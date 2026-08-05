@@ -1,0 +1,2 @@
+[functions.payment-reminders]
+verify_jwt = false

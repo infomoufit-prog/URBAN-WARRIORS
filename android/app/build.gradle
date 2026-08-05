@@ -1,0 +1,45 @@
+plugins {
+    id 'com.android.application'
+}
+
+def releaseKeystore = System.getenv('UW_KEYSTORE_PATH')
+def releaseStorePassword = System.getenv('UW_KEYSTORE_PASSWORD')
+def releaseKeyAlias = System.getenv('UW_KEY_ALIAS')
+def releaseKeyPassword = System.getenv('UW_KEY_PASSWORD')
+
+android {
+    namespace 'com.urbanwarriors.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.urbanwarriors.app'
+        minSdk 24
+        targetSdk 35
+        versionCode 3
+        versionName '1.2.0'
+    }
+
+    signingConfigs {
+        release {
+            if (releaseKeystore && releaseStorePassword && releaseKeyAlias && releaseKeyPassword) {
+                storeFile file(releaseKeystore)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            if (releaseKeystore) signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

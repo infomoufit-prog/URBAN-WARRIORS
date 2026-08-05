@@ -1,0 +1,22 @@
+-- Ejecutar después de desplegar la función payment-reminders.
+-- La ejecución es horaria; la función solo procesa cada club cuando coincide
+-- con la hora local configurada. Esto evita problemas con el cambio de hora.
+
+select vault.create_secret('https://TU-PROYECTO.supabase.co', 'uw_project_url');
+select vault.create_secret('TU_SECRETO_ALEATORIO', 'uw_cron_secret');
+
+select cron.schedule(
+  'urban-warriors-payment-reminders',
+  '5 * * * *',
+  $$
+  select net.http_post(
+    url := (select decrypted_secret from vault.decrypted_secrets where name='uw_project_url')
+      || '/functions/v1/payment-reminders',
+    headers := jsonb_build_object(
+      'content-type','application/json',
+      'x-uw-cron-secret',(select decrypted_secret from vault.decrypted_secrets where name='uw_cron_secret')
+    ),
+    body := '{}'::jsonb
+  );
+  $$
+);

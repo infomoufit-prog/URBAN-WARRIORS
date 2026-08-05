@@ -1,0 +1,40 @@
+name: Build signed Android release
+on:
+  workflow_dispatch:
+    inputs:
+      release_name:
+        description: Release name, for example v1.2.0
+        required: true
+        default: v1.2.0
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Restore signing keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/urban-warriors-release.jks"
+      - name: Build web assets
+        run: npm run build
+      - name: Build signed APK
+        env:
+          UW_KEYSTORE_PATH: ${{ runner.temp }}/urban-warriors-release.jks
+          UW_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          UW_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          UW_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: cd android && gradle assembleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: urban-warriors-${{ inputs.release_name }}
+          path: android/app/build/outputs/apk/release/app-release.apk
