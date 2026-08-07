@@ -1,56 +1,21 @@
-# Arquitectura · Urban Warriors 1.2
+# Arquitectura Urban Warriors 1.3.0
 
-## Capas
+## Cliente
 
-```mermaid
-flowchart TD
-  U[Usuario] --> W[Web / PWA en Netlify]
-  U --> A[APK Android]
-  W --> DS[Data Store]
-  A --> DS
-  DS -->|Demo| L[localStorage]
-  DS -->|Producción| S[Supabase Auth + REST/RPC]
-  S --> P[PostgreSQL + RLS]
-  S --> ST[Storage privado]
-  C[Supabase Cron] --> EF[Edge Function payment-reminders]
-  EF --> P
-  EF --> F[Firebase Cloud Messaging opcional]
-  F --> U
-```
+La PWA y la aplicación Android comparten el contenido de `web/`. `scripts/build.mjs` copia esa versión a `dist/` y a `android/app/src/main/assets/www`.
 
-## Cuenta, persona y alumno
+## Backend
 
-La cuenta autenticada no se confunde con el alumno. Un adulto puede ser tutor, alumno y miembro del equipo a la vez. Los menores quedan vinculados a uno o varios tutores.
+Supabase proporciona Auth, PostgreSQL, RLS, Storage y Edge Functions. El frontend utiliza operaciones RPC transaccionales para los formularios de negocio, evitando escrituras parciales y diferencias entre web y APK.
 
-## Ciclo de mensualidad
+## Persistencia
 
-```mermaid
-flowchart LR
-  Q[Cuota generada] --> A1[Aviso 1]
-  A1 --> A2[Aviso 2]
-  A2 --> A3[Aviso 3]
-  A3 --> A4[Aviso 4]
-  A4 --> A5[Aviso 5]
-  A5 --> V[Vencida día 15]
-  Q --> CP[Usuario comunica pago]
-  CP --> PV[Pendiente de validación]
-  PV --> OK[Validada / pagada]
-  PV --> NO[Rechazada / vuelve a pendiente]
-  Q --> PA[Pausa administrativa]
-```
+- Catálogo público: disciplinas, grupos, horarios y tarifas activas.
+- Datos privados: socios, tutores, pagos, asistencia, seguimiento y documentos.
+- Medios públicos: `club-public-media`.
+- Justificantes privados: `justificantes-pago`.
+- Documentos privados: `member-documents`.
 
-Reglas principales:
+## Alertas
 
-- Calendario inicial: 1, 4, 8, 11 y 14.
-- La combinación cuota, destinatario, número de aviso y canal es única.
-- Los hermanos se pueden agrupar en un único mensaje, manteniendo una fila histórica por cuota.
-- Un pago comunicado detiene los avisos hasta su revisión.
-- Dirección, secretaría y tesorería pueden registrar cobros, pausar, reactivar, validar o rechazar.
-- Una pausa con fecha final caduca automáticamente.
-
-## Migraciones
-
-- `001`: núcleo multi-club y RLS.
-- `002`: cuentas, accesos, publicaciones, material y notificaciones.
-- `003`: estados `pendiente_validacion` y `aplazada`.
-- `004`: cinco avisos, justificantes privados, cobros, pausas, historial y RPC.
+`procesar_avisos_cobro` genera los cinco avisos internos. `payment-reminders` ejecuta el calendario económico. `notification-dispatch` publica contenido programado, resuelve destinatarios y envía las notificaciones pendientes por FCM cuando Firebase está configurado.

@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UrbanWarriors"
         android:usesCleartextTraffic="false">
+        <service
+            android:name=".UrbanWarriorsMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

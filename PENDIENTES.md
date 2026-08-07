@@ -1,38 +1,13 @@
-# Pendientes para puesta en uso
+# Pendientes externos después de Urban Warriors 1.3.0
 
-## Terminado en esta entrega
+El código funcional y la base de datos operativa están preparados. Quedan tareas que dependen de servicios y credenciales externas:
 
-- Aplicación web/PWA completa en modo demo.
-- Flujo adulto/tutor y menores vinculados.
-- Paneles por rol.
-- Clases, acceso, asistencia y seguimiento.
-- Cuotas, cobros, pagos parciales y justificantes.
-- Cinco avisos en días 1, 4, 8, 11 y 14.
-- Agrupación familiar, idempotencia, pausa, reactivación y vencimiento.
-- Validación/rechazo por dirección, secretaría o tesorería.
-- Comunicaciones, eventos y material.
-- SQL multi-club, Edge Function, PWA y proyecto Android.
-- Manual PDF y cartel para el gimnasio.
-
-## Falta infraestructura o credenciales
-
-1. Crear el proyecto Supabase.
-2. Ejecutar y validar las cuatro migraciones.
-3. Crear Storage y probar justificantes.
-4. Introducir datos reales del club.
-5. Crear usuarios y permisos reales.
-6. Publicar la web en Netlify.
-7. Desplegar la Edge Function y activar Cron.
-8. Crear Firebase si se desea push con la app cerrada.
-9. Compilar y firmar el APK.
-10. Publicar el APK y actualizar `release.apkUrl`.
-11. Generar el QR definitivo de la página de descarga.
-12. Hacer piloto con secretaría, un monitor y dos familias.
-
-## Antes de producción
-
-- Validación legal de privacidad y menores.
-- Pruebas RLS multi-club.
-- Prueba de recuperación de contraseña.
-- Revisión de copias de seguridad.
-- Revisión de accesibilidad y dispositivos Android reales.
+1. Ejecutar y validar la migración 007 en Supabase.
+2. Completar la prueba RLS con dirección, secretaría, tesorería, monitor, familia y alumno.
+3. Configurar Firebase Web y Android.
+4. Desplegar `payment-reminders` y `notification-dispatch`.
+5. Activar los Cron de avisos y publicaciones programadas.
+6. Crear el keystore y firmar el APK.
+7. Publicar la release del APK y añadir su URL a `web/config.js`.
+8. Generar el QR definitivo hacia la página estable de descarga.
+9. Revisar textos legales y política de privacidad antes de cargar datos reales.

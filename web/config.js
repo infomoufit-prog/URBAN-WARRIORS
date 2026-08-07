@@ -8,18 +8,20 @@ window.UW_CONFIG = {
   locale: 'es-ES',
   currency: 'EUR',
   timezone: 'Europe/Madrid',
-  demoMode: true,
+  demoMode: false,
   supabase: {
-    enabled: false,
-    url: '',
-    anonKey: ''
+    enabled: true,
+    url: 'https://poggsobhtutbuagjiydc.supabase.co',
+    anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3',
   },
   release: {
-    version: '1.2.0',
-    build: 3,
+    version: '1.6.0',
+    build: 12,
     apkUrl: '',
-    webUrl: '',
-    publishedAt: '2026-08-05'
+    webUrl: 'https://urban01.netlify.app',
+    publishedAt: '2026-08-07',
+    backendVersion: '1.6.0',
+    schemaEpoch: 160
   },
   push: {
     enabled: false,

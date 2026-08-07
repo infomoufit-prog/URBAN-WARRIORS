@@ -7,3 +7,7 @@ android/local.properties
 android/.gradle/
 android/app/build/
 .env
+android/app/google-services.json
+*.jks
+*.keystore
+.env.firebase

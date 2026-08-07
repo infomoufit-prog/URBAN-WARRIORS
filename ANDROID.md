@@ -11,7 +11,7 @@ El proyecto `android/` contiene una aplicación WebView con:
 - botón atrás;
 - permiso de notificaciones Android 13+;
 - canal local `urban_warriors_alerts`;
-- versión `1.2.0`, `versionCode 3`.
+- versión `1.3.0`, `versionCode 6`.
 
 ## Preparar contenido
 

@@ -363,3 +363,26 @@ img { max-width: 100%; }
   .reminder-timeline { min-width: 470px; }
   .form-grid.five-days { grid-template-columns: repeat(5,minmax(54px,1fr)); overflow-x: auto; padding-bottom: 6px; }
 }
+
+/* v1.6.0: gobernanza única de mutaciones y gestión multigrupo */
+.form-error { margin-top: 14px; padding: 11px 13px; border-radius: 12px; border: 1px solid rgba(251,113,133,.32); background: rgba(251,113,133,.08); color: #fecdd3; font-size: 12px; line-height: 1.45; }
+.enrollment-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.enrollment-strip .badge { display: inline-flex; align-items: center; gap: 7px; }
+.inline-x { width: 18px; height: 18px; border: 0; border-radius: 50%; background: rgba(255,255,255,.12); color: inherit; cursor: pointer; font-weight: 900; line-height: 1; }
+.inline-x:hover { background: rgba(251,113,133,.22); }
+
+
+/* build 12: recibos breves Urban Warriors */
+.receipt-modal { max-width: 520px; }
+.receipt-card { position: relative; overflow: hidden; padding: 34px 28px 28px; border: 1px solid #343941; border-radius: 22px; background: #050608; color: #fff; text-align: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.025); }
+.receipt-card::before { content:''; position:absolute; left:0; right:0; top:0; height:3px; background:linear-gradient(90deg,transparent,#fff,transparent); opacity:.8; }
+.receipt-logo { display:block; width:min(190px,62%); max-height:110px; object-fit:contain; margin:0 auto 20px; }
+.receipt-kicker { color:#9ca3af; font-size:10px; font-weight:900; letter-spacing:.24em; }
+.receipt-paid { margin:8px 0 24px; font-size:34px; line-height:1; font-weight:1000; letter-spacing:.05em; }
+.receipt-grid { display:grid; grid-template-columns:minmax(90px,.8fr) minmax(0,1.5fr); gap:0; border-top:1px solid #292d33; border-bottom:1px solid #292d33; text-align:left; }
+.receipt-grid span,.receipt-grid strong { padding:11px 4px; border-bottom:1px solid #1d2025; }
+.receipt-grid span:nth-last-child(-n+2),.receipt-grid strong:nth-last-child(-n+2) { border-bottom:0; }
+.receipt-grid span { color:#858c96; font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.receipt-grid strong { text-align:right; font-size:13px; overflow-wrap:anywhere; }
+.receipt-number { margin-top:22px; color:#9ca3af; font-size:11px; font-weight:900; letter-spacing:.12em; }
+.receipt-thanks { margin-top:9px; font-size:11px; color:#eef0f2; }

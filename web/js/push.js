@@ -53,3 +53,10 @@
 
   window.UW_PUSH = { configured, requestPermissionAndToken };
 })();
+
+window.addEventListener('uw-native-push-token', async (event) => {
+  const token = event.detail;
+  if (!token || !window.UW_STORE?.registerPushToken) return;
+  try { await window.UW_STORE.registerPushToken(token, 'android'); }
+  catch (error) { console.error('No se pudo registrar el token FCM nativo', error); }
+});

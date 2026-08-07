@@ -20,6 +20,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends Activity {
     private static final int FILE_PICKER_REQUEST = 401;
@@ -44,7 +45,7 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(true);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/1.2.0");
+        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/1.6.0");
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
@@ -126,7 +127,20 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public String requestNotifications() {
             runOnUiThread(MainActivity.this::requestNotificationPermission);
-            return "";
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    String token = task.getResult();
+                    getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
+                    runOnUiThread(() -> webView.evaluateJavascript(
+                        "window.dispatchEvent(new CustomEvent('uw-native-push-token',{detail:" + org.json.JSONObject.quote(token) + "}));", null));
+                }
+            });
+            return getSharedPreferences("uw_push", MODE_PRIVATE).getString("fcm_token", "");
+        }
+
+        @JavascriptInterface
+        public String getPushToken() {
+            return getSharedPreferences("uw_push", MODE_PRIVATE).getString("fcm_token", "");
         }
 
         @JavascriptInterface

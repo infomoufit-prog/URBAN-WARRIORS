@@ -1,0 +1,16 @@
+-- Ejecutar DESPUÉS de desplegar notification-dispatch y guardar secretos en Vault.
+-- Reutiliza uw_project_url y uw_cron_secret creados para payment-reminders.
+select cron.schedule(
+  'urban-warriors-notification-dispatch',
+  '*/10 * * * *',
+  $$
+  select net.http_post(
+    url := (select decrypted_secret from vault.decrypted_secrets where name='uw_project_url') || '/functions/v1/notification-dispatch',
+    headers := jsonb_build_object(
+      'content-type','application/json',
+      'x-uw-cron-secret',(select decrypted_secret from vault.decrypted_secrets where name='uw_cron_secret')
+    ),
+    body := '{}'::jsonb
+  );
+  $$
+);

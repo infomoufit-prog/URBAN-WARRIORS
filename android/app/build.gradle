@@ -15,8 +15,8 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
         targetSdk 35
-        versionCode 3
-        versionName '1.2.0'
+        versionCode 12
+        versionName '1.6.0'
     }
 
     signingConfigs {
@@ -42,4 +42,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'androidx.core:core:1.15.0'
+}
+
+if (file('google-services.json').exists()) {
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    logger.lifecycle('Urban Warriors: google-services.json no está presente; se compilará sin registrar FCM hasta añadirlo.')
 }

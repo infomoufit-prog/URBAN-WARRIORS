@@ -1,12 +1,12 @@
 {
-  "name": "urban-warriors-v1.2",
-  "version": "1.2.0",
+  "name": "urban-warriors-v1.6.0",
+  "version": "1.6.0",
   "private": true,
   "description": "Aplicación móvil/PWA para Urban Warriors, preparada para Supabase y Android.",
   "scripts": {
     "dev": "node scripts/serve.mjs",
-    "build": "node scripts/build.mjs",
-    "test": "node scripts/test.mjs && node scripts/test-reminders.mjs",
+    "build": "node scripts/test-governance-v160.mjs && node scripts/test-sql-compat-v160.mjs && node scripts/test-browser-channel-v160.mjs && node scripts/test-receipts-v160.mjs && node scripts/test-production-v160.mjs && node scripts/build.mjs",
+    "test": "node scripts/test-governance-v160.mjs && node scripts/test-sql-compat-v160.mjs && node scripts/test-browser-channel-v160.mjs && node scripts/test.mjs && node scripts/test-reminders.mjs && node scripts/test-receipts-v160.mjs && node scripts/test-production-v160.mjs",
     "qr": "python3 scripts/generate_qr.py",
     "android:prepare": "node scripts/build.mjs",
     "android:debug": "cd android && gradle assembleDebug",
