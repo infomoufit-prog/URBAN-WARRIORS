@@ -12,13 +12,13 @@ const pkg = JSON.parse(pkgText);
 const checks = [];
 const check = (name, ok, detail='') => checks.push({ name, ok: Boolean(ok), detail });
 
-check('runtime 1.6.0/build12', config.includes("version: '1.6.0'") && config.includes('build: 12') && config.includes("backendVersion: '1.6.0'") && config.includes('schemaEpoch: 160'));
+check('runtime 1.6.0/build14', config.includes("version: '1.6.0'") && config.includes('build: 14') && config.includes("backendVersion: '1.6.0'") && config.includes('schemaEpoch: 160'));
 check('package 1.6.0', pkg.version === '1.6.0' && pkg.name === 'urban-warriors-v1.6.0');
-check('Android 1.6.0', gradle.includes('versionCode 12') && gradle.includes("versionName '1.6.0'") && activity.includes('UrbanWarriorsApp/1.6.0'));
-check('cache 1.6.0 build12', sw.includes("urban-warriors-v1.6.0-build12"));
+check('Android 1.6.0', gradle.includes('versionCode 14') && gradle.includes("versionName '1.6.0'") && activity.includes('UrbanWarriorsApp/1.6.0'));
+check('cache 1.6.0 build14', sw.includes("urban-warriors-v1.6.0-build14"));
 check('service worker no intercepta APIs externas', sw.includes('url.origin !== self.location.origin') && sw.includes("if (event.request.method !== 'GET') return"));
 for (const asset of ['app.css','config.js','demo-data.js','data-store.js','push.js','app.js','service-worker.js']) {
-  check(`cache bust ${asset}`, index.includes(`${asset}?v=1.6.0-b12`), asset);
+  check(`cache bust ${asset}`, index.includes(`${asset}?v=1.6.0-b14`), asset);
 }
 check('sin backup runtime', await access(resolve(root,'web/js/data-store.js.bak')).then(()=>false).catch(()=>true));
 check('publishable key no usado como Bearer', !/Authorization\s*:\s*`Bearer \$\{this\.anonKey\}`/.test(store) && !/Authorization\s*:\s*`Bearer \$\{this\.session\?\.access_token \|\| this\.anonKey\}`/.test(store));
@@ -45,6 +45,16 @@ check('contrato antes de mutar', store.includes('if (!opts.skipContract) await t
 check('idempotencia request_id', migration.includes('create table if not exists public.app_mutation_requests') && migration.includes('request_id uuid primary key') && store.includes('p_request_id: requestId'));
 check('membresía obligatoria gateway', migration.includes("p_operation not in ('cuenta.registrar','invitacion.aceptar')") && migration.includes('MUTATION_MEMBERSHIP_REQUIRED'));
 check('respuesta versionada confirmada', store.includes("response?.backend_version !== RUNTIME_VERSION") && store.includes('response?.request_id !== requestId'));
+
+// Build 14 · punto único de decisión del catálogo.
+const catalogLiterals = [...app.matchAll(/data-(edit-discipline|toggle-discipline|add-grade|edit-grade|edit-group)=|data-action="open-(discipline|grade|group)-form"/g)];
+const unwrapped = catalogLiterals.filter((m) => {
+  const before = app.slice(Math.max(0, m.index - 400), m.index);
+  return !before.includes('catalogControl(');
+});
+check('controles de catálogo envueltos en catalogControl', unwrapped.length === 0, `${catalogLiterals.length} controles; ${unwrapped.length} sin envolver`);
+check('guardián único de catálogo en el despachador', app.includes('isCatalogTarget(target) && !canManageCatalog()'));
+check('rol de catálogo declarado una sola vez', (app.match(/\['direccion', 'secretaria'\]\.includes\(currentUser\(\)\?\.rol\)/g) || []).length === 1);
 
 const failed = checks.filter(c => !c.ok);
 for (const c of checks) console.log(`${c.ok ? 'OK' : 'FAIL'} ${c.name}${c.detail ? ` — ${c.detail}` : ''}`);

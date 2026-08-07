@@ -88,6 +88,28 @@
   function data() { return store.getData(); }
   function isAdmin() { return ['direccion', 'secretaria', 'economia', 'comunicacion'].includes(currentUser()?.rol); }
   function canManageFinance() { return ['direccion', 'secretaria', 'economia'].includes(currentUser()?.rol); }
+  // CORRECCIÓN 1.6.1: isAdmin() incluye economia y comunicacion, pero las RPC de
+  // catálogo (app_guardar_disciplina / _grado / _grupo / _socio) solo aceptan
+  // direccion y secretaria. Sin esta distinción, esos dos roles veían los botones
+  // de "Nueva disciplina" o "Crear grupo" y recibían siempre
+  // "No tienes permiso para gestionar disciplinas" al guardar.
+  // ---------------------------------------------------------------------------
+  // PUNTO ÚNICO DE DECISIÓN DEL CATÁLOGO (build 14)
+  // Disciplinas, grados y grupos solo los modifican Dirección y Secretaría, que
+  // es exactamente lo que aceptan app_guardar_disciplina, app_guardar_grado y
+  // app_guardar_grupo. Ninguna pantalla vuelve a comprobar roles por su cuenta:
+  // todas envuelven sus controles en catalogControl() y el despachador de clics
+  // bloquea las mismas acciones aunque un control llegase a renderizarse.
+  // ---------------------------------------------------------------------------
+  function canManageCatalog() { return ['direccion', 'secretaria'].includes(currentUser()?.rol); }
+  const CATALOG_ACTIONS = ['open-discipline-form', 'open-grade-form', 'open-group-form'];
+  const CATALOG_DATASET_KEYS = ['editDiscipline', 'toggleDiscipline', 'addGrade', 'editGrade', 'editGroup'];
+  function catalogControl(html) { return canManageCatalog() ? html : ''; }
+  function isCatalogTarget(target) {
+    if (!target) return false;
+    if (target.dataset.action && CATALOG_ACTIONS.includes(target.dataset.action)) return true;
+    return CATALOG_DATASET_KEYS.some((key) => target.dataset[key]);
+  }
   function isMonitor() { return currentUser()?.rol === 'monitor'; }
   function isMemberPortal() { return ['familia', 'alumno'].includes(currentUser()?.rol); }
 
@@ -164,7 +186,30 @@
   function bottomNav() {
     return `<nav class="bottom-nav" aria-label="Navegación principal">${navItems().map(([route, icon, label]) => `<button class="nav-btn ${state.route === route ? 'active' : ''}" type="button" data-route="${route}"><span class="nav-icon">${icon}</span><span>${label}</span></button>`).join('')}</nav>`;
   }
-  function renderShell(content) { app.innerHTML = `<div class="app-shell authenticated"><main class="page">${content}</main>${bottomNav()}</div>`; }
+  // CORRECCIÓN 1.6.1: store.writeBlockedReason, store.loadErrors y
+  // store.runFinalDiagnostic() existían desde 1.6.0 pero ninguna pantalla los
+  // mostraba. El único canal de error era un toast de 3,6 segundos, así que un
+  // backend sin la puerta de escritura instalada resultaba indistinguible de un
+  // "no se guarda" sin causa. Este aviso es persistente y literal.
+  function systemBanner() {
+    const blocked = store.writeBlockedReason;
+    const failures = (store.loadErrors || []).map((item) => item.table);
+    if (!blocked && !failures.length) return '';
+    if (blocked) {
+      return `<div class="form-error" role="alert" style="margin:12px 0">
+        <strong>El guardado está bloqueado por el servidor.</strong>
+        <div style="margin-top:6px">${escapeHtml(blocked)}</div>
+        <div style="margin-top:6px" class="list-subtitle">Ejecuta las migraciones 015, 016 y 017 en Supabase y vuelve a intentarlo.</div>
+        <button class="btn btn-small btn-secondary" style="margin-top:10px" data-action="run-diagnostic">Reintentar diagnóstico</button>
+      </div>`;
+    }
+    return `<div class="form-error" role="alert" style="margin:12px 0">
+      <strong>Datos incompletos.</strong>
+      <div style="margin-top:6px">No se han podido leer: ${escapeHtml([...new Set(failures)].join(', '))}. Lo que ves en pantalla puede no estar completo.</div>
+    </div>`;
+  }
+
+  function renderShell(content) { app.innerHTML = `<div class="app-shell authenticated"><main class="page">${systemBanner()}${content}</main>${bottomNav()}</div>`; }
 
   function renderLogin(staffOnly) {
     const title = staffOnly ? 'Acceso del equipo' : 'Accede a Urban Warriors';
@@ -318,15 +363,15 @@
     const groups = member ? d.grupos.filter((g) => memberGroups.includes(g.id)) : d.grupos;
     const todaySessions = member ? d.sesiones.filter((s) => memberGroups.includes(s.grupo_id) && s.fecha === todayIso()) : [];
     const upcomingSessions = d.sesiones.filter((s) => !member || memberGroups.includes(s.grupo_id)).slice().sort((a,b)=>`${a.fecha}${a.hora_inicio}`.localeCompare(`${b.fecha}${b.hora_inicio}`)).slice(0,20);
-    renderShell(`${topbar(isMemberPortal() ? 'Horarios y acceso' : 'Clases y horarios', 'Programación semanal')}${isAdmin() ? `<div class="toolbar"><button class="btn btn-primary" data-action="open-group-form">Crear grupo</button><button class="btn btn-secondary" data-action="open-session-form">Nueva sesión</button><button class="btn btn-secondary" data-action="open-discipline-form">Nueva disciplina</button></div>` : ''}
+    renderShell(`${topbar(isMemberPortal() ? 'Horarios y acceso' : 'Clases y horarios', 'Programación semanal')}${isAdmin() ? `<div class="toolbar">${catalogControl(`<button class="btn btn-primary" data-action="open-group-form">Crear grupo</button>`)}<button class="btn btn-secondary" data-action="open-session-form">Nueva sesión</button>${catalogControl(`<button class="btn btn-secondary" data-action="open-discipline-form">Nueva disciplina</button>`)}</div>` : ''}
       ${isMemberPortal() && todaySessions.length ? `<section class="notice-panel"><strong>Clase disponible hoy</strong><p>Registra la llegada de ${escapeHtml(member.nombre)} introduciendo el código mostrado por el monitor.</p>${todaySessions.map((s) => `<button class="btn btn-primary" data-checkin-session="${s.id}">Registrar acceso · ${escapeHtml(s.hora_inicio)}</button>`).join('')}</section>` : ''}
-      <div class="card-grid two">${groups.map((group) => { const discipline = byId(d.disciplinas, group.disciplina_id); const hours = d.horarios.filter((h) => h.grupo_id === group.id); return `<article class="card"><div class="list-top"><div><h3 class="list-title">${escapeHtml(group.nombre)}</h3><p class="list-subtitle">${escapeHtml(discipline?.nombre || '')} · Monitor: ${escapeHtml(group.monitor || 'Sin asignar')}</p></div>${statusBadge(group.activo ? 'activo' : 'inactivo')}</div><div class="card schedule-hours">${hours.map((h) => row('◷', days[h.dia_semana], `${h.hora_inicio} – ${h.hora_fin}`, '')).join('') || empty('Sin horarios configurados')}</div>${isAdmin() ? `<div class="list-actions"><button class="btn btn-small btn-secondary" data-edit-group="${group.id}">Editar grupo y horarios</button><button class="btn btn-small btn-ghost" data-create-session="${group.id}">Crear sesión</button></div>` : ''}</article>`; }).join('') || empty('No hay grupos configurados')}</div>
+      <div class="card-grid two">${groups.map((group) => { const discipline = byId(d.disciplinas, group.disciplina_id); const hours = d.horarios.filter((h) => h.grupo_id === group.id); return `<article class="card"><div class="list-top"><div><h3 class="list-title">${escapeHtml(group.nombre)}</h3><p class="list-subtitle">${escapeHtml(discipline?.nombre || '')} · Monitor: ${escapeHtml(group.monitor || 'Sin asignar')}</p></div>${statusBadge(group.activo ? 'activo' : 'inactivo')}</div><div class="card schedule-hours">${hours.map((h) => row('◷', days[h.dia_semana], `${h.hora_inicio} – ${h.hora_fin}`, '')).join('') || empty('Sin horarios configurados')}</div>${isAdmin() ? `<div class="list-actions">${catalogControl(`<button class="btn btn-small btn-secondary" data-edit-group="${group.id}">Editar grupo y horarios</button>`)}<button class="btn btn-small btn-ghost" data-create-session="${group.id}">Crear sesión</button></div>` : ''}</article>`; }).join('') || empty('No hay grupos configurados')}</div>
       <section class="section"><div class="section-head"><div><h2>Sesiones</h2><p>Clases reales para asistencia y check-in</p></div></div><div class="list">${upcomingSessions.map((session)=>{const group=byId(d.grupos,session.grupo_id);return `<article class="list-item"><div class="list-top"><div><h3 class="list-title">${escapeHtml(group?.nombre || 'Sesión')}</h3><p class="list-subtitle">${dateText(session.fecha)} · ${escapeHtml(String(session.hora_inicio||'').slice(0,5))} · ${escapeHtml(session.monitor || '')}</p></div>${statusBadge(session.estado)}</div>${isAdmin()||isMonitor()?`<div class="list-actions"><button class="btn btn-small btn-secondary" data-edit-session="${session.id}">Editar</button><button class="btn btn-small btn-primary" data-session="${session.id}">Asistencia</button></div>`:''}</article>`}).join('') || empty('No hay sesiones creadas')}</div></section>`);
   }
 
   function renderGroups() {
     const d = data(); const groups = isMonitor() ? d.grupos.filter((g) => g.monitor === currentUser().nombre || currentUser().nombre === 'Álex') : d.grupos;
-    renderShell(`${topbar(isAdmin() ? 'Grupos' : 'Mis grupos', `${groups.length} grupos asignados`)}${isAdmin()?`<div class="toolbar"><button class="btn btn-primary" data-action="open-group-form">Crear grupo</button><button class="btn btn-secondary" data-action="open-session-form">Nueva sesión</button></div>`:''}<div class="card-grid two">${groups.map((g) => { const students = d.socios.filter((s) => memberInGroup(s, g.id)); return `<article class="card"><div class="list-top"><div><h3>${escapeHtml(g.nombre)}</h3><p class="list-subtitle">${students.length} alumnos · ${escapeHtml(g.monitor || '')}</p></div>${statusBadge(g.activo ? 'activo' : 'inactivo')}</div><div class="list-actions"><button class="btn btn-small btn-primary" data-group-attendance="${g.id}">Pasar lista</button>${isAdmin()?`<button class="btn btn-small btn-secondary" data-edit-group="${g.id}">Editar grupo y horarios</button><button class="btn btn-small btn-ghost" data-create-session="${g.id}">Nueva sesión</button>`:''}</div><div style="margin-top:14px">${students.map((s) => row('◎', `${s.nombre} ${s.apellidos}`, `Grado ${s.grado || 'sin asignar'}`, '')).join('') || '<p class="list-subtitle">Sin alumnos asignados</p>'}</div></article>`; }).join('') || empty('No tienes grupos asignados')}</div>`);
+    renderShell(`${topbar(isAdmin() ? 'Grupos' : 'Mis grupos', `${groups.length} grupos asignados`)}${isAdmin()?`<div class="toolbar">${catalogControl(`<button class="btn btn-primary" data-action="open-group-form">Crear grupo</button>`)}<button class="btn btn-secondary" data-action="open-session-form">Nueva sesión</button></div>`:''}<div class="card-grid two">${groups.map((g) => { const students = d.socios.filter((s) => memberInGroup(s, g.id)); return `<article class="card"><div class="list-top"><div><h3>${escapeHtml(g.nombre)}</h3><p class="list-subtitle">${students.length} alumnos · ${escapeHtml(g.monitor || '')}</p></div>${statusBadge(g.activo ? 'activo' : 'inactivo')}</div><div class="list-actions"><button class="btn btn-small btn-primary" data-group-attendance="${g.id}">Pasar lista</button>${catalogControl(`<button class="btn btn-small btn-secondary" data-edit-group="${g.id}">Editar grupo y horarios</button>`)}${isAdmin()?`<button class="btn btn-small btn-ghost" data-create-session="${g.id}">Nueva sesión</button>`:''}</div><div style="margin-top:14px">${students.map((s) => row('◎', `${s.nombre} ${s.apellidos}`, `Grado ${s.grado || 'sin asignar'}`, '')).join('') || '<p class="list-subtitle">Sin alumnos asignados</p>'}</div></article>`; }).join('') || empty('No tienes grupos asignados')}</div>`);
   }
 
   function renderAttendance() {
@@ -571,7 +616,7 @@
 
   function renderDisciplines() {
     const d = data();
-    renderShell(`${topbar('Disciplinas y grados', 'Catálogo editable')}<div class="toolbar"><button class="btn btn-primary" data-action="open-discipline-form">Nueva disciplina</button><button class="btn btn-secondary" data-action="open-grade-form">Nuevo grado</button></div><div class="card-grid two">${d.disciplinas.map((disc) => { const grades=d.grados.filter((g)=>g.disciplina_id===disc.id).sort((a,b)=>Number(a.orden)-Number(b.orden)); return `<article class="card"><div class="list-top"><div><h3 class="list-title">${escapeHtml(disc.nombre)}</h3><p class="list-subtitle">${escapeHtml(disc.descripcion || 'Sin descripción')}</p></div>${statusBadge(disc.activa ? 'activo' : 'inactivo')}</div><div class="grade-list" style="margin-top:14px">${grades.map((g)=>`<button class="badge ${g.activo===false?'info':''}" style="margin:0 5px 5px 0" data-edit-grade="${g.id}">${escapeHtml(g.orden)} · ${escapeHtml(g.nombre)}</button>`).join('') || '<span class="list-subtitle">Sin escala de grados</span>'}</div><div class="list-actions"><button class="btn btn-small btn-secondary" data-edit-discipline="${disc.id}">Editar</button><button class="btn btn-small btn-ghost" data-add-grade="${disc.id}">Añadir grado</button><button class="btn btn-small btn-ghost" data-toggle-discipline="${disc.id}">${disc.activa ? 'Desactivar' : 'Activar'}</button></div></article>`; }).join('') || empty('No hay disciplinas')}</div>`);
+    renderShell(`${topbar('Disciplinas y grados', 'Catálogo editable')}${catalogControl(`<div class="toolbar"><button class="btn btn-primary" data-action="open-discipline-form">Nueva disciplina</button><button class="btn btn-secondary" data-action="open-grade-form">Nuevo grado</button></div>`) || '<div class="toolbar"><span class="list-subtitle">Solo Dirección y Secretaría pueden modificar el catálogo.</span></div>'}<div class="card-grid two">${d.disciplinas.map((disc) => { const grades=d.grados.filter((g)=>g.disciplina_id===disc.id).sort((a,b)=>Number(a.orden)-Number(b.orden)); return `<article class="card"><div class="list-top"><div><h3 class="list-title">${escapeHtml(disc.nombre)}</h3><p class="list-subtitle">${escapeHtml(disc.descripcion || 'Sin descripción')}</p></div>${statusBadge(disc.activa ? 'activo' : 'inactivo')}</div><div class="grade-list" style="margin-top:14px">${grades.map((g)=>`${catalogControl(`<button class="badge ${g.activo===false?'info':''}" style="margin:0 5px 5px 0" data-edit-grade="${g.id}">${escapeHtml(g.orden)} · ${escapeHtml(g.nombre)}</button>`) || `<span class="badge ${g.activo===false?'info':''}" style="margin:0 5px 5px 0">${escapeHtml(g.orden)} · ${escapeHtml(g.nombre)}</span>`}`).join('') || '<span class="list-subtitle">Sin escala de grados</span>'}</div>${catalogControl(`<div class="list-actions"><button class="btn btn-small btn-secondary" data-edit-discipline="${disc.id}">Editar</button><button class="btn btn-small btn-ghost" data-add-grade="${disc.id}">Añadir grado</button><button class="btn btn-small btn-ghost" data-toggle-discipline="${disc.id}">${disc.activa ? 'Desactivar' : 'Activar'}</button></div>`)}</article>`; }).join('') || empty('No hay disciplinas')}</div>`);
   }
 
   function renderSettings() {
@@ -945,6 +990,12 @@
   async function handleClick(event) {
     const target = event.target.closest('[data-route],[data-action],[data-demo-role],[data-register-type],[data-edit-member],[data-member-progress],[data-member-graduation],[data-approve-enrollment],[data-waitlist-enrollment],[data-reject-enrollment],[data-edit-group],[data-create-session],[data-edit-session],[data-session],[data-group-attendance],[data-payment-fee],[data-validate-payment],[data-reject-payment],[data-view-proof],[data-pause-fee],[data-resume-fee],[data-attendance-state],[data-checkin-session],[data-buy-material],[data-advance-order],[data-notification],[data-edit-discipline],[data-add-grade],[data-edit-grade],[data-toggle-discipline],[data-edit-tariff],[data-toggle-tariff],[data-edit-material],[data-add-variant],[data-edit-variant],[data-toggle-material],[data-edit-communication],[data-archive-communication],[data-copy-invite],[data-view-document],[data-disable-enrollment],[data-receipt],[data-download-receipt]');
     if (!target) return;
+    // Guardián único: ninguna acción de catálogo se ejecuta sin rol autorizado,
+    // aunque el control se hubiera renderizado por error.
+    if (isCatalogTarget(target) && !canManageCatalog()) {
+      toast('Solo Dirección y Secretaría pueden modificar el catálogo.', 'error');
+      return;
+    }
     try {
       if (target.dataset.receipt) { receiptPreview(byId(data().recibos || [], target.dataset.receipt)); return; }
       if (target.dataset.downloadReceipt) { await downloadReceiptPdf(target.dataset.downloadReceipt); return; }
@@ -1011,6 +1062,16 @@
       else if (action === 'open-enrollment-form') enrollmentForm();
       else if (action === 'open-add-enrollment-form') additionalEnrollmentForm();
       else if (action === 'open-discipline-form') disciplineForm();
+      else if (action === 'run-diagnostic') {
+        try {
+          const diagnostic = await store.runFinalDiagnostic();
+          console.info('Diagnóstico del canal de escritura', diagnostic);
+          toast('Canal de guardado verificado correctamente');
+        } catch (error) {
+          toast(error?.message || 'El canal de guardado sigue bloqueado', 'error');
+        }
+        render();
+      }
       else if (action === 'open-grade-form') gradeForm();
       else if (action === 'open-group-form') groupForm();
       else if (action === 'open-session-form') sessionForm();

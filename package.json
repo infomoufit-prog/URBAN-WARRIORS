@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "build": "node scripts/test-governance-v160.mjs && node scripts/test-sql-compat-v160.mjs && node scripts/test-browser-channel-v160.mjs && node scripts/test-receipts-v160.mjs && node scripts/test-production-v160.mjs && node scripts/build.mjs",
-    "test": "node scripts/test-governance-v160.mjs && node scripts/test-sql-compat-v160.mjs && node scripts/test-browser-channel-v160.mjs && node scripts/test.mjs && node scripts/test-reminders.mjs && node scripts/test-receipts-v160.mjs && node scripts/test-production-v160.mjs",
+    "test": "node scripts/test-governance-v160.mjs && node scripts/test-sql-compat-v160.mjs && node scripts/test-browser-channel-v160.mjs && node scripts/test.mjs && node scripts/test-reminders.mjs && node scripts/test-receipts-v160.mjs && node scripts/test-production-v160.mjs && node scripts/test-sql-migrations-v161.mjs",
     "qr": "python3 scripts/generate_qr.py",
     "android:prepare": "node scripts/build.mjs",
     "android:debug": "cd android && gradle assembleDebug",
-    "android:release": "cd android && gradle assembleRelease"
+    "android:release": "cd android && gradle assembleRelease",
+    "test:sql": "node scripts/test-sql-migrations-v161.mjs",
+    "test:sql:strict": "node scripts/test-sql-migrations-v161.mjs --require-db",
+    "certify": "npm test && node scripts/test-sql-migrations-v161.mjs --require-db"
   },
   "engines": {
     "node": ">=20"

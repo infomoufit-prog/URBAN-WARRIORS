@@ -701,7 +701,18 @@ begin
    where m.rol='direccion' and m.activo
    order by m.creado_en
    limit 1;
-  if v_club is null or v_direction is null then raise exception 'V160_SMOKE_NO_ACTIVE_DIRECTION'; end if;
+  -- CORRECCIÓN 1.6.1: la ausencia de una cuenta de dirección es una condición de
+  -- club recién creado, NO un fallo de la gobernanza. Antes se lanzaba una
+  -- excepción que revertía la migración completa (la puerta de escritura no
+  -- llegaba a existir) y la app quedaba sin poder guardar nada. Ahora se avisa y
+  -- se omite el smoke test; la verificación estructural del bloque 6 sigue siendo
+  -- obligatoria y sí aborta si la gobernanza queda incompleta.
+  -- El smoke test se ejecuta igual, y con la misma severidad, en cuanto exista
+  -- una cuenta de dirección activa (ver 017_persistence_recovery_v161.sql).
+  if v_club is null or v_direction is null then
+    raise notice 'V160_SMOKE_OMITIDO: todavía no hay ninguna cuenta con rol direccion activa. Ejecuta app_bootstrap_direccion (migración 017) y vuelve a lanzar esta migración para certificar la escritura real.';
+    return;
+  end if;
   perform set_config('request.jwt.claim.sub',v_direction::text,true);
   v_first := public.app_mutate_v160('disciplina.guardar',jsonb_build_object(
     'club_id',v_club,'nombre',v_name,'descripcion','Smoke test temporal','color','#ffffff','activa',true,'orden',32700

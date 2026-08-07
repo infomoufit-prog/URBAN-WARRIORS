@@ -301,6 +301,7 @@
     loading: false,
     backendContract: null,
     writeBlockedReason: null,
+    loadErrors: [],
 
     async init() {
       if (this.mode === 'demo') {
@@ -472,9 +473,22 @@
         rol: membership.rol, roles: memberships.filter((m) => m.club_id === membership.club_id).map((m) => m.rol),
         club_id: membership.club_id, socio_ids: []
       };
+      // CORRECCIÓN 1.6.1: la sesión NO se da por válida hasta que el backend
+      // confirma el contrato de escritura. Antes se persistía aquí y, si el
+      // contrato fallaba, login() lanzaba una excepción pero store.session ya
+      // estaba poblada: app.js pintaba el panel de administración completo con
+      // una sesión que no podía guardar absolutamente nada.
+      try {
+        await this.ensureBackendContract(true);
+        await this.loadRemote();
+      } catch (error) {
+        this.session = null;
+        this.backendContract = null;
+        localStorage.removeItem(SESSION_KEY);
+        await supabase.signOut().catch(() => {});
+        throw error;
+      }
       localStorage.setItem(SESSION_KEY, JSON.stringify(this.session));
-      await this.ensureBackendContract(true);
-      await this.loadRemote();
       return this.session;
     },
 
@@ -586,7 +600,12 @@
       try { return safeArray(await supabase.select(table, query)); }
       catch (error) {
         if (error?.code === 'AUTH_EXPIRED') throw error;
+        // CORRECCIÓN 1.6.1: antes esto solo hacía console.warn. Una tabla ausente
+        // o una policy mal aplicada devolvía [] y la pantalla quedaba vacía, algo
+        // indistinguible de "no se ha guardado". Ahora el fallo queda registrado
+        // y la interfaz puede avisar de que los datos mostrados son incompletos.
         console.warn(`No se pudo cargar ${table}:`, error.message);
+        this.loadErrors.push({ table, message: error?.message || 'error desconocido' });
         return fallback || [];
       }
     },
@@ -597,6 +616,7 @@
         return this.data;
       }
       this.loading = true;
+      this.loadErrors = [];
       try {
         await supabase.ensureFreshSession();
         const clubId = this.session.club_id;

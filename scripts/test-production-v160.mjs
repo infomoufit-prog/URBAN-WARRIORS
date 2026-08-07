@@ -14,7 +14,7 @@ if(!config.includes('sb_publishable_')) throw new Error('Debe usarse publishable
 if(/service_role|SUPABASE_SERVICE_ROLE/i.test(config)) throw new Error('Secreto service_role expuesto en config');
 if(!netlify.includes('command = "npm run build"') || !netlify.includes('publish = "dist"')) throw new Error('Netlify no ejecuta build gobernado');
 if(!netlify.includes('no-cache, no-store, must-revalidate')) throw new Error('Falta no-store para config/service worker');
-if(!index.includes('?v=1.6.0-b12')) throw new Error('Assets sin cache bust');
+if(!index.includes('?v=1.6.0-b14')) throw new Error('Assets sin cache bust');
 if(!store.includes('app_mutate_v160') || !migration.includes('app_mutate_v160')) throw new Error('Gateway ausente');
 if(!app.includes('finishMutation')) throw new Error('UX post-guardado ausente');
 if(pkg.scripts.build.includes('test-governance-v160')===false) throw new Error('El deploy no ejecuta preflight de gobernanza');

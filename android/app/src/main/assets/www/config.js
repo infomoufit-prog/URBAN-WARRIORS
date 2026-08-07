@@ -16,7 +16,7 @@ window.UW_CONFIG = {
   },
   release: {
     version: '1.6.0',
-    build: 12,
+    build: 14,
     apkUrl: '',
     webUrl: 'https://urban01.netlify.app',
     publishedAt: '2026-08-07',
