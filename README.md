@@ -1,50 +1,83 @@
-# Urban Warriors 1.6.0
+# Urban Warriors 2.0.0-rc.1
 
-Aplicación web/PWA y proyecto Android para la gestión diaria de Urban Warriors. Web y APK comparten Supabase como fuente de verdad.
+Reconstrucción modular del frontend de Urban Warriors sobre el backend Supabase existente.
 
-## Arquitectura de escritura 1.6.0
+## Objetivo de esta RC
 
-Desde 1.6.0 el navegador **no escribe directamente en tablas ni invoca RPC históricas**. Todas las mutaciones pasan por un único contrato versionado:
+Eliminar el frontend monolítico de 1.6.x y conservar como API estable:
 
-- contrato: `app_runtime_contract_v160`
-- mutación: `app_mutate_v160`
-- diagnóstico del canal: `app_write_channel_probe_v160`
-- idempotencia: `app_mutation_requests.request_id`
+- Supabase Auth
+- PostgreSQL + RLS
+- Storage
+- contrato backend `1.6.0`
+- `schema epoch 160`
+- puerta única `app_mutate_v160`
+- diagnóstico `app_diagnostico_persistencia_v161`
 
-La web bloquea cualquier guardado si su versión de backend no coincide con `1.6.0`. La migración 015 revoca DML directo para `anon/authenticated` y revoca la ejecución cliente de las RPC de mutación antiguas; esas funciones solo quedan encapsuladas en servidor.
+La aplicación web nueva no reutiliza `UW_STORE`, no tiene modo demo paralelo y no realiza DML directo.
 
-## Módulos gobernados
+## Módulos incluidos
 
-- cuentas e invitaciones;
-- perfil;
-- disciplinas y grados;
-- grupos y múltiples horarios;
-- alumnos, multideporte y multigrupo;
-- preinscripciones, lista de espera, aprobación y rechazo;
-- matrículas y graduaciones;
-- tarifas, cuotas, cobros, justificantes y cinco avisos;
-- publicaciones/eventos;
-- material, variantes, stock y pedidos;
-- sesiones, check-in, asistencia y seguimiento;
-- documentos y notificaciones;
-- configuración del club y registro de dispositivos push.
+- autenticación, registro e invitaciones
+- dashboard
+- disciplinas y grados
+- grupos y horarios
+- alumnos, matrículas, graduaciones y documentos
+- preinscripciones
+- sesiones, asistencia y check-in
+- progreso y seguimiento
+- tarifas, cuotas, pagos, justificantes y recibos
+- configuración y ejecución de avisos de cobro
+- comunicaciones
+- material, variantes y pedidos
+- notificaciones
+- usuarios/roles
+- configuración del club
+- perfil y push Android
+- diagnóstico técnico
+- Certification Runner E2E para Dirección
 
-## Control de deploy
+## Ruta única de escritura
 
-`npm run build` ejecuta primero el preflight de gobernanza. Si detecta RPC antiguas en el runtime, DML directo, versión/cache incoherente, firmas SQL incompatibles o un canal HTTP mal formado, el build falla y Netlify no publica esa revisión.
+`UI → repository → backend.mutate() → app_mutate_v160 → respuesta versionada → lectura → render`
+
+Los formularios esperan la respuesta del backend antes de cerrarse. Los errores permanecen visibles.
+
+## Desarrollo local sin consumir Netlify
+
+Requisitos: Node.js 20 o superior.
+
+```bash
+npm run dev
+```
+
+Después abrir la URL local que muestre el servidor (por defecto `http://127.0.0.1:4173`).
+
+El frontend local se conecta al mismo Supabase configurado en `web/config.js`. Esto permite probar el sistema completo antes del único deploy final.
+
+## Verificación estática y build
 
 ```bash
 npm test
 npm run build
 ```
 
-El build copia y verifica por SHA-256 que `web/`, `dist/` y los assets Android sean idénticos.
+`npm run build`:
+1. ejecuta los controles de arquitectura y contrato;
+2. genera `dist/`;
+3. sincroniza el mismo runtime con `android/app/src/main/assets/www`;
+4. compara hashes para evitar divergencias Web/Android.
 
-## Actualización desde 1.5.2
+## Certificación E2E
 
-1. Ejecutar **una sola vez** `supabase/migrations/015_mutation_governance_v160.sql`.
-2. La propia migración ejecuta un smoke test transaccional y revierte si la gobernanza no queda instalada correctamente.
-3. Subir el parche 1.6.0 a GitHub.
-4. Netlify ejecutará el preflight antes de publicar.
+Iniciar sesión con un usuario `direccion` y abrir **Certificación E2E**.
 
-No volver a ejecutar migraciones anteriores que ya finalizaron correctamente.
+El runner genera datos con prefijo `E2E_RC1_`, recorre operaciones reales contra Supabase/PostgreSQL, vuelve a leer los registros y al final verifica persistencia tras logout/login.
+
+No ejecuta automáticamente la generación masiva de cuotas ni cobros reales, porque `cuotas.generar` puede afectar registros legítimos del club. Esas dos funciones están implementadas, pero se comprueban de forma controlada en el smoke final.
+
+## Netlify
+
+Netlify no se utiliza como entorno iterativo. La RC está preparada para un único despliegue final después de superar la certificación local contra Supabase.
+
+Véase `DEPLOY_FINAL.md`.

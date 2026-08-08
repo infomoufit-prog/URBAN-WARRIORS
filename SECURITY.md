@@ -1,23 +1,31 @@
-# Seguridad
+# Seguridad · Urban Warriors 2.0.0-rc.1
 
-## Aplicado en el código
+## Controles aplicados
 
-- `club_id` en los datos de negocio y relaciones compuestas para impedir cruces entre clubes.
-- RLS en las tablas principales.
-- Funciones `security definer` con `search_path` fijo.
-- Operaciones de cobro sensibles mediante RPC.
-- Justificantes en un bucket privado, con rutas `club_id/socio_id/archivo` y URL firmada temporal.
-- Historial idempotente de avisos.
-- Dirección, secretaría y economía pueden gestionar cobros; monitores no.
-- La familia solo comunica pagos de socios vinculados.
-- La `service_role` y el service account de Firebase permanecen en servidor.
+- RLS y modelo multi-club existentes se conservan.
+- El frontend no contiene `service_role`.
+- La publishable key de Supabase se usa únicamente como `apikey`.
+- `Authorization` transporta el token de sesión real.
+- No existe DML directo desde los repositorios.
+- Las 37 mutaciones de negocio pasan por `app_mutate_v160`.
+- Cada mutación usa `request_id` y valida la respuesta versionada.
+- Los errores de Auth/PostgREST/RPC/Storage se propagan a la interfaz.
+- Documentos y justificantes permanecen en buckets privados y se abren mediante URL firmada.
+- Los permisos visuales se centralizan en `core/permissions.js`; el backend continúa siendo la autoridad final.
+- `app_bootstrap_direccion` no se expone desde la aplicación.
+- El Certification Runner solo está visible para Dirección.
 
-## Obligatorio antes de datos reales
+## Límites deliberados
 
-- Ejecutar las migraciones en un proyecto de prueba y verificar su sintaxis real.
-- Probar RLS con usuarios de clubes distintos.
-- Revisar permisos de Storage con archivos reales.
-- Configurar recuperación de contraseña, confirmación de correo y rate limiting/CAPTCHA.
-- Sustituir textos legales provisionales.
-- Crear copias de seguridad y política de retención.
-- Realizar revisión jurídica de privacidad, menores y derechos de imagen.
+- La RC no modifica RLS, RPC ni migraciones del backend.
+- La matriz de permisos de frontend refleja las RPC conocidas, pero el backend sigue validando asignaciones específicas de monitor, familia o socio.
+- Los consentimientos existentes pueden leerse bajo las políticas del backend, pero no se ha inventado una nueva mutación v160 para modificarlos.
+- La certificación automática no genera cuotas masivas ni registra cobros reales de forma automática para evitar efectos económicos sobre datos legítimos.
+
+## Antes de declarar producción certificada
+
+1. Ejecutar `npm run build`.
+2. Ejecutar el Certification Runner contra el Supabase real desde localhost.
+3. Revisar la exportación JSON de trazas/IDs.
+4. Hacer un único deploy final.
+5. Repetir un smoke corto en el dominio Netlify.

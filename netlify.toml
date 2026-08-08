@@ -1,13 +1,8 @@
 [build]
   command = "npm run build"
   publish = "dist"
-
-# El build usa import.meta.dirname, disponible desde Node 20.11. Sin fijar la
-# versión, un runtime antiguo de Netlify rompe el build y el sitio se queda
-# publicado en el deploy anterior sin que nadie lo note.
 [build.environment]
   NODE_VERSION = "22"
-
 [[headers]]
   for = "/*"
   [headers.values]
@@ -15,23 +10,19 @@
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(self), geolocation=(), microphone=()"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [[headers]]
   for = "/service-worker.js"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
-
 [[headers]]
   for = "/config.js"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
-
 [[headers]]
   for = "/js/*"
   [headers.values]
-    Cache-Control = "no-cache, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

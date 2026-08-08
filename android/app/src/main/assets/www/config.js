@@ -1,6 +1,3 @@
-/* Urban Warriors runtime configuration.
- * This file can be edited after deployment without rebuilding the app.
- */
 window.UW_CONFIG = {
   appName: 'Urban Warriors',
   clubSlug: 'urban-warriors',
@@ -8,39 +5,25 @@ window.UW_CONFIG = {
   locale: 'es-ES',
   currency: 'EUR',
   timezone: 'Europe/Madrid',
-  demoMode: false,
   supabase: {
     enabled: true,
     url: 'https://poggsobhtutbuagjiydc.supabase.co',
-    anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3',
+    anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '1.6.0',
-    build: 15,
-    apkUrl: '',
-    webUrl: 'https://urban01.netlify.app',
-    publishedAt: '2026-08-07',
+    version: '2.0.0-rc.3',
+    build: 20003,
     backendVersion: '1.6.0',
-    schemaEpoch: 160
-  },
-  push: {
-    enabled: false,
-    vapidKey: '',
-    firebase: {
-      apiKey: '',
-      authDomain: '',
-      projectId: '',
-      storageBucket: '',
-      messagingSenderId: '',
-      appId: ''
-    }
+    schemaEpoch: 160,
+    mutationEndpoint: 'app_mutate_v160',
+    contractEndpoint: 'app_runtime_contract_v160',
+    probeEndpoint: 'app_write_channel_probe_v160',
+    diagnosticEndpoint: 'app_diagnostico_persistencia_v161',
+    webUrl: 'https://urban01.netlify.app'
   },
   brand: {
     name: 'Urban Warriors',
     slogan: 'Bring the Pain',
-    logo: './assets/urban-warriors-logo.png',
-    primary: '#ffffff',
-    secondary: '#050608',
-    accent: '#9ca3af'
+    logo: './assets/urban-warriors-logo.png'
   }
 };
