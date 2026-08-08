@@ -12,13 +12,13 @@ const pkg = JSON.parse(pkgText);
 const checks = [];
 const check = (name, ok, detail='') => checks.push({ name, ok: Boolean(ok), detail });
 
-check('runtime 1.6.0/build14', config.includes("version: '1.6.0'") && config.includes('build: 14') && config.includes("backendVersion: '1.6.0'") && config.includes('schemaEpoch: 160'));
+check('runtime 1.6.0/build15', config.includes("version: '1.6.0'") && config.includes('build: 15') && config.includes("backendVersion: '1.6.0'") && config.includes('schemaEpoch: 160'));
 check('package 1.6.0', pkg.version === '1.6.0' && pkg.name === 'urban-warriors-v1.6.0');
-check('Android 1.6.0', gradle.includes('versionCode 14') && gradle.includes("versionName '1.6.0'") && activity.includes('UrbanWarriorsApp/1.6.0'));
-check('cache 1.6.0 build14', sw.includes("urban-warriors-v1.6.0-build14"));
+check('Android 1.6.0', gradle.includes('versionCode 15') && gradle.includes("versionName '1.6.0'") && activity.includes('UrbanWarriorsApp/1.6.0'));
+check('cache 1.6.0 build15', sw.includes("urban-warriors-v1.6.0-build15"));
 check('service worker no intercepta APIs externas', sw.includes('url.origin !== self.location.origin') && sw.includes("if (event.request.method !== 'GET') return"));
 for (const asset of ['app.css','config.js','demo-data.js','data-store.js','push.js','app.js','service-worker.js']) {
-  check(`cache bust ${asset}`, index.includes(`${asset}?v=1.6.0-b14`), asset);
+  check(`cache bust ${asset}`, index.includes(`${asset}?v=1.6.0-b15`), asset);
 }
 check('sin backup runtime', await access(resolve(root,'web/js/data-store.js.bak')).then(()=>false).catch(()=>true));
 check('publishable key no usado como Bearer', !/Authorization\s*:\s*`Bearer \$\{this\.anonKey\}`/.test(store) && !/Authorization\s*:\s*`Bearer \$\{this\.session\?\.access_token \|\| this\.anonKey\}`/.test(store));
@@ -59,4 +59,7 @@ check('rol de catálogo declarado una sola vez', (app.match(/\['direccion', 'sec
 const failed = checks.filter(c => !c.ok);
 for (const c of checks) console.log(`${c.ok ? 'OK' : 'FAIL'} ${c.name}${c.detail ? ` — ${c.detail}` : ''}`);
 if (failed.length) throw new Error(`Gobernanza 1.6.0: ${failed.length} fallo(s): ${failed.map(x=>x.name).join(', ')}`);
+
+check('guardado modal explícito', app.includes('data-action=\"submit-modal-form\"') && app.includes("action === 'submit-modal-form'"));
+check('guardado modal valida y ejecuta handleSubmit', app.includes('form.reportValidity()') && app.includes('await handleSubmit({ target: form, preventDefault() {} })'));
 console.log(`OK: ${checks.length} controles de gobernanza 1.6.0.`);

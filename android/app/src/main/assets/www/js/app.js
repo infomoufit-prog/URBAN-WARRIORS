@@ -641,7 +641,7 @@
   function openModal(title, body, submitLabel, formId) {
     document.getElementById('modal-backdrop')?.remove();
     const modal = document.createElement('div'); modal.className = 'modal-backdrop'; modal.id = 'modal-backdrop';
-    modal.innerHTML = `<section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title">${escapeHtml(title)}</h2><button class="icon-btn" data-action="close-modal">×</button></div><div class="modal-body"><form id="${formId}">${body}<div class="form-error" data-form-error role="alert" hidden></div><div class="modal-actions"><button class="btn btn-ghost" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-primary" type="submit">${escapeHtml(submitLabel || 'Guardar')}</button></div></form></div></section>`;
+    modal.innerHTML = `<section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title">${escapeHtml(title)}</h2><button class="icon-btn" data-action="close-modal">×</button></div><div class="modal-body"><form id="${formId}">${body}<div class="form-error" data-form-error role="alert" hidden></div><div class="modal-actions"><button class="btn btn-ghost" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-primary" type="button" data-action="submit-modal-form">${escapeHtml(submitLabel || 'Guardar')}</button></div></form></div></section>`;
     document.body.appendChild(modal);
   }
   function closeModal() { document.getElementById('modal-backdrop')?.remove(); }
@@ -1054,6 +1054,13 @@
       if (target.dataset.advanceOrder) { const order = byId(data().pedidos_material, target.dataset.advanceOrder); const next = order.estado === 'reservado' ? 'preparado' : 'entregado'; await store.updateMaterialOrder(order.id, next); toast(`Pedido marcado como ${next}`); render(); return; }
       if (target.dataset.notification) { const item = byId(data().notificaciones, target.dataset.notification); if (item && !item.leida) await store.markNotificationRead(item.id); go(target.dataset.notificationRoute || 'home'); return; }
       const action = target.dataset.action;
+      if (action === 'submit-modal-form') {
+        const form = target.closest('form');
+        if (!form) throw new Error('No se encontró el formulario a guardar.');
+        if (!form.reportValidity()) return;
+        await handleSubmit({ target: form, preventDefault() {} });
+        return;
+      }
       if (action === 'profile') go('profile');
       else if (action === 'logout') { await store.logout(); state.selectedMemberId = null; go('home'); }
       else if (action === 'close-modal') closeModal();

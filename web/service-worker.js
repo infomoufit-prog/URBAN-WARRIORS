@@ -1,7 +1,7 @@
-const CACHE = 'urban-warriors-v1.6.0-build14';
+const CACHE = 'urban-warriors-v1.6.0-build15';
 const ASSETS = [
-  './', './index.html', './config.js?v=1.6.0-b14', './manifest.webmanifest', './css/app.css?v=1.6.0-b14',
-  './js/demo-data.js?v=1.6.0-b14', './js/data-store.js?v=1.6.0-b14', './js/push.js?v=1.6.0-b14', './js/app.js?v=1.6.0-b14',
+  './', './index.html', './config.js?v=1.6.0-b15', './manifest.webmanifest', './css/app.css?v=1.6.0-b15',
+  './js/demo-data.js?v=1.6.0-b15', './js/data-store.js?v=1.6.0-b15', './js/push.js?v=1.6.0-b15', './js/app.js?v=1.6.0-b15',
   './assets/urban-warriors-logo.png', './assets/icons/icon-192.png', './assets/icons/icon-512.png'
 ];
 

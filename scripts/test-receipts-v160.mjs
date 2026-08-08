@@ -19,7 +19,7 @@ check('frontend carga recibos',store.includes("'recibos_cuota', `select=*&club_i
 check('botón de recibo',app.includes('data-receipt=')&&app.includes('Ver recibo'));
 check('PDF real cliente',app.includes('canvasJpegToPdf')&&app.includes("type:'application/pdf'")&&app.includes('Descargar PDF'));
 check('diseño negro Warriors',css.includes('.receipt-card')&&css.includes('background: #050608')&&app.includes('Gracias por formar parte de Urban Warriors'));
-check('build14',config.includes('build: 14'));
+check('build15',config.includes('build: 15'));
 const bad=checks.filter(([,ok])=>!ok); for(const [n,ok] of checks) console.log(`${ok?'OK':'FAIL'} ${n}`);
 if(bad.length) throw new Error(`Recibos: ${bad.length} fallo(s)`);
 console.log(`OK: ${checks.length} controles de recibos Urban Warriors.`);
