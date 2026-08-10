@@ -15,8 +15,8 @@ const [app,components,icons,repos,comms,admin,css,supa,backend,m006,m012,dispatc
 // Producto: la versión y endpoints técnicos no aparecen en login/topbar ni navegación cotidiana.
 assert(!components.includes('release.version')&&!components.includes('backendVersion'),'shell cotidiano no expone versión/backend');
 assert(!/release\.version/.test(app.split('function renderLogin')[1]?.split('function openRegistrationChoice')[0]||''),'login no muestra versión técnica');
-assert(app.includes("if(role==='direccion') ids=['dashboard'")&&!app.match(/if\(role==='direccion'\) ids=\[[^\]]*diagnostics/),'Dirección no tiene diagnóstico en navegación cotidiana');
-assert(admin.includes('Herramientas técnicas')&&admin.includes('#diagnostics')&&admin.includes('#certification'),'herramientas técnicas quedan apartadas en Configuración de Dirección');
+assert(app.includes("if(role==='direccion'||role==='coordinacion') ids=['dashboard'")&&!app.match(/ids=\[[^\]]*diagnostics/),'Gestor/Coordinación no tienen diagnóstico en navegación cotidiana');
+assert(admin.includes('Herramientas técnicas')&&admin.includes('#diagnostics')&&admin.includes('#certification'),'herramientas técnicas quedan apartadas en Configuración del Gestor de la app');
 
 // Iconografía: SVG propio, sin dependencia de emoji como sistema de navegación.
 assert(icons.includes('<svg class="uw-icon')&&icons.includes("export const navIcon"),'sistema de iconos SVG profesional disponible');
@@ -37,12 +37,12 @@ assert(m012.includes("if p_estado='publicada' and v_notificada is null")&&m012.i
 assert(m012.includes("p_audiencia='todos'")&&m012.includes("p_audiencia='monitores'")&&m012.includes("'familia'")&&m012.includes("'alumno'"),'SQL segmenta avisos por audiencia');
 assert(repos.includes('notificaciones_lecturas')&&repos.includes('sharedRead'),'lectura individual de avisos compartidos se fusiona correctamente');
 assert(app.includes('setNotificationBadge')&&app.includes('setInterval(()=>refreshNotifications')&&app.includes('Tienes ${unread.length} notificaciones pendientes'),'entrada y sesión activa muestran pendientes/nuevas notificaciones');
-assert(comms.includes("uw-notifications-changed")&&comms.includes('Publicación guardada y aviso generado'),'publicar refresca centro de notificaciones y confirma al editor');
+assert(comms.includes("uw-notifications-changed")&&comms.includes('Publicación guardada y notificada'),'publicar refresca centro de notificaciones y confirma al editor');
 assert(dispatch.includes("publicar_comunicaciones_programadas")&&dispatch.includes('FIREBASE_SERVICE_ACCOUNT_JSON')&&dispatch.includes('fcm.googleapis.com'),'infraestructura existente contempla programadas y push FCM cuando está configurado');
 
 // Las migraciones no se modifican en RC5: mismo hash conocido de RC3/RC4.
 let mh=createHash('sha256');
-for(const f of (await readdir(resolve(root,'supabase/migrations'))).filter(x=>x.endsWith('.sql')).sort()) {mh.update(f);mh.update(await readFile(resolve(root,'supabase/migrations',f)));}
+for(const f of (await readdir(resolve(root,'supabase/migrations'))).filter(x=>/^(00[1-9]|01[0-7])_.*\.sql$/.test(x)).sort()) {mh.update(f);mh.update(await readFile(resolve(root,'supabase/migrations',f)));}
 assert(mh.digest('hex')==='f3f33071f6f9aefa76bca6972957482e2d1f907b3640f613a5277c5a858c0403','migraciones 001→017 permanecen idénticas a la base certificada');
 
 console.log('RC5 MEDIA + ICONOS + NOTIFICACIONES: PASS');

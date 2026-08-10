@@ -1,78 +1,62 @@
-# Arquitectura · Urban Warriors 2.0.0-rc.1
+# Arquitectura · Urban Warriors 2.0.0-rc.8
 
-## Decisión principal
+## Principio
 
-El backend 1.6.0 se mantiene y el frontend se ha reconstruido. No se reutiliza el store monolítico ni el dispatcher global de la línea 1.6.x.
+RC8 amplía la RC7 certificada sin alterar el canal estable de persistencia. El frontend no contiene una vía paralela de escritura ni vuelve al store monolítico de la línea 1.x.
 
 ## Capas
 
-### 1. Cliente Supabase
-`web/js/core/supabase.js`
+1. `web/js/core/supabase.js`: Auth, PostgREST, RPC y Storage.
+2. `web/js/core/backend.js`: contrato, sesión, mutación gobernada, diagnóstico y Storage.
+3. `web/js/core/repositories.js`: acceso por dominio y limpieza física de ficheros.
+4. `web/js/core/state.js`: estado UI mínimo.
+5. `web/js/ui/*` + `web/js/modules/*`: experiencia por rol y listeners explícitos.
 
-Único lugar del frontend que realiza `fetch` a Auth, PostgREST, RPC y Storage. La clave `sb_publishable_*` se envía como `apikey`; `Authorization` usa el access token real.
+## Escritura
 
-### 2. Backend adapter
-`web/js/core/backend.js`
+`UI → repository → backend.mutate() → app_mutate_v160 → respuesta verificada → lectura → render`
 
-Gestiona autenticación, restauración de sesión, contrato backend, diagnóstico, trazas y la única ruta de mutación.
+Toda mutación valida versión, operación y `request_id`. Las nuevas eliminaciones también pasan por el gateway.
 
-Cada escritura verifica previamente el contrato y después valida:
-- `ok`
-- `backend_version`
-- `operation`
-- `request_id`
+## Backend RC8
 
-### 3. Repositories
-`web/js/core/repositories.js`
+`020_session_reservations_document_download_v164.sql` se aplica después de 019 y mantiene:
 
-Consultas específicas por dominio. No existe una recarga global de todas las tablas tras cada operación.
+- backend `1.6.0`;
+- schema epoch `160`;
+- endpoint `app_mutate_v160`;
+- operaciones históricas delegadas a `app_mutate_v160_legacy`;
+- RLS/Auth como autoridad.
 
-### 4. Estado
-`web/js/core/state.js`
+Añade operaciones de borrado total y limpieza editorial sin alterar migraciones 001–017.
 
-Estado mínimo de sesión, ruta, error, diagnóstico, trazas y certificación. La UI no marca una operación como guardada antes de recibir confirmación.
+## Dos niveles de ciclo de vida
 
-### 5. UI y módulos
-`web/js/ui/components.js` y `web/js/modules/*`
+**Seguro:** archivar/desactivar/dar de baja/cancelar, o eliminar solo si no hay dependencias.
 
-Los formularios tienen listeners de `submit` directos. La secuencia es:
+**Destructivo:** solo Dirección, confirmado escribiendo `ELIMINAR`, y elimina dependencias gobernadas para la entidad seleccionada.
 
-`submit → reportValidity → Guardando… → await repository → Guardado ✓ / error visible`
+Los recibos como elemento individual siguen usando `Anular` en el flujo económico normal. El borrado total de un alumno, solicitado expresamente por Dirección, elimina su conjunto de datos financieros relacionado para permitir la destrucción completa del expediente.
 
-## Persistencia
+## Limpieza de Storage
 
-Todas las escrituras de negocio pasan por:
+- `member-documents`: documentos privados de expediente.
+- `justificantes-pago`: justificantes privados.
+- `club-public-media`: publicaciones, material y branding.
 
-`app_mutate_v160(p_operation, p_payload, p_request_id)`
+La base de datos devuelve las rutas/URLs afectadas y el repository elimina los objetos físicos después de confirmar la mutación. Reemplazar una imagen también limpia la anterior.
 
-El frontend contiene referencias a las 37 operaciones del contrato v160 entre repositorios y operaciones de bootstrap/push.
+## PWA / Android
 
-## Lecturas
+- frontend: `2.0.0-rc.8`
+- Android: `versionCode 20008`, `versionName 2.0.0-rc.8`
+- Web, `dist` y assets Android se sincronizan mediante `scripts/build.mjs`.
 
-Las lecturas usan PostgREST con RLS. Se cargan únicamente las colecciones necesarias para la pantalla actual.
 
-## Storage
+## Reservas de sesión RC8
 
-- `member-documents`: documentos privados de socios.
-- `justificantes-pago`: justificantes privados de pago, con URL firmada temporal.
-- medios públicos existentes del backend se mantienen.
+`reservas_sesion` representa intención previa de asistencia y no sustituye `asistencias` ni el check-in. Las escrituras pasan exclusivamente por `app_mutate_v160` mediante `sesion.reserva.confirmar` y `sesion.reserva.cancelar`. El backend valida pertenencia, matrícula activa, estado programado y aforo antes de confirmar.
 
-## PWA
+## Descarga privada RC8
 
-El service worker 2.0 no guarda en caché HTML, JavaScript, CSS, config ni el propio service worker. Solo cachea activos estáticos no críticos. Al activarse elimina caches antiguos.
-
-## Android
-
-Web y Android comparten exactamente el mismo runtime generado por `scripts/build.mjs`.
-
-La WebView sirve los assets desde:
-`https://appassets.androidplatform.net/`
-
-Esto permite módulos ES sin depender de `file://`. La app Android no registra el service worker sobre ese host virtual.
-
-## Compatibilidad
-
-- frontend: `2.0.0-rc.1`
-- build: `20001`
-- backend: `1.6.0`
-- schema epoch: `160`
+La UI no expone `member-documents` públicamente. `supabase.js` obtiene una URL firmada temporal, descarga el blob y `documents.js` / `portal.js` inician la descarga local. Abrir y descargar respetan las mismas RLS y visibilidad documental existentes.

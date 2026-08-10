@@ -62,6 +62,8 @@ export class SupabaseClient {
     const res=await fetch(url,{method:'POST',headers:{apikey:this.key,Authorization:`Bearer ${this.session.access_token}`,'Content-Type':file.type||'application/octet-stream','x-upsert':upsert?'true':'false'},body:file});
     const body=await res.json().catch(()=>({})); if(!res.ok)throw new Error(body.message||body.error||`Storage HTTP ${res.status}`);return body;
   }
+  async remove(bucket,path){await this.fresh();if(!this.session?.access_token)throw new AuthExpiredError();return this.request(`/storage/v1/object/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`,{method:'DELETE'});}
   async signedUrl(bucket,path,expiresIn=600){const b=await this.request(`/storage/v1/object/sign/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`,{method:'POST',body:JSON.stringify({expiresIn})});const u=b.signedURL||b.signedUrl||b.url;return u?.startsWith('http')?u:`${this.url}/storage/v1${u}`}
+  async downloadSigned(bucket,path,expiresIn=600){const url=await this.signedUrl(bucket,path,expiresIn);const res=await fetch(url);if(!res.ok)throw new Error(`No se pudo descargar el archivo (HTTP ${res.status})`);return res.blob()}
   publicUrl(bucket,path){return `${this.url}/storage/v1/object/public/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`}
 }

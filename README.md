@@ -1,54 +1,54 @@
-# Urban Warriors 2.0.0-rc.5 · Premium Media & Notifications
+# Urban Warriors 2.0.0-rc.9 · Final Release Candidate
 
-RC5 conserva la arquitectura estable y certificada de la línea 2.0 con una reconstrucción de experiencia visual y paridad de producto basada en las versiones anteriores de Urban Warriors.
+RC9 parte de RC8 y solo cierra el modelo de acceso del equipo. No reconstruye persistencia, documentos, reservas, publicaciones, material, finanzas ni asistencia.
 
-## Principio de RC5
+## Roles visibles definitivos
 
-**No se toca la persistencia que ya funciona.**
+- **Gestor de la app**: máximo nivel. Internamente conserva la clave histórica `direccion` para mantener compatibilidad con el backend certificado. Es el único perfil con invitaciones de personal, herramientas técnicas, diagnóstico, certificación E2E y acciones de borrado total.
+- **Coordinación**: administración operativa amplia del club. Puede trabajar con alumnos, solicitudes, disciplinas, grupos, sesiones, asistencia, progreso, seguimiento, finanzas, avisos, publicaciones, material, archivo documental, equipo en modo consulta y personalización del club. No recibe el rol interno `direccion`, no ejecuta E2E y no dispone de `Eliminar todo`.
+- **Secretaría**: altas, solicitudes, alumnos, grupos, sesiones, documentos, comunicaciones administrativas y operativa asociada.
+- **Economía / Tesorería**: tarifas, cuotas, pagos, recibos, avisos y material.
+- **Comunicación**: publicaciones y contenidos.
+- **Monitor**: grupos, sesiones, asistencia y seguimiento.
+- **Familia / Alumno**: portal personal, reservas de sesión, material, publicaciones, documentos visibles y actividad propia.
 
-Se mantienen el backend Supabase 1.6.0, RLS, Storage, Auth, `app_mutate_v160`, epoch 160 y la arquitectura modular de RC3. RC5 mantiene esa experiencia Premium y añade iconografía SVG, multimedia directa y centro de notificaciones conectado al backend existente.
+## Compatibilidad de Coordinación
 
-## Novedades principales
+PostgreSQL conserva el enum histórico de roles. RC9 añade una marca `coordinacion` y materializa ese nivel mediante las membresías operativas ya existentes `secretaria + economia + comunicacion`. Esto reutiliza las RLS probadas y evita otorgar privilegios reservados a `direccion`.
 
-- sistema visual Urban Warriors Premium oscuro;
-- login/onboarding de marca;
-- dashboards específicos por rol;
-- navegación inferior móvil específica por rol;
-- listados adaptativos: tabla desktop / cards móvil;
-- catálogo deportivo visual;
-- grupos con ocupación y horarios;
-- preinscripciones en pipeline;
-- comunicaciones tipo feed;
-- material en catálogo de producto;
-- Equipo e invitaciones;
-- portal completo Familia/Alumno;
-- selector de hijos/socios vinculados;
-- asistencia, grado, próxima clase y cuotas como métricas;
-- horarios y check-in;
-- comunicar pago y solicitar material;
-- solicitar otra disciplina/grupo y añadir menor;
-- progreso, graduaciones, seguimiento y documentos visibles.
+En frontend esas membresías se presentan como un único rol **Coordinación**.
 
-## Ruta de escritura
+## Migración
 
-`UI → repository → backend.mutate() → app_mutate_v160 → respuesta → lectura → render`
+Si 018, 019 y 020 ya están instaladas, ejecutar una sola vez:
 
-No existe DML directo desde los módulos de UI.
+`supabase/migrations/021_access_roles_gestor_coordinacion_v165.sql`
 
-## Desarrollo/certificación local
+El archivo duplicado para copiar directamente al SQL Editor es `SQL_EJECUTAR_RC9_021.sql`.
+
+El diagnóstico final es:
+
+```sql
+select * from public.app_diagnostico_final_v165();
+```
+
+Solo el Gestor de la app puede ejecutarlo.
+
+## Contrato estable
+
+- backend: `1.6.0`
+- schema epoch: `160`
+- gateway: `app_mutate_v160`
+- las 62 operaciones de RC8 se conservan
+- RC8 queda encapsulado como `app_mutate_v160_v164`
+
+## Validación
 
 ```bash
 npm install
+npm test
 npm run build
 npm run dev
 ```
 
-Abrir `http://127.0.0.1:4173` y ejecutar **Certificación E2E** con una cuenta Dirección antes de subir RC5 a Netlify.
-
-## Documentación
-
-- `INFORME_RC5_MEDIA_ICONOS_NOTIFICACIONES.md` — mejoras RC5 y límites.
-- `VALIDACION_RC5.md` — controles y certificación pendiente.
-- `INFORME_RC4_PREMIUM.md` — base visual y paridad recuperada.
-- `MATRIZ_PERMISOS.md` — permisos de UI derivados del backend.
-- `DEPLOY_FINAL.md` — procedimiento de deploy único.
+Antes del deploy final, verificar al menos una invitación de **Coordinación** con una cuenta de prueba y confirmar que ve gestión operativa pero no herramientas técnicas ni `Eliminar todo`.

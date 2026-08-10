@@ -15,17 +15,28 @@ function qs(value){return encodeURIComponent(String(value??''));}
 
 async function identityFromAuth(authUser){
   const userId=authUser.id;
-  const memberships=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,logo_url,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
+  let memberships;
+  try{
+    memberships=await client.select('miembros_club',`select=club_id,rol,coordinacion,clubes(id,nombre,slug,lema,logo_url,portada_url,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
+  }catch(error){
+    // Compatibilidad temporal si RC9 se abre antes de aplicar la migración 021.
+    memberships=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,lema,logo_url,portada_url,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
+  }
   if(!memberships?.length)throw new Error('El usuario no pertenece a ningún club activo.');
   const priority=['direccion','secretaria','economia','comunicacion','monitor','familia','alumno'];
   memberships.sort((a,b)=>priority.indexOf(a.rol)-priority.indexOf(b.rol));
-  const chosen=memberships.find(m=>m.clubes?.slug===cfg.clubSlug)||memberships[0];
+  const candidate=memberships.find(m=>m.clubes?.slug===cfg.clubSlug)||memberships[0];
+  const clubMemberships=memberships.filter(m=>m.club_id===candidate.club_id);
+  const isCoordination=clubMemberships.some(m=>m.coordinacion===true);
+  const chosen=isCoordination?(clubMemberships.find(m=>m.rol==='secretaria')||candidate):candidate;
   const profiles=await client.select('perfiles',`select=*&id=eq.${qs(userId)}&limit=1`).catch(()=>[]);
   const profile=profiles?.[0]||{};
+  const effectiveRole=isCoordination?'coordinacion':chosen.rol;
+  const effectiveRoles=isCoordination?['coordinacion']:[...new Set(clubMemberships.map(m=>m.rol))];
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
     apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',
-    rol:chosen.rol,roles:[...new Set(memberships.filter(m=>m.club_id===chosen.club_id).map(m=>m.rol))],club_id:chosen.club_id,club:chosen.clubes||null
+    rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination
   };
 }
 
@@ -33,8 +44,8 @@ export const backend={
   async contract(session=state.session){
     if(!session?.club_id)throw new AuthExpiredError();
     const c=await client.rpc(cfg.release.contractEndpoint,{p_club_id:session.club_id});
-    if(!c?.ok||!c?.write_ready||c.backend_version!==cfg.release.backendVersion||c.mutation_endpoint!==cfg.release.mutationEndpoint){
-      throw new Error(`Contrato backend incompatible: esperado ${cfg.release.backendVersion}/${cfg.release.mutationEndpoint}; recibido ${c?.backend_version||'—'}/${c?.mutation_endpoint||'—'}.`);
+    if(!c?.ok||!c?.write_ready||c.backend_version!==cfg.release.backendVersion||Number(c.schema_epoch)!==Number(cfg.release.schemaEpoch)||c.mutation_endpoint!==cfg.release.mutationEndpoint){
+      throw new Error(`Contrato backend incompatible: esperado ${cfg.release.backendVersion}/epoch ${cfg.release.schemaEpoch}/${cfg.release.mutationEndpoint}; recibido ${c?.backend_version||'—'}/epoch ${c?.schema_epoch||'—'}/${c?.mutation_endpoint||'—'}.`);
     }
     return c;
   },
@@ -114,6 +125,8 @@ export const backend={
     }
   },
   async upload(bucket,path,file,upsert=false){const out=await client.upload(bucket,path,file,upsert);state.pushTrace({kind:'storage',ok:true,label:`UPLOAD ${bucket}`,detail:path});return out;},
+  async remove(bucket,path){const out=await client.remove(bucket,path);state.pushTrace({kind:'storage',ok:true,label:`DELETE ${bucket}`,detail:path});return out;},
   async signedUrl(bucket,path,expires=600){return client.signedUrl(bucket,path,expires)},
+  async download(bucket,path,expires=600){const blob=await client.downloadSigned(bucket,path,expires);state.pushTrace({kind:'storage',ok:true,label:`DOWNLOAD ${bucket}`,detail:path});return blob;},
   publicUrl(bucket,path){return client.publicUrl(bucket,path)}
 };

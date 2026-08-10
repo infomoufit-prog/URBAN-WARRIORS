@@ -15,15 +15,19 @@ export function alertHtml(){
 export function bindDismissAlerts(){document.querySelectorAll('[data-dismiss-alert]').forEach(b=>b.addEventListener('click',()=>{state.clearError();b.closest('.alert')?.remove();}));}
 
 const initials=(name='')=>String(name).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()).join('')||'UW';
+const safeColor=(value,fallback)=>/^#[0-9a-f]{6}$/i.test(String(value||''))?String(value):fallback;
+const safeLogo=(value)=>{const v=String(value||'').trim();return /^(https?:\/\/|\.\/|\/)/i.test(v)?v:'./assets/urban-warriors-logo.png'};
+const safeOptionalImage=(value)=>{const v=String(value||'').trim();return /^(https?:\/\/|\.\/|\/)/i.test(v)?v:''};
 
 export function shell(navItems,active,mobileItems=[]){
   const s=state.session;
   const sections={dashboard:'Principal',members:'Gestión',enrollments:'Gestión',catalog:'Club',groups:'Club',sessions:'Clases',attendance:'Clases',progress:'Seguimiento',tracking:'Seguimiento',finance:'Economía',reminders:'Economía',communications:'Contenido',material:'Contenido',notifications:'Cuenta',users:'Administración',settings:'Administración',diagnostics:'Sistema',certification:'Sistema',requests:'Mi cuenta',install:'Mi cuenta',profile:'Cuenta'};
   let last='';const navHtml=navItems.map(n=>{const sec=sections[n.id]||'Más';const head=sec!==last?`<div class="nav-section">${esc(sec)}</div>`:'';last=sec;return `${head}<button type="button" class="nav-item ${active===n.id?'active':''}" data-nav="${esc(n.id)}"><span>${n.icon}</span><b>${esc(n.label)}</b></button>`}).join('');
   const mobile=mobileItems.map(n=>`<button type="button" class="${active===n.id?'active':''}" ${n.id==='more'?'id="mobile-more"':`data-nav="${esc(n.id)}"`}><span>${n.icon}</span>${esc(n.label)}</button>`).join('');
-  return `<div class="app-shell">
+  const logo=safeLogo(s?.club?.logo_url);const cover=safeOptionalImage(s?.club?.portada_url);const primary=safeColor(s?.club?.color_primario,'#ffffff');const secondary=safeColor(s?.club?.color_secundario,'#050608');
+  return `<div class="app-shell" style="--club-primary:${esc(primary)};--club-secondary:${esc(secondary)};--uw-logo-image:url('${esc(logo)}');--uw-cover-image:${cover?`url('${esc(cover)}')`:'none'}">
     <aside class="sidebar" id="sidebar">
-      <div class="brand-block"><img src="./assets/urban-warriors-logo.png" alt="Urban Warriors"><div><strong>URBAN WARRIORS</strong><small>Bring the Pain</small></div></div>
+      <div class="brand-block"><img src="${esc(logo)}" alt="${esc(s?.club?.nombre||'Urban Warriors')}"><div><strong>${esc(String(s?.club?.nombre||'URBAN WARRIORS').toUpperCase())}</strong><small>${esc(s?.club?.lema||'Bring the Pain')}</small></div></div>
       <nav class="nav-list">${navHtml}</nav>
       <div class="sidebar-foot"><div class="user-avatar">${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</div><span>${esc(`${s?.nombre||''} ${s?.apellidos||''}`.trim())}</span><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small><button type="button" class="btn btn-ghost btn-sm" id="logout-btn">${icon('logOut',{size:15})} Cerrar sesión</button></div>
     </aside>
@@ -83,6 +87,14 @@ export function openForm({title,subtitle='',fields=[],initial={},submitText='Gua
   });
   setTimeout(()=>form.querySelector('input:not([type=hidden]),select,textarea')?.focus(),0);
   return {wrap,form};
+}
+export function openDetail({title='',subtitle='',body='',actions='',width='860px',className=''}){
+  closeModal();
+  const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';
+  wrap.innerHTML=`<div class="modal detail-modal ${esc(className)}" style="--modal-width:${esc(width)}"><div class="modal-head"><div><h2>${esc(title)}</h2>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div><button type="button" class="icon-btn" id="modal-close" aria-label="Cerrar">${icon('close')}</button></div><div class="detail-modal-body">${body}</div>${actions?`<div class="modal-actions detail-actions">${actions}</div>`:''}</div>`;
+  document.body.appendChild(wrap);
+  const close=()=>closeModal();wrap.querySelector('#modal-close')?.addEventListener('click',close);wrap.addEventListener('click',e=>{if(e.target===wrap)close()});
+  return {wrap,close};
 }
 export function closeModal(){document.getElementById('modal-layer')?.remove();}
 export function confirmDialog(title,text,onConfirm,{confirmText='Confirmar',danger=false}={}){openForm({title,subtitle:text,fields:[],submitText:confirmText,onSubmit:async()=>onConfirm(),width:'480px'});if(danger)document.getElementById('modal-submit')?.classList.add('btn-danger');}

@@ -1,29 +1,27 @@
-# Matriz de permisos de interfaz
+# Matriz de permisos · RC9
 
-El backend es siempre la autoridad final. Esta matriz controla qué acciones se muestran en el frontend reconstruido.
+| Área | Gestor de la app | Coordinación | Secretaría | Economía | Comunicación | Monitor | Familia/Alumno |
+|---|---|---|---|---|---|---|---|
+| Panel global | Sí | Sí | Sí | financiero | editorial | hoy | personal |
+| Disciplinas | Sí | Sí | Sí | — | — | grados | — |
+| Grupos | Sí | Sí | Sí | — | — | lectura/operativa | horarios propios |
+| Alumnos | Sí | Sí | Sí | — | — | ámbito deportivo | propios/vinculados |
+| Solicitudes/matrículas | Sí | Sí | Sí | — | — | — | solicitar |
+| Sesiones | Sí | Sí | Sí | — | — | Sí | ver/reservar |
+| Asistencia/check-in | Sí | Sí | Sí | — | — | Sí | check-in propio |
+| Progreso/seguimiento | Sí | Sí | Sí | — | — | Sí | visible propio |
+| Finanzas/pagos | Sí | Sí | operativa | Sí | — | — | propias |
+| Avisos de cobro | Sí | Sí | Sí | Sí | — | — | recibe |
+| Publicaciones | Sí | Sí | Sí | — | Sí | lectura | lectura según audiencia |
+| Material/solicitudes | Sí | Sí | Sí | Sí | — | — | solicitar |
+| Archivo documental | Sí | Sí | Sí | — | — | — | documentos autorizados |
+| Personalización club | Sí | Sí | Sí | Sí | Sí | — | — |
+| Ver equipo | Sí | Sí | Sí | según RLS | según RLS | según RLS | — |
+| Invitar personal | **Sí** | **No** | No | No | No | No | No |
+| Borrado total | **Sí** | **No** | No | No | No | No | No |
+| Diagnóstico técnico | **Sí** | **No** | No | No | No | No | No |
+| Certificación E2E | **Sí** | **No** | No | No | No | No | No |
 
-| Capacidad | Dirección | Secretaría | Economía | Comunicación | Monitor |
-|---|---:|---:|---:|---:|---:|
-| Disciplinas | ✓ | ✓ | | | |
-| Grados | ✓ | ✓ | | | ✓ |
-| Grupos | ✓ | ✓ | | | |
-| Alumnos | ✓ | ✓ | | | |
-| Matrículas | ✓ | ✓ | | | |
-| Graduaciones | ✓ | ✓ | | | ✓ |
-| Tarifas | ✓ | | ✓ | | |
-| Cuotas: generar | ✓ | | ✓ | | |
-| Pagos: administración | ✓ | ✓ | ✓ | | |
-| Avisos de cobro | ✓ | ✓ | ✓ | | |
-| Material | ✓ | ✓ | ✓ | | |
-| Comunicaciones | ✓ | | | ✓ | |
-| Sesiones | ✓ | ✓ | | | ✓ |
-| Asistencia / check-in | ✓ | ✓ | | | ✓* |
-| Seguimiento | ✓ | ✓ | | | ✓* |
-| Documentos de alumnos | ✓ | ✓ | | | |
-| Invitaciones | ✓ | | | | |
-| Configuración club | ✓ | ✓ | ✓ | ✓ | |
-| Certificación E2E | ✓ | | | | |
+## Nota técnica
 
-`*` El backend aplica además el ámbito/asignación real del monitor.
-
-Familia y alumno disponen de navegación restringida y las políticas RLS determinan los registros que pueden leer/comunicar.
+`direccion` continúa siendo la clave interna del máximo nivel y se muestra siempre como **Gestor de la app**. `Coordinación` no recibe `direccion`; reutiliza de forma controlada permisos backend de `secretaria`, `economia` y `comunicacion`, que en UI se colapsan en un único rol.

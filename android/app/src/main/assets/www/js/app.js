@@ -11,20 +11,21 @@ import { renderFinance, renderReminders } from './modules/finance.js';
 import { renderCommunications, renderMaterial, renderNotifications } from './modules/comms-material.js';
 import { renderUsers, renderSettings, renderProfile, renderDiagnostics, renderCertification, renderInstall } from './modules/admin.js';
 import { renderPortalDashboard, renderPortalSchedule, renderPortalRequests, renderPortalProfile } from './modules/portal.js';
+import { renderDocuments } from './modules/documents.js';
 
 const isPortal=()=>['familia','alumno'].includes(state.session?.rol);
 const routes={
   dashboard:()=>isPortal()?renderPortalDashboard():renderDashboard(),catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
   sessions:renderSessions,attendance:renderAttendance,progress:renderProgress,finance:renderFinance,reminders:renderReminders,communications:renderCommunications,
-  tracking:renderTracking,material:renderMaterial,notifications:renderNotifications,users:renderUsers,settings:renderSettings,diagnostics:renderDiagnostics,
+  tracking:renderTracking,material:renderMaterial,documents:renderDocuments,notifications:renderNotifications,users:renderUsers,settings:renderSettings,diagnostics:renderDiagnostics,
   certification:renderCertification,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():renderProfile
 };
-const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',notifications:'Notificaciones',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app'};
+const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app'};
 
 function navFor(session){
   const role=session?.rol;let ids;
-  if(role==='direccion') ids=['dashboard','members','enrollments','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','material','notifications','users','settings','install','profile'];
-  else if(role==='secretaria') ids=['dashboard','enrollments','members','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','material','notifications','users','settings','install','profile'];
+  if(role==='direccion'||role==='coordinacion') ids=['dashboard','members','enrollments','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','material','documents','notifications','users','settings','install','profile'];
+  else if(role==='secretaria') ids=['dashboard','enrollments','members','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','material','documents','notifications','users','settings','install','profile'];
   else if(role==='economia') ids=['dashboard','finance','reminders','material','notifications','settings','install','profile'];
   else if(role==='comunicacion') ids=['dashboard','communications','notifications','settings','install','profile'];
   else if(role==='monitor') ids=['dashboard','groups','sessions','attendance','tracking','progress','notifications','install','profile'];
@@ -33,7 +34,7 @@ function navFor(session){
 }
 function mobileNavFor(session){
   const role=session?.rol;let ids;
-  if(role==='direccion')ids=['dashboard','members','sessions','finance','more'];
+  if(role==='direccion'||role==='coordinacion')ids=['dashboard','members','sessions','finance','more'];
   else if(role==='secretaria')ids=['dashboard','enrollments','members','sessions','more'];
   else if(role==='economia')ids=['dashboard','finance','reminders','notifications','more'];
   else if(role==='comunicacion')ids=['dashboard','communications','notifications','profile','more'];
@@ -98,7 +99,7 @@ async function publicCatalog(){
   const [d,g,t]=await Promise.all([client.select('disciplinas',`select=*&club_id=eq.${club.id}&activa=eq.true&order=orden`,false),client.select('grupos',`select=*&club_id=eq.${club.id}&activo=eq.true&order=nombre`,false),client.select('tarifas',`select=*&club_id=eq.${club.id}&activa=eq.true&order=nombre`,false)]);return {d,g,t};
 }
 function openRegistrationChoice(){
-  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar Urban Warriors.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Soy una persona adulta</strong><small>Crearé mi cuenta y solicitaré mi propia inscripción.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>El personal accede mediante una invitación de Dirección.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Los menores no crean una cuenta independiente. La cuenta y los consentimientos corresponden a una persona adulta responsable.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitation();else openRegistration(type)}));
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar Urban Warriors.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Soy una persona adulta</strong><small>Crearé mi cuenta y solicitaré mi propia inscripción.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>El personal accede mediante una invitación del Gestor de la app.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Los menores no crean una cuenta independiente. La cuenta y los consentimientos corresponden a una persona adulta responsable.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitation();else openRegistration(type)}));
 }
 async function openRegistration(type){
   try{const c=await publicCatalog();const tutor=type==='tutor';openForm({title:tutor?'Cuenta familiar':'Cuenta de alumno adulto',subtitle:'Cuenta → datos → solicitud deportiva → consentimientos',width:'900px',fields:[
@@ -127,6 +128,6 @@ async function boot(){
   window.addEventListener('hashchange',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
   window.addEventListener('focus',()=>{if(state.session)refreshNotifications({announce:true})});
   try{const session=await backend.restore();if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();}
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20005').catch(e=>console.warn('Service worker:',e));
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20008').catch(e=>console.warn('Service worker:',e));
 }
 boot();
