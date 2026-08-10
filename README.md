@@ -1,83 +1,54 @@
-# Urban Warriors 2.0.0-rc.1
+# Urban Warriors 2.0.0-rc.5 · Premium Media & Notifications
 
-Reconstrucción modular del frontend de Urban Warriors sobre el backend Supabase existente.
+RC5 conserva la arquitectura estable y certificada de la línea 2.0 con una reconstrucción de experiencia visual y paridad de producto basada en las versiones anteriores de Urban Warriors.
 
-## Objetivo de esta RC
+## Principio de RC5
 
-Eliminar el frontend monolítico de 1.6.x y conservar como API estable:
+**No se toca la persistencia que ya funciona.**
 
-- Supabase Auth
-- PostgreSQL + RLS
-- Storage
-- contrato backend `1.6.0`
-- `schema epoch 160`
-- puerta única `app_mutate_v160`
-- diagnóstico `app_diagnostico_persistencia_v161`
+Se mantienen el backend Supabase 1.6.0, RLS, Storage, Auth, `app_mutate_v160`, epoch 160 y la arquitectura modular de RC3. RC5 mantiene esa experiencia Premium y añade iconografía SVG, multimedia directa y centro de notificaciones conectado al backend existente.
 
-La aplicación web nueva no reutiliza `UW_STORE`, no tiene modo demo paralelo y no realiza DML directo.
+## Novedades principales
 
-## Módulos incluidos
+- sistema visual Urban Warriors Premium oscuro;
+- login/onboarding de marca;
+- dashboards específicos por rol;
+- navegación inferior móvil específica por rol;
+- listados adaptativos: tabla desktop / cards móvil;
+- catálogo deportivo visual;
+- grupos con ocupación y horarios;
+- preinscripciones en pipeline;
+- comunicaciones tipo feed;
+- material en catálogo de producto;
+- Equipo e invitaciones;
+- portal completo Familia/Alumno;
+- selector de hijos/socios vinculados;
+- asistencia, grado, próxima clase y cuotas como métricas;
+- horarios y check-in;
+- comunicar pago y solicitar material;
+- solicitar otra disciplina/grupo y añadir menor;
+- progreso, graduaciones, seguimiento y documentos visibles.
 
-- autenticación, registro e invitaciones
-- dashboard
-- disciplinas y grados
-- grupos y horarios
-- alumnos, matrículas, graduaciones y documentos
-- preinscripciones
-- sesiones, asistencia y check-in
-- progreso y seguimiento
-- tarifas, cuotas, pagos, justificantes y recibos
-- configuración y ejecución de avisos de cobro
-- comunicaciones
-- material, variantes y pedidos
-- notificaciones
-- usuarios/roles
-- configuración del club
-- perfil y push Android
-- diagnóstico técnico
-- Certification Runner E2E para Dirección
+## Ruta de escritura
 
-## Ruta única de escritura
+`UI → repository → backend.mutate() → app_mutate_v160 → respuesta → lectura → render`
 
-`UI → repository → backend.mutate() → app_mutate_v160 → respuesta versionada → lectura → render`
+No existe DML directo desde los módulos de UI.
 
-Los formularios esperan la respuesta del backend antes de cerrarse. Los errores permanecen visibles.
-
-## Desarrollo local sin consumir Netlify
-
-Requisitos: Node.js 20 o superior.
+## Desarrollo/certificación local
 
 ```bash
+npm install
+npm run build
 npm run dev
 ```
 
-Después abrir la URL local que muestre el servidor (por defecto `http://127.0.0.1:4173`).
+Abrir `http://127.0.0.1:4173` y ejecutar **Certificación E2E** con una cuenta Dirección antes de subir RC5 a Netlify.
 
-El frontend local se conecta al mismo Supabase configurado en `web/config.js`. Esto permite probar el sistema completo antes del único deploy final.
+## Documentación
 
-## Verificación estática y build
-
-```bash
-npm test
-npm run build
-```
-
-`npm run build`:
-1. ejecuta los controles de arquitectura y contrato;
-2. genera `dist/`;
-3. sincroniza el mismo runtime con `android/app/src/main/assets/www`;
-4. compara hashes para evitar divergencias Web/Android.
-
-## Certificación E2E
-
-Iniciar sesión con un usuario `direccion` y abrir **Certificación E2E**.
-
-El runner genera datos con prefijo `E2E_RC1_`, recorre operaciones reales contra Supabase/PostgreSQL, vuelve a leer los registros y al final verifica persistencia tras logout/login.
-
-No ejecuta automáticamente la generación masiva de cuotas ni cobros reales, porque `cuotas.generar` puede afectar registros legítimos del club. Esas dos funciones están implementadas, pero se comprueban de forma controlada en el smoke final.
-
-## Netlify
-
-Netlify no se utiliza como entorno iterativo. La RC está preparada para un único despliegue final después de superar la certificación local contra Supabase.
-
-Véase `DEPLOY_FINAL.md`.
+- `INFORME_RC5_MEDIA_ICONOS_NOTIFICACIONES.md` — mejoras RC5 y límites.
+- `VALIDACION_RC5.md` — controles y certificación pendiente.
+- `INFORME_RC4_PREMIUM.md` — base visual y paridad recuperada.
+- `MATRIZ_PERMISOS.md` — permisos de UI derivados del backend.
+- `DEPLOY_FINAL.md` — procedimiento de deploy único.

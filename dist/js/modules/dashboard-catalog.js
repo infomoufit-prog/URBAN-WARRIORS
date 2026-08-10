@@ -1,27 +1,46 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, byName } from '../core/utils.js';
-import { pageHeader, metric, card, table, empty, badge, openForm, toast, setError, setMainHtml } from '../ui/components.js';
+import { esc, byName, money, dateFmt, isoDate } from '../core/utils.js';
+import { pageHeader, hero, metric, progress, quickRow, card, table, empty, badge, openForm, toast, setError, setMainHtml } from '../ui/components.js';
+import { icon } from '../ui/icons.js';
 
 const btn=(id,label,cls='btn btn-ghost btn-sm')=>`<button type="button" class="${cls}" data-id="${esc(id)}">${esc(label)}</button>`;
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 
 export async function renderDashboard(){
-  setMainHtml('<div class="loading-card">Cargando panel…</div>');
+  setMainHtml('<div class="loading-card">Preparando tu panel…</div>');
   try{
-    const d=await repos.dashboard.load();
-    const pending=d.fees.filter(x=>['pendiente','vencida','parcialmente_pagada'].includes(x.estado));
-    const unpaid=pending.reduce((s,x)=>s+Number(x.importe||0),0);
-    const future=d.sessions.filter(x=>String(x.fecha)>=new Date().toISOString().slice(0,10)&&x.estado!=='cancelada');
-    const unread=d.notifs.filter(x=>!x.leida);
-    setMainHtml(`${pageHeader('Inicio','Resumen operativo conectado a Supabase')}
-      <div class="metrics">${metric('Socios activos',d.members.filter(x=>x.estado==='activo').length)}${metric('Grupos activos',d.groups.filter(x=>x.activo).length)}${metric('Cuotas pendientes',pending.length,`${unpaid.toFixed(2)} € nominales`)}${metric('Avisos sin leer',unread.length)}</div>
-      <div class="grid-2">${card('Próximas sesiones',future.length?future.slice(0,8).map(x=>`<div class="cert-step"><span class="cert-index">${esc(String(x.fecha).slice(8,10)||'•')}</span><div><strong>${esc(x.fecha)}</strong><small>${esc(x.estado)}</small></div></div>`).join(''):empty('Sin sesiones próximas'))}${card('Estado del sistema',`<p>Frontend <strong>${esc(window.UW_CONFIG.release.version)}</strong></p><p>Backend esperado <strong>${esc(window.UW_CONFIG.release.backendVersion)}</strong></p><p>Rol efectivo <strong>${esc(state.session?.rol)}</strong></p><button class="btn btn-ghost" id="run-quick-diagnostic">Ejecutar diagnóstico</button><div id="quick-diagnostic" style="margin-top:12px"></div>`)}</div>`);
-    document.getElementById('run-quick-diagnostic')?.addEventListener('click',async()=>{
-      const box=document.getElementById('quick-diagnostic');box.textContent='Comprobando…';
-      try{const { backend }=await import('../core/backend.js');const [contract,probe]=await Promise.all([backend.contract(),backend.probe()]);box.innerHTML=`${badge('Contrato OK','ok')} ${badge('Canal OK','ok')}<pre style="white-space:pre-wrap;font-size:11px">${esc(JSON.stringify({contract,probe},null,2))}</pre>`;}catch(e){box.innerHTML=`${badge('Fallo','danger')} ${esc(e.message)}`}
-    });
+    const role=state.session?.rol;const d=await repos.dashboard.load();const today=isoDate();
+    const activeMembers=d.members.filter(x=>x.estado==='activo');const activeGroups=d.groups.filter(x=>x.activo);const pendingFees=d.fees.filter(x=>['pendiente','vencida','parcialmente_pagada'].includes(x.estado));const overdue=d.fees.filter(x=>x.estado==='vencida');
+    const pendingAmount=pendingFees.reduce((sum,x)=>sum+Number(x.importe||0),0);const future=d.sessions.filter(x=>String(x.fecha)>=today&&x.estado!=='cancelada').sort((a,b)=>`${a.fecha} ${a.hora_inicio}`.localeCompare(`${b.fecha} ${b.hora_inicio}`));
+    const unread=d.notifs.filter(x=>!x.leida);const pendingPre=d.pre.filter(x=>['enviada','en_revision','pendiente_documentacion','lista_espera'].includes(x.estado));const pendingPayments=d.payments.filter(x=>x.estado_validacion==='pendiente');
+    const occupancy=activeGroups.map(g=>{const enrolled=new Set(d.enrollments.filter(e=>e.grupo_id===g.id&&e.activa).map(e=>e.socio_id)).size;const cap=Number(g.plazas||0);return {...g,enrolled,pct:cap?Math.min(100,Math.round(enrolled/cap*100)):0};}).sort((a,b)=>b.pct-a.pct);
+    if(role==='economia'){
+      const paid=d.payments.filter(x=>x.estado_validacion==='validado').reduce((sum,x)=>sum+Number(x.importe||0),0);
+      setMainHtml(`${hero({kicker:'Tesorería',title:'Control financiero, sin ruido.',body:'Cuotas, cobros y validaciones priorizadas para que la caja del club esté siempre al día.',actions:'<button class="btn btn-primary" data-nav="finance">Abrir finanzas</button><button class="btn btn-ghost" data-nav="reminders">Avisos de cobro</button>',sideValue:money(paid),sideLabel:'pagos validados visibles'})}
+        <div class="metrics">${metric('Pendiente',money(pendingAmount),`${pendingFees.length} cuotas`)}${metric('Vencido',overdue.length,`${money(overdue.reduce((s,x)=>s+Number(x.importe||0),0))}`)}${metric('Pagos por validar',pendingPayments.length)}${metric('Recibos / pagos',d.payments.length)}</div>
+        <div class="grid-2">${card('Prioridad de hoy',`${quickRow(icon('wallet'),'Pagos por validar',`${pendingPayments.length} comunicaciones pendientes`,'<button class="btn btn-primary btn-sm" data-nav="finance">Revisar</button>')}${quickRow(icon('bell'),'Cuotas vencidas',`${overdue.length} cuotas requieren seguimiento`,'<button class="btn btn-ghost btn-sm" data-nav="reminders">Avisos</button>')}`)}${card('Últimos movimientos',d.payments.slice(0,6).map(x=>quickRow(icon('creditCard'),money(x.importe),`${dateFmt(x.fecha)} · ${x.estado_validacion}`,badge(x.estado_validacion,x.estado_validacion==='validado'?'ok':x.estado_validacion==='rechazado'?'danger':'warn'))).join('')||empty('Sin pagos'))}</div>`);
+    }else if(role==='monitor'){
+      const todaySessions=future.filter(x=>String(x.fecha)===today);const groupIds=new Set(todaySessions.map(x=>x.grupo_id));const myGroups=activeGroups.filter(g=>g.monitor_principal_id===state.session?.id||groupIds.has(g.id));
+      setMainHtml(`${hero({kicker:'Hoy',title:`Hola, ${state.session?.nombre||'Warrior'}.`,body:'Tus clases, asistencia y seguimiento en un panel pensado para moverte rápido desde el tatami.',actions:'<button class="btn btn-primary" data-nav="attendance">Pasar asistencia</button><button class="btn btn-ghost" data-nav="tracking">Seguimiento</button>',sideValue:String(todaySessions.length),sideLabel:'clases programadas hoy',dark:true})}
+        <div class="grid-2">${card('Clases de hoy',todaySessions.length?todaySessions.map(s=>quickRow(String(s.hora_inicio||'').slice(0,5),activeGroups.find(g=>g.id===s.grupo_id)?.nombre||'Clase',`${s.monitor_nombre||'Monitor'} · ${s.estado}`,'<button class="btn btn-primary btn-sm" data-nav="attendance">Pasar lista</button>')).join(''):empty('Sin clases hoy'))}${card('Mis grupos',myGroups.length?myGroups.slice(0,8).map(g=>{const o=occupancy.find(x=>x.id===g.id)||{enrolled:0,pct:0};return `<div class="occupancy"><div><strong>${esc(g.nombre)}</strong><small>${esc(g.monitor_nombre||'')}</small></div><span>${o.enrolled}/${g.plazas||'—'}</span>${progress(o.pct)}</div>`}).join(''):empty('Sin grupos asignados'))}</div>`);
+    }else if(role==='comunicacion'){
+      setMainHtml(`${hero({kicker:'Comunicación',title:'La voz del club, en una sola bandeja.',body:'Publica noticias, eventos y avisos manteniendo una experiencia coherente para familias, alumnado y equipo.',actions:'<button class="btn btn-primary" data-nav="communications">Gestionar publicaciones</button><button class="btn btn-ghost" data-nav="notifications">Ver avisos</button>',sideValue:String(unread.length),sideLabel:'notificaciones sin leer',dark:true})}
+        <div class="metrics">${metric('Avisos sin leer',unread.length)}${metric('Sesiones próximas',future.length)}${metric('Grupos activos',activeGroups.length)}${metric('Socios activos',activeMembers.length)}</div>`);
+    }else{
+      const secretary=role==='secretaria';const actionItems=[
+        {icon:icon('userPlus'),title:'Preinscripciones pendientes',sub:`${pendingPre.length} solicitudes por revisar`,nav:'enrollments',count:pendingPre.length},
+        {icon:icon('wallet'),title:'Pagos por validar',sub:`${pendingPayments.length} comunicaciones de pago`,nav:'finance',count:pendingPayments.length},
+        {icon:icon('bell'),title:'Cuotas vencidas',sub:`${overdue.length} cuotas requieren seguimiento`,nav:'reminders',count:overdue.length},
+        {icon:icon('user'),title:'Alumnos activos',sub:`${activeMembers.length} fichas activas`,nav:'members',count:activeMembers.length}
+      ].sort((a,b)=>b.count-a.count);
+      setMainHtml(`${hero({kicker:secretary?'Secretaría · Operación diaria':'Dirección · Panel del gimnasio',title:secretary?'Todo lo pendiente, bajo control.':'Todo el gimnasio, en una sola app.',body:secretary?'Prioriza solicitudes, documentación, matrículas, pagos y clases del día.':'Inscripciones, clases, asistencia, finanzas y comunicaciones con una visión operativa del club.',actions:'<button class="btn btn-primary" data-nav="members">Gestionar alumnos</button><button class="btn btn-ghost" data-nav="attendance">Pasar asistencia</button>',sideValue:String(activeMembers.length),sideLabel:'socios activos'})}
+        <div class="metrics">${metric('Socios activos',activeMembers.length)}${metric('Preinscripciones',pendingPre.length,'pendientes de revisar')}${metric('Ocupación media',`${occupancy.length?Math.round(occupancy.reduce((s,x)=>s+x.pct,0)/occupancy.length):0}%`,`${activeGroups.length} grupos activos`)}${metric('Cuotas vencidas',overdue.length,money(overdue.reduce((s,x)=>s+Number(x.importe||0),0)))}</div>
+        <div class="grid-2">${card('Acciones pendientes',actionItems.map(x=>quickRow(x.icon,x.title,x.sub,`<button class="btn ${x.count?'btn-primary':'btn-ghost'} btn-sm" data-nav="${x.nav}">Abrir</button>`)).join(''))}${card('Clases y ocupación',occupancy.length?occupancy.slice(0,7).map(g=>`<div class="occupancy"><div><strong>${esc(g.nombre)}</strong><small>${esc(g.monitor_nombre||'Sin monitor asignado')}</small></div><span>${g.enrolled}/${g.plazas||'—'}</span>${progress(g.pct)}</div>`).join(''):empty('Sin grupos activos'))}</div>
+        ${card('Próximas sesiones',future.length?future.slice(0,8).map(x=>quickRow(String(x.fecha).slice(8,10),activeGroups.find(g=>g.id===x.grupo_id)?.nombre||'Clase',`${dateFmt(x.fecha)} · ${String(x.hora_inicio||'').slice(0,5)} · ${x.estado}`,badge(x.estado,x.estado==='completada'?'ok':x.estado==='cancelada'?'danger':'neutral'))).join(''):empty('Sin sesiones próximas'))}`);
+    }
+    document.querySelectorAll('#main-view [data-nav]').forEach(b=>b.addEventListener('click',()=>document.querySelector(`.nav-item[data-nav="${b.dataset.nav}"]`)?.click()||document.querySelector(`.bottom-nav [data-nav="${b.dataset.nav}"]`)?.click()));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Inicio')} ${empty('No se pudo cargar el panel',e.message)}`)}
 }
 
@@ -39,18 +58,14 @@ function gradeFields(disciplines){return [
 export async function renderCatalog(){
   setMainHtml('<div class="loading-card">Cargando catálogo…</div>');
   try{
-    const [disciplines,grades]=await Promise.all([repos.catalog.disciplines(),repos.catalog.grades()]);
-    disciplines.sort(byName); const canD=has(state.session,'discipline'),canG=has(state.session,'grade');
-    const drows=disciplines.map(d=>`<tr><td><strong>${esc(d.nombre)}</strong><br><small>${esc(d.descripcion||'')}</small></td><td>${badge(d.activa?'Activa':'Inactiva',d.activa?'ok':'neutral')}</td><td>${esc(d.orden)}</td><td><div class="row-actions">${canD?btn(d.id,'Editar','btn btn-ghost btn-sm edit-discipline')+btn(d.id,d.activa?'Desactivar':'Activar','btn btn-ghost btn-sm toggle-discipline'):''}</div></td></tr>`);
-    const grows=grades.map(g=>{const d=disciplines.find(x=>x.id===g.disciplina_id);return `<tr><td>${esc(d?.nombre||'—')}</td><td><strong>${esc(g.nombre)}</strong></td><td>${esc(g.orden)}</td><td>${badge(g.activo?'Activo':'Inactivo',g.activo?'ok':'neutral')}</td><td>${canG?btn(g.id,'Editar','btn btn-ghost btn-sm edit-grade'):''}</td></tr>`});
-    setMainHtml(`${pageHeader('Disciplinas y grados','Catálogo deportivo',`${canD?'<button class="btn btn-primary" id="new-discipline">Nueva disciplina</button>':''}${canG?'<button class="btn btn-ghost" id="new-grade">Nuevo grado</button>':''}`)}
-      ${card('Disciplinas',drows.length?table(['Disciplina','Estado','Orden','Acciones'],drows):empty('Sin disciplinas'))}
-      ${card('Grados',grows.length?table(['Disciplina','Grado','Orden','Estado','Acciones'],grows):empty('Sin grados'))}`);
+    const [disciplines,grades]=await Promise.all([repos.catalog.disciplines(),repos.catalog.grades()]);disciplines.sort(byName);const canD=has(state.session,'discipline'),canG=has(state.session,'grade');
+    const cards=disciplines.map(d=>{const gs=grades.filter(g=>g.disciplina_id===d.id).sort((a,b)=>Number(a.orden||0)-Number(b.orden||0));return `<section class="card"><div class="card-head"><div><div class="page-kicker">Disciplina ${d.activa?'activa':'inactiva'}</div><h2 style="font-size:22px">${esc(d.nombre)}</h2></div><div class="row-actions">${badge(d.activa?'Activa':'Inactiva',d.activa?'ok':'neutral')}${canD?btn(d.id,'Editar','btn btn-ghost btn-sm edit-discipline')+btn(d.id,d.activa?'Desactivar':'Activar','btn btn-ghost btn-sm toggle-discipline'):''}${canG?`<button class="btn btn-primary btn-sm add-grade" data-id="${esc(d.id)}">+ Grado</button>`:''}</div></div><p class="muted" style="margin:0 0 15px;line-height:1.5">${esc(d.descripcion||'Sin descripción')}</p><div style="display:flex;gap:7px;flex-wrap:wrap">${gs.length?gs.map(g=>`<button type="button" class="profile-chip ${g.activo?'':'muted'} ${canG?'edit-grade':''}" data-id="${esc(g.id)}"><span style="width:9px;height:9px;border-radius:50%;background:${esc(g.color||'#fff')}"></span><strong>${esc(g.nombre)}</strong></button>`).join(''):'<span class="muted">Sin grados configurados</span>'}</div></section>`}).join('');
+    setMainHtml(`${pageHeader('Disciplinas y grados','Estructura deportiva del club',`${canD?'<button class="btn btn-primary" id="new-discipline">Nueva disciplina</button>':''}${canG?'<button class="btn btn-ghost" id="new-grade">Nuevo grado</button>':''}`,'Club')}${cards||empty('Sin disciplinas')}`);
     const reload=()=>renderCatalog();
     document.getElementById('new-discipline')?.addEventListener('click',()=>openForm({title:'Nueva disciplina',fields:disciplineFields(),onSubmit:async v=>{await repos.catalog.saveDiscipline(v);toast('Disciplina guardada');await reload();}}));
     bind('.edit-discipline',(id)=>{const d=disciplines.find(x=>x.id===id);openForm({title:'Editar disciplina',fields:disciplineFields(),initial:d,onSubmit:async v=>{await repos.catalog.saveDiscipline({...d,...v,id});toast('Disciplina actualizada');await reload();}})});
     bind('.toggle-discipline',async(id,el)=>{const d=disciplines.find(x=>x.id===id);el.disabled=true;try{await repos.catalog.saveDiscipline({...d,activa:!d.activa});toast(d.activa?'Disciplina desactivada':'Disciplina activada');await reload();}catch(e){setError(e);el.disabled=false;}});
-    document.getElementById('new-grade')?.addEventListener('click',()=>openForm({title:'Nuevo grado',fields:gradeFields(disciplines),onSubmit:async v=>{await repos.catalog.saveGrade(v);toast('Grado guardado');await reload();}}));
-    bind('.edit-grade',(id)=>{const g=grades.find(x=>x.id===id);openForm({title:'Editar grado',fields:gradeFields(disciplines),initial:g,onSubmit:async v=>{await repos.catalog.saveGrade({...g,...v,id});toast('Grado actualizado');await reload();}})});
+    const openGrade=(g={})=>openForm({title:g.id?'Editar grado':'Nuevo grado',fields:gradeFields(disciplines),initial:g,onSubmit:async v=>{await repos.catalog.saveGrade({...g,...v,id:g.id||null});toast('Grado guardado');await reload();}});
+    document.getElementById('new-grade')?.addEventListener('click',()=>openGrade());bind('.edit-grade',id=>openGrade(grades.find(x=>x.id===id)));bind('.add-grade',id=>openGrade({disciplina_id:id,activo:true,orden:grades.filter(g=>g.disciplina_id===id).length+1}));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Disciplinas y grados')} ${empty('No se pudo cargar el catálogo',e.message)}`)}
 }

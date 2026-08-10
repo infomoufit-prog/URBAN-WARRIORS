@@ -1,0 +1,22 @@
+import { readFile,readdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+const root=resolve(import.meta.dirname,'..');
+const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL RC4: ${msg}`);console.log(`OK RC4: ${msg}`)};
+const text=async p=>readFile(resolve(root,p),'utf8');
+const hash=async p=>createHash('sha256').update(await readFile(resolve(root,p))).digest('hex');
+let mh=createHash('sha256');for(const f of (await readdir(resolve(root,'supabase/migrations'))).filter(x=>x.endsWith('.sql')).sort()){mh.update(f);mh.update(await readFile(resolve(root,'supabase/migrations',f)))}
+assert(mh.digest('hex')==='f3f33071f6f9aefa76bca6972957482e2d1f907b3640f613a5277c5a858c0403','migraciones 001→017 permanecen idénticas a RC3');
+const app=await text('web/js/app.js'),css=await text('web/css/app.css'),portal=await text('web/js/modules/portal.js'),comms=await text('web/js/modules/comms-material.js'),components=await text('web/js/ui/components.js');
+assert(app.includes("else ids=['dashboard','groups','finance','communications','material','notifications','requests','install','profile']"),'familia/alumno tiene navegación de producto sin diagnóstico');
+assert(!app.match(/else ids=\[[^\]]*diagnostics[^\]]*\]/),'navegación final de usuario no expone diagnóstico');
+assert(app.includes("ids=['dashboard','groups','attendance','tracking','profile']"),'monitor tiene bottom nav específico');
+assert(app.includes("ids=['dashboard','finance','reminders','notifications','more']"),'economía tiene bottom nav específico');
+assert(portal.includes('Registrar acceso')&&portal.includes('Añadir menor')&&portal.includes('Nueva solicitud deportiva'),'portal familiar recupera check-in, menor y multideporte');
+assert(portal.includes('profileSwitcher')&&portal.includes('Asistencia')&&portal.includes('Grado actual'),'portal familiar incluye selector y KPIs deportivos');
+assert(portal.includes("repos.portal.requestEnrollment")&&portal.includes("repos.portal.requestMinor")&&portal.includes("repos.portal.checkin"),'acciones familiares usan repositories y gateway gobernado');
+assert(comms.includes("value:'todos'")&&comms.includes("value:'familias'")&&comms.includes("value:'monitores'"),'audiencias de comunicaciones coinciden con backend SQL');
+assert(css.includes('.bottom-nav')&&css.includes('.profile-switcher')&&css.includes('.pipeline')&&css.includes('.feed-card'),'design system premium cubre móvil, portal, pipeline y feed');
+assert(components.includes('data-label=')&&css.includes('td::before'),'tablas se convierten en cards etiquetadas en móvil');
+assert(app.includes('Tengo invitación')&&app.includes('Instalar Urban Warriors')&&app.includes('Bring the Pain'),'login/onboarding recupera identidad y accesos públicos');
+console.log('RC4 PREMIUM: PASS');

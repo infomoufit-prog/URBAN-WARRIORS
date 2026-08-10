@@ -30,10 +30,10 @@ Comprobar que termina con igualdad Web = dist = Android.
 
 ## Paso C · GitHub / Netlify
 
-1. Copiar esta RC al repositorio local de Urban Warriors.
+1. Copiar RC5 al repositorio local de Urban Warriors.
 2. GitHub Desktop → revisar cambios.
 3. Commit sugerido:
-   `Urban Warriors 2.0.0-rc.1 - reconstrucción frontend`
+   `Urban Warriors 2.0.0-rc.5 - Premium UX + media + notificaciones`
 4. Push origin.
 5. Netlify realizará el único deploy.
 6. Confirmar `Published`.
@@ -48,7 +48,7 @@ Desde una ventana privada:
 - logout/login;
 - confirmar persistencia.
 
-Si el smoke coincide con la certificación local, fijar esta RC como base estable.
+Si el smoke coincide con la certificación local, fijar RC5 como base estable.
 
 ## Supabase
 

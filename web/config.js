@@ -11,8 +11,8 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.3',
-    build: 20003,
+    version: '2.0.0-rc.5',
+    build: 20005,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',

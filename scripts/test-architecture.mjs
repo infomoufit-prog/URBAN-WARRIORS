@@ -18,7 +18,7 @@ assert(new Set(ops).size>=30,`cobertura funcional de operaciones: ${new Set(ops)
 assert(/form\.addEventListener\('submit'/.test(texts['js/ui/components.js']),'formularios tienen listener submit directo');
 assert(/button\.disabled=true/.test(texts['js/ui/components.js'])&&/Guardando…/.test(texts['js/ui/components.js']),'estado visual Guardando y bloqueo doble envío');
 assert(/await onSubmit\(values/.test(texts['js/ui/components.js']),'UI espera confirmación backend antes de cerrar formulario');
-console.log('ARQUITECTURA RC1: PASS');
+console.log('ARQUITECTURA RC5: PASS');
 // Import graph and Android compatibility checks.
 for(const [name,text] of Object.entries(texts)){
   for(const m of text.matchAll(/from\s+['"](\.\.?\/[^'"]+)['"]/g)){
@@ -33,5 +33,6 @@ assert(!/codigo_acceso:'E2E'/.test(adminSrc),'E2E no reutiliza código fijo de s
 console.log('OK: grafo de imports relativo resuelto');
 const gradle=await readFile(resolve(root,'android/app/build.gradle'),'utf8');
 const mainActivity=await readFile(resolve(root,'android/app/src/main/java/com/urbanwarriors/app/MainActivity.java'),'utf8');
-assert(/versionCode\s+20003/.test(gradle)&&/versionName '2\.0\.0-rc\.3'/.test(gradle),'Android versionado 2.0.0-rc.3 / 20003');
+assert(/versionCode\s+20005/.test(gradle)&&/versionName '2\.0\.0-rc\.5'/.test(gradle),'Android versionado 2.0.0-rc.5 / 20005');
 assert(mainActivity.includes('appassets.androidplatform.net')&&mainActivity.includes('shouldInterceptRequest'),'Android sirve ES modules desde origen HTTPS virtual');
+assert(mainActivity.includes('UrbanWarriorsApp/2.0.0-rc.5'),'User-Agent Android acompaña versión RC5');

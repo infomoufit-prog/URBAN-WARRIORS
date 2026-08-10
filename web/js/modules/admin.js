@@ -3,19 +3,21 @@ import { backend } from '../core/backend.js';
 import { state } from '../core/state.js';
 import { has, rolesLabel } from '../core/permissions.js';
 import { esc, dtFmt, isoDate, monthStart, sleep } from '../core/utils.js';
-import { pageHeader, card, table, empty, badge, openForm, toast, setError, setMainHtml } from '../ui/components.js';
+import { pageHeader, hero, quickRow, card, table, empty, badge, openForm, toast, setError, setMainHtml } from '../ui/components.js';
+import { icon } from '../ui/icons.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 
 export async function renderUsers(){
-  setMainHtml('<div class="loading-card">Cargando usuarios…</div>');
+  setMainHtml('<div class="loading-card">Cargando equipo…</div>');
   try{
     const [members,invitations]=await Promise.all([repos.users.members(),repos.users.invitations()]);const can=has(state.session,'invite');
-    const mrows=members.map(m=>`<tr><td><strong>${esc(m.perfiles?.nombre||'')} ${esc(m.perfiles?.apellidos||'')}</strong><br><small>${esc(m.perfiles?.telefono||'')}</small></td><td>${badge(m.rol,'neutral')}</td><td>${badge(m.activo?'Activo':'Inactivo',m.activo?'ok':'neutral')}</td><td>${dtFmt(m.creado_en)}</td></tr>`);
-    const irows=invitations.map(i=>`<tr><td>${esc(i.email)}</td><td>${esc(i.rol)}</td><td>${badge(i.estado,i.estado==='aceptada'?'ok':i.estado==='pendiente'?'warn':'neutral')}</td><td>${dtFmt(i.expira_en)}</td></tr>`);
-    setMainHtml(`${pageHeader('Usuarios','Personal y roles del club',can?'<button class="btn btn-primary" id="new-invite">Invitar personal</button>':'')}${card('Miembros',mrows.length?table(['Persona','Rol','Estado','Alta'],mrows):empty('Sin miembros'))}${card('Invitaciones',irows.length?table(['Email','Rol','Estado','Expira'],irows):empty('Sin invitaciones'))}`);
-    document.getElementById('new-invite')?.addEventListener('click',()=>openForm({title:'Invitar personal',fields:[{name:'email',label:'Email',type:'email',required:true},{name:'rol',label:'Rol',type:'select',required:true,options:['secretaria','economia','comunicacion','monitor'].map(x=>({value:x,label:x}))}],onSubmit:async v=>{await repos.users.invite(v.email,v.rol);toast('Invitación creada');await renderUsers();}}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Usuarios')} ${empty('No se pudieron cargar los usuarios',e.message)}`)}
+    const memberCards=members.map(m=>quickRow(icon('user'),`${m.perfiles?.nombre||''} ${m.perfiles?.apellidos||''}`.trim()||'Miembro',`${m.rol} · ${m.perfiles?.telefono||'sin teléfono'} · alta ${dtFmt(m.creado_en)}`,badge(m.activo?'Activo':'Inactivo',m.activo?'ok':'neutral'))).join('');
+    const irows=invitations.map(i=>{const link=`${window.UW_CONFIG.release.webUrl||location.origin}/?invite=${encodeURIComponent(i.token||'')}`;return `<tr><td><strong>${esc(i.email)}</strong></td><td>${badge(i.rol,'neutral')}</td><td>${badge(i.estado,i.estado==='aceptada'?'ok':i.estado==='pendiente'?'warn':'neutral')}</td><td>${dtFmt(i.expira_en)}</td><td>${can&&i.estado==='pendiente'&&i.token?`<button class="btn btn-ghost btn-sm copy-invite" data-link="${esc(link)}">Copiar enlace</button>`:''}</td></tr>`});
+    setMainHtml(`${pageHeader('Equipo','Personas, roles e invitaciones del club',can?'<button class="btn btn-primary" id="new-invite">Invitar personal</button>':'','Administración')}<div class="grid-2">${card('Equipo activo',memberCards||empty('Sin miembros'))}${card('Invitar al equipo',hero({kicker:'Acceso seguro',title:'Cada rol ve solo lo que necesita.',body:'Dirección crea invitaciones con caducidad. La persona puede aceptar con una cuenta existente o crear una nueva desde el enlace.',dark:true,actions:can?'<button class="btn btn-primary" id="hero-invite">Crear invitación</button>':''}))}</div>${card('Invitaciones',irows.length?table(['Email','Rol','Estado','Expira','Acciones'],irows):empty('Sin invitaciones'))}`);
+    const openInvite=()=>openForm({title:'Invitar personal',subtitle:'Se generará un enlace seguro con caducidad.',fields:[{name:'email',label:'Email',type:'email',required:true},{name:'rol',label:'Rol',type:'select',required:true,options:[{value:'secretaria',label:'Secretaría'},{value:'economia',label:'Economía / Tesorería'},{value:'comunicacion',label:'Comunicación'},{value:'monitor',label:'Monitor'}]}],onSubmit:async v=>{await repos.users.invite(v.email,v.rol);toast('Invitación creada');await renderUsers();}});
+    document.getElementById('new-invite')?.addEventListener('click',openInvite);document.getElementById('hero-invite')?.addEventListener('click',openInvite);document.querySelectorAll('.copy-invite').forEach(b=>b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(b.dataset.link);toast('Enlace copiado')}catch{prompt('Copia este enlace',b.dataset.link)}}));
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Equipo')} ${empty('No se pudo cargar el equipo',e.message)}`)}
 }
 
 export async function renderSettings(){
@@ -23,7 +25,7 @@ export async function renderSettings(){
   try{
     const [rows,config]=await Promise.all([repos.settings.club(),repos.settings.config()]);const c=rows?.[0]||state.session?.club||{};const can=has(state.session,'clubConfig');
     const configMap=Object.fromEntries((config||[]).map(x=>[x.clave,x.valor]));
-    setMainHtml(`${pageHeader('Configuración','Datos generales del club',can?'<button class="btn btn-primary" id="edit-club">Editar</button>':'')}${card('Club',`<div class="grid-2"><div><p><strong>Nombre</strong><br>${esc(c.nombre||'')}</p><p><strong>Lema</strong><br>${esc(c.lema||'—')}</p><p><strong>Teléfono</strong><br>${esc(c.telefono||'—')}</p></div><div><p><strong>Email</strong><br>${esc(c.email||'—')}</p><p><strong>Dirección</strong><br>${esc(c.direccion||'—')}</p><p><strong>Web</strong><br>${esc(c.web||'—')}</p></div></div>`)}`);
+    setMainHtml(`${pageHeader('Configuración','Datos generales del club',can?'<button class="btn btn-primary" id="edit-club">Editar</button>':'')}${card('Club',`<div class="grid-2"><div><p><strong>Nombre</strong><br>${esc(c.nombre||'')}</p><p><strong>Lema</strong><br>${esc(c.lema||'—')}</p><p><strong>Teléfono</strong><br>${esc(c.telefono||'—')}</p></div><div><p><strong>Email</strong><br>${esc(c.email||'—')}</p><p><strong>Dirección</strong><br>${esc(c.direccion||'—')}</p><p><strong>Web</strong><br>${esc(c.web||'—')}</p></div></div>`)}${state.session?.rol==='direccion'?card('Herramientas técnicas',`<p class="muted">Área reservada a Dirección para soporte, diagnóstico y certificación. La información técnica queda fuera de la navegación cotidiana.</p><div class="row-actions"><a class="btn btn-ghost" href="#diagnostics">${icon('activity',{size:17})} Diagnóstico</a><a class="btn btn-ghost" href="#certification">${icon('shieldCheck',{size:17})} Certificación E2E</a></div>`):''}`);
     document.getElementById('edit-club')?.addEventListener('click',()=>openForm({title:'Configurar club',fields:[{name:'nombre',label:'Nombre',required:true},{name:'lema',label:'Lema'},{name:'telefono',label:'Teléfono'},{name:'email',label:'Email',type:'email'},{name:'direccion',label:'Dirección',full:true},{name:'web',label:'Web'},{name:'color_primario',label:'Color primario',type:'color',value:'#ffffff'},{name:'color_secundario',label:'Color secundario',type:'color',value:'#050608'},{name:'dia_vencimiento',label:'Día de vencimiento',type:'number',min:1,max:28,value:configMap.dia_vencimiento||10},{name:'avisos_clase_horas',label:'Aviso de clase (horas)',type:'number',min:1,value:configMap.avisos_clase_horas||24}],initial:c,onSubmit:async v=>{await repos.settings.saveClub(v);toast('Configuración guardada');await renderSettings();}}));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Configuración')} ${empty('No se pudo cargar la configuración',e.message)}`)}
 }
@@ -31,8 +33,15 @@ export async function renderSettings(){
 export async function renderProfile(){
   const s=state.session;
   setMainHtml(`${pageHeader('Mi perfil','Datos personales de la sesión actual')} ${card('Perfil',`<p><strong>${esc(s?.nombre||'')} ${esc(s?.apellidos||'')}</strong></p><p>${esc(s?.email||'')}</p><p>${esc(s?.telefono||'')}</p><p>Roles: ${esc(rolesLabel(s?.roles||[]))}</p><button class="btn btn-primary" id="edit-profile">Editar perfil</button> <button class="btn btn-ghost" id="enable-push">Activar avisos del dispositivo</button>`)}`);
-  document.getElementById('enable-push')?.addEventListener('click',async()=>{try{if(window.UrbanWarriorsNative?.requestNotifications){const token=window.UrbanWarriorsNative.requestNotifications();if(token)await backend.mutate('push.registrar',{token,plataforma:'android'});toast('Solicitud de notificaciones enviada');}else{toast('La activación push está disponible en la app Android','error');}}catch(e){setError(e)}});
+  document.getElementById('enable-push')?.addEventListener('click',async()=>{try{let enabled=false;if('Notification' in window){const permission=Notification.permission==='granted'?'granted':await Notification.requestPermission();if(permission==='granted'){localStorage.setItem('uw_foreground_notifications','1');enabled=true;}}if(window.UrbanWarriorsNative?.requestNotifications){const token=window.UrbanWarriorsNative.requestNotifications();if(token)await backend.mutate('push.registrar',{token,plataforma:'android'});enabled=true;}toast(enabled?'Avisos del dispositivo activados':'No se concedió permiso para mostrar avisos',enabled?'ok':'error');}catch(e){setError(e)}});
   document.getElementById('edit-profile')?.addEventListener('click',()=>openForm({title:'Editar perfil',fields:[{name:'nombre',label:'Nombre',required:true},{name:'apellidos',label:'Apellidos'},{name:'telefono',label:'Teléfono'}],initial:s,onSubmit:async v=>{await repos.settings.profile(v);Object.assign(state.session,v);localStorage.setItem('uw2_app_session',JSON.stringify(state.session));toast('Perfil actualizado');await renderProfile();}}));
+}
+
+export async function renderInstall(){
+  setMainHtml(`${pageHeader('Instalar Urban Warriors','Acceso rápido desde móvil y documentación','', 'Mi cuenta')}
+    ${hero({kicker:'Urban Warriors en tu móvil',title:'Tu club, siempre a mano.',body:'Instala la aplicación web o utiliza la versión Android disponible para el club.',actions:'<button class="btn btn-primary" id="install-pwa">Instalar PWA</button>',dark:true})}
+    <div class="grid-2">${card('Instalación rápida',`<div style="display:grid;place-items:center;padding:10px"><img src="./assets/install-qr.png" alt="QR de instalación" style="width:min(260px,80%);border-radius:18px;background:#fff;padding:10px"><p class="muted">Escanea el QR desde tu móvil para abrir Urban Warriors.</p></div>`)}${card('Guías',`${quickRow(icon('fileText'),'Manual de Urban Warriors','Guía de uso para usuarios','<a class="btn btn-ghost btn-sm" href="./assets/docs/Manual_Urban_Warriors.pdf" target="_blank">Abrir</a>')}${quickRow(icon('qr'),'Cartel de descarga','Material rápido para el club','<a class="btn btn-ghost btn-sm" href="./assets/docs/Cartel_Guia_Rapida_Usuarios.png" target="_blank">Abrir</a>')}`)}</div>`);
+  document.getElementById('install-pwa')?.addEventListener('click',async()=>{if(window.__uwInstallPrompt){window.__uwInstallPrompt.prompt();await window.__uwInstallPrompt.userChoice;window.__uwInstallPrompt=null;}else toast('En este dispositivo usa el menú del navegador → Instalar aplicación.','error');});
 }
 
 export async function renderDiagnostics(){
@@ -47,7 +56,7 @@ export async function renderDiagnostics(){
 function certStep(name,detail=''){return {name,detail,status:'pending',error:null,data:null}}
 function renderCertBoard(steps,running=false){
   const box=document.getElementById('cert-board');if(!box)return;
-  box.innerHTML=steps.map((s,i)=>`<div class="cert-step ${s.status==='ok'?'ok':s.status==='fail'?'fail':''}"><span class="cert-index">${s.status==='ok'?'✓':s.status==='fail'?'!':i+1}</span><div><strong>${esc(s.name)}</strong><small>${esc(s.error||s.detail||'Pendiente')}</small></div>${s.status==='ok'?badge('OK','ok'):s.status==='fail'?badge('FALLO','danger'):badge(running?'Pendiente':'No ejecutado','neutral')}</div>`).join('');
+  box.innerHTML=steps.map((s,i)=>`<div class="cert-step ${s.status==='ok'?'ok':s.status==='fail'?'fail':''}"><span class="cert-index">${s.status==='ok'?icon('checkCircle',{size:15}):s.status==='fail'?icon('alert',{size:15}):i+1}</span><div><strong>${esc(s.name)}</strong><small>${esc(s.error||s.detail||'Pendiente')}</small></div>${s.status==='ok'?badge('OK','ok'):s.status==='fail'?badge('FALLO','danger'):badge(running?'Pendiente':'No ejecutado','neutral')}</div>`).join('');
 }
 
 export async function renderCertification(){
@@ -66,7 +75,7 @@ export async function renderCertification(){
 }
 
 async function runCertification(steps,password){
-  const prefix=`E2E_RC3_${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`;const ids={};const email=state.session.email;const log=[];const sessionAccessCode=`E2E${Date.now().toString(36).slice(-7).toUpperCase()}`;
+  const prefix=`E2E_RC5_${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`;const ids={};const email=state.session.email;const log=[];const sessionAccessCode=`E2E${Date.now().toString(36).slice(-7).toUpperCase()}`;
   const set=async(index,fn)=>{
     steps[index].status='pending';steps[index].detail='Ejecutando…';renderCertBoard(steps,true);
     try{const data=await fn();steps[index].status='ok';steps[index].data=data;steps[index].detail=typeof data==='string'?data:'Verificado';log.push({step:steps[index].name,ok:true,data});renderCertBoard(steps,true);return data;}
@@ -76,7 +85,7 @@ async function runCertification(steps,password){
   try{
     await set(0,async()=>{const [c,p]=await Promise.all([backend.contract(),backend.probe()]);if(!c.ok||!p.ok)throw new Error('Contrato o sonda sin OK');return {contract:c.backend_version,probe:true}});
     await set(1,async()=>{const d=await backend.diagnostic();const list=Array.isArray(d)?d:[];const fails=list.filter(x=>String(x.estado||x.status||x.resultado||'OK').toUpperCase()==='FALLO');if(fails.length)throw new Error(`Diagnóstico SQL contiene ${fails.length} control(es) en FALLO`);return {rows:list.length||9,avisos:list.filter(x=>String(x.estado||'').toUpperCase()==='AVISO').length}});
-    await set(2,async()=>{const r=await repos.catalog.saveDiscipline({nombre:`${prefix}_DISCIPLINA`,descripcion:'Certificación E2E RC1',color:'#ffffff',activa:true,orden:999});ids.discipline=r.id;const row=await findOne('disciplinas',r.id);return {id:r.id,nombre:row.nombre}});
+    await set(2,async()=>{const r=await repos.catalog.saveDiscipline({nombre:`${prefix}_DISCIPLINA`,descripcion:'Certificación E2E RC5',color:'#ffffff',activa:true,orden:999});ids.discipline=r.id;const row=await findOne('disciplinas',r.id);return {id:r.id,nombre:row.nombre}});
     await set(3,async()=>{await repos.catalog.saveDiscipline({id:ids.discipline,nombre:`${prefix}_DISCIPLINA`,descripcion:'E2E EDITADO',color:'#ffffff',activa:true,orden:998});const row=await findOne('disciplinas',ids.discipline);if(row.descripcion!=='E2E EDITADO')throw new Error('La edición no aparece en la lectura.');return {id:row.id,descripcion:row.descripcion}});
     await set(4,async()=>{const r=await repos.catalog.saveGrade({disciplina_id:ids.discipline,nombre:`${prefix}_GRADO`,orden:99,color:'#ffffff',meses_minimos:0,activo:true});ids.grade=r.id;return findOne('grados',r.id)});
     await set(5,async()=>{const r=await repos.groups.save({disciplina_id:ids.discipline,nombre:`${prefix}_GRUPO`,monitor_nombre:'E2E',sala:'E2E',edad_min:10,edad_max:99,plazas:20,activo:true,horarios:[{dia_semana:1,hora_inicio:'18:00',hora_fin:'19:00'}]});ids.group=r.id;const row=await findOne('grupos',r.id);const hs=await backend.select('horarios_grupo',`select=*&grupo_id=eq.${encodeURIComponent(r.id)}`);if(!hs.length)throw new Error('Grupo creado sin horario persistido.');return {id:row.id,horarios:hs.length}});

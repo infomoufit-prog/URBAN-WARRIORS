@@ -9,16 +9,37 @@ const filterClub=()=>`club_id=eq.${enc(session()?.club_id)}`;
 async function read(table,query){return backend.select(table,query)}
 async function mutation(op,payload){return backend.mutate(op,payload)}
 
+const PUBLIC_IMAGE_TYPES=new Set(['image/jpeg','image/png','image/webp','image/gif']);
+async function uploadPublicImage(kind,file){
+  if(!file||!file.size)return '';
+  if(file.size>5*1024*1024)throw new Error('La imagen supera el límite de 5 MB.');
+  if(!PUBLIC_IMAGE_TYPES.has(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP o GIF.');
+  const ext=({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif' })[file.type]||'img';
+  const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+  const path=`${session().club_id}/${kind}/${Date.now()}-${token}.${ext}`;
+  await backend.upload('club-public-media',path,file,false);
+  return backend.publicUrl('club-public-media',path);
+}
+async function notificationList(limit=500){
+  const [items,reads]=await Promise.all([
+    read('notificaciones',`select=*&${filterClub()}&order=creado_en.desc&limit=${Number(limit)||500}`),
+    session()?.id?read('notificaciones_lecturas',`select=notificacion_id,leida_en&perfil_id=eq.${enc(session().id)}&limit=2000`).catch(()=>[]):Promise.resolve([])
+  ]);
+  const sharedRead=new Set((reads||[]).map(x=>x.notificacion_id));
+  return (items||[]).map(n=>({...n,leida:n.perfil_id===session()?.id?Boolean(n.leida):sharedRead.has(n.id),leida_en:n.perfil_id===session()?.id?n.leida_en:(sharedRead.has(n.id)?reads.find(r=>r.notificacion_id===n.id)?.leida_en:null)}));
+}
+
 export const repos={
   dashboard:{
     async load(){
       const c=session()?.club_id; const q=`club_id=eq.${enc(c)}`;
       const safe=async(table,query)=>{try{return await read(table,query)}catch{return[]}};
-      const [disc,groups,members,fees,sessions,notifs]=await Promise.all([
-        safe('disciplinas',`select=id,activa&${q}`),safe('grupos',`select=id,activo&${q}`),safe('socios',`select=id,estado&${q}`),
-        safe('cuotas',`select=id,estado,importe&${q}&order=vencimiento.desc&limit=1000`),safe('sesiones_entrenamiento',`select=id,fecha,estado&${q}&order=fecha.desc&limit=100`),safe('notificaciones',`select=id,leida&${q}&order=creado_en.desc&limit=100`)
+      const [disc,groups,members,fees,sessions,notifs,pre,payments,enrollments,attendance]=await Promise.all([
+        safe('disciplinas',`select=id,nombre,activa&${q}`),safe('grupos',`select=id,nombre,disciplina_id,activo,plazas,monitor_nombre&${q}`),safe('socios',`select=id,nombre,apellidos,estado&${q}`),
+        safe('cuotas',`select=id,socio_id,estado,importe,vencimiento&${q}&order=vencimiento.desc&limit=1000`),safe('sesiones_entrenamiento',`select=id,grupo_id,fecha,hora_inicio,hora_fin,estado,monitor_nombre&${q}&order=fecha.desc&limit=120`),notificationList(120).catch(()=>[]),
+        safe('preinscripciones',`select=id,nombre,apellidos,estado,creado_en&${q}&order=creado_en.desc&limit=200`),safe('pagos',`select=id,socio_id,importe,fecha,estado_validacion&${q}&order=fecha.desc&limit=400`),safe('socio_disciplinas',`select=id,socio_id,grupo_id,activa&${q}`),safe('asistencias',`select=id,socio_id,sesion_id,estado&${q}&limit=3000`)
       ]);
-      return {disc,groups,members,fees,sessions,notifs};
+      return {disc,groups,members,fees,sessions,notifs,pre,payments,enrollments,attendance};
     }
   },
   catalog:{
@@ -85,21 +106,41 @@ export const repos={
   },
   communications:{
     list:()=>read('comunicaciones',`select=*&${filterClub()}&order=creado_en.desc&limit=1000`),
+    uploadImage:(file)=>uploadPublicImage('communications',file),
     save:(p)=>mutation('publicacion.guardar',{id:p.id||null,tipo:p.tipo||'noticia',titulo:p.titulo,cuerpo:p.cuerpo,audiencia:p.audiencia||'todos',estado:p.estado||'borrador',evento_fecha:p.evento_fecha||null,ubicacion:p.ubicacion||'',imagen_url:p.imagen_url||''})
   },
   material:{
     list:()=>read('material_catalogo',`select=*&${filterClub()}&order=orden,nombre`), variants:()=>read('material_variantes',`select=*&${filterClub()}&order=material_id,talla,color`), orders:()=>read('material_pedidos',`select=*&${filterClub()}&order=creado_en.desc&limit=1000`),
+    uploadImage:(file)=>uploadPublicImage('material',file),
     save:(p)=>mutation('material.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,categoria:p.categoria||'',descripcion:p.descripcion||'',imagen_url:p.imagen_url||'',precio:Number(p.precio||0),stock:Number(p.stock||0),obligatorio:p.obligatorio===true,referencia:p.referencia||'',activo:p.activo!==false}),
     saveVariant:(p)=>mutation('material.variante.guardar',{id:p.id||null,material_id:p.material_id,talla:p.talla||'',color:p.color||'',referencia:p.referencia||'',stock:Number(p.stock||0),activa:p.activa!==false}),
     request:(p)=>mutation('material.solicitar',{socio_id:p.socio_id,material_id:p.material_id,variante_id:p.variante_id||null,cantidad:Number(p.cantidad||1),observaciones:p.observaciones||''}),
     orderStatus:(pedido_id,estado)=>mutation('material.pedido.estado',{pedido_id,estado})
   },
   notifications:{
-    list:()=>read('notificaciones',`select=*&${filterClub()}&order=creado_en.desc&limit=500`), markRead:(notificacion_id)=>mutation('notificacion.leer',{notificacion_id})
+    list:()=>notificationList(500), markRead:(notificacion_id)=>mutation('notificacion.leer',{notificacion_id})
   },
   users:{
     members:()=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&order=creado_en`), invitations:()=>read('invitaciones_club',`select=*&${filterClub()}&order=creado_en.desc`),
     invite:(email,rol)=>mutation('invitacion.crear',{email,rol})
+  },
+  portal:{
+    visibleMembers:()=>read('socios',`select=*&${filterClub()}&order=apellidos,nombre`),
+    enrollments:()=>read('socio_disciplinas',`select=*&${filterClub()}&order=fecha_inicio.desc`),
+    graduations:()=>read('graduaciones',`select=*&${filterClub()}&order=fecha.desc&limit=500`),
+    schedules:()=>read('horarios_grupo',`select=*&${filterClub()}&order=dia_semana,hora_inicio`),
+    sessions:()=>read('sesiones_entrenamiento',`select=*&${filterClub()}&order=fecha.desc,hora_inicio.desc&limit=500`),
+    attendance:()=>read('asistencias',`select=*&${filterClub()}&order=registrado_en.desc&limit=2000`),
+    tracking:()=>read('seguimiento',`select=*&${filterClub()}&order=fecha.desc,creado_en.desc&limit=500`),
+    documents:()=>read('documentos_socios',`select=*&${filterClub()}&visible_familia=eq.true&order=creado_en.desc&limit=500`),
+    fees:()=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=1000`),
+    payments:()=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=1000`),
+    receipts:()=>read('recibos_cuota',`select=*&${filterClub()}&order=periodo.desc,numero.desc&limit=1000`),
+    communications:()=>read('comunicaciones',`select=*&${filterClub()}&estado=in.(publicada,programada)&order=publicada_en.desc,creado_en.desc&limit=200`),
+    notifications:()=>notificationList(300),
+    requestMinor:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:'menor',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa_id||null,parentesco:p.parentesco||null,observaciones:p.observaciones||null}),
+    requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),
+    checkin:(sesion_id,socio_id,codigo='')=>mutation('checkin.registrar',{sesion_id,socio_id,codigo,metodo:'codigo'})
   },
   settings:{
     club:()=>read('clubes',`select=*&id=eq.${enc(session()?.club_id)}&limit=1`), config:()=>read('config_club',`select=*&${filterClub()}`),

@@ -63,4 +63,5 @@ export class SupabaseClient {
     const body=await res.json().catch(()=>({})); if(!res.ok)throw new Error(body.message||body.error||`Storage HTTP ${res.status}`);return body;
   }
   async signedUrl(bucket,path,expiresIn=600){const b=await this.request(`/storage/v1/object/sign/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`,{method:'POST',body:JSON.stringify({expiresIn})});const u=b.signedURL||b.signedUrl||b.url;return u?.startsWith('http')?u:`${this.url}/storage/v1${u}`}
+  publicUrl(bucket,path){return `${this.url}/storage/v1/object/public/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`}
 }

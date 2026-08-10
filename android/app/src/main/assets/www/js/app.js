@@ -1,61 +1,95 @@
 import { backend, client } from './core/backend.js';
 import { state } from './core/state.js';
+import { repos } from './core/repositories.js';
 import { humanError, esc } from './core/utils.js';
-import { shell, setAppHtml, bindDismissAlerts, setError, openForm, toast } from './ui/components.js';
+import { shell, setAppHtml, bindDismissAlerts, setError, openForm, closeModal, toast, setNotificationBadge } from './ui/components.js';
+import { navIcon, icon } from './ui/icons.js';
 import { renderDashboard, renderCatalog } from './modules/dashboard-catalog.js';
 import { renderGroups, renderMembers, renderEnrollments } from './modules/groups-members.js';
 import { renderSessions, renderAttendance, renderTracking, renderProgress } from './modules/training.js';
 import { renderFinance, renderReminders } from './modules/finance.js';
 import { renderCommunications, renderMaterial, renderNotifications } from './modules/comms-material.js';
-import { renderUsers, renderSettings, renderProfile, renderDiagnostics, renderCertification } from './modules/admin.js';
+import { renderUsers, renderSettings, renderProfile, renderDiagnostics, renderCertification, renderInstall } from './modules/admin.js';
+import { renderPortalDashboard, renderPortalSchedule, renderPortalRequests, renderPortalProfile } from './modules/portal.js';
 
+const isPortal=()=>['familia','alumno'].includes(state.session?.rol);
 const routes={
-  dashboard:renderDashboard,catalog:renderCatalog,groups:renderGroups,members:renderMembers,enrollments:renderEnrollments,
+  dashboard:()=>isPortal()?renderPortalDashboard():renderDashboard(),catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
   sessions:renderSessions,attendance:renderAttendance,progress:renderProgress,finance:renderFinance,reminders:renderReminders,communications:renderCommunications,
-  tracking:renderTracking,material:renderMaterial,notifications:renderNotifications,users:renderUsers,settings:renderSettings,
-  diagnostics:renderDiagnostics,certification:renderCertification,profile:renderProfile
+  tracking:renderTracking,material:renderMaterial,notifications:renderNotifications,users:renderUsers,settings:renderSettings,diagnostics:renderDiagnostics,
+  certification:renderCertification,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():renderProfile
 };
-const ICON={dashboard:'⌂',catalog:'◈',groups:'▦',members:'◉',enrollments:'✦',sessions:'◷',attendance:'✓',progress:'↗',finance:'€',reminders:'⚑',communications:'✉',tracking:'↗',material:'□',notifications:'●',users:'♟',settings:'⚙',diagnostics:'⌁',certification:'✓',profile:'◎'};
-const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Preinscripciones',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',notifications:'Notificaciones',users:'Usuarios',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil'};
+const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',notifications:'Notificaciones',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app'};
 
 function navFor(session){
-  const role=session?.rol;
-  let ids;
-  if(['direccion','secretaria'].includes(role)) ids=['dashboard','catalog','groups','members','enrollments','sessions','attendance','progress','finance','reminders','communications','tracking','material','notifications','users','settings','diagnostics','profile'];
-  else if(role==='economia') ids=['dashboard','finance','reminders','material','notifications','settings','diagnostics','profile'];
-  else if(role==='comunicacion') ids=['dashboard','communications','notifications','settings','diagnostics','profile'];
-  else if(role==='monitor') ids=['dashboard','catalog','groups','sessions','attendance','progress','tracking','notifications','diagnostics','profile'];
-  else ids=['dashboard','groups','progress','finance','material','notifications','diagnostics','profile'];
-  if(session?.roles?.includes('direccion')) ids.splice(ids.length-1,0,'certification');
-  return [...new Set(ids)].map(id=>({id,label:LABEL[id],icon:ICON[id]}));
+  const role=session?.rol;let ids;
+  if(role==='direccion') ids=['dashboard','members','enrollments','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','material','notifications','users','settings','install','profile'];
+  else if(role==='secretaria') ids=['dashboard','enrollments','members','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','material','notifications','users','settings','install','profile'];
+  else if(role==='economia') ids=['dashboard','finance','reminders','material','notifications','settings','install','profile'];
+  else if(role==='comunicacion') ids=['dashboard','communications','notifications','settings','install','profile'];
+  else if(role==='monitor') ids=['dashboard','groups','sessions','attendance','tracking','progress','notifications','install','profile'];
+  else ids=['dashboard','groups','finance','communications','material','notifications','requests','install','profile'];
+  return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?'Hoy':isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':LABEL[id],icon:navIcon(id)}));
 }
+function mobileNavFor(session){
+  const role=session?.rol;let ids;
+  if(role==='direccion')ids=['dashboard','members','sessions','finance','more'];
+  else if(role==='secretaria')ids=['dashboard','enrollments','members','sessions','more'];
+  else if(role==='economia')ids=['dashboard','finance','reminders','notifications','more'];
+  else if(role==='comunicacion')ids=['dashboard','communications','notifications','profile','more'];
+  else if(role==='monitor')ids=['dashboard','groups','attendance','tracking','profile'];
+  else ids=['dashboard','groups','finance','communications','profile'];
+  const map={more:{id:'more',label:'Más',icon:navIcon('more')}};return ids.map(id=>map[id]||{id,label:isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':role==='monitor'&&id==='dashboard'?'Hoy':LABEL[id],icon:navIcon(id)});
+}
+
+let notificationTimer=null;
+let notificationPrimed=false;
+let knownNotificationIds=new Set();
+
+function stopNotificationMonitor(){if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}notificationPrimed=false;knownNotificationIds=new Set();}
+async function refreshNotifications({announce=true}={}){
+  if(!state.session)return;
+  try{
+    const items=await repos.notifications.list();
+    const unread=items.filter(n=>!n.leida);
+    state.unreadNotificationCount=unread.length;setNotificationBadge(unread.length);
+    const ids=new Set(items.map(n=>n.id));
+    if(!notificationPrimed){
+      if(announce&&unread.length)toast(unread.length===1?'Tienes 1 notificación pendiente':`Tienes ${unread.length} notificaciones pendientes`);
+    }else if(announce){
+      const fresh=items.filter(n=>!knownNotificationIds.has(n.id));
+      if(fresh.length){
+        const n=fresh[0];toast(fresh.length===1?`Nueva notificación: ${n.titulo}`:`${fresh.length} nuevas notificaciones`);
+        if('Notification' in window&&Notification.permission==='granted'&&document.hidden){try{new Notification(n.titulo||'Urban Warriors',{body:n.cuerpo||'Tienes una nueva notificación.',icon:'./assets/icons/icon-192.png'})}catch{}}
+      }
+    }
+    knownNotificationIds=ids;notificationPrimed=true;
+  }catch(error){console.warn('Centro de notificaciones:',humanError(error));}
+}
+function startNotificationMonitor(){stopNotificationMonitor();refreshNotifications({announce:true});notificationTimer=setInterval(()=>refreshNotifications({announce:true}),45000);}
+window.addEventListener('uw-notifications-changed',()=>refreshNotifications({announce:false}));
 
 async function navigate(id,{replace=false}={}){
-  if(!routes[id])id='dashboard';
-  const allowed=new Set(navFor(state.session).map(x=>x.id));if(!allowed.has(id))id='dashboard';
-  state.route=id;
+  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));if(state.session?.rol==='direccion'){allowed.add('diagnostics');allowed.add('certification');}if(!allowed.has(id))id='dashboard';state.route=id;
   if(replace)history.replaceState({route:id},'',`#${id}`);else if(location.hash!==`#${id}`)history.pushState({route:id},'',`#${id}`);
-  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));
-  state.clearError();document.getElementById('global-alerts').innerHTML='';
-  await routes[id]();
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
 }
-
-function renderShell(){
-  const nav=navFor(state.session);const initial=(location.hash||'#dashboard').slice(1);
-  setAppHtml(shell(nav,nav.some(n=>n.id===initial)?initial:'dashboard'));bindDismissAlerts();
+function bindShellNavigation(){
   document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{navigate(b.dataset.nav);document.getElementById('sidebar')?.classList.remove('open')}));
   document.getElementById('menu-btn')?.addEventListener('click',()=>document.getElementById('sidebar')?.classList.toggle('open'));
-  document.getElementById('logout-btn')?.addEventListener('click',async()=>{await backend.signOut();renderLogin();});
-  navigate(nav.some(n=>n.id===initial)?initial:'dashboard',{replace:true});
+  document.getElementById('mobile-more')?.addEventListener('click',()=>document.getElementById('sidebar')?.classList.add('open'));
+  document.getElementById('logout-btn')?.addEventListener('click',async()=>{stopNotificationMonitor();await backend.signOut();renderLogin();});
+}
+function renderShell(){
+  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.rol==='direccion'){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();startNotificationMonitor();navigate(route,{replace:true});
 }
 
-function renderLogin(){
+function renderLogin(prefillEmail=''){
   state.session=null;
-  setAppHtml(`<div class="login-shell"><section class="login-visual"><div><img src="./assets/urban-warriors-logo.png" alt="Urban Warriors"><h1>URBAN<br>WARRIORS</h1><p>Gestión del club con persistencia verificable sobre Supabase.</p></div><small>${esc(window.UW_CONFIG.release.version)} · backend ${esc(window.UW_CONFIG.release.backendVersion)}</small></section><section class="login-card-wrap"><form class="login-card" id="login-form"><h2>Acceso</h2><p>Inicia sesión con tu cuenta del club.</p><div id="login-error" class="login-error" hidden></div><div class="field"><label>Email</label><input name="email" type="email" autocomplete="username" required></div><div class="field"><label>Contraseña</label><input name="password" type="password" autocomplete="current-password" required></div><button class="btn btn-primary" id="login-submit" type="submit">Entrar</button><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-ghost btn-sm" type="button" id="register-btn">Crear cuenta</button><button class="btn btn-ghost btn-sm" type="button" id="invite-btn">Tengo invitación</button></div></form></section></div>`);
+  setAppHtml(`<div class="login-shell"><section class="login-visual"><div class="login-brand"><img src="./assets/urban-warriors-logo.png" alt="Urban Warriors"><div class="slogan">Bring the Pain</div><h1>URBAN<br>WARRIORS</h1><p>Tu gimnasio, tus clases y tu evolución. Gestión premium para equipo, alumnado y familias.</p></div><div class="login-foot">Urban Warriors · Bring the Pain</div></section><section class="login-card-wrap"><form class="login-card" id="login-form"><div class="login-mini-brand"><img src="./assets/urban-warriors-logo.png" alt=""><div><strong>URBAN WARRIORS</strong><small>Bring the Pain</small></div></div><h2>Bienvenido/a</h2><p>Accede a tu cuenta del club.</p><div id="login-error" class="login-error" hidden></div><div class="field"><label>Email</label><input name="email" type="email" autocomplete="username" value="${esc(prefillEmail)}" required></div><div class="field"><label>Contraseña</label><input name="password" type="password" autocomplete="current-password" required></div><button class="btn btn-primary" id="login-submit" type="submit">Entrar</button><div class="login-link-row"><button class="btn btn-ghost btn-sm" type="button" id="register-btn">Crear cuenta</button><button class="btn btn-ghost btn-sm" type="button" id="invite-btn">Tengo invitación</button></div><div class="login-install"><button type="button" id="public-install">Instalar Urban Warriors</button></div></form></section></div>`);
   const form=document.getElementById('login-form'),btn=document.getElementById('login-submit'),box=document.getElementById('login-error');
   form.addEventListener('submit',async e=>{e.preventDefault();e.stopPropagation();if(!form.reportValidity())return;btn.disabled=true;btn.textContent='Validando…';box.hidden=true;try{const fd=new FormData(form);await backend.signIn(fd.get('email'),fd.get('password'));renderShell();}catch(error){box.hidden=false;box.textContent=humanError(error);btn.disabled=false;btn.textContent='Entrar';}});
-  document.getElementById('register-btn')?.addEventListener('click',openRegistration);
-  document.getElementById('invite-btn')?.addEventListener('click',openInvitation);
+  document.getElementById('register-btn')?.addEventListener('click',openRegistrationChoice);document.getElementById('invite-btn')?.addEventListener('click',()=>openInvitation());document.getElementById('public-install')?.addEventListener('click',openPublicInstall);
   const params=new URLSearchParams(location.search);if(params.get('invite'))setTimeout(()=>openInvitation(params.get('invite')),50);
 }
 
@@ -63,27 +97,36 @@ async function publicCatalog(){
   const clubs=await client.select('clubes',`select=id,nombre&slug=eq.${encodeURIComponent(window.UW_CONFIG.clubSlug)}&activo=eq.true&limit=1`,false);const club=clubs?.[0];if(!club)throw new Error('Club no disponible.');
   const [d,g,t]=await Promise.all([client.select('disciplinas',`select=*&club_id=eq.${club.id}&activa=eq.true&order=orden`,false),client.select('grupos',`select=*&club_id=eq.${club.id}&activo=eq.true&order=nombre`,false),client.select('tarifas',`select=*&club_id=eq.${club.id}&activa=eq.true&order=nombre`,false)]);return {d,g,t};
 }
-async function openRegistration(){
-  try{
-    const c=await publicCatalog();
-    openForm({title:'Crear cuenta',subtitle:'Registro de adulto o tutor/familia',width:'880px',fields:[
-      {name:'tipo_cuenta',label:'Tipo de cuenta',type:'select',required:true,options:[{value:'adulto',label:'Adulto / alumno'},{value:'tutor',label:'Tutor / familia'}]},
-      {name:'email',label:'Email',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true},
-      {name:'adulto_nombre',label:'Nombre del adulto',required:true},{name:'adulto_apellidos',label:'Apellidos del adulto',required:true},{name:'adulto_fecha_nacimiento',label:'Nacimiento adulto',type:'date'},
-      {name:'telefono',label:'Teléfono',required:true},{name:'menor_nombre',label:'Nombre del menor'},{name:'menor_apellidos',label:'Apellidos del menor'},{name:'menor_fecha_nacimiento',label:'Nacimiento menor',type:'date'},
-      {name:'disciplina_id',label:'Disciplina',type:'select',options:c.d.map(x=>({value:x.id,label:x.nombre}))},{name:'grupo_id',label:'Grupo',type:'select',options:c.g.map(x=>({value:x.id,label:x.nombre}))},{name:'tarifa_id',label:'Tarifa',type:'select',options:c.t.map(x=>({value:x.id,label:`${x.nombre} · ${Number(x.importe||0).toFixed(2)} €`}))}
-    ],submitText:'Crear cuenta',onSubmit:async v=>{const r=await backend.registerAccount(v);if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');}else{toast('Cuenta creada');renderShell();}}});
-  }catch(e){setError(e)}
+function openRegistrationChoice(){
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar Urban Warriors.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Soy una persona adulta</strong><small>Crearé mi cuenta y solicitaré mi propia inscripción.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>El personal accede mediante una invitación de Dirección.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Los menores no crean una cuenta independiente. La cuenta y los consentimientos corresponden a una persona adulta responsable.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitation();else openRegistration(type)}));
+}
+async function openRegistration(type){
+  try{const c=await publicCatalog();const tutor=type==='tutor';openForm({title:tutor?'Cuenta familiar':'Cuenta de alumno adulto',subtitle:'Cuenta → datos → solicitud deportiva → consentimientos',width:'900px',fields:[
+    {name:'email',label:'Email de acceso',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true},{name:'adulto_nombre',label:'Nombre del adulto',required:true},{name:'adulto_apellidos',label:'Apellidos del adulto',required:true},{name:'adulto_fecha_nacimiento',label:'Nacimiento adulto',type:'date'},{name:'telefono',label:'Teléfono',required:true},
+    ...(tutor?[{name:'menor_nombre',label:'Nombre del menor',required:true},{name:'menor_apellidos',label:'Apellidos del menor',required:true},{name:'menor_fecha_nacimiento',label:'Nacimiento menor',type:'date',required:true}]:[]),
+    {name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:c.d.map(x=>({value:x.id,label:x.nombre}))},{name:'grupo_id',label:'Grupo preferido',type:'select',options:c.g.map(x=>({value:x.id,label:x.nombre}))},{name:'tarifa_id',label:'Tarifa',type:'select',options:c.t.map(x=>({value:x.id,label:`${x.nombre} · ${Number(x.importe||0).toFixed(2)} €`}))},
+    {name:'privacy',label:'Acepto la política de privacidad y el tratamiento de datos necesario para gestionar la solicitud.',type:'checkbox',value:false,required:true,full:true},{name:'rules',label:'He leído y acepto las condiciones de inscripción y funcionamiento del club.',type:'checkbox',value:false,required:true,full:true}
+  ],submitText:'Crear cuenta y enviar solicitud',onSubmit:async v=>{if(!v.privacy||!v.rules)throw new Error('Debes aceptar los consentimientos para continuar.');const r=await backend.registerAccount({...v,tipo_cuenta:type});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderShell();}}});}catch(e){setError(e)}
 }
 function openInvitation(prefill=''){
-  openForm({title:'Aceptar invitación',subtitle:'Si todavía no has iniciado sesión, guardaremos el token y se aceptará al entrar con el email invitado.',fields:[{name:'token',label:'Token de invitación',required:true,value:prefill},{name:'email',label:'Email invitado',type:'email'}],submitText:'Continuar',onSubmit:async v=>{const r=await backend.acceptInvitation(v.token,v.email);if(r.loginRequired)toast('Invitación preparada. Inicia sesión con el email invitado.');else{toast('Invitación aceptada. Vuelve a iniciar sesión para cargar el rol.');await backend.signOut();renderLogin();}}});
+  openForm({title:'Acceso del equipo',subtitle:'Acepta una invitación con una cuenta existente o crea una nueva.',width:'720px',fields:[{name:'token',label:'Token de invitación',required:true,value:prefill},{name:'modo',label:'¿Ya tienes cuenta?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},{name:'email',label:'Email invitado',type:'email',required:true},{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'password',label:'Contraseña (solo cuenta nueva)',type:'password'}],submitText:'Continuar',onSubmit:async v=>{
+    if(v.modo==='existente'){await backend.acceptInvitation(v.token,v.email);toast('Invitación preparada. Inicia sesión con el email invitado.');renderLogin(v.email);return;}
+    if(!v.password||v.password.length<6)throw new Error('Indica una contraseña de al menos 6 caracteres para crear la cuenta.');const auth=await client.signUp(v.email,v.password,{nombre:v.nombre||'',apellidos:v.apellidos||'',tipo_cuenta:'personal_invitado',club_slug:window.UW_CONFIG.clubSlug});
+    if(!auth?.access_token){localStorage.setItem('uw2_pending_invitation',JSON.stringify({token:v.token,email:v.email}));toast('Cuenta creada. Confirma tu email y después inicia sesión para aceptar la invitación.');renderLogin(v.email);return;}
+    const r=await backend.acceptInvitation(v.token,v.email);if(r.loginRequired){toast('Inicia sesión para completar la invitación');renderLogin(v.email);}else{toast('Invitación aceptada. Inicia sesión con tu nueva cuenta.');await backend.signOut();renderLogin(v.email);}
+  }});
+}
+function openPublicInstall(){
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:680px"><div class="modal-head"><div><h2>Instalar Urban Warriors</h2><p>Lleva el club contigo en el móvil.</p></div><button class="icon-btn" id="modal-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:24px;text-align:center"><img src="./assets/install-qr.png" alt="QR" style="width:240px;max-width:70%;background:#fff;padding:10px;border-radius:18px"><p class="muted">Escanea el QR o instala la PWA desde el navegador.</p><div class="row-actions" style="justify-content:center"><button class="btn btn-primary" id="install-now">Instalar aplicación</button><a class="btn btn-ghost" href="./assets/docs/Manual_Urban_Warriors.pdf" target="_blank">Ver manual</a></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#modal-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelector('#install-now').addEventListener('click',async()=>{if(window.__uwInstallPrompt){window.__uwInstallPrompt.prompt();await window.__uwInstallPrompt.userChoice;window.__uwInstallPrompt=null;}else toast('Usa el menú del navegador → Instalar aplicación.','error')});
 }
 
 async function boot(){
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__uwInstallPrompt=e;});
   window.addEventListener('uw-native-push-token',async e=>{try{if(state.session&&e.detail)await backend.mutate('push.registrar',{token:e.detail,plataforma:'android'});}catch(error){console.warn('Push token:',error)}});
   window.addEventListener('popstate',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
+  window.addEventListener('hashchange',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
+  window.addEventListener('focus',()=>{if(state.session)refreshNotifications({announce:true})});
   try{const session=await backend.restore();if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();}
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20003').catch(e=>console.warn('Service worker:',e));
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20005').catch(e=>console.warn('Service worker:',e));
 }
-
 boot();

@@ -114,5 +114,6 @@ export const backend={
     }
   },
   async upload(bucket,path,file,upsert=false){const out=await client.upload(bucket,path,file,upsert);state.pushTrace({kind:'storage',ok:true,label:`UPLOAD ${bucket}`,detail:path});return out;},
-  async signedUrl(bucket,path,expires=600){return client.signedUrl(bucket,path,expires)}
+  async signedUrl(bucket,path,expires=600){return client.signedUrl(bucket,path,expires)},
+  publicUrl(bucket,path){return client.publicUrl(bucket,path)}
 };
