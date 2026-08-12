@@ -12,24 +12,41 @@ const forceConfirm=(title,subtitle,onConfirm)=>openForm({title,subtitle:`${subti
 export async function renderFinance(){
   setMainHtml('<div class="loading-card">Cargando finanzas…</div>');
   try{
-    const [tariffs,fees,payments,receipts,members]=await Promise.all([repos.tariffs.list(),repos.finance.fees(),repos.finance.payments(),repos.finance.receipts(),repos.members.list()]);
+    const [tariffs,fees,payments,receipts,members,account]=await Promise.all([
+      repos.tariffs.list(),repos.finance.fees(),repos.finance.payments(),repos.finance.receipts(),repos.members.list(),repos.finance.account().catch(()=>[])
+    ]);
     const canTariff=has(state.session,'tariff'),canGenerate=has(state.session,'feeGenerate'),canAdminPay=has(state.session,'paymentAdmin'),portal=['familia','alumno'].includes(state.session?.rol);
-    const pending=fees.filter(f=>['pendiente','vencida','parcialmente_pagada'].includes(f.estado));const pendingAmount=pending.reduce((s,f)=>s+Number(f.importe||0),0);
+    const pending=fees.filter(f=>['pendiente','vencida','parcialmente_pagada'].includes(f.estado));
+    const pendingAmount=(account.length?account:pending).reduce((sum,row)=>sum+Number(row.saldo??row.importe??0),0);
+    const overdue=fees.filter(f=>f.estado==='vencida');
+    const pendingValidation=payments.filter(p=>p.estado_validacion==='pendiente');
+    const validated=payments.filter(p=>p.estado_validacion==='validado');
+    const collected=validated.reduce((sum,p)=>sum+Number(p.importe||0),0);
     const actions=`${canTariff?'<button class="btn btn-ghost" id="new-tariff">Nueva tarifa</button>':''}${canGenerate?'<button class="btn btn-primary" id="generate-fees">Generar cuotas</button>':''}`;
     const tariffRows=tariffs.map(t=>`<tr><td><strong>${esc(t.nombre)}</strong><br><small>${esc(t.descripcion||'')}</small></td><td>${money(t.importe)}</td><td>${money(t.matricula)}</td><td>${esc(t.periodicidad)}</td><td>${badge(t.activa?'Activa':'Inactiva',t.activa?'ok':'neutral')}</td><td>${canTariff?`<div class="row-actions"><button class="btn btn-ghost btn-sm edit-tariff" data-id="${esc(t.id)}">Editar</button><button class="btn btn-danger btn-sm delete-tariff" data-id="${esc(t.id)}">Eliminar</button>${isDirection()?`<button class="btn btn-danger btn-sm force-delete-tariff" data-id="${esc(t.id)}">Eliminar todo</button>`:''}</div>`:''}</td></tr>`);
     const feeRows=fees.slice(0,300).map(f=>{const m=members.find(x=>x.id===f.socio_id);return `<tr><td><strong>${esc(m?`${m.apellidos}, ${m.nombre}`:'—')}</strong></td><td>${esc(String(f.periodo||'').slice(0,7))}</td><td>${money(f.importe)}</td><td>${dateFmt(f.vencimiento)}</td><td>${badge(f.estado,f.estado==='pagada'?'ok':f.estado==='vencida'?'danger':f.estado==='parcialmente_pagada'?'warn':'neutral')}</td><td><div class="row-actions">${canAdminPay&&f.estado!=='pagada'?`<button class="btn btn-primary btn-sm admin-pay" data-id="${esc(f.id)}">Cobrar</button>`:''}${!canAdminPay&&f.estado!=='pagada'?`<button class="btn btn-primary btn-sm communicate-pay" data-id="${esc(f.id)}">Comunicar pago</button>`:''}${has(state.session,'reminders')&&f.estado!=='pagada'?(f.avisos_pausados?`<button class="btn btn-ghost btn-sm resume-fee" data-id="${esc(f.id)}">Reactivar avisos</button>`:`<button class="btn btn-ghost btn-sm pause-fee" data-id="${esc(f.id)}">Pausar avisos</button>`):''}</div></td></tr>`});
     const paymentRows=payments.slice(0,300).map(p=>{const m=members.find(x=>x.id===p.socio_id);return `<tr><td>${dateFmt(p.fecha)}</td><td>${esc(m?`${m.apellidos}, ${m.nombre}`:'—')}</td><td>${money(p.importe)}</td><td>${esc(p.metodo)}</td><td>${badge(p.estado_validacion,p.estado_validacion==='validado'?'ok':p.estado_validacion==='rechazado'?'danger':'warn')}</td><td><div class="row-actions">${p.justificante_url?`<button class="btn btn-ghost btn-sm view-proof" data-id="${esc(p.id)}">Justificante</button>`:''}${canAdminPay&&p.estado_validacion==='pendiente'?`<button class="btn btn-primary btn-sm validate-pay" data-id="${esc(p.id)}">Validar</button> <button class="btn btn-ghost btn-sm reject-pay" data-id="${esc(p.id)}">Rechazar</button>`:''}</div></td></tr>`});
     const receiptRows=receipts.slice(0,300).map(r=>`<tr><td><strong>${esc(r.numero)}</strong><br><small>${r.anulado_en?'ANULADO':''}</small></td><td>${esc(r.socio_nombre)}</td><td>${dateFmt(r.fecha_pago)}</td><td>${esc(String(r.periodo||'').slice(0,7))}</td><td>${money(r.importe)}</td><td>${badge(r.anulado_en?'Anulado':'Emitido',r.anulado_en?'danger':'ok')}<br><small>${esc(r.motivo_anulacion||r.metodo||'—')}</small></td><td>${canAdminPay&&!r.anulado_en?`<button class="btn btn-ghost btn-sm annul-receipt" data-id="${esc(r.id)}">Anular</button>`:''}</td></tr>`);
-    setMainHtml(portal?`${pageHeader('Mensualidades','Cuotas, pagos y recibos de tus perfiles','', 'Mi cuenta')}
-      <div class="metrics">${metric('Pendientes',pending.length)}${metric('Importe pendiente',money(pendingAmount))}${metric('Pagos comunicados',payments.length)}${metric('Recibos',receipts.length)}</div>
-      ${card('Cuotas',feeRows.length?table(['Alumno','Periodo','Importe','Vence','Estado','Acciones'],feeRows):empty('No hay cuotas pendientes'))}
-      ${card('Pagos comunicados',paymentRows.length?table(['Fecha','Alumno','Importe','Método','Validación','Acciones'],paymentRows):empty('Aún no has comunicado pagos'))}
-      ${card('Recibos',receiptRows.length?table(['Número','Alumno','Pago','Periodo','Importe','Estado','Acciones'],receiptRows):empty('Los recibos aparecerán cuando un pago quede validado'))}`:`${pageHeader('Finanzas','Tarifas, cuotas, pagos y recibos',actions,'Economía')}
-      <div class="metrics">${metric('Cuotas pendientes',pending.length)}${metric('Importe nominal',money(pendingAmount))}${metric('Pagos registrados',payments.length)}${metric('Recibos emitidos',receipts.length)}</div>
-      ${card('Tarifas',tariffRows.length?table(['Tarifa','Importe','Matrícula','Periodicidad','Estado','Acciones'],tariffRows):empty('Sin tarifas'))}
-      ${card('Cuotas',feeRows.length?table(['Alumno','Periodo','Importe','Vence','Estado','Acciones'],feeRows):empty('Sin cuotas'))}
-      ${card('Pagos',paymentRows.length?table(['Fecha','Alumno','Importe','Método','Validación','Acciones'],paymentRows):empty('Sin pagos'))}
-      ${card('Recibos',receiptRows.length?table(['Número','Alumno','Pago','Periodo','Importe','Estado','Acciones'],receiptRows):empty('Sin recibos'))}`);
+    const accountRows=account.slice(0,500).map(a=>{const m=members.find(x=>x.id===a.socio_id);const saldo=Number(a.saldo||0);return `<tr><td><strong>${esc(m?`${m.apellidos}, ${m.nombre}`:'—')}</strong></td><td>${esc(String(a.periodo||'').slice(0,7))}</td><td>${esc(a.concepto||'Cuota')}</td><td>${money(a.importe)}</td><td>${money(a.pagado_validado)}</td><td><strong>${money(saldo)}</strong></td><td>${badge(a.estado,a.estado==='pagada'||saldo<=0?'ok':a.estado==='vencida'?'danger':'warn')}</td><td>${a.recibo_numero?`<strong>${esc(a.recibo_numero)}</strong>${a.recibo_anulado_en?'<br><small>ANULADO</small>':''}`:'—'}</td></tr>`});
+
+    if(portal){
+      setMainHtml(`${pageHeader('Estado de cuenta','Cuotas, pagos, saldos y recibos de tus perfiles','', 'Mi cuenta')}
+        <div class="metrics">${metric('Saldo pendiente',money(pendingAmount))}${metric('Cuotas vencidas',overdue.length)}${metric('Pagos validados',validated.length)}${metric('Recibos',receipts.filter(r=>!r.anulado_en).length)}</div>
+        ${card('Estado de cuenta',accountRows.length?table(['Alumno','Periodo','Concepto','Cuota','Pagado','Saldo','Estado','Recibo'],accountRows):empty('Sin movimientos','Cuando el club genere cuotas aparecerá aquí tu historial económico.'))}
+        ${card('Cuotas',feeRows.length?table(['Alumno','Periodo','Importe','Vence','Estado','Acciones'],feeRows):empty('No hay cuotas pendientes'))}
+        ${card('Pagos comunicados',paymentRows.length?table(['Fecha','Alumno','Importe','Método','Validación','Acciones'],paymentRows):empty('Aún no has comunicado pagos'))}
+        ${card('Recibos',receiptRows.length?table(['Número','Alumno','Pago','Periodo','Importe','Estado','Acciones'],receiptRows):empty('Los recibos aparecerán cuando un pago quede validado'))}`);
+    }else{
+      setMainHtml(`${pageHeader('Finanzas','Tarifas, cuotas, pagos, recibos y estado de cuenta',actions,'Economía')}
+        <div class="metrics">${metric('Cobrado validado',money(collected))}${metric('Saldo pendiente',money(pendingAmount))}${metric('Vencidas',overdue.length)}${metric('Por validar',pendingValidation.length,'pagos comunicados')}</div>
+        ${pendingValidation.length?`<div class="alert alert-warning"><strong>Requiere acción</strong><span>${pendingValidation.length} pago${pendingValidation.length===1?'':'s'} pendiente${pendingValidation.length===1?'':'s'} de validación.</span></div>`:''}
+        ${card('Estado de cuenta',accountRows.length?table(['Alumno','Periodo','Concepto','Cuota','Pagado','Saldo','Estado','Recibo'],accountRows):empty('Sin movimientos'))}
+        ${card('Tarifas',tariffRows.length?table(['Tarifa','Importe','Matrícula','Periodicidad','Estado','Acciones'],tariffRows):empty('Sin tarifas'))}
+        ${card('Cuotas',feeRows.length?table(['Alumno','Periodo','Importe','Vence','Estado','Acciones'],feeRows):empty('Sin cuotas'))}
+        ${card('Pagos',paymentRows.length?table(['Fecha','Alumno','Importe','Método','Validación','Acciones'],paymentRows):empty('Sin pagos'))}
+        ${card('Recibos',receiptRows.length?table(['Número','Alumno','Pago','Periodo','Importe','Estado','Acciones'],receiptRows):empty('Sin recibos'))}`);
+    }
+
     const reload=()=>renderFinance();
     const tariffFields=[{name:'nombre',label:'Nombre',required:true},{name:'importe',label:'Importe',type:'number',step:'0.01',min:0,required:true},{name:'matricula',label:'Matrícula',type:'number',step:'0.01',min:0,value:0},{name:'periodicidad',label:'Periodicidad',type:'select',value:'mensual',options:['mensual','trimestral','semestral','anual','unica'].map(x=>({value:x,label:x}))},{name:'descripcion',label:'Descripción',type:'textarea',full:true},{name:'activa',label:'Tarifa activa',type:'checkbox',value:true}];
     document.getElementById('new-tariff')?.addEventListener('click',()=>openForm({title:'Nueva tarifa',fields:tariffFields,onSubmit:async v=>{await repos.tariffs.save(v);toast('Tarifa guardada');await reload();}}));

@@ -15,8 +15,8 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
         targetSdk 35
-        versionCode 20009
-        versionName '2.0.0-rc.9'
+        versionCode 20010
+        versionName '2.0.0-rc.10'
     }
 
     signingConfigs {

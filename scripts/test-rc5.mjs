@@ -36,7 +36,7 @@ assert(m006.includes("'club-public-media'")&&m006.includes('5242880')&&m006.incl
 assert(m012.includes("if p_estado='publicada' and v_notificada is null")&&m012.includes("insert into public.notificaciones")&&m012.includes("update public.comunicaciones set notificada_en=now()"),'publicar genera notificación transaccional en SQL');
 assert(m012.includes("p_audiencia='todos'")&&m012.includes("p_audiencia='monitores'")&&m012.includes("'familia'")&&m012.includes("'alumno'"),'SQL segmenta avisos por audiencia');
 assert(repos.includes('notificaciones_lecturas')&&repos.includes('sharedRead'),'lectura individual de avisos compartidos se fusiona correctamente');
-assert(app.includes('setNotificationBadge')&&app.includes('setInterval(()=>refreshNotifications')&&app.includes('Tienes ${unread.length} notificaciones pendientes'),'entrada y sesión activa muestran pendientes/nuevas notificaciones');
+assert(app.includes('setNotificationBadge')&&app.includes('setInterval(()=>refreshNotifications')&&app.includes('unreadGroups')&&app.includes('grupos pendientes'),'entrada y sesión activa muestran pendientes agrupados/nuevas notificaciones');
 assert(comms.includes("uw-notifications-changed")&&comms.includes('Publicación guardada y notificada'),'publicar refresca centro de notificaciones y confirma al editor');
 assert(dispatch.includes("publicar_comunicaciones_programadas")&&dispatch.includes('FIREBASE_SERVICE_ACCOUNT_JSON')&&dispatch.includes('fcm.googleapis.com'),'infraestructura existente contempla programadas y push FCM cuando está configurado');
 

@@ -8,7 +8,7 @@ const hash=async p=>createHash('sha256').update(await readFile(resolve(root,p)))
 let mh=createHash('sha256');for(const f of (await readdir(resolve(root,'supabase/migrations'))).filter(x=>/^(00[1-9]|01[0-7])_.*\.sql$/.test(x)).sort()){mh.update(f);mh.update(await readFile(resolve(root,'supabase/migrations',f)))}
 assert(mh.digest('hex')==='f3f33071f6f9aefa76bca6972957482e2d1f907b3640f613a5277c5a858c0403','migraciones 001→017 permanecen idénticas a RC3');
 const app=await text('web/js/app.js'),css=await text('web/css/app.css'),portal=await text('web/js/modules/portal.js'),comms=await text('web/js/modules/comms-material.js'),components=await text('web/js/ui/components.js');
-assert(app.includes("else ids=['dashboard','groups','finance','communications','material','notifications','requests','install','profile']"),'familia/alumno tiene navegación de producto sin diagnóstico');
+assert(/else ids=\['dashboard','groups',[^\]]*'community'[^\]]*'profile'\]/.test(app),'familia/alumno tiene navegación de producto y Comunidad sin diagnóstico');
 assert(!app.match(/else ids=\[[^\]]*diagnostics[^\]]*\]/),'navegación final de usuario no expone diagnóstico');
 assert(app.includes("ids=['dashboard','groups','attendance','tracking','profile']"),'monitor tiene bottom nav específico');
 assert(app.includes("ids=['dashboard','finance','reminders','notifications','more']"),'economía tiene bottom nav específico');

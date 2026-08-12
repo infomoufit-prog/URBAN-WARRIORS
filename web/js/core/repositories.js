@@ -97,6 +97,7 @@ export const repos={
   },
   finance:{
     fees:()=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=1000`), payments:()=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=1000`), receipts:()=>read('recibos_cuota',`select=*&${filterClub()}&order=periodo.desc,numero.desc&limit=1000`),
+    account:()=>read('v_estado_cuenta_socio',`select=*&${filterClub()}&order=periodo.desc&limit=2000`),
     generate:(periodo=monthStart())=>mutation('cuotas.generar',{periodo}),
     adminPayment:(p)=>mutation('pago.registrar_admin',{cuota_id:p.cuota_id,importe:Number(p.importe),fecha:p.fecha||isoDate(),metodo:p.metodo,referencia:p.referencia||null,observaciones:p.observaciones||null}),
     communicatePayment:(p)=>mutation('pago.comunicar',{cuota_id:p.cuota_id,importe:Number(p.importe),fecha:p.fecha||isoDate(),metodo:p.metodo,referencia:p.referencia||null,justificante_path:p.justificante_path||null,observaciones:p.observaciones||null}),
@@ -120,6 +121,11 @@ export const repos={
   },
   sessions:{
     list:()=>read('sesiones_entrenamiento',`select=*&${filterClub()}&order=fecha.desc,hora_inicio.desc&limit=500`),
+    series:()=>read('series_sesiones',`select=*&${filterClub()}&order=creado_en.desc`),
+    saveSeries:(p)=>mutation('sesion.serie.guardar',{id:p.id||null,grupo_id:p.grupo_id,dias_semana:p.dias_semana||[],hora_inicio:p.hora_inicio,hora_fin:p.hora_fin||null,monitor_nombre:p.monitor_nombre||'',sala:p.sala||'',codigo_acceso:p.codigo_acceso||'',fecha_inicio:p.fecha_inicio||isoDate(),fecha_fin:p.fecha_fin||null,activa:p.activa!==false}),
+    endSeries:(serie_id,fecha_fin=isoDate())=>mutation('sesion.serie.finalizar',{serie_id,fecha_fin}),
+    generateRecurring:(horizonte_dias=84)=>mutation('sesiones.recurrentes.generar',{horizonte_dias:Number(horizonte_dias||84)}),
+    exception:(p)=>mutation('sesion.excepcion.guardar',{sesion_id:p.sesion_id,estado:p.estado||null,monitor_nombre:p.monitor_nombre||null,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,sala:p.sala||null,motivo:p.motivo||'',observacion_general:p.observacion_general||null}),
     save:(p)=>mutation('sesion.guardar',{id:p.id||null,grupo_id:p.grupo_id,fecha:p.fecha,hora_inicio:p.hora_inicio,hora_fin:p.hora_fin||null,monitor_nombre:p.monitor_nombre||'',estado:p.estado||'programada',observacion_general:p.observacion_general||'',codigo_acceso:p.codigo_acceso||''}),
     attendance:()=>read('asistencias',`select=*&${filterClub()}&order=registrado_en.desc&limit=2000`),
     reservations:()=>read('reservas_sesion',`select=*&${filterClub()}&order=creado_en.desc&limit=3000`),
@@ -153,7 +159,10 @@ export const repos={
     async delete(material_id){const out=await mutation('material.eliminar',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}, async forceDelete(material_id){const out=await mutation('material.eliminar_forzado',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}
   },
   notifications:{
-    list:()=>notificationList(500), markRead:(notificacion_id)=>mutation('notificacion.leer',{notificacion_id})
+    list:()=>notificationList(500), markRead:(notificacion_id)=>mutation('notificacion.leer',{notificacion_id}),
+    markGroup:(tipo)=>mutation('notificacion.leer_grupo',{tipo}), markAll:()=>mutation('notificacion.leer_todas',{}),
+    preferences:()=>read('preferencias_notificacion',`select=*&${filterClub()}&perfil_id=eq.${enc(session()?.id)}&limit=1`),
+    savePreferences:(p)=>mutation('notificaciones.preferencias',{push_general:p.push_general!==false,push_finanzas:p.push_finanzas!==false,push_sesiones:p.push_sesiones!==false,push_comunidad:p.push_comunidad===true})
   },
   users:{
     members:()=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&order=creado_en`), invitations:()=>read('invitaciones_club',`select=*&${filterClub()}&order=creado_en.desc`),
@@ -183,7 +192,24 @@ export const repos={
   settings:{
     club:()=>read('clubes',`select=*&id=eq.${enc(session()?.club_id)}&limit=1`), config:()=>read('config_club',`select=*&${filterClub()}`),
     uploadBrandImage:(kind,file)=>uploadPublicImage(kind==='cover'?'branding-cover':'branding-logo',file), removeBrandImage:(url)=>removePublicImage(url),
-    saveClub:(p)=>mutation('club.configurar',p), profile:(p)=>mutation('perfil.guardar',{nombre:p.nombre||'',apellidos:p.apellidos||'',telefono:p.telefono||''})
+    saveClub:(p)=>mutation('club.configurar',p), profile:(p)=>mutation('perfil.guardar',{nombre:p.nombre||'',apellidos:p.apellidos||'',telefono:p.telefono||''}),
+    async uploadAvatar(file){if(!file||!file.size)throw new Error('Selecciona una imagen.');if(file.size>5*1024*1024)throw new Error('La foto supera 5 MB.');if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path=`${session().club_id}/${session().id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;await backend.upload('profile-media',path,file,false);try{const out=await mutation('perfil.avatar',{avatar_path:path});if(out?.old_avatar_path)await backend.remove('profile-media',out.old_avatar_path).catch(()=>{});return out;}catch(e){await backend.remove('profile-media',path).catch(()=>{});throw e;}},
+    async removeAvatar(){const out=await mutation('perfil.avatar',{avatar_path:null});if(out?.old_avatar_path)await backend.remove('profile-media',out.old_avatar_path).catch(()=>{});return out;},
+    avatarUrl:(path)=>path?backend.signedUrl('profile-media',path,3600):Promise.resolve('')
+  },
+  community:{
+    list:()=>read('publicaciones_comunidad',`select=*&${filterClub()}&order=creado_en.desc&limit=250`),
+    async quota(){const rows=await read('publicaciones_comunidad',`select=id,autor_perfil_id,creado_en&${filterClub()}&autor_perfil_id=eq.${enc(session()?.id)}&creado_en=gte.${enc(new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString())}&limit=20`);const staff=['direccion','coordinacion','secretaria','comunicacion'].includes(session()?.rol);return {used:rows.length,limit:staff?5:3};},
+    async upload(file){if(!file||!file.size)throw new Error('Selecciona una imagen o vídeo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP, MP4, WEBM o MOV.');if(file.size>(isVideo?20:5)*1024*1024)throw new Error(isVideo?'El vídeo supera 20 MB.':'La imagen supera 5 MB.');const ext=(file.name.split('.').pop()|| (isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();const path=`${session().club_id}/${session().id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;await backend.upload('community-media',path,file,false);return path;},
+    mediaUrl:(path)=>backend.signedUrl('community-media',path,3600),
+    publish:(p)=>mutation('comunidad.publicar',{texto:p.texto||'',media_path:p.media_path,media_tipo:p.media_tipo,duracion_segundos:p.duracion_segundos||null}),
+    async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});if(out?.media_path)await backend.remove('community-media',out.media_path).catch(()=>{});return out;},
+    moderate:(publicacion_id,oculta=true,motivo='')=>mutation('comunidad.moderar',{publicacion_id,oculta,motivo})
+  },
+  legal:{
+    docs:()=>read('textos_legales',`select=*&${filterClub()}&vigente=eq.true&order=tipo`),
+    accept:(tipo,version='2.0.0',aceptado=true,socio_id=null)=>mutation('legal.aceptar',{tipo,version,aceptado,socio_id,user_agent:navigator.userAgent}),
+    acceptances:()=>read('aceptaciones_legales',`select=*&${filterClub()}&perfil_id=eq.${enc(session()?.id)}&order=aceptado_en.desc`)
   },
   documents:{
     list:()=>read('documentos_socios',`select=*&${filterClub()}&order=creado_en.desc&limit=2000`),

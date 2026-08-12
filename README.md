@@ -1,48 +1,47 @@
-# Urban Warriors 2.0.0-rc.9 · Final Release Candidate
+# Urban Warriors 2.0.0-rc.10 · FINAL MVP
 
-RC9 parte de RC8 y solo cierra el modelo de acceso del equipo. No reconstruye persistencia, documentos, reservas, publicaciones, material, finanzas ni asistencia.
+RC10 es la candidata de congelado funcional del MVP. Conserva la arquitectura estable de RC9 y añade el último paquete de producto: notificaciones escalables, sesiones recurrentes, Comunidad temporal, perfil/avatar, cierre de Finanzas, preparación push, ayuda/manuales y consentimiento legal versionado.
 
-## Roles visibles definitivos
+## Núcleo estable
 
-- **Gestor de la app**: máximo nivel. Internamente conserva la clave histórica `direccion` para mantener compatibilidad con el backend certificado. Es el único perfil con invitaciones de personal, herramientas técnicas, diagnóstico, certificación E2E y acciones de borrado total.
-- **Coordinación**: administración operativa amplia del club. Puede trabajar con alumnos, solicitudes, disciplinas, grupos, sesiones, asistencia, progreso, seguimiento, finanzas, avisos, publicaciones, material, archivo documental, equipo en modo consulta y personalización del club. No recibe el rol interno `direccion`, no ejecuta E2E y no dispone de `Eliminar todo`.
-- **Secretaría**: altas, solicitudes, alumnos, grupos, sesiones, documentos, comunicaciones administrativas y operativa asociada.
-- **Economía / Tesorería**: tarifas, cuotas, pagos, recibos, avisos y material.
-- **Comunicación**: publicaciones y contenidos.
-- **Monitor**: grupos, sesiones, asistencia y seguimiento.
-- **Familia / Alumno**: portal personal, reservas de sesión, material, publicaciones, documentos visibles y actividad propia.
+- Backend: `1.6.0`
+- Schema epoch: `160`
+- Gateway único: `app_mutate_v160`
+- Diagnóstico RC10: `app_diagnostico_final_v166()` dentro de la app (Gestor)
+- Diagnóstico instalable desde SQL Editor: `app_diagnostico_instalacion_v166()`
 
-## Compatibilidad de Coordinación
+## Roles
 
-PostgreSQL conserva el enum histórico de roles. RC9 añade una marca `coordinacion` y materializa ese nivel mediante las membresías operativas ya existentes `secretaria + economia + comunicacion`. Esto reutiliza las RLS probadas y evita otorgar privilegios reservados a `direccion`.
+- **Gestor de la app**: máximo nivel (`direccion` internamente).
+- **Coordinación**: gestión operativa amplia, sin herramientas técnicas de máximo nivel.
+- **Secretaría**
+- **Economía / Tesorería**
+- **Comunicación**
+- **Monitor**
+- **Familia / Alumno**
 
-En frontend esas membresías se presentan como un único rol **Coordinación**.
+## Novedades RC10
+
+- Notificaciones agrupadas y lectura masiva.
+- Preferencias push por categoría.
+- Series semanales de sesiones + excepciones.
+- Comunidad: 3 publicaciones/mes usuario, 5/mes equipo, vídeo <=15 s, retención 30 días.
+- Perfil privado con fotografía.
+- Estado de cuenta y métricas de Tesorería.
+- Manual de usuario + manual de equipo + ayuda interna.
+- Cartel de difusión solo para Gestor/Coordinación/Secretaría.
+- Condiciones, privacidad, Comunidad y derechos de imagen versionados.
+- Android preparado para routing de push y sincronización de token.
 
 ## Migración
 
-Si 018, 019 y 020 ya están instaladas, ejecutar una sola vez:
+Ejecutar **una sola vez**, después de RC9:
 
-`supabase/migrations/021_access_roles_gestor_coordinacion_v165.sql`
+`SQL_EJECUTAR_RC10_022.sql`
 
-El archivo duplicado para copiar directamente al SQL Editor es `SQL_EJECUTAR_RC9_021.sql`.
+El resultado final del SQL debe mostrar **12 controles `OK`**.
 
-El diagnóstico final es:
-
-```sql
-select * from public.app_diagnostico_final_v165();
-```
-
-Solo el Gestor de la app puede ejecutarlo.
-
-## Contrato estable
-
-- backend: `1.6.0`
-- schema epoch: `160`
-- gateway: `app_mutate_v160`
-- las 62 operaciones de RC8 se conservan
-- RC8 queda encapsulado como `app_mutate_v160_v164`
-
-## Validación
+## Prueba local
 
 ```bash
 npm install
@@ -51,4 +50,16 @@ npm run build
 npm run dev
 ```
 
-Antes del deploy final, verificar al menos una invitación de **Coordinación** con una cuenta de prueba y confirmar que ve gestión operativa pero no herramientas técnicas ni `Eliminar todo`.
+## Push
+
+El repositorio no contiene credenciales privadas. La preparación de código está incluida, pero la certificación final requiere Firebase real, secretos de Supabase, Edge Functions desplegadas/programadas y una prueba en Android físico con la app cerrada. Ver `PUSH_PRODUCCION_CHECKLIST.md`.
+
+## Documentación
+
+- `AUDITORIA_MAESTRA_RC10_FINAL.md`
+- `INFORME_RC10_FINAL_MVP.md`
+- `VALIDACION_RC10_FINAL.md`
+- `PUSH_PRODUCCION_CHECKLIST.md`
+- `DEPLOY_FINAL.md`
+- `web/assets/docs/Manual_Usuario_Urban_Warriors.pdf`
+- `web/assets/docs/Manual_Equipo_Urban_Warriors.pdf`

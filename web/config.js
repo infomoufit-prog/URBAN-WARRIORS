@@ -11,14 +11,14 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.9',
-    build: 20009,
+    version: '2.0.0-rc.10',
+    build: 20010,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',
     contractEndpoint: 'app_runtime_contract_v160',
     probeEndpoint: 'app_write_channel_probe_v160',
-    diagnosticEndpoint: 'app_diagnostico_final_v165',
+    diagnosticEndpoint: 'app_diagnostico_final_v166',
     webUrl: 'https://urban01.netlify.app'
   },
   brand: {

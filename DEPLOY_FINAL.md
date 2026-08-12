@@ -1,11 +1,13 @@
-# Procedimiento final RC9 · un solo deploy
+# Procedimiento final RC10 · un solo deploy
 
-1. Mantener la versión publicada mientras se valida RC9 localmente.
-2. En Supabase SQL Editor ejecutar **una sola vez** `SQL_EJECUTAR_RC9_021.sql` después de 020.
-3. Confirmar que `app_diagnostico_final_v165()` devuelve controles `OK` con la cuenta Gestor de la app.
-4. En la carpeta RC9 ejecutar `npm install`, `npm test`, `npm run build`, `npm run dev`.
-5. Probar login del Gestor de la app: debe conservar todas las operaciones, Herramientas técnicas y `Eliminar todo`.
-6. Crear una invitación de prueba con rol **Coordinación**, aceptarla con otra cuenta y verificar: panel operativo completo, sin E2E/diagnóstico, sin crear invitaciones y sin `Eliminar todo`.
-7. Tras la certificación, en el repositorio local `URBAN-WARRIORS` conservar `.git` y sustituir el resto por el contenido del ZIP RC9 limpio.
-8. Hacer un único commit y `Push origin`. Netlify publicará automáticamente.
-9. Validar producción y congelar funcionalidades antes de firma APK/AAB.
+1. Mantener RC9 publicada mientras se certifica RC10.
+2. En Supabase SQL Editor ejecutar **una sola vez** `SQL_EJECUTAR_RC10_022.sql`, después de 021/021B ya validados.
+3. El propio SQL termina mostrando `app_diagnostico_instalacion_v166()`: comprobar **12 controles en OK**.
+4. En la carpeta RC10 ejecutar `npm install`, `npm test`, `npm run build` y `npm run dev`.
+5. Entrar como **Gestor de la app** y ejecutar la certificación E2E completa.
+6. Probar manualmente: notificaciones masivas, serie semanal y excepción, reserva, Comunidad, avatar, Finanzas/estado de cuenta, textos legales y Ayuda.
+7. Tras la certificación, en el repositorio local `URBAN-WARRIORS` conservar únicamente `.git` y sustituir el resto por el contenido del ZIP RC10 limpio.
+8. GitHub Desktop: un único commit y `Push origin`. Netlify publicará automáticamente.
+9. Validar la URL de producción.
+10. Configurar/certificar push en Android con `PUSH_PRODUCCION_CHECKLIST.md`.
+11. Congelar funcionalidades y promover a `2.0.0` antes de generar APK/AAB release firmado.

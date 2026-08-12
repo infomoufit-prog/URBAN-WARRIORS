@@ -35,7 +35,7 @@ async function identityFromAuth(authUser){
   const effectiveRoles=isCoordination?['coordinacion']:[...new Set(clubMemberships.map(m=>m.rol))];
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',avatar_path:profile.avatar_path||'',
     rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination
   };
 }
@@ -74,15 +74,20 @@ export const backend={
     const session=await identityFromAuth(auth.user);
     await this.contract(session);
     persistSession(session);
+    const pendingLegal=localStorage.getItem('uw2_pending_legal');
+    if(pendingLegal){try{const entries=JSON.parse(pendingLegal)||[];for(const item of entries)await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});localStorage.removeItem('uw2_pending_legal');}catch(error){console.warn('Aceptaciones legales pendientes:',humanError(error));}}
     state.pushTrace({kind:'auth',ok:true,label:'Login validado',detail:`${session.email} · ${session.rol}`});
     return session;
   },
   async registerAccount(input){
     const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,telefono:input.telefono,tipo_cuenta:input.tipo_cuenta,club_slug:cfg.clubSlug});
     const payload={club_slug:cfg.clubSlug,tipo_cuenta:input.tipo_cuenta,adulto_nombre:input.adulto_nombre,adulto_apellidos:input.adulto_apellidos,telefono:input.telefono||'',fecha_nacimiento_adulto:input.adulto_fecha_nacimiento||null,menor_nombre:input.menor_nombre||null,menor_apellidos:input.menor_apellidos||null,fecha_nacimiento_menor:input.menor_fecha_nacimiento||null,disciplina_id:input.disciplina_id||null,grupo_id:input.grupo_id||null,tarifa_id:input.tarifa_id||null};
-    if(!auth?.access_token){localStorage.setItem('uw2_pending_registration',JSON.stringify({email:input.email,payload}));return {confirmationRequired:true};}
+    const legalEntries=input.legal_acceptances||[];
+    if(!auth?.access_token){localStorage.setItem('uw2_pending_registration',JSON.stringify({email:input.email,payload}));if(legalEntries.length)localStorage.setItem('uw2_pending_legal',JSON.stringify(legalEntries));return {confirmationRequired:true};}
     await this.bootstrapMutate('cuenta.registrar',payload);
-    const session=await identityFromAuth(auth.user);await this.contract(session);persistSession(session);return {confirmationRequired:false,session};
+    const session=await identityFromAuth(auth.user);await this.contract(session);persistSession(session);
+    for(const item of legalEntries){await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});}
+    return {confirmationRequired:false,session};
   },
   async acceptInvitation(token,email=''){
     if(!client.session?.access_token){localStorage.setItem('uw2_pending_invitation',JSON.stringify({token,email}));return {loginRequired:true};}

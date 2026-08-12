@@ -18,6 +18,7 @@ const paths = {
   activity:'<path d="M3 12h4l2-6 4 12 2-6h6"/>',
   shieldCheck:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
   shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+  chevronLeft:'<path d="m15 18-6-6 6-6"/>',
   chevronRight:'<path d="m9 18 6-6-6-6"/>',
   download:'<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
@@ -49,4 +50,4 @@ export function icon(name,{size=20,className=''}={}){
   return `<svg class="uw-icon ${className}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${body}</svg>`;
 }
 
-export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkCircle',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'user',requests:'plus',documents:'folder',install:'download',more:'more'}[id]||'activity');
+export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkCircle',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'user',requests:'plus',documents:'folder',install:'download',community:'sparkles',help:'fileText',more:'more'}[id]||'activity');

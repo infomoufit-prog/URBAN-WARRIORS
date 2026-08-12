@@ -36,7 +36,7 @@ function localParts(timeZone: string, date = new Date()) {
 }
 
 async function firebaseAccessToken(account: FirebaseServiceAccount): Promise<string> {
-  const privateKey = await importPKCS8(account.private_key, 'RS256')
+  const privateKey = await importPKCS8(account.private_key.replace(/\\n/g, '\n'), 'RS256')
   const now = Math.floor(Date.now() / 1000)
   const assertion = await new SignJWT({
     scope: 'https://www.googleapis.com/auth/firebase.messaging'
@@ -156,8 +156,9 @@ Deno.serve(async (request) => {
       const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString()
       const { data: notifications, error: notificationsError } = await supabase
         .from('notificaciones')
-        .select('id,club_id,perfil_id,titulo,cuerpo,ruta,datos,push_intentos')
+        .select('id,club_id,perfil_id,tipo,titulo,cuerpo,ruta,datos,push_intentos')
         .not('perfil_id', 'is', null)
+        .in('tipo', ['cuota','aviso_cobro','pago','validacion_pago','recibo'])
         .in('club_id', pushClubIds)
         .is('push_enviado_en', null)
         .gte('creado_en', since)
@@ -166,17 +167,27 @@ Deno.serve(async (request) => {
 
       const profileIds = [...new Set((notifications || []).map((item) => item.perfil_id))]
       const devicesByProfile = new Map<string, string[]>()
+      const pushFinanceDisabled = new Set<string>()
       if (profileIds.length) {
-        const { data: devices, error: devicesError } = await supabase
-          .from('dispositivos_push')
-          .select('perfil_id,token')
-          .eq('activo', true)
+        const { data: prefs, error: prefsError } = await supabase
+          .from('preferencias_notificacion')
+          .select('perfil_id,push_finanzas')
           .in('perfil_id', profileIds)
-        if (devicesError) throw devicesError
-        for (const device of devices || []) {
-          const list = devicesByProfile.get(device.perfil_id) || []
-          list.push(device.token)
-          devicesByProfile.set(device.perfil_id, list)
+        if (prefsError) throw prefsError
+        for (const pref of prefs || []) if (pref.push_finanzas === false) pushFinanceDisabled.add(pref.perfil_id)
+        const allowedProfileIds = profileIds.filter((id) => !pushFinanceDisabled.has(id))
+        if (allowedProfileIds.length) {
+          const { data: devices, error: devicesError } = await supabase
+            .from('dispositivos_push')
+            .select('perfil_id,token')
+            .eq('activo', true)
+            .in('perfil_id', allowedProfileIds)
+          if (devicesError) throw devicesError
+          for (const device of devices || []) {
+            const list = devicesByProfile.get(device.perfil_id) || []
+            list.push(device.token)
+            devicesByProfile.set(device.perfil_id, list)
+          }
         }
       }
 

@@ -1,62 +1,70 @@
-# Arquitectura · Urban Warriors 2.0.0-rc.8
+# Arquitectura · Urban Warriors 2.0.0-rc.10
 
 ## Principio
 
-RC8 amplía la RC7 certificada sin alterar el canal estable de persistencia. El frontend no contiene una vía paralela de escritura ni vuelve al store monolítico de la línea 1.x.
+RC10 amplía RC9 sin sustituir el canal estable de persistencia. El frontend mantiene una única ruta de mutación gobernada y separa claramente UI, repositorios, backend y cliente Supabase.
 
 ## Capas
 
 1. `web/js/core/supabase.js`: Auth, PostgREST, RPC y Storage.
-2. `web/js/core/backend.js`: contrato, sesión, mutación gobernada, diagnóstico y Storage.
-3. `web/js/core/repositories.js`: acceso por dominio y limpieza física de ficheros.
+2. `web/js/core/backend.js`: sesión, contrato, mutación, diagnóstico, subida/descarga y sincronización de token push.
+3. `web/js/core/repositories.js`: acceso por dominio y limpieza física de archivos.
 4. `web/js/core/state.js`: estado UI mínimo.
-5. `web/js/ui/*` + `web/js/modules/*`: experiencia por rol y listeners explícitos.
+5. `web/js/modules/*` + `web/js/ui/*`: experiencia por rol.
 
 ## Escritura
 
 `UI → repository → backend.mutate() → app_mutate_v160 → respuesta verificada → lectura → render`
 
-Toda mutación valida versión, operación y `request_id`. Las nuevas eliminaciones también pasan por el gateway.
+No se incorpora un store monolítico alternativo ni DML directo desde los módulos.
 
-## Backend RC8
+## Contrato
 
-`020_session_reservations_document_download_v164.sql` se aplica después de 019 y mantiene:
+- Backend: `1.6.0`
+- Schema epoch: `160`
+- Gateway: `app_mutate_v160`
+- RC9 queda encapsulado por el wrapper de RC10.
+- Migración nueva: `022_rc10_final_mvp_v166.sql`.
 
-- backend `1.6.0`;
-- schema epoch `160`;
-- endpoint `app_mutate_v160`;
-- operaciones históricas delegadas a `app_mutate_v160_legacy`;
-- RLS/Auth como autoridad.
+## Dominios añadidos en RC10
 
-Añade operaciones de borrado total y limpieza editorial sin alterar migraciones 001–017.
+### Notificaciones
+Lectura individual, por grupo y total; preferencias push por categoría; visualización agrupada y distinción de acciones pendientes.
 
-## Dos niveles de ciclo de vida
+### Sesiones recurrentes
+`series_sesiones` define recurrencias semanales. Las ocurrencias concretas siguen viviendo en `sesiones_entrenamiento`, lo que permite reservas, asistencia e histórico por fecha. Las excepciones se aplican a una ocurrencia sin destruir la serie.
 
-**Seguro:** archivar/desactivar/dar de baja/cancelar, o eliminar solo si no hay dependencias.
+### Comunidad
+`publicaciones_comunidad` es independiente de las comunicaciones oficiales. Los archivos viven en `community-media` privado y la UI obtiene URLs firmadas. El mantenimiento programado purga contenido caducado y media asociada.
 
-**Destructivo:** solo Dirección, confirmado escribiendo `ELIMINAR`, y elimina dependencias gobernadas para la entidad seleccionada.
+### Perfil
+`perfiles.avatar_path` referencia un objeto privado de `profile-media`. Sustitución y borrado limpian el objeto anterior.
 
-Los recibos como elemento individual siguen usando `Anular` en el flujo económico normal. El borrado total de un alumno, solicitado expresamente por Dirección, elimina su conjunto de datos financieros relacionado para permitir la destrucción completa del expediente.
+### Finanzas
+`v_estado_cuenta_socio` presenta cuota, pagos validados, saldo, estado y recibo sin crear una segunda contabilidad paralela.
 
-## Limpieza de Storage
+### Legal
+`textos_legales` conserva documentos versionados y `aceptaciones_legales` registra decisiones del usuario. La autorización de imagen permanece separada de las condiciones necesarias para acceder al servicio.
 
-- `member-documents`: documentos privados de expediente.
+## Storage
+
+- `member-documents`: expediente privado.
 - `justificantes-pago`: justificantes privados.
-- `club-public-media`: publicaciones, material y branding.
+- `club-public-media`: publicaciones oficiales, material y branding.
+- `profile-media`: avatares privados.
+- `community-media`: contenido social temporal privado.
 
-La base de datos devuelve las rutas/URLs afectadas y el repository elimina los objetos físicos después de confirmar la mutación. Reemplazar una imagen también limpia la anterior.
+## Push y tareas programadas
 
-## PWA / Android
+- `notification-dispatch`: horizonte recurrente, publicaciones/notificaciones programadas, limpieza de Comunidad y push general/sesiones/comunidad.
+- `payment-reminders`: recordatorios financieros y push financiero.
 
-- frontend: `2.0.0-rc.8`
-- Android: `versionCode 20008`, `versionName 2.0.0-rc.8`
-- Web, `dist` y assets Android se sincronizan mediante `scripts/build.mjs`.
+Ambas funciones requieren configuración externa de producción; las credenciales no forman parte del repositorio.
 
+## Android
 
-## Reservas de sesión RC8
-
-`reservas_sesion` representa intención previa de asistencia y no sustituye `asistencias` ni el check-in. Las escrituras pasan exclusivamente por `app_mutate_v160` mediante `sesion.reserva.confirmar` y `sesion.reserva.cancelar`. El backend valida pertenencia, matrícula activa, estado programado y aforo antes de confirmar.
-
-## Descarga privada RC8
-
-La UI no expone `member-documents` públicamente. `supabase.js` obtiene una URL firmada temporal, descarga el blob y `documents.js` / `portal.js` inician la descarga local. Abrir y descargar respetan las mismas RLS y visibilidad documental existentes.
+- `versionName 2.0.0-rc.10`
+- `versionCode 20010`
+- Firebase Messaging integrado condicionalmente cuando existe `google-services.json` real.
+- Una push abierta desde Android conserva la ruta funcional hacia la app.
+- `web`, `dist` y `android/app/src/main/assets/www` se sincronizan mediante `npm run build`.

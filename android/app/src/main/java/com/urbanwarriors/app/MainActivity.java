@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.9");
+        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.10");
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
@@ -106,7 +106,25 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl(APP_ORIGIN + "/index.html");
+        webView.loadUrl(APP_ORIGIN + "/index.html" + routeFragment(getIntent()));
+    }
+
+    private static String routeFragment(Intent intent) {
+        if (intent == null) return "";
+        String route = intent.getStringExtra("route");
+        if (route == null || !route.matches("[A-Za-z0-9_-]{1,64}")) return "";
+        return "#" + route;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        String fragment = routeFragment(intent);
+        if (webView != null && !fragment.isEmpty()) {
+            String route = fragment.substring(1);
+            webView.evaluateJavascript("window.location.hash=" + org.json.JSONObject.quote("#" + route) + ";", null);
+        }
     }
 
     private static String mimeType(String path) {

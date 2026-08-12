@@ -1,27 +1,24 @@
-# Matriz de permisos · RC9
+# Matriz de permisos · RC10
 
-| Área | Gestor de la app | Coordinación | Secretaría | Economía | Comunicación | Monitor | Familia/Alumno |
+| Área | Gestor app | Coordinación | Secretaría | Economía | Comunicación | Monitor | Familia/Alumno |
 |---|---|---|---|---|---|---|---|
-| Panel global | Sí | Sí | Sí | financiero | editorial | hoy | personal |
-| Disciplinas | Sí | Sí | Sí | — | — | grados | — |
-| Grupos | Sí | Sí | Sí | — | — | lectura/operativa | horarios propios |
-| Alumnos | Sí | Sí | Sí | — | — | ámbito deportivo | propios/vinculados |
-| Solicitudes/matrículas | Sí | Sí | Sí | — | — | — | solicitar |
-| Sesiones | Sí | Sí | Sí | — | — | Sí | ver/reservar |
-| Asistencia/check-in | Sí | Sí | Sí | — | — | Sí | check-in propio |
-| Progreso/seguimiento | Sí | Sí | Sí | — | — | Sí | visible propio |
-| Finanzas/pagos | Sí | Sí | operativa | Sí | — | — | propias |
+| Panel | global | global | operativo | financiero | editorial | hoy | personal |
+| Disciplinas/grupos/alumnos | Sí | Sí | Sí | — | — | ámbito propio | propio/vinculado |
+| Sesiones recurrentes | Sí | Sí | Sí | — | — | operativa asignada | ver/reservar |
+| Excepciones/cancelaciones | Sí | Sí | Sí | — | — | según permiso | recibe aviso |
+| Reserva/check-in | Sí | Sí | Sí | — | — | Sí | propio |
+| Finanzas/estado cuenta | Sí | Sí | operativa | Sí | — | — | propio |
 | Avisos de cobro | Sí | Sí | Sí | Sí | — | — | recibe |
-| Publicaciones | Sí | Sí | Sí | — | Sí | lectura | lectura según audiencia |
-| Material/solicitudes | Sí | Sí | Sí | Sí | — | — | solicitar |
-| Archivo documental | Sí | Sí | Sí | — | — | — | documentos autorizados |
-| Personalización club | Sí | Sí | Sí | Sí | Sí | — | — |
-| Ver equipo | Sí | Sí | Sí | según RLS | según RLS | según RLS | — |
-| Invitar personal | **Sí** | **No** | No | No | No | No | No |
-| Borrado total | **Sí** | **No** | No | No | No | No | No |
-| Diagnóstico técnico | **Sí** | **No** | No | No | No | No | No |
-| Certificación E2E | **Sí** | **No** | No | No | No | No | No |
+| Comunicaciones oficiales | Sí | Sí | Sí | — | Sí | lectura | según audiencia |
+| Comunidad | moderar/publicar | moderar/publicar | publicar | lectura | moderar/publicar | publicar usuario | publicar usuario |
+| Archivo documental | Sí | Sí | Sí | — | — | — | autorizado |
+| Perfil/avatar propio | Sí | Sí | Sí | Sí | Sí | Sí | Sí |
+| Notificaciones masivas | Sí | Sí | Sí | propias | propias | propias | propias |
+| Manual usuario | Sí | Sí | Sí | Sí | Sí | Sí | Sí |
+| Manual equipo | Sí | Sí | Sí | Sí | Sí | Sí | — |
+| Cartel difusión | **Sí** | **Sí** | **Sí** | — | — | — | — |
+| Invitar personal | **Sí** | No | No | No | No | No | — |
+| Borrado total | **Sí** | No | No | No | No | No | — |
+| Diagnóstico/E2E | **Sí** | No | No | No | No | No | — |
 
-## Nota técnica
-
-`direccion` continúa siendo la clave interna del máximo nivel y se muestra siempre como **Gestor de la app**. `Coordinación` no recibe `direccion`; reutiliza de forma controlada permisos backend de `secretaria`, `economia` y `comunicacion`, que en UI se colapsan en un único rol.
+`direccion` continúa siendo la clave interna del Gestor de la app. Coordinación reutiliza permisos operativos compuestos sin obtener `direccion`.
