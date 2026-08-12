@@ -3,8 +3,6 @@ import { importPKCS8, SignJWT } from 'npm:jose@6'
 
 type Json = Record<string, unknown>
 type FirebaseServiceAccount = { project_id: string; client_email: string; private_key: string; token_uri?: string }
-type PushPreference = { perfil_id: string; push_general: boolean; push_finanzas: boolean; push_sesiones: boolean; push_comunidad: boolean }
-
 function getSecretKey(): string {
   const legacy = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
   if (legacy) return legacy
@@ -14,22 +12,6 @@ function getSecretKey(): string {
   const key = keys.default || Object.values(keys)[0]
   if (!key) throw new Error('SUPABASE_SECRET_KEYS no contiene ninguna clave')
   return key
-}
-
-function pushCategory(type: unknown): 'general'|'finanzas'|'sesiones'|'comunidad' {
-  const t=String(type||'general')
-  if (['cuota','pago','validacion_pago','recibo','aviso_cobro'].includes(t)) return 'finanzas'
-  if (['reserva_sesion','sesion_cambio','clase'].includes(t)) return 'sesiones'
-  if (t==='comunidad') return 'comunidad'
-  return 'general'
-}
-function allowedByPreference(pref: PushPreference|undefined,type: unknown): boolean {
-  const category=pushCategory(type)
-  if (!pref) return category==='comunidad' ? false : true
-  if (category==='finanzas') return pref.push_finanzas!==false
-  if (category==='sesiones') return pref.push_sesiones!==false
-  if (category==='comunidad') return pref.push_comunidad===true
-  return pref.push_general!==false
 }
 
 async function firebaseAccessToken(account: FirebaseServiceAccount): Promise<string> {
@@ -67,10 +49,10 @@ Deno.serve(async (request) => {
     for(const club of clubs||[]){const {data,error}=await supabase.rpc('app_generar_sesiones_recurrentes',{p_club_id:club.id,p_horizonte_dias:84});if(error)throw error;recurringGenerated+=Number(data||0)}
 
     // 2) Retención Comunidad: DB + archivo físico. Se hace antes del push y funciona incluso sin Firebase.
-    let expiredQuery=supabase.from('publicaciones_comunidad').select('id,club_id,media_path').lte('expira_en',now).limit(500)
+    let expiredQuery=supabase.from('publicaciones_comunidad').select('id,club_id,media_path,portada_path').lte('expira_en',now).limit(500)
     if(requestedClub)expiredQuery=expiredQuery.eq('club_id',requestedClub)
     const {data:expired,error:expiredError}=await expiredQuery;if(expiredError)throw expiredError
-    const paths=(expired||[]).map(x=>x.media_path).filter(Boolean) as string[]
+    const paths=(expired||[]).flatMap(x=>[x.media_path,x.portada_path]).filter(Boolean) as string[]
     if(paths.length){for(let i=0;i<paths.length;i+=100){const {error}=await supabase.storage.from('community-media').remove(paths.slice(i,i+100));if(error)throw error}}
     if((expired||[]).length){const {error}=await supabase.from('publicaciones_comunidad').delete().in('id',(expired||[]).map(x=>x.id));if(error)throw error}
 
@@ -86,7 +68,7 @@ Deno.serve(async (request) => {
     if(requestedClub)notificationQuery=notificationQuery.eq('club_id',requestedClub)
     const {data:notifications,error:notificationError}=await notificationQuery;if(notificationError)throw notificationError
 
-    let sent=0,errors=0,skippedPreference=0
+    let sent=0,errors=0
     const due=(notifications||[]).filter(n=>!n.programada_para||new Date(n.programada_para).getTime()<=Date.now())
     for(const notification of due){
       const recipientIds=new Set<string>()
@@ -97,15 +79,12 @@ Deno.serve(async (request) => {
         const {data:members,error}=await memberQuery;if(error)throw error;for(const m of members||[])recipientIds.add(m.perfil_id)
       }
       const ids=[...recipientIds]
-      const prefMap=new Map<string,PushPreference>()
-      if(ids.length){const {data:prefs,error}=await supabase.from('preferencias_notificacion').select('perfil_id,push_general,push_finanzas,push_sesiones,push_comunidad').eq('club_id',notification.club_id).in('perfil_id',ids);if(error)throw error;for(const p of prefs||[])prefMap.set(p.perfil_id,p as PushPreference)}
-      const allowedIds=ids.filter(id=>allowedByPreference(prefMap.get(id),notification.tipo));skippedPreference+=ids.length-allowedIds.length
       let tokens:{id:string;token:string}[]=[]
-      if(allowedIds.length){const {data:devices,error}=await supabase.from('dispositivos_push').select('id,token').eq('club_id',notification.club_id).eq('activo',true).in('perfil_id',allowedIds);if(error)throw error;tokens=devices||[]}
+      if(ids.length){const {data:devices,error}=await supabase.from('dispositivos_push').select('id,token').eq('club_id',notification.club_id).eq('activo',true).in('perfil_id',ids);if(error)throw error;tokens=devices||[]}
       let delivered=false;const itemErrors:string[]=[]
       for(const device of tokens){try{await sendFcm(account,accessToken,device.token,notification as Json);delivered=true;sent++}catch(error){errors++;const message=error instanceof Error?error.message:String(error);itemErrors.push(message);if(/UNREGISTERED|registration-token-not-registered|not found/i.test(message))await supabase.from('dispositivos_push').update({activo:false}).eq('id',device.id)}}
-      await supabase.from('notificaciones').update({push_enviado_en:delivered?new Date().toISOString():null,push_intentos:Number(notification.push_intentos||0)+1,push_error:itemErrors.length?itemErrors.join(' | ').slice(0,2000):(tokens.length?null:(allowedIds.length?'Sin dispositivos push registrados':'Push desactivado por preferencias'))}).eq('id',notification.id)
+      await supabase.from('notificaciones').update({push_enviado_en:delivered?new Date().toISOString():null,push_intentos:Number(notification.push_intentos||0)+1,push_error:itemErrors.length?itemErrors.join(' | ').slice(0,2000):(tokens.length?null:'Sin dispositivos push registrados')}).eq('id',notification.id)
     }
-    return Response.json({ok:true,firebase_configured:true,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,notifications:due.length,sent,errors,skipped_preference:skippedPreference})
+    return Response.json({ok:true,firebase_configured:true,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,notifications:due.length,sent,errors})
   }catch(error){console.error(error);return Response.json({error:error instanceof Error?error.message:String(error)},{status:500})}
 })
