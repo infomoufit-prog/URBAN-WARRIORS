@@ -1,5 +1,14 @@
 # Checklist Push · Urban Warriors RC10
 
+## Seguridad Android previa
+
+- Firebase se inicializa de forma explícita y tolerante a ausencia de configuración.
+- La aplicación puede arrancar y usarse aunque FCM falle.
+- El token se obtiene de forma asíncrona después de inicializar Firebase.
+- El usuario concede el permiso mediante el diálogo oficial de Android.
+- Si Android no vuelve a mostrar el diálogo, la app abre los ajustes de notificaciones.
+- La renovación queda en preferencias locales y se registra al volver a la interfaz autenticada.
+
 ## Lo que ya aporta el código
 
 - Registro de dispositivos/token push.

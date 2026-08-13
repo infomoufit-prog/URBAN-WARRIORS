@@ -7,7 +7,7 @@ const [cfg,repos,perms,app,groups,training,catalog,finance,comms,admin,sql]=awai
   read('web/js/modules/groups-members.js'),read('web/js/modules/training.js'),read('web/js/modules/dashboard-catalog.js'),
   read('web/js/modules/finance.js'),read('web/js/modules/comms-material.js'),read('web/js/modules/admin.js'),read('supabase/migrations/019_final_deletion_media_cleanup_v163.sql')
 ]);
-assert(cfg.includes("version: '2.0.0-rc.12'")&&cfg.includes('build: 20012')&&cfg.includes("app_diagnostico_final_v166"),'RC10 conserva regresión RC7 / v166');
+assert(cfg.includes("version: '2.0.0-rc.12'")&&cfg.includes('build: 20016')&&cfg.includes("app_diagnostico_final_v166"),'RC12 build 20016 conserva regresión RC7 / v166');
 for(const op of ['grupo.eliminar_forzado','alumno.eliminar_forzado','sesion.eliminar_forzado','disciplina.eliminar_forzado','grado.eliminar_forzado','tarifa.eliminar_forzado','material.eliminar_forzado','publicacion.limpiar_antiguas']) assert(sql.includes(`'${op}'`)&&repos.includes(`'${op}'`),`operación ${op}`);
 assert(sql.includes("tiene_rol_club(p_club_id,'direccion','secretaria','comunicacion')")&&perms.includes("communication:['direccion','coordinacion','secretaria','comunicacion']")&&app.includes("'communications','community','material','documents'"),'Secretaría entra en gestión editorial');
 assert(sql.includes("datos->>'comunicacion_id'=v_id::text")&&sql.includes("'imagen_url',v_image"),'borrado de publicación limpia avisos y devuelve imagen');

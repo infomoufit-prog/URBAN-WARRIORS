@@ -26,13 +26,15 @@ export function shell(navItems,active,mobileItems=[]){
   const mobile=mobileItems.map(n=>`<button type="button" class="${active===n.id?'active':''}" ${n.id==='more'?'id="mobile-more"':`data-nav="${esc(n.id)}"`}><span>${n.icon}</span>${esc(n.label)}</button>`).join('');
   const logo=safeLogo(s?.club?.logo_url);const cover=safeOptionalImage(s?.club?.portada_url);const primary=safeColor(s?.club?.color_primario,'#ffffff');const secondary=safeColor(s?.club?.color_secundario,'#050608');
   return `<div class="app-shell" style="--club-primary:${esc(primary)};--club-secondary:${esc(secondary)};--uw-logo-image:url('${esc(logo)}');--uw-cover-image:${cover?`url('${esc(cover)}')`:'none'}">
+    <button type="button" class="icon-btn mobile-only menu-toggle" id="menu-btn" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><span class="menu-icon-open">${icon('menu')}</span><span class="menu-icon-close">${icon('close')}</span></button>
     <aside class="sidebar" id="sidebar">
       <div class="brand-block"><img src="${esc(logo)}" alt="${esc(s?.club?.nombre||'Urban Warriors')}"><div><strong>${esc(String(s?.club?.nombre||'URBAN WARRIORS').toUpperCase())}</strong><small>${esc(s?.club?.lema||'Bring the Pain')}</small></div></div>
       <nav class="nav-list">${navHtml}</nav>
       <div class="sidebar-foot"><div class="user-avatar session-avatar" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="Foto de perfil" hidden></div><span>${esc(`${s?.nombre||''} ${s?.apellidos||''}`.trim())}</span><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small><button type="button" class="btn btn-ghost btn-sm" id="logout-btn">${icon('logOut',{size:15})} Cerrar sesión</button></div>
     </aside>
+    <button type="button" class="sidebar-scrim" id="sidebar-scrim" aria-label="Cerrar menú" tabindex="-1"></button>
     <section class="content-shell">
-      <header class="topbar"><button type="button" class="icon-btn mobile-only" id="menu-btn" aria-label="Abrir menú">${icon('menu')}</button><div class="topbar-identity"><strong>${esc(s?.club?.nombre||'Urban Warriors')}</strong><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small></div><div class="topbar-actions"><button class="icon-btn notification-button" id="notification-button" type="button" data-nav="notifications" aria-label="Notificaciones">${icon('bell')}<span class="notification-count" id="notification-count" hidden>0</span></button><button class="topbar-avatar session-avatar" type="button" data-nav="profile" aria-label="Mi perfil" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="Foto de perfil" hidden></button></div></header>
+      <header class="topbar"><div class="topbar-identity"><strong>${esc(s?.club?.nombre||'Urban Warriors')}</strong><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small></div><div class="topbar-actions"><button class="icon-btn notification-button" id="notification-button" type="button" data-nav="notifications" aria-label="Notificaciones">${icon('bell')}<span class="notification-count" id="notification-count" hidden>0</span></button><button class="topbar-avatar session-avatar" type="button" data-nav="profile" aria-label="Mi perfil" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="Foto de perfil" hidden></button></div></header>
       <div id="global-alerts">${alertHtml()}</div>
       <main id="main-view" class="main-view"><div class="loading-card">Cargando…</div></main>
     </section>
@@ -75,7 +77,9 @@ export function openForm({title,subtitle='',fields=[],initial={},submitText='Gua
   document.body.appendChild(wrap);
   const form=wrap.querySelector('#modal-form'),button=wrap.querySelector('#modal-submit'),errorBox=wrap.querySelector('#modal-error');
   const close=()=>closeModal(); wrap.querySelector('#modal-close').addEventListener('click',close);wrap.querySelector('#modal-cancel').addEventListener('click',close);
-  wrap.addEventListener('click',e=>{if(e.target===wrap)close()});
+  // Los formularios solo se cierran con X o Cancelar. En Android, al volver del
+  // selector nativo de archivos puede llegar un toque tardío sobre el fondo del
+  // modal; tratarlo como cierre hacía perder el formulario y el borrador.
   form.addEventListener('submit',async e=>{
     e.preventDefault(); e.stopPropagation(); errorBox.hidden=true;
     if(!form.reportValidity())return;

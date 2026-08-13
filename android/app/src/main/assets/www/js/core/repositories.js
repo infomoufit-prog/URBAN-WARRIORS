@@ -1,6 +1,7 @@
 import { backend } from './backend.js';
 import { state } from './state.js';
 import { isoDate, monthStart } from './utils.js';
+import { optimizeImage } from './media.js';
 
 const enc=(v)=>encodeURIComponent(String(v??''));
 const session=()=>state.session;
@@ -12,12 +13,13 @@ async function mutation(op,payload){return backend.mutate(op,payload)}
 const PUBLIC_IMAGE_TYPES=new Set(['image/jpeg','image/png','image/webp','image/gif']);
 async function uploadPublicImage(kind,file){
   if(!file||!file.size)return '';
-  if(file.size>5*1024*1024)throw new Error('La imagen supera el límite de 5 MB.');
   if(!PUBLIC_IMAGE_TYPES.has(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP o GIF.');
-  const ext=({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif' })[file.type]||'img';
+  const prepared=file.type==='image/gif'?{file}:await optimizeImage(file);
+  if(prepared.file.size>5*1024*1024)throw new Error('La imagen optimizada supera el límite de 5 MB.');
+  const ext=({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif' })[prepared.file.type]||'img';
   const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
   const path=`${session().club_id}/${kind}/${Date.now()}-${token}.${ext}`;
-  await backend.upload('club-public-media',path,file,false);
+  await backend.upload('club-public-media',path,prepared.file,false);
   return backend.publicUrl('club-public-media',path);
 }
 function publicMediaPath(url){
@@ -98,6 +100,10 @@ export const repos={
   finance:{
     fees:()=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=1000`), payments:()=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=1000`), receipts:()=>read('recibos_cuota',`select=*&${filterClub()}&order=periodo.desc,numero.desc&limit=1000`),
     account:()=>read('v_estado_cuenta_socio',`select=*&${filterClub()}&order=periodo.desc&limit=2000`),
+    years:()=>read('cuotas',`select=periodo&${filterClub()}&order=periodo.desc&limit=5000`),
+    detail:({year,month,socio,origin,status}={})=>read('v_finanzas_detalle',`select=*&${filterClub()}${year?`&anio=eq.${enc(year)}`:''}${month?`&mes=eq.${enc(month)}`:''}${socio?`&socio_id=eq.${enc(socio)}`:''}${origin?`&origen=eq.${enc(origin)}`:''}${status?`&estado=eq.${enc(status)}`:''}&order=periodo.desc,vencimiento.desc&limit=2000`),
+    metricsMonthly:(year)=>read('v_finanzas_metricas_mensuales',`select=*&${filterClub()}${year?`&anio=eq.${enc(year)}`:''}&order=anio.desc,mes.asc&limit=240`),
+    metricsAnnual:()=>read('v_finanzas_metricas_anuales',`select=*&${filterClub()}&order=anio.desc&limit=50`),
     generate:(periodo=monthStart())=>mutation('cuotas.generar',{periodo}),
     adminPayment:(p)=>mutation('pago.registrar_admin',{cuota_id:p.cuota_id,importe:Number(p.importe),fecha:p.fecha||isoDate(),metodo:p.metodo,referencia:p.referencia||null,observaciones:p.observaciones||null}),
     communicatePayment:(p)=>mutation('pago.comunicar',{cuota_id:p.cuota_id,importe:Number(p.importe),fecha:p.fecha||isoDate(),metodo:p.metodo,referencia:p.referencia||null,justificante_path:p.justificante_path||null,observaciones:p.observaciones||null}),
@@ -154,9 +160,7 @@ export const repos={
     uploadImage:(file)=>uploadPublicImage('material',file), removeImage:(url)=>removePublicImage(url),
     save:(p)=>mutation('material.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,categoria:p.categoria||'',descripcion:p.descripcion||'',imagen_url:p.imagen_url||'',precio:Number(p.precio||0),stock:Number(p.stock||0),obligatorio:p.obligatorio===true,referencia:p.referencia||'',activo:p.activo!==false}),
     saveVariant:(p)=>mutation('material.variante.guardar',{id:p.id||null,material_id:p.material_id,talla:p.talla||'',color:p.color||'',referencia:p.referencia||'',stock:Number(p.stock||0),activa:p.activa!==false}),
-    request:(p)=>mutation('material.solicitar',{socio_id:p.socio_id,material_id:p.material_id,variante_id:p.variante_id||null,cantidad:Number(p.cantidad||1),observaciones:p.observaciones||''}),
-    validateDelivery:(pedido_id)=>mutation('material.validar_entrega',{pedido_id}),
-    registerDelivery:(p)=>mutation('material.registrar_entrega',{socio_id:p.socio_id,material_id:p.material_id,variante_id:p.variante_id||null,cantidad:Number(p.cantidad||1),observaciones:p.observaciones||''}),
+    request:(p)=>mutation('material.solicitar',{socio_id:p.socio_id,material_id:p.material_id,variante_id:p.variante_id||null,cantidad:Number(p.cantidad||1),observaciones:p.observaciones||'',validar_ahora:p.validar_ahora===true}),
     orderStatus:(pedido_id,estado)=>mutation('material.pedido.estado',{pedido_id,estado}),
     async delete(material_id){const out=await mutation('material.eliminar',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}, async forceDelete(material_id){const out=await mutation('material.eliminar_forzado',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}
   },
@@ -200,14 +204,15 @@ export const repos={
     avatarUrl:(path)=>path?backend.signedUrl('profile-media',path,3600):Promise.resolve('')
   },
   community:{
-    list:(limit=20,offset=0)=>read('publicaciones_comunidad',`select=*&${filterClub()}&order=creado_en.desc,id.desc&limit=${Math.max(1,Math.min(Number(limit)||20,50))}&offset=${Math.max(0,Number(offset)||0)}`),
+    listPage:(cursor=null,limit=20)=>read('publicaciones_comunidad',`select=*&${filterClub()}${cursor?.created&&cursor?.id?`&or=(creado_en.lt.${enc(cursor.created)},and(creado_en.eq.${enc(cursor.created)},id.lt.${enc(cursor.id)}))`:''}&order=creado_en.desc,id.desc&limit=${Math.min(20,Math.max(1,Number(limit)||20))}`),
     async quota(){const rows=await read('publicaciones_comunidad',`select=id,autor_perfil_id,creado_en&${filterClub()}&autor_perfil_id=eq.${enc(session()?.id)}&creado_en=gte.${enc(new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString())}&limit=20`);const staff=['direccion','coordinacion','secretaria','comunicacion'].includes(session()?.rol);return {used:rows.length,limit:staff?5:3};},
-    async upload(file,kind='media'){if(!file||!file.size)throw new Error('Selecciona un archivo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP, MP4, WEBM o MOV.');if(file.size>(isVideo?50:5)*1024*1024)throw new Error(isVideo?'El vídeo supera 50 MB.':'La imagen supera 5 MB.');const ext=(file.name.split('.').pop()|| (isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();const path=`${session().club_id}/${session().id}/${kind}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;await backend.upload('community-media',path,file,false);return path;},
+    async upload(file){if(!file||!file.size)throw new Error('Selecciona una imagen o vídeo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP, MP4, WEBM o MOV.');if(file.size>(isVideo?50:5)*1024*1024)throw new Error(isVideo?'El vídeo supera 50 MB.':'La imagen supera 5 MB.');const ext=(file.name.split('.').pop()|| (isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();const path=`${session().club_id}/${session().id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;await backend.upload('community-media',path,file,false);return path;},
     mediaUrl:(path)=>backend.signedUrl('community-media',path,3600),
-    publish:(p)=>mutation('comunidad.publicar',{texto:p.texto||'',media_path:p.media_path,media_tipo:p.media_tipo,duracion_segundos:p.duracion_segundos||null,portada_path:p.portada_path||null,media_ancho:p.media_ancho||null,media_alto:p.media_alto||null}),
-    async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});if(out?.media_path)await backend.remove('community-media',out.media_path).catch(()=>{});return out;},
+    publish:(p)=>mutation('comunidad.publicar',{texto:p.texto||'',media_path:p.media_path,media_tipo:p.media_tipo,duracion_segundos:p.duracion_segundos||null,media_mime:p.media_mime||null,media_width:p.media_width||null,media_height:p.media_height||null,media_size_bytes:p.media_size_bytes||null,portada_automatica_path:p.portada_automatica_path||null,portada_manual_path:p.portada_manual_path||null}),
+    async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});for(const path of [...new Set([out?.media_path,out?.portada_automatica_path,out?.portada_manual_path].filter(Boolean))])await backend.remove('community-media',path).catch(()=>{});return out;},
     moderate:(publicacion_id,oculta=true,motivo='')=>mutation('comunidad.moderar',{publicacion_id,oculta,motivo}),
-    removeMedia:(path)=>path?backend.remove('community-media',path):Promise.resolve()
+    changeCover:(publicacion_id,portada_manual_path)=>mutation('comunidad.moderar',{publicacion_id,accion:'portada',portada_manual_path}),
+    removePath:(path)=>path?backend.remove('community-media',path):Promise.resolve()
   },
   legal:{
     docs:()=>read('textos_legales',`select=*&${filterClub()}&vigente=eq.true&order=tipo`),

@@ -29,7 +29,7 @@ No se incorpora un store monolítico alternativo ni DML directo desde los módul
 ## Dominios añadidos en RC10
 
 ### Notificaciones
-Lectura individual, por grupo y total; preferencias push por categoría; visualización agrupada y distinción de acciones pendientes.
+Lectura individual, por grupo y total; permiso global Android; visualización agrupada y distinción de acciones pendientes. La tabla histórica de preferencias se conserva por compatibilidad, pero los workers ya no filtran categorías personales.
 
 ### Sesiones recurrentes
 `series_sesiones` define recurrencias semanales. Las ocurrencias concretas siguen viviendo en `sesiones_entrenamiento`, lo que permite reservas, asistencia e histórico por fecha. Las excepciones se aplican a una ocurrencia sin destruir la serie.
@@ -42,6 +42,8 @@ Lectura individual, por grupo y total; preferencias push por categoría; visuali
 
 ### Finanzas
 `v_estado_cuenta_socio` presenta cuota, pagos validados, saldo, estado y recibo sin crear una segunda contabilidad paralela.
+
+La migración 024 añade `v_finanzas_detalle`, `v_finanzas_metricas_mensuales` y `v_finanzas_metricas_anuales`. Son vistas `security_invoker`: las cifras se derivan de los datos reales y respetan las políticas de las tablas base.
 
 ### Legal
 `textos_legales` conserva documentos versionados y `aceptaciones_legales` registra decisiones del usuario. La autorización de imagen permanece separada de las condiciones necesarias para acceder al servicio.

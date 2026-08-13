@@ -166,17 +166,17 @@ Deno.serve(async (request) => {
       if (notificationsError) throw notificationsError
 
       const profileIds = [...new Set((notifications || []).map((item) => item.perfil_id))]
-      const devicesByProfile = new Map<string, string[]>()
+      const devicesByProfile = new Map<string, { id: string; token: string }[]>()
       if (profileIds.length) {
         const { data: devices, error: devicesError } = await supabase
           .from('dispositivos_push')
-          .select('perfil_id,token')
+          .select('id,perfil_id,token')
           .eq('activo', true)
           .in('perfil_id', profileIds)
         if (devicesError) throw devicesError
         for (const device of devices || []) {
           const list = devicesByProfile.get(device.perfil_id) || []
-          list.push(device.token)
+          list.push({ id: device.id, token: device.token })
           devicesByProfile.set(device.perfil_id, list)
         }
       }
@@ -186,9 +186,9 @@ Deno.serve(async (request) => {
         if (!tokens.length) continue
         let delivered = false
         const errors: string[] = []
-        for (const token of tokens) {
+        for (const device of tokens) {
           try {
-            await sendFcm(account, accessToken, token, {
+            await sendFcm(account, accessToken, device.token, {
               title: notification.titulo,
               body: notification.cuerpo,
               route: notification.ruta,
@@ -198,7 +198,11 @@ Deno.serve(async (request) => {
             pushSent += 1
           } catch (error) {
             pushErrors += 1
-            errors.push(error instanceof Error ? error.message : String(error))
+            const message = error instanceof Error ? error.message : String(error)
+            errors.push(message)
+            if (/UNREGISTERED|registration-token-not-registered|not found/i.test(message)) {
+              await supabase.from('dispositivos_push').update({ activo: false }).eq('id', device.id)
+            }
           }
         }
         await supabase

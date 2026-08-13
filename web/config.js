@@ -12,7 +12,7 @@ window.UW_CONFIG = {
   },
   release: {
     version: '2.0.0-rc.12',
-    build: 20012,
+    build: 20016,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',

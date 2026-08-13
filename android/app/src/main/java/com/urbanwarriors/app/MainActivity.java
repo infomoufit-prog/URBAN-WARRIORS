@@ -13,6 +13,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.graphics.Insets;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowInsets;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -22,6 +26,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -31,19 +36,26 @@ public class MainActivity extends Activity {
     private static final int FILE_PICKER_REQUEST = 401;
     private static final int NOTIFICATION_PERMISSION_REQUEST = 402;
     private static final String NOTIFICATION_CHANNEL_ID = "urban_warriors_alerts";
+    private static final String LOG_TAG = "UrbanWarriorsPush";
     // Origen HTTPS virtual para que los ES modules del frontend 2.0 funcionen en WebView.
     private static final String APP_HOST = "appassets.androidplatform.net";
     private static final String APP_ORIGIN = "https://" + APP_HOST;
     private WebView webView;
     private ValueCallback<Uri[]> fileCallback;
+    private int safeAreaTopPx;
+    private int safeAreaBottomPx;
+    private boolean firebaseReady;
 
     @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createNotificationChannel();
+        configureEdgeToEdge();
         webView = new WebView(this);
         setContentView(webView);
+        observeSafeAreas();
+        firebaseReady = initializeFirebaseSafely();
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -57,6 +69,12 @@ public class MainActivity extends Activity {
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                applySafeAreasToFrontend();
+            }
+
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
@@ -110,6 +128,89 @@ public class MainActivity extends Activity {
         webView.loadUrl(APP_ORIGIN + "/index.html" + routeFragment(getIntent()));
     }
 
+    private boolean initializeFirebaseSafely() {
+        try {
+            FirebaseApp app = FirebaseApp.getApps(this).isEmpty() ? FirebaseApp.initializeApp(this) : FirebaseApp.getInstance();
+            if (app == null) {
+                Log.w(LOG_TAG, "Firebase no está configurado; la app continuará sin push.");
+                return false;
+            }
+            Log.i(LOG_TAG, "Firebase inicializado correctamente.");
+            return true;
+        } catch (Throwable error) {
+            Log.e(LOG_TAG, "Firebase no pudo inicializarse; la app continuará funcionando.", error);
+            return false;
+        }
+    }
+
+    private void refreshPushTokenSafely() {
+        if (!firebaseReady) {
+            firebaseReady = initializeFirebaseSafely();
+            if (!firebaseReady) return;
+        }
+        try {
+            Log.i(LOG_TAG, "Solicitando token FCM de forma asíncrona.");
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (!task.isSuccessful() || task.getResult() == null || task.getResult().trim().isEmpty()) {
+                    Log.w(LOG_TAG, "No se pudo obtener el token FCM.", task.getException());
+                    return;
+                }
+                String token = task.getResult().trim();
+                getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
+                Log.i(LOG_TAG, "Token FCM obtenido y preparado para sincronización.");
+                dispatchPushToken(token);
+            });
+        } catch (Throwable error) {
+            Log.e(LOG_TAG, "Error al solicitar token FCM; no se interrumpe la app.", error);
+        }
+    }
+
+    private void dispatchPushToken(String token) {
+        if (webView == null || token == null || token.trim().isEmpty()) return;
+        runOnUiThread(() -> webView.evaluateJavascript(
+            "window.dispatchEvent(new CustomEvent('uw-native-push-token',{detail:" + org.json.JSONObject.quote(token) + "}));",
+            null
+        ));
+    }
+
+    private void configureEdgeToEdge() {
+        getWindow().setStatusBarColor(android.graphics.Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(android.graphics.Color.TRANSPARENT);
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        );
+    }
+
+    private void observeSafeAreas() {
+        getWindow().getDecorView().setOnApplyWindowInsetsListener((view, insets) -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                safeAreaTopPx = bars.top;
+                safeAreaBottomPx = bars.bottom;
+            } else {
+                safeAreaTopPx = Math.max(insets.getStableInsetTop(), insets.getSystemWindowInsetTop());
+                safeAreaBottomPx = insets.getStableInsetBottom();
+            }
+            applySafeAreasToFrontend();
+            return insets;
+        });
+        getWindow().getDecorView().requestApplyInsets();
+    }
+
+    private void applySafeAreasToFrontend() {
+        if (webView == null) return;
+        final int top = Math.max(0, safeAreaTopPx);
+        final int bottom = Math.max(0, safeAreaBottomPx);
+        webView.post(() -> webView.evaluateJavascript(
+            "document.documentElement.style.setProperty('--uw-native-safe-top','" + top + "px');"
+                + "document.documentElement.style.setProperty('--uw-native-safe-bottom','" + bottom + "px');"
+                + "window.dispatchEvent(new CustomEvent('uw-safe-area-changed',{detail:{top:" + top + ",bottom:" + bottom + "}}));",
+            null
+        ));
+    }
+
     private static String routeFragment(Intent intent) {
         if (intent == null) return "";
         String route = intent.getStringExtra("route");
@@ -150,65 +251,55 @@ public class MainActivity extends Activity {
         }
     }
 
-    private String notificationPermissionStatus() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        boolean askedBefore = getSharedPreferences("uw_push", MODE_PRIVATE).getBoolean("notification_permission_requested", false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            return askedBefore ? "denied" : "not_determined";
-        }
-        if (manager != null && !manager.areNotificationsEnabled()) return "blocked";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && manager != null) {
-            NotificationChannel channel = manager.getNotificationChannel(NOTIFICATION_CHANNEL_ID);
-            if (channel != null && channel.getImportance() == NotificationManager.IMPORTANCE_NONE) return "blocked";
-        }
-        return "granted";
-    }
-
-    private void dispatchNotificationPermissionStatus() {
-        if (webView == null) return;
-        String status = notificationPermissionStatus();
-        webView.evaluateJavascript("window.dispatchEvent(new CustomEvent('uw-native-notification-permission',{detail:" + org.json.JSONObject.quote(status) + "}));", null);
-    }
-
-    private void refreshPushToken() {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                String token = task.getResult();
-                getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
-                runOnUiThread(() -> {
-                    if (webView != null) webView.evaluateJavascript("window.dispatchEvent(new CustomEvent('uw-native-push-token',{detail:" + org.json.JSONObject.quote(token) + "}));", null);
-                });
-            }
-        });
-    }
-
     private void requestNotificationPermission() {
-        getSharedPreferences("uw_push", MODE_PRIVATE).edit().putBoolean("notification_permission_requested", true).apply();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            getSharedPreferences("uw_push", MODE_PRIVATE).edit().putBoolean("notification_permission_requested", true).apply();
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_REQUEST);
-            return;
+        } else {
+            refreshPushTokenSafely();
+            notifyPermissionState();
         }
-        refreshPushToken();
-        showLocalNotification("Urban Warriors", "Las notificaciones del dispositivo están activadas.");
-        dispatchNotificationPermissionStatus();
+    }
+
+    private String notificationPermissionState() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return "granted";
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) return "granted";
+        boolean requested = getSharedPreferences("uw_push", MODE_PRIVATE).getBoolean("notification_permission_requested", false);
+        if (!requested) return "prompt";
+        return shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) ? "rationale" : "settings";
+    }
+
+    private void notifyPermissionState() {
+        if (webView == null) return;
+        String state = notificationPermissionState();
+        runOnUiThread(() -> webView.evaluateJavascript(
+            "window.dispatchEvent(new CustomEvent('uw-native-notification-state',{detail:" + org.json.JSONObject.quote(state) + "}));",
+            null
+        ));
     }
 
     private void openNotificationSettings() {
         try {
-            Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+            Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
             startActivity(intent);
-        } catch (Exception exception) {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
+        } catch (Exception error) {
+            Log.w(LOG_TAG, "No se pudo abrir ajustes de notificaciones; se abre la ficha de la app.", error);
+            Intent fallback = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
+            startActivity(fallback);
         }
     }
 
     private void showLocalNotification(String title, String body) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(LOG_TAG, "Notificación local omitida: permiso Android no concedido.");
+            return;
+        }
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Notification.Builder builder = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? new Notification.Builder(this, NOTIFICATION_CHANNEL_ID) : new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher).setContentTitle(title).setContentText(body).setAutoCancel(true);
-        manager.notify((int) (System.currentTimeMillis() % Integer.MAX_VALUE), builder.build());
+        try { manager.notify((int) (System.currentTimeMillis() % Integer.MAX_VALUE), builder.build()); }
+        catch (SecurityException error) { Log.w(LOG_TAG, "Android bloqueó la notificación local.", error); }
     }
 
     public class NativeBridge {
@@ -218,8 +309,8 @@ public class MainActivity extends Activity {
             return getSharedPreferences("uw_push", MODE_PRIVATE).getString("fcm_token", "");
         }
         @JavascriptInterface public String getPushToken() { return getSharedPreferences("uw_push", MODE_PRIVATE).getString("fcm_token", ""); }
-        @JavascriptInterface public String getNotificationPermissionStatus() { return notificationPermissionStatus(); }
-        @JavascriptInterface public void ensurePushToken() { runOnUiThread(MainActivity.this::refreshPushToken); }
+        @JavascriptInterface public String getNotificationPermissionState() { return notificationPermissionState(); }
+        @JavascriptInterface public boolean isFirebaseReady() { return firebaseReady; }
         @JavascriptInterface public void openNotificationSettings() { runOnUiThread(MainActivity.this::openNotificationSettings); }
         @JavascriptInterface public void showNotification(String title, String body) { runOnUiThread(() -> showLocalNotification(title, body)); }
     }
@@ -227,17 +318,16 @@ public class MainActivity extends Activity {
     @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == NOTIFICATION_PERMISSION_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                refreshPushToken();
-                showLocalNotification("Urban Warriors", "Las notificaciones del dispositivo están activadas.");
-            }
-            runOnUiThread(this::dispatchNotificationPermissionStatus);
+            boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            Log.i(LOG_TAG, granted ? "Permiso de notificaciones concedido." : "Permiso de notificaciones no concedido.");
+            if (granted) refreshPushTokenSafely();
+            notifyPermissionState();
         }
     }
-
     @Override protected void onResume() {
         super.onResume();
-        if (webView != null) runOnUiThread(this::dispatchNotificationPermissionStatus);
+        if (notificationPermissionState().equals("granted")) refreshPushTokenSafely();
+        notifyPermissionState();
     }
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

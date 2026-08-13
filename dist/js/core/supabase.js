@@ -59,7 +59,10 @@ export class SupabaseClient {
   async upload(bucket,path,file,upsert=false){
     await this.fresh(); if(!this.session?.access_token)throw new AuthExpiredError();
     const url=`${this.url}/storage/v1/object/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`;
-    const res=await fetch(url,{method:'POST',headers:{apikey:this.key,Authorization:`Bearer ${this.session.access_token}`,'Content-Type':file.type||'application/octet-stream','x-upsert':upsert?'true':'false'},body:file});
+    const ctrl=new AbortController();const timeoutMs=Math.min(120000,Math.max(30000,30000+Math.ceil(Number(file.size||0)/262144)*1000));const timeout=setTimeout(()=>ctrl.abort(),timeoutMs);let res;
+    try{res=await fetch(url,{method:'POST',headers:{apikey:this.key,Authorization:`Bearer ${this.session.access_token}`,'Content-Type':file.type||'application/octet-stream','x-upsert':upsert?'true':'false'},body:file,signal:ctrl.signal});}
+    catch(error){if(error?.name==='AbortError')throw new Error('La subida ha superado el tiempo de espera y no se considera confirmada.');throw new Error('No se pudo conectar con Storage para subir el archivo. Comprueba la conexión e inténtalo de nuevo.');}
+    finally{clearTimeout(timeout);}
     const body=await res.json().catch(()=>({})); if(!res.ok)throw new Error(body.message||body.error||`Storage HTTP ${res.status}`);return body;
   }
   async remove(bucket,path){await this.fresh();if(!this.session?.access_token)throw new AuthExpiredError();return this.request(`/storage/v1/object/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`,{method:'DELETE'});}

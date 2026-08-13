@@ -1,2 +1,5 @@
+[functions.notification-dispatch]
+verify_jwt = false
+
 [functions.payment-reminders]
 verify_jwt = false

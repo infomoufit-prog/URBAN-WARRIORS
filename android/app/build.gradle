@@ -15,7 +15,7 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
         targetSdk 35
-        versionCode 20012
+        versionCode 20016
         versionName '2.0.0-rc.12'
     }
 
@@ -36,11 +36,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    lint {
-        abortOnError = false
-        checkReleaseBuilds = false
     }
 
     compileOptions {

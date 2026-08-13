@@ -5,17 +5,24 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class UrbanWarriorsMessagingService extends FirebaseMessagingService {
     private static final String CHANNEL_ID = "urban_warriors_alerts";
+    private static final String LOG_TAG = "UrbanWarriorsPush";
 
     @Override
     public void onNewToken(String token) {
         super.onNewToken(token);
-        getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
+        if (token == null || token.trim().isEmpty()) {
+            Log.w(LOG_TAG, "Firebase entregó un token vacío; se ignora.");
+            return;
+        }
+        getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token.trim()).apply();
+        Log.i(LOG_TAG, "Token FCM renovado y almacenado para la siguiente sincronización.");
     }
 
     @Override
@@ -27,6 +34,8 @@ public class UrbanWarriorsMessagingService extends FirebaseMessagingService {
             if (message.getNotification().getTitle() != null) title = message.getNotification().getTitle();
             if (message.getNotification().getBody() != null) body = message.getNotification().getBody();
         }
+        if (message.getData().get("title") != null) title = message.getData().get("title");
+        if (message.getData().get("body") != null) body = message.getData().get("body");
         String route = message.getData().getOrDefault("route", "notifications");
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("route", route);
@@ -47,6 +56,7 @@ public class UrbanWarriorsMessagingService extends FirebaseMessagingService {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent);
-        manager.notify((int)(System.currentTimeMillis() % Integer.MAX_VALUE), builder.build());
+        try { manager.notify((int)(System.currentTimeMillis() % Integer.MAX_VALUE), builder.build()); }
+        catch (SecurityException error) { Log.w(LOG_TAG, "Notificación FCM recibida pero bloqueada por Android.", error); }
     }
 }

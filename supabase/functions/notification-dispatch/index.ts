@@ -3,6 +3,7 @@ import { importPKCS8, SignJWT } from 'npm:jose@6'
 
 type Json = Record<string, unknown>
 type FirebaseServiceAccount = { project_id: string; client_email: string; private_key: string; token_uri?: string }
+
 function getSecretKey(): string {
   const legacy = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
   if (legacy) return legacy
@@ -49,10 +50,10 @@ Deno.serve(async (request) => {
     for(const club of clubs||[]){const {data,error}=await supabase.rpc('app_generar_sesiones_recurrentes',{p_club_id:club.id,p_horizonte_dias:84});if(error)throw error;recurringGenerated+=Number(data||0)}
 
     // 2) Retención Comunidad: DB + archivo físico. Se hace antes del push y funciona incluso sin Firebase.
-    let expiredQuery=supabase.from('publicaciones_comunidad').select('id,club_id,media_path,portada_path').lte('expira_en',now).limit(500)
+    let expiredQuery=supabase.from('publicaciones_comunidad').select('id,club_id,media_path,portada_automatica_path,portada_manual_path').lte('expira_en',now).limit(500)
     if(requestedClub)expiredQuery=expiredQuery.eq('club_id',requestedClub)
     const {data:expired,error:expiredError}=await expiredQuery;if(expiredError)throw expiredError
-    const paths=(expired||[]).flatMap(x=>[x.media_path,x.portada_path]).filter(Boolean) as string[]
+    const paths=[...new Set((expired||[]).flatMap(x=>[x.media_path,x.portada_automatica_path,x.portada_manual_path]).filter(Boolean))] as string[]
     if(paths.length){for(let i=0;i<paths.length;i+=100){const {error}=await supabase.storage.from('community-media').remove(paths.slice(i,i+100));if(error)throw error}}
     if((expired||[]).length){const {error}=await supabase.from('publicaciones_comunidad').delete().in('id',(expired||[]).map(x=>x.id));if(error)throw error}
 
@@ -83,7 +84,7 @@ Deno.serve(async (request) => {
       if(ids.length){const {data:devices,error}=await supabase.from('dispositivos_push').select('id,token').eq('club_id',notification.club_id).eq('activo',true).in('perfil_id',ids);if(error)throw error;tokens=devices||[]}
       let delivered=false;const itemErrors:string[]=[]
       for(const device of tokens){try{await sendFcm(account,accessToken,device.token,notification as Json);delivered=true;sent++}catch(error){errors++;const message=error instanceof Error?error.message:String(error);itemErrors.push(message);if(/UNREGISTERED|registration-token-not-registered|not found/i.test(message))await supabase.from('dispositivos_push').update({activo:false}).eq('id',device.id)}}
-      await supabase.from('notificaciones').update({push_enviado_en:delivered?new Date().toISOString():null,push_intentos:Number(notification.push_intentos||0)+1,push_error:itemErrors.length?itemErrors.join(' | ').slice(0,2000):(tokens.length?null:'Sin dispositivos push registrados')}).eq('id',notification.id)
+      await supabase.from('notificaciones').update({push_enviado_en:delivered?new Date().toISOString():null,push_intentos:Number(notification.push_intentos||0)+1,push_error:itemErrors.length?itemErrors.join(' | ').slice(0,2000):(tokens.length?null:'Sin dispositivos push activos')}).eq('id',notification.id)
     }
     return Response.json({ok:true,firebase_configured:true,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,notifications:due.length,sent,errors})
   }catch(error){console.error(error);return Response.json({error:error instanceof Error?error.message:String(error)},{status:500})}
