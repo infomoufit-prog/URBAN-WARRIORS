@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -53,7 +52,7 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.12");
+        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.10");
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
@@ -150,58 +149,10 @@ public class MainActivity extends Activity {
         }
     }
 
-    private String notificationPermissionStatus() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        boolean askedBefore = getSharedPreferences("uw_push", MODE_PRIVATE).getBoolean("notification_permission_requested", false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            return askedBefore ? "denied" : "not_determined";
-        }
-        if (manager != null && !manager.areNotificationsEnabled()) return "blocked";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && manager != null) {
-            NotificationChannel channel = manager.getNotificationChannel(NOTIFICATION_CHANNEL_ID);
-            if (channel != null && channel.getImportance() == NotificationManager.IMPORTANCE_NONE) return "blocked";
-        }
-        return "granted";
-    }
-
-    private void dispatchNotificationPermissionStatus() {
-        if (webView == null) return;
-        String status = notificationPermissionStatus();
-        webView.evaluateJavascript("window.dispatchEvent(new CustomEvent('uw-native-notification-permission',{detail:" + org.json.JSONObject.quote(status) + "}));", null);
-    }
-
-    private void refreshPushToken() {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                String token = task.getResult();
-                getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
-                runOnUiThread(() -> {
-                    if (webView != null) webView.evaluateJavascript("window.dispatchEvent(new CustomEvent('uw-native-push-token',{detail:" + org.json.JSONObject.quote(token) + "}));", null);
-                });
-            }
-        });
-    }
-
     private void requestNotificationPermission() {
-        getSharedPreferences("uw_push", MODE_PRIVATE).edit().putBoolean("notification_permission_requested", true).apply();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_REQUEST);
-            return;
-        }
-        refreshPushToken();
-        showLocalNotification("Urban Warriors", "Las notificaciones del dispositivo están activadas.");
-        dispatchNotificationPermissionStatus();
-    }
-
-    private void openNotificationSettings() {
-        try {
-            Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
-            startActivity(intent);
-        } catch (Exception exception) {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
-        }
+        } else showLocalNotification("Urban Warriors", "Las alertas del dispositivo están activadas.");
     }
 
     private void showLocalNotification(String title, String body) {
@@ -215,29 +166,22 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public String requestNotifications() {
             runOnUiThread(MainActivity.this::requestNotificationPermission);
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    String token = task.getResult();
+                    getSharedPreferences("uw_push", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
+                    runOnUiThread(() -> webView.evaluateJavascript("window.dispatchEvent(new CustomEvent('uw-native-push-token',{detail:" + org.json.JSONObject.quote(token) + "}));", null));
+                }
+            });
             return getSharedPreferences("uw_push", MODE_PRIVATE).getString("fcm_token", "");
         }
         @JavascriptInterface public String getPushToken() { return getSharedPreferences("uw_push", MODE_PRIVATE).getString("fcm_token", ""); }
-        @JavascriptInterface public String getNotificationPermissionStatus() { return notificationPermissionStatus(); }
-        @JavascriptInterface public void ensurePushToken() { runOnUiThread(MainActivity.this::refreshPushToken); }
-        @JavascriptInterface public void openNotificationSettings() { runOnUiThread(MainActivity.this::openNotificationSettings); }
         @JavascriptInterface public void showNotification(String title, String body) { runOnUiThread(() -> showLocalNotification(title, body)); }
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == NOTIFICATION_PERMISSION_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                refreshPushToken();
-                showLocalNotification("Urban Warriors", "Las notificaciones del dispositivo están activadas.");
-            }
-            runOnUiThread(this::dispatchNotificationPermissionStatus);
-        }
-    }
-
-    @Override protected void onResume() {
-        super.onResume();
-        if (webView != null) runOnUiThread(this::dispatchNotificationPermissionStatus);
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) showLocalNotification("Urban Warriors", "Las alertas del dispositivo están activadas.");
     }
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
