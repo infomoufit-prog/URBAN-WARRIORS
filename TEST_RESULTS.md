@@ -41,3 +41,13 @@
 Estado: **pruebas locales y gateway Supabase superados; frontend web y APK RC10 pendientes de restauración y certificación**.
 
 Supabase real fue corregido mediante la migración controlada 023. No se ha restaurado todavía el frontend publicado ni se ha sustituido la APK RC12 instalada.
+
+### Vista previa web RC10
+
+- Arranque y restauración de sesión Gestor: **OK**.
+- Contrato y sonda de escritura: **OK**.
+- Diagnóstico de persistencia: **12/12 OK**.
+- Comunidad: crear con imagen, leer y eliminar: **OK**.
+- Comunicaciones: crear con imagen, leer y eliminar: **OK**.
+- Material: crear sin imagen, editar con imagen ligera, leer y eliminar: **OK**.
+- Incidencia observada: una imagen PNG de mayor peso permaneció más de un minuto en subida y terminó con `Failed to fetch`. No se creó el material ni hubo duplicado. Una imagen ligera posterior se guardó correctamente.
