@@ -2,7 +2,7 @@ import { backend, client } from './core/backend.js';
 import { state } from './core/state.js';
 import { repos } from './core/repositories.js';
 import { humanError, esc } from './core/utils.js';
-import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge } from './ui/components.js';
+import { shell, setAppHtml, bindDismissAlerts, setError, openForm, closeModal, toast, setNotificationBadge } from './ui/components.js';
 import { navIcon, icon } from './ui/icons.js';
 import { renderDashboard, renderCatalog } from './modules/dashboard-catalog.js';
 import { renderGroups, renderMembers, renderEnrollments } from './modules/groups-members.js';
@@ -97,47 +97,6 @@ async function syncNativePushToken(){
     await backend.mutate('push.registrar',{token,plataforma:'android'});localStorage.setItem('uw_push_synced_token',key);
   }catch(error){console.warn('Sincronización push:',error)}
 }
-
-const isNativeAndroid=()=>Boolean(window.UrbanWarriorsNative?.getNotificationPermissionStatus);
-const nativeNotificationStatus=()=>{try{return String(window.UrbanWarriorsNative?.getNotificationPermissionStatus?.()||'unknown')}catch{return 'unknown'}};
-
-async function enforceNativePushPreferences(){
-  if(!state.session||!isNativeAndroid())return;
-  try{
-    await repos.notifications.savePreferences({push_general:true,push_finanzas:true,push_sesiones:true,push_comunidad:true});
-  }catch(error){console.warn('Preferencias push RC11:',humanError(error));}
-}
-
-function showNativeNotificationPrompt(status=nativeNotificationStatus()){
-  if(!state.session||!isNativeAndroid()||status==='granted')return;
-  const blocked=status==='denied'||status==='blocked';
-  const actions=blocked
-    ? '<button class="btn btn-ghost" id="push-later">Ahora no</button><button class="btn btn-primary" id="push-open-settings">Abrir ajustes de notificaciones</button>'
-    : '<button class="btn btn-ghost" id="push-later">Ahora no</button><button class="btn btn-primary" id="push-activate">Activar notificaciones</button>';
-  openDetail({
-    title:'Activa las notificaciones',
-    subtitle:'Urban Warriors puede avisarte de cuotas, cambios de sesión, comunicaciones y novedades importantes.',
-    body:`<div class="native-push-consent"><div class="native-push-consent-icon">${icon('bell')}</div><div><strong>${blocked?'Las notificaciones están desactivadas en Android':'No te pierdas avisos importantes del club'}</strong><p>${blocked?'Abre los ajustes de Android y permite las notificaciones de Urban Warriors.':'Pulsa Activar notificaciones y acepta el permiso que mostrará Android. Puedes cambiar este permiso más adelante desde los ajustes del teléfono.'}</p></div></div>`,
-    actions,
-    width:'560px',
-    className:'native-push-modal'
-  });
-  document.getElementById('push-later')?.addEventListener('click',closeModal);
-  document.getElementById('push-activate')?.addEventListener('click',()=>{window.UrbanWarriorsNative?.requestNotifications?.();});
-  document.getElementById('push-open-settings')?.addEventListener('click',()=>{window.UrbanWarriorsNative?.openNotificationSettings?.();});
-}
-
-async function ensureNativeNotificationSetup(){
-  if(!state.session||!isNativeAndroid())return;
-  await enforceNativePushPreferences();
-  const status=nativeNotificationStatus();
-  if(status==='granted'){
-    window.UrbanWarriorsNative?.ensurePushToken?.();
-    await syncNativePushToken();
-    return;
-  }
-  showNativeNotificationPrompt(status);
-}
 window.addEventListener('uw-notifications-changed',()=>refreshNotifications({announce:false}));
 window.addEventListener('uw-profile-avatar-changed',()=>hydrateSessionAvatar());
 
@@ -153,7 +112,7 @@ function bindShellNavigation(){
   document.getElementById('logout-btn')?.addEventListener('click',async()=>{stopNotificationMonitor();await backend.signOut();renderLogin();});
 }
 function renderShell(){
-  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.rol==='direccion'){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});ensureNativeNotificationSetup();
+  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.rol==='direccion'){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
 }
 
 function renderLogin(prefillEmail=''){
@@ -205,11 +164,10 @@ function openPublicInstall(){
 async function boot(){
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__uwInstallPrompt=e;});
   window.addEventListener('uw-native-push-token',async e=>{try{if(state.session&&e.detail){await backend.mutate('push.registrar',{token:e.detail,plataforma:'android'});localStorage.setItem('uw_push_synced_token',`${state.session.id}:${e.detail}`);}}catch(error){console.warn('Push token:',error)}});
-  window.addEventListener('uw-native-notification-permission',async e=>{if(!state.session||!isNativeAndroid())return;const status=String(e.detail||nativeNotificationStatus());if(status==='granted'){closeModal();window.UrbanWarriorsNative?.ensurePushToken?.();await syncNativePushToken();toast('Notificaciones activadas');}else if(status==='denied'||status==='blocked'){closeModal();showNativeNotificationPrompt(status);}});
   window.addEventListener('popstate',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
   window.addEventListener('hashchange',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
   window.addEventListener('focus',()=>{if(state.session)refreshNotifications({announce:true})});
   try{const session=await backend.restore();if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();}
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20012').catch(e=>console.warn('Service worker:',e));
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20010').catch(e=>console.warn('Service worker:',e));
 }
 boot();
