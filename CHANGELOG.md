@@ -8,6 +8,8 @@
 - Añadido test estático específico y punto de rollback.
 - Ejecutado en Supabase real con resultado 12/12 OK.
 - Certificación E2E real superada: 19/19.
+- Vista previa web RC10 certificada: diagnóstico 12/12 y CRUD crítico de Comunidad, Comunicaciones, Materiales y Finanzas.
+- Registrada incidencia no bloqueante de subida de imágenes grandes en `BUGS.md`.
 
 ## 2.0.0-rc.10
 

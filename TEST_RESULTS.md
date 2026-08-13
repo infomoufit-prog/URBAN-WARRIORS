@@ -50,4 +50,5 @@ Supabase real fue corregido mediante la migración controlada 023. No se ha rest
 - Comunidad: crear con imagen, leer y eliminar: **OK**.
 - Comunicaciones: crear con imagen, leer y eliminar: **OK**.
 - Material: crear sin imagen, editar con imagen ligera, leer y eliminar: **OK**.
+- Finanzas: carga de secciones y creación/eliminación de registro temporal: **OK**.
 - Incidencia observada: una imagen PNG de mayor peso permaneció más de un minuto en subida y terminó con `Failed to fetch`. No se creó el material ni hubo duplicado. Una imagen ligera posterior se guardó correctamente.
