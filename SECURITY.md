@@ -1,31 +1,55 @@
-# Seguridad · Urban Warriors 2.0.0-rc.1
+# Seguridad · Urban Warriors RC13 build 20018
 
-## Controles aplicados
+## Autoridad
 
-- RLS y modelo multi-club existentes se conservan.
 - El frontend no contiene `service_role`.
-- La publishable key de Supabase se usa únicamente como `apikey`.
-- `Authorization` transporta el token de sesión real.
-- No existe DML directo desde los repositorios.
-- Las 37 mutaciones de negocio pasan por `app_mutate_v160`.
-- Cada mutación usa `request_id` y valida la respuesta versionada.
-- Los errores de Auth/PostgREST/RPC/Storage se propagan a la interfaz.
-- Documentos y justificantes permanecen en buckets privados y se abren mediante URL firmada.
-- Los permisos visuales se centralizan en `core/permissions.js`; el backend continúa siendo la autoridad final.
-- `app_bootstrap_direccion` no se expone desde la aplicación.
-- El Certification Runner solo está visible para Dirección.
+- Auth real + `Authorization` de sesión.
+- Todas las mutaciones de negocio pasan por `app_mutate_v160` y `request_id` idempotente.
+- El cliente valida backend `1.6.0`, schema epoch `160` y operaciones requeridas antes de escribir.
+- Permisos visuales no sustituyen las comprobaciones SQL.
 
-## Límites deliberados
+## Tenant y privacidad
 
-- La RC no modifica RLS, RPC ni migraciones del backend.
-- La matriz de permisos de frontend refleja las RPC conocidas, pero el backend sigue validando asignaciones específicas de monitor, familia o socio.
-- Los consentimientos existentes pueden leerse bajo las políticas del backend, pero no se ha inventado una nueva mutación v160 para modificarlos.
-- La certificación automática no genera cuotas masivas ni registra cobros reales de forma automática para evitar efectos económicos sobre datos legítimos.
+- Los recursos de club conservan `club_id` y validación de membresía/rol.
+- Perfil deportivo, perfil público de club e identidad social son capas distintas.
+- El perfil público del club no se alimenta de CIF, email/teléfono administrativos ni dirección privada.
+- Fecha de nacimiento, finanzas, documentos y parentesco no se copian a la identidad social.
 
-## Antes de declarar producción certificada
+## 034 · Notificaciones
 
-1. Ejecutar `npm run build`.
-2. Ejecutar el Certification Runner contra el Supabase real desde localhost.
-3. Revisar la exportación JSON de trazas/IDs.
-4. Hacer un único deploy final.
-5. Repetir un smoke corto en el dominio Netlify.
+- la lectura masiva/grupo no puede ocultar avisos accionables;
+- una lectura individual simple también rechaza una tarea accionable;
+- `notificacion.revisar` exige acceso al aviso y deja `perfil_id`, ruta y timestamp;
+- el cliente móvil muestra las tareas separadas de informativas.
+
+## 035 · Perfil público
+
+- tabla sin SELECT directo para `authenticated`;
+- lectura mediante RPC explícita;
+- edición solo Dirección o Coordinación por gateway;
+- slug validado y estable;
+- enlaces, logo y portada públicos se restringen a `https://` tanto en el gateway como mediante constraints; el seed descarta URLs administrativas no HTTPS;
+- nombre del club, no el logo, es el punto de navegación exigido en Comunidad interna.
+
+## 036 · Edad / social / UGC
+
+- autorregistro alumno 16+ verificado en backend;
+- elegibilidad social se calcula desde socio `activo`, DOB almacenada por club y rol `alumno`; el umbral vive en `config_club.edad_min_comunidad_general` con suelo técnico de producto en 14 años;
+- familia/tutor no activa la capa social;
+- normas y privacidad deben aceptarse y quedan versionadas;
+- publicar UGC en la Comunidad interna exige aceptación explícita y vigente de sus normas; crear la cuenta del club no las acepta automáticamente;
+- denuncia/bloqueo sin DML directo;
+- reportes solo visibles por RPC a moderadores autorizados;
+- suspender/reactivar acceso social requiere motivo, no puede hacerse sobre uno mismo y deja una fila de auditoría;
+- el usuario suspendido/cerrado no puede auto-reactivar su identidad.
+
+## Android
+
+- `usesCleartextTraffic=false`;
+- package estable `com.urbanwarriors.app`;
+- target/compile SDK 36;
+- firma release mediante secretos externos al repositorio.
+
+## Pendiente antes de afirmar producción
+
+034–036 deben verificarse en Supabase real, luego probarse con cuentas reales por rol/RLS y en APK física. La presencia de denuncia/bloqueo/moderación no constituye por sí sola aprobación de Google Play: todavía hay que completar público objetivo, privacidad/Data Safety y requisitos de UGC/seguridad infantil en Play Console.

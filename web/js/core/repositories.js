@@ -41,12 +41,15 @@ async function removePublicImages(urls=[]){
   return removed;
 }
 async function notificationList(limit=500){
-  const [items,reads]=await Promise.all([
+  const [items,reads,actionRows]=await Promise.all([
     read('notificaciones',`select=*&${filterClub()}&order=creado_en.desc&limit=${Number(limit)||500}`),
-    session()?.id?read('notificaciones_lecturas',`select=notificacion_id,leida_en&perfil_id=eq.${enc(session().id)}&limit=2000`).catch(()=>[]):Promise.resolve([])
+    session()?.id?read('notificaciones_lecturas',`select=notificacion_id,leida_en&perfil_id=eq.${enc(session().id)}&limit=3000`).catch(()=>[]):Promise.resolve([]),
+    session()?.club_id?backend.readRpc('app_notificaciones_accionables_v034',{p_club_id:session().club_id}).catch(()=>[]):Promise.resolve([])
   ]);
   const sharedRead=new Set((reads||[]).map(x=>x.notificacion_id));
-  return (items||[]).map(n=>({...n,leida:n.perfil_id===session()?.id?Boolean(n.leida):sharedRead.has(n.id),leida_en:n.perfil_id===session()?.id?n.leida_en:(sharedRead.has(n.id)?reads.find(r=>r.notificacion_id===n.id)?.leida_en:null)}));
+  const readAt=new Map((reads||[]).map(x=>[x.notificacion_id,x.leida_en]));
+  const actionMap=new Map((actionRows||[]).map(x=>[x.notificacion_id,x.requiere_accion===true]));
+  return (items||[]).map(n=>({...n,requiere_accion:actionMap.get(n.id)===true,leida:n.perfil_id===session()?.id?Boolean(n.leida):sharedRead.has(n.id),leida_en:n.perfil_id===session()?.id?n.leida_en:(sharedRead.has(n.id)?readAt.get(n.id):null)}));
 }
 
 export const repos={
@@ -165,8 +168,8 @@ export const repos={
     async delete(material_id){const out=await mutation('material.eliminar',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}, async forceDelete(material_id){const out=await mutation('material.eliminar_forzado',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}
   },
   notifications:{
-    list:()=>notificationList(500), markRead:(notificacion_id)=>mutation('notificacion.leer',{notificacion_id}),
-    markGroup:(tipo)=>mutation('notificacion.leer_grupo',{tipo}), markAll:()=>mutation('notificacion.leer_todas',{}),
+    list:()=>notificationList(1000), markRead:(notificacion_id)=>mutation('notificacion.leer',{notificacion_id}), review:(notificacion_id)=>mutation('notificacion.revisar',{notificacion_id}),
+    markGroup:(tipo)=>mutation('notificacion.leer_grupo',{tipo}), markInformative:()=>mutation('notificacion.leer_todas',{}),
     preferences:()=>read('preferencias_notificacion',`select=*&${filterClub()}&perfil_id=eq.${enc(session()?.id)}&limit=1`),
     savePreferences:(p)=>mutation('notificaciones.preferencias',{push_general:p.push_general!==false,push_finanzas:p.push_finanzas!==false,push_sesiones:p.push_sesiones!==false,push_comunidad:p.push_comunidad===true})
   },
@@ -203,8 +206,56 @@ export const repos={
     async removeAvatar(){const out=await mutation('perfil.avatar',{avatar_path:null});if(out?.old_avatar_path)await backend.remove('profile-media',out.old_avatar_path).catch(()=>{});return out;},
     avatarUrl:(path)=>path?backend.signedUrl('profile-media',path,3600):Promise.resolve('')
   },
+  clubPublic:{
+    async one(club_id=session()?.club_id){const rows=await backend.readRpc('app_perfil_club_publico_v035',{p_club_id:club_id});return rows?.[0]||null;},
+    save:(p)=>mutation('club_publico.guardar',{slug:p.slug,nombre_publico:p.nombre_publico,alias:p.alias||'',lema:p.lema||'',descripcion:p.descripcion||'',historia:p.historia||'',ciudad:p.ciudad||'',provincia:p.provincia||'',pais:p.pais||'España',logros:p.logros||'',contacto_publico:p.contacto_publico||'',web_publica:p.web_publica||'',instagram:p.instagram||'',tiktok:p.tiktok||'',youtube:p.youtube||'',logo_url:p.logo_url||'',portada_url:p.portada_url||'',visible:p.visible!==false}),
+    uploadImage:(kind,file)=>uploadPublicImage(kind==='cover'?'public-club-cover':'public-club-logo',file),
+    removeImage:(url)=>removePublicImage(url)
+  },
+  publicIdentity:{
+    search:(query='')=>backend.readRpc('app_buscar_identidades_publicas_v035',{p_club_id:session()?.club_id,p_query:query||'',p_limit:60})
+  },
+  sportsProfiles:{
+    list:(socio_id=null)=>backend.readRpc('app_perfiles_deportivos_publicos_v032',{p_club_id:session()?.club_id,p_socio_id:socio_id||null}),
+    async one(socio_id){const rows=await this.list(socio_id);return rows?.[0]||null;},
+    save:(p)=>mutation('perfil_deportivo.guardar',{socio_id:p.socio_id,apodo:p.apodo||'',presentacion:p.presentacion||'',experiencia_anos:p.experiencia_anos===''||p.experiencia_anos==null?null:Number(p.experiencia_anos),guardia:p.guardia||'',tecnica_favorita:p.tecnica_favorita||'',especialidad:p.especialidad||'',categoria_competitiva:p.categoria_competitiva||'',competiciones_logros:p.competiciones_logros||'',objetivos:p.objetivos||'',visible:p.visible!==false}),
+    moderate:(socio_id,visible,motivo='')=>mutation('perfil_deportivo.moderar',{socio_id,visible:visible===true,motivo:motivo||''}),
+    async uploadPhoto(socio_id,file){
+      if(!file||!file.size)throw new Error('Selecciona una imagen.');
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');
+      const prepared=await optimizeImage(file,{maxEdge:1280,maxBytes:2*1024*1024});
+      if(prepared.file.size>5*1024*1024)throw new Error('La foto supera 5 MB.');
+      const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/webp'?'webp':'jpg';
+      const path=`${session().club_id}/${socio_id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;
+      await backend.upload('sports-profile-media',path,prepared.file,false);
+      try{const out=await mutation('perfil_deportivo.foto',{socio_id,foto_path:path});if(out?.old_foto_path&&out.old_foto_path!==path)await backend.remove('sports-profile-media',out.old_foto_path).catch(()=>{});return out;}
+      catch(error){await backend.remove('sports-profile-media',path).catch(()=>{});throw error;}
+    },
+    async removePhoto(socio_id){const out=await mutation('perfil_deportivo.foto',{socio_id,foto_path:null});if(out?.old_foto_path)await backend.remove('sports-profile-media',out.old_foto_path).catch(()=>{});return out;},
+    photoUrl:(path)=>path?backend.signedUrl('sports-profile-media',path,3600):Promise.resolve('')
+  },
+  events:{
+    list:()=>read('eventos_competicion',`select=*&${filterClub()}&order=fecha.desc,hora_inicio.asc,id.desc&limit=500`),
+    participants:(evento_id)=>backend.readRpc('app_evento_participantes_visibles_v033',{p_club_id:session()?.club_id,p_evento_id:evento_id}),
+    fights:(evento_id)=>backend.readRpc('app_evento_combates_visibles_v033',{p_club_id:session()?.club_id,p_evento_id:evento_id}),
+    save:(p)=>mutation('evento.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,descripcion:p.descripcion||'',fecha:p.fecha,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,lugar:p.lugar||'',organizador:p.organizador||'',fecha_limite_inscripcion:p.fecha_limite_inscripcion||null,estado:p.estado||'borrador',edad_min:p.edad_min===''||p.edad_min==null?null:Number(p.edad_min),edad_max:p.edad_max===''||p.edad_max==null?null:Number(p.edad_max),peso_min:p.peso_min===''||p.peso_min==null?null:Number(p.peso_min),peso_max:p.peso_max===''||p.peso_max==null?null:Number(p.peso_max),categoria_texto:p.categoria_texto||'',grado_minimo_texto:p.grado_minimo_texto||'',documentacion_requerida:p.documentacion_requerida||'',autorizacion_requerida:p.autorizacion_requerida===true,cuota_inscripcion:p.cuota_inscripcion===''||p.cuota_inscripcion==null?null:Number(p.cuota_inscripcion),observaciones_requisitos:p.observaciones_requisitos||''}),
+    setStatus:(evento_id,estado)=>mutation('evento.estado',{evento_id,estado}),
+    saveExternal:(p)=>mutation('evento.participante.externo',{id:p.id||null,evento_id:p.evento_id,nombre:p.nombre,apellidos:p.apellidos||'',club_origen:p.club_origen||'',disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',peso:p.peso===''||p.peso==null?null:Number(p.peso),grado_texto:p.grado_texto||'',edad:p.edad===''||p.edad==null?null:Number(p.edad),observaciones:p.observaciones||''}),
+    requestRegistration:(p)=>mutation('evento.inscripcion.solicitar',{evento_id:p.evento_id,socio_id:p.socio_id,disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',peso:p.peso===''||p.peso==null?null:Number(p.peso),grado_texto:p.grado_texto||'',observaciones:p.observaciones||''}),
+    setRegistrationStatus:(participante_id,estado,observaciones='')=>mutation('evento.inscripcion.estado',{participante_id,estado,observaciones}),
+    withdraw:(participante_id,observaciones='')=>mutation('evento.inscripcion.baja',{participante_id,observaciones}),
+    saveFight:(p)=>mutation('evento.combate.guardar',{id:p.id||null,evento_id:p.evento_id,participante_a_id:p.participante_a_id,participante_b_id:p.participante_b_id,disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',tatami_ring:p.tatami_ring||'',orden:p.orden===''||p.orden==null?null:Number(p.orden),hora_aprox:p.hora_aprox||null,estado:p.estado||'pendiente',resultado:p.resultado||'',ganador_participante_id:p.ganador_participante_id||null,observaciones:p.observaciones||''}),
+    deleteFight:(combate_id)=>mutation('evento.combate.eliminar',{combate_id})
+  },
   community:{
-    listPage:(cursor=null,limit=20)=>read('publicaciones_comunidad',`select=*&${filterClub()}${cursor?.created&&cursor?.id?`&or=(creado_en.lt.${enc(cursor.created)},and(creado_en.eq.${enc(cursor.created)},id.lt.${enc(cursor.id)}))`:''}&order=creado_en.desc,id.desc&limit=${Math.min(20,Math.max(1,Number(limit)||20))}`),
+    async listPage(cursor=null,limit=20){
+      const posts=await read('publicaciones_comunidad',`select=*&${filterClub()}${cursor?.created&&cursor?.id?`&or=(creado_en.lt.${enc(cursor.created)},and(creado_en.eq.${enc(cursor.created)},id.lt.${enc(cursor.id)}))`:''}&order=creado_en.desc,id.desc&limit=${Math.min(20,Math.max(1,Number(limit)||20))}`);
+      if(!posts?.length||!session()?.id)return posts||[];
+      const ids=posts.map(p=>p.id).filter(Boolean);if(!ids.length)return posts;
+      const mine=await read('comunidad_likes',`select=publicacion_id&${filterClub()}&perfil_id=eq.${enc(session().id)}&publicacion_id=in.(${ids.map(enc).join(',')})&limit=${ids.length}`).catch(()=>[]);
+      const liked=new Set((mine||[]).map(x=>x.publicacion_id));
+      return posts.map(p=>({...p,likedByMe:liked.has(p.id)}));
+    },
     async quota(){const rows=await read('publicaciones_comunidad',`select=id,autor_perfil_id,creado_en&${filterClub()}&autor_perfil_id=eq.${enc(session()?.id)}&creado_en=gte.${enc(new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString())}&limit=20`);const staff=['direccion','coordinacion','secretaria','comunicacion'].includes(session()?.rol);return {used:rows.length,limit:staff?5:3};},
     async upload(file){if(!file||!file.size)throw new Error('Selecciona una imagen o vídeo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP, MP4, WEBM o MOV.');if(file.size>(isVideo?50:5)*1024*1024)throw new Error(isVideo?'El vídeo supera 50 MB.':'La imagen supera 5 MB.');const ext=(file.name.split('.').pop()|| (isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();const path=`${session().club_id}/${session().id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;await backend.upload('community-media',path,file,false);return path;},
     mediaUrl:(path)=>backend.signedUrl('community-media',path,3600),
@@ -212,7 +263,19 @@ export const repos={
     async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});for(const path of [...new Set([out?.media_path,out?.portada_automatica_path,out?.portada_manual_path].filter(Boolean))])await backend.remove('community-media',path).catch(()=>{});return out;},
     moderate:(publicacion_id,oculta=true,motivo='')=>mutation('comunidad.moderar',{publicacion_id,oculta,motivo}),
     changeCover:(publicacion_id,portada_manual_path)=>mutation('comunidad.moderar',{publicacion_id,accion:'portada',portada_manual_path}),
+    like:(publicacion_id,activo)=>mutation('comunidad.like',{publicacion_id,activo:activo===true}),
+    blocked:()=>backend.readRpc('app_comunidad_bloqueados_v036',{p_club_id:session()?.club_id}),
+    block:(perfil_id,bloquear=true)=>mutation('comunidad.bloquear',{perfil_id,bloquear:bloquear===true}),
+    report:(objetivo_tipo,objetivo_id,motivo,detalle='',ambito='club')=>mutation('comunidad.denunciar',{objetivo_tipo,objetivo_id,motivo,detalle,ambito}),
+    reports:()=>backend.readRpc('app_comunidad_reportes_v036',{p_club_id:session()?.club_id}),
+    reportStatus:(reporte_id,estado,{resolucion='',ocultar_publicacion=false}={})=>mutation('comunidad.denuncia.estado',{reporte_id,estado,resolucion,ocultar_publicacion:ocultar_publicacion===true}),
     removePath:(path)=>path?backend.remove('community-media',path):Promise.resolve()
+  },
+  socialGeneral:{
+    status:()=>backend.readRpc('app_comunidad_general_estado_v036',{p_club_id:session()?.club_id}),
+    activate:({acepta_normas,acepta_privacidad})=>mutation('comunidad_general.activar',{acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,user_agent:navigator.userAgent}),
+    moderateAccess:(perfil_id,estado,motivo)=>mutation('comunidad_general.moderar_acceso',{perfil_id,estado,motivo}),
+    async rules(){const rows=await read('textos_legales',`select=id,tipo,version,cuerpo&${filterClub()}&tipo=eq.comunidad_general&vigente=eq.true&limit=1`);return rows?.[0]||null;}
   },
   legal:{
     docs:()=>read('textos_legales',`select=*&${filterClub()}&vigente=eq.true&order=tipo`),

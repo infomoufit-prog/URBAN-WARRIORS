@@ -1,5 +1,52 @@
 # Changelog
 
+## 2.0.0-rc.13 · build 20020 · corrección de próxima sesión en portal alumno
+
+- Portal alumno/familia: la **próxima sesión** permanece visible y accionable aunque caiga en la semana siguiente; corrige el caso detectado el sábado 15/08 con una clase del martes 18/08.
+- Dashboard alumno: permite **Confirmar asistencia** o **Cancelar asistencia** directamente sobre la próxima actividad; el check-in sigue apareciendo solo el día de la clase.
+- Vista semanal: se conserva `Esta semana / anterior / siguiente`; si la semana actual está vacía, la próxima sesión no desaparece porque queda fijada arriba.
+- Backend/Supabase: **sin cambios SQL**; 034–036 permanecen exactamente como en build 20019.
+- Android/web: build incrementado a `20020` para no confundir el paquete corregido con 20019.
+
+## 2.0.0-rc.13 · build 20019 · pulido final previo a validación del club
+
+- UX: la red interna pasa a llamarse **Comunidad del Club**; la futura capa global se presenta como **Social Community / Comunidad General**.
+- Sesiones: vista por semana natural (lunes–domingo), navegación anterior/actual/siguiente y prioridad visual para la próxima sesión; no cambia el motor de recurrencias ni el histórico.
+- Portal alumno/familia: las sesiones se consultan con la misma organización semanal.
+- Branding: logos de club recortados en marco circular; PWA añade iconos maskable y Android añade adaptive icon para evitar el recuadro dentro del launcher circular.
+- Android/web: `versionCode`/cache build 20019; `applicationId` y `versionName` se conservan para continuidad de actualización.
+- Backend: **sin migraciones nuevas**; 034–036 permanecen sin cambios.
+- Regresión local: 57/57 JS/MJS, 583 `OK`, 29 `PASS`, contrato 93/93 y `web = dist = Android` con 51 archivos.
+
+## 2.0.0-rc.13 · build 20018 · intervención final del MVP
+
+- 034: notificaciones accionables; lectura masiva solo informativa y revisión auditada.
+- 035: perfil público de Urban Warriors separado de datos administrativos; el nombre del club en Comunidad abre la ficha; URLs públicas restringidas a HTTPS desde tabla, seed, gateway y render.
+- 035: capa normalizada de identidad/búsqueda `club + miembro`, preparada para futuros tipos.
+- 036: autorregistro autónomo alumno 16+ y elegibilidad social desde dato de edad verificado por el club; umbral social configurable en backend con suelo 14.
+- 036: Comunidad General opcional, sin feed global en esta fase; familia/tutor no crea identidad social.
+- 036: la Comunidad interna deja de considerar aceptadas sus normas durante el alta; publicar UGC exige aceptación explícita y vigente, comprobada también por backend.
+- 036: denuncia, bloqueo, resolución/ocultación y suspensión/reactivación social con auditoría.
+- Android: build 20018, compile/target SDK 36 y AGP 8.10.1; applicationId conservado.
+- Las migraciones 031–033 ya fueron verificadas en Supabase real; 034–036 siguen pendientes de ejecución real.
+- No es freeze ni producción hasta cerrar Supabase, roles/RLS, APK física y distribución.
+
+## 2.0.0-rc.13 · MVP Freeze candidate (implementado localmente)
+
+- Build 20017; RC12 permanece como punto de retorno y no se sobrescribe.
+- Corregida la contaminación responsive móvil→PC con guardias explícitas de escritorio.
+- Finanzas: preservada separación cuota/material/otro; añadido test matemático y runbook estricto para 031 pendiente en Supabase real.
+- Comunidad: likes con contador anónimo; identidad no consultable por otros usuarios.
+- Perfil deportivo por socio, editable por titular/tutor, visible solo en el mismo club y separado de datos administrativos.
+- Privacidad voluntaria y bloqueo por moderación modelados de forma independiente.
+- Nueva sección Eventos/Competiciones con requisitos, inscritos internos/externos, aprobación y combates manuales.
+- Participantes externos no requieren app/cuenta y no almacenan datos de contacto innecesarios.
+- Lecturas sensibles de perfiles/participantes/combates mediante RPCs seguras; DML nuevo exclusivamente por gateway.
+- Contrato frontend exige las 12 capacidades nuevas antes de aceptar el backend RC13.
+- Nuevas migraciones 032/033, preflights, verificaciones y rollbacks conservadores.
+- Regresiones RC4–RC12 y suites RC13 integradas en `npm test`.
+- No se considera congelada hasta certificar Supabase real + PC/web móvil + APK física.
+
 ## Release J — multiclub, RLS y rendimiento (implementado localmente)
 
 - Auditoría confirma `club_id` en todos los recursos de negocio; perfiles permanecen globales deliberadamente.

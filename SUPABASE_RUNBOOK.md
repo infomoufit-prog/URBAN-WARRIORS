@@ -1,18 +1,56 @@
-# Runbook Supabase previo a APK y deploy
+# Supabase · Runbook RC13 build 20018
 
-Estado actual confirmado: migraciones 023–028 aplicadas y verificadas; 029–030 pendientes.
+## Regla principal
 
-La secuencia completa, Edge Functions, CRUD/RLS, Android y la puerta de Netlify están en `PREDEPLOY_EXECUTION.md`.
+No ejecutar varias migraciones nuevas a la vez. Orden estricto: **034 → 035 → 036**. Si un preflight o verify falla, detenerse.
 
-## Orden obligatorio
+La base 031–033 ya fue aplicada y verificada previamente en el proyecto real usado para este MVP. Antes de continuar conviene disponer de backup reciente.
 
-1. Ejecutar `supabase/verification/preflight_029_video.sql`; exige 6/6 `OK`.
-2. Aplicar 029 y ejecutar `supabase/verification/verify_029_video.sql`; exige 7/7 `OK`.
-3. Ejecutar `supabase/verification/preflight_030_multiclub.sql`; exige 10/10 `OK`.
-4. Aplicar 030 y ejecutar `supabase/verification/verify_030_multiclub.sql`; exige 7/7 `OK`.
-5. Ejecutar `supabase/verification/final_audit_023_030.sql`; exige 10/10 `OK`.
-6. Desplegar y probar `notification-dispatch` y `payment-reminders` con backup y logs.
-7. Ejecutar `supabase/verification/pre_apk_backend_health.sql`.
-8. Completar matriz CRUD/RLS con roles reales antes de generar APK.
+## 034 · Notificaciones accionables
 
-Cada paso se detiene ante el primer error. No se fusiona GitHub ni se despliega Netlify durante este runbook.
+1. Ejecutar `supabase/verification/preflight_034_notifications.sql`.
+2. Todos los booleanos deben ser `true`.
+3. Ejecutar `supabase/migrations/034_notifications_actionable.sql`.
+4. Ejecutar `supabase/verification/verify_034_notifications.sql`.
+5. Todos los booleanos deben ser `true`; los contadores de incidencias deben ser `0`.
+6. Ejecutar `supabase/verification/test_034_notifications_transactional.sql`.
+7. Debe terminar con aviso `034 TEST OK`; el propio script revierte sus datos de prueba.
+
+Prueba manual mínima: usuario de equipo con informativas + accionables; “Marcar informativas como leídas” no puede ocultar las accionables y `Revisar` debe abrir su ruta.
+
+## 035 · Perfil público de club
+
+1. `preflight_035_club_public_profile.sql` → todos `true`.
+2. `035_club_public_profile.sql` → Success.
+3. `verify_035_club_public_profile.sql` → booleanos `true`; incidencias `0`.
+4. Confirmar también `urls_publicas_https = true` y `clubes_activos_sin_perfil_publico = 0`.
+
+Pruebas manuales:
+- Dirección/Coordinación edita perfil público.
+- Rol no autorizado no puede editar aunque fuerce la mutación.
+- Los datos administrativos privados no aparecen en RPC/cliente.
+- Desde Comunidad, el **nombre Urban Warriors** abre la ficha; el logo no es requisito de navegación.
+- Buscador devuelve club y perfiles deportivos visibles sin abrir tablas privadas.
+
+## 036 · Acceso social, edad y seguridad
+
+1. `preflight_036_social_access.sql` → todos `true`.
+2. `036_social_access_safety_age.sql` → Success.
+3. `verify_036_social_access.sql` → todos los booleanos `true`; todos los contadores de incidencias `0`.
+
+Pruebas manuales:
+- autorregistro alumno <16 rechazado por backend; 16+ mantiene preinscripción histórica;
+- familia/tutor no ve activación de Comunidad General;
+- alumno activo con edad verificada es la única fuente de elegibilidad; el umbral se toma de `config_club.edad_min_comunidad_general` y conserva suelo 14;
+- activación exige normas + privacidad y deja aceptación legal;
+- denunciar publicación/perfil y bloquear funcionan;
+- moderador revisa, oculta, suspende/reactiva acceso social y queda auditoría;
+- usuario suspendido no puede auto-reactivarse.
+
+## Contrato final esperado
+
+El frontend build 20018 exige 19 capacidades añadidas desde 032–036. Si falta alguna, el login/restauración debe fallar de forma explícita en lugar de operar contra un backend incompleto.
+
+## Después de SQL
+
+No desplegar todavía. Ejecutar pruebas por rol/RLS, PC, móvil web y APK física. Solo después del freeze se permite tag/push/Netlify.

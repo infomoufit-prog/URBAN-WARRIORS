@@ -44,8 +44,11 @@ export const backend={
   async contract(session=state.session){
     if(!session?.club_id)throw new AuthExpiredError();
     const c=await client.rpc(cfg.release.contractEndpoint,{p_club_id:session.club_id});
-    if(!c?.ok||!c?.write_ready||c.backend_version!==cfg.release.backendVersion||Number(c.schema_epoch)!==Number(cfg.release.schemaEpoch)||c.mutation_endpoint!==cfg.release.mutationEndpoint){
-      throw new Error(`Contrato backend incompatible: esperado ${cfg.release.backendVersion}/epoch ${cfg.release.schemaEpoch}/${cfg.release.mutationEndpoint}; recibido ${c?.backend_version||'—'}/epoch ${c?.schema_epoch||'—'}/${c?.mutation_endpoint||'—'}.`);
+    const operations=new Set(Array.isArray(c?.operations)?c.operations:[]);
+    const missingOperations=(cfg.release.requiredOperations||[]).filter(op=>!operations.has(op));
+    if(!c?.ok||!c?.write_ready||c.backend_version!==cfg.release.backendVersion||Number(c.schema_epoch)!==Number(cfg.release.schemaEpoch)||c.mutation_endpoint!==cfg.release.mutationEndpoint||missingOperations.length){
+      const missing=missingOperations.length?` Operaciones RC13 ausentes: ${missingOperations.join(', ')}.`:'';
+      throw new Error(`Contrato backend incompatible: esperado ${cfg.release.backendVersion}/epoch ${cfg.release.schemaEpoch}/${cfg.release.mutationEndpoint}; recibido ${c?.backend_version||'—'}/epoch ${c?.schema_epoch||'—'}/${c?.mutation_endpoint||'—'}.${missing}`);
     }
     return c;
   },
@@ -109,6 +112,12 @@ export const backend={
     const t0=performance.now();
     try{const data=await client.select(table,query);state.pushTrace({kind:'read',ok:true,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
     catch(error){state.pushTrace({kind:'read',ok:false,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+  },
+  async readRpc(name,args={}){
+    if(!state.session?.club_id)throw new AuthExpiredError();
+    const t0=performance.now();
+    try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
+    catch(error){state.pushTrace({kind:'read',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
   },
   async mutate(operation,payload={},options={}){
     if(!state.session?.club_id)throw new AuthExpiredError();

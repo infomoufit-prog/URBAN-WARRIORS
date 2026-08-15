@@ -1,65 +1,44 @@
-# Urban Warriors 2.0.0-rc.10 · FINAL MVP
+# Urban Warriors 2.0.0-rc.13 · build 20020
 
-RC10 es la candidata de congelado funcional del MVP. Conserva la arquitectura estable de RC9 y añade el último paquete de producto: notificaciones escalables, sesiones recurrentes, Comunidad temporal, perfil/avatar, cierre de Finanzas, preparación push, ayuda/manuales y consentimiento legal versionado.
+Candidata de validación del MVP de Urban Warriors. Esta versión continúa siendo la app del club Urban Warriors; **no despliega todavía la futura plataforma multiclub**. La arquitectura sí queda preparada para generalizar perfiles, permisos e identidad pública sin reescribir el núcleo.
 
-## Núcleo estable
+## Base estable
 
 - Backend: `1.6.0`
 - Schema epoch: `160`
 - Gateway único: `app_mutate_v160`
-- Diagnóstico RC10: `app_diagnostico_final_v166()` dentro de la app (Gestor)
-- Diagnóstico instalable desde SQL Editor: `app_diagnostico_instalacion_v166()`
+- Android package: `com.urbanwarriors.app`
+- Android `versionCode`: `20020`
+- Android `targetSdk` / `compileSdk`: `36`
+- Cadena SQL: 023–030 histórica + 031 Finanzas + 032 Social + 033 Eventos + 034 Notificaciones + 035 Perfil público de club + 036 Acceso social/seguridad.
 
-## Roles
+## Alcance build 20020
 
-- **Gestor de la app**: máximo nivel (`direccion` internamente).
-- **Coordinación**: gestión operativa amplia, sin herramientas técnicas de máximo nivel.
-- **Secretaría**
-- **Economía / Tesorería**
-- **Comunicación**
-- **Monitor**
-- **Familia / Alumno**
+- Notificaciones accionables: lectura masiva solo de informativas; las tareas deben abrirse con **Revisar**.
+- Perfil público de Urban Warriors separado del expediente administrativo.
+- En **Comunidad del Club**, el **nombre del club** abre su perfil público; el logo no es el mecanismo obligatorio.
+- Capa normalizada de identidad pública para `club` + `miembro`, preparada para futuros tipos sin una tabla genérica gigante.
+- Base opcional de **Social Community / Comunidad General**, separada del uso normal del club; en esta fase no existe feed global.
+- Elegibilidad social modelada desde 14+ con edad verificada por el club y solo rol alumno; familia/tutor no es identidad social.
+- Autorregistro autónomo como alumno: 16+; menores de 16 siguen el flujo tutor/club.
+- Denuncia de publicación/perfil, bloqueo, revisión, ocultación y suspensión/reactivación de acceso social con auditoría.
+- Perfil deportivo, likes, Finanzas y Eventos de RC13 se conservan.
 
-## Novedades RC10
+## Estado real de Supabase
 
-- Notificaciones agrupadas y lectura masiva.
-- Preferencias push por categoría.
-- Series semanales de sesiones + excepciones.
-- Comunidad: 3 publicaciones/mes usuario, 5/mes equipo, vídeo <=15 s, retención 30 días.
-- Perfil privado con fotografía.
-- Estado de cuenta y métricas de Tesorería.
-- Manual de usuario + manual de equipo + ayuda interna.
-- Cartel de difusión solo para Gestor/Coordinación/Secretaría.
-- Condiciones, privacidad, Comunidad y derechos de imagen versionados.
-- Android preparado para routing de push y sincronización de token.
+Durante esta misma validación se certificaron en Supabase real 031–036. Para 034 se superó además la prueba transaccional; 035 y 036 pasaron sus verificaciones de estructura/integridad. Build 20020 **no añade nuevas migraciones SQL**.
 
-## Migración
-
-Ejecutar **una sola vez**, después de RC9:
-
-`SQL_EJECUTAR_RC10_022.sql`
-
-El resultado final del SQL debe mostrar **12 controles `OK`**.
-
-## Prueba local
+## Validación local
 
 ```bash
-npm install
 npm test
 npm run build
-npm run dev
 ```
 
-## Push
+El build web copia una única fuente a `dist` y `android/app/src/main/assets/www`; antes del freeze debe comprobarse paridad exacta.
 
-El repositorio no contiene credenciales privadas. La preparación de código está incluida, pero la certificación final requiere Firebase real, secretos de Supabase, Edge Functions desplegadas/programadas y una prueba en Android físico con la app cerrada. Ver `PUSH_PRODUCCION_CHECKLIST.md`.
+## Importante antes de producción
 
-## Documentación
+Esta candidata **no está congelada** hasta completar las pruebas manuales pendientes por roles/RLS, repetir la pasada PC/web móvil del build 20020, compilar Android release firmada, instalarla físicamente encima del build anterior y cerrar la revisión de Google Play (privacidad, Data Safety, público objetivo, UGC/seguridad infantil, ficha y AAB).
 
-- `AUDITORIA_MAESTRA_RC10_FINAL.md`
-- `INFORME_RC10_FINAL_MVP.md`
-- `VALIDACION_RC10_FINAL.md`
-- `PUSH_PRODUCCION_CHECKLIST.md`
-- `DEPLOY_FINAL.md`
-- `web/assets/docs/Manual_Usuario_Urban_Warriors.pdf`
-- `web/assets/docs/Manual_Equipo_Urban_Warriors.pdf`
+Documentos principales: `RC13_BUILD_20020_FINAL_POLISH_REPORT.md`, `RC13_BUILD_20018_IMPLEMENTATION_PLAN.md`, `PLATFORM_EVOLUTION_RULES.md`, `STATUS.md`, `RC13_VALIDATION.md`, `ANDROID.md` y `SUPABASE_RUNBOOK.md`.

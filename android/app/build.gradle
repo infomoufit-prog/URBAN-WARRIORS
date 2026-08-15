@@ -9,14 +9,14 @@ def releaseKeyPassword = System.getenv('UW_KEY_PASSWORD')
 
 android {
     namespace 'com.urbanwarriors.app'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
-        targetSdk 35
-        versionCode 20016
-        versionName '2.0.0-rc.12'
+        targetSdk 36
+        versionCode 20020
+        versionName '2.0.0-rc.13'
     }
 
     signingConfigs {

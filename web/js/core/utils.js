@@ -12,6 +12,28 @@ export const uuid = () => {
 
 export const isoDate = (date=new Date()) => date.toISOString().slice(0,10);
 export const monthStart = (date=new Date()) => `${date.toISOString().slice(0,7)}-01`;
+
+export const localIsoDate = (date=new Date()) => {
+  const d = new Date(date);
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+};
+export function weekRange(offset=0, base=new Date()) {
+  const d=new Date(base);d.setHours(12,0,0,0);
+  const mondayIndex=(d.getDay()+6)%7;
+  d.setDate(d.getDate()-mondayIndex+(Number(offset)||0)*7);
+  const start=localIsoDate(d);const endDate=new Date(d);endDate.setDate(d.getDate()+6);
+  return {start,end:localIsoDate(endDate)};
+}
+export function sortSessionsForWeek(rows, offset=0, now=new Date()) {
+  const nowKey=`${localIsoDate(now)} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  return [...(rows||[])].sort((a,b)=>{
+    const ak=`${String(a?.fecha||'')} ${String(a?.hora_inicio||'').slice(0,5)}`;
+    const bk=`${String(b?.fecha||'')} ${String(b?.hora_inicio||'').slice(0,5)}`;
+    if(Number(offset)===0){const af=ak>=nowKey,bf=bk>=nowKey;if(af!==bf)return af?-1:1;return af?ak.localeCompare(bk):bk.localeCompare(ak);}
+    return ak.localeCompare(bk);
+  });
+}
 export const money = (value) => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(Number(value||0));
 export const dateFmt = (value) => value ? new Intl.DateTimeFormat('es-ES').format(new Date(`${String(value).slice(0,10)}T12:00:00`)) : '—';
 export const dtFmt = (value) => value ? new Intl.DateTimeFormat('es-ES',{dateStyle:'short',timeStyle:'short'}).format(new Date(value)) : '—';

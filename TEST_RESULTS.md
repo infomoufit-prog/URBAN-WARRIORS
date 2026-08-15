@@ -1,5 +1,34 @@
 # Resultados de pruebas
 
+## 2026-08-14 — RC13 MVP build 20017 · certificación local
+
+### Superadas localmente
+
+- `npm test`: **PASS** (24 bloques PASS y 487 comprobaciones OK en la ejecución final).
+- Contrato RC13: **86/86** operaciones `app_mutate_v160` implementadas según la prueba de contrato.
+- `node --check`: **51/51** archivos JS/MJS sin error de sintaxis.
+- `npm run build`: **PASS**.
+- Build: **48 archivos**.
+- Paridad exacta: `web = dist = android/app/src/main/assets/www`.
+- `git diff --check`: **PASS**.
+- Migración financiera 031: conservada sin modificación.
+- Nuevas pruebas: matemática financiera, capability gate backend, perfiles/likes, eventos, responsive y cadena SQL.
+
+### Pendiente antes del freeze definitivo
+
+- Supabase real: audit 023–030 y ejecución/verificación controlada de 031 → 032 → 033.
+- RLS real multiclub con cuentas de dos clubes.
+- Matriz funcional por roles reales.
+- Validación visual PC y web móvil contra backend real.
+- APK física Android, notificaciones, multimedia, safe areas y ciclo foreground/background/cerrada.
+- Solo después: commit/tag de freeze, push y Netlify desde el SHA exacto.
+
+### Resultado
+
+Estado: **candidata RC13 implementada y certificada localmente; no congelada todavía**.
+
+---
+
 ## 2026-08-13 — RC10 sin modificaciones
 
 ### Superadas localmente

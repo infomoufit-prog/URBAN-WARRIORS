@@ -1,0 +1,17 @@
+import { readFile } from 'node:fs/promises';import { resolve } from 'node:path';
+const root=resolve(import.meta.dirname,'..');const read=p=>readFile(resolve(root,p),'utf8');
+const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL RC13 NOTIFICATIONS 20020: ${msg}`);console.log(`OK RC13 NOTIFICATIONS 20020: ${msg}`)};
+const [sql,pre,verify,transactional,repos,ui,app,css]=await Promise.all([read('supabase/migrations/034_notifications_actionable.sql'),read('supabase/verification/preflight_034_notifications.sql'),read('supabase/verification/verify_034_notifications.sql'),read('supabase/verification/test_034_notifications_transactional.sql'),read('web/js/core/repositories.js'),read('web/js/modules/comms-material.js'),read('web/js/app.js'),read('web/css/app.css')]);
+assert(sql.includes('app_notificacion_requiere_accion_v034')&&sql.includes('notificaciones_revisiones'),'034 guarda revisión y calcula acción con estado real');
+assert(sql.includes("p.estado in ('enviada','en_revision','pendiente_documentacion')")&&sql.includes("mp.estado in ('reservado','pendiente_validacion','preparado')")&&sql.includes("estado_validacion='pendiente'"),'clasificador revisa estados vivos de inscripción, material y pagos');
+assert((sql.match(/not public\.app_notificacion_requiere_accion_v034\(n\.id\)/g)||[]).length>=4,'lectura masiva/grupal y flags propios excluyen tareas accionables');
+assert(sql.includes("p_operation='notificacion.revisar'")&&sql.includes('notificaciones_revisiones'),'revisar es operación gateway auditable');
+assert(pre.includes('gateway_033')&&verify.includes('masivas_protegidas'),'preflight y verificación 034 están encadenados');
+assert(repos.includes("app_notificaciones_accionables_v034")&&repos.includes("mutation('notificacion.revisar'"),'cliente obtiene accionabilidad del backend y usa revisar');
+assert(ui.includes('Marcar informativas como leídas')&&ui.includes("g.key!=='accion'")&&ui.includes('review-notification'),'UI nunca ofrece lectura masiva en Requiere acción');
+assert(ui.includes('notification-more')&&ui.includes('Ver ${g.items.length-initialLimit} avisos más')&&repos.includes('notificationList(1000)'),'la bandeja no vuelve inaccesibles los avisos que superan el corte visual y amplía margen de carga');
+assert(app.includes("n?.requiere_accion===true"),'contador/categoría global usa la clasificación del backend');
+assert(css.includes('.notification-group-action')&&css.includes('@media(max-width:820px)'),'notificaciones accionables tienen tratamiento responsive para APK');
+assert(pre.includes('material_pedidos')&&pre.includes('pagos')&&pre.includes('cuotas')&&pre.includes('columnas_notificacion'),'preflight 034 comprueba dependencias y columnas usadas por el clasificador');
+assert(transactional.includes("'notificacion.leer_grupo'")&&transactional.includes('v_action_group'),'prueba transaccional cubre lectura masiva por grupo además de lectura global');
+console.log('RC13 BUILD 20020 NOTIFICACIONES ACCIONABLES: PASS');

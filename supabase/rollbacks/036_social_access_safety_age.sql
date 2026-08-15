@@ -1,0 +1,23 @@
+-- Rollback 036: restaura gateway/contrato 035 y elimina objetos propios de 036.
+begin;
+drop trigger if exists clubes_seed_comunidad_general_v036 on public.clubes;
+drop function if exists public.app_seed_comunidad_general_new_club_v036();
+drop function if exists public.app_edad_min_comunidad_general_v036(uuid);
+drop function if exists public.app_comunidad_reportes_v036(uuid);
+drop function if exists public.app_comunidad_general_estado_v036(uuid);
+drop function if exists public.app_comunidad_bloqueados_v036(uuid);
+drop function if exists public.app_puede_moderar_comunidad_v036(uuid);
+drop table if exists public.reportes_comunidad;
+drop table if exists public.bloqueos_comunidad;
+drop table if exists public.moderacion_accesos_sociales;
+drop table if exists public.identidades_sociales;
+update public.textos_legales set vigente=false where tipo='comunidad_general' and version='1.0.0';
+delete from public.config_club where clave='edad_min_comunidad_general';
+drop function if exists public.app_mutate_v160(text,jsonb,uuid);
+do $$ begin if to_regprocedure('public.app_mutate_v160_pre_social_access_036(text,jsonb,uuid)') is not null then alter function public.app_mutate_v160_pre_social_access_036(text,jsonb,uuid) rename to app_mutate_v160; end if; end $$;
+grant execute on function public.app_mutate_v160(text,jsonb,uuid) to authenticated;
+drop function if exists public.app_runtime_contract_v160(uuid);
+do $$ begin if to_regprocedure('public.app_runtime_contract_v160_pre_social_access_036(uuid)') is not null then alter function public.app_runtime_contract_v160_pre_social_access_036(uuid) rename to app_runtime_contract_v160; end if; end $$;
+grant execute on function public.app_runtime_contract_v160(uuid) to authenticated;
+notify pgrst,'reload schema';
+commit;

@@ -1,4 +1,5 @@
 <resources>
     <color name="uw_black">#050608</color>
     <color name="uw_white">#FFFFFF</color>
+    <color name="launcher_background">#050608</color>
 </resources>

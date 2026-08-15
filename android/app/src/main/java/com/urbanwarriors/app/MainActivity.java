@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.12");
+        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.13");
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {

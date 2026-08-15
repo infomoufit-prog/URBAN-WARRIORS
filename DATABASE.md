@@ -1,54 +1,51 @@
-# Base de datos
+# Base de datos · RC13 build 20018
 
-## Regla operativa
+## Principio
 
-Toda evolución parte de SQL022 RC10 y se aplica mediante migraciones ordenadas, no destructivas y con rollback conservador. La producción activa tiene aplicadas `023_restore_rc10_gateway_v166.sql` y `024_finance_annual_metrics.sql`.
+Evolución incremental y reversible. Toda escritura de negocio nueva pasa por `app_mutate_v160`; las lecturas sensibles usan RLS o RPCs de campos explícitos. `club_id` sigue delimitando los recursos tenant cuando corresponde.
 
-## Migraciones de reconstrucción
+## Cadena
 
-| Migración | Estado | Cambios | Datos |
-|---|---|---|---|
-| 023 | Aplicada y validada | Recupera `app_mutate_v160` RC10 | No modifica registros |
-| 024 | Aplicada; verificación 3/3 OK | Origen de cargo, índices y vistas financieras anuales | Conserva todo el histórico |
-| 025 | Aplicada; verificación 2/2 OK | Validación de retirada, stock, entrega y cargo material | No borra pedidos existentes |
-| 026 | Aplicada; rollback OK | Material dentro del motor común de avisos | Conserva historial |
-| 027 | Aplicada; índice verificado | Índice multiclub para cursor estable de Comunidad | No modifica publicaciones |
-| 028 | Aplicada; metadata/rollback 2/2 OK | MIME, dimensiones y peso de multimedia de Comunidad | Conserva paths y publicaciones |
-| 029 | Preparada localmente | Vídeo 50 MB y paths de portadas automática/manual | Conserva multimedia existente |
-| 030 | Preparada localmente | Aislamiento tenant, cierre DML e índices multiclub | No modifica datos de negocio |
+| Migración | Dominio | Estado real conocido |
+|---|---|---|
+| 023–030 | hardening histórico / multiclub / media / finanzas | auditadas previamente |
+| 031 | recibos + desglose financiero | aplicada y verificada |
+| 032 | perfiles deportivos + likes | aplicada y verificada |
+| 033 | eventos + participantes + combates | aplicada y verificada |
+| 034 | notificaciones accionables | **pendiente Supabase real** |
+| 035 | perfil público de club + identidad normalizada | **pendiente Supabase real** |
+| 036 | edad/alta social/UGC/moderación | **pendiente Supabase real** |
 
-## Finanzas
+## 034
 
-- `cuotas`: fuente de cargos; 024 añade `origen` (`cuota`, `material`, `otro`) y `origen_id`.
-- `pagos`: fuente de cobros comunicados/validados.
-- `recibos_cuota`: recibos trazables y anulables.
-- `v_finanzas_detalle`: una fila por cargo con pagos validados agregados.
-- `v_finanzas_metricas_mensuales` y `v_finanzas_metricas_anuales`: cifras derivadas, no redundantes.
+Objetos principales:
+- `notificaciones_revisiones`;
+- `app_notificacion_requiere_accion_v034`;
+- `app_notificaciones_accionables_v034`;
+- operación `notificacion.revisar`.
 
-Las vistas usan `security_invoker`; el aislamiento continúa dependiendo de RLS en `cuotas`, `pagos`, `socios` y `recibos_cuota`.
+Las operaciones históricas `notificacion.leer`, `leer_grupo` y `leer_todas` quedan endurecidas para excluir avisos que siguen requiriendo acción.
 
-## Material
+## 035
 
-- `material_catalogo` y `material_variantes`: catálogo y stock por club.
-- `material_pedidos`: la solicitud queda `pendiente_validacion`; conserva precio, validador, fecha y `cuota_id`.
-- `material_entregas`: evidencia final relacionada con el pedido.
-- `app_validar_retirada_material_v025`: transacción única con bloqueo de stock y cargo de origen `material`.
-- `procesar_avisos_cobro`: tras 026 procesa cuota, material y futuros conceptos sin duplicar motores.
+`perfiles_club_publicos` almacena solo información que el club decide exponer. No concede SELECT directo a `authenticated`; se consume por `app_perfil_club_publico_v035`. `web_publica`, redes, logo y portada tienen constraints HTTPS y el seed no arrastra URLs administrativas con otros esquemas.
 
-## Multimedia de Comunidad
+`app_buscar_identidades_publicas_v035` devuelve una forma normalizada sin exponer las tablas privadas de origen.
 
-- El binario permanece en el bucket privado `community-media` con path por club y perfil.
-- `publicaciones_comunidad` conserva path y, desde 028, MIME, ancho, alto y bytes finales.
-- El wrapper 028 delega primero en el gateway RC10 y completa únicamente los metadatos de la publicación recién autorizada.
-- El wrapper 029 valida vídeo 1080p/50 MB y permite cambiar portada únicamente a Gestor/Coordinación.
-- `notification-dispatch` elimina al caducar el archivo principal, la portada automática y la manual.
+## 036
 
-## Hardening multiclub
+Objetos:
+- `identidades_sociales` (solo tipo `miembro` en esta fase);
+- `bloqueos_comunidad`;
+- `reportes_comunidad`;
+- `moderacion_accesos_sociales`;
+- `app_comunidad_general_estado_v036`;
+- `app_comunidad_bloqueados_v036`;
+- `app_comunidad_reportes_v036`;
+- `app_puede_moderar_comunidad_v036`.
 
-- `app_multiclub_audit_v030()` comprueba `club_id`, RLS, índice tenant y ausencia de DML cliente directo.
-- `app_privilege_snapshot_v030` conserva los privilegios efectivos previos únicamente para rollback.
-- Storage sigue siendo privado y los paths comienzan por `club_id/perfil_id`.
+La activación social registra una aceptación en `aceptaciones_legales` contra `textos_legales` `comunidad_general` versión `1.0.0`. La edad mínima se lee de `config_club.edad_min_comunidad_general` con suelo 14. Una identidad suspendida/cerrada no se auto-reactiva desde el perfil.
 
-## Pendiente antes de despliegue
+## Regla futura
 
-Ejecutar 024–030 en orden, validar resultados, comprobar planes/índices y ejecutar la matriz SELECT/INSERT/UPDATE/DELETE con roles reales.
+Urban Warriors no se trata como ID especial. Los triggers 035/036 dejan plantilla/estructura preparada para un futuro tenant sin desplegar aún selector ni UX multiclub. Los futuros competidor/federación/marca/tienda tendrán modelos propios y se normalizarán en la capa de identidad pública.

@@ -1,24 +1,22 @@
-# Matriz de permisos · RC10
+# Matriz de permisos funcionales · RC13 build 20018
 
-| Área | Gestor app | Coordinación | Secretaría | Economía | Comunicación | Monitor | Familia/Alumno |
-|---|---|---|---|---|---|---|---|
-| Panel | global | global | operativo | financiero | editorial | hoy | personal |
-| Disciplinas/grupos/alumnos | Sí | Sí | Sí | — | — | ámbito propio | propio/vinculado |
-| Sesiones recurrentes | Sí | Sí | Sí | — | — | operativa asignada | ver/reservar |
-| Excepciones/cancelaciones | Sí | Sí | Sí | — | — | según permiso | recibe aviso |
-| Reserva/check-in | Sí | Sí | Sí | — | — | Sí | propio |
-| Finanzas/estado cuenta | Sí | Sí | operativa | Sí | — | — | propio |
-| Avisos de cobro | Sí | Sí | Sí | Sí | — | — | recibe |
-| Comunicaciones oficiales | Sí | Sí | Sí | — | Sí | lectura | según audiencia |
-| Comunidad | moderar/publicar | moderar/publicar | publicar | lectura | moderar/publicar | publicar usuario | publicar usuario |
-| Archivo documental | Sí | Sí | Sí | — | — | — | autorizado |
-| Perfil/avatar propio | Sí | Sí | Sí | Sí | Sí | Sí | Sí |
-| Notificaciones masivas | Sí | Sí | Sí | propias | propias | propias | propias |
-| Manual usuario | Sí | Sí | Sí | Sí | Sí | Sí | Sí |
-| Manual equipo | Sí | Sí | Sí | Sí | Sí | Sí | — |
-| Cartel difusión | **Sí** | **Sí** | **Sí** | — | — | — | — |
-| Invitar personal | **Sí** | No | No | No | No | No | — |
-| Borrado total | **Sí** | No | No | No | No | No | — |
-| Diagnóstico/E2E | **Sí** | No | No | No | No | No | — |
+| Área | Dirección | Coordinación | Secretaría | Economía | Comunicación | Monitor | Alumno | Familia |
+|---|---|---|---|---|---|---|---|---|
+| Gestión alumnos/grupos | Sí | Sí | Sí | — | — | ámbito propio | propio | vinculados |
+| Finanzas | Sí | Sí | Sí | Sí | — | — | propio | vinculados |
+| Comunidad interna publicar | Sí | Sí | Sí | según reglas actuales | Sí | Sí | Sí | Sí según reglas actuales |
+| Comunidad interna moderar | Sí | Sí | Sí | — | Sí | — | — | — |
+| Likes | Sí | Sí | Sí | Sí | Sí | Sí | Sí | Sí |
+| Perfil deportivo | moderar | moderar | según política | — | según política | lectura | propio | menor vinculado |
+| Eventos/competiciones | Sí | Sí | Sí | según permiso | según permiso | según permiso | solicitar | solicitar vinculado |
+| Notificaciones informativas masivas | Sí | Sí | Sí | Sí | Sí | según visibles | propias | propias |
+| Notificaciones que requieren acción | revisar obligatoriamente | revisar | revisar | revisar | revisar | si aplica | si aplica | si aplica |
+| Perfil público de Urban Warriors editar | **Sí** | **Sí** | No | No | No | No | No | No |
+| Ver perfil público | Sí | Sí | Sí | Sí | Sí | Sí | Sí | Sí |
+| Activar futura Comunidad General | No por rol equipo | No | No | No | No | No | **solo alumno elegible** | **No** |
+| Denunciar/bloquear | Sí | Sí | Sí | Sí | Sí | Sí | Sí | según Comunidad interna |
+| Resolver denuncias | **Sí** | **Sí** | **Sí** | No | **Sí** | No | No | No |
+| Suspender acceso social | **Sí** | **Sí** | **Sí** | No | **Sí** | No | No | No |
+| Diagnóstico/E2E | **Sí** | No | No | No | No | No | No | No |
 
-`direccion` continúa siendo la clave interna del Gestor de la app. Coordinación reutiliza permisos operativos compuestos sin obtener `direccion`.
+`direccion` sigue siendo el máximo nivel interno. La UI nunca sustituye las comprobaciones del backend.

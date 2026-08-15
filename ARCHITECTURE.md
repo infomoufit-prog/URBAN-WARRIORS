@@ -1,72 +1,91 @@
-# Arquitectura · Urban Warriors 2.0.0-rc.10
+# Arquitectura · Urban Warriors 2.0.0-rc.13 · build 20020
 
 ## Principio
 
-RC10 amplía RC9 sin sustituir el canal estable de persistencia. El frontend mantiene una única ruta de mutación gobernada y separa claramente UI, repositorios, backend y cliente Supabase.
+Urban Warriors sigue siendo el entorno único del MVP. Esta RC **no** crea todavía la experiencia multiclub general, pero toda nueva estructura evita depender de Urban Warriors como excepción. Las reglas de evolución permanente están en `PLATFORM_EVOLUTION_RULES.md`.
 
 ## Capas
 
 1. `web/js/core/supabase.js`: Auth, PostgREST, RPC y Storage.
-2. `web/js/core/backend.js`: sesión, contrato, mutación, diagnóstico, subida/descarga y sincronización de token push.
-3. `web/js/core/repositories.js`: acceso por dominio y limpieza física de archivos.
+2. `web/js/core/backend.js`: sesión, contrato, gateway, diagnóstico, subida/descarga y push.
+3. `web/js/core/repositories.js`: API de dominio consumida por UI.
 4. `web/js/core/state.js`: estado UI mínimo.
 5. `web/js/modules/*` + `web/js/ui/*`: experiencia por rol.
+6. Supabase: RLS + RPC de lectura segura + `app_mutate_v160` como única puerta de negocio.
 
-## Escritura
+Flujo de escritura:
 
-`UI → repository → backend.mutate() → app_mutate_v160 → respuesta verificada → lectura → render`
-
-No se incorpora un store monolítico alternativo ni DML directo desde los módulos.
+`UI → repository → backend.mutate() → contrato runtime → app_mutate_v160 → validación backend → respuesta versionada → render`
 
 ## Contrato
 
 - Backend: `1.6.0`
 - Schema epoch: `160`
 - Gateway: `app_mutate_v160`
-- RC9 queda encapsulado por el wrapper de RC10.
-- Migración nueva: `022_rc10_final_mvp_v166.sql`.
+- Cada migración 032–036 envuelve y conserva la función anterior.
+- El cliente build 20020 exige 19 capacidades acumuladas nuevas sobre el contrato previo; un backend incompleto se rechaza explícitamente.
 
-## Dominios añadidos en RC10
+## Dominios RC13
 
-### Notificaciones
-Lectura individual, por grupo y total; permiso global Android; visualización agrupada y distinción de acciones pendientes. La tabla histórica de preferencias se conserva por compatibilidad, pero los workers ya no filtran categorías personales.
+### 031 Finanzas
 
-### Sesiones recurrentes
-`series_sesiones` define recurrencias semanales. Las ocurrencias concretas siguen viviendo en `sesiones_entrenamiento`, lo que permite reservas, asistencia e histórico por fecha. Las excepciones se aplican a una ocurrencia sin destruir la serie.
+Cuota/material/otro, recibos y estado de cuenta derivados de las fuentes contables existentes. No se crea contabilidad paralela.
 
-### Comunidad
-`publicaciones_comunidad` es independiente de las comunicaciones oficiales. Los archivos viven en `community-media` privado y la UI obtiene URLs firmadas. El mantenimiento programado purga contenido caducado y media asociada.
+### 032 Perfil deportivo + likes
 
-### Perfil
-`perfiles.avatar_path` referencia un objeto privado de `profile-media`. Sustitución y borrado limpian el objeto anterior.
+`perfiles_deportivos` está separado del expediente administrativo. Visibilidad y moderación son estados distintos. El cliente no puede enumerar quién dio like.
 
-### Finanzas
-`v_estado_cuenta_socio` presenta cuota, pagos validados, saldo, estado y recibo sin crear una segunda contabilidad paralela.
+### 033 Eventos/Competiciones
 
-La migración 024 añade `v_finanzas_detalle`, `v_finanzas_metricas_mensuales` y `v_finanzas_metricas_anuales`. Son vistas `security_invoker`: las cifras se derivan de los datos reales y respetan las políticas de las tablas base.
+Eventos, requisitos, participantes internos/externos e interacciones de combate manual. Participantes y combates sensibles se leen por RPC segura.
 
-### Legal
-`textos_legales` conserva documentos versionados y `aceptaciones_legales` registra decisiones del usuario. La autorización de imagen permanece separada de las condiciones necesarias para acceder al servicio.
+### 034 Notificaciones accionables
+
+`app_notificacion_requiere_accion_v034` decide con estado vivo del objeto si un aviso sigue exigiendo acción. Lectura masiva/grupo solo afecta informativas. `notificacion.revisar` registra apertura/revisión en `notificaciones_revisiones`.
+
+### 035 Perfil público de club
+
+`perfiles_club_publicos` es una proyección pública independiente de `clubes`. No reutiliza CIF, email, teléfono o dirección administrativa. Dirección/Coordinación pueden editar por gateway. Los campos URL públicos aceptan únicamente HTTPS y el render vuelve a sanitizarlos defensivamente.
+
+La función `app_buscar_identidades_publicas_v035` normaliza por ahora `club` + `miembro` para que UI/búsqueda no dependan del modelo de tablas de cada tipo. Competidor, federación, marca y tienda llegarán como modelos propios y podrán añadirse a esta capa.
+
+### 036 Base social opcional + seguridad UGC
+
+La identidad social de un miembro (`identidades_sociales`) es distinta de su expediente del club. Solo existe el tipo actual `miembro`; no se meten futuros tipos en una tabla genérica.
+
+- autorregistro autónomo alumno: 16+;
+- elegibilidad social: rol alumno + socio activo + DOB verificada + umbral configurable en `config_club` (suelo 14);
+- activación voluntaria con aceptación legal versionada;
+- familia/tutor no activa identidad social;
+- denuncia y bloqueo por gateway;
+- reportes por RPC segura;
+- suspensión/reactivación social auditada en `moderacion_accesos_sociales`;
+- una suspensión social no bloquea la gestión administrativa del club.
+
+No existe todavía feed de Social Community / Comunidad General.
+
+## Comunidad del Club vs futura Social Community / Comunidad General
+
+Son ámbitos diferentes. Las publicaciones actuales siguen siendo del club y no se vuelven globales por defecto. Dentro de Comunidad del Club, el **nombre del club** abre la ficha pública de Urban Warriors.
 
 ## Storage
 
-- `member-documents`: expediente privado.
-- `justificantes-pago`: justificantes privados.
-- `club-public-media`: publicaciones oficiales, material y branding.
-- `profile-media`: avatares privados.
-- `community-media`: contenido social temporal privado.
-
-## Push y tareas programadas
-
-- `notification-dispatch`: horizonte recurrente, publicaciones/notificaciones programadas, limpieza de Comunidad y push general/sesiones/comunidad.
-- `payment-reminders`: recordatorios financieros y push financiero.
-
-Ambas funciones requieren configuración externa de producción; las credenciales no forman parte del repositorio.
+Se conservan los buckets históricos privados/públicos según dominio. Las nuevas estructuras 034–036 no exponen secretos ni añaden DML directo desde frontend.
 
 ## Android
 
-- `versionName 2.0.0-rc.10`
-- `versionCode 20010`
-- Firebase Messaging integrado condicionalmente cuando existe `google-services.json` real.
-- Una push abierta desde Android conserva la ruta funcional hacia la app.
-- `web`, `dist` y `android/app/src/main/assets/www` se sincronizan mediante `npm run build`.
+- package/namespace: `com.urbanwarriors.app`
+- build: `20020`
+- versionName: `2.0.0-rc.13`
+- compile/target SDK: `36`
+- web embebida servida desde origen HTTPS virtual.
+
+La compilación nativa release/AAB requiere toolchain Android externo a este entorno.
+
+## Organización semanal de sesiones
+
+La persistencia de recurrencias no cambia. La UI filtra por semana natural (lunes–domingo), permite navegar a semana anterior/siguiente y, en la semana actual, ordena primero la próxima sesión y luego las siguientes; las sesiones ya pasadas permanecen detrás como contexto. El mismo criterio se aplica al portal de alumno/familia.
+
+## Identidad visual de club
+
+Los logos de club se presentan dentro de marcos circulares sin obligar a que el archivo fuente ya tenga esa forma. La PWA usa iconos maskable y Android usa adaptive icons para evitar dobles marcos o un cuadrado visible dentro del círculo del launcher.

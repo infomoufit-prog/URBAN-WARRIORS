@@ -1,0 +1,14 @@
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+const root=resolve(import.meta.dirname,'..');
+const read=p=>readFile(resolve(root,p),'utf8');
+const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL RC13 ANDROID PLAY 20020: ${msg}`);console.log(`OK RC13 ANDROID PLAY 20020: ${msg}`)};
+const [appGradle,rootGradle,manifest,activity]=await Promise.all([read('android/app/build.gradle'),read('android/build.gradle'),read('android/app/src/main/AndroidManifest.xml'),read('android/app/src/main/java/com/urbanwarriors/app/MainActivity.java')]);
+assert(appGradle.includes("applicationId 'com.urbanwarriors.app'"),'applicationId estable para continuidad de actualizaciones');
+assert(appGradle.includes('compileSdk 36')&&appGradle.includes('targetSdk 36'),'Android 16 / API 36 configurado para Google Play');
+assert(rootGradle.includes("version '8.10.1'"),'AGP compatible con API 36 configurado');
+assert(appGradle.includes('versionCode 20020')&&appGradle.includes("versionName '2.0.0-rc.13'"),'build Android identificado como RC13/20020');
+assert(appGradle.includes("System.getenv('UW_KEYSTORE_PATH')")&&appGradle.includes('signingConfigs'),'firma release depende de secretos externos y no incrusta claves');
+assert(manifest.includes('android:usesCleartextTraffic="false"')&&manifest.includes('android.permission.POST_NOTIFICATIONS'),'manifiesto conserva transporte seguro y permiso push explícito');
+assert(activity.includes('configureEdgeToEdge()')&&activity.includes('--uw-native-safe-top')&&activity.includes('--uw-native-safe-bottom'),'WebView conserva safe areas al orientar a API 36');
+console.log('RC13 BUILD 20020 ANDROID / PLAY STATIC READINESS: PASS');

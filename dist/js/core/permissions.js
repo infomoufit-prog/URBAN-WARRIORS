@@ -5,7 +5,7 @@ export const PERMISSIONS = Object.freeze({
   communication:['direccion','coordinacion','secretaria','comunicacion'], session:['direccion','coordinacion','secretaria','monitor'], attendance:['direccion','coordinacion','secretaria','monitor'],
   checkin:['direccion','coordinacion','secretaria','monitor'], tracking:['direccion','coordinacion','secretaria','monitor'], document:['direccion','coordinacion','secretaria'],
   paymentAdmin:['direccion','coordinacion','secretaria','economia'], feeGenerate:['direccion','coordinacion','economia'], reminders:['direccion','coordinacion','secretaria','economia'],
-  invite:['direccion'], clubConfig:['direccion','coordinacion','secretaria','economia','comunicacion'], certification:['direccion']
+  invite:['direccion'], clubConfig:['direccion','coordinacion','secretaria','economia','comunicacion'], eventManage:['direccion','coordinacion','secretaria','monitor'], certification:['direccion']
 });
 export const has = (session, permission) => {
   const allowed=PERMISSIONS[permission]||[]; const roles=session?.roles?.length?session.roles:[session?.rol].filter(Boolean);
