@@ -1,55 +1,48 @@
-# Estado del proyecto · RC13 build 20020
+# STATUS · KOMBAX 20.050 ACCOUNT SECURITY
 
-## Pulido final 20020
+Candidata actual de validación: **build 20050**.
 
-- nomenclatura visible separada: **Comunidad del Club** vs **Social Community / Comunidad General**;
-- Sesiones organizadas por semana natural, con navegación anterior/actual/siguiente y próxima sesión primero;
-- logo/launcher normalizado para ocupar el marco circular, con iconos PWA maskable y Android adaptive icon;
-- sin migraciones SQL nuevas: Supabase 034–036 permanece como backend certificado.
+Último cambio: cambio de contraseña autenticado desde perfil/cuenta, con verificación explícita de contraseña actual y cierre de sesión posterior. No requiere migración Supabase.
+
+# Estado del proyecto · KOMBAX RC13 build 20049 FINAL CANDIDATE
 
 ## Candidata actual
 
 - Versión: **2.0.0-rc.13**.
-- Build / Android `versionCode`: **20020**.
-- Base inmediata reversible: RC13 build 20018; RC13 build 20017 se conserva como referencia anterior.
-- Estado: **código build 20020 certificado localmente; Supabase 034–036 aplicado/verificado; falta APK release y validación final de distribución**.
-- Freeze: **NO**.
-- Netlify producción: **NO desplegar todavía**.
+- Build web / Android `versionCode`: **20049**.
+- applicationId: `com.urbanwarriors.app`.
+- Perfil Miembro: identidad KOMBAX Social canónica única, arquitectura 20048 preservada.
+- Recuperación de contraseña: código de 6 dígitos + verificación + nueva contraseña + cierre de sesión temporal, implementado en ambos logins.
+- Recibos: branding y prefijo propios por Club, con snapshot histórico del emisor.
+- Supabase 094/095/096: aplicadas y verificadas en vivo.
+- Seguridad 20.046: revalidada después de 096.
+- `npm test`: PASS.
+- `npm run build`: PASS.
+- `web = dist = Android`: 63/63/63, 0 diferencias.
+- Android preflight: 4/5; firma local pendiente deliberadamente fuera del paquete.
 
-## Implementado localmente
+## Estado de release
 
-- 031 Finanzas conservada; 032 perfiles deportivos/likes; 033 Eventos/Competiciones.
-- 034 notificaciones accionables y revisión auditada.
-- 035 perfil público de club + capa normalizada de identidad/búsqueda.
-- 036 autorregistro alumno 16+, base social opcional con umbral configurable por club (suelo 14), aceptación legal versionada, denuncia, bloqueo, moderación y suspensión social auditada.
-- La publicación UGC interna requiere aceptación explícita vigente de Normas de Comunidad del Club; no se concede durante el registro del club.
-- navegación desde el **nombre del club** en Comunidad del Club al perfil público.
-- configuración Android build 20020, API 36 y AGP 8.10.1.
+**FINAL CANDIDATE / PRE-FREEZE.** Los dos últimos cambios funcionales están implementados. Para declarar `KOMBAX BASE FREEZE` falta la validación manual final y completar el E2E alojado de recuperación de contraseña.
 
-## Evidencia local final
+No se ha modificado GitHub, no se ha desplegado Netlify y no se ha generado/publicado APK/AAB de producción.
 
-- `node --check`: **57/57** JS/MJS, 0 fallos.
-- `npm test`: **583 OK / 29 PASS**.
-- Contrato final: **93/93** operaciones.
-- `npm run build`: **51 archivos · web = dist = Android**.
-- `git diff --check`: limpio.
+### Pendientes pre-producción conocidos
 
-## Supabase real
+1. En Supabase: `Authentication → Email Templates → Reset password`, instalar `supabase/auth_templates/recovery_otp_20049.html` para que el correo muestre `{{ .Token }}`.
+2. Ejecutar E2E real de recuperación: solicitar código, recibir correo, verificar, cambiar contraseña y entrar de nuevo.
+3. Activar **Leaked Password Protection** en Supabase Auth y repetir smoke Auth.
+4. Validación manual final PC + móvil, incluyendo un recibo visual.
+5. Mantener la deuda del Performance Advisor como fase separada; no mezclar refactor masivo de índices/RLS con el freeze.
+6. Tras freeze: GitHub → Netlify/PWA → APK Release → AAB → Google Play.
 
-- 023–030: auditado previamente durante esta sesión.
-- 031: aplicado y prueba transaccional superada.
-- 032: aplicado/verificado.
-- 033: aplicado/verificado.
-- 034: aplicado/verificado; 8/8 `true`, revisión fuera de club 0 y prueba transaccional `Success`.
-- 035: aplicado/verificado; 10/10 `true` y clubes activos sin perfil público 0.
-- 036: aplicado/verificado; 22/22 `true`, contadores 0/0/0/0 y suspensiones fuera de club 0.
+## Evidencia 20049
 
-## Puertas restantes para freeze
+- Migración viva: `20260819005526 kombax_multiclub_receipt_branding_20049`.
+- Recibos reales existentes: 4; todos con snapshot de emisor y números históricos intactos.
+- Smoke financiero transaccional: PASS; 0 fixtures.
+- Usuarios `auth.users` después de QA: 3; no se crearon cuentas de prueba.
+- Test conductual Auth REST: PASS.
+- SHA agregado web/dist/Android: `dde0d09ac4448cd80b95924222c80e620a0dfc8403ec205c46d5b2c48420e415`.
 
-1. Completar pruebas manuales pendientes por roles/RLS y privacidad (incluido menor <16 y tutor cuando se decida ejecutar esa validación).
-2. Repetir pasada local build 20020 en PC y móvil tras copiar el nuevo paquete al equipo.
-3. Compilar Android release firmada y AAB en Android Studio/SDK real.
-4. Instalar build 20020 encima del build anterior sin desinstalar y probar APK física.
-5. Validar push/foreground/background/navegación/permisos Android.
-6. Revisión final Google Play: público objetivo, UGC, seguridad infantil, privacidad/Data Safety y cuenta de desarrollador.
-7. Commit/tag de freeze; Netlify solo desde el mismo estado certificado.
+Ver detalle en `BUILD_20049_FINAL_AUTH_RECEIPTS_VALIDATION.md` y `CHANGELOG_RC13_BUILD_20049.md`.

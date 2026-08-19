@@ -1,5 +1,65 @@
 # Changelog
 
+## 2.0.0-rc.13 · build 20030 · ámbitos de monitor y privacidad financiera
+
+- Nuevo modelo muchos-a-muchos de ámbitos para varios monitores, alumnos y grupos dentro de un club.
+- Separación backend entre acceso deportivo del monitor y ficha administrativa/familiar del socio.
+- Documentos privados y recibos dejan de heredar visibilidad por ser monitor.
+- `Mis alumnos` usa proyección mínima segura; contacto solo mediante permiso explícito.
+- `Mi cartera` incorpora niveles none/status/portfolio/collect/receipts por ámbito.
+- Asistencia, seguimiento, graduaciones, reservas y series quedan limitados por ámbito y flags de permiso.
+- Nueva administración `Ámbitos y privacidad` para Gestor/Coordinación.
+- Migración 057 con preflight, verify, test JWT A/B y rollback; no aplicar antes de 056.
+- Regresión y build: PASS; 71 archivos sincronizados web/dist/Android; versionCode 20030.
+
+## 2.0.0-rc.13 · build 20025 · Showcase y preparación de carga multiclub
+
+- KOMBAX Showcase como escaparate informativo global con marcas, categorías, fichas, lanzamientos, precio orientativo opcional y enlaces HTTPS.
+- Gestión autorizada de marcas y fichas mediante gestor explícito o entitlement; borrador, publicación y archivo conservan trazabilidad.
+- No se implementan carrito, checkout, pagos, pedidos, stock, envíos, devoluciones ni comisiones.
+- Seis fichas visuales sintéticas marcadas DEMO para presentación; no se escriben en Supabase ni contienen enlaces/ofertas reales.
+- Catálogo paginado por cursor con límite de 24, búsqueda y filtrado por categoría.
+- Migración local 042 con preflight, verificación, prueba transaccional y rollback conservador.
+- Generadores deterministas y protegidos para escenarios QA de 10, 50 y 100 clubes.
+- Harness K6 y runbook con percentiles, tasa de error, lecturas críticas y revisión de recursos/consultas.
+- La preparación estática **no certifica** capacidad para 100 clubes; prueba real, Supabase, JKS, Android físico y Netlify continúan pendientes.
+
+## 2.0.0-rc.13 · build 20024 · KOMBAX Social Alpha
+
+- Nueva capa global KOMBAX Social, separada de la Comunidad del Club en datos, permisos, navegación y estética.
+- Perfiles públicos proyectados de club, miembro autorizado y futuro perfil directo sin exponer expedientes ni datos administrativos.
+- Feed profesional paginado por cursor en bloques máximos de 20, con publicaciones de texto, categorías y likes cuya identidad no se expone.
+- Solicitudes estructuradas de contacto de 10–500 caracteres, con aceptación o rechazo y sin conversación, presencia ni mensajería encadenada.
+- Bloqueo backend de contacto cuando cualquiera de los perfiles personales corresponde a un menor de 18 años.
+- Denuncias, bloqueos, moderadores globales y auditoría de moderación; la suspensión social no altera la membresía del club.
+- Normas KOMBAX Social 1.1 y activación opcional con consentimiento diferenciado.
+- No se crean seguidores, amistades, chat, mensajes directos ni contadores de popularidad.
+- Migración local 041 con preflight, verificación, prueba transaccional y rollback que conserva contenido.
+- Supabase real, firma JKS, APK/AAB, instalación física y Netlify: **NO EJECUTADO** en esta fase.
+
+## 2.0.0-rc.13 · build 20023 · puerta KOMBAX y base multiclub
+
+- Nueva puerta pública KOMBAX con dos vías independientes: acceso mediante club y categorías de perfil directo.
+- Directorio público limitado por nombre, ubicación o disciplina, compatible con enlace/QR y sin exponer datos administrativos.
+- Urban Warriors permanece como club real; cinco clubes ficticios quedan identificados como DEMO y aislados en fixtures locales que no deben ejecutarse en producción.
+- Categorías encajadas para competidor, marca, federación, espectador y profesional vinculado al deporte; altas, precios y cobros continúan expresamente cerrados.
+- Contexto de acceso separado de identidad, suscripción y capacidades; cambio entre clubes limpia caché y estado del tenant anterior.
+- Co-branding KOMBAX en acceso y registro, manteniendo `com.urbanwarriors.app` y la identidad instalada de Urban Warriors durante la transición.
+- Migración local 040 con preflight, verificación, prueba transaccional y rollback conservador.
+- KOMBAX Social y Showcase siguen desactivados; Supabase real, firma JKS, APK/AAB, instalación física y Netlify: **NO EJECUTADO** en esta fase.
+
+## 2.0.0-rc.13 · build 20022 · estabilización y co-branding KOMBAX
+
+- Corregida la lectura persistente de notificaciones individuales, por grupo e informativas, con estado optimista y reversión.
+- Nombre completo renderizado con separación normalizada sin alterar el perfil.
+- Nuevo archivo/papelera para nueve tipos de contenido, restauración durante 30 días y auditoría; pagos y recibos quedan excluidos.
+- Recibos completos con logo del club, estado, detalle, impresión/guardar como PDF y compartición.
+- Co-branding discreto KOMBAX manteniendo Urban Warriors como identidad principal e instalada.
+- Cuatro temas cerrados, previsualización local, publicación versionada y restauración.
+- Caché por club/usuario en lecturas seguras y métricas P50/P95/incidencias de más de cinco segundos.
+- Migraciones locales 037–039 con preflight, verificación, prueba transaccional y rollback conservador.
+- Supabase real, firma JKS, APK/AAB, instalación física y Netlify: **NO EJECUTADO** en esta fase.
+
 ## 2.0.0-rc.13 · build 20020 · corrección de próxima sesión en portal alumno
 
 - Portal alumno/familia: la **próxima sesión** permanece visible y accionable aunque caiga en la semana siguiente; corrige el caso detectado el sábado 15/08 con una clase del martes 18/08.
@@ -138,3 +198,31 @@
 - Añadida consulta de salud backend previa a APK sin exponer tokens.
 - Documentado el orden Supabase → Edge Functions → CRUD/RLS → Android/Pixel 8 → Netlify.
 - Alineado el snapshot 030 con todos los recursos auditados para que el rollback de privilegios sea completo.
+
+## RC13 build 20028 · KOMBAX identity/public profiles/platform admin
+Ver detalle en `CHANGELOG_RC13_BUILD_20028.md`. Build 20028 separa Miembro/Competidor, añade actuar como Club, Hub de Club, perfiles públicos, multimedia Social directa, Showcase accionable y Administración KOMBAX global mediante backend 051–056.
+
+## RC13 build 20029 · 2026-08-17
+- Compositor de texto visible y subida multimedia en KOMBAX Social.
+- Feed con scroll progresivo automático y fallback manual.
+- Showcase con subida desde dispositivo y Storage protegido en 054.
+- Separación explícita Comunidad interna / KOMBAX Social público.
+- Rojo sangre KOMBAX y microanimaciones premium.
+- VersionCode 20029; suite/build completos PASS.
+
+## RC13 build 20048 · PRE-FREEZE
+- Perfil Miembro unificado con su identidad KOMBAX Social canónica.
+- Perfil deportivo legacy retirado de la navegación activa y preservado solo como compatibilidad privada.
+- Campos deportivos declarados integrados en Social; continuidad Competidor verificada.
+- Directorio/Comunidad resuelven `social_id` canónico.
+- Fondo Club negro con logo desenfocado; no usa portada como background global.
+- Seguridad 20.046 revalidada; build/regresión final PASS.
+
+## RC13 build 20049 · FINAL CANDIDATE
+- Recuperación de contraseña por correo con OTP de 6 dígitos, verificación `recovery`, cambio de contraseña y cierre de sesión temporal.
+- Botón de recuperación disponible en login Club y login KOMBAX; respuesta anti-enumeración.
+- Plantilla KOMBAX `{{ .Token }}` incluida para Supabase Auth; su instalación alojada queda como único ajuste manual del flujo.
+- Recibos convertidos a multi-club: snapshot del emisor, logo/nombre/contacto del Club y prefijo propio por Club.
+- Eliminado fallback visual Urban Warriors para otros clubes; fallback neutro KOMBAX.
+- Migración 096 aplicada/verificada en vivo; cuatro recibos históricos conservan sus números y reciben snapshot del emisor.
+- Smoke financiero con rollback PASS; regresión/build PASS; web=dist=Android 63/63/63.

@@ -37,6 +37,7 @@ export function sortSessionsForWeek(rows, offset=0, now=new Date()) {
 export const money = (value) => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(Number(value||0));
 export const dateFmt = (value) => value ? new Intl.DateTimeFormat('es-ES').format(new Date(`${String(value).slice(0,10)}T12:00:00`)) : '—';
 export const dtFmt = (value) => value ? new Intl.DateTimeFormat('es-ES',{dateStyle:'short',timeStyle:'short'}).format(new Date(value)) : '—';
+export const fullName = (name='',surnames='') => [name,surnames].map(value=>String(value||'').trim()).filter(Boolean).join(' ').replace(/\s+/g,' ');
 export const byName = (a,b) => String(a?.nombre||a?.titulo||'').localeCompare(String(b?.nombre||b?.titulo||''),'es');
 export const opt = (rows, selected, label=(r)=>r.nombre) => rows.map(r=>`<option value="${esc(r.id)}" ${String(r.id)===String(selected||'')?'selected':''}>${esc(label(r))}</option>`).join('');
 export const sleep = (ms) => new Promise(r=>setTimeout(r,ms));

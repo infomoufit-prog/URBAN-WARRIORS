@@ -1,0 +1,30 @@
+import {readFile,access} from 'node:fs/promises';import {resolve} from 'node:path';
+const root=resolve(import.meta.dirname,'..'),read=p=>readFile(resolve(root,p),'utf8'),exists=async p=>{try{await access(resolve(root,p));return true}catch{return false}},assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL KOMBAX 20024: ${msg}`);console.log(`OK KOMBAX 20024: ${msg}`)};
+const [cfg,gradle,app,module,repos,portal,components,css,sql,rollback,verify]=await Promise.all([read('web/config.js'),read('android/app/build.gradle'),read('web/js/app.js'),read('web/js/modules/kombax-social.js'),read('web/js/core/repositories.js'),read('web/js/modules/portal.js'),read('web/js/ui/components.js'),read('web/css/app.css'),read('supabase/migrations/041_kombax_social_alpha.sql'),read('supabase/rollbacks/041_kombax_social_alpha.sql'),read('supabase/verification/verify_041_kombax_social.sql')]);
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);
+assert(build>=20024&&Number(gradle.match(/versionCode\s+(\d+)/)?.[1])>=20024&&cfg.includes('kombaxSocial: true'),'build conserva o supera KOMBAX Social 20024');
+assert(gradle.includes("applicationId 'com.urbanwarriors.app'"),'identidad Android permanece actualizable con el JKS existente');
+assert(app.includes("renderKombaxSocial")&&app.includes("social:'KOMBAX Social'")&&app.includes("platformFeatures().social"),'ruta social está separada y protegida por feature flag');
+assert(components.includes("social:'KOMBAX'"),'navegación identifica la capa global fuera de Contenido del club');
+for(const table of ['kombax_social_perfiles','kombax_social_publicaciones','kombax_social_likes','kombax_social_bloqueos','kombax_social_contactos','kombax_social_reportes','kombax_social_moderacion'])assert(sql.includes(`public.${table}`),`migración modela ${table}`);
+assert(!/create table[^;]*(seguidores|followers|amistades|conversaciones|mensajes)/is.test(sql),'no existen tablas de seguidores, amistades, conversaciones ni mensajes');
+assert(sql.includes("extract(year from age(current_date,s.fecha_nacimiento))>=18")&&sql.includes('no se permite contacto con perfiles personales menores de 18 años'),'contacto con menores se bloquea en backend, no solo en UI');
+assert(sql.includes("mensaje text not null check(char_length(btrim(mensaje)) between 10 and 500)")&&sql.includes("estado text not null default 'pendiente' check(estado in ('pendiente','aceptada','rechazada','cerrada'))"),'contacto es solicitud única acotada y no hilo de chat');
+assert(sql.includes('app_kombax_social_feed_v041')&&sql.includes('p_limit integer default 20')&&sql.includes('limit least(greatest(coalesce(p_limit,20),1),20)'),'feed global tiene cursor y página máxima de 20');
+assert(sql.includes("version='1.1.0'")&&sql.includes('NORMAS DE KOMBAX SOCIAL'),'activación exige texto legal específico vigente');
+assert(sql.includes('enable row level security')&&sql.includes('revoke all on public.kombax_moderadores_globales')&&!/grant\s+(select|insert|update|delete)\s+on\s+public\.kombax_social_/i.test(sql),'tablas sociales quedan tras RPC, RLS y revocación directa');
+assert(sql.includes('kombax_moderadores_globales')&&sql.includes('kombax_social_moderacion'),'moderación global y auditoría son explícitas');
+assert(sql.includes('DEPRECATED_MAIN_OPERATION: comunidad_general.activar')&&sql.includes("'kombax_social_gateway','app_kombax_social_mutate_v041'")&&!cfg.match(/requiredOperations:[\s\S]*?\]/)?.[0].includes("'comunidad_general.activar'"),'contrato retira la activación legal 1.0 y declara el gateway social 041');
+for(const text of ['Actualidad profesional','Perfiles públicos','Protección de menores'])assert(module.includes(text),`interfaz incluye “${text}”`);
+if(build<20040){for(const text of ['Solicitudes de contacto','No existe chat'])assert(module.includes(text),`interfaz histórica incluye “${text}”`);}else{
+  for(const text of ['Contacto KOMBAX','20 mensajes totales','Solo texto'])assert(module.includes(text),`evolución 20040 incluye “${text}”`);
+  assert(!/envío de (imágenes|vídeos|audios|archivos)/i.test(module)||module.includes('Sin imágenes'),'evolución 20040 mantiene mensajería sin multimedia');
+}
+assert(module.includes('repos.kombaxSocial.feed')&&module.includes('repos.kombaxSocial.contact')&&!module.includes('backend.select'),'UI consume repositorio y no consulta tablas directamente');
+assert((repos.includes("app_kombax_social_mutate_v067")||repos.includes("app_kombax_social_mutate_v065")||repos.includes("app_kombax_social_mutate_v053")||repos.includes("app_kombax_social_mutate_v050")||repos.includes("app_kombax_social_mutate_v049")||repos.includes("app_kombax_social_mutate_v041"))&&(repos.includes("app_kombax_social_contactos_v041")||repos.includes("app_kombax_contactos_v067")||repos.includes("app_kombax_contactos_v065"))&&repos.includes("response.request_id!==requestId"),'repositorio valida gateway social vigente, idempotencia y lecturas seguras');
+assert(portal.includes('KOMBAX Social')&&!portal.includes('se habilitará en una fase posterior'),'perfil de alumno ya no contradice el feed habilitado');
+assert(css.includes('.kombax-social-page')&&css.includes('--ks-red:#e31b23')&&css.includes('@media(max-width:560px)'),'tema global rojo/negro/blanco tiene adaptación móvil');
+assert(rollback.includes('conserva contenido/auditoría')&&verify.includes('no_chat_followers'),'rollback conserva datos y verificación comprueba funciones excluidas');
+for(const p of ['supabase/verification/preflight_041_kombax_social.sql','supabase/verification/test_041_kombax_social_transactional.sql'])assert(await exists(p),`${p} disponible`);
+assert(/^\s*(?:--[^\n]*\n)*\s*begin;/i.test(sql)&&/commit;\s*$/i.test(sql)&&(sql.match(/\$\$/g)||[]).length%2===0,'migración 041 es transaccional y delimitada');
+console.log('KOMBAX BUILD 20024 STATIC: PASS');

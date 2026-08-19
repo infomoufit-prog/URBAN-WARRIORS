@@ -1,0 +1,17 @@
+# Android local / sensible
+android/keystore.properties
+android/local.properties
+android/app/google-services.json
+*.jks
+*.keystore
+
+# Builds locales
+android/.gradle/
+android/**/build/
+*.apk
+*.aab
+
+# Entorno y dependencias
+node_modules/
+.env
+.env.*

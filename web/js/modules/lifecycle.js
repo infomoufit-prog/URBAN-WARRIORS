@@ -1,0 +1,28 @@
+import { repos } from '../core/repositories.js';
+import { esc, dtFmt } from '../core/utils.js';
+import { pageHeader, card, table, empty, badge, openForm, toast, setError, setMainHtml } from '../ui/components.js';
+
+const TYPE_LABELS=Object.freeze({publicacion:'Publicaciones',comunicacion:'Comunicaciones',evento:'Eventos antiguos',notificacion:'Notificaciones informativas',material:'Archivos y material',documento:'Archivos y material',seguimiento:'Notas de seguimiento',asistencia:'Asistencia',sesion:'Sesiones finalizadas'});
+const filters={tipo:'',estado:'',desde:'',hasta:''};
+
+const statusBadge=(state)=>badge(({activo:'Activo',archivado:'Archivado',papelera:'Papelera'})[state]||state,state==='papelera'?'danger':state==='archivado'?'warn':'ok');
+
+export async function renderLifecycle(){
+  setMainHtml('<div class="loading-card">Cargando archivo y papelera…</div>');
+  try{
+    const rows=await repos.lifecycle.list(filters);
+    const filterBar=`<div class="lifecycle-filters"><label>Tipo<select id="lifecycle-type"><option value="">Todos</option>${Object.entries(TYPE_LABELS).map(([value,label])=>`<option value="${value}" ${filters.tipo===value?'selected':''}>${esc(label)}</option>`).join('')}</select></label><label>Estado<select id="lifecycle-state"><option value="">Todos</option>${['activo','archivado','papelera'].map(value=>`<option value="${value}" ${filters.estado===value?'selected':''}>${esc(value)}</option>`).join('')}</select></label><label>Desde<input id="lifecycle-from" type="date" value="${esc(filters.desde)}"></label><label>Hasta<input id="lifecycle-to" type="date" value="${esc(filters.hasta)}"></label><button class="btn btn-ghost" id="lifecycle-filter">Aplicar filtros</button></div>`;
+    const actions=`<div class="lifecycle-actions"><span id="lifecycle-selected">0 seleccionados</span><button class="btn btn-ghost btn-sm" id="lifecycle-archive" disabled>Archivar</button><button class="btn btn-danger btn-sm" id="lifecycle-trash" disabled>Mover a papelera</button><button class="btn btn-primary btn-sm" id="lifecycle-restore" disabled>Restaurar</button></div>`;
+    const bodyRows=(rows||[]).map(r=>`<tr><td><input class="lifecycle-check" type="checkbox" data-id="${esc(r.recurso_id)}" data-type="${esc(r.recurso_tipo)}" data-state="${esc(r.ciclo_estado)}" aria-label="Seleccionar ${esc(r.titulo)}"></td><td>${esc(TYPE_LABELS[r.recurso_tipo]||r.recurso_tipo)}</td><td><strong>${esc(r.titulo||'Sin título')}</strong><br><small>${esc(r.resumen||'')}</small></td><td>${dtFmt(r.fecha)}</td><td>${statusBadge(r.ciclo_estado)}${r.restaurar_hasta?`<br><small>Recuperable hasta ${dtFmt(r.restaurar_hasta)}</small>`:''}</td></tr>`);
+    setMainHtml(`${pageHeader('Archivo y papelera','Ciclo de vida seguro con restauración durante 30 días y auditoría','', 'Administración')}${filterBar}<div class="alert alert-warning lifecycle-policy"><strong>Sin borrado financiero</strong><span>Pagos, cuotas y recibos no se eliminan aquí. Las notificaciones que requieren acción tampoco pueden archivarse masivamente.</span></div>${card('Contenido del club',`${actions}${bodyRows.length?table(['','Tipo','Contenido','Fecha','Estado'],bodyRows):empty('Sin resultados','Prueba otra combinación de filtros.')}`)}`);
+
+    const checked=()=>[...document.querySelectorAll('.lifecycle-check:checked')];
+    const syncSelection=()=>{const selected=checked(),type=selected[0]?.dataset.type||'';document.querySelectorAll('.lifecycle-check').forEach(c=>{c.disabled=Boolean(type)&&!c.checked&&c.dataset.type!==type;});document.getElementById('lifecycle-selected').textContent=`${selected.length} seleccionado${selected.length===1?'':'s'}${type?` · ${TYPE_LABELS[type]}`:''}`;const states=new Set(selected.map(c=>c.dataset.state));document.getElementById('lifecycle-archive').disabled=!selected.length||states.size!==1||!states.has('activo');document.getElementById('lifecycle-trash').disabled=!selected.length||states.has('papelera');document.getElementById('lifecycle-restore').disabled=!selected.length||states.has('activo');};
+    document.querySelectorAll('.lifecycle-check').forEach(c=>c.addEventListener('change',syncSelection));
+    document.getElementById('lifecycle-filter')?.addEventListener('click',()=>{filters.tipo=document.getElementById('lifecycle-type').value;filters.estado=document.getElementById('lifecycle-state').value;filters.desde=document.getElementById('lifecycle-from').value;filters.hasta=document.getElementById('lifecycle-to').value;renderLifecycle();});
+    const runAction=(accion)=>{const selected=checked();if(!selected.length)return;const type=selected[0].dataset.type,ids=selected.map(c=>c.dataset.id);const title=accion==='papelera'?'Mover a papelera':accion==='restaurar'?'Restaurar contenido':'Archivar contenido';openForm({title,subtitle:`${ids.length} elemento${ids.length===1?'':'s'} de ${TYPE_LABELS[type]}. La acción quedará auditada.`,fields:[{name:'motivo',label:'Motivo',type:'textarea',required:accion!=='restaurar',full:true,maxLength:500}],submitText:title,onSubmit:async v=>{const result=await repos.lifecycle.action(type,ids,accion,v.motivo);toast(`${result?.actualizados??ids.length} elemento${ids.length===1?'':'s'} actualizado${ids.length===1?'':'s'}`);await renderLifecycle();}});};
+    document.getElementById('lifecycle-archive')?.addEventListener('click',()=>runAction('archivar'));
+    document.getElementById('lifecycle-trash')?.addEventListener('click',()=>runAction('papelera'));
+    document.getElementById('lifecycle-restore')?.addEventListener('click',()=>runAction('restaurar'));
+  }catch(error){setError(error);setMainHtml(`${pageHeader('Archivo y papelera')} ${empty('No se pudo cargar el ciclo de vida',error.message)}`);}
+}

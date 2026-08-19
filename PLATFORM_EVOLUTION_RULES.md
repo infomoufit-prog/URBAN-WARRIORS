@@ -1,128 +1,70 @@
-# Urban Warriors · Reglas permanentes de evolución de producto
+# KOMBAX · reglas permanentes de evolución
 
-Estado: **contrato de arquitectura para RC13 build 20020 y posteriores**.
+Estado: **contrato de arquitectura vigente desde RC13 build 20025**.
 
-## 1. Alcance actual
+## 1. Plataforma y tenant piloto
 
-Urban Warriors sigue siendo, en esta fase, una aplicación/entorno único de validación del MVP del gimnasio Urban Warriors. **No se despliega todavía una plataforma multiclub visible, no se cambia el nombre de la aplicación y no se crea un selector general de clubes.**
+KOMBAX es la capa general. Urban Warriors es el tenant piloto y conserva por ahora la identidad Android `com.urbanwarriors.app` para permitir actualización sobre la instalación existente. Ningún permiso puede depender del nombre o UUID de Urban Warriors.
 
-La obligación actual es distinta: toda decisión nueva debe evitar bloquear una evolución posterior hacia una plataforma general. Urban Warriors será el primer club/tenant cuando esa capa exista, no una excepción de negocio.
+## 2. Dos puertas de entrada
 
-## 2. Regla de evolución multiclub
+- **Entrar mediante mi club**: búsqueda pública limitada, autenticación y acceso a un contexto para el que exista membresía activa.
+- **Otros perfiles KOMBAX**: competidor, marca, federación, espectador o profesional vinculado. El modelo y la navegación están encajados, pero su alta, cobro y beneficios permanecen cerrados hasta una fase específica.
 
-- No introducir condiciones de negocio del tipo `club.nombre === 'Urban Warriors'`.
-- No usar el UUID del club como excepción funcional. El ID de Urban Warriors puede existir en configuración del MVP, nunca como permiso especial.
-- Los recursos privados de gestión mantienen `club_id`, RLS y gateway.
-- La futura generalización debe poder añadir clubes sin duplicar el frontend ni bifurcar la app.
-- El branding futuro será configuración/datos, no un fork por club.
+Elegir una tarjeta DEMO nunca crea membresía, suscripción ni entitlement.
 
-## 3. Gestión privada e identidad pública son capas distintas
+## 3. Aislamiento multiclub
 
-Nunca construir un perfil público leyendo directamente el expediente administrativo.
+- Recursos operativos privados siempre delimitados por `club_id`, RLS y gateway.
+- El cambio de club vuelve a validar membresía/capabilities y limpia caché y estado del tenant anterior.
+- Auth, identidad pública, membresía, rol, suscripción y entitlement son conceptos distintos.
+- La aplicación debe crecer a 100 clubes sin forks de frontend ni excepciones por club; esa capacidad solo se considera probada tras ensayos reales.
 
-Datos administrativos que no se publican automáticamente: email, teléfono privado, domicilio, CIF/documentación, fecha completa de nacimiento, emergencias, familia/tutores, finanzas y documentos.
+## 4. Branding y temas
 
-Los datos públicos deben existir en una estructura creada expresamente para publicación y ser voluntarios/moderables.
+Logo, banner y uno de los cuatro temas cerrados son configuración versionada del club. Los temas fijan tokens, tipografía y contraste; no permiten CSS arbitrario. Se puede cambiar de tema mediante publicación controlada y rollback de versión, sin duplicar assets ni lógica.
 
-## 4. Perfil público de club
+KOMBAX usa rojo, negro y blanco de forma propia; el entorno privado conserva la identidad elegida por cada club y el co-branding discreto KOMBAX.
 
-RC13 build 20020 valida el modelo con Urban Warriors mediante `perfiles_club_publicos`.
+## 5. Comunidad del Club y KOMBAX Social
 
-- El nombre del club dentro de Comunidad interna es el punto de navegación al perfil público.
-- El logo es visual; no es el mecanismo obligatorio de navegación.
-- La misma ficha/modelo será reutilizable más adelante en Comunidad General.
-- El perfil público usa identificador estable (`slug`) separado del nombre visible.
-- Edición: Gestor/Dirección o Coordinación autorizada del propio club.
+Son dominios independientes. El contenido interno no se publica globalmente por defecto y tener cuenta del club no activa un perfil social.
 
-## 5. Identidad pública normalizada
+KOMBAX Social Alpha exige alta voluntaria y normas propias. Incluye perfil público, feed, likes con identidad no expuesta, bloqueo, denuncia, moderación y una solicitud estructurada de contacto. No incluye seguidores, amistades, chat, mensajes, presencia ni intercambio automático de datos personales.
 
-No crear una tabla monstruosa con todos los campos de alumno, club, federación, marca y tienda.
+## 6. Privacidad y edad
 
-Cada dominio conserva su modelo propio y una capa común entrega al consumidor una forma normalizada: identificador público, tipo, referencia, nombre, subtítulo, slug y media.
+El perfil público se construye desde campos expresamente publicables; nunca desde el expediente administrativo. Email, teléfono privado, domicilio, fecha completa de nacimiento, emergencias, familia, finanzas y documentos quedan fuera.
 
-RC13 valida dos fuentes: `club` y `miembro/perfil deportivo`. Futuras capas podrán añadir `competidor`, `federacion`, `marca` y `tienda`.
+El backend calcula la edad desde una fuente verificada y bloquea el contacto si cualquiera de los perfiles personales es menor de 18 años. No basta una restricción visual. Cualquier futura experiencia social para menores exige un diseño legal, de credenciales y control adulto independiente.
 
-## 6. Comunidad del Club y Social Community / Comunidad General son ámbitos distintos
+## 7. Showcase no comercial
 
-La **Comunidad del Club** actual de Urban Warriors es interna al club. Sus publicaciones **no se convierten automáticamente en contenido global**.
+KOMBAX Showcase es un escaparate informativo de marcas y elementos publicados. No es tienda y no debe incorporar carrito, checkout, pedidos, cobros, stock, envío, devoluciones o marketplace sin una decisión de producto y arquitectura nueva.
 
-La futura **Social Community / Comunidad General** será un servicio social opcional, con alta propia, normas propias, privacidad y moderación independientes.
+## 8. Contenido y notificaciones
 
-Tener cuenta del club no equivale a tener perfil en Social Community / Comunidad General.
+- Informativas: lectura individual, agrupada o masiva y contador persistente.
+- Accionables: se resuelven con una acción explícita y estado vivo del objeto; una lectura masiva no las completa.
+- Archivo/papelera: solo contenido permitido, recuperación durante 30 días y auditoría. Finanzas y recibos no se eliminan por este flujo.
 
-Tampoco se considera aceptada automáticamente la normativa social por crear una cuenta del club. Para publicar contenido generado por usuarios, las normas de la Comunidad correspondiente deben mostrarse y aceptarse expresamente; la retirada de esa aceptación bloquea nuevas publicaciones sin eliminar la cuenta administrativa.
+## 9. Compatibilidad y secretos
 
-## 7. Edad y cuentas
+- Mantener paquete y firma Android; incrementar `versionCode` de forma monótona.
+- Migraciones hacia delante y reversión conservadora; nunca reinicios destructivos.
+- JKS, contraseñas, Firebase real, `.env`, APK y AAB no entran en Git ni en el ZIP fuente.
+- Probar cada candidata encima de la build anterior sin desinstalar.
 
-### Autorregistro como alumno del club
+## 10. Orden obligatorio
 
-- Desde **16 años cumplidos**: el alumno puede crear su propia cuenta y enviar su preinscripción/solicitud deportiva mediante el flujo actual.
-- Menor de 16: no crea una cuenta de alumno independiente; se mantiene el flujo mediante club y/o padre, madre o tutor.
-- El límite se valida en backend y también se explica/valida en frontend.
+**concepto → alcance → privacidad → permisos → tenant → datos → RPC/RLS → frontend → responsive → Android → tests → Supabase real → E2E/dispositivo → carga → freeze → deploy**
 
-### Social Community / Comunidad General
+Ningún informe puede afirmar una puerta externa que no haya sido ejecutada y conservado su resultado. Si una fase excede una sesión, se entrega el checkpoint verificable y se continúa en la siguiente, sin atajos ni parches que debiliten la arquitectura.
 
-- Umbral social configurado en backend por club mediante `edad_min_comunidad_general`, con **suelo de producto de 14 años cumplidos**, siempre calculados con fecha de nacimiento verificada por el club.
-- No se acepta una edad autodeclarada para saltar el control.
-- Cumplir la edad solo habilita la opción: la activación social es voluntaria.
-- Padre/madre/tutor no puede activar Social Community / Comunidad General en esta fase.
-- En el MVP actual los menores de 16 no disponen de autorregistro autónomo; por ello la arquitectura 14+ queda preparada sin inventar ahora un mecanismo de credenciales adicional para 14–15. Antes de habilitar una experiencia social real para 14–15 en distribución pública se deberá cerrar expresamente el modelo de credenciales, control adulto/público objetivo y las obligaciones vigentes de la tienda/aplicación.
+## 11. Fuera de build 20025
 
-## 8. Seguridad de contenido generado por usuarios
-
-La experiencia social debe incluir desde su base:
-
-- denunciar publicación;
-- denunciar perfil;
-- bloquear/desbloquear perfil;
-- revisión por equipo autorizado;
-- ocultar contenido denunciado;
-- resolución/descartado trazable de denuncias;
-- suspensión/reactivación del acceso social con motivo y auditoría;
-- separación entre moderación y preferencias de privacidad.
-
-Bloquear un perfil social no puede bloquear comunicaciones administrativas, avisos de seguridad ni obligaciones del club.
-
-## 9. Notificaciones operativas
-
-Las notificaciones informativas y las tareas que requieren acción tienen semántica diferente.
-
-- Informativas: lectura individual, por grupo y masiva.
-- Requiere acción: no se puede limpiar mediante acciones masivas.
-- La accionabilidad se calcula con el estado vivo del objeto relacionado, no solo con `tipo`.
-- Una tarea accionable se revisa mediante una acción explícita que deja auditoría y abre su ruta funcional.
-- El diseño debe soportar alto volumen de Dirección/Secretaría/Economía/otros roles de equipo, especialmente en APK móvil.
-
-## 10. Compatibilidad de actualización
-
-La instalación actual de Urban Warriors es el piloto real del MVP y debe poder evolucionar a la misma aplicación futura.
-
-- conservar identidad Android de la app;
-- conservar clave/firma de actualización;
-- aumentar `versionCode` de forma monótona;
-- migraciones de datos hacia delante, no reinicios destructivos;
-- no obligar a desinstalar para actualizar;
-- probar cada candidato instalándolo encima de la build anterior cuando sea posible.
-
-## 11. Orden obligatorio de cualquier cambio futuro
-
-**concepto → alcance → privacidad → permisos → tenant/aislamiento → modelo de datos → gateway/RPC → frontend → responsive → Android → tests → Supabase real → dispositivo físico → freeze → deploy**
-
-No desplegar una migración nueva solo porque el código compila. Cada migración debe tener preflight, verificación y rollback/retorno documentado.
-
-## 12. Fuera del freeze actual
-
-No forman parte del cierre RC13 build 20020:
-
-- entorno multiclub visible completo;
-- nuevo nombre/branding de plataforma general;
-- selector global de clubes;
-- feed de Social Community / Comunidad General;
-- seguidores/amistades/chat;
-- competidor independiente funcional;
-- federaciones funcionales;
-- marcas/tiendas funcionales;
-- marketplace/patrocinios;
-- brackets automáticos multiclub.
-
-Se prepara la arquitectura; no se simula que estas funciones ya existen.
+- alta/cobro y beneficios funcionales de perfiles directos;
+- seguidores, amistades, chat o mensajería;
+- comercio en Showcase;
+- soporte de 100 clubes certificado por carga real;
+- publicación Google Play o producción Netlify.

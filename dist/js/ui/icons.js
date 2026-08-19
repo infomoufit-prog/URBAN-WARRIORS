@@ -12,6 +12,7 @@ const paths = {
   bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>',
   megaphone:'<path d="m3 11 14-5v12L3 13v-2Z"/><path d="M11.5 16.3 13 21H8l-1.6-6.1"/><path d="M21 9v6"/>',
   message:'<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>',
+  heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/>',
   clipboard:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6M9 14h6"/>',
   package:'<path d="m21 8-9 5-9-5 9-5 9 5Z"/><path d="M3 8v9l9 5 9-5V8M12 13v9"/>',
   settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>',
@@ -42,6 +43,27 @@ const paths = {
   folder:'<path d="M3 6h7l2 2h9v11H3V6Z"/>',
   shoppingBag:'<path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/>',
   mapPin:'<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+
+  dojo:'<path d="M3 20h18M5 20v-9l7-6 7 6v9M8 20v-6h8v6M4 11h16M9 8h6"/>',
+  idCard:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="11" r="2.2"/><path d="M5.5 16c.7-1.7 1.7-2.5 2.5-2.5S9.8 14.3 10.5 16M13 10h5M13 14h4"/>',
+  fighter:'<circle cx="12" cy="5" r="2"/><path d="M9 9l3-2 3 2 2 4-3 2-1 6M10 12 7 16l-3-2M14 15l4 3 2-3"/>',
+  brandMark:'<path d="M12 2l2.2 6.2L20 10l-5.8 2L12 18l-2.2-6L4 10l5.8-1.8L12 2Z"/><circle cx="12" cy="10" r="2.4"/>',
+  federation:'<path d="M12 2 20 6v6c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-4Z"/><path d="M8 9h8M9 13h6M12 7v9"/>',
+  spectator:'<path d="M2.5 12s3.7-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.7 5.5-9.5 5.5S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/><path d="M4 20h16"/>',
+  professional:'<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7V5h6v2M4 12h16M10 15h4"/>',
+  network:'<circle cx="6" cy="12" r="2.3"/><circle cx="18" cy="7" r="2.3"/><circle cx="18" cy="17" r="2.3"/><path d="m8 11 7.7-3M8 13l7.7 3"/>',
+  spotlight:'<path d="M5 4h14l-2 7H7L5 4Z"/><path d="M9 11v5M15 11v5M6 20h12M12 16v4"/>',
+  receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+  checkin:'<path d="M4 4h16v16H4z"/><path d="m8 12 2.5 2.5L16 9"/>',
+  arrowUpRight:'<path d="M7 17 17 7M9 7h8v8"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
+  lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2M14 9l2 2"/>',
+  bookmark:'<path d="M6 3h12v18l-6-4-6 4V3Z"/>',
+  bookmarkCheck:'<path d="M6 3h12v18l-6-4-6 4V3Z"/><path d="m9 10 2 2 4-4"/>',
+  eyeOff:'<path d="M3 3l18 18M10.6 6.2A10.8 10.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3 3.7M6.3 6.3C3.8 8.2 2.5 12 2.5 12s3.5 6 9.5 6a9.6 9.6 0 0 0 3-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  filter:'<path d="M4 6h16M7 12h10M10 18h4"/>',
   sparkles:'<path d="m12 3 1.3 3.7L17 8l-3.7 1.3L12 13l-1.3-3.7L7 8l3.7-1.3L12 3Z"/><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15ZM5 14l.7 1.8L7.5 16l-1.8.7L5 18.5l-.7-1.8L2.5 16l1.8-.2L5 14Z"/>'
 };
 
@@ -50,4 +72,19 @@ export function icon(name,{size=20,className=''}={}){
   return `<svg class="uw-icon ${className}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${body}</svg>`;
 }
 
-export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkCircle',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'user',requests:'plus',documents:'folder',install:'download',community:'sparkles',events:'calendar',help:'fileText',more:'more'}[id]||'activity');
+export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkin',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'idCard',requests:'plus',documents:'folder',archive:'archive',install:'download',community:'dojo',social:'network',showcase:'spotlight','platform-admin':'key',scopes:'shieldCheck',events:'calendar',help:'fileText',more:'more'}[id]||'activity');
+
+
+const featurePaths={
+  club:`<path class="fi-main" d="M12 51h40M16 51V26l16-12 16 12v25M22 51V35h20v16M14 27h36"/><path class="fi-accent" d="M25 23h14M30 35v16M20 31h24"/><circle class="fi-node" cx="32" cy="13" r="3"/>`,
+  identity:`<rect class="fi-main" x="10" y="15" width="44" height="34" rx="7"/><circle class="fi-accent" cx="24" cy="30" r="7"/><path class="fi-main" d="M15 44c2.5-6 5.5-9 9-9s6.5 3 9 9M37 26h11M37 33h9M37 40h7"/><path class="fi-accent" d="M44 12v7M40.5 15.5h7"/>`,
+  fighter:`<circle class="fi-accent" cx="32" cy="12" r="6"/><path class="fi-main" d="M24 24l8-7 8 7 6 12-8 5-3 15M28 31 18 42l-8-7M38 42l10 9 6-8"/><path class="fi-accent" d="M24 25 15 29M40 25l9 5"/>`,
+  brand:`<path class="fi-main" d="M32 8 38 24l16 6-16 6-6 16-6-16-16-6 16-6 6-16Z"/><circle class="fi-accent" cx="32" cy="30" r="7"/><path class="fi-accent" d="m46 12 2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6Z"/>`,
+  federation:`<path class="fi-main" d="M32 8 52 17v14c0 12-8 20-20 25-12-5-20-13-20-25V17L32 8Z"/><path class="fi-accent" d="M22 25h20M25 34h14M32 20v25"/><circle class="fi-node" cx="32" cy="17" r="2.5"/>`,
+  spectator:`<path class="fi-main" d="M8 32s9-15 24-15 24 15 24 15-9 15-24 15S8 32 8 32Z"/><circle class="fi-accent" cx="32" cy="32" r="8"/><path class="fi-main" d="M14 54h36"/><path class="fi-accent" d="M22 54v-5M32 54v-7M42 54v-5"/>`,
+  professional:`<rect class="fi-main" x="10" y="19" width="44" height="32" rx="6"/><path class="fi-accent" d="M24 19v-6h16v6M10 31h44M27 36h10v6H27z"/><path class="fi-main" d="M18 51v4M46 51v4"/>`
+};
+export function featureIcon(name,{size=64,className=''}={}){
+  const body=featurePaths[name]||featurePaths.identity;
+  return `<svg class="feature-icon ${className}" width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">${body}</svg>`;
+}

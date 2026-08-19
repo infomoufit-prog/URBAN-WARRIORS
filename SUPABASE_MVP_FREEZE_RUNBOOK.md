@@ -1,5 +1,7 @@
 # Urban Warriors RC13 · Runbook Supabase MVP Freeze
 
+> **HISTÓRICO / NO USAR PARA BUILD 20025.** Consultar `DOCUMENTATION_INDEX.md` y el runbook KOMBAX 037–042 vigente.
+
 ## Regla de oro
 
 Ejecutar en el **SQL Editor del proyecto correcto** con privilegios de propietario/postgres y con copia de seguridad previa.

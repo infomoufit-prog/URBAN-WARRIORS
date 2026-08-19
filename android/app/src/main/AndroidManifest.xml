@@ -8,7 +8,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="Urban Warriors"
+        android:label="KOMBAX"
         android:supportsRtl="true"
         android:theme="@style/Theme.UrbanWarriors"
         android:usesCleartextTraffic="false">

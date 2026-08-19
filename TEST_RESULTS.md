@@ -1,5 +1,7 @@
 # Resultados de pruebas
 
+> **REGISTRO HISTÓRICO ACUMULADO.** El veredicto local vigente de build 20025 está en `FINAL_RELEASE_AUDIT_RC13_BUILD_20025.md`; los pendientes de fases anteriores no sustituyen ese estado.
+
 ## 2026-08-14 — RC13 MVP build 20017 · certificación local
 
 ### Superadas localmente

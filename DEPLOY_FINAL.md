@@ -1,5 +1,7 @@
 # Procedimiento final RC10 · un solo deploy
 
+> **HISTÓRICO / NO USAR PARA BUILD 20025.** Para la candidata actual consultar `DOCUMENTATION_INDEX.md` y `NETLIFY_KOMBAX_BUILD_20025_RUNBOOK.md`.
+
 1. Mantener RC9 publicada mientras se certifica RC10.
 2. En Supabase SQL Editor ejecutar **una sola vez** `SQL_EJECUTAR_RC10_022.sql`, después de 021/021B ya validados.
 3. El propio SQL termina mostrando `app_diagnostico_instalacion_v166()`: comprobar **12 controles en OK**.

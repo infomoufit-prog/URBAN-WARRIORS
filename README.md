@@ -1,44 +1,56 @@
-# Urban Warriors 2.0.0-rc.13 · build 20020
+# KOMBAX / Urban Warriors · RC13 build 20030
 
-Candidata de validación del MVP de Urban Warriors. Esta versión continúa siendo la app del club Urban Warriors; **no despliega todavía la futura plataforma multiclub**. La arquitectura sí queda preparada para generalizar perfiles, permisos e identidad pública sin reescribir el núcleo.
+Candidata local construida sobre build 20029. Mantiene continuidad Android y amplía la arquitectura multiclub con privacidad real por monitor.
 
-## Base estable
+- versión: `2.0.0-rc.13`;
+- Android `applicationId`: `com.urbanwarriors.app`;
+- Android `versionCode`: `20030`;
+- fuente canónica: `/web`;
+- `dist` y `android/app/src/main/assets/www` se regeneran con `npm run build` y deben ser idénticos.
 
-- Backend: `1.6.0`
-- Schema epoch: `160`
-- Gateway único: `app_mutate_v160`
-- Android package: `com.urbanwarriors.app`
-- Android `versionCode`: `20020`
-- Android `targetSdk` / `compileSdk`: `36`
-- Cadena SQL: 023–030 histórica + 031 Finanzas + 032 Social + 033 Eventos + 034 Notificaciones + 035 Perfil público de club + 036 Acceso social/seguridad.
+## Bloques actuales
 
-## Alcance build 20020
+- 037–050: backend KOMBAX ya aplicado/verificado en el remoto durante esta sesión.
+- 051: aplicado/verificado 9/9.
+- 052: preflight 4/4 completado; migración pendiente.
+- 053–056: pendientes de aplicación remota.
+- 057: ámbitos de trabajo, privacidad por monitor y cartera financiera diferenciada, implementada localmente y pendiente de Supabase.
 
-- Notificaciones accionables: lectura masiva solo de informativas; las tareas deben abrirse con **Revisar**.
-- Perfil público de Urban Warriors separado del expediente administrativo.
-- En **Comunidad del Club**, el **nombre del club** abre su perfil público; el logo no es el mecanismo obligatorio.
-- Capa normalizada de identidad pública para `club` + `miembro`, preparada para futuros tipos sin una tabla genérica gigante.
-- Base opcional de **Social Community / Comunidad General**, separada del uso normal del club; en esta fase no existe feed global.
-- Elegibilidad social modelada desde 14+ con edad verificada por el club y solo rol alumno; familia/tutor no es identidad social.
-- Autorregistro autónomo como alumno: 16+; menores de 16 siguen el flujo tutor/club.
-- Denuncia de publicación/perfil, bloqueo, revisión, ocultación y suspensión/reactivación de acceso social con auditoría.
-- Perfil deportivo, likes, Finanzas y Eventos de RC13 se conservan.
+## Build 20030
 
-## Estado real de Supabase
+Añade:
+- varios monitores y alumnos/grupos compartidos mediante ámbitos;
+- `Mis alumnos` seguro sin ficha administrativa completa;
+- `Mis grupos` limitado por backend;
+- `Mi cartera` con niveles `none/status/portfolio/collect/receipts`;
+- permisos independientes de contacto, asistencia y seguimiento;
+- documentos/recibos separados del acceso deportivo;
+- administración `Ámbitos y privacidad` para Gestor/Coordinación;
+- hardening de reservas, series, asistencia, seguimiento, graduación y mutaciones de sesiones.
 
-Durante esta misma validación se certificaron en Supabase real 031–036. Para 034 se superó además la prueba transaccional; 035 y 036 pasaron sus verificaciones de estructura/integridad. Build 20020 **no añade nuevas migraciones SQL**.
+Conserva todas las capacidades 20028/20029 de identidad KOMBAX, Social, scroll/feed, multimedia, Showcase, rojo sangre y Administración KOMBAX.
 
 ## Validación local
 
 ```bash
 npm test
 npm run build
+npm run android:preflight
 ```
 
-El build web copia una única fuente a `dist` y `android/app/src/main/assets/www`; antes del freeze debe comprobarse paridad exacta.
+Resultados de esta entrega:
+- tests: PASS;
+- build: PASS;
+- `71 archivos · web = dist = Android`;
+- Android preflight: 3/5 esperado sin `google-services.json` real ni `keystore.properties`/JKS.
 
-## Importante antes de producción
+## Orden obligatorio para continuar
 
-Esta candidata **no está congelada** hasta completar las pruebas manuales pendientes por roles/RLS, repetir la pasada PC/web móvil del build 20020, compilar Android release firmada, instalarla físicamente encima del build anterior y cerrar la revisión de Google Play (privacidad, Data Safety, público objetivo, UGC/seguridad infantil, ficha y AAB).
+1. Supabase: continuar desde **migración 052**.
+2. Completar 052 → 056.
+3. Ejecutar 057 con su preflight/verify/test.
+4. QA local real con Gestor, Monitor A, Monitor B y alumnos/grupos separados.
+5. Solo después GitHub/Netlify.
+6. Android: incorporar Firebase/JKS local, generar APK Release, validar actualización y generar AAB.
 
-Documentos principales: `RC13_BUILD_20020_FINAL_POLISH_REPORT.md`, `RC13_BUILD_20018_IMPLEMENTATION_PLAN.md`, `PLATFORM_EVOLUTION_RULES.md`, `STATUS.md`, `RC13_VALIDATION.md`, `ANDROID.md` y `SUPABASE_RUNBOOK.md`.
+Runbook vigente: `SUPABASE_KOMBAX_RC13_20030_RUNBOOK.md`.

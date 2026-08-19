@@ -1,5 +1,7 @@
 # Validación · Urban Warriors RC13 build 20020
 
+> **HISTÓRICO / NO CERTIFICA BUILD 20025.** Consultar `FINAL_RELEASE_AUDIT_RC13_BUILD_20025.md`.
+
 ## A. Local / estático
 
 Certificado localmente en la ejecución final de build 20020: 57/57 JS/MJS sin error de sintaxis, `npm test` con 583 comprobaciones `OK`, 29 marcadores `PASS`, contrato 93/93 y build con 51 archivos en paridad exacta.

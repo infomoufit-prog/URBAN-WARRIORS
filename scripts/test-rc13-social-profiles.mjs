@@ -4,13 +4,14 @@ import { resolve } from 'node:path';
 const root=resolve(import.meta.dirname,'..');
 const read=p=>readFile(resolve(root,p),'utf8');
 const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL RC13 SOCIAL: ${msg}`);console.log(`OK RC13 SOCIAL: ${msg}`)};
-const [sql,preflight,verify,rollback,repos,community,profile,portal]=await Promise.all([
+const [sql,preflight,verify,rollback,repos,community,profile,portal,cfg]=await Promise.all([
   read('supabase/migrations/032_social_profiles_likes.sql'),
   read('supabase/verification/preflight_032_social.sql'),
   read('supabase/verification/verify_032_social.sql'),
   read('supabase/rollbacks/032_social_profiles_likes.sql'),
-  read('web/js/core/repositories.js'),read('web/js/modules/community.js'),read('web/js/modules/sports-profile.js'),read('web/js/modules/portal.js')
+  read('web/js/core/repositories.js'),read('web/js/modules/community.js'),read('web/js/modules/sports-profile.js'),read('web/js/modules/portal.js'),read('web/config.js')
 ]);
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);
 
 assert(sql.includes('create table if not exists public.perfiles_deportivos'),'perfil deportivo está separado del perfil administrativo');
 assert(sql.includes('visible boolean not null default false')&&sql.includes('moderacion_oculta boolean not null default false'),'privacidad del alumno y bloqueo de moderación son estados independientes');
@@ -38,10 +39,12 @@ const communityRepo=repos.slice(repos.indexOf('community:{'),repos.indexOf('lega
 assert(communityRepo.includes('perfil_id=eq.${enc(session().id)}'),'frontend consulta únicamente likes propios');
 assert(!communityRepo.includes('select=perfil_id,nombre')&&!communityRepo.includes('likers'),'no existe API frontend para listar identidades de likes');
 assert(community.includes('data-like-count')&&community.includes("repos.community.like"),'Comunidad muestra y permite alternar el contador de likes');
-assert(community.includes('openPublicDirectory')&&community.includes('openSportsProfile'),'Comunidad enlaza a directorio/perfil deportivo');
+if(build<20048)assert(community.includes('openPublicDirectory')&&community.includes('openSportsProfile'),'Comunidad enlaza a directorio/perfil deportivo');
+else assert(community.includes('openPublicDirectory')&&community.includes('openKombaxPublicProfile')&&community.includes('data-author-social'),'20.048 Comunidad enlaza al directorio y perfil KOMBAX canónico');
 assert(profile.includes('Solo se comparte información deportiva')&&profile.includes('No incluyas teléfono, email, dirección'),'editor advierte y limita el contenido compartido');
 assert(profile.includes('Perfil privado')&&profile.includes('Perfil oculto por moderación'),'frontend distingue privacidad voluntaria de moderación');
-assert(portal.includes('Perfil deportivo compartido')&&portal.includes('foto deportiva'),'portal integra perfil deportivo separado de la cuenta');
+if(build<20048)assert(portal.includes('Perfil deportivo compartido')&&portal.includes('foto deportiva'),'portal integra perfil deportivo separado de la cuenta');
+else assert(portal.includes('renderOwnKombaxProfilePage')&&!portal.includes('Perfil deportivo compartido')&&portal.includes('Información privada del club'),'20.048 portal unifica perfil público y conserva expediente privado separado');
 assert(preflight.includes('app_finance_receipts_audit_v031')&&preflight.includes('app_multiclub_audit_v030'),'032 no debe aplicarse antes de certificar Finanzas 031 y hardening multiclub 030');
 assert(verify.includes('perfil_sin_select_directo')&&verify.includes('likes_descuadrados'),'verificación cubre privacidad y consistencia de contador');
 assert(rollback.includes('app_puede_ver_perfil_deportivo_v032'),'rollback cierra las nuevas lecturas seguras sin destruir datos');

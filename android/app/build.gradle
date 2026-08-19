@@ -1,11 +1,32 @@
+import java.util.Properties
+
 plugins {
     id 'com.android.application'
 }
 
-def releaseKeystore = System.getenv('UW_KEYSTORE_PATH')
-def releaseStorePassword = System.getenv('UW_KEYSTORE_PASSWORD')
-def releaseKeyAlias = System.getenv('UW_KEY_ALIAS')
-def releaseKeyPassword = System.getenv('UW_KEY_PASSWORD')
+// La firma nunca se guarda en el proyecto. Para Android Studio se puede crear
+// android/keystore.properties a partir del ejemplo; CI puede seguir usando las
+// variables UW_* ya soportadas por RC13.
+def signingProperties = new Properties()
+def signingPropertiesFile = rootProject.file('keystore.properties')
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+}
+
+def signingValue = { String propertyName, String environmentName ->
+    def localValue = signingProperties.getProperty(propertyName)?.trim()
+    localValue ?: System.getenv(environmentName)?.trim()
+}
+
+def releaseKeystore = signingValue('storeFile', 'UW_KEYSTORE_PATH')
+def releaseStorePassword = signingValue('storePassword', 'UW_KEYSTORE_PASSWORD')
+def releaseKeyAlias = signingValue('keyAlias', 'UW_KEY_ALIAS')
+def releaseKeyPassword = signingValue('keyPassword', 'UW_KEY_PASSWORD')
+def releaseKeystoreFile = releaseKeystore ? rootProject.file(releaseKeystore) : null
+def releaseSigningReady = releaseKeystoreFile?.isFile()
+    && releaseStorePassword
+    && releaseKeyAlias
+    && releaseKeyPassword
 
 android {
     namespace 'com.urbanwarriors.app'
@@ -15,14 +36,14 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
         targetSdk 36
-        versionCode 20020
+        versionCode 20057
         versionName '2.0.0-rc.13'
     }
 
     signingConfigs {
         release {
-            if (releaseKeystore && releaseStorePassword && releaseKeyAlias && releaseKeyPassword) {
-                storeFile file(releaseKeystore)
+            if (releaseSigningReady) {
+                storeFile releaseKeystoreFile
                 storePassword releaseStorePassword
                 keyAlias releaseKeyAlias
                 keyPassword releaseKeyPassword
@@ -32,7 +53,7 @@ android {
 
     buildTypes {
         release {
-            if (releaseKeystore) signingConfig signingConfigs.release
+            if (releaseSigningReady) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -54,4 +75,17 @@ if (file('google-services.json').exists()) {
     apply plugin: 'com.google.gms.google-services'
 } else {
     logger.lifecycle('Urban Warriors: google-services.json no está presente; se compilará sin registrar FCM hasta añadirlo.')
+}
+
+tasks.register('signingStatus') {
+    group = 'verification'
+    description = 'Comprueba la preparación de firma sin mostrar credenciales.'
+    doLast {
+        println releaseSigningReady
+            ? 'Urban Warriors: firma release preparada (credenciales ocultas).'
+            : 'Urban Warriors: firma release no configurada. Usa keystore.properties o las variables UW_*.'
+        println file('google-services.json').isFile()
+            ? 'Urban Warriors: Firebase Android configurado.'
+            : 'Urban Warriors: falta app/google-services.json; las notificaciones push no quedarán registradas.'
+    }
 }

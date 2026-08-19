@@ -1,0 +1,13 @@
+begin;
+drop policy if exists kombax_social_media_delete_v053 on storage.objects;
+drop policy if exists kombax_social_media_insert_v053 on storage.objects;
+drop function if exists public.app_kombax_social_mutate_v053(text,jsonb,uuid);
+drop function if exists public.app_kombax_perfil_publico_v053(uuid);
+drop function if exists public.app_kombax_social_feed_v053(timestamptz,uuid,integer);
+drop function if exists public.app_kombax_social_media_v053(uuid);
+drop trigger if exists kombax_social_media_guard_v053 on public.kombax_social_media;
+drop function if exists public.app_kombax_social_media_guard_v053();
+alter table public.kombax_social_publicaciones drop column if exists social_media_id;
+drop table if exists public.kombax_social_media;
+notify pgrst,'reload schema';
+commit;

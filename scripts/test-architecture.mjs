@@ -37,6 +37,6 @@ assert(!/codigo_acceso:'E2E'/.test(adminSrc),'E2E no reutiliza código fijo de s
 console.log('OK: grafo de imports relativo resuelto');
 const gradle=await readFile(resolve(root,'android/app/build.gradle'),'utf8');
 const mainActivity=await readFile(resolve(root,'android/app/src/main/java/com/urbanwarriors/app/MainActivity.java'),'utf8');
-assert(/versionCode\s+20020/.test(gradle)&&/versionName '2\.0\.0-rc\.13'/.test(gradle),'Android RC13 versionado con build 20020');
+assert(Number(gradle.match(/versionCode\s+(\d+)/)?.[1])>=20021&&/versionName '2\.0\.0-rc\.13'/.test(gradle),'Android RC13 mantiene versionCode monótono desde 20021');
 assert(mainActivity.includes('appassets.androidplatform.net')&&mainActivity.includes('shouldInterceptRequest'),'Android sirve ES modules desde origen HTTPS virtual');
 assert(mainActivity.includes('UrbanWarriorsApp/2.0.0-rc.13'),'User-Agent Android acompaña versión RC13');

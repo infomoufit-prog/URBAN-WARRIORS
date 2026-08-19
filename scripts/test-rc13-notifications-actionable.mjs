@@ -7,7 +7,7 @@ assert(sql.includes("p.estado in ('enviada','en_revision','pendiente_documentaci
 assert((sql.match(/not public\.app_notificacion_requiere_accion_v034\(n\.id\)/g)||[]).length>=4,'lectura masiva/grupal y flags propios excluyen tareas accionables');
 assert(sql.includes("p_operation='notificacion.revisar'")&&sql.includes('notificaciones_revisiones'),'revisar es operación gateway auditable');
 assert(pre.includes('gateway_033')&&verify.includes('masivas_protegidas'),'preflight y verificación 034 están encadenados');
-assert(repos.includes("app_notificaciones_accionables_v034")&&repos.includes("mutation('notificacion.revisar'"),'cliente obtiene accionabilidad del backend y usa revisar');
+assert(repos.includes("app_notificaciones_accionables_v034")&&repos.includes("optimisticNotificationMutation('notificacion.revisar'"),'cliente obtiene accionabilidad del backend y usa revisar con persistencia optimista');
 assert(ui.includes('Marcar informativas como leídas')&&ui.includes("g.key!=='accion'")&&ui.includes('review-notification'),'UI nunca ofrece lectura masiva en Requiere acción');
 assert(ui.includes('notification-more')&&ui.includes('Ver ${g.items.length-initialLimit} avisos más')&&repos.includes('notificationList(1000)'),'la bandeja no vuelve inaccesibles los avisos que superan el corte visual y amplía margen de carga');
 assert(app.includes("n?.requiere_accion===true"),'contador/categoría global usa la clasificación del backend');

@@ -1,0 +1,17 @@
+import {readFileSync} from 'node:fs';
+const read=p=>readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
+const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL KOMBAX 20029: ${msg}`);console.log(`OK KOMBAX 20029: ${msg}`)};
+const social=read('web/js/modules/kombax-social.js'),showcase=read('web/js/modules/showcase.js'),repos=read('web/js/core/repositories.js'),community=read('web/js/modules/community.js'),hub=read('web/js/modules/club-kombax-hub.js'),css=read('web/css/kombax-premium.css'),sql54=read('supabase/migrations/054_kombax_showcase_actions.sql'),rollback54=read('supabase/rollbacks/054_kombax_showcase_actions.sql'),verify54=read('supabase/verification/verify_054_showcase_actions.sql'),config=read('web/config.js'),index=read('web/index.html'),sw=read('web/service-worker.js'),gradle=read('android/app/build.gradle');
+const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0);assert(currentBuild>=20029&&index.includes(`?v=${currentBuild}`)&&sw.includes(String(currentBuild))&&gradle.includes(`versionCode ${currentBuild}`),'build 20029 o posterior invalida caché y mantiene Android monótono');
+assert(social.includes('kx-social-quick-text')&&social.includes('kx-social-quick-publish')&&social.includes("repos.kombaxSocial.publish(profile.id,'actualizacion',text"),'Social expone publicación inmediata de texto');
+assert(social.includes('Subir foto o vídeo')&&social.includes('Foto / vídeo'),'Social mantiene subida directa de foto/vídeo y compositor visible');
+assert(social.includes('kombax-social-sentinel')&&social.includes('IntersectionObserver')&&social.includes("rootMargin:'700px 0px'"),'feed Social dispone de scroll progresivo automático');
+assert(css.includes('--kx-red:#c9001b')&&css.includes('--kx-red-deep:#65000d')&&css.includes('@keyframes kx-feed-card-in'),'paleta rojo sangre y microanimaciones están activas');
+assert(showcase.includes('imagen_archivo')&&showcase.includes('galeria_archivo_1')&&showcase.includes('uploadImage(brand.id'),'Showcase permite subir imagen principal y galería desde dispositivo');
+assert(repos.includes('uploadKombaxShowcaseImage')&&repos.includes('/showcase/${brandId}/'),'repositorio sube imágenes Showcase a Storage segmentado');
+assert(sql54.includes('kombax_showcase_media_insert_v054')&&sql54.includes("[2]='showcase'")&&sql54.includes('app_kombax_showcase_puede_gestionar_v045'),'Storage Showcase queda protegido por propietario/gestor');
+assert(rollback54.includes('drop policy if exists kombax_showcase_media_insert_v054')&&rollback54.includes('drop policy if exists kombax_showcase_media_delete_v054'),'rollback 054 revierte las políticas Storage de Showcase');
+assert(verify54.includes('upload_policy_ok')&&verify54.includes('delete_policy_ok'),'verify 054 comprueba políticas de subida/borrado Showcase');
+assert(community.includes('DESTINO DE PUBLICACIÓN')&&community.includes('Ir a KOMBAX Social'),'Comunidad interna diferencia explícitamente el destino y enlaza Social público');
+assert(hub.includes("card('community','Comunidad del Club'")&&hub.includes("card('social','KOMBAX Social'"),'Hub del Club separa Comunidad interna y Social público');
+console.log('KOMBAX BUILD 20029 SOCIAL + SHOWCASE FIX STATIC: PASS');

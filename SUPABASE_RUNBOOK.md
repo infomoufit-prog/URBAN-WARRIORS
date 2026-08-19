@@ -1,5 +1,7 @@
 # Supabase · Runbook RC13 build 20018
 
+> **HISTÓRICO / NO USAR PARA 037–042.** La única secuencia vigente para build 20025 está en `SUPABASE_KOMBAX_RC13_20022_20025_RUNBOOK.md`.
+
 ## Regla principal
 
 No ejecutar varias migraciones nuevas a la vez. Orden estricto: **034 → 035 → 036**. Si un preflight o verify falla, detenerse.

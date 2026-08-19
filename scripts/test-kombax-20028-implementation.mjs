@@ -1,0 +1,51 @@
+import {readFile,access,readdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+const root=resolve(import.meta.dirname,'..');
+const read=p=>readFile(resolve(root,p),'utf8');
+const exists=async p=>{try{await access(resolve(root,p));return true}catch{return false}};
+const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL KOMBAX 20028: ${msg}`);console.log(`OK KOMBAX 20028: ${msg}`)};
+const [cfg,gradle,index,sw,gateway,app,repos,backend,social,showcase,hub,pub,admin,identity,icons,css,sql51,sql52,sql53,sql54,sql55,sql56,grant]=await Promise.all([
+  read('web/config.js'),read('android/app/build.gradle'),read('web/index.html'),read('web/service-worker.js'),read('web/js/modules/gateway.js'),read('web/js/app.js'),read('web/js/core/repositories.js'),read('web/js/core/backend.js'),read('web/js/modules/kombax-social.js'),read('web/js/modules/showcase.js'),read('web/js/modules/club-kombax-hub.js'),read('web/js/modules/public-profile.js'),read('web/js/modules/platform-admin.js'),read('web/js/core/identity-context.js'),read('web/js/ui/icons.js'),read('web/css/kombax-premium.css'),read('supabase/migrations/051_kombax_identity_context.sql'),read('supabase/migrations/052_kombax_public_profiles.sql'),read('supabase/migrations/053_kombax_social_media_publisher.sql'),read('supabase/migrations/054_kombax_showcase_actions.sql'),read('supabase/migrations/055_kombax_platform_admin.sql'),read('supabase/migrations/056_kombax_release_contract.sql'),read('supabase/setup/grant_platform_admin.sql.example')
+]);
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+assert(build>=20028&&androidBuild>=20028&&build===androidBuild,'web y Android conservan o superan build 20028');
+assert(index.includes(`kombax-premium.css?v=${build}`)&&index.includes(`app.js?v=${build}`)&&sw.includes(String(build)),'runtime y assets invalidan caché con el build actual');
+assert(!gateway.includes('SaaS multiclub · Contact sports')&&!gateway.includes('PLATAFORMA MULTICLUB PROFESIONAL'),'Gateway no expone etiquetas técnicas/comerciales internas');
+assert(cfg.includes('demoDirectory: false')&&cfg.includes('showcaseDemo: false'),'fixtures visuales quedan desactivados en la release normal');
+assert(sql51.includes("when sp.sujeto_tipo='miembro' then 'miembro'")&&!sql51.includes("when sp.sujeto_tipo='miembro' then 'competidor'"),'Miembro Social permanece Miembro y no se convierte en Competidor');
+assert(sql51.includes('kombax_club_team_permissions')&&sql51.includes("'social.act_as_club'")&&sql51.includes('kombax_actor_audit'),'equipo autorizado puede actuar como Club con permisos y auditoría');
+assert(sql51.includes('app_kombax_social_mis_perfiles_v051')&&identity.includes('ACT')===false&&identity.includes('chooseDefaultIdentity'),'contexto de identidad es reutilizable y el Club puede ser identidad predeterminada');
+assert(social.includes('ACTUAR COMO')&&social.includes('Subir foto o vídeo')&&social.includes('O elegir del álbum')&&social.includes('attachAlbumMedia'),'Social permite elegir identidad y subir/reutilizar multimedia');
+assert(social.includes('data-social-profile-open')&&pub.includes('openKombaxPublicProfile')&&(repos.includes('app_kombax_perfil_publico_v053')||repos.includes('app_kombax_perfil_publico_v065')||repos.includes('app_kombax_perfil_publico_v068')),'tarjetas/autores navegan a un perfil público completo, respetando privacidad de Relaciones en builds posteriores');
+if(build<20048)assert(pub.includes('Editar mi perfil Social')&&repos.includes('kombax.identity.member.profile.update')&&sql51.includes("p_operation='kombax.identity.member.profile.update'"),'Miembro dispone de bio/avatar/portada Social editables sin reutilizar automáticamente su perfil deportivo');
+else assert(pub.includes('Editar mi perfil')&&pub.includes('Esta es tu única ficha pública KOMBAX')&&repos.includes('kombax.identity.member.profile.update'),'20.048 conserva edición Social y la integra en la única ficha pública del Miembro');
+assert(sql51.includes('branding_actualizado_en')&&sql51.includes('pc.actualizado_en')&&sql51.includes('c.logo_url'),'backfill 051 conserva la fuente de logo/portada del Club más reciente');
+assert(hub.includes('ESTÁS GESTIONANDO')&&hub.includes('Perfil público')&&hub.includes('Álbum')&&hub.includes('KOMBAX Social')&&hub.includes('Showcase')&&hub.includes('Relaciones')&&hub.includes('Contactos'),'Mi perfil de Gestor/Coordinación abre el Hub completo del Club');
+assert(app.includes("['direccion','coordinacion'].includes(state.session?.rol)?renderClubKombaxHub():renderProfile")&&app.includes("'personal-profile':renderProfile"),'perfil del Club y perfil personal están separados por contexto');
+assert(sql52.includes('app_kombax_social_directorio_v052')&&sql52.includes('app_kombax_perfil_publico_v052'),'backend publica directorio y ficha completa sin reutilizar perfil deportivo como identidad');
+assert(sql53.includes('kombax_social_media')&&sql53.includes('KOMBAX_POST_ACTIVE_LIMIT_30')&&sql53.includes('KOMBAX_POST_DAILY_LIMIT_3')&&sql53.includes('KOMBAX_POST_VIDEO_ACTIVE_LIMIT_10'),'multimedia Social y límites de publicación se aplican en backend');
+assert(sql54.includes("cta_tipo in ('info','contact','shop','web','where')")&&sql54.includes('kombax_showcase_guardados')&&sql54.includes('app_kombax_showcase_mis_elementos_v054'),'Showcase incorpora CTA, guardados y edición de CTA');
+assert(showcase.includes('Solicitar información')||showcase.includes("contact:'Contactar'"),'Showcase ofrece contacto/información accionable');
+assert(showcase.includes('Guardados')&&showcase.includes('Compartir')&&showcase.includes('Ir a tienda')&&showcase.includes('Dónde encontrar'),'Showcase ofrece guardar, compartir, tienda/web y ubicación sin checkout KOMBAX');
+assert(!sql54.match(/create table[^;]*(carrito|pedido|pago|checkout|stock|envio|devolucion)/i),'Showcase 20028 no introduce dominio de comercio transaccional');
+assert(sql55.includes('kombax_platform_admins')&&sql55.includes('app_kombax_es_platform_admin_v055')&&sql55.includes('app_kombax_platform_profiles_v055')&&admin.includes('LLAVE GLOBAL ACTIVA'),'administrador global existe, se valida en backend y dispone de búsqueda global de perfiles');
+assert(!/where\s+[^;]*email/i.test(sql55)&&!/where\s+[^;]*email/i.test(grant)&&!/['\"]?[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}['\"]?/i.test(sql55),'administrador global no se autoriza por email hardcodeado');
+assert(backend.includes('platform_admin:platform.authorized===true')&&app.includes("session?.platform_admin===true")&&sql55.includes("estado in ('pendiente','en_revision')"),'sesión y navegación reciben autorización global y la consola usa estados reales de moderación');
+assert(sql55.includes('or public.app_kombax_es_platform_admin_v055()')&&admin.includes('VERIFICACIONES')&&admin.includes('MODERACIÓN E INCIDENCIAS'),'platform_admin integra moderación/verificación y consola operativa global');
+assert(/'build',20\d{3}/.test(sql56)&&admin.includes('ESTADO TÉCNICO'),'diagnóstico técnico queda reservado a Administración KOMBAX');
+assert(icons.includes("'platform-admin':'key'")&&css.includes('.kx-club-hub')&&css.includes('.kx-public-profile')&&css.includes('.kx-platform-admin')&&css.includes('.kx-identity-context'),'navegación y design system cubren las nuevas superficies');
+for(const n of [51,52,53,54,55,56]){
+  const nn=String(n).padStart(3,'0');
+  const migrations=await readdir(resolve(root,'supabase/migrations')),rollbacks=await readdir(resolve(root,'supabase/rollbacks')),verifications=await readdir(resolve(root,'supabase/verification'));
+  assert(migrations.some(f=>f.startsWith(nn+'_')),`migración ${nn} presente`);
+  assert(rollbacks.some(f=>f.startsWith(nn+'_')),`rollback ${nn} presente`);
+  assert(verifications.some(f=>f.startsWith(`preflight_${nn}_`)),`preflight ${nn} presente`);
+  assert(verifications.some(f=>f.startsWith(`verify_${nn}_`)),`verify ${nn} presente`);
+  assert(verifications.some(f=>f.startsWith(`test_${nn}_`)),`test transaccional ${nn} presente`);
+  const f=migrations.find(x=>x.startsWith(nn+'_')),sql=await read('supabase/migrations/'+f);
+  assert(/^\s*(?:--[^\n]*\n\s*)*begin;/i.test(sql)&&/notify pgrst,'reload schema';\s*commit;\s*$/i.test(sql),`SQL ${nn} es transaccional y recarga esquema`);
+  assert((sql.match(/\$\$/g)||[]).length%2===0,`SQL ${nn} mantiene $$ equilibrados`);
+  assert(!/returns\s+table\([^)]*\bposition\s+integer/i.test(sql),`SQL ${nn} no reintroduce el conflicto reservado position`);
+}
+assert(await exists('supabase/setup/grant_platform_admin.sql.example'),'existe setup explícito para conceder la llave global por UUID');
+console.log('KOMBAX BUILD 20028 IMPLEMENTATION STATIC: PASS');

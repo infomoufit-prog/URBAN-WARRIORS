@@ -1,51 +1,36 @@
-# Base de datos · RC13 build 20018
+# Base de datos · KOMBAX RC13 build 20025
 
-## Principio
+## Cadena conocida
 
-Evolución incremental y reversible. Toda escritura de negocio nueva pasa por `app_mutate_v160`; las lecturas sensibles usan RLS o RPCs de campos explícitos. `club_id` sigue delimitando los recursos tenant cuando corresponde.
-
-## Cadena
-
-| Migración | Dominio | Estado real conocido |
+| Migraciones | Dominio | Estado en esta entrega |
 |---|---|---|
-| 023–030 | hardening histórico / multiclub / media / finanzas | auditadas previamente |
-| 031 | recibos + desglose financiero | aplicada y verificada |
-| 032 | perfiles deportivos + likes | aplicada y verificada |
-| 033 | eventos + participantes + combates | aplicada y verificada |
-| 034 | notificaciones accionables | **pendiente Supabase real** |
-| 035 | perfil público de club + identidad normalizada | **pendiente Supabase real** |
-| 036 | edad/alta social/UGC/moderación | **pendiente Supabase real** |
+| 001–036 | núcleo Urban Warriors / RC13 recibido | estado heredado y documentado |
+| 037 | notificaciones leídas | implementada local; Supabase real pendiente |
+| 038 | archivo/papelera | implementada local; Supabase real pendiente |
+| 039 | branding/temas | implementada local; Supabase real pendiente |
+| 040 | puerta/contextos KOMBAX | implementada local; Supabase real pendiente |
+| 041 | KOMBAX Social Alpha | implementada local; Supabase real pendiente |
+| 042 | KOMBAX Showcase | implementada local; Supabase real pendiente |
 
-## 034
+## Reglas
 
-Objetos principales:
-- `notificaciones_revisiones`;
-- `app_notificacion_requiere_accion_v034`;
-- `app_notificaciones_accionables_v034`;
-- operación `notificacion.revisar`.
+- Migraciones incrementales y transaccionales.
+- Preflight, verify, prueba transaccional y rollback por fase.
+- RLS habilitado y acceso directo revocado en los nuevos dominios globales.
+- Campos públicos explícitos; no `select *` hacia clientes en directorios globales.
+- Mutaciones idempotentes con `app_mutation_requests`.
+- Sin fixtures DEMO/carga en producción.
 
-Las operaciones históricas `notificacion.leer`, `leer_grupo` y `leer_todas` quedan endurecidas para excluir avisos que siguen requiriendo acción.
+## Global frente a tenant
 
-## 035
+Los recursos operativos del club siguen delimitados por `club_id`. KOMBAX Social y Showcase son globales: enlazan sujetos públicos y verifican propietario, gestor, moderador o entitlement. No copian datos administrativos del tenant.
 
-`perfiles_club_publicos` almacena solo información que el club decide exponer. No concede SELECT directo a `authenticated`; se consume por `app_perfil_club_publico_v035`. `web_publica`, redes, logo y portada tienen constraints HTTPS y el seed no arrastra URLs administrativas con otros esquemas.
+## 041 Social
 
-`app_buscar_identidades_publicas_v035` devuelve una forma normalizada sin exponer las tablas privadas de origen.
+Perfiles, publicaciones, likes, bloqueos, solicitudes de contacto, denuncias y auditoría son tablas independientes de Comunidad del Club. El contacto comprueba edad en vivo y exige 18 años a cualquier perfil personal. No existen tablas de seguidores, conversaciones o mensajes.
 
-## 036
+## 042 Showcase
 
-Objetos:
-- `identidades_sociales` (solo tipo `miembro` en esta fase);
-- `bloqueos_comunidad`;
-- `reportes_comunidad`;
-- `moderacion_accesos_sociales`;
-- `app_comunidad_general_estado_v036`;
-- `app_comunidad_bloqueados_v036`;
-- `app_comunidad_reportes_v036`;
-- `app_puede_moderar_comunidad_v036`.
+Marcas, gestores, categorías y elementos informativos. URLs/galería requieren HTTPS; el precio es opcional/orientativo. No existen entidades de carrito, pedido, pago, stock, envío, devolución o checkout.
 
-La activación social registra una aceptación en `aceptaciones_legales` contra `textos_legales` `comunidad_general` versión `1.0.0`. La edad mínima se lee de `config_club.edad_min_comunidad_general` con suelo 14. Una identidad suspendida/cerrada no se auto-reactiva desde el perfil.
-
-## Regla futura
-
-Urban Warriors no se trata como ID especial. Los triggers 035/036 dejan plantilla/estructura preparada para un futuro tenant sin desplegar aún selector ni UX multiclub. Los futuros competidor/federación/marca/tienda tendrán modelos propios y se normalizarán en la capa de identidad pública.
+La secuencia operativa completa está en `SUPABASE_KOMBAX_RC13_20022_20025_RUNBOOK.md`.

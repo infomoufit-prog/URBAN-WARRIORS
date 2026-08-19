@@ -1,0 +1,24 @@
+-- KOMBAX build 20030 · test transaccional 057
+-- Ejecutar en un proyecto QA autenticado con cuentas reales. El SQL Editor como
+-- postgres no sustituye una prueba RLS/JWT. Sustituir UUIDs y mantener ROLLBACK.
+begin;
+-- GESTOR/COORDINACIÓN:
+-- select public.app_kombax_ambito_mutate_v057('ambito.save',jsonb_build_object(
+--   'club_id','<CLUB_UUID>','nombre','QA · Monitor A','tipo','monitor'),gen_random_uuid());
+-- Asignar con ambito.team.set un MONITOR_A (finance_level='none'), un ALUMNO_A y GRUPO_A.
+-- Crear un segundo ámbito con MONITOR_B / ALUMNO_B / GRUPO_B.
+--
+-- VALIDAR AUTENTICADO COMO MONITOR_A:
+-- 1. app_kombax_mis_alumnos_v057(CLUB) contiene ALUMNO_A y nunca ALUMNO_B.
+-- 2. SELECT directo FROM socios no devuelve la ficha administrativa de ALUMNO_A/B.
+-- 3. documentos_socios y bucket member-documents no son legibles por ser monitor.
+-- 4. grupos/series/reservas solo muestran el alcance A.
+-- 5. app_kombax_mi_cartera_v057 devuelve 0 filas con finance_level='none'.
+-- 6. Cambiar a status: ve estado/vencimiento, pero importe/saldo/recibo son NULL.
+-- 7. Cambiar a portfolio: ve importes de A, nunca B.
+-- 8. Cambiar a collect: puede registrar cobro de A; cobro de B debe fallar.
+-- 9. gestionar_asistencia=false impide guardar asistencia/check-in aunque vea el alumno.
+-- 10. gestionar_seguimiento=false impide seguimiento/graduación aunque vea el alumno.
+-- 11. MONITOR_B nunca ve ni muta datos operativos/financieros de A.
+-- 12. GESTOR mantiene visión global según sus permisos históricos.
+rollback;

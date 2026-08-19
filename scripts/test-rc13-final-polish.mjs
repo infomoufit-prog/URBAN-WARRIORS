@@ -29,7 +29,8 @@ assert(portal.includes('portal-reserve-next')&&portal.includes('portal-cancel-ne
 assert(app.includes("community:'Comunidad del Club'"),'navegación distingue Comunidad del Club');
 assert(community.includes("pageHeader('Comunidad del Club'")&&community.includes('COMUNIDAD DEL CLUB ·'),'feed interno se identifica explícitamente como Comunidad del Club');
 assert(help.includes('Normas de Comunidad del Club'),'privacidad/ayuda identifica las normas del feed interno');
-assert(portal.includes("card('Social Community'")&&portal.includes('COMUNIDAD GENERAL · SERVICIO SOCIAL OPCIONAL')&&portal.includes('Activar Social Community'),'servicio social futuro se presenta como Social Community / Comunidad General');
+const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]);
+assert(currentBuild>=20024?(portal.includes("card('KOMBAX Social'")&&portal.includes('RED PROFESIONAL GLOBAL · SERVICIO OPCIONAL')&&portal.includes('Activar KOMBAX Social')):(portal.includes("card('Social Community'")&&portal.includes('COMUNIDAD GENERAL · SERVICIO SOCIAL OPCIONAL')&&portal.includes('Activar Social Community')),'servicio social conserva la presentación correspondiente a su fase');
 
 assert(css.includes('.club-public-logo{border-radius:50%')&&css.includes('.brand-block img,.login-visual img,.login-mini-brand img{border-radius:50%'),'logos de club se recortan en marco circular y ocupan el área visual');
 const m=JSON.parse(manifest);const maskable=m.icons.filter(x=>String(x.purpose||'').includes('maskable'));
@@ -37,5 +38,5 @@ assert(maskable.length===2&&maskable.some(x=>x.sizes==='192x192')&&maskable.some
 for(const file of ['web/assets/icons/icon-maskable-192.png','web/assets/icons/icon-maskable-512.png','android/app/src/main/res/drawable/ic_launcher_foreground.png','android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml'])await access(resolve(root,file));
 assert(adaptive.includes('<adaptive-icon')&&adaptive.includes('@color/launcher_background')&&adaptive.includes('@drawable/ic_launcher_foreground')&&colors.includes('launcher_background'),'Android usa adaptive icon con fondo y foreground propios');
 
-assert(config.includes('build: 20020')&&gradle.includes('versionCode 20020')&&sw.includes('rc13-20020'),'runtime, Android y caché identifican build 20020');
-console.log('RC13 BUILD 20020 FINAL POLISH: PASS');
+assert(Number(config.match(/build:\s*(\d+)/)?.[1])>=20020&&Number(gradle.match(/versionCode\s+(\d+)/)?.[1])>=20021&&/rc13-20\d{3}/.test(sw),'runtime web y Android mantienen versionado RC13 monótono');
+console.log('RC13 FINAL POLISH REGRESSION: PASS');

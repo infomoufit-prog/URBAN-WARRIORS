@@ -47,7 +47,7 @@ function eventForm(event=null,disciplines=[],onSaved=renderEvents){
 
 function externalForm(event,participant=null,onSaved){
   const initial=participant||{};
-  openForm({title:participant?'Editar participante externo':'Añadir participante externo',subtitle:'No necesita cuenta ni instalar Urban Warriors. Guarda solo información deportiva necesaria.',width:'820px',initial,fields:[
+  openForm({title:participant?'Editar participante externo':'Añadir participante externo',subtitle:'No necesita cuenta ni instalar KOMBAX. Guarda solo información deportiva necesaria.',width:'820px',initial,fields:[
     {name:'nombre',label:'Nombre',required:true,maxLength:120},{name:'apellidos',label:'Apellidos',maxLength:180},{name:'club_origen',label:'Club de procedencia',maxLength:180},{name:'disciplina_texto',label:'Disciplina',maxLength:160},
     {name:'categoria_texto',label:'Categoría',maxLength:160},{name:'peso',label:'Peso (kg)',type:'number',min:0,step:'0.1'},{name:'grado_texto',label:'Grado / cinturón',maxLength:160},{name:'edad',label:'Edad / categoría de edad',type:'number',min:0,max:120},
     {name:'observaciones',label:'Observaciones deportivas',type:'textarea',rows:3,full:true,maxLength:1000,help:'No introduzcas teléfono, email, dirección, documentos ni otros datos privados.'}

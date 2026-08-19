@@ -53,9 +53,13 @@ export class SupabaseClient {
   }
   async signIn(email,password){const b=await this.request('/auth/v1/token?grant_type=password',{method:'POST',useAuth:false,body:JSON.stringify({email,password})},false);return this.#save(b)}
   async signUp(email,password,data={}){const b=await this.request('/auth/v1/signup',{method:'POST',useAuth:false,body:JSON.stringify({email,password,data})},false);if(b?.access_token)this.#save(b);return b}
+  async requestPasswordRecovery(email){return this.request('/auth/v1/recover',{method:'POST',useAuth:false,body:JSON.stringify({email})},false)}
+  async verifyPasswordRecovery(email,token){const b=await this.request('/auth/v1/verify',{method:'POST',useAuth:false,body:JSON.stringify({type:'recovery',email,token})},false);if(!b?.access_token)throw new Error('No se pudo validar el código de recuperación.');return this.#save(b)}
+  async updatePassword(password){if(!this.session?.access_token)throw new AuthExpiredError('El código de recuperación debe validarse antes de cambiar la contraseña.');return this.request('/auth/v1/user',{method:'PUT',body:JSON.stringify({password})},false)}
   async signOut(){try{if(this.session)await this.request('/auth/v1/logout',{method:'POST'},false)}catch(e){console.warn('Logout remoto:',humanError(e))}finally{this.clear()}}
   async select(table,query='select=*',useAuth=true){return this.request(`/rest/v1/${table}?${query}`,{method:'GET',useAuth})}
   async rpc(name,payload={}){return this.request(`/rest/v1/rpc/${name}`,{method:'POST',body:JSON.stringify(payload)})}
+  async invokeFunction(name,payload={}){return this.request(`/functions/v1/${encodeURIComponent(name)}`,{method:'POST',body:JSON.stringify(payload),timeoutMs:30000})}
   async upload(bucket,path,file,upsert=false){
     await this.fresh(); if(!this.session?.access_token)throw new AuthExpiredError();
     const url=`${this.url}/storage/v1/object/${encodeURIComponent(bucket)}/${path.split('/').map(encodeURIComponent).join('/')}`;

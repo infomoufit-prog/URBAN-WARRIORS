@@ -14,8 +14,10 @@ const events=['evento.guardar','evento.estado','evento.participante.externo','ev
 const notifications=['notificacion.revisar'];
 const clubPublic=['club_publico.guardar'];
 const safety=['comunidad_general.activar','comunidad.denunciar','comunidad.bloquear','comunidad.denuncia.estado','comunidad_general.moderar_acceso'];
-assert(required.length===19,'RC13 build 20020 exige exactamente las 19 capacidades nuevas acumuladas');
-for(const op of [...social,...events,...notifications,...clubPublic,...safety])assert(required.includes(op),`contrato cliente exige ${op}`);
+const currentSafety=safety.filter(op=>op!=='comunidad_general.activar');
+assert(required.length===18,'build 20024 exige las 18 capacidades vigentes del gateway principal');
+for(const op of [...social,...events,...notifications,...clubPublic,...currentSafety])assert(required.includes(op),`contrato cliente exige ${op}`);
+assert(!required.includes('comunidad_general.activar'),'cliente retira la activación legal 1.0 sustituida por el gateway social 041');
 assert(backend.includes('missingOperations')&&backend.includes('Operaciones RC13 ausentes'),'login/restauración falla de forma explícita si Supabase no tiene RC13 completo');
 for(const op of social)assert(m32.includes(`'${op}'`),`032 publica ${op} en contrato runtime`);
 for(const op of events)assert(m33.includes(`'${op}'`),`033 publica ${op} en contrato runtime`);

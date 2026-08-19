@@ -2,7 +2,7 @@ import { backend, client } from './core/backend.js';
 import { state } from './core/state.js';
 import { repos } from './core/repositories.js';
 import { humanError, esc } from './core/utils.js';
-import { shell, setAppHtml, bindDismissAlerts, setError, openForm, closeModal, toast, setNotificationBadge } from './ui/components.js';
+import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge } from './ui/components.js';
 import { navIcon, icon } from './ui/icons.js';
 import { renderDashboard, renderCatalog } from './modules/dashboard-catalog.js';
 import { renderGroups, renderMembers, renderEnrollments } from './modules/groups-members.js';
@@ -15,25 +15,37 @@ import { renderDocuments } from './modules/documents.js';
 import { renderCommunity } from './modules/community.js';
 import { renderEvents } from './modules/events.js';
 import { renderHelpLegal } from './modules/help-legal.js';
+import { KOMBAX_BRAND, platformFeatures, hasExplicitClubSelection, selectedClubSlug, selectedClubPreview, selectClubSlug, clearSelectedClub, themeDefinition } from './core/platform.js';
+import { renderLifecycle } from './modules/lifecycle.js';
+import { renderKombaxGateway, renderClubDirectory, renderDirectProfiles, renderDirectProfileHub } from './modules/gateway.js';
+import { renderKombaxSocial } from './modules/kombax-social.js';
+import { renderShowcase } from './modules/showcase.js';
+import { renderClubKombaxHub } from './modules/club-kombax-hub.js';
+import { renderPlatformAdmin } from './modules/platform-admin.js';
+import { renderWorkScopes } from './modules/work-scopes.js';
+import { openPasswordRecovery } from './modules/auth-recovery.js';
 
 const isPortal=()=>['familia','alumno'].includes(state.session?.rol);
 const routes={
   dashboard:()=>isPortal()?renderPortalDashboard():renderDashboard(),catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
   sessions:renderSessions,attendance:renderAttendance,progress:renderProgress,finance:renderFinance,reminders:renderReminders,communications:renderCommunications,
   tracking:renderTracking,material:renderMaterial,documents:renderDocuments,notifications:renderNotifications,users:renderUsers,settings:renderSettings,diagnostics:renderDiagnostics,
-  certification:renderCertification,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():renderProfile,community:renderCommunity,events:renderEvents,help:renderHelpLegal
+  certification:renderCertification,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():(['direccion','coordinacion'].includes(state.session?.rol)?renderClubKombaxHub():renderProfile), 'personal-profile':renderProfile,'platform-admin':renderPlatformAdmin,scopes:renderWorkScopes,community:renderCommunity,social:renderKombaxSocial,showcase:renderShowcase,events:renderEvents,archive:renderLifecycle,help:renderHelpLegal
 };
-const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app',community:'Comunidad del Club',events:'Eventos',help:'Manual y ayuda'};
+const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app',community:'Comunidad del Club',social:'KOMBAX Social',showcase:'KOMBAX Showcase','platform-admin':'Administración KOMBAX','personal-profile':'Mi perfil personal',scopes:'Ámbitos y privacidad',events:'Eventos',archive:'Archivo y papelera',help:'Manual interactivo'};
 
 function navFor(session){
   const role=session?.rol;let ids;
-  if(role==='direccion'||role==='coordinacion') ids=['dashboard','members','enrollments','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','community','events','material','documents','notifications','users','settings','help','install','profile'];
-  else if(role==='secretaria') ids=['dashboard','enrollments','members','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','community','events','material','documents','notifications','users','settings','help','install','profile'];
+  if(role==='direccion'||role==='coordinacion') ids=['dashboard','members','enrollments','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','community','events','material','documents','archive','notifications','users','scopes','settings','help','install','profile'];
+  else if(role==='secretaria') ids=['dashboard','enrollments','members','catalog','groups','sessions','attendance','progress','tracking','finance','reminders','communications','community','events','material','documents','archive','notifications','users','settings','help','install','profile'];
   else if(role==='economia') ids=['dashboard','finance','reminders','community','events','material','notifications','settings','help','install','profile'];
   else if(role==='comunicacion') ids=['dashboard','communications','community','events','notifications','settings','help','install','profile'];
-  else if(role==='monitor') ids=['dashboard','groups','sessions','attendance','tracking','progress','community','events','notifications','help','install','profile'];
+  else if(role==='monitor') ids=['dashboard','members','groups','sessions','attendance','tracking','progress','finance','community','events','notifications','help','install','profile'];
   else ids=['dashboard','groups','finance','communications','community','events','material','notifications','requests','help','install','profile'];
-  return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?'Hoy':isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':LABEL[id],icon:navIcon(id)}));
+  if(platformFeatures().social){const communityIndex=ids.indexOf('community');ids.splice(communityIndex>=0?communityIndex+1:ids.length,0,'social');}
+  if(platformFeatures().showcase){const socialIndex=ids.indexOf('social');ids.splice(socialIndex>=0?socialIndex+1:ids.length,0,'showcase');}
+  if(session?.platform_admin===true)ids.push('platform-admin');
+  return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?'Hoy':role==='monitor'&&id==='members'?'Mis alumnos':role==='monitor'&&id==='groups'?'Mis grupos':role==='monitor'&&id==='finance'?'Mi cartera':role==='alumno'&&id==='help'?'Mi manual':isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':LABEL[id],icon:navIcon(id)}));
 }
 function mobileNavFor(session){
   const role=session?.rol;let ids;
@@ -41,7 +53,7 @@ function mobileNavFor(session){
   else if(role==='secretaria')ids=['dashboard','enrollments','members','sessions','more'];
   else if(role==='economia')ids=['dashboard','finance','reminders','notifications','more'];
   else if(role==='comunicacion')ids=['dashboard','communications','community','notifications','more'];
-  else if(role==='monitor')ids=['dashboard','groups','attendance','tracking','profile'];
+  else if(role==='monitor')ids=['dashboard','members','groups','attendance','more'];
   else ids=['dashboard','groups','community','finance','profile'];
   const map={more:{id:'more',label:'Más',icon:navIcon('more')}};return ids.map(id=>map[id]||{id,label:isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':role==='monitor'&&id==='dashboard'?'Hoy':LABEL[id],icon:navIcon(id)});
 }
@@ -69,10 +81,10 @@ async function hydrateSessionAvatar(){
 }
 
 function stopNotificationMonitor(){if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}notificationPrimed=false;knownNotificationIds=new Set();}
-async function refreshNotifications({announce=true}={}){
+async function refreshNotifications({announce=true,force=false}={}){
   if(!state.session)return;
   try{
-    const items=await repos.notifications.list();
+    const items=await repos.notifications.list({force});
     const unread=items.filter(n=>!n.leida);
     const unreadGroups=new Set(unread.map(notificationGroupKey));
     state.unreadNotificationCount=unreadGroups.size;setNotificationBadge(unreadGroups.size);
@@ -83,13 +95,13 @@ async function refreshNotifications({announce=true}={}){
       const fresh=items.filter(n=>!knownNotificationIds.has(n.id));
       if(fresh.length){
         const n=fresh[0];toast(fresh.length===1?`Nueva notificación: ${n.titulo}`:`${fresh.length} nuevas notificaciones`);
-        if('Notification' in window&&Notification.permission==='granted'&&document.hidden){try{new Notification(n.titulo||'Urban Warriors',{body:n.cuerpo||'Tienes una nueva notificación.',icon:'./assets/icons/icon-192.png'})}catch{}}
+        if('Notification' in window&&Notification.permission==='granted'&&document.hidden){try{new Notification(n.titulo||'KOMBAX',{body:n.cuerpo||'Tienes una nueva notificación.',icon:'./assets/icons/icon-192.png'})}catch{}}
       }
     }
     knownNotificationIds=ids;notificationPrimed=true;
   }catch(error){console.warn('Centro de notificaciones:',humanError(error));}
 }
-function startNotificationMonitor(){stopNotificationMonitor();refreshNotifications({announce:true});notificationTimer=setInterval(()=>refreshNotifications({announce:true}),45000);}
+function startNotificationMonitor(){stopNotificationMonitor();refreshNotifications({announce:true,force:true});notificationTimer=setInterval(()=>refreshNotifications({announce:true,force:true}),45000);}
 async function syncNativePushToken(){
   try{
     if(!state.session||!window.UrbanWarriorsNative?.getPushToken)return;
@@ -98,14 +110,20 @@ async function syncNativePushToken(){
     await backend.mutate('push.registrar',{token,plataforma:'android'});localStorage.setItem('uw_push_synced_token',key);
   }catch(error){console.warn('Sincronización push:',error)}
 }
-window.addEventListener('uw-notifications-changed',()=>refreshNotifications({announce:false}));
+window.addEventListener('uw-notifications-changed',event=>refreshNotifications({announce:false,force:event.detail?.persisted===true}));
 window.addEventListener('uw-profile-avatar-changed',()=>hydrateSessionAvatar());
 window.addEventListener('uw-native-notification-state',()=>{if(state.route==='profile')navigate('profile',{replace:true});});
 
 async function navigate(id,{replace=false}={}){
-  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));if(state.session?.rol==='direccion'){allowed.add('diagnostics');allowed.add('certification');}if(!allowed.has(id))id='dashboard';state.route=id;
+  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));if(state.session?.platform_admin===true){allowed.add('diagnostics');allowed.add('certification');}if(['direccion','coordinacion'].includes(state.session?.rol))allowed.add('personal-profile');if(state.session?.platform_admin===true)allowed.add('platform-admin');if(!allowed.has(id))id='dashboard';state.route=id;
   if(replace)history.replaceState({route:id},'',`#${id}`);else if(location.hash!==`#${id}`)history.pushState({route:id},'',`#${id}`);
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
+}
+function openClubSwitcher(){
+  const memberships=state.session?.memberships||[],clubs=[...new Map(memberships.filter(x=>x.club?.slug).map(x=>[x.club_id,x.club])).values()];
+  if(clubs.length<2)return;
+  const {wrap}=openDetail({title:'Cambiar de club',subtitle:'La identidad es la misma; datos, permisos, tema y caché cambian con el contexto.',body:`<div class="club-context-list">${clubs.map(club=>`<button type="button" data-club-context="${esc(club.slug)}" class="club-context-row ${club.id===state.session.club_id?'active':''}"><span>${esc(String(club.nombre||'K').slice(0,2).toUpperCase())}</span><div><strong>${esc(club.nombre)}</strong><small>${esc(club.lema||club.slug)}</small></div>${club.id===state.session.club_id?'<b>ACTUAL</b>':'<b>CAMBIAR</b>'}</button>`).join('')}</div>`});
+  wrap.querySelectorAll('[data-club-context]').forEach(button=>button.addEventListener('click',async()=>{if(button.dataset.clubContext===state.session?.club?.slug){closeModal();return;}button.disabled=true;try{stopNotificationMonitor();await backend.switchClub(button.dataset.clubContext);closeModal();renderShell();toast(`Contexto cambiado a ${state.session.club.nombre}`);}catch(error){button.disabled=false;startNotificationMonitor();setError(error);}}));
 }
 function bindShellNavigation(){
   const shell=document.querySelector('.app-shell'),sidebar=document.getElementById('sidebar'),menuButton=document.getElementById('menu-btn'),scrim=document.getElementById('sidebar-scrim');
@@ -116,66 +134,111 @@ function bindShellNavigation(){
   scrim?.addEventListener('click',()=>setSidebarOpen(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&sidebar?.classList.contains('open'))setSidebarOpen(false)},{once:false});
   document.getElementById('logout-btn')?.addEventListener('click',async()=>{stopNotificationMonitor();await backend.signOut();renderLogin();});
+  document.getElementById('club-context-button')?.addEventListener('click',openClubSwitcher);
 }
 function renderShell(){
-  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.rol==='direccion'){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
+  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.platform_admin===true){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
+}
+
+function renderGatewayRoot(){
+  renderKombaxGateway({onClubDirectory:()=>renderClubDirectory({onBack:renderGatewayRoot,onSelect:club=>{selectClubSlug(club.slug,club);renderClubLogin();}}),onDirectProfiles:()=>renderDirectProfiles({onBack:renderGatewayRoot})});
 }
 
 function renderLogin(prefillEmail=''){
   state.session=null;
-  setAppHtml(`<div class="login-shell"><section class="login-visual"><div class="login-brand"><img src="./assets/urban-warriors-logo.png" alt="Urban Warriors"><div class="slogan">Bring the Pain</div><h1>URBAN<br>WARRIORS</h1><p>Tu gimnasio, tus clases y tu evolución. Gestión premium para equipo, alumnado y familias.</p></div><div class="login-foot">Urban Warriors · Bring the Pain</div></section><section class="login-card-wrap"><form class="login-card" id="login-form"><div class="login-mini-brand"><img src="./assets/urban-warriors-logo.png" alt=""><div><strong>URBAN WARRIORS</strong><small>Bring the Pain</small></div></div><h2>Bienvenido/a</h2><p>Accede a tu cuenta del club.</p><div id="login-error" class="login-error" hidden></div><div class="field"><label>Email</label><input name="email" type="email" autocomplete="username" value="${esc(prefillEmail)}" required></div><div class="field"><label>Contraseña</label><input name="password" type="password" autocomplete="current-password" required></div><button class="btn btn-primary" id="login-submit" type="submit">Entrar</button><div class="login-link-row"><button class="btn btn-ghost btn-sm" type="button" id="register-btn">Crear cuenta</button><button class="btn btn-ghost btn-sm" type="button" id="invite-btn">Tengo invitación</button></div><div class="login-install"><button type="button" id="public-install">Instalar Urban Warriors</button></div></form></section></div>`);
-  const form=document.getElementById('login-form'),btn=document.getElementById('login-submit'),box=document.getElementById('login-error');
-  form.addEventListener('submit',async e=>{e.preventDefault();e.stopPropagation();if(!form.reportValidity())return;btn.disabled=true;btn.textContent='Validando…';box.hidden=true;try{const fd=new FormData(form);await backend.signIn(fd.get('email'),fd.get('password'));renderShell();}catch(error){box.hidden=false;box.textContent=humanError(error);btn.disabled=false;btn.textContent='Entrar';}});
-  document.getElementById('register-btn')?.addEventListener('click',openRegistrationChoice);document.getElementById('invite-btn')?.addEventListener('click',()=>openInvitation());document.getElementById('public-install')?.addEventListener('click',openPublicInstall);
-  const params=new URLSearchParams(location.search);if(params.get('invite'))setTimeout(()=>openInvitation(params.get('invite')),50);
+  if(platformFeatures().gateway&&!hasExplicitClubSelection()){renderGatewayRoot();return;}
+  renderClubLogin(prefillEmail);
+}
+
+function renderClubLogin(prefillEmail=''){
+  state.session=null;
+  const preview=selectedClubPreview()||{};const clubName=preview.nombre||'Tu club',clubSlogan=preview.lema||'Tu comunidad deportiva';const logo=/^(https:\/\/|\.\/|\/)/i.test(String(preview.logo_url||''))?preview.logo_url:KOMBAX_BRAND.symbol;const theme=themeDefinition(preview.theme_id);
+  const kombaxMark=`<div class="kombax-cobrand" aria-label="Tecnología ${esc(KOMBAX_BRAND.name)}"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""><span><strong>${esc(KOMBAX_BRAND.name)}</strong><small>${esc(KOMBAX_BRAND.tagline)}</small></span></div>`;
+  setAppHtml(`<div class="login-shell ${esc(theme.className)}"><section class="login-visual">${kombaxMark}<div class="login-brand"><img src="${esc(logo)}" alt="${esc(clubName)}"><div class="slogan">${esc(clubSlogan)}</div><h1>${esc(clubName.toUpperCase())}</h1><p>Tu club, tus clases y tu evolución. Gestión profesional para equipo, alumnado y familias.</p></div><div class="login-foot">${esc(clubName)} · tecnología ${esc(KOMBAX_BRAND.name)}</div></section><section class="login-card-wrap"><form class="login-card" id="login-form">${kombaxMark}<div class="login-mini-brand"><img src="${esc(logo)}" alt=""><div><strong>${esc(clubName.toUpperCase())}</strong><small>${esc(clubSlogan)}</small></div></div><div class="login-kicker">ACCESO PRIVADO DEL CLUB</div><h2>Bienvenido/a</h2><p>Accede a tu cuenta de ${esc(clubName)}.</p><div id="login-error" class="login-error" hidden></div><div class="field login-field"><label for="login-email">Email</label><div class="login-input-shell">${icon('mail',{size:18})}<input id="login-email" name="email" type="email" autocomplete="username" value="${esc(prefillEmail)}" required></div></div><div class="field login-field login-password-wrap"><label for="login-password">Contraseña</label><div class="login-input-shell">${icon('key',{size:18})}<input id="login-password" name="password" type="password" autocomplete="current-password" required><button class="login-password-toggle" id="password-toggle" type="button" aria-label="Mostrar contraseña">${icon('eye',{size:18})}</button></div></div><button class="btn btn-primary" id="login-submit" type="submit">Entrar ${icon('chevronRight',{size:17})}</button><button class="login-recovery-link" type="button" id="forgot-password-btn">¿Has olvidado tu contraseña?</button><div class="login-link-row"><button class="btn btn-ghost btn-sm" type="button" id="register-btn">Crear cuenta</button><button class="btn btn-ghost btn-sm" type="button" id="invite-btn">Tengo código del club</button></div>${platformFeatures().gateway?`<button class="club-login-back" type="button" id="back-to-kombax">${icon('chevronLeft',{size:15})} Elegir otro club</button>`:''}<div class="login-install"><button type="button" id="public-install">Instalar ${esc(KOMBAX_BRAND.name)}</button></div></form></section></div>`);
+  const form=document.getElementById('login-form'),btn=document.getElementById('login-submit'),box=document.getElementById('login-error'),password=document.getElementById('login-password'),toggle=document.getElementById('password-toggle');
+  toggle?.addEventListener('click',()=>{const visible=password.type==='text';password.type=visible?'password':'text';toggle.setAttribute('aria-label',visible?'Mostrar contraseña':'Ocultar contraseña');toggle.innerHTML=icon(visible?'eye':'eyeOff',{size:18});password.focus();});
+  form.addEventListener('submit',async e=>{e.preventDefault();e.stopPropagation();if(!form.reportValidity())return;btn.disabled=true;btn.textContent='Validando…';box.hidden=true;try{const fd=new FormData(form);await backend.signIn(fd.get('email'),fd.get('password'));renderShell();}catch(error){box.hidden=false;box.textContent=humanError(error);btn.disabled=false;btn.innerHTML=`Entrar ${icon('chevronRight',{size:17})}`;}});
+  document.getElementById('register-btn')?.addEventListener('click',openRegistrationChoice);document.getElementById('invite-btn')?.addEventListener('click',()=>openInvitationChoice());document.getElementById('public-install')?.addEventListener('click',openPublicInstall);
+  document.getElementById('forgot-password-btn')?.addEventListener('click',()=>openPasswordRecovery({prefillEmail:document.getElementById('login-email')?.value||prefillEmail,onComplete:email=>renderClubLogin(email)}));
+  document.getElementById('back-to-kombax')?.addEventListener('click',()=>{clearSelectedClub();renderGatewayRoot();});
+  const params=new URLSearchParams(location.search);const accessCode=params.get('access_code')||params.get('invite');if(accessCode)setTimeout(()=>openInvitationChoice(accessCode,params.get('access_type')||params.get('invite_type')||''),50);
 }
 
 function ageYears(value){const d=new Date(`${value}T12:00:00`);if(Number.isNaN(d.getTime()))return null;const now=new Date();let years=now.getFullYear()-d.getFullYear();const before=now.getMonth()<d.getMonth()||(now.getMonth()===d.getMonth()&&now.getDate()<d.getDate());if(before)years--;return years;}
 async function publicCatalog(){
-  const clubs=await client.select('clubes',`select=id,nombre&slug=eq.${encodeURIComponent(window.UW_CONFIG.clubSlug)}&activo=eq.true&limit=1`,false);const club=clubs?.[0];if(!club)throw new Error('Club no disponible.');
-  const [d,g,t,legal]=await Promise.all([client.select('disciplinas',`select=*&club_id=eq.${club.id}&activa=eq.true&order=orden`,false),client.select('grupos',`select=*&club_id=eq.${club.id}&activo=eq.true&order=nombre`,false),client.select('tarifas',`select=*&club_id=eq.${club.id}&activa=eq.true&order=nombre`,false),client.select('textos_legales',`select=id,tipo,version,cuerpo&club_id=eq.${club.id}&vigente=eq.true&order=tipo`,false).catch(()=>[])]);return {club,d,g,t,legal};
+  const out=await client.rpc('app_kombax_registro_catalogo_publico_v087',{p_club_slug:selectedClubSlug()});
+  if(!out?.available||!out.club?.id)throw new Error('Club no disponible.');
+  return {club:out.club,d:Array.isArray(out.d)?out.d:[],g:Array.isArray(out.g)?out.g:[],t:Array.isArray(out.t)?out.t:[],legal:Array.isArray(out.legal)?out.legal:[]};
 }
 function openRegistrationChoice(){
-  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar Urban Warriors.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Tengo 16 años o más y quiero inscribirme como alumno</strong><small>Crearé mi propia cuenta y enviaré mi solicitud deportiva al club.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>El personal accede mediante una invitación del Gestor de la app.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Si eres menor de 16 años no crees una cuenta de alumno independiente: tu alta se gestiona mediante el club o la cuenta de tu padre, madre o tutor.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitation();else openRegistration(type)}));
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><div class="registration-platform-mark"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""><span>Tecnología KOMBAX</span></div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar el entorno de tu club.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Tengo 16 años o más y quiero inscribirme como alumno</strong><small>Crearé mi propia cuenta y enviaré mi solicitud deportiva al club.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>Usa el código de equipo del club. Tu solicitud quedará pendiente hasta que Gestor o Coordinación valide tu acceso y rol.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Si eres menor de 16 años no crees una cuenta de alumno independiente: tu alta se gestiona mediante el club o la cuenta de tu padre, madre o tutor.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitation();else openRegistration(type)}));
 }
 function showPublicLegal(doc){
   const d=document.createElement('dialog');d.className='legal-dialog';d.innerHTML=`<div class="legal-dialog-head"><div><strong>${esc(({condiciones_uso:'Condiciones de uso',privacidad:'Política de privacidad',comunidad:'Normas de Comunidad del Club',derechos_imagen:'Autorización de imagen'})[doc.tipo]||doc.tipo)}</strong><small>Versión ${esc(doc.version||'')}</small></div><button class="icon-btn" aria-label="Cerrar">${icon('close')}</button></div><div class="legal-dialog-body">${esc(doc.cuerpo||'').replace(/\n/g,'<br>')}</div>`;document.body.appendChild(d);d.querySelector('button').addEventListener('click',()=>{d.close();d.remove()});d.addEventListener('close',()=>d.remove());d.showModal();}
-async function openRegistration(type){
+async function openRegistration(type,invite=null){
   try{
     const c=await publicCatalog();const tutor=type==='tutor';const byType=Object.fromEntries((c.legal||[]).map(x=>[x.tipo,x]));
     const modal=openForm({title:tutor?'Cuenta familiar':'Cuenta de alumno',subtitle:'Cuenta → datos → solicitud deportiva → consentimientos',width:'900px',fields:[
-      {name:'email',label:'Email de acceso',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true},{name:'adulto_nombre',label:tutor?'Nombre del adulto':'Nombre',required:true},{name:'adulto_apellidos',label:tutor?'Apellidos del adulto':'Apellidos',required:true},{name:'adulto_fecha_nacimiento',label:tutor?'Nacimiento adulto (opcional)':'Fecha de nacimiento',type:'date',required:!tutor},{name:'telefono',label:'Teléfono',required:true},
+      {name:'email',label:'Email de acceso',type:'email',required:true,value:invite?.email||''},{name:'password',label:'Contraseña',type:'password',required:true},{name:'adulto_nombre',label:tutor?'Nombre del adulto':'Nombre',required:true},{name:'adulto_apellidos',label:tutor?'Apellidos del adulto':'Apellidos',required:true},{name:'adulto_fecha_nacimiento',label:tutor?'Nacimiento adulto (opcional)':'Fecha de nacimiento',type:'date',required:!tutor},{name:'telefono',label:'Teléfono',required:true},
       ...(tutor?[{name:'menor_nombre',label:'Nombre del menor',required:true},{name:'menor_apellidos',label:'Apellidos del menor',required:true},{name:'menor_fecha_nacimiento',label:'Nacimiento menor',type:'date',required:true}]:[]),
       {name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:c.d.map(x=>({value:x.id,label:x.nombre}))},{name:'grupo_id',label:'Grupo preferido',type:'select',options:c.g.map(x=>({value:x.id,label:x.nombre}))},{name:'tarifa_id',label:'Tarifa',type:'select',options:c.t.map(x=>({value:x.id,label:`${x.nombre} · ${Number(x.importe||0).toFixed(2)} €`}))},
-      {name:'terms',label:'He leído y acepto las Condiciones de uso.',type:'checkbox',value:false,required:true,full:true},{name:'privacy',label:'He leído la Política de privacidad.',type:'checkbox',value:false,required:true,full:true},{name:'image_rights',label:tutor?'Autorizo, de forma opcional, el uso de la imagen del menor dentro de Urban Warriors.':'Autorizo, de forma opcional, el uso de mi imagen dentro de Urban Warriors.',type:'checkbox',value:false,full:true}
+      {name:'terms',label:'He leído y acepto las Condiciones de uso.',type:'checkbox',value:false,required:true,full:true},{name:'privacy',label:'He leído la Política de privacidad.',type:'checkbox',value:false,required:true,full:true},{name:'image_rights',label:tutor?'Autorizo, de forma opcional, el uso de la imagen del menor dentro del club.':'Autorizo, de forma opcional, el uso de mi imagen dentro del club.',type:'checkbox',value:false,full:true}
     ],submitText:'Crear cuenta y enviar solicitud',onSubmit:async v=>{
       if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de privacidad.');
       if(!tutor){const years=ageYears(v.adulto_fecha_nacimiento);if(years==null)throw new Error('Indica una fecha de nacimiento válida.');if(years<16)throw new Error('El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor, utiliza el alta mediante tutor o contacta con el club.');}
       const legal_acceptances=[{tipo:'condiciones_uso',version:byType.condiciones_uso?.version||'2.0.0',aceptado:true},{tipo:'privacidad',version:byType.privacidad?.version||'2.0.0',aceptado:true},{tipo:'derechos_imagen',version:byType.derechos_imagen?.version||'2.0.0',aceptado:v.image_rights===true}];
-      const r=await backend.registerAccount({...v,tipo_cuenta:type,legal_acceptances});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderShell();}
+      const r=await backend.registerAccount({...v,tipo_cuenta:type,legal_acceptances,invite_code:invite?.code||null,club_slug:invite?.club_slug||selectedClubSlug()});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderShell();}
     }});
+    modal.wrap.querySelector('.modal-head>div')?.insertAdjacentHTML('afterbegin',`<div class="registration-platform-mark"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""><span>Tecnología KOMBAX</span></div>`);
     const grid=modal.form.querySelector('.form-grid');const legalBox=document.createElement('div');legalBox.className='registration-legal-links field full';legalBox.innerHTML=`<strong>Lee antes de aceptar</strong><div class="row-actions">${['condiciones_uso','privacidad','comunidad','derechos_imagen'].filter(k=>byType[k]).map(k=>`<button type="button" class="btn btn-ghost btn-sm legal-preview" data-type="${esc(k)}">${esc(({condiciones_uso:'Condiciones de uso',privacidad:'Privacidad',comunidad:'Comunidad del Club',derechos_imagen:'Derechos de imagen'})[k])}</button>`).join('')}</div><small>La autorización de imagen es opcional y puede retirarse posteriormente.</small>`;grid.appendChild(legalBox);legalBox.querySelectorAll('.legal-preview').forEach(b=>b.addEventListener('click',()=>showPublicLegal(byType[b.dataset.type])));
   }catch(e){setError(e)}
 }
-function openInvitation(prefill=''){
-  openForm({title:'Acceso del equipo',subtitle:'Acepta una invitación con una cuenta existente o crea una nueva.',width:'720px',fields:[{name:'token',label:'Token de invitación',required:true,value:prefill},{name:'modo',label:'¿Ya tienes cuenta?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},{name:'email',label:'Email invitado',type:'email',required:true},{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'password',label:'Contraseña (solo cuenta nueva)',type:'password'}],submitText:'Continuar',onSubmit:async v=>{
-    if(v.modo==='existente'){await backend.acceptInvitation(v.token,v.email);toast('Invitación preparada. Inicia sesión con el email invitado.');renderLogin(v.email);return;}
-    if(!v.password||v.password.length<6)throw new Error('Indica una contraseña de al menos 6 caracteres para crear la cuenta.');const auth=await client.signUp(v.email,v.password,{nombre:v.nombre||'',apellidos:v.apellidos||'',tipo_cuenta:'personal_invitado',club_slug:window.UW_CONFIG.clubSlug});
-    if(!auth?.access_token){localStorage.setItem('uw2_pending_invitation',JSON.stringify({token:v.token,email:v.email}));toast('Cuenta creada. Confirma tu email y después inicia sesión para aceptar la invitación.');renderLogin(v.email);return;}
-    const r=await backend.acceptInvitation(v.token,v.email);if(r.loginRequired){toast('Inicia sesión para completar la invitación');renderLogin(v.email);}else{toast('Invitación aceptada. Inicia sesión con tu nueva cuenta.');await backend.signOut();renderLogin(v.email);}
+function openInvitationChoice(prefill='',prefillType=''){
+  const type=String(prefillType||'').toLowerCase();
+  if(type==='alumno'||type==='alumnos'||type==='familia')return openStudentAccessCode(prefill);
+  if(type==='equipo')return openTeamAccessCode(prefill);
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:720px"><div class="modal-head"><div><h2>Tengo un código del club</h2><p>Introduce el código corto que te ha facilitado el club o que aparece junto a su QR.</p></div><button class="icon-btn" id="invitation-choice-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-access-kind="alumnos"><strong>Alumnos y familias</strong><small>Para solicitar el alta como alumno/a o crear una cuenta de padre, madre o tutor.</small></button><button class="choice-card" data-access-kind="equipo"><strong>Miembros del equipo</strong><small>Para crear tu cuenta y solicitar acceso al equipo del club. El rol se valida después.</small></button></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#invitation-choice-close')?.addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-access-kind]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.accessKind;closeModal();if(k==='alumnos')openStudentAccessCode(prefill);else openTeamAccessCode(prefill);}));
+}
+function accessClubSlug(){
+  const slug=selectedClubSlug();
+  if(!slug)throw new Error('Primero abre el QR o selecciona el club al que quieres acceder.');
+  return slug;
+}
+function openStudentAccessCode(prefill=''){
+  let slug;try{slug=accessClubSlug();}catch(error){toast(error.message,'error');return;}
+  openForm({title:'Código para alumnos y familias',subtitle:'Escribe el código de 4 o 5 dígitos del club. El mismo código puede usarse mientras el club no lo cambie.',width:'720px',fields:[{name:'code',label:'Código del club',required:true,value:prefill,placeholder:'12345',inputmode:'numeric'},{name:'modo',label:'¿Quién se registra?',type:'select',required:true,value:'adulto',options:[{value:'adulto',label:'Alumno/a de 16 años o más'},{value:'tutor',label:'Padre, madre o tutor de un menor'}]}],submitText:'Continuar',onSubmit:async v=>{
+    const code=String(v.code||'').trim();if(!/^\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');
+    const club=selectedClubPreview()||{slug,nombre:slug};
+    setTimeout(()=>openRegistration(v.modo,{code,club_slug:slug,club_nombre:club.nombre||slug}),220);
+  }});
+}
+function openTeamAccessCode(prefill=''){
+  let slug;try{slug=accessClubSlug();}catch(error){toast(error.message,'error');return;}
+  openForm({title:'Código para miembros del equipo',subtitle:'El código permite crear o vincular tu cuenta al club. No concede permisos automáticamente: Gestor o Coordinación revisarán la solicitud y asignarán el rol.',width:'760px',fields:[{name:'code',label:'Código de equipo',required:true,value:prefill,placeholder:'54321',inputmode:'numeric'},{name:'modo',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},{name:'email',label:'Email',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true},{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'}],submitText:'Enviar solicitud',onSubmit:async v=>{
+    const code=String(v.code||'').trim();if(!/^\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');
+    if(String(v.password||'').length<6)throw new Error('La contraseña debe tener al menos 6 caracteres.');
+    if(v.modo==='existente'){
+      await backend.signInGlobal(v.email,v.password);await backend.requestTeamAccess(slug,code,v.email);
+      toast('Solicitud de acceso al equipo enviada. El club debe revisarla.','ok');await backend.signOut();renderClubLogin(v.email);return;
+    }
+    if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');
+    const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos});
+    if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({club_slug:slug,code,email:v.email}));toast('Cuenta creada. Confirma tu email y después accede a KOMBAX; la solicitud quedará registrada.');renderGatewayRoot();return;}
+    await backend.requestTeamAccess(slug,code,v.email);toast('Cuenta creada y solicitud de equipo enviada.','ok');await backend.signOut();renderClubLogin(v.email);
   }});
 }
 function openPublicInstall(){
-  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:680px"><div class="modal-head"><div><h2>Instalar Urban Warriors</h2><p>Lleva el club contigo en el móvil.</p></div><button class="icon-btn" id="modal-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:24px;text-align:center"><img src="./assets/install-qr.png" alt="QR" style="width:240px;max-width:70%;background:#fff;padding:10px;border-radius:18px"><p class="muted">Escanea el QR o instala la PWA desde el navegador.</p><div class="row-actions" style="justify-content:center"><button class="btn btn-primary" id="install-now">Instalar aplicación</button><a class="btn btn-ghost" href="./assets/docs/manual-usuario/01_portada_manual_usuario.png" target="_blank">Ver guía visual</a></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#modal-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelector('#install-now').addEventListener('click',async()=>{if(window.__uwInstallPrompt){window.__uwInstallPrompt.prompt();await window.__uwInstallPrompt.userChoice;window.__uwInstallPrompt=null;}else toast('Usa el menú del navegador → Instalar aplicación.','error')});
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:680px"><div class="modal-head"><div><h2>Instalar KOMBAX</h2><p>Lleva tu portal de club contigo en el móvil.</p></div><button class="icon-btn" id="modal-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:24px;text-align:center"><img src="./assets/install-qr.png" alt="QR" style="width:240px;max-width:70%;background:#fff;padding:10px;border-radius:18px"><p class="muted">Escanea el QR o instala la PWA desde el navegador.</p><div class="row-actions" style="justify-content:center"><button class="btn btn-primary" id="install-now">Instalar aplicación</button></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#modal-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelector('#install-now').addEventListener('click',async()=>{if(window.__uwInstallPrompt){window.__uwInstallPrompt.prompt();await window.__uwInstallPrompt.userChoice;window.__uwInstallPrompt=null;}else toast('Usa el menú del navegador → Instalar aplicación.','error')});
 }
 
 async function boot(){
+  const entryParams=new URLSearchParams(location.search);if(entryParams.get('club')){try{const slug=selectClubSlug(entryParams.get('club'));const matches=await client.rpc('app_buscar_clubes_kombax_v040',{p_query:slug,p_limit:5}).catch(()=>[]),club=(matches||[]).find(x=>x.slug===slug);if(club)selectClubSlug(slug,club);}catch(error){console.warn('Enlace de club no válido:',error)}}
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__uwInstallPrompt=e;});
   window.addEventListener('uw-native-push-token',async e=>{try{if(state.session&&e.detail){await backend.mutate('push.registrar',{token:e.detail,plataforma:'android'});localStorage.setItem('uw_push_synced_token',`${state.session.id}:${e.detail}`);}}catch(error){console.warn('Push token:',error)}});
-  window.addEventListener('popstate',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
-  window.addEventListener('hashchange',()=>{if(state.session)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
-  window.addEventListener('focus',()=>{if(state.session)refreshNotifications({announce:true})});
-  try{const session=await backend.restore();if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();}
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register('./service-worker.js?v=20019').catch(e=>console.warn('Service worker:',e));
+  window.addEventListener('popstate',()=>{if(state.session?.club_id)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
+  window.addEventListener('hashchange',()=>{if(state.session?.club_id)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
+  window.addEventListener('focus',()=>{if(state.session?.club_id)refreshNotifications({announce:true})});
+  try{const session=await backend.restore();if(session?.scope==='kombax')renderDirectProfileHub({onBack:renderGatewayRoot});else if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();}
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));
 }
 boot();

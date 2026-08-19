@@ -5,7 +5,7 @@ const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL RC8: ${msg}`);console.log(`
 const [cfg,repos,portal,training,docs,supa,backend,admin,sql]=await Promise.all([
   read('web/config.js'),read('web/js/core/repositories.js'),read('web/js/modules/portal.js'),read('web/js/modules/training.js'),read('web/js/modules/documents.js'),read('web/js/core/supabase.js'),read('web/js/core/backend.js'),read('web/js/modules/admin.js'),read('supabase/migrations/020_session_reservations_document_download_v164.sql')
 ]);
-assert(cfg.includes("version: '2.0.0-rc.13'")&&cfg.includes('build: 20020')&&cfg.includes("app_diagnostico_final_v166"),'regresión RC8 preservada en RC13 build 20020 / v166');
+assert(cfg.includes("version: '2.0.0-rc.13'")&&Number(cfg.match(/build:\s*(\d+)/)?.[1])>=20020&&cfg.includes("app_diagnostico_final_v166"),'regresión RC8 preservada en RC13 / v166');
 assert(sql.includes('create table if not exists public.reservas_sesion')&&sql.includes("'sesion.reserva.confirmar'")&&sql.includes("'sesion.reserva.cancelar'"),'tabla y operaciones de reserva gobernadas');
 assert(sql.includes('Aforo completo para esta sesión')&&sql.includes('for update of s'),'aforo protegido frente a concurrencia');
 assert(sql.includes("public.puede_ver_socio(v_socio_id)")&&sql.includes('socio_disciplinas')&&sql.includes('and sd.activa'),'reserva limitada al alumno/familia autorizado y matrícula activa');

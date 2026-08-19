@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=process.cwd(),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const assert=(ok,msg)=>{if(!ok)throw new Error(`20038 identity/album/media: ${msg}`);console.log(`OK 20038: ${msg}`)};
+const [ui,club,repos,social,identity,pub,admin,css,mig,hardening,cfg,index,sw,gradle,pkg,platform]=[
+'web/js/ui/components.js','web/js/modules/club-profile.js','web/js/core/repositories.js','web/js/modules/kombax-social.js','web/js/core/identity-context.js','web/js/modules/public-profile.js','web/js/modules/admin.js','web/css/kombax-premium.css','supabase/migrations/063_kombax_identity_album_media_20038.sql','supabase/migrations/064_kombax_identity_helpers_hardening_20038.sql','web/config.js','web/index.html','web/service-worker.js','android/app/build.gradle','package.json','web/js/modules/platform-admin.js'].map(read);
+const build=Number((cfg.match(/build:\s*(\d+)/)||[])[1]||0),android=Number((gradle.match(/versionCode\s+(\d+)/)||[])[1]||0),indexBuild=Math.max(...[...index.matchAll(/v=(20\d{3})/g)].map(m=>Number(m[1])),0),swBuild=Number((sw.match(/20\d{3}/)||[])[0]||0);
+assert(build>=20038&&android===build&&indexBuild===build&&swBuild===build,'trace 20038+ coherente en web/PWA/Android');
+assert(ui.includes("Array.isArray(o)?{value:o[0],label:o[1]}")&&ui.includes("o.label??o.value"),'select renderer tolera objetos y tuplas legacy');
+assert(club.includes("{value:'photo',label:'Fotografía'}")&&club.includes("{value:'video',label:'Vídeo · máximo 15 s'}"),'selector del álbum muestra Tipo legible y valores válidos');
+assert(![club,pub,platform].some(x=>x.includes('options:[[')),'no quedan selectores tuple defectuosos en superficies auditadas');
+assert(repos.includes("const normalizedType=['photo','video'].includes(requested)?requested:detected")&&repos.includes('tipo:normalizedType'),'upload de álbum normaliza/valida tipo antes del backend');
+assert(repos.includes('syncPrivateAvatarToKombaxSocial')&&repos.includes("backend.download('profile-media'")&&repos.includes("uploadKombaxSocialMedia(socialId,'avatar'"),'self-heal de avatar solo desde sesión propietaria hacia copia pública');
+assert(admin.includes('sync-public-avatar')&&admin.includes('repos.kombaxSocial.syncPrivateAvatar'),'Mi perfil ofrece reparación explícita del avatar social histórico');
+assert(identity.includes("return path?backend.publicUrl('kombax-public-media',path):(url||'')"),'avatar Social explícito tiene prioridad sobre URL heredada');
+assert(social.includes('newClubMedia')&&social.includes('newDirectMedia')&&social.includes('removeAlbumMedia')&&social.includes('removeMedia(newSocialMedia)'),'publicador revierte media nueva si falla la publicación');
+assert(social.includes('const alreadyAttached=')&&social.includes('x.storage_path===source.storage_path')&&social.includes("if(source._source_type==='social')socialMediaId=source.id"),'reutilizar álbum evita duplicar adjuntos sociales ya existentes');
+assert(/catch\(error\)\{\s*if\(newSocialMedia\)/.test(social),'rollback elimina adjunto Social recién creado aunque la fuente viniera de un álbum existente');
+assert(css.includes('.kombax-post-media img{display:block;width:auto;max-width:100%;height:auto')&&css.includes('object-fit:contain')&&css.includes('.kx-media-viewer'),'feed y visor conservan proporción y permiten vista completa');
+assert(!css.includes('.kombax-social-post:hover .kombax-post-media img{transform:scale(1.012)}'),'feed no recorta por zoom hover');
+assert(club.includes('data-club-media-open')&&pub.includes('data-kx-public-photo'),'álbum de club y perfil público abren fotografía completa');
+assert(mig.includes("array_length(storage.foldername(name),1)>=3")&&mig.includes('app_kombax_social_avatar_url_v063')&&mig.includes('avatar_url=new.logo_url')&&mig.includes('avatar_url=pc.logo_url'),'migración corrige RLS, fuente canónica y backfill de Club');
+for(const rpc of ['app_kombax_social_directorio_v052','app_kombax_social_feed_v053','app_kombax_social_mis_perfiles_v051','app_kombax_social_comentarios_v053','app_kombax_perfil_publico_v053'])assert(mig.includes(rpc),`RPC ${rpc} usa identidad visual efectiva`);
+assert(fs.existsSync(path.join(root,'supabase/verification/verify_063_kombax_identity_album_media_20038.sql')),'verificación SQL 063 presente');
+assert(hardening.includes("from public,anon,authenticated")&&fs.existsSync(path.join(root,'supabase/verification/verify_064_kombax_identity_helpers_hardening_20038.sql')),'helpers internos 063 quedan sin EXECUTE directo y con verificación 064');
+assert(pkg.includes('test-kombax-20038-identity-album-media.mjs'),'suite principal incluye regresión 20038');
+console.log('KOMBAX BUILD 20038 IDENTITY + ALBUM + MEDIA: PASS');

@@ -1,5 +1,5 @@
 window.UW_CONFIG = {
-  appName: 'Urban Warriors',
+  appName: 'KOMBAX',
   clubSlug: 'urban-warriors',
   primaryClubId: '11111111-1111-4111-8111-111111111111',
   locale: 'es-ES',
@@ -12,7 +12,7 @@ window.UW_CONFIG = {
   },
   release: {
     version: '2.0.0-rc.13',
-    build: 20020,
+    build: 20057,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',
@@ -23,10 +23,18 @@ window.UW_CONFIG = {
       'perfil_deportivo.guardar','perfil_deportivo.foto','perfil_deportivo.moderar','comunidad.like',
       'evento.guardar','evento.estado','evento.participante.externo','evento.inscripcion.solicitar',
       'evento.inscripcion.estado','evento.inscripcion.baja','evento.combate.guardar','evento.combate.eliminar',
-      'notificacion.revisar','club_publico.guardar','comunidad_general.activar','comunidad.denunciar',
+      'notificacion.revisar','club_publico.guardar','comunidad.denunciar',
       'comunidad.bloquear','comunidad.denuncia.estado','comunidad_general.moderar_acceso'
     ],
     webUrl: 'https://urban01.netlify.app'
+  },
+  features: {
+    kombaxGateway: true,
+    directProfiles: true,
+    kombaxSocial: true,
+    kombaxShowcase: true,
+    demoDirectory: false,
+    showcaseDemo: false
   },
   brand: {
     name: 'Urban Warriors',

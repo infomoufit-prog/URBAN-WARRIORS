@@ -201,8 +201,13 @@ public class MainActivity extends Activity {
 
     private void applySafeAreasToFrontend() {
         if (webView == null) return;
-        final int top = Math.max(0, safeAreaTopPx);
-        final int bottom = Math.max(0, safeAreaBottomPx);
+        // WindowInsets entrega píxeles físicos, mientras que la WebView interpreta
+        // los valores CSS en píxeles independientes de densidad. Inyectar el valor
+        // físico sin convertirlo triplicaba aproximadamente los márgenes en móviles
+        // xxhdpi/xxxhdpi. Convertimos una sola vez antes de exponerlos al frontend.
+        final float density = Math.max(1f, getResources().getDisplayMetrics().density);
+        final int top = Math.max(0, Math.round(safeAreaTopPx / density));
+        final int bottom = Math.max(0, Math.round(safeAreaBottomPx / density));
         webView.post(() -> webView.evaluateJavascript(
             "document.documentElement.style.setProperty('--uw-native-safe-top','" + top + "px');"
                 + "document.documentElement.style.setProperty('--uw-native-safe-bottom','" + bottom + "px');"

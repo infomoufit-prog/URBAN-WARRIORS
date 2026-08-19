@@ -1,55 +1,34 @@
-# Android · RC13 build 20020
+# Android · KOMBAX / Urban Warriors RC13 build 20025
 
-## Identidad y actualización
+Este es el resumen Android vigente. El procedimiento operativo completo está en `ANDROID_STUDIO_KOMBAX_RC13_BUILD_20025.md`; los documentos con build 20018, 20019 o 20021 son evidencia histórica y no instrucciones para esta candidata.
 
-- `applicationId`: `com.urbanwarriors.app`
-- `namespace`: `com.urbanwarriors.app`
-- `versionCode`: `20020`
-- `versionName`: `2.0.0-rc.13`
-- `minSdk`: `24`
-- `compileSdk`: `36`
-- `targetSdk`: `36`
-- AGP: `8.10.1`
-- Java source/target: `17`
+## Identidad de actualización
 
-La continuidad de actualizaciones exige mantener el mismo `applicationId` y la misma cadena de firma. El keystore **no se incluye** en el repositorio; la build release toma `UW_KEYSTORE_PATH`, `UW_KEYSTORE_PASSWORD`, `UW_KEY_ALIAS` y `UW_KEY_PASSWORD` del entorno.
+- `applicationId` y `namespace`: `com.urbanwarriors.app`.
+- `versionCode`: `20025`.
+- `versionName`: `2.0.0-rc.13`.
+- `minSdk`: 24; `compileSdk`/`targetSdk`: 36.
+- AGP: 8.10.1; Java: 17.
+- alias del JKS existente: `urban-warriors`.
 
-## Contenido web embebido
+La actualización exige el mismo paquete y la misma cadena de firma que la build 20021 instalada. El ZIP no contiene el JKS, contraseñas, `keystore.properties`, `google-services.json`, APK ni AAB.
 
-`web` es la fuente. `npm run build` debe dejar idénticos:
+## Web embebida
 
-- `web/`
-- `dist/`
-- `android/app/src/main/assets/www/`
+`web` es la única fuente. `node scripts/build.mjs` regenera y verifica:
 
-El cambio temporal usado para pruebas LAN no forma parte del freeze: `scripts/serve.mjs` debe escuchar en `127.0.0.1`.
+- `web/`;
+- `dist/`;
+- `android/app/src/main/assets/www/`.
 
-## Permisos relevantes
+La compilación local certificada contiene 60 archivos idénticos en los tres destinos. Android mantiene `usesCleartextTraffic=false`, origen WebView HTTPS virtual, safe areas y navegación nativa.
 
-- Internet.
-- Cámara.
-- Notificaciones (`POST_NOTIFICATIONS`).
-- `usesCleartextTraffic=false`.
+## Firma local
 
-## Build nativo pendiente
+Crear `android/keystore.properties` desde el ejemplo o usar las variables `UW_*`. Apuntar al JKS ya existente y no crear una clave nueva. El preflight debe pasar 5/5 después de añadir Firebase y firma.
 
-Este entorno de trabajo no contiene Android SDK ni Gradle Wrapper completo, por lo que la certificación nativa APK/AAB debe ejecutarse en Android Studio/CI con toolchain compatible. Para AGP 8.10.x se debe usar Gradle 8.11.1 o superior compatible, según la tabla oficial de Android. AGP 8.10.1 es la versión fijada por este candidato y soporta API 36. La documentación oficial sitúa el mínimo para API 36.0 en AGP 8.9.1; por tanto no se presenta 8.10.1 como mínimo universal, sino como la versión concreta certificada estáticamente en este proyecto.
+La candidata solo queda aprobada cuando el APK y el AAB se generan desde el mismo estado, `apksigner` confirma los fingerprints documentados y la APK 20025 se instala encima de 20021 sin desinstalar.
 
-Antes del freeze:
-1. sincronizar proyecto Android;
-2. compilar `assembleRelease` con firma real;
-3. compilar `bundleRelease` para AAB;
-4. instalar APK 20020 encima de la versión anterior sin desinstalar;
-5. probar login, notificaciones, permisos, multimedia, navegación y foreground/background;
-6. conservar hashes del APK/AAB finalmente certificados.
+## Estado honesto
 
-## Google Play
-
-La configuración apunta a API 36 para anticipar el requisito de nuevas apps/actualizaciones desde el 31-08-2026. Aun así, la subida exige revisión final de Play Console, público objetivo, Data Safety, política de privacidad, UGC, seguridad infantil, credenciales de revisión y firma/Play App Signing.
-
-## Icono / launcher build 20020
-
-- iconos legacy regenerados sin el recuadro gris exterior;
-- PWA añade iconos `maskable` 192/512;
-- Android API 26+ usa `adaptive-icon` con fondo `#050608` y foreground propio;
-- el objetivo es que el emblema ocupe el marco del launcher sin aparecer como un cuadrado dentro de un círculo.
+Configuración y recursos Android: preparados estáticamente. Gradle, Firebase real, firma JKS, APK/AAB y dispositivo físico: pendientes del ordenador autorizado.

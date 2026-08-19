@@ -1,5 +1,7 @@
 # Paquete previo a Netlify y APK
 
+> **HISTÓRICO RC12 / NO USAR PARA BUILD 20025.** Las rutas vigentes están en `DOCUMENTATION_INDEX.md`.
+
 ## Estado certificado de RC12 (build 20016)
 
 - Base de código: RC10 restaurada, consolidada en RC11 y ampliada de forma conservadora en RC12.

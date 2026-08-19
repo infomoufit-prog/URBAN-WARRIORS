@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
+const ok=(v,m)=>{if(!v){console.error('FAIL 20055 MVP PROFILE SCOPE:',m);process.exit(1)}console.log('OK',m)};
+const gateway=read('web/js/modules/gateway.js');
+const config=read('web/config.js');const gradle=read('android/app/build.gradle');const sw=read('web/service-worker.js');const index=read('web/index.html');
+ok(/id:'competidor'[\s\S]{0,280}disabled:true/.test(gateway),'Competidor queda temporalmente deshabilitado sin eliminar su modelo');
+ok(/id:'club'[\s\S]{0,250}(applicationOnly:true|benefits:)/.test(gateway)&&/id:'marca'[\s\S]{0,250}benefits:/.test(gateway)&&/id:'federacion'[\s\S]{0,250}benefits:/.test(gateway),'Club, Marca y Federación permanecen disponibles');
+ok(gateway.includes('const available=directTypes.filter(x=>!x.disabled)'),'selector autenticado excluye cualquier identidad deshabilitada');
+ok(gateway.includes('Club, Marca o Federación. Competidor se activará en una fase posterior del MVP.'),'entrada global comunica el alcance real del MVP');
+ok(gateway.includes('Competidor, Profesional y Espectador permanecen reservados temporalmente.'),'selector público explica identidades reservadas');
+ok(gateway.includes('Continuidad con mi perfil de Miembro')&&gateway.includes("type==='competidor'"),'código de Competidor se conserva para reactivación futura');
+const build=Number(config.match(/build:\s*(\d+)/)?.[1]);const android=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);const swBuild=Number(sw.match(/rc13-(\d+)/)?.[1]);const refs=[...index.matchAll(/\?v=(\d+)/g)].map(x=>Number(x[1]));
+ok(build>=20055&&android===build&&swBuild===build&&refs.length>0&&refs.every(v=>v===build),'web/PWA/Android mantienen coherencia desde build 20055');
+console.log('KOMBAX BUILD 20055 · MVP profile scope: PASS');

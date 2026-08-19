@@ -1,5 +1,7 @@
 # Checklist Push · Urban Warriors RC10
 
+> **HISTÓRICO / NO CERTIFICA BUILD 20025.** Usar `ANDROID_STUDIO_KOMBAX_RC13_BUILD_20025.md`; FCM real sigue siendo una puerta externa.
+
 ## Seguridad Android previa
 
 - Firebase se inicializa de forma explícita y tolerante a ausencia de configuración.

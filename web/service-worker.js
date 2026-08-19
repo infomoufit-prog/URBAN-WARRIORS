@@ -1,4 +1,4 @@
-const VERSION='uw2-2.0.0-rc13-20020';
+const VERSION='uw2-2.0.0-rc13-20057';
 const STATIC_CACHE=`${VERSION}-media`;
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key!==STATIC_CACHE)await caches.delete(key);await self.clients.claim();})()));

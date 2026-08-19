@@ -35,7 +35,7 @@ assert(sql.includes('estado=v_status')&&sql.includes("p_operation='evento.guarda
 
 assert(repos.includes("backend.readRpc('app_evento_participantes_visibles_v033'")&&repos.includes("backend.readRpc('app_evento_combates_visibles_v033'"),'repositorio consume RPCs seguras');
 for(const op of ['evento.guardar','evento.participante.externo','evento.inscripcion.solicitar','evento.inscripcion.estado','evento.inscripcion.baja','evento.combate.guardar','evento.combate.eliminar'])assert(repos.includes(`'${op}'`),`repositorio enruta ${op} por gateway`);
-assert(ui.includes('No necesita cuenta ni instalar Urban Warriors'),'externos no necesitan app');
+assert(ui.includes('No necesita cuenta ni instalar KOMBAX'),'externos no necesitan cuenta ni instalar la app');
 assert(ui.includes('Añadir y confirmar')&&!ui.includes('setTimeout(()=>registrationForm'),'alta de alumno por el equipo usa un único formulario sin temporizadores frágiles');
 assert(ui.includes("portal()&&event.estado==='abierto'"),'autoinscripción se limita a familia/alumno con evento abierto');
 assert(ui.includes('Emparejamiento manual')&&ui.includes('No se generan cuadros automáticamente'),'MVP mantiene combates manuales sin bracket automático');
