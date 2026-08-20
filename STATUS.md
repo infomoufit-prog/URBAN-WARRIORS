@@ -1,48 +1,30 @@
-# STATUS · KOMBAX 20.050 ACCOUNT SECURITY
+# STATUS · KOMBAX 20.058 · NAVIGATION + HEADER ACTIVITY · INTERVENCIÓN 2
 
-Candidata actual de validación: **build 20050**.
+Candidata actual de validación: **build 20058**.
 
-Último cambio: cambio de contraseña autenticado desde perfil/cuenta, con verificación explícita de contraseña actual y cierre de sesión posterior. No requiere migración Supabase.
+## Implementado en 20.058 hasta esta intervención
 
-# Estado del proyecto · KOMBAX RC13 build 20049 FINAL CANDIDATE
+- Navegación global prioritaria: `Mi perfil`, `KOMBAX Social`, `KOMBAX Showcase`.
+- `Mi Club` como acordeón de accesos operativos gobernados por rol.
+- Dirección/Coordinación: `Mi perfil` personal separado de `Perfil del club`.
+- Navegación móvil simplificada a Mi perfil / Social / Showcase / Mi Club.
+- Botón de menú móvil con mayor affordance y área táctil.
+- `Notificaciones del Club` fuera del menú lateral y mantenidas en cabecera.
+- Refresh token inválido: limpieza de sesión + mensaje humano.
+- Pérdida temporal de red durante restauración: conserva sesión local y reintenta al recuperar conectividad.
+- Sin cambios de esquema Supabase.
 
-## Candidata actual
+## Evidencia automática
 
-- Versión: **2.0.0-rc.13**.
-- Build web / Android `versionCode`: **20049**.
-- applicationId: `com.urbanwarriors.app`.
-- Perfil Miembro: identidad KOMBAX Social canónica única, arquitectura 20048 preservada.
-- Recuperación de contraseña: código de 6 dígitos + verificación + nueva contraseña + cierre de sesión temporal, implementado en ambos logins.
-- Recibos: branding y prefijo propios por Club, con snapshot histórico del emisor.
-- Supabase 094/095/096: aplicadas y verificadas en vivo.
-- Seguridad 20.046: revalidada después de 096.
-- `npm test`: PASS.
-- `npm run build`: PASS.
-- `web = dist = Android`: 63/63/63, 0 diferencias.
-- Android preflight: 4/5; firma local pendiente deliberadamente fuera del paquete.
+- `npm test`: **PASS**.
+- `npm run build`: **PASS**.
+- `web = dist = Android`: **65 / 65 / 65**, listas iguales y `0` diferencias de hash.
+- Android `versionCode`: **20058**.
+- Android preflight: **4/5**, solo firma local pendiente.
+- No se incluyen JKS, keystore, P12/PFX ni claves privadas en el paquete.
 
 ## Estado de release
 
-**FINAL CANDIDATE / PRE-FREEZE.** Los dos últimos cambios funcionales están implementados. Para declarar `KOMBAX BASE FREEZE` falta la validación manual final y completar el E2E alojado de recuperación de contraseña.
+**CANDIDATA DE VALIDACIÓN MANUAL · NO FREEZE.**
 
-No se ha modificado GitHub, no se ha desplegado Netlify y no se ha generado/publicado APK/AAB de producción.
-
-### Pendientes pre-producción conocidos
-
-1. En Supabase: `Authentication → Email Templates → Reset password`, instalar `supabase/auth_templates/recovery_otp_20049.html` para que el correo muestre `{{ .Token }}`.
-2. Ejecutar E2E real de recuperación: solicitar código, recibir correo, verificar, cambiar contraseña y entrar de nuevo.
-3. Activar **Leaked Password Protection** en Supabase Auth y repetir smoke Auth.
-4. Validación manual final PC + móvil, incluyendo un recibo visual.
-5. Mantener la deuda del Performance Advisor como fase separada; no mezclar refactor masivo de índices/RLS con el freeze.
-6. Tras freeze: GitHub → Netlify/PWA → APK Release → AAB → Google Play.
-
-## Evidencia 20049
-
-- Migración viva: `20260819005526 kombax_multiclub_receipt_branding_20049`.
-- Recibos reales existentes: 4; todos con snapshot de emisor y números históricos intactos.
-- Smoke financiero transaccional: PASS; 0 fixtures.
-- Usuarios `auth.users` después de QA: 3; no se crearon cuentas de prueba.
-- Test conductual Auth REST: PASS.
-- SHA agregado web/dist/Android: `dde0d09ac4448cd80b95924222c80e620a0dfc8403ec205c46d5b2c48420e415`.
-
-Ver detalle en `BUILD_20049_FINAL_AUTH_RECEIPTS_VALIDATION.md` y `CHANGELOG_RC13_BUILD_20049.md`.
+La 20.058 incorpora ya separación real de cabecera **Notificaciones KOMBAX / Notificaciones del Club / Mensajes**. La actividad KOMBAX del header contabiliza solicitudes de red/contacto que requieren decisión; Mensajes contabiliza no leídos de chats aceptados; Club conserva el centro operativo existente. La siguiente intervención de 20.058 cerrará validación visual/manual y después se continuará con 20.059 para Mi red KOMBAX, Contact Gate, chat realtime, Showcase messaging y comentarios inline.

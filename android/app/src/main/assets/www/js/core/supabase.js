@@ -44,7 +44,8 @@ export class SupabaseClient {
     const text=await res.text(); let body=null; if(text){try{body=JSON.parse(text)}catch{body=text}}
     if(!res.ok){
       const message=body&&typeof body==='object'?[body.message,body.details,body.hint,body.msg,body.error_description,body.error].filter(Boolean).join(' · '):String(body||`HTTP ${res.status}`);
-      const expired=res.status===401||/jwt.*expired|token.*expired|invalid.*jwt/i.test(message);
+      const refreshFailure=path.includes('/auth/v1/token?grant_type=refresh_token')&&/invalid\s*refresh\s*token|refresh\s*token\s*(?:not\s*found|invalid|expired)|refresh_token_not_found|refresh_token.*(?:invalid|expired)/i.test(message);
+      const expired=res.status===401||/jwt.*expired|token.*expired|invalid.*jwt/i.test(message)||refreshFailure;
       if(expired&&retry&&this.session?.refresh_token&&!authPath){await this.refresh();return this.request(path,options,false)}
       if(expired){this.clear();throw new AuthExpiredError()}
       const err=new Error(message||`HTTP ${res.status}`);err.status=res.status;err.code=body?.code;err.details=body?.details;err.hint=body?.hint;throw err;

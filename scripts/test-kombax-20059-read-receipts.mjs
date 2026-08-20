@@ -1,0 +1,12 @@
+import {readFile} from 'node:fs/promises';
+const root=new URL('../',import.meta.url);const read=p=>readFile(new URL(p,root),'utf8');
+const [social,css,migration]=await Promise.all([read('web/js/modules/kombax-social.js'),read('web/css/kombax-premium.css'),read('supabase/migrations/104_kombax_unlimited_chat_20059.sql')]);
+const ok=(v,m)=>{if(!v)throw new Error(`20059 read receipts: ${m}`);console.log('OK '+m)};
+ok(social.includes("label:'✓ Enviado'")&&social.includes("label:'✓✓ Leído'"),'mensajes propios distinguen Enviado y Leído');
+ok(social.includes('if(!m.propio)return')&&social.includes('kx-contact-message-status'),'estado de lectura solo se representa en mensajes propios');
+ok(social.includes('syncReadReceipts')&&social.includes("contactMessages(current.id,{limit:PAGE})"),'autosync refresca recibos de lectura sin recargar toda la conversación');
+ok(social.includes('String(fresh.leido_en')&&social.includes('updateReceiptDom(next)'),'cambio de leido_en actualiza el DOM del mensaje existente');
+ok(social.includes("await repos.kombaxSocial.markContactRead(current.id).catch(()=>{})"),'abrir/recibir conversación conserva marcado automático de lectura');
+ok(css.includes('.kx-contact-message-status')&&css.includes('data-read-state=\"read\"'),'estilo de recibos incluido en la UI premium');
+ok(migration.includes('leido_en timestamptz')&&migration.includes('app_kombax_contact_mensajes_v104'),'contrato v104 conserva timestamp de lectura');
+console.log('KOMBAX BUILD 20059 · CHAT READ RECEIPTS: PASS');

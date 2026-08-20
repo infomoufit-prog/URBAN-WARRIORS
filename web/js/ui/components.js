@@ -47,21 +47,41 @@ const safeOptionalImage=(value)=>{const v=String(value||'').trim();return /^(htt
 export function shell(navItems,active,mobileItems=[]){
   const s=state.session;
   const theme=themeFromClub(s?.club);
-  const sections={dashboard:'Principal',members:'Gestión',enrollments:'Gestión',catalog:'Club',groups:'Club',sessions:'Clases',attendance:'Clases',progress:'Seguimiento',tracking:'Seguimiento',finance:'Economía',reminders:'Economía',communications:'Contenido',community:'Contenido',social:'KOMBAX',showcase:'KOMBAX',events:'Club',material:'Contenido',documents:'Administración',archive:'Administración',notifications:'Cuenta',users:'Administración',settings:'Administración',diagnostics:'Sistema',certification:'Sistema',requests:'Mi cuenta',install:'Mi cuenta',help:'Ayuda',profile:'Cuenta'};
-  let last='';const navHtml=navItems.map(n=>{const sec=sections[n.id]||'Más';const head=sec!==last?`<div class="nav-section">${esc(sec)}</div>`:'';last=sec;return `${head}<button type="button" class="nav-item ${active===n.id?'active':''}" data-nav="${esc(n.id)}"><span>${n.icon}</span><b>${esc(n.label)}</b></button>`}).join('');
-  const mobile=mobileItems.map(n=>`<button type="button" class="${active===n.id?'active':''}" ${n.id==='more'?'id="mobile-more"':`data-nav="${esc(n.id)}"`}><span>${n.icon}</span>${esc(n.label)}</button>`).join('');
+  const sections={dashboard:'Principal',members:'Gestión',enrollments:'Gestión',catalog:'Club',groups:'Club',sessions:'Clases',attendance:'Clases',progress:'Seguimiento',tracking:'Seguimiento',finance:'Economía',reminders:'Economía',communications:'Contenido',community:'Contenido',social:'KOMBAX',showcase:'KOMBAX',events:'Club',material:'Contenido',documents:'Administración',archive:'Administración',users:'Administración',settings:'Administración',diagnostics:'Sistema',certification:'Sistema',requests:'Mi cuenta',install:'Mi cuenta',help:'Ayuda',profile:'Club'};
+  const hasPersonal=navItems.some(n=>n.id==='personal-profile');
+  const personalId=hasPersonal?'personal-profile':'profile';
+  const byId=new Map(navItems.map(item=>[item.id,item]));
+  const globalIds=[personalId,'social','showcase'];
+  const globalHtml=globalIds.map(id=>byId.get(id)).filter(Boolean).map(n=>`<button type="button" class="nav-item nav-primary ${active===n.id?'active':''}" data-nav="${esc(n.id)}"><span>${n.icon}</span><b>${esc(n.label)}</b></button>`).join('');
+  const excluded=new Set([...globalIds,'notifications','platform-admin']);
+  const clubItems=navItems.filter(n=>!excluded.has(n.id));
+  let last='';
+  const clubHtml=clubItems.map(n=>{const sec=sections[n.id]||'Más';const head=sec!==last?`<div class="nav-subsection">${esc(sec)}</div>`:'';last=sec;return `${head}<button type="button" class="nav-item nav-club-item ${active===n.id?'active':''}" data-nav="${esc(n.id)}"><span>${n.icon}</span><b>${esc(n.label)}</b></button>`}).join('');
+  const platformAdmin=byId.get('platform-admin');
+  const platformHtml=platformAdmin?`<div class="nav-platform"><div class="nav-section">PLATAFORMA</div><button type="button" class="nav-item ${active==='platform-admin'?'active':''}" data-nav="platform-admin"><span>${platformAdmin.icon}</span><b>${esc(platformAdmin.label)}</b></button></div>`:'';
+  const mobileClubActive=clubItems.some(x=>x.id===active)||active==='notifications';
+  const mobile=mobileItems.map(n=>`<button type="button" class="${active===n.id||(n.id==='more'&&mobileClubActive)?'active':''}" ${n.id==='more'?'id="mobile-more"':`data-nav="${esc(n.id)}"`}><span>${n.icon}</span>${esc(n.label)}</button>`).join('');
   const logo=safeClubLogo(s?.club);const cover=safeOptionalImage(s?.club?.portada_url);const primary=safeColor(s?.club?.color_primario,'#ffffff');const secondary=safeColor(s?.club?.color_secundario,'#050608');
   const clubCount=new Set((s?.memberships||[]).map(x=>x.club_id).filter(Boolean)).size;
+  const activeInClub=clubItems.some(item=>item.id===active)||active==='notifications';let clubOpen=activeInClub;try{const saved=localStorage.getItem('uw2_club_nav_open');if(!activeInClub&&(saved==='1'||saved==='0'))clubOpen=saved==='1';}catch{}
   return `<div class="app-shell ${esc(theme.className)}" data-club-theme="${esc(theme.id)}" style="--club-primary:${esc(primary)};--club-secondary:${esc(secondary)};--uw-logo-image:${logo?`url('${esc(logo)}')`:'none'};--uw-cover-image:${cover?`url('${esc(cover)}')`:'none'}">
-    <button type="button" class="icon-btn mobile-only menu-toggle" id="menu-btn" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><span class="menu-icon-open">${icon('menu')}</span><span class="menu-icon-close">${icon('close')}</span></button>
+    <button type="button" class="icon-btn mobile-only menu-toggle" id="menu-btn" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><span class="menu-icon-open">${icon('menu')}</span><span class="menu-icon-close">${icon('close')}</span><span class="menu-toggle-dot" aria-hidden="true"></span></button>
     <aside class="sidebar" id="sidebar">
       <div class="brand-block">${logo?`<img src="${esc(logo)}" alt="${esc(s?.club?.nombre||'Tu club')}">`:`<div class="club-brand-fallback" aria-hidden="true">${esc(initials(s?.club?.nombre||'CLUB'))}</div>`}<div><strong>${esc(String(s?.club?.nombre||'TU CLUB').toUpperCase())}</strong><small>${esc(s?.club?.lema||'Tu comunidad deportiva')}</small></div></div>
-      <nav class="nav-list">${navHtml}</nav>
+      <nav class="nav-list" aria-label="Navegación principal">
+        <div class="nav-section nav-section-global">KOMBAX</div>
+        <div class="nav-global">${globalHtml}</div>
+        <details class="club-nav-accordion ${clubOpen?'is-open':''}" id="club-nav-accordion" ${clubOpen?'open':''}>
+          <summary><span class="club-nav-icon">${icon('dojo',{size:20})}</span><span class="club-nav-copy"><b>Mi Club</b><small>${esc(s?.club?.nombre||'Club activo')}</small></span><span class="club-nav-chevron">${icon('chevronRight',{size:17})}</span></summary>
+          <div class="club-nav-panel">${clubHtml}</div>
+        </details>
+        ${platformHtml}
+      </nav>
       <div class="sidebar-foot"><div class="user-avatar session-avatar" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="Foto de perfil" hidden></div><span>${esc(`${s?.nombre||''} ${s?.apellidos||''}`.trim())}</span><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small><button type="button" class="btn btn-ghost btn-sm" id="logout-btn">${icon('logOut',{size:15})} Cerrar sesión</button></div>
     </aside>
     <button type="button" class="sidebar-scrim" id="sidebar-scrim" aria-label="Cerrar menú" tabindex="-1"></button>
     <section class="content-shell">
-      <header class="topbar"><div class="topbar-identity"><strong>${esc(s?.club?.nombre||'Tu club')}</strong><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small></div><div class="topbar-actions"><span class="kombax-shell-mark" title="Tecnología ${esc(KOMBAX_BRAND.name)}"><img src="${esc(KOMBAX_BRAND.symbol)}" alt="${esc(KOMBAX_BRAND.name)}"><span>${esc(KOMBAX_BRAND.name)}</span></span>${clubCount>1?`<button class="btn btn-ghost btn-sm club-context-button" id="club-context-button" type="button">${icon('layers',{size:15})}<span>Cambiar club</span></button>`:''}<button class="icon-btn notification-button" id="notification-button" type="button" data-nav="notifications" aria-label="Notificaciones">${icon('bell')}<span class="notification-count" id="notification-count" hidden>0</span></button><button class="topbar-avatar session-avatar" type="button" data-nav="profile" aria-label="Mi perfil" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="Foto de perfil" hidden></button></div></header>
+      <header class="topbar"><div class="topbar-identity"><strong>${esc(s?.club?.nombre||'Tu club')}</strong><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small></div><div class="topbar-actions"><span class="kombax-shell-mark" title="Tecnología ${esc(KOMBAX_BRAND.name)}"><img src="${esc(KOMBAX_BRAND.symbol)}" alt="${esc(KOMBAX_BRAND.name)}"><span>${esc(KOMBAX_BRAND.name)}</span></span>${clubCount>1?`<button class="btn btn-ghost btn-sm club-context-button" id="club-context-button" type="button">${icon('layers',{size:15})}<span>Cambiar club</span></button>`:''}<button class="icon-btn notification-button kombax-notification-button" id="kombax-notification-button" type="button" aria-label="Notificaciones KOMBAX" title="Notificaciones KOMBAX">${icon('bell')}<span class="notification-count" id="kombax-notification-count" hidden>0</span><span class="topbar-action-marker kombax-marker" aria-hidden="true">KX</span></button><button class="icon-btn notification-button club-notification-button" id="notification-button" type="button" data-nav="notifications" aria-label="Notificaciones del Club" title="Notificaciones del Club">${icon('bell')}<span class="notification-count" id="notification-count" hidden>0</span><span class="topbar-action-marker" aria-hidden="true">CLUB</span></button><button class="icon-btn notification-button message-notification-button" id="message-button" type="button" aria-label="Mensajes" title="Mensajes">${icon('message')}<span class="notification-count" id="message-count" hidden>0</span></button><button class="topbar-avatar session-avatar" type="button" data-nav="${esc(personalId)}" aria-label="Mi perfil" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="Foto de perfil" hidden></button></div></header>
       <div id="global-alerts">${alertHtml()}</div>
       <main id="main-view" class="main-view"><div class="loading-card">Cargando…</div></main>
     </section>
@@ -69,7 +89,10 @@ export function shell(navItems,active,mobileItems=[]){
   </div>`;
 }
 
-export function setNotificationBadge(count=0){const el=document.getElementById('notification-count');if(!el)return;const n=Math.max(0,Number(count||0));el.textContent=n>99?'99+':String(n);el.hidden=n===0;document.getElementById('notification-button')?.classList.toggle('has-unread',n>0);}
+function setTopbarBadge(countElId,buttonId,count=0){const el=document.getElementById(countElId);if(!el)return;const n=Math.max(0,Number(count||0));el.textContent=n>99?'99+':String(n);el.hidden=n===0;document.getElementById(buttonId)?.classList.toggle('has-unread',n>0);}
+export function setNotificationBadge(count=0){setTopbarBadge('notification-count','notification-button',count);}
+export function setKombaxNotificationBadge(count=0){setTopbarBadge('kombax-notification-count','kombax-notification-button',count);}
+export function setMessageBadge(count=0){setTopbarBadge('message-count','message-button',count);}
 
 export function pageHeader(title,subtitle='',actions='',kicker=''){
   return `<div class="page-head"><div>${kicker?`<div class="page-kicker">${esc(kicker)}</div>`:''}<h1>${esc(title)}</h1>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;

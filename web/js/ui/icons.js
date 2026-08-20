@@ -72,7 +72,7 @@ export function icon(name,{size=20,className=''}={}){
   return `<svg class="uw-icon ${className}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${body}</svg>`;
 }
 
-export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkin',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'idCard',requests:'plus',documents:'folder',archive:'archive',install:'download',community:'dojo',social:'network',showcase:'spotlight','platform-admin':'key',scopes:'shieldCheck',events:'calendar',help:'fileText',more:'more'}[id]||'activity');
+export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkin',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'idCard',requests:'plus',documents:'folder',archive:'archive',install:'download',community:'dojo',social:'network',showcase:'spotlight','platform-admin':'key','personal-profile':'idCard',scopes:'shieldCheck',events:'calendar',help:'fileText',more:'more'}[id]||'activity');
 
 
 const featurePaths={

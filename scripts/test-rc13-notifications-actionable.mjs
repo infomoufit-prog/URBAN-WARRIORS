@@ -10,7 +10,7 @@ assert(pre.includes('gateway_033')&&verify.includes('masivas_protegidas'),'prefl
 assert(repos.includes("app_notificaciones_accionables_v034")&&repos.includes("optimisticNotificationMutation('notificacion.revisar'"),'cliente obtiene accionabilidad del backend y usa revisar con persistencia optimista');
 assert(ui.includes('Marcar informativas como leídas')&&ui.includes("g.key!=='accion'")&&ui.includes('review-notification'),'UI nunca ofrece lectura masiva en Requiere acción');
 assert(ui.includes('notification-more')&&ui.includes('Ver ${g.items.length-initialLimit} avisos más')&&repos.includes('notificationList(1000)'),'la bandeja no vuelve inaccesibles los avisos que superan el corte visual y amplía margen de carga');
-assert(app.includes("n?.requiere_accion===true"),'contador/categoría global usa la clasificación del backend');
+assert(app.includes('club_unread_groups')&&/app_kombax_header_summary_v10[56]/.test(repos),'contador/categoría global usa resumen clasificado por backend');
 assert(css.includes('.notification-group-action')&&css.includes('@media(max-width:820px)'),'notificaciones accionables tienen tratamiento responsive para APK');
 assert(pre.includes('material_pedidos')&&pre.includes('pagos')&&pre.includes('cuotas')&&pre.includes('columnas_notificacion'),'preflight 034 comprueba dependencias y columnas usadas por el clasificador');
 assert(transactional.includes("'notificacion.leer_grupo'")&&transactional.includes('v_action_group'),'prueba transaccional cubre lectura masiva por grupo además de lectura global');

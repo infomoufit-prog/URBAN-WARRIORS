@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.0-rc.13 · build 20058 · Navigation + Session UX · intervención 1
+
+- Nueva jerarquía transversal de navegación: **Mi perfil → KOMBAX Social → KOMBAX Showcase → Mi Club**.
+- `Mi Club` pasa a acordeón y conserva todos los accesos operativos permitidos por rol; la autorización de rutas no se relaja.
+- Dirección/Coordinación separan `Mi perfil` personal de `Perfil del club`.
+- En móvil, la navegación principal prioriza Mi perfil, Social, Showcase y Mi Club; Mi Club abre directamente el acordeón lateral.
+- `Notificaciones del Club` deja de duplicarse en el menú lateral y permanece accesible desde la cabecera con identificación explícita de Club.
+- Mejora del botón de menú móvil: mayor área táctil y señal visual estable.
+- Un refresh token inválido o inexistente se convierte en expiración controlada de sesión y nunca expone el mensaje técnico de Supabase.
+- Una pérdida puntual de conexión conserva la sesión local y permite reintentar al recuperar Internet, en vez de expulsar al usuario.
+- Errores de sesión/red se traducen a mensajes humanos.
+- Sin migración Supabase ni cambios de esquema en esta intervención.
+- `npm test`: PASS. `npm run build`: PASS. Web/dist/Android: 65/65/65, hashes idénticos.
+- Android preflight: 4/5; firma local sigue deliberadamente fuera del paquete.
+- Esta es la **primera intervención de 20.058**, no el freeze final: la separación completa de Notificaciones KOMBAX / Club / Mensajes continúa en la siguiente intervención.
+
 ## 2.0.0-rc.13 · build 20030 · ámbitos de monitor y privacidad financiera
 
 - Nuevo modelo muchos-a-muchos de ámbitos para varios monitores, alumnos y grupos dentro de un club.

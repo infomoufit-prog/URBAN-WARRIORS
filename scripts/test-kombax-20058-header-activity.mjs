@@ -1,0 +1,17 @@
+import {readFile} from 'node:fs/promises';
+const root=new URL('../',import.meta.url);const read=p=>readFile(new URL(p,root),'utf8');
+const [app,ui,repos,state,css,migration,rollback]=await Promise.all([read('web/js/app.js'),read('web/js/ui/components.js'),read('web/js/core/repositories.js'),read('web/js/core/state.js'),read('web/css/kombax-premium.css'),read('supabase/migrations/103_kombax_header_activity_20058.sql'),read('supabase/rollbacks/103_kombax_header_activity_20058_rollback.sql')]);
+const ok=(v,m)=>{if(!v)throw new Error(m);console.log('OK '+m)};
+ok(ui.includes('id="kombax-notification-button"')&&ui.includes('id="notification-button"')&&ui.includes('id="message-button"'),'cabecera contiene tres accesos independientes KOMBAX / Club / Mensajes');
+ok(ui.includes('setKombaxNotificationBadge')&&ui.includes('setMessageBadge'),'badges KOMBAX y Mensajes tienen estado independiente');
+ok(repos.includes("headerSummary:()=>backend.readRpc('app_kombax_header_summary_v106'")||repos.includes("headerSummary:()=>backend.readRpc('app_kombax_header_summary_v105'")||repos.includes("headerActivity:()=>backend.globalReadRpc('app_kombax_header_activity_v103',{})"),'frontend consume un RPC agregado para la cabecera');
+ok(app.includes('refreshHeaderSummary')&&app.includes('club_unread_groups'),'actividad Club/KOMBAX se consolida sin depender de cargar el centro completo');
+ok(/if\(error\?\.code==='AUTH_EXPIRED'\).*setKombaxNotificationBadge\(0\).*setMessageBadge\(0\)/s.test(app)&&!/catch\(error\)\{\s*state\.unreadKombaxCount=0;state\.unreadMessageCount=0;setKombaxNotificationBadge\(0\);setMessageBadge\(0\);/.test(app),'fallo transitorio conserva badges y solo limpia al expirar sesión');
+ok(app.includes('refreshHeaderSummary')&&app.includes('message_unread')&&app.includes('contact_requests')&&app.includes('relation_requests'),'monitor de cabecera usa contadores reales separados');
+ok(app.includes("openSocialView('contacts')")&&app.includes('data-kx-activity-open="relations"'),'acciones de cabecera llevan a la actividad correspondiente');
+ok(state.includes('unreadKombaxCount')&&state.includes('unreadMessageCount'),'estado mantiene contadores independientes');
+ok(css.includes('intervention 2 · split KOMBAX / Club / Messages header activity')&&css.includes('.kx-header-activity'),'diseño responsive específico para la nueva cabecera');
+ok(migration.includes('app_kombax_header_activity_v103')&&migration.includes("c.estado='pendiente'")&&migration.includes("c.estado='aceptada'")&&migration.includes("r.estado='pending'"),'RPC diferencia solicitudes KOMBAX de mensajes de chats aceptados');
+ok(migration.includes('security definer')&&migration.includes('set search_path=public,auth')&&migration.includes('revoke all')&&migration.includes('grant execute'),'RPC aplica cierre explícito y search_path fijado');
+ok(rollback.includes('drop function if exists public.app_kombax_header_activity_v103()'),'rollback 103 disponible');
+console.log('KOMBAX BUILD 20058 · Header activity split: PASS');

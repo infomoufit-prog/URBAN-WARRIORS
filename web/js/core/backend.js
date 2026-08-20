@@ -7,12 +7,34 @@ import { invalidateCache } from './query-cache.js';
 const APP_SESSION='uw2_app_session';
 const cfg=window.UW_CONFIG;
 export const client=new SupabaseClient(cfg.supabase);
+const readInflight=new Map();
+const READ_CONCURRENCY=6;
+const CONTRACT_TTL_MS=5*60*1000;
+let activeReads=0;
+const readQueue=[];
+const contractCache=new Map();
+const readContext=()=>`${state.session?.id||client.session?.user?.id||'anonymous'}:${state.session?.club_id||'global'}`;
+const stableArgs=args=>JSON.stringify(Object.keys(args||{}).sort().reduce((out,key)=>(out[key]=args[key],out),{}));
+async function withReadSlot(loader){
+  if(activeReads>=READ_CONCURRENCY)await new Promise(resolve=>readQueue.push(resolve));
+  activeReads++;
+  try{return await loader();}
+  finally{activeReads=Math.max(0,activeReads-1);readQueue.shift()?.();}
+}
+function dedupeRead(key,loader){
+  const scoped=`${readContext()}:${key}`,existing=readInflight.get(scoped);if(existing)return existing;
+  let promise;promise=Promise.resolve().then(()=>withReadSlot(loader)).finally(()=>{if(readInflight.get(scoped)===promise)readInflight.delete(scoped)});
+  readInflight.set(scoped,promise);return promise;
+}
+function contractKey(session){return `${session?.id||'anonymous'}:${session?.club_id||'global'}:${cfg.release.backendVersion}:${cfg.release.schemaEpoch}:${cfg.release.mutationEndpoint}`}
+function clearContractCache(){contractCache.clear();}
 
 function persistSession(session){
   state.session=session||null;
   if(session)localStorage.setItem(APP_SESSION,JSON.stringify(session)); else localStorage.removeItem(APP_SESSION);
 }
 function readAppSession(){try{return JSON.parse(localStorage.getItem(APP_SESSION)||'null')}catch{return null}}
+const isTransientNetworkError=error=>/failed to fetch|networkerror|network request failed|load failed|internet|tiempo de espera|timeout/i.test(String(error?.message||''));
 function qs(value){return encodeURIComponent(String(value??''));}
 async function platformContext(){
   try{const value=await client.rpc('app_kombax_platform_context_v055',{});return value&&typeof value==='object'?value:{authorized:false};}
@@ -64,17 +86,28 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
 }
 
 export const backend={
-  async contract(session=state.session){
+  async contract(session=state.session,{force=false}={}){
     if(!session?.club_id)throw new AuthExpiredError();
-    const c=await client.rpc(cfg.release.contractEndpoint,{p_club_id:session.club_id});
-    const operations=new Set(Array.isArray(c?.operations)?c.operations:[]);
-    const missingOperations=(cfg.release.requiredOperations||[]).filter(op=>!operations.has(op));
-    if(!c?.ok||!c?.write_ready||c.backend_version!==cfg.release.backendVersion||Number(c.schema_epoch)!==Number(cfg.release.schemaEpoch)||c.mutation_endpoint!==cfg.release.mutationEndpoint||missingOperations.length){
-      const missing=missingOperations.length?` Operaciones RC13 ausentes: ${missingOperations.join(', ')}.`:'';
-      throw new Error(`Contrato backend incompatible: esperado ${cfg.release.backendVersion}/epoch ${cfg.release.schemaEpoch}/${cfg.release.mutationEndpoint}; recibido ${c?.backend_version||'—'}/epoch ${c?.schema_epoch||'—'}/${c?.mutation_endpoint||'—'}.${missing}`);
+    const key=contractKey(session),now=Date.now(),cachedContract=contractCache.get(key);
+    if(!force&&cachedContract?.value&&cachedContract.expires>now){
+      state.setCapabilities(cachedContract.value.operations||[]);
+      return cachedContract.value;
     }
-    state.setCapabilities(c.operations||[]);
-    return c;
+    if(!force&&cachedContract?.promise)return cachedContract.promise;
+    const promise=withReadSlot(async()=>{
+      const c=await client.rpc(cfg.release.contractEndpoint,{p_club_id:session.club_id});
+      const operations=new Set(Array.isArray(c?.operations)?c.operations:[]);
+      const missingOperations=(cfg.release.requiredOperations||[]).filter(op=>!operations.has(op));
+      if(!c?.ok||!c?.write_ready||c.backend_version!==cfg.release.backendVersion||Number(c.schema_epoch)!==Number(cfg.release.schemaEpoch)||c.mutation_endpoint!==cfg.release.mutationEndpoint||missingOperations.length){
+        const missing=missingOperations.length?` Operaciones RC13 ausentes: ${missingOperations.join(', ')}.`:'';
+        throw new Error(`Contrato backend incompatible: esperado ${cfg.release.backendVersion}/epoch ${cfg.release.schemaEpoch}/${cfg.release.mutationEndpoint}; recibido ${c?.backend_version||'—'}/epoch ${c?.schema_epoch||'—'}/${c?.mutation_endpoint||'—'}.${missing}`);
+      }
+      state.setCapabilities(c.operations||[]);
+      contractCache.set(key,{value:c,expires:Date.now()+CONTRACT_TTL_MS});
+      return c;
+    }).catch(error=>{contractCache.delete(key);throw error;});
+    contractCache.set(key,{promise,expires:0});
+    return promise;
   },
   async probe(){if(!state.session?.club_id)throw new AuthExpiredError();return client.rpc(cfg.release.probeEndpoint,{p_club_id:state.session.club_id})},
   async diagnostic(){return client.rpc(cfg.release.diagnosticEndpoint,{})},
@@ -220,19 +253,28 @@ export const backend={
       const session=await identityFromAuth(authUser);
       await this.contract(session); persistSession(session); return session;
     }catch(error){
+      // Una pérdida puntual de red no invalida una sesión que sigue almacenada.
+      // Conservamos el contexto local y dejamos que las lecturas reintenten al recuperar conexión.
+      if(isTransientNetworkError(error)&&client.session?.access_token){console.warn('Sesión conservada sin conexión:',humanError(error));persistSession(saved);return saved;}
+      const authExpired=error instanceof AuthExpiredError||error?.code==='AUTH_EXPIRED';
       // Una cuenta KOMBAX puede existir sin membresía de club. No debe expulsarse por ello.
-      try{
+      if(!authExpired)try{
         const authUser=client.session?.user||{id:saved.id,email:saved.email,user_metadata:{nombre:saved.nombre,apellidos:saved.apellidos}};
         if(client.session?.access_token){const session=await globalIdentityFromAuth(authUser);persistSession(session);state.setCapabilities([]);return session;}
-      }catch(globalError){console.warn('No se restaura la identidad KOMBAX:',humanError(globalError));}
-      console.warn('No se restaura la sesión:',humanError(error)); await client.signOut().catch(()=>{});persistSession(null);return null;
+      }catch(globalError){
+        if(isTransientNetworkError(globalError)&&client.session?.access_token){console.warn('Identidad KOMBAX pendiente de red:',humanError(globalError));persistSession(saved);return saved;}
+        console.warn('No se restaura la identidad KOMBAX:',humanError(globalError));
+      }
+      console.warn('No se restaura la sesión:',humanError(error));await client.signOut().catch(()=>{});persistSession(null);
+      if(authExpired)throw new AuthExpiredError();
+      return null;
     }
   },
   async switchClub(slug){
     if(!client.session?.access_token)throw new AuthExpiredError();
     const previous=state.session;
     try{
-      if(previous?.club_id)invalidateCache(`${previous.club_id}:${previous.id}:`);selectClubSlug(slug);state.clearTenantState();
+      if(previous?.club_id)invalidateCache(`${previous.club_id}:${previous.id}:`);clearContractCache();selectClubSlug(slug);state.clearTenantState();
       const authUser=client.session.user||{id:previous?.id,email:previous?.email,user_metadata:{nombre:previous?.nombre,apellidos:previous?.apellidos}};
       const session=await identityFromAuth(authUser,slug);
       if(session.club?.slug!==slug)throw new Error('No perteneces a este club o la membresía no está activa.');
@@ -242,17 +284,21 @@ export const backend={
     }
   },
   hasCapability(operation){return state.can(operation)},
-  async signOut({preserveTrace=false}={}){await client.signOut();persistSession(null);state.moduleCache.clear();if(!preserveTrace)state.trace=[];},
+  async signOut({preserveTrace=false}={}){await client.signOut();persistSession(null);clearContractCache();state.moduleCache.clear();if(!preserveTrace)state.trace=[];},
   async select(table,query='select=*'){
-    const t0=performance.now();
-    try{const data=await client.select(table,query);state.pushTrace({kind:'read',ok:true,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
-    catch(error){state.pushTrace({kind:'read',ok:false,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    return dedupeRead(`select:${table}:${query}`,async()=>{
+      const t0=performance.now();
+      try{const data=await client.select(table,query);state.pushTrace({kind:'read',ok:true,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
+      catch(error){state.pushTrace({kind:'read',ok:false,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    });
   },
   async globalReadRpc(name,args={}){
     if(!client.session?.access_token)throw new AuthExpiredError();
-    const t0=performance.now();
-    try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
-    catch(error){state.pushTrace({kind:'read',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    return dedupeRead(`globalReadRpc:${name}:${stableArgs(args)}`,async()=>{
+      const t0=performance.now();
+      try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
+      catch(error){state.pushTrace({kind:'read',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    });
   },
   async invokeFunction(name,payload={}){
     if(!client.session?.access_token)throw new AuthExpiredError();
@@ -262,7 +308,7 @@ export const backend={
   },
   async publicRpc(name,args={}){
     const t0=performance.now();
-    try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
+    try{const data=await withReadSlot(()=>client.rpc(name,args));state.pushTrace({kind:'read',ok:true,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
     catch(error){state.pushTrace({kind:'read',ok:false,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
   },
   async globalWriteRpc(name,args={}){
@@ -273,9 +319,11 @@ export const backend={
   },
   async readRpc(name,args={}){
     if(!state.session?.club_id)throw new AuthExpiredError();
-    const t0=performance.now();
-    try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
-    catch(error){state.pushTrace({kind:'read',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    return dedupeRead(`readRpc:${name}:${stableArgs(args)}`,async()=>{
+      const t0=performance.now();
+      try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
+      catch(error){state.pushTrace({kind:'read',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    });
   },
   async writeRpc(name,args={}){
     if(!state.session?.club_id)throw new AuthExpiredError();

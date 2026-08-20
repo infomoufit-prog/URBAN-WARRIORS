@@ -7,6 +7,7 @@ import { icon } from '../ui/icons.js';
 import { chooseDefaultIdentity, setActiveIdentity, identityLabel } from '../core/identity-context.js';
 import { openKombaxPublicProfile } from './public-profile.js';
 import { openKombaxPostManager, socialQuotaMarkup } from './social-post-management.js';
+import { createAdaptivePoller } from '../core/adaptive-poller.js';
 
 const PAGE_SIZE=20;
 const TYPE_LABEL={actualizacion:'Actualización',resultado:'Resultado',evento:'Evento',oportunidad:'Oportunidad'};
@@ -83,6 +84,10 @@ function postMedia(p){
 
 function socialRulesCard(){
   return `<section class="kx-social-rules-card"><div class="kx-social-rules-summary"><div>${icon('info',{size:22})}<div><strong>Cómo funciona KOMBAX Social</strong><span>Norma general actual para Miembro, Competidor, Club, Federación y Marca.</span></div></div><details><summary>Ver normas de publicación</summary><ul><li>Máximo <b>30 publicaciones activas</b> por identidad.</li><li>Máximo <b>3 publicaciones nuevas al día</b>.</li><li>Máximo <b>10 vídeos activos</b> por identidad.</li><li>El perfil muestra primero las <b>10 publicaciones más recientes</b> y permite cargar las anteriores de 10 en 10.</li><li>KOMBAX <b>no elimina automáticamente</b> tus publicaciones al llegar a 30: tú decides cuál borrar.</li><li>El Álbum es independiente: borrar una publicación no elimina una foto o vídeo que también hayas guardado en el Álbum.</li></ul><p>Estos límites son la norma general actual y podrán variar en el futuro según tipo de perfil o plan KOMBAX.</p></details></div></section>`;
+}
+
+function competitorFoundersPromo(){
+  return `<section class="kx-founders-promo competitor" aria-label="Promoción de lanzamiento para competidores"><div class="kx-founders-promo-mark">${icon('fighter',{size:28})}</div><div><span>COMBAT SOCIAL · LANZAMIENTO</span><strong>PRIMEROS 20 · COMPETIDORES FUNDADORES</strong><p>Los primeros 20 competidores que completen la verificación KOMBAX quedarán incluidos en una <b>ventaja especial de lanzamiento</b> cuando KOMBAX active su modalidad de suscripción. Próximamente comunicaremos en qué consiste.</p><small>La plaza se determina por el orden de verificación KOMBAX.</small></div></section>`;
 }
 
 function quotaAction(){
@@ -203,31 +208,131 @@ async function activateSocial(){
   wrap.querySelector('#social-activate-confirm')?.addEventListener('click',async()=>{const button=wrap.querySelector('#social-activate-confirm');if(!wrap.querySelector('#social-rules-ok')?.checked||!wrap.querySelector('#social-privacy-ok')?.checked){toast('Debes aceptar ambas condiciones.','error');return;}button.disabled=true;try{const consent={acepta_normas:true,acepta_privacidad:true};if(socialStatus?.scope==='global'&&socialStatus?.direct_profile_id)await repos.kombaxSocial.activateDirect(socialStatus.direct_profile_id,consent);else await repos.kombaxIdentity.activateMember(consent);closeModal();toast('Perfil KOMBAX Social activado');await renderKombaxSocial();}catch(error){button.disabled=false;setError(error);}});
 }
 
-function openContact(targetId,targetName){
+async function openContact(targetId,targetName){
   const senders=ownProfiles.filter(p=>p.contacto_habilitado);const preferred=activeIdentity();if(preferred){senders.sort((a,b)=>a.id===preferred.id?-1:b.id===preferred.id?1:0);}
   if(!senders.length){toast('No tienes un perfil habilitado para contacto. Los perfiles personales menores de 18 años no pueden usar esta función.','error');return;}
-  openForm({title:`Contactar con ${targetName}`,subtitle:'Contacto KOMBAX es un intercambio profesional breve. Si la otra parte acepta, se habilitan hasta 20 mensajes totales de solo texto.',fields:[{name:'remitente',label:'Enviar como',type:'select',required:true,value:senders[0].id,options:senders.map(p=>({value:p.id,label:p.nombre_publico}))},{name:'motivo',label:'Motivo',type:'select',required:true,value:'informacion',options:Object.entries(CONTACT_LABEL).map(([value,label])=>({value,label}))},{name:'mensaje',label:'Primer mensaje',type:'textarea',required:true,full:true,rows:5,maxLength:500,help:'Entre 10 y 500 caracteres. Cuenta como mensaje 1/20. No admite imágenes, vídeos, audios ni archivos.'}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.kombaxSocial.contact(v.remitente,targetId,v.motivo,v.mensaje);toast('Solicitud enviada · mensaje 1/20');activeView='contacts';await renderKombaxSocial();}});
+  try{
+    const existing=(await repos.kombaxSocial.contacts()).find(c=>{
+      const mine=senders.some(p=>String(p.id)===String(c.remitente_id)||String(p.id)===String(c.destinatario_id));
+      const other=String(c.remitente_id)===String(targetId)||String(c.destinatario_id)===String(targetId);
+      return mine&&other&&['pendiente','aceptada'].includes(String(c.estado));
+    });
+    if(existing){
+      if(existing.estado==='aceptada')toast('Ya tenéis un chat abierto.');
+      else toast('La solicitud de contacto sigue pendiente.');
+      await openContactThread(existing);return;
+    }
+  }catch{}
+  openForm({title:`Contactar con ${targetName}`,subtitle:'Indica el motivo y un primer mensaje. La otra persona debe aceptar la solicitud antes de que se habilite el chat.',fields:[{name:'remitente',label:'Enviar como',type:'select',required:true,value:senders[0].id,options:senders.map(p=>({value:p.id,label:p.nombre_publico}))},{name:'motivo',label:'Motivo',type:'select',required:true,value:'informacion',options:Object.entries(CONTACT_LABEL).map(([value,label])=>({value,label}))},{name:'mensaje',label:'Primer mensaje',type:'textarea',required:true,full:true,rows:5,maxLength:500,help:'Entre 10 y 500 caracteres. Se enviará junto a la solicitud. No admite imágenes, vídeos, audios ni archivos.'}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.kombaxSocial.contact(v.remitente,targetId,v.motivo,v.mensaje);toast('Solicitud de contacto enviada');activeView='contacts';await renderKombaxSocial();}});
 }
 
 async function openContactThread(contact){
-  let current=contact;
+  let current=contact,disposed=false,syncing=false,syncPoller=null,lastMetaSyncAt=0;
+  let messages=[],olderAvailable=false,lastOrdinal=0;
+  const PAGE=30;
   const senderFor=()=>ownProfiles.find(p=>p.id===current.remitente_id||p.id===current.destinatario_id)||null;
   const otherName=()=>{const sender=senderFor();if(!sender)return `${current.remitente_nombre} ↔ ${current.destinatario_nombre}`;return sender.id===current.remitente_id?current.destinatario_nombre:current.remitente_nombre;};
-  const modal=openDetail({title:`Contacto KOMBAX · ${otherName()}`,subtitle:`${CONTACT_LABEL[current.motivo]||current.motivo} · solo texto · máximo ${Number(current.mensajes_limite||20)} mensajes`,body:'<div id="kx-contact-thread-root"><div class="loading-card">Cargando conversación…</div></div>',actions:'<button type="button" class="btn btn-ghost" id="kx-contact-refresh">Actualizar</button><button type="button" class="btn btn-ghost" id="kx-contact-close-thread">Cerrar contacto</button><button type="button" class="btn btn-danger" id="kx-contact-delete-thread">Eliminar conversación</button>',width:'760px',className:'kx-contact-thread-modal'});
+  const modal=openDetail({title:`Chat KOMBAX · ${otherName()}`,subtitle:`${CONTACT_LABEL[current.motivo]||current.motivo} · chat de texto`,body:'<div id="kx-contact-thread-root"><div class="loading-card">Cargando conversación…</div></div>',actions:'<button type="button" class="btn btn-ghost" id="kx-contact-close-thread">Cerrar chat</button><button type="button" class="btn btn-danger" id="kx-contact-delete-thread">Eliminar conversación</button>',width:'760px',className:'kx-contact-thread-modal'});
   const root=modal.wrap.querySelector('#kx-contact-thread-root');
   const refreshMeta=async()=>{const all=await repos.kombaxSocial.contacts();current=all.find(x=>String(x.id)===String(current.id))||current;return current;};
-  const render=async()=>{
-    try{await repos.kombaxSocial.markContactRead(current.id).catch(()=>{});await refreshMeta();const rows=await repos.kombaxSocial.contactMessages(current.id);const sender=senderFor();const count=Number(current.mensajes_count??rows.length);const limit=Number(current.mensajes_limite||20);const closed=current.estado!=='aceptada'||count>=limit;
-      root.innerHTML=`<section class="kx-contact-thread"><header><div><span class="page-kicker">${esc(String(current.estado||'').toUpperCase())} · ${esc(CONTACT_LABEL[current.motivo]||current.motivo)}</span><strong>${esc(current.remitente_nombre)} ↔ ${esc(current.destinatario_nombre)}</strong></div><span class="kx-contact-counter ${count>=limit?'limit':''}">${count}/${limit}</span></header><div class="kx-contact-message-list">${rows.map(m=>`<article class="kx-contact-message ${m.propio?'own':'other'}"><small>${esc(m.autor_nombre)} · ${dtFmt(m.creado_en)}</small><p>${esc(m.texto).replace(/\n/g,'<br>')}</p></article>`).join('')}</div>${current.estado==='aceptada'&&sender&&count<limit?`<div class="kx-contact-composer"><textarea id="kx-contact-message-text" maxlength="500" rows="3" placeholder="Escribe un mensaje breve…" aria-label="Mensaje de Contacto KOMBAX"></textarea><div><small>Solo texto · quedan ${Math.max(limit-count,0)} mensajes</small><button type="button" class="btn btn-primary" id="kx-contact-send">Enviar</button></div></div>`:`<div class="kx-contact-closed">${closed?'Este contacto está en modo lectura.':'La solicitud debe ser aceptada antes de continuar.'}</div>`}</section>`;
-      const send=root.querySelector('#kx-contact-send');send?.addEventListener('click',async()=>{const text=root.querySelector('#kx-contact-message-text')?.value.trim()||'';if(!text){toast('Escribe un mensaje.','error');return;}send.disabled=true;try{await repos.kombaxSocial.sendContactMessage(current.id,sender.id,text);await render();}catch(error){send.disabled=false;setError(error);}});
-      const list=root.querySelector('.kx-contact-message-list');if(list)list.scrollTop=list.scrollHeight;
-      const closeButton=modal.wrap.querySelector('#kx-contact-close-thread');if(closeButton)closeButton.hidden=current.estado!=='aceptada';
-    }catch(error){root.innerHTML=empty('No se pudo abrir el contacto',error?.message||'Revisa la conexión.');}
+  const receiptState=m=>m?.leido_en?{state:'read',label:'✓✓ Leído',title:`Leído ${dtFmt(m.leido_en)}`}:{state:'sent',label:'✓ Enviado',title:'Enviado'};
+  const receiptHtml=m=>{if(!m.propio)return '';const r=receiptState(m);return `<span class="kx-contact-message-status" data-read-state="${r.state}" title="${esc(r.title)}" aria-label="${esc(r.title)}">${r.label}</span>`;};
+  const msgHtml=m=>`<article class="kx-contact-message ${m.propio?'own':'other'}" data-message-id="${esc(m.id)}" data-ordinal="${Number(m.ordinal)||0}"><small>${esc(m.autor_nombre)} · ${dtFmt(m.creado_en)}</small><p>${esc(m.texto).replace(/\n/g,'<br>')}</p>${receiptHtml(m)}</article>`;
+  const updateReceiptDom=m=>{if(!m?.propio)return;const article=[...root.querySelectorAll('.kx-contact-message[data-message-id]')].find(el=>el.dataset.messageId===String(m.id));const status=article?.querySelector('.kx-contact-message-status');if(!status)return;const r=receiptState(m);status.dataset.readState=r.state;status.textContent=r.label;status.title=r.title;status.setAttribute('aria-label',r.title);};
+  const syncState=(text,kind='ok')=>{const el=root.querySelector('#kx-chat-sync-state');if(el){el.textContent=text;el.dataset.state=kind;}};
+  const cleanup=()=>{if(disposed)return;disposed=true;syncPoller?.stop();syncPoller=null;};
+  const ensureAlive=()=>{if(!root.isConnected){cleanup();return false;}return true;};
+  const bindComposer=()=>{
+    const sender=senderFor(),send=root.querySelector('#kx-contact-send'),area=root.querySelector('#kx-contact-message-text');
+    const submit=async()=>{const text=area?.value.trim()||'';if(!text){toast('Escribe un mensaje.','error');return;}if(!sender||!send)return;send.disabled=true;area.disabled=true;try{await repos.kombaxSocial.sendContactMessage(current.id,sender.id,text);area.value='';syncPoller?.markActive();syncState('Mensaje enviado · sincronizando','sync');await syncNew(true);}catch(error){setError(error);}finally{if(send.isConnected)send.disabled=false;if(area?.isConnected){area.disabled=false;area.focus();}}};
+    send?.addEventListener('click',submit);
+    area?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();submit();}});
   };
-  modal.wrap.querySelector('#kx-contact-refresh')?.addEventListener('click',render);
-  modal.wrap.querySelector('#kx-contact-close-thread')?.addEventListener('click',async()=>{const b=modal.wrap.querySelector('#kx-contact-close-thread');b.disabled=true;try{await repos.kombaxSocial.closeContact(current.id);toast('Contacto cerrado');modal.close();await renderContacts();}catch(error){b.disabled=false;setError(error);}});
-  modal.wrap.querySelector('#kx-contact-delete-thread')?.addEventListener('click',()=>{const actor=senderFor();if(!actor){toast('No se puede identificar la copia de esta conversación.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La otra persona conservará su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(current.id,actor.id);toast('Conversación eliminada de tu bandeja');modal.close();await renderContacts();},{confirmText:'Eliminar conversación',danger:true});});
-  await render();
+  const renderThread=(scrollBottom=false)=>{
+    if(!ensureAlive())return;
+    const sender=senderFor();const chatOpen=current.estado==='aceptada'&&!!sender&&current.puede_chat!==false;
+    root.innerHTML=`<section class="kx-contact-thread"><header><div><span class="page-kicker">${esc(String(current.estado||'').toUpperCase())} · ${esc(CONTACT_LABEL[current.motivo]||current.motivo)}</span><strong>${esc(current.remitente_nombre)} ↔ ${esc(current.destinatario_nombre)}</strong></div><span class="kx-chat-live-state" id="kx-chat-sync-state" data-state="ok">Actualización automática</span></header>${olderAvailable?'<div class="kx-chat-history"><button type="button" class="btn btn-ghost btn-sm" id="kx-contact-load-older">Cargar mensajes anteriores</button></div>':''}<div class="kx-contact-message-list">${messages.map(msgHtml).join('')}</div>${chatOpen?`<div class="kx-contact-composer"><textarea id="kx-contact-message-text" maxlength="500" rows="3" placeholder="Escribe un mensaje…" aria-label="Mensaje de chat KOMBAX"></textarea><div><small>Enter para enviar · Shift+Enter para salto de línea</small><button type="button" class="btn btn-primary" id="kx-contact-send">Enviar</button></div></div>`:`<div class="kx-contact-closed">${current.estado==='pendiente'?'Solicitud pendiente. El chat se habilitará cuando la otra persona la acepte.':current.estado==='rechazada'?'La solicitud fue rechazada.':'Este chat está cerrado y se conserva en modo lectura.'}</div>`}</section>`;
+    bindComposer();
+    root.querySelector('#kx-contact-load-older')?.addEventListener('click',loadOlder);
+    const list=root.querySelector('.kx-contact-message-list');if(list&&scrollBottom)list.scrollTop=list.scrollHeight;
+    const closeButton=modal.wrap.querySelector('#kx-contact-close-thread');if(closeButton)closeButton.hidden=current.estado!=='aceptada';
+  };
+  const loadOlder=async()=>{
+    const button=root.querySelector('#kx-contact-load-older');if(button)button.disabled=true;
+    const before=messages.length?Math.min(...messages.map(m=>Number(m.ordinal)||Number.MAX_SAFE_INTEGER)):null;
+    if(!before){olderAvailable=false;renderThread(false);return;}
+    try{
+      const rows=await repos.kombaxSocial.contactMessages(current.id,{before,limit:PAGE});
+      const known=new Set(messages.map(m=>String(m.id)));const fresh=rows.filter(m=>!known.has(String(m.id)));
+      const list=root.querySelector('.kx-contact-message-list'),oldHeight=list?.scrollHeight||0,oldTop=list?.scrollTop||0;
+      messages=[...fresh,...messages].sort((a,b)=>Number(a.ordinal)-Number(b.ordinal));
+      olderAvailable=rows.length?rows[0].older_available===true:false;
+      renderThread(false);
+      const next=root.querySelector('.kx-contact-message-list');if(next)next.scrollTop=oldTop+(next.scrollHeight-oldHeight);
+    }catch(error){if(button?.isConnected)button.disabled=false;toast(error?.message||'No se pudieron cargar mensajes anteriores.','error');}
+  };
+  const appendRows=async rows=>{
+    if(!rows?.length||!ensureAlive())return 0;
+    const known=new Set(messages.map(m=>String(m.id)));const fresh=rows.filter(m=>!known.has(String(m.id))).sort((a,b)=>Number(a.ordinal)-Number(b.ordinal));
+    if(!fresh.length)return 0;
+    const list=root.querySelector('.kx-contact-message-list');if(!list)return;
+    const nearBottom=list.scrollHeight-list.scrollTop-list.clientHeight<120;
+    fresh.forEach(m=>list.insertAdjacentHTML('beforeend',msgHtml(m)));
+    messages.push(...fresh);messages.sort((a,b)=>Number(a.ordinal)-Number(b.ordinal));
+    lastOrdinal=Math.max(lastOrdinal,...fresh.map(m=>Number(m.ordinal)||0));
+    await repos.kombaxSocial.markContactRead(current.id).catch(()=>{});
+    if(nearBottom||fresh.some(m=>m.propio))list.scrollTop=list.scrollHeight;
+    return fresh.length;
+  };
+  const syncReadReceipts=async()=>{
+    const rows=await repos.kombaxSocial.contactMessages(current.id,{limit:PAGE});
+    if(!rows?.length)return 0;
+    const latest=new Map(rows.map(m=>[String(m.id),m]));let changed=0;
+    messages=messages.map(m=>{
+      const fresh=latest.get(String(m.id));
+      if(!fresh||String(fresh.leido_en||'')===String(m.leido_en||''))return m;
+      const next={...m,leido_en:fresh.leido_en};changed++;updateReceiptDom(next);return next;
+    });
+    return changed;
+  };
+  const syncNew=async(force=false)=>{
+    if(!ensureAlive()||syncing||(!force&&document.visibilityState==='hidden'))return 'idle';
+    syncing=true;let ok=true,activity=false;
+    try{
+      let rounds=0;
+      while(rounds<10){
+        const rows=await repos.kombaxSocial.contactMessages(current.id,{after:lastOrdinal,limit:50});
+        if(!rows.length)break;
+        const appended=await appendRows(rows);if(appended>0)activity=true;rounds++;
+        if(rows.length<50)break;
+      }
+      const now=Date.now();
+      if(force||now-lastMetaSyncAt>=12000){
+        lastMetaSyncAt=now;
+        if(await syncReadReceipts()>0)activity=true;
+        const beforeState=String(current.estado);await refreshMeta();
+        if(beforeState!==String(current.estado)){activity=true;renderThread(true);}
+      }
+      syncState(activity?'Actividad sincronizada':'Actualización automática','ok');
+    }catch(error){ok=false;syncState(navigator.onLine?'Reintentando sincronización…':'Sin conexión · reintentando','warn');}
+    finally{syncing=false;}
+    return ok?(activity?true:'idle'):false;
+  };
+  const loadInitial=async()=>{
+    try{
+      await repos.kombaxSocial.markContactRead(current.id).catch(()=>{});await refreshMeta();
+      const rows=await repos.kombaxSocial.contactMessages(current.id,{limit:PAGE});
+      messages=rows.slice().sort((a,b)=>Number(a.ordinal)-Number(b.ordinal));
+      olderAvailable=rows.length?rows[0].older_available===true:false;
+      lastOrdinal=messages.reduce((max,m)=>Math.max(max,Number(m.ordinal)||0),0);
+      renderThread(true);
+    }catch(error){root.innerHTML=empty('No se pudo abrir el chat',error?.message||'Revisa la conexión.');}
+  };
+  syncPoller=createAdaptivePoller(()=>syncNew(false),{activeMs:2500,hiddenMs:0,maxMs:30000,idleMaxMs:30000,idleAfter:2,jitterRatio:.18});
+  syncPoller.start({immediate:false});
+  modal.wrap.querySelector('#kx-contact-close-thread')?.addEventListener('click',async()=>{const b=modal.wrap.querySelector('#kx-contact-close-thread');b.disabled=true;try{await repos.kombaxSocial.closeContact(current.id);toast('Chat cerrado');cleanup();modal.close();await renderContacts();}catch(error){b.disabled=false;setError(error);}});
+  modal.wrap.querySelector('#kx-contact-delete-thread')?.addEventListener('click',()=>{const actor=senderFor();if(!actor){toast('No se puede identificar la copia de esta conversación.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La otra persona conservará su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(current.id,actor.id);toast('Conversación eliminada de tu bandeja');cleanup();modal.close();await renderContacts();},{confirmText:'Eliminar conversación',danger:true});});
+  await loadInitial();
 }
 
 function openReport(type,id){
@@ -354,7 +459,7 @@ async function loadFeed(append=false){
 }
 
 function renderFeedView(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',ownProfiles.length?'<button type="button" class="btn btn-primary" id="kombax-social-publish">+ Publicar con multimedia</button>':'','KOMBAX Social')}${identitySwitcher()}${tabBar()}${activationPanel()}${socialRulesCard()}${quickComposer()}${feedCards()}</div>`);bindCommon();bindFeed();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',ownProfiles.length?'<button type="button" class="btn btn-primary" id="kombax-social-publish">+ Publicar con multimedia</button>':'','KOMBAX Social')}${identitySwitcher()}${tabBar()}${competitorFoundersPromo()}${activationPanel()}${socialRulesCard()}${quickComposer()}${feedCards()}</div>`);bindCommon();bindFeed();
 }
 
 async function renderProfiles(){
@@ -370,11 +475,11 @@ async function renderProfiles(){
 }
 
 async function renderContacts(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Contacto KOMBAX','Networking profesional de texto. Cada contacto aceptado permite un máximo de 20 mensajes totales; después queda en modo lectura.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div id="kombax-contact-list"><div class="loading-card">Cargando contactos…</div></div></div>`);bindCommon();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Mensajes Social','Solicitudes de contacto con aceptación previa y chat de texto abierto. Los mensajes se sincronizan automáticamente mientras KOMBAX está abierto.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div id="kombax-contact-list"><div class="loading-card">Cargando contactos…</div></div></div>`);bindCommon();
   const box=document.getElementById('kombax-contact-list');
   try{
     const rows=await repos.kombaxSocial.contacts();
-    box.innerHTML=rows.length?`<div class="kombax-contact-list">${rows.map(c=>`<article><header><div><span class="page-kicker">${esc(c.direccion==='recibida'?'RECIBIDA':c.direccion==='enviada'?'ENVIADA':'CONTACTO')} · ${esc(CONTACT_LABEL[c.motivo]||c.motivo)}</span><strong>${esc(c.remitente_nombre)} → ${esc(c.destinatario_nombre)}</strong></div>${badge(c.estado,c.estado==='aceptada'?'ok':c.estado==='rechazada'||c.estado==='cerrada'?'warn':'neutral')}</header><p>${esc(c.ultimo_mensaje||'Solicitud de contacto')}</p><div class="kx-contact-meta"><small>${dtFmt(c.ultimo_mensaje_en||c.creado_en)}</small><span>${Number(c.mensajes_count||0)}/${Number(c.mensajes_limite||20)} mensajes</span>${Number(c.no_leidos||0)>0?`<b>${Number(c.no_leidos)} nuevo${Number(c.no_leidos)===1?'':'s'}</b>`:''}</div><div class="row-actions">${c.gestionable?`<button class="btn btn-primary btn-sm" data-contact-state="aceptada" data-contact-id="${esc(c.id)}">Aceptar</button><button class="btn btn-ghost btn-sm" data-contact-state="rechazada" data-contact-id="${esc(c.id)}">Rechazar</button>`:''}<button class="btn btn-ghost btn-sm" data-contact-open="${esc(c.id)}">${c.estado==='aceptada'?'Abrir contacto':'Ver mensajes'}</button><button class="btn btn-danger btn-sm" data-contact-delete="${esc(c.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`).join('')}</div>`:empty('Sin contactos','Cuando envíes o recibas una solicitud aparecerá aquí. Si se acepta, se habilitará un hilo breve de solo texto.');
+    box.innerHTML=rows.length?`<div class="kombax-contact-list">${rows.map(c=>`<article><header><div><span class="page-kicker">${esc(c.direccion==='recibida'?'RECIBIDA':c.direccion==='enviada'?'ENVIADA':'CONTACTO')} · ${esc(CONTACT_LABEL[c.motivo]||c.motivo)}</span><strong>${esc(c.remitente_nombre)} → ${esc(c.destinatario_nombre)}</strong></div>${badge(c.estado,c.estado==='aceptada'?'ok':c.estado==='rechazada'||c.estado==='cerrada'?'warn':'neutral')}</header><p>${esc(c.ultimo_mensaje||'Solicitud de contacto')}</p><div class="kx-contact-meta"><small>${dtFmt(c.ultimo_mensaje_en||c.creado_en)}</small><span>${c.estado==='aceptada'?'Chat abierto':c.estado==='pendiente'?'Pendiente de aceptación':'Conversación cerrada'}</span>${Number(c.no_leidos||0)>0?`<b>${Number(c.no_leidos)} nuevo${Number(c.no_leidos)===1?'':'s'}</b>`:''}</div><div class="row-actions">${c.gestionable?`<button class="btn btn-primary btn-sm" data-contact-state="aceptada" data-contact-id="${esc(c.id)}">Aceptar</button><button class="btn btn-ghost btn-sm" data-contact-state="rechazada" data-contact-id="${esc(c.id)}">Rechazar</button>`:''}<button class="btn btn-ghost btn-sm" data-contact-open="${esc(c.id)}">${c.estado==='aceptada'?'Abrir contacto':'Ver mensajes'}</button><button class="btn btn-danger btn-sm" data-contact-delete="${esc(c.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`).join('')}</div>`:empty('Sin contactos','Cuando envíes o recibas una solicitud aparecerá aquí. Si se acepta, se habilitará un chat de texto.');
     box.querySelectorAll('[data-contact-state]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.contactStatus(b.dataset.contactId,b.dataset.contactState);toast(b.dataset.contactState==='aceptada'?'Solicitud aceptada · contacto abierto':'Solicitud rechazada');await renderContacts();}catch(error){b.disabled=false;setError(error);}}));
     box.querySelectorAll('[data-contact-open]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactOpen));if(c)openContactThread(c);}));
     box.querySelectorAll('[data-contact-delete]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactDelete));if(!c)return;const actor=ownProfiles.find(p=>p.id===c.remitente_id||p.id===c.destinatario_id);if(!actor){toast('No se puede identificar tu identidad en este contacto.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La contraparte conserva su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(c.id,actor.id);toast('Conversación eliminada');await renderContacts();},{confirmText:'Eliminar conversación',danger:true});}));
@@ -416,7 +521,7 @@ function moderationAction(report,estado,accion){
 }
 
 async function renderSafety(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Seguridad y alcance','Controles claros para una comunidad responsable.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div class="kombax-safety-grid"><article>${icon('shieldCheck',{size:30})}<strong>Separación real</strong><p>KOMBAX Social no muestra expedientes, cuotas, asistencia, teléfonos, correos, domicilios ni relaciones familiares.</p></article><article>${icon('message',{size:30})}<strong>Contacto KOMBAX</strong><p>Una solicitud aceptada habilita un hilo profesional de hasta 20 mensajes totales. Es solo texto: sin imágenes, vídeos, audios, archivos, grupos, presencia ni estado en línea.</p></article><article>${icon('users',{size:30})}<strong>Protección de menores</strong><p>KOMBAX impide el contacto directo cuando cualquiera de los perfiles personales corresponde a una persona menor de 18 años.</p></article><article>${icon('alert',{size:30})}<strong>Moderación global</strong><p>Publicaciones, comentarios y perfiles pueden denunciarse. Los bloqueos y las acciones de moderación conservan trazabilidad sin alterar la membresía del club.</p></article></div><section id="kx-moderation-console"></section></div>`);bindCommon();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Seguridad y alcance','Controles claros para una comunidad responsable.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div class="kombax-safety-grid"><article>${icon('shieldCheck',{size:30})}<strong>Separación real</strong><p>KOMBAX Social no muestra expedientes, cuotas, asistencia, teléfonos, correos, domicilios ni relaciones familiares.</p></article><article>${icon('message',{size:30})}<strong>Contacto KOMBAX</strong><p>El chat solo se habilita tras aceptar una solicitud con motivo previo. El historial permanece abierto y es solo texto: sin imágenes, vídeos, audios ni archivos en esta fase.</p></article><article>${icon('users',{size:30})}<strong>Protección de menores</strong><p>KOMBAX impide el contacto directo cuando cualquiera de los perfiles personales corresponde a una persona menor de 18 años.</p></article><article>${icon('alert',{size:30})}<strong>Moderación global</strong><p>Publicaciones, comentarios y perfiles pueden denunciarse. Los bloqueos y las acciones de moderación conservan trazabilidad sin alterar la membresía del club.</p></article></div><section id="kx-moderation-console"></section></div>`);bindCommon();
   const consoleBox=document.getElementById('kx-moderation-console');
   let reports=[];
   try{reports=await repos.kombaxSocial.moderationQueue(120);}catch{return;}

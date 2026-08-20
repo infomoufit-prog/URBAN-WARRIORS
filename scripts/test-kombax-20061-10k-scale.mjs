@@ -1,0 +1,21 @@
+import {readFile} from 'node:fs/promises';
+const root=new URL('../',import.meta.url);const read=p=>readFile(new URL(p,root),'utf8');
+const [cfg,html,sw,gradle,app,repos,backend,poller,social,migration,rollback,verification,k6,fixture,runbook,target]=await Promise.all([
+  read('web/config.js'),read('web/index.html'),read('web/service-worker.js'),read('android/app/build.gradle'),read('web/js/app.js'),read('web/js/core/repositories.js'),read('web/js/core/backend.js'),read('web/js/core/adaptive-poller.js'),read('web/js/modules/kombax-social.js'),read('supabase/migrations/106_kombax_10k_concurrent_scale_20061.sql'),read('supabase/rollbacks/106_kombax_10k_concurrent_scale_20061_rollback.sql'),read('supabase/verification/106_kombax_10k_concurrent_scale_20061_verification.sql'),read('load/k6-kombax-10k-concurrent.js'),read('scripts/generate-kombax-load-fixture.mjs'),read('LOAD_TEST_RUNBOOK_10K_CONCURRENT_20061.md'),read('SCALE_TARGET_10K_CONCURRENT_20061.md')
+]);
+const ok=(v,m)=>{if(!v)throw new Error(`20061: ${m}`);console.log('OK '+m)};
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]);const android=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);const swBuild=Number(sw.match(/rc13-(\d+)/)?.[1]);const refs=[...html.matchAll(/\?v=(\d+)/g)].map(x=>Number(x[1]));
+ok(build>=20061&&android===build&&swBuild===build&&refs.length>0&&refs.every(v=>v===build),'build web/PWA/Android mantiene coherencia desde 20061');
+ok(poller.includes('idleStreak')&&poller.includes('idleMaxMs')&&poller.includes('idleAfter')&&poller.includes('markActive()')&&poller.includes("visibilitychange"),'poller soporta idle backoff, actividad y visibilidad');
+ok(backend.includes('READ_CONCURRENCY=6')&&backend.includes('CONTRACT_TTL_MS=5*60*1000')&&backend.includes('withReadSlot')&&backend.includes('contractCache'),'cliente limita concurrencia de lecturas y cachea contrato');
+ok(app.includes('activeMs:45000')&&app.includes('hiddenMs:0')&&app.includes('idleMaxMs:300000')&&app.includes("?'idle':true"),'cabecera se pausa en background y reduce frecuencia en reposo');
+ok(social.includes('activeMs:2500')&&social.includes('hiddenMs:0')&&social.includes('idleMaxMs:30000')&&social.includes("activity?true:'idle'")&&social.includes('syncPoller?.markActive()'),'chat mantiene hot path y backoff idle con reactivación inmediata');
+ok(repos.includes('app_kombax_header_summary_v106')&&repos.includes('app_kombax_header_activity_v106')&&repos.includes('app_kombax_contactos_v106')&&repos.includes('app_kombax_contact_mensajes_v106')&&repos.includes('app_kombax_contact_mark_read_v106'),'frontend usa contratos v106 de cabecera/chat');
+ok(migration.includes('idx_kombax_social_contacto_remitente_v106')&&migration.includes('app_kombax_my_social_actor_ids_v106')&&migration.includes('app_kombax_header_summary_v106')&&migration.includes('app_kombax_contact_mensajes_v106'),'migración v106 incluye índice, actor scope y contratos escalables');
+ok(migration.includes("set search_path to 'public','auth'")&&migration.includes('revoke all')&&migration.includes('grant execute')&&migration.includes('to authenticated'),'v106 conserva privilegios explícitos y search_path fijo');
+ok(rollback.includes('drop function if exists public.app_kombax_header_summary_v106')&&verification.includes('anon_header_closed')&&verification.includes('anon_messages_closed'),'rollback y verificación v106 disponibles');
+ok(k6.includes('10000')&&k6.includes('7500')&&k6.includes('2500')&&k6.includes('app_kombax_header_summary_v106')&&k6.includes('app_kombax_contact_mensajes_v106'),'harness k6 cubre escalado hasta 10k y endpoints v106');
+ok(fixture.includes('50000')&&fixture.includes('--clubs')&&fixture.includes('--members'),'fixture permite dataset configurable hasta 50k miembros sintéticos');
+ok(runbook.includes('100 → 250 → 500 → 1.000 → 2.500 → 5.000 → 7.500 → 10.000')||runbook.includes('100 -> 250 -> 500'),'runbook exige escalado progresivo hasta 10k');
+ok(target.toLowerCase().includes('no certific')||target.toLowerCase().includes('no queda certific'),'documentación no confunde preparación con certificación de carga');
+console.log('KOMBAX BUILD 20061 · 10K CONCURRENT SCALE READINESS: PASS');

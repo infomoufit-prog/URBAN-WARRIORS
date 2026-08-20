@@ -25,5 +25,6 @@ ok(m.includes('drop index if exists public.idx_material_pedidos_club_validacion'
 for(const idx of ['idx_socios_perfil_fk_v100','idx_dispositivos_push_perfil_fk_v100','idx_kombax_social_posts_social_media_fk_v100','idx_asistencias_club_socio_fk_v100','idx_material_pedidos_club_socio_fk_v100']) ok(m.includes(`create index if not exists ${idx}`),`índice FK consolidación: ${idx}`);
 ok(r.includes('grant execute on function public.app_kombax_social_mutate_v083')&&r.includes('alter policy perfil_propio on public.perfiles using (id=auth.uid())')&&r.includes('create index if not exists idx_material_pedidos_club_validacion'),'rollback restaura RPC/policies/índice previo');
 ok(r.includes('drop index if exists public.idx_socios_perfil_fk_v100')&&r.includes("notify pgrst,'reload schema'"),'rollback elimina índices v100 y recarga schema');
-ok(cfg.includes('build: 20057')&&sw.includes('rc13-20057')&&index.includes('v=20057')&&gradle.includes('versionCode 20057'),'web/PWA/Android marcan build 20057');
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]);const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);const swBuild=Number(sw.match(/rc13-(\d+)/)?.[1]);const refs=[...index.matchAll(/\?v=(\d+)/g)].map(x=>Number(x[1]));
+ok(build>=20057&&androidBuild===build&&swBuild===build&&refs.length>0&&refs.every(v=>v===build),'web/PWA/Android conservan la consolidación 20057 y mantienen el build sincronizado');
 console.log('KOMBAX BUILD 20057 · Supabase consolidation: PASS');

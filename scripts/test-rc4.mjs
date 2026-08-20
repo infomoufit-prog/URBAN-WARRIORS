@@ -10,8 +10,8 @@ assert(mh.digest('hex')==='f3f33071f6f9aefa76bca6972957482e2d1f907b3640f613a5277
 const app=await text('web/js/app.js'),css=await text('web/css/app.css'),portal=await text('web/js/modules/portal.js'),comms=await text('web/js/modules/comms-material.js'),components=await text('web/js/ui/components.js');
 assert(/else ids=\['dashboard','groups',[^\]]*'community'[^\]]*'profile'\]/.test(app),'familia/alumno tiene navegación de producto y Comunidad sin diagnóstico');
 assert(!app.match(/else ids=\[[^\]]*diagnostics[^\]]*\]/),'navegación final de usuario no expone diagnóstico');
-assert(app.includes("ids=['dashboard','members','groups','attendance','more']"),'monitor tiene bottom nav específico con acceso directo a sus alumnos');
-assert(app.includes("ids=['dashboard','finance','reminders','notifications','more']"),'economía tiene bottom nav específico');
+assert(/else if\(role==='monitor'\) ids=\['dashboard','members','groups','sessions','attendance'/.test(app),'monitor conserva acceso gobernado a alumnos, grupos, sesiones y asistencia');
+assert(/else if\(role==='economia'\) ids=\['dashboard','finance','reminders'/.test(app),'economía conserva acceso gobernado a finanzas y avisos de cobro');
 assert(portal.includes('Registrar acceso')&&portal.includes('Añadir menor')&&portal.includes('Nueva solicitud deportiva'),'portal familiar recupera check-in, menor y multideporte');
 assert(portal.includes('profileSwitcher')&&portal.includes('Asistencia')&&portal.includes('Grado actual'),'portal familiar incluye selector y KPIs deportivos');
 assert(portal.includes("repos.portal.requestEnrollment")&&portal.includes("repos.portal.requestMinor")&&portal.includes("repos.portal.checkin"),'acciones familiares usan repositories y gateway gobernado');

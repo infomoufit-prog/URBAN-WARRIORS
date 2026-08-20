@@ -43,8 +43,11 @@ export const opt = (rows, selected, label=(r)=>r.nombre) => rows.map(r=>`<option
 export const sleep = (ms) => new Promise(r=>setTimeout(r,ms));
 
 export function humanError(error) {
-  const parts = [error?.message, error?.details, error?.hint].filter(Boolean);
-  return parts.join(' · ') || 'Error desconocido';
+  if(error?.code==='AUTH_EXPIRED')return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
+  const raw=[error?.message,error?.details,error?.hint].filter(Boolean).join(' · ');
+  if(/invalid\s*refresh\s*token|refresh\s*token\s*(?:not\s*found|invalid|expired)|refresh_token_not_found/i.test(raw))return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
+  if(/failed to fetch|networkerror|network request failed|load failed/i.test(raw))return 'No se pudo conectar. Comprueba tu conexión a Internet e inténtalo de nuevo.';
+  return raw || 'No se ha podido completar la operación.';
 }
 
 export function todayTime(offsetMinutes=0) {

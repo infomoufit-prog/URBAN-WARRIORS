@@ -2,7 +2,8 @@ import { backend, client } from './core/backend.js';
 import { state } from './core/state.js';
 import { repos } from './core/repositories.js';
 import { humanError, esc } from './core/utils.js';
-import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge } from './ui/components.js';
+import { createAdaptivePoller } from './core/adaptive-poller.js';
+import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge, setKombaxNotificationBadge, setMessageBadge } from './ui/components.js';
 import { navIcon, icon } from './ui/icons.js';
 import { renderDashboard, renderCatalog } from './modules/dashboard-catalog.js';
 import { renderGroups, renderMembers, renderEnrollments } from './modules/groups-members.js';
@@ -32,7 +33,7 @@ const routes={
   tracking:renderTracking,material:renderMaterial,documents:renderDocuments,notifications:renderNotifications,users:renderUsers,settings:renderSettings,diagnostics:renderDiagnostics,
   certification:renderCertification,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():(['direccion','coordinacion'].includes(state.session?.rol)?renderClubKombaxHub():renderProfile), 'personal-profile':renderProfile,'platform-admin':renderPlatformAdmin,scopes:renderWorkScopes,community:renderCommunity,social:renderKombaxSocial,showcase:renderShowcase,events:renderEvents,archive:renderLifecycle,help:renderHelpLegal
 };
-const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app',community:'Comunidad del Club',social:'KOMBAX Social',showcase:'KOMBAX Showcase','platform-admin':'Administración KOMBAX','personal-profile':'Mi perfil personal',scopes:'Ámbitos y privacidad',events:'Eventos',archive:'Archivo y papelera',help:'Manual interactivo'};
+const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones del Club',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app',community:'Comunidad del Club',social:'KOMBAX Social',showcase:'KOMBAX Showcase','platform-admin':'Administración KOMBAX','personal-profile':'Mi perfil',scopes:'Ámbitos y privacidad',events:'Eventos',archive:'Archivo y papelera',help:'Manual interactivo'};
 
 function navFor(session){
   const role=session?.rol;let ids;
@@ -44,32 +45,58 @@ function navFor(session){
   else ids=['dashboard','groups','finance','communications','community','events','material','notifications','requests','help','install','profile'];
   if(platformFeatures().social){const communityIndex=ids.indexOf('community');ids.splice(communityIndex>=0?communityIndex+1:ids.length,0,'social');}
   if(platformFeatures().showcase){const socialIndex=ids.indexOf('social');ids.splice(socialIndex>=0?socialIndex+1:ids.length,0,'showcase');}
+  if(role==='direccion'||role==='coordinacion')ids.unshift('personal-profile');
   if(session?.platform_admin===true)ids.push('platform-admin');
-  return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?'Hoy':role==='monitor'&&id==='members'?'Mis alumnos':role==='monitor'&&id==='groups'?'Mis grupos':role==='monitor'&&id==='finance'?'Mi cartera':role==='alumno'&&id==='help'?'Mi manual':isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':LABEL[id],icon:navIcon(id)}));
+  return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?'Hoy':role==='monitor'&&id==='members'?'Mis alumnos':role==='monitor'&&id==='groups'?'Mis grupos':role==='monitor'&&id==='finance'?'Mi cartera':role==='alumno'&&id==='help'?'Mi manual':isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':(role==='direccion'||role==='coordinacion')&&id==='profile'?'Perfil del club':LABEL[id],icon:navIcon(id)}));
 }
 function mobileNavFor(session){
-  const role=session?.rol;let ids;
-  if(role==='direccion'||role==='coordinacion')ids=['dashboard','members','sessions','finance','more'];
-  else if(role==='secretaria')ids=['dashboard','enrollments','members','sessions','more'];
-  else if(role==='economia')ids=['dashboard','finance','reminders','notifications','more'];
-  else if(role==='comunicacion')ids=['dashboard','communications','community','notifications','more'];
-  else if(role==='monitor')ids=['dashboard','members','groups','attendance','more'];
-  else ids=['dashboard','groups','community','finance','profile'];
-  const map={more:{id:'more',label:'Más',icon:navIcon('more')}};return ids.map(id=>map[id]||{id,label:isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':role==='monitor'&&id==='dashboard'?'Hoy':LABEL[id],icon:navIcon(id)});
+  const profileId=['direccion','coordinacion'].includes(session?.rol)?'personal-profile':'profile';
+  const ids=[profileId];
+  if(platformFeatures().social)ids.push('social');
+  if(platformFeatures().showcase)ids.push('showcase');
+  ids.push('more');
+  const map={more:{id:'more',label:'Mi Club',icon:navIcon('community')}};
+  return ids.map(id=>map[id]||{id,label:LABEL[id],icon:navIcon(id)});
 }
 
-let notificationTimer=null;
+let notificationPoller=null;
 let notificationPrimed=false;
-let knownNotificationIds=new Set();
+let knownLatestNotificationId='';
+let knownLatestNotificationAt='';
+let kombaxHeaderActivity={kombax_pending:0,relation_requests:0,contact_requests:0,message_unread:0};
 
-const notificationGroupKey=(n)=>{
-  const type=String(n?.tipo||'general');
-  if(n?.requiere_accion===true)return 'accion';
-  if(['reserva_sesion','sesion_cambio','clase'].includes(type))return 'sesiones';
-  if(type==='comunidad')return 'comunidad';
-  if(['comunicacion','evento'].includes(type))return 'comunicaciones';
-  return 'otros';
-};
+async function refreshHeaderSummary({announce=true}={}){
+  if(!state.session)return 'idle';
+  const wasPrimed=notificationPrimed;
+  const beforeSignature=`${state.unreadNotificationCount||0}:${state.unreadKombaxCount||0}:${state.unreadMessageCount||0}:${knownLatestNotificationId}:${knownLatestNotificationAt}`;
+  try{
+    const rows=await repos.notifications.headerSummary();const data=Array.isArray(rows)?(rows[0]||{}):(rows||{});
+    const unreadGroups=Number(data.club_unread_groups||0),unreadItems=Number(data.club_unread_items||0);
+    kombaxHeaderActivity={kombax_pending:Number(data.kombax_pending||0),relation_requests:Number(data.relation_requests||0),contact_requests:Number(data.contact_requests||0),message_unread:Number(data.message_unread||0)};
+    state.unreadNotificationCount=unreadGroups;state.unreadKombaxCount=kombaxHeaderActivity.kombax_pending;state.unreadMessageCount=kombaxHeaderActivity.message_unread;
+    setNotificationBadge(unreadGroups);setKombaxNotificationBadge(state.unreadKombaxCount);setMessageBadge(state.unreadMessageCount);
+    const latestId=String(data.club_latest_id||''),latestAt=String(data.club_latest_created_at||'');
+    if(!notificationPrimed){
+      if(announce&&unreadItems)toast(unreadGroups===1?`Tienes ${unreadItems} aviso${unreadItems===1?'':'s'} en 1 grupo pendiente`:`Tienes ${unreadItems} avisos en ${unreadGroups} grupos pendientes`);
+    }else if(announce&&latestId&&latestId!==knownLatestNotificationId&&(!knownLatestNotificationAt||latestAt>knownLatestNotificationAt)){
+      const title=String(data.club_latest_title||'Nueva notificación');toast(`Nueva notificación: ${title}`);
+      if('Notification' in window&&Notification.permission==='granted'&&document.hidden){try{new Notification(title,{body:String(data.club_latest_body||'Tienes una nueva notificación.'),icon:'./assets/icons/icon-192.png'})}catch{}}
+    }
+    knownLatestNotificationId=latestId;knownLatestNotificationAt=latestAt;notificationPrimed=true;
+    const afterSignature=`${state.unreadNotificationCount||0}:${state.unreadKombaxCount||0}:${state.unreadMessageCount||0}:${knownLatestNotificationId}:${knownLatestNotificationAt}`;
+    return wasPrimed&&beforeSignature===afterSignature?'idle':true;
+  }catch(error){
+    if(error?.code==='AUTH_EXPIRED'){state.unreadNotificationCount=0;state.unreadKombaxCount=0;state.unreadMessageCount=0;setNotificationBadge(0);setKombaxNotificationBadge(0);setMessageBadge(0);return true;}
+    console.warn('Resumen de actividad:',humanError(error));return false;
+  }
+}
+function openSocialView(view){try{sessionStorage.setItem('kombax_social_view',view)}catch{};navigate('social');}
+function openKombaxActivity(){
+  const k=kombaxHeaderActivity;const actionable=Number(k.kombax_pending||0);
+  const body=`<div class="kx-header-activity"><section><div class="kx-header-activity-icon">${icon('network',{size:22})}</div><div><small>MI RED KOMBAX</small><strong>${Number(k.relation_requests||0)} solicitud${Number(k.relation_requests||0)===1?'':'es'} pendiente${Number(k.relation_requests||0)===1?'':'s'}</strong><p>Solicitudes privadas que requieren tu decisión.</p></div><button type="button" class="btn btn-ghost btn-sm" data-kx-activity-open="relations">Revisar</button></section><section><div class="kx-header-activity-icon">${icon('message',{size:22})}</div><div><small>CONTACTO KOMBAX</small><strong>${Number(k.contact_requests||0)} solicitud${Number(k.contact_requests||0)===1?'':'es'} pendiente${Number(k.contact_requests||0)===1?'':'s'}</strong><p>Contactos que todavía esperan aceptación o rechazo.</p></div><button type="button" class="btn btn-ghost btn-sm" data-kx-activity-open="contacts">Revisar</button></section>${actionable===0?'<div class="kx-header-activity-empty"><strong>Todo al día</strong><span>No tienes solicitudes KOMBAX pendientes.</span></div>':''}</div>`;
+  const {wrap}=openDetail({title:'Notificaciones KOMBAX',subtitle:'Actividad global separada de los avisos de tu Club.',body,width:'640px',className:'kx-header-activity-modal'});
+  wrap.querySelectorAll('[data-kx-activity-open]').forEach(button=>button.addEventListener('click',()=>{closeModal();openSocialView(button.dataset.kxActivityOpen)}));
+}
 
 async function hydrateSessionAvatar(){
   const path=state.session?.avatar_path;if(!path)return;
@@ -80,28 +107,13 @@ async function hydrateSessionAvatar(){
   }catch(error){console.warn('Avatar:',humanError(error));}
 }
 
-function stopNotificationMonitor(){if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}notificationPrimed=false;knownNotificationIds=new Set();}
-async function refreshNotifications({announce=true,force=false}={}){
-  if(!state.session)return;
-  try{
-    const items=await repos.notifications.list({force});
-    const unread=items.filter(n=>!n.leida);
-    const unreadGroups=new Set(unread.map(notificationGroupKey));
-    state.unreadNotificationCount=unreadGroups.size;setNotificationBadge(unreadGroups.size);
-    const ids=new Set(items.map(n=>n.id));
-    if(!notificationPrimed){
-      if(announce&&unread.length)toast(unreadGroups.size===1?`Tienes ${unread.length} aviso${unread.length===1?'':'s'} en 1 grupo pendiente`:`Tienes ${unread.length} avisos en ${unreadGroups.size} grupos pendientes`);
-    }else if(announce){
-      const fresh=items.filter(n=>!knownNotificationIds.has(n.id));
-      if(fresh.length){
-        const n=fresh[0];toast(fresh.length===1?`Nueva notificación: ${n.titulo}`:`${fresh.length} nuevas notificaciones`);
-        if('Notification' in window&&Notification.permission==='granted'&&document.hidden){try{new Notification(n.titulo||'KOMBAX',{body:n.cuerpo||'Tienes una nueva notificación.',icon:'./assets/icons/icon-192.png'})}catch{}}
-      }
-    }
-    knownNotificationIds=ids;notificationPrimed=true;
-  }catch(error){console.warn('Centro de notificaciones:',humanError(error));}
+function stopNotificationMonitor(){if(notificationPoller){notificationPoller.stop();notificationPoller=null;}notificationPrimed=false;knownLatestNotificationId='';knownLatestNotificationAt='';}
+function startNotificationMonitor(){
+  stopNotificationMonitor();
+  notificationPoller=createAdaptivePoller(()=>refreshHeaderSummary({announce:true}),{activeMs:45000,hiddenMs:0,maxMs:600000,idleMaxMs:300000,idleAfter:2,jitterRatio:.2});
+  notificationPoller.start({immediate:true});
 }
-function startNotificationMonitor(){stopNotificationMonitor();refreshNotifications({announce:true,force:true});notificationTimer=setInterval(()=>refreshNotifications({announce:true,force:true}),45000);}
+
 async function syncNativePushToken(){
   try{
     if(!state.session||!window.UrbanWarriorsNative?.getPushToken)return;
@@ -110,7 +122,8 @@ async function syncNativePushToken(){
     await backend.mutate('push.registrar',{token,plataforma:'android'});localStorage.setItem('uw_push_synced_token',key);
   }catch(error){console.warn('Sincronización push:',error)}
 }
-window.addEventListener('uw-notifications-changed',event=>refreshNotifications({announce:false,force:event.detail?.persisted===true}));
+window.addEventListener('uw-notifications-changed',()=>refreshHeaderSummary({announce:false}));
+window.addEventListener('uw-kombax-activity-changed',()=>refreshHeaderSummary({announce:false}));
 window.addEventListener('uw-profile-avatar-changed',()=>hydrateSessionAvatar());
 window.addEventListener('uw-native-notification-state',()=>{if(state.route==='profile')navigate('profile',{replace:true});});
 
@@ -126,15 +139,18 @@ function openClubSwitcher(){
   wrap.querySelectorAll('[data-club-context]').forEach(button=>button.addEventListener('click',async()=>{if(button.dataset.clubContext===state.session?.club?.slug){closeModal();return;}button.disabled=true;try{stopNotificationMonitor();await backend.switchClub(button.dataset.clubContext);closeModal();renderShell();toast(`Contexto cambiado a ${state.session.club.nombre}`);}catch(error){button.disabled=false;startNotificationMonitor();setError(error);}}));
 }
 function bindShellNavigation(){
-  const shell=document.querySelector('.app-shell'),sidebar=document.getElementById('sidebar'),menuButton=document.getElementById('menu-btn'),scrim=document.getElementById('sidebar-scrim');
+  const shell=document.querySelector('.app-shell'),sidebar=document.getElementById('sidebar'),menuButton=document.getElementById('menu-btn'),scrim=document.getElementById('sidebar-scrim'),clubNav=document.getElementById('club-nav-accordion');
   const setSidebarOpen=open=>{const next=Boolean(open);sidebar?.classList.toggle('open',next);shell?.classList.toggle('sidebar-open',next);menuButton?.setAttribute('aria-expanded',String(next));menuButton?.setAttribute('aria-label',next?'Cerrar menú':'Abrir menú');scrim?.classList.toggle('open',next);};
   document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{navigate(b.dataset.nav);setSidebarOpen(false)}));
   menuButton?.addEventListener('click',()=>setSidebarOpen(!sidebar?.classList.contains('open')));
-  document.getElementById('mobile-more')?.addEventListener('click',()=>setSidebarOpen(true));
+  document.getElementById('mobile-more')?.addEventListener('click',()=>{if(clubNav)clubNav.open=true;setSidebarOpen(true)});
+  clubNav?.addEventListener('toggle',()=>{try{localStorage.setItem('uw2_club_nav_open',clubNav.open?'1':'0')}catch{}});
   scrim?.addEventListener('click',()=>setSidebarOpen(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&sidebar?.classList.contains('open'))setSidebarOpen(false)},{once:false});
   document.getElementById('logout-btn')?.addEventListener('click',async()=>{stopNotificationMonitor();await backend.signOut();renderLogin();});
   document.getElementById('club-context-button')?.addEventListener('click',openClubSwitcher);
+  document.getElementById('kombax-notification-button')?.addEventListener('click',openKombaxActivity);
+  document.getElementById('message-button')?.addEventListener('click',()=>openSocialView('contacts'));
 }
 function renderShell(){
   const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.platform_admin===true){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
@@ -237,8 +253,8 @@ async function boot(){
   window.addEventListener('uw-native-push-token',async e=>{try{if(state.session&&e.detail){await backend.mutate('push.registrar',{token:e.detail,plataforma:'android'});localStorage.setItem('uw_push_synced_token',`${state.session.id}:${e.detail}`);}}catch(error){console.warn('Push token:',error)}});
   window.addEventListener('popstate',()=>{if(state.session?.club_id)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
   window.addEventListener('hashchange',()=>{if(state.session?.club_id)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
-  window.addEventListener('focus',()=>{if(state.session?.club_id)refreshNotifications({announce:true})});
-  try{const session=await backend.restore();if(session?.scope==='kombax')renderDirectProfileHub({onBack:renderGatewayRoot});else if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();}
+  window.addEventListener('focus',()=>{if(state.session?.club_id)notificationPoller?.trigger()});
+  try{const session=await backend.restore();if(session?.scope==='kombax')renderDirectProfileHub({onBack:renderGatewayRoot});else if(session)renderShell();else renderLogin();}catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));
 }
 boot();

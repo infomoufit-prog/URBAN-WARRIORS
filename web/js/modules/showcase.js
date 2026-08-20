@@ -75,6 +75,10 @@ function openItem(item){
   wrap.querySelector('#showcase-provider-profile')?.addEventListener('click',()=>openKombaxPublicProfile(item.proveedor_social_id));
 }
 
+function clubFoundersPromo(){
+  return `<section class="kx-founders-promo club" aria-label="Promoción de lanzamiento para clubes"><div class="kx-founders-promo-mark">${icon('dojo',{size:28})}</div><div><span>KOMBAX SHOWCASE · LANZAMIENTO</span><strong>PRIMEROS 20 · CLUBES FUNDADORES</strong><p>Los primeros 20 clubes que completen la verificación KOMBAX quedarán incluidos en una <b>ventaja especial de lanzamiento</b> cuando KOMBAX active su modalidad de suscripción. Próximamente comunicaremos en qué consiste.</p><small>La plaza se determina por el orden de verificación KOMBAX.</small></div></section>`;
+}
+
 function bindCatalog(){
   document.getElementById('showcase-search')?.addEventListener('click',()=>{currentQuery=document.getElementById('showcase-query')?.value||'';loadCatalog(false);});
   document.getElementById('showcase-query')?.addEventListener('keydown',e=>{if(e.key==='Enter'){currentQuery=e.currentTarget.value;loadCatalog(false);}});
@@ -88,7 +92,7 @@ function bindCatalog(){
 
 function renderCatalog(){
   const headActions=`<div class="row-actions">${managedBrands.length?'<button type="button" class="btn btn-ghost" id="showcase-manage">Gestionar escaparate</button>':''}<button type="button" class="btn btn-ghost" id="showcase-saved">${icon('bookmark',{size:17})} Guardados</button></div>`;
-  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader('Marcas y novedades','Descubre productos y servicios y conecta directamente con quienes los ofrecen.',headActions,'KOMBAX Showcase')}${controls()}${items.length?`<div class="showcase-grid">${items.map(cardHtml).join('')}</div>${done?'':'<button class="btn btn-ghost showcase-more" id="showcase-more">Cargar más</button>'}`:empty('Sin contenido publicado','Las fichas activas aparecerán aquí cuando sus responsables las publiquen.')}</div>`);bindCatalog();
+  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader('Marcas y novedades','Descubre productos y servicios y conecta directamente con quienes los ofrecen.',headActions,'KOMBAX Showcase')}${clubFoundersPromo()}${controls()}${items.length?`<div class="showcase-grid">${items.map(cardHtml).join('')}</div>${done?'':'<button class="btn btn-ghost showcase-more" id="showcase-more">Cargar más</button>'}`:empty('Sin contenido publicado','Las fichas activas aparecerán aquí cuando sus responsables las publiquen.')}</div>`);bindCatalog();
 }
 
 async function loadCatalog(append=false){
