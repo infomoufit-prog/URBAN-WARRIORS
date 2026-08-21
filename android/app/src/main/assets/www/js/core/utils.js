@@ -48,6 +48,17 @@ export function technicalError(error) {
 
 const TECHNICAL_ERROR_PATTERN=/(?:\brls\b|row[- ]level security|\brpc\b|\bpgrst\w*\b|sqlstate|postgres|supabase|schema cache|\bschema\b|\bconstraint\b|foreign key|duplicate key|violates|permission denied|\bpolicy\b|\brelation\b|\bcolumn\b|\buuid\b|\bjsonb?\b|\bapp_kombax_[a-z0-9_]+|\bapp_[a-z0-9_]+_v\d+|\bKOMBAX_[A-Z0-9_]+|\bpublic\.|\bauth\.|storage\/v1|rest\/v1|functions\/v1|\bHTTP\s*\d{3}\b|\b42P\w+\b|\b23\d{3}\b)/i;
 const SAFE_SPANISH_PREFIX=/^(?:No se |No tienes |No puedes |Debes |Indica |Introduce |Selecciona |El código |La contraseña |Tu sesión |Has alcanzado |Esta |Este |Primero |Revisa |Comprueba |La nueva |La foto |El archivo |Formato |Club |Cuenta |Solicitud |Perfil |Mensaje |Comentario |Publicación |Acceso |Inicia sesión)/i;
+const APPLICATION_FIELD_LABELS={
+  ubicacion:'ubicación',disciplinas:'disciplinas',nombre_legal:'nombre legal',email:'correo electrónico',email_oficial:'correo oficial',email_corporativo:'correo corporativo',
+  registro_entidad:'registro o número oficial',responsable:'persona responsable',rol_responsable:'cargo de la persona responsable',evidencia:'referencias de verificación',
+  pais:'país',territorio:'territorio',web_publica_https:'web pública con HTTPS'
+};
+
+function applicationFieldsMessage(raw){
+  const match=raw.match(/KOMBAX_(?:APPLICATION|CLUB)_FIELDS_REQUIRED:([^\s·]+)/i);if(!match)return '';
+  const labels=match[1].split(',').map(key=>APPLICATION_FIELD_LABELS[key]||key.replaceAll('_',' '));
+  return `Revisa los campos obligatorios antes de enviar: ${labels.join(', ')}.`;
+}
 
 export function humanError(error) {
   if(error?.code==='AUTH_EXPIRED')return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
@@ -57,6 +68,11 @@ export function humanError(error) {
   if(/rate.?limit|too many|frequent|429/i.test(raw))return 'Has realizado demasiados intentos. Espera un momento y vuelve a intentarlo.';
   if(/invalid login credentials|invalid credentials|email or password|wrong password|bad password/i.test(raw))return 'El correo o la contraseña no son correctos.';
   if(/otp|one.?time|token|code.*expired|expired.*code|invalid.*code/i.test(raw)&&!/codigo|código/i.test(raw))return 'El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.';
+  if(/KOMBAX_VERIFICATION_DOCUMENT_REQUIRED/i.test(raw))return 'Adjunta un documento acreditativo antes de enviar la solicitud.';
+  const applicationFields=applicationFieldsMessage(raw);if(applicationFields)return applicationFields;
+  if(/KOMBAX_DECLARATION_REQUIRED/i.test(raw))return 'Debes confirmar la declaración de identidad y representación.';
+  if(/KOMBAX_APPLICATION_LOCKED_FOR_REVIEW/i.test(raw))return 'La solicitud ya está en revisión y no se puede modificar.';
+  if(/KOMBAX_APPLICATION_NOT_SUBMITTABLE/i.test(raw))return 'La solicitud no está en un estado que permita volver a enviarla.';
   if(/not authorized|unauthorized|forbidden|permission denied|platform_admin_required/i.test(raw))return 'No tienes permiso para realizar esta acción.';
   if(/not found|does not exist|no rows|404/i.test(raw)&&!SAFE_SPANISH_PREFIX.test(raw))return 'El contenido solicitado ya no está disponible.';
   if(TECHNICAL_ERROR_PATTERN.test(raw))return 'No se ha podido completar la operación. Inténtalo de nuevo.';

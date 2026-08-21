@@ -1,7 +1,8 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root=resolve(new URL('..',import.meta.url).pathname);
+const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const must=(ok,msg)=>{if(!ok)throw new Error(`20040: ${msg}`)};
 const sqlPath='supabase/migrations/065_kombax_social_affiliation_contact_20040.sql';

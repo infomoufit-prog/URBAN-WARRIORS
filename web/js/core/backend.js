@@ -211,44 +211,23 @@ export const backend={
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized))throw new Error('Indica un correo electrónico válido.');
     if(!String(password||''))throw new Error('Introduce tu contraseña.');
     try{
-      await client.signIn(normalized,String(password));
+      const auth=await client.signIn(normalized,String(password));
       const challenge=await client.rpc('app_kombax_platform_admin_challenge_start_v108',{});
-      await client.requestEmailOtp(normalized);
-      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: contraseña validada',detail:normalized});
-      return {challenge_id:challenge?.challenge_id||challenge?.id,email:normalized,email_masked:challenge?.email_masked||normalized,expires_at:challenge?.expires_at||null};
-    }catch(error){
-      const message=technicalError(error);
-      if(/platform_admin_required|not authorized|forbidden/i.test(message))throw new Error('Esta cuenta no tiene autorización de administración global KOMBAX.');
-      if(/invalid login credentials|invalid credentials|email or password/i.test(message))throw new Error('El correo o la contraseña no son correctos.');
-      throw new Error(humanError(error));
-    }
-  },
-  async resendPlatformAdminOtp(email){
-    const normalized=String(email||'').trim().toLowerCase();
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized))throw new Error('Indica un correo electrónico válido.');
-    try{await client.requestEmailOtp(normalized);return {ok:true};}
-    catch(error){throw new Error(humanError(error));}
-  },
-  async completePlatformAdminAccess({email,token,challenge_id}){
-    state.clearError();
-    const normalized=String(email||'').trim().toLowerCase();
-    const code=String(token||'').replace(/\s+/g,'');
-    if(!/^\d{6,8}$/.test(code))throw new Error('Introduce el código de un solo uso recibido por correo.');
-    if(!challenge_id)throw new Error('La solicitud de acceso ha caducado. Vuelve a empezar.');
-    try{
-      const auth=await client.verifyEmailOtp(normalized,code);
-      const result=await client.rpc('app_kombax_platform_admin_challenge_complete_v108',{p_challenge_id:challenge_id});
+      const challengeId=challenge?.challenge_id||challenge?.id;
+      if(!challengeId)throw new Error('La solicitud de acceso ha caducado. Vuelve a empezar.');
+      const result=await client.rpc('app_kombax_platform_admin_password_complete_v110',{p_challenge_id:challengeId});
       if(result?.authorized!==true)throw new Error('No se pudo completar la verificación de administración.');
       const session=await globalIdentityFromAuth(auth.user);
       if(session.platform_admin!==true)throw new Error('No se pudo confirmar la autorización global KOMBAX.');
       const adminSession={...session,scope:'platform-admin',admin_expires_at:result.expires_at||null};
       state.session=adminSession;state.setCapabilities([]);
       try{sessionStorage.setItem('uw2_platform_admin_session',JSON.stringify({id:adminSession.id,email:adminSession.email,expires_at:adminSession.admin_expires_at||null}))}catch{}
-      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: OTP verificado',detail:normalized});
+      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: contraseña validada',detail:normalized});
       return adminSession;
     }catch(error){
       const message=technicalError(error);
-      if(/otp|token|expired|invalid/i.test(message))throw new Error('El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.');
+      if(/platform_admin_required|not authorized|forbidden/i.test(message))throw new Error('Esta cuenta no tiene autorización de administración global KOMBAX.');
+      if(/invalid login credentials|invalid credentials|email or password/i.test(message))throw new Error('El correo o la contraseña no son correctos.');
       throw new Error(humanError(error));
     }
   },
@@ -389,7 +368,7 @@ export const backend={
     if(!client.session?.access_token)throw new AuthExpiredError();
     const t0=performance.now();state.pushTrace({kind:'mutation',stage:'request',ok:null,label:`GLOBAL RPC ${name}`});
     try{const data=await client.rpc(name,args);state.pushTrace({kind:'mutation',stage:'response',ok:true,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
-    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw new Error(humanError(error));}
+    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
   },
   async readRpc(name,args={}){
     if(!state.session?.club_id)throw new AuthExpiredError();

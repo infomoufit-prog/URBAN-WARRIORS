@@ -36,7 +36,7 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
         targetSdk 36
-        versionCode 20065
+        versionCode 20067
         versionName '2.0.0-rc.13'
     }
 

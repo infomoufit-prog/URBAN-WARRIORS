@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
-const root=path.resolve(path.dirname(new URL(import.meta.url).pathname),'..');
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('web/js/app.js');
 const gateway=read('web/js/modules/gateway.js');
@@ -31,12 +32,12 @@ assert.match(gateway,/now-at<=5000/,'hidden tap sequence must be time-bounded');
 assert.doesNotMatch(gateway,/No recibe insignia KOMBAX en 20\.044|CLUB ACCESS \/ 01|KOMBAX ID \/ CUENTA|KOMBAX ID \/ 02/,'gateway must not expose internal release labels');
 
 assert.match(access,/ACCESO MAESTRO/);
-assert.match(access,/SEGUNDO FACTOR/);
-assert.match(access,/código de un solo uso/i);
+assert.doesNotMatch(access,/SEGUNDO FACTOR|código de un solo uso|enviar otro código/i);
 assert.match(backend,/beginPlatformAdminAccess/);
-assert.match(backend,/completePlatformAdminAccess/);
-assert.match(supabase,/requestEmailOtp/);
-assert.match(supabase,/verifyEmailOtp/);
+assert.match(backend,/app_kombax_platform_admin_password_complete_v110/);
+assert.doesNotMatch(backend,/requestEmailOtp|verifyEmailOtp|completePlatformAdminAccess|resendPlatformAdminOtp/);
+assert.match(supabase,/requestPasswordRecovery/);
+assert.match(supabase,/verifyPasswordRecovery/);
 assert.match(backend,/app_kombax_platform_admin_session_end_v108/);
 
 assert.match(sql,/kombax_platform_admin_challenges/);

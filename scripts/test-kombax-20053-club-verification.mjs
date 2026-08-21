@@ -12,7 +12,7 @@ const cfg=read('web/config.js');const sw=read('web/service-worker.js');const idx
 ok(gateway.includes("name:'telefono',label:'Teléfono oficial · privado',required:true"),'Club exige teléfono oficial en formulario');
 ok(gateway.includes("name:'forma_entidad',label:'Tipo de club / entidad · privado'")&&gateway.includes('Opcional en la verificación inicial'),'forma jurídica/CIF no se sobrerregula');
 ok(gateway.includes("name:'tipo_acreditacion',label:'Tipo de acreditación'")&&gateway.includes("v.tipo_acreditacion||'Documento acreditativo'"),'acreditación de Club queda tipificada');
-ok(gateway.includes('No es obligatorio que sea documentación empresarial compleja'),'ayuda de acreditación admite clubes pequeños/asociaciones/autónomos');
+ok(/no (?:es obligatorio que sea|tiene que ser) documentación empresarial compleja/i.test(gateway),'ayuda de acreditación admite clubes pequeños/asociaciones/autónomos');
 
 ok(admin.includes('clubVerificationStatus')&&admin.includes('Checklist previo a aprobación'),'Administrador recibe checklist estructurado');
 ok(admin.includes('He comprobado que el club existe')&&admin.includes('He comprobado que esta persona puede representar al club')&&admin.includes('He revisado el documento acreditativo'),'Verificar exige comprobaciones administrativas');

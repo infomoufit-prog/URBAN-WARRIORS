@@ -234,7 +234,7 @@ function applicationFields(type,profile=null,application=null){
   if(type==='club')fields.push({name:'tipo_acreditacion',label:'Tipo de acreditación',type:'select',required:true,value:'Documento del club / centro',options:[{value:'Licencia / acreditación federativa',label:'Licencia / acreditación federativa'},{value:'Registro de club o asociación',label:'Registro de club o asociación'},{value:'Documento fiscal o legal',label:'Documento fiscal o legal'},{value:'Documento del club / centro',label:'Documento del club / centro'},{value:'Otro documento acreditativo',label:'Otro documento acreditativo'}],full:true});
   fields.push(
     {name:'evidencia',label:type==='club'?'Cómo podemos comprobar que el club existe y que puedes representarlo':'Cómo podemos verificar esta identidad',type:'textarea',rows:4,maxLength:1200,required:true,full:true,value:verify.evidencia||'',help:type==='club'?'Indica web, red social oficial, federación, registro, centro deportivo u otra referencia contrastable. Estos datos son privados.':'Describe fuentes verificables. KOMBAX no publica estos datos.'},
-    {name:'documento',label:type==='club'?'Documento acreditativo privado':'Documento acreditativo',type:'file',accept:'.pdf,image/jpeg,image/png,image/webp',full:true,help:type==='club'?'Adjunta una acreditación razonable del club o de la representación. No es obligatorio que sea documentación empresarial compleja. PDF/JPG/PNG/WEBP, máximo 15 MB.':'Es obligatorio disponer de al menos un documento antes del envío. PDF/JPG/PNG/WEBP, máximo 15 MB; almacenamiento privado.'},
+    {name:'documento',label:type==='club'?'Documento acreditativo privado':'Documento acreditativo',type:'file',accept:'.pdf,image/jpeg,image/png,image/webp',required:!application,full:true,help:type==='club'?'Necesario para enviar una solicitud nueva. Puede ser una licencia, registro, documento del centro u otra acreditación razonable; no tiene que ser documentación empresarial compleja. PDF/JPG/PNG/WEBP, máximo 15 MB.':'Es obligatorio disponer de al menos un documento antes del envío. PDF/JPG/PNG/WEBP, máximo 15 MB; almacenamiento privado.'},
     {name:'declaration',label:'Declaro que la información es correcta y que estoy autorizado para representar esta identidad',type:'checkbox',value:application?.declaracion_aceptada===true,required:true,full:true}
   );
   return fields;
@@ -253,7 +253,9 @@ async function saveAndSubmitApplication(type,{profile=null,application=null,onBa
       const saved=await repos.kombaxProfiles.saveApplication({solicitud_id:application?.id||null,tipo:type,perfil_directo_id:profile?.id||null,nombre_publico:v.nombre_publico,datos_publicos,datos_verificacion,declaracion_aceptada:true});
       const row=saved?.data||saved;const id=row?.id||application?.id;if(!id)throw new Error('No se pudo verificar el identificador de la solicitud guardada.');
       if(v.documento)await repos.kombaxProfiles.uploadVerificationDocument(id,type==='club'?(v.tipo_acreditacion||'Documento acreditativo'):'acreditacion',v.documento);
-      await repos.kombaxProfiles.submitApplication(id);toast('Solicitud enviada a revisión KOMBAX');await renderDirectProfileHub({onBack});
+      try{await repos.kombaxProfiles.submitApplication(id);}
+      catch(error){toast('Borrador guardado. Revisa los requisitos antes de reenviar.','warning');throw error;}
+      toast('Solicitud enviada a revisión KOMBAX');await renderDirectProfileHub({onBack});
     }
   });
 }

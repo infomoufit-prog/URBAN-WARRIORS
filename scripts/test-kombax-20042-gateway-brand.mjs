@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-const root=resolve(new URL('..',import.meta.url).pathname);
+import { fileURLToPath } from 'node:url';
+const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const must=(ok,msg)=>{if(!ok)throw new Error(`20042: ${msg}`)};
 const gateway=read('web/js/modules/gateway.js'),premium=read('web/css/kombax-premium.css'),config=read('web/config.js'),platform=read('web/js/core/platform.js'),index=read('web/index.html'),sw=read('web/service-worker.js'),gradle=read('android/app/build.gradle');

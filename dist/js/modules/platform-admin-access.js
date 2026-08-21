@@ -28,30 +28,17 @@ function accessMark(){return `<div class="kx-admin-access-mark"><img src="${esc(
 
 function renderCredentials({onCancel,onSuccess,message=''}){
   clearIdle();
-  setAppHtml(`<main class="kx-admin-access-shell"><section class="kx-admin-access-card">${accessMark()}<div class="kx-admin-access-kicker">ACCESO MAESTRO</div><h1>Administración global KOMBAX</h1><p>Acceso independiente del rol de cualquier club. Requiere contraseña y un código de un solo uso enviado al correo autorizado.</p>${message?`<div class="alert alert-warning"><strong>Sesión cerrada</strong><span>${esc(message)}</span></div>`:''}<form id="kx-admin-credentials"><div class="field"><label for="kx-admin-email">Correo autorizado</label><input id="kx-admin-email" name="email" type="email" autocomplete="username" required></div><div class="field"><label for="kx-admin-password">Contraseña</label><input id="kx-admin-password" name="password" type="password" autocomplete="current-password" required></div><div id="kx-admin-access-error" class="login-error" hidden></div><button class="btn btn-primary" id="kx-admin-continue" type="submit">Continuar ${icon('chevronRight',{size:17})}</button></form><div class="kx-admin-access-footer"><span>La puerta oculta no concede permisos.</span><button class="btn btn-ghost btn-sm" id="kx-admin-cancel" type="button">Salir</button></div></section></main>`);
+  setAppHtml(`<main class="kx-admin-access-shell"><section class="kx-admin-access-card">${accessMark()}<div class="kx-admin-access-kicker">ACCESO MAESTRO</div><h1>Administración global KOMBAX</h1><p>Acceso independiente del rol de cualquier club. Introduce el correo Owner autorizado y valida de nuevo tu contraseña para abrir la Consola KOMBAX.</p>${message?`<div class="alert alert-warning"><strong>Sesión cerrada</strong><span>${esc(message)}</span></div>`:''}<form id="kx-admin-credentials"><div class="field"><label for="kx-admin-email">Correo autorizado</label><input id="kx-admin-email" name="email" type="email" autocomplete="username" required></div><div class="field"><label for="kx-admin-password">Contraseña</label><input id="kx-admin-password" name="password" type="password" autocomplete="current-password" required></div><div id="kx-admin-access-error" class="login-error" hidden></div><button class="btn btn-primary" id="kx-admin-continue" type="submit">Abrir Consola KOMBAX ${icon('chevronRight',{size:17})}</button></form><div class="kx-admin-access-footer"><span>La puerta oculta no concede permisos.</span><button class="btn btn-ghost btn-sm" id="kx-admin-cancel" type="button">Salir</button></div></section></main>`);
   const form=document.getElementById('kx-admin-credentials'),button=document.getElementById('kx-admin-continue'),errorBox=document.getElementById('kx-admin-access-error');
   form?.addEventListener('submit',async event=>{
     event.preventDefault();if(!form.reportValidity())return;button.disabled=true;button.textContent='Verificando…';errorBox.hidden=true;
     const fd=new FormData(form);
     try{
-      const challenge=await backend.beginPlatformAdminAccess(fd.get('email'),fd.get('password'));
-      renderOtp({challenge,onCancel,onSuccess});
-    }catch(error){errorBox.hidden=false;errorBox.textContent=humanError(error);button.disabled=false;button.innerHTML=`Continuar ${icon('chevronRight',{size:17})}`;}
+      await backend.beginPlatformAdminAccess(fd.get('email'),fd.get('password'));
+      toast('Acceso maestro verificado');onSuccess?.();
+    }catch(error){errorBox.hidden=false;errorBox.textContent=humanError(error);button.disabled=false;button.innerHTML=`Abrir Consola KOMBAX ${icon('chevronRight',{size:17})}`;}
   });
   document.getElementById('kx-admin-cancel')?.addEventListener('click',async()=>{await backend.signOutPlatformAdmin().catch(()=>{});onCancel?.();});
-}
-
-function renderOtp({challenge,onCancel,onSuccess}){
-  const email=challenge?.email||'';
-  setAppHtml(`<main class="kx-admin-access-shell"><section class="kx-admin-access-card">${accessMark()}<div class="kx-admin-access-kicker">SEGUNDO FACTOR</div><h1>Introduce tu código</h1><p>Hemos enviado un código de un solo uso a <strong>${esc(challenge?.email_masked||email)}</strong>. Úsalo para abrir la Consola KOMBAX.</p><form id="kx-admin-otp"><div class="field"><label for="kx-admin-code">Código de seguridad</label><input id="kx-admin-code" name="token" class="kx-admin-code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" pattern="[0-9]{6,8}" required></div><div id="kx-admin-otp-error" class="login-error" hidden></div><button class="btn btn-primary" id="kx-admin-verify" type="submit">Abrir Consola KOMBAX</button></form><div class="kx-admin-access-footer"><button class="btn btn-ghost btn-sm" id="kx-admin-resend" type="button">Enviar otro código</button><button class="btn btn-ghost btn-sm" id="kx-admin-back" type="button">Cancelar</button></div></section></main>`);
-  const form=document.getElementById('kx-admin-otp'),button=document.getElementById('kx-admin-verify'),errorBox=document.getElementById('kx-admin-otp-error'),code=document.getElementById('kx-admin-code');code?.focus();
-  form?.addEventListener('submit',async event=>{
-    event.preventDefault();if(!form.reportValidity())return;button.disabled=true;button.textContent='Validando código…';errorBox.hidden=true;
-    try{await backend.completePlatformAdminAccess({email,token:new FormData(form).get('token'),challenge_id:challenge.challenge_id});toast('Acceso maestro verificado');onSuccess?.();}
-    catch(error){errorBox.hidden=false;errorBox.textContent=humanError(error);button.disabled=false;button.textContent='Abrir Consola KOMBAX';}
-  });
-  document.getElementById('kx-admin-resend')?.addEventListener('click',async event=>{const b=event.currentTarget;b.disabled=true;try{await backend.resendPlatformAdminOtp(email);toast('Nuevo código enviado');}catch(error){errorBox.hidden=false;errorBox.textContent=humanError(error);}finally{setTimeout(()=>{if(b.isConnected)b.disabled=false},5000)}});
-  document.getElementById('kx-admin-back')?.addEventListener('click',async()=>{await backend.signOutPlatformAdmin().catch(()=>{});onCancel?.();});
 }
 
 export function renderPlatformAdminAccess({onCancel,onSuccess,message=''}={}){renderCredentials({onCancel,onSuccess,message});}

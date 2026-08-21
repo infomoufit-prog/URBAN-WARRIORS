@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
-const root=path.resolve(path.dirname(new URL(import.meta.url).pathname),'..');
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const cfg=read('web/config.js');
 const gradle=read('android/app/build.gradle');
@@ -15,8 +16,8 @@ const sql=read('supabase/migrations/109_kombax_role_invitations_team_filter_2006
 
 const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]);
 const android=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);
-assert.equal(build,20065);
-assert.equal(android,20065);
+assert.ok(build>=20065);
+assert.equal(android,build);
 
 assert.match(repos,/rol=in\.\(direccion,secretaria,economia,comunicacion,monitor\)/,'team repository must positively filter operational roles');
 assert.match(users,/teamRoles=new Set\(\['direccion','secretaria','economia','comunicacion','monitor'\]\)/,'frontend defensive filter must exclude alumno/familia');

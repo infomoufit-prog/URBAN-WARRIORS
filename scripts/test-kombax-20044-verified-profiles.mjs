@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-const root=resolve(new URL('..',import.meta.url).pathname);
+import { fileURLToPath } from 'node:url';
+const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const must=(ok,msg)=>{if(!ok)throw new Error(`20044: ${msg}`)};
 for(const n of [69,70,71,72]){

@@ -1,0 +1,40 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {fileURLToPath} from 'node:url';
+
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const access=read('web/js/modules/platform-admin-access.js');
+const backend=read('web/js/core/backend.js');
+const gateway=read('web/js/modules/gateway.js');
+const supabase=read('web/js/core/supabase.js');
+const recovery=read('web/js/modules/auth-recovery.js');
+const config=read('web/config.js');
+const index=read('web/index.html');
+const worker=read('web/service-worker.js');
+const gradle=read('android/app/build.gradle');
+
+assert.equal(Number(config.match(/build:\s*(\d+)/)?.[1]),20067);
+assert.equal(Number(gradle.match(/versionCode\s+(\d+)/)?.[1]),20067);
+assert.match(index,/v=20067/);
+assert.match(worker,/rc13-20067/);
+assert.match(gateway,/taps\.length<8/);
+assert.match(gateway,/now-at<=5000/);
+assert.match(access,/Correo autorizado/);
+assert.match(access,/Contraseña/);
+assert.match(access,/Abrir Consola KOMBAX/);
+assert.doesNotMatch(access,/SEGUNDO FACTOR|one-time-code|código de un solo uso|enviar otro código|kx-admin-otp/i);
+assert.match(backend,/app_kombax_platform_admin_challenge_start_v108/);
+assert.match(backend,/app_kombax_platform_admin_password_complete_v110/);
+assert.match(backend,/app_kombax_platform_admin_session_end_v108/);
+assert.doesNotMatch(backend,/requestEmailOtp|verifyEmailOtp|completePlatformAdminAccess|resendPlatformAdminOtp|challenge_complete_v108/);
+assert.match(backend,/admin_expires_at/);
+assert.match(access,/ADMIN_IDLE_MS=15\*60\*1000/);
+assert.match(supabase,/signUp\(email,password/);
+assert.match(supabase,/requestPasswordRecovery/);
+assert.match(supabase,/verifyPasswordRecovery/);
+assert.match(recovery,/requestPasswordRecovery/);
+assert.match(recovery,/completePasswordRecovery/);
+
+console.log('KOMBAX 20067 Owner password-only access: PASS');

@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-const root=resolve(new URL('..',import.meta.url).pathname);
+import { fileURLToPath } from 'node:url';
+const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const must=(ok,msg)=>{if(!ok)throw new Error(`20043: ${msg}`)};
 const migration='supabase/migrations/068_kombax_relations_privacy_20043.sql';
