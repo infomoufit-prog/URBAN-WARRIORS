@@ -1,7 +1,7 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, dateFmt, money } from '../core/utils.js';
+import { esc, dateFmt, money, humanError } from '../core/utils.js';
 import { pageHeader, card, empty, badge, openForm, openDetail, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 
@@ -130,5 +130,5 @@ export async function renderEvents(){
     setMainHtml(`${pageHeader('Eventos y competiciones','Inscripciones, requisitos, participantes y combates en una sola sección.',manager()?`<button class="btn btn-primary" id="event-new">${icon('plus',{size:16})} Nuevo evento</button>`:'','Club')}${card('Calendario de competición',`<div class="event-list">${cards||empty('No hay eventos','Cuando el club publique una competición aparecerá aquí.')}</div>`)} `);
     document.getElementById('event-new')?.addEventListener('click',()=>eventForm(null,disciplines,renderEvents));
     document.querySelectorAll('.event-open').forEach(b=>b.addEventListener('click',()=>{const event=events.find(e=>e.id===b.dataset.id);if(event)openEvent(event,disciplines,members);}));
-  }catch(error){setError(error);setMainHtml(`${pageHeader('Eventos y competiciones')}${empty('No se pudieron cargar los eventos',error.message)}`);}
+  }catch(error){setError(error);setMainHtml(`${pageHeader('Eventos y competiciones')}${empty('No se pudieron cargar los eventos',humanError(error))}`);}
 }

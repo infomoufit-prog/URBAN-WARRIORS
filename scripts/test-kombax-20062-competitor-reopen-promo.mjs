@@ -22,5 +22,5 @@ ok(!/(€|descuento|porcentaje|\bprecio\b|%)/i.test(socialPromo+clubPromo),'camp
 ok(social.includes('${competitorFoundersPromo()}')&&showcase.includes('${clubFoundersPromo()}'),'promociones están insertadas en feed Social y catálogo Showcase');
 ok(css.includes('.kx-founders-promo')&&css.includes('.kx-founders-promo-mark'),'promoción tiene tratamiento responsive compartido');
 const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]);const android=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);const swBuild=Number(sw.match(/rc13-(\d+)/)?.[1]);const refs=[...html.matchAll(/\?v=(\d+)/g)].map(x=>Number(x[1]));
-ok(build===20062&&android===build&&swBuild===build&&refs.length>0&&refs.every(v=>v===build),'web/PWA/Android alineados en build 20062');
+ok(build>=20062&&android===build&&swBuild===build&&refs.length>0&&refs.every(v=>v===build),'web/PWA/Android conservan 20062+ y permanecen alineados');
 console.log('KOMBAX BUILD 20062 · COMPETITOR REOPEN + FOUNDERS PROMO: PASS');

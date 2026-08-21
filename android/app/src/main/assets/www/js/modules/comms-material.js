@@ -1,7 +1,7 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, dateFmt, dtFmt, money } from '../core/utils.js';
+import { esc, dateFmt, dtFmt, money, humanError } from '../core/utils.js';
 import { pageHeader, quickRow, card, table, empty, badge, openForm, openDetail, closeModal, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 
@@ -69,7 +69,7 @@ export async function renderCommunications(){
     bind('.edit-comm',id=>openCommunicationForm(items.find(x=>x.id===id),reload));
     bind('.archive-comm',id=>{const x=items.find(i=>i.id===id);confirmDialog('Archivar publicación','La publicación se conserva, pero deja de mostrarse en el feed habitual.',async()=>{await repos.communications.save({...x,estado:'archivada'});toast('Publicación archivada');await reload();},{confirmText:'Archivar'})});
     bind('.delete-comm',id=>{const x=items.find(i=>i.id===id);confirmDialog('Eliminar publicación y contenido','Se borrarán esta publicación, sus avisos vinculados y su imagen física de Storage. Esta acción no se puede deshacer.',async()=>{await repos.communications.delete(id);toast('Publicación e imagen eliminadas');await reload();},{confirmText:'Eliminar definitivamente',danger:true})});
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Comunicaciones')} ${empty('No se pudieron cargar las comunicaciones',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Comunicaciones')} ${empty('No se pudieron cargar las comunicaciones',humanError(e))}`)}
 }
 
 function productDetail(product,{variants=[],members=[],can=false,canManage=false,reload=()=>{}}={}){
@@ -134,7 +134,7 @@ export async function renderMaterial(){
     bind('.product-open',id=>productDetail(items.find(x=>x.id===id),{variants,members,can,canManage,reload}));
     bind('.validate-material-order',id=>confirmDialog('Validar retirada y generar cargo','La operación descontará stock, registrará la entrega y añadirá la deuda del material al estado de cuenta.',async()=>{await repos.material.orderStatus(id,'validado');toast('Retirada validada y cargo generado');window.dispatchEvent(new CustomEvent('uw-notifications-changed'));await reload();},{confirmText:'Validar y generar cargo'}));
     bind('.cancel-material-order',id=>confirmDialog('Cancelar retirada','No se descontará stock ni se generará ningún cargo.',async()=>{await repos.material.orderStatus(id,'cancelado');toast('Retirada cancelada');await reload();},{confirmText:'Cancelar retirada',danger:true}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Material')} ${empty('No se pudo cargar el material',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Material')} ${empty('No se pudo cargar el material',humanError(e))}`)}
 }
 
 const notificationRoute=(route)=>({fees:'finance',materials:'material',home:'dashboard'}[String(route||'')]||String(route||'dashboard'));
@@ -172,5 +172,5 @@ export async function renderNotifications(){
     document.querySelectorAll('.mark-group').forEach(b=>b.addEventListener('click',async()=>{const cat=b.dataset.category;const group=[...grouped.values()].find(g=>g.key===cat);const types=[...new Set((group?.items||[]).filter(n=>!n.leida&&n.requiere_accion!==true).map(n=>n.tipo))];const pending=Promise.all(types.map(t=>repos.notifications.markGroup(t)));await renderNotifications();try{await pending;toast('Avisos informativos del grupo marcados como leídos');await renderNotifications();}catch(e){setError(e);await renderNotifications();}}));
     document.querySelectorAll('.review-notification').forEach(b=>b.addEventListener('click',async()=>{if(b.disabled)return;b.disabled=true;const pending=repos.notifications.review(b.dataset.id);await renderNotifications();try{await pending;const route=notificationRoute(b.dataset.route);if(location.hash!==`#${route}`)location.hash=`#${route}`;else window.dispatchEvent(new HashChangeEvent('hashchange'));}catch(e){setError(e);await renderNotifications();}}));
     document.getElementById('notification-permission')?.addEventListener('click',()=>{try{if(permissionState==='granted'||permissionState==='settings'||permissionState==='rationale'){window.UrbanWarriorsNative.openNotificationSettings();toast('Revisa el permiso global de KOMBAX en Ajustes');}else{window.UrbanWarriorsNative.requestNotifications();toast('Android mostrará la solicitud oficial de notificaciones');}setTimeout(()=>renderNotifications(),900);}catch(e){setError(e)}});
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Notificaciones')} ${empty('No se pudieron cargar las notificaciones',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Notificaciones')} ${empty('No se pudieron cargar las notificaciones',humanError(e))}`)}
 }

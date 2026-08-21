@@ -17,7 +17,7 @@ assert(social.includes('activateDirect')&&social.includes("socialStatus?.scope==
 assert(gateway.includes('Espectador continúa cerrado')||gateway.includes('Espectador sigue desactivado'),'Espectador continúa deshabilitado');
 assert(repos.includes('app_kombax_perfil_mutate_v043')&&(repos.includes('app_kombax_social_mutate_v067')||repos.includes('app_kombax_social_mutate_v050')||repos.includes('app_kombax_social_mutate_v053')||repos.includes('app_kombax_social_mutate_v065'))&&repos.includes('app_kombax_relacion_mutate_v045'),'repositorios conservan perfiles/relaciones y una mutación Social compatible o superior a 050');
 assert(club.includes('10 fotos')&&club.includes('3 vídeos')&&club.includes('máximo 15 s'),'Club dispone de álbum 10/3/15s');
-assert(social.includes('Guardar')&&social.includes('Comentarios')&&social.includes('Vincular'),'Social expone guardados, comentarios y relaciones');
+assert(social.includes('Guardar')&&social.includes('Comentarios')&&(social.includes('Añadir a mi red')||social.includes('Vincular')),'Social expone guardados, comentarios y relaciones');
 assert(social.includes("openReport('comentario'")&&social.includes('data-kx-comment-report'),'comentarios admiten denuncia desde la interfaz');
 assert(social.includes('moderationQueue')&&social.includes('data-kx-moderate')&&repos.includes('app_kombax_moderation_queue_v050'),'moderadores disponen de cola y acciones auditadas 050');
 assert(showcase.includes("máximo 15")&&showcase.includes("máximo 30")&&showcase.includes('galeria_3')&&showcase.includes('slice(0,3)'),'Showcase comunica límites Club/Marca y galería');

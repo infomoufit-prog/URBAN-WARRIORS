@@ -83,9 +83,25 @@ async function kombaxIdentityMutation(operation,payload={}){
   invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);
   return response.data;
 }
+function isMissingRpc(error,rpcName=''){
+  const code=String(error?.code||'').toUpperCase();
+  const message=String(error?.message||error||'');
+  return code==='PGRST202'||/schema cache|could not find the function|function .* does not exist|404/i.test(message)||(rpcName&&message.toLowerCase().includes(String(rpcName).toLowerCase()));
+}
+async function rpcWithFallback(primaryCall,fallbackCall,rpcName=''){
+  try{return await primaryCall();}
+  catch(error){if(!isMissingRpc(error,rpcName))throw error;return fallbackCall();}
+}
 async function kombaxSocialNetworkMutation(operation,payload={}){
   const requestId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const response=await backend.globalWriteRpc('app_kombax_social_network_mutate_v104',{p_operation:operation,p_payload:{...payload,club_id:session()?.club_id||null},p_request_id:requestId});
+  const args={p_operation:operation,p_payload:{...payload,club_id:session()?.club_id||null},p_request_id:requestId};
+  let response;
+  try{response=await backend.globalWriteRpc('app_kombax_social_network_mutate_v107',args);}
+  catch(error){
+    if(!isMissingRpc(error,'app_kombax_social_network_mutate_v107'))throw error;
+    if(operation==='kombax.showcase.contact.request')throw new Error('La mensajería de Showcase necesita activar la actualización 107 del backend para completar esta validación.');
+    response=await backend.globalWriteRpc('app_kombax_social_network_mutate_v104',args);
+  }
   if(!response?.ok||response.operation!==operation||response.request_id!==requestId)throw new Error(`Respuesta de red KOMBAX no verificable para ${operation}.`);
   invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);
   window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));
@@ -338,7 +354,7 @@ export const repos={
   },
   notifications:{
     list:(options={})=>notificationList(1000,options),
-    headerSummary:()=>backend.readRpc('app_kombax_header_summary_v106',{p_club_id:session()?.club_id}),
+    headerSummary:()=>rpcWithFallback(()=>backend.readRpc('app_kombax_header_summary_v107',{p_club_id:session()?.club_id}),()=>backend.readRpc('app_kombax_header_summary_v106',{p_club_id:session()?.club_id}),'app_kombax_header_summary_v107'),
     markRead:(notificacion_id)=>optimisticNotificationMutation('notificacion.leer',{notificacion_id},n=>n.id===notificacion_id),
     review:(notificacion_id)=>optimisticNotificationMutation('notificacion.revisar',{notificacion_id},n=>n.id===notificacion_id),
     markGroup:(tipo)=>optimisticNotificationMutation('notificacion.leer_grupo',{tipo},n=>n.tipo===tipo&&n.requiere_accion!==true),
@@ -348,14 +364,14 @@ export const repos={
     savePreferences:(p)=>mutation('notificaciones.preferencias',{push_general:p.push_general!==false,push_finanzas:p.push_finanzas!==false,push_sesiones:p.push_sesiones!==false,push_comunidad:p.push_comunidad===true})
   },
   users:{
-    members:()=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&order=creado_en&limit=500`),
-    teamRequests:()=>backend.readRpc('app_kombax_solicitudes_equipo_v060',{p_club_id:session()?.club_id}),
+    members:()=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&rol=in.(direccion,secretaria,economia,comunicacion,monitor)&order=creado_en&limit=500`),
+    teamRequests:async()=>{try{return await backend.readRpc('app_kombax_solicitudes_equipo_v109',{p_club_id:session()?.club_id});}catch{return backend.readRpc('app_kombax_solicitudes_equipo_v060',{p_club_id:session()?.club_id});}},
     resolveTeamRequest:(id,estado,rol=null,nota='')=>backend.writeRpc('app_kombax_solicitud_equipo_resolver_v060',{p_solicitud_id:id,p_estado:estado,p_rol:rol,p_nota:nota||null})
   },
   accessCodes:{
     get:()=>backend.readRpc('app_kombax_codigos_club_v060',{p_club_id:session()?.club_id}),
     rotate:(tipo,codigo='')=>backend.writeRpc('app_kombax_codigo_rotar_v060',{p_club_id:session()?.club_id,p_tipo:tipo,p_codigo:String(codigo||'').trim()||null}),
-    requestTeam:(clubSlug,codigo)=>backend.globalWriteRpc('app_kombax_equipo_solicitar_v060',{p_club_slug:clubSlug,p_codigo:String(codigo||'').trim()})
+    requestTeam:(clubSlug,codigo,rol='')=>backend.requestTeamAccess(clubSlug,codigo,session()?.email||'',rol)
   },
   scopes:{
     context:()=>backend.readRpc('app_kombax_mi_ambito_v057',{p_club_id:session()?.club_id}),
@@ -516,7 +532,7 @@ export const repos={
     quota:(social_id)=>backend.globalReadRpc('app_kombax_social_cupo_v099',{p_social_id:social_id}),
     profilePosts:(social_id,cursor=null,limit=10)=>backend.globalReadRpc('app_kombax_social_profile_posts_v099',{p_social_id:social_id,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(10,Math.max(1,Number(limit)||10))}),
     headerActivity:()=>backend.globalReadRpc('app_kombax_header_activity_v106',{}),
-    contacts:()=>backend.globalReadRpc('app_kombax_contactos_v106',{}),
+    contacts:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_contactos_v107',{}),()=>backend.globalReadRpc('app_kombax_contactos_v106',{}),'app_kombax_contactos_v107'),
     contactMessages:(contacto_id,{before=null,after=null,limit=30}={})=>backend.globalReadRpc('app_kombax_contact_mensajes_v106',{p_contacto_id:contacto_id,p_before_ordinal:before,p_after_ordinal:after,p_limit:Math.min(50,Math.max(1,Number(limit)||30))}),
     markContactRead:async(contacto_id)=>{const out=await backend.globalWriteRpc('app_kombax_contact_mark_read_v106',{p_contacto_id:contacto_id});window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;},
     activate:({acepta_normas,acepta_privacidad})=>kombaxIdentityMutation('kombax.identity.member.activate',{club_id:session()?.club_id||null,acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,user_agent:navigator.userAgent}),
@@ -535,6 +551,7 @@ export const repos={
     like:(publicacion_id,activo)=>kombaxSocialMutation('kombax.social.like',{publicacion_id,activo:activo===true}),
     block:(perfil_social_id,bloquear=true)=>kombaxSocialMutation('kombax.social.bloquear',{perfil_social_id,bloquear:bloquear===true}),
     contact:(remitente_social_id,destinatario_social_id,motivo,mensaje)=>kombaxSocialNetworkMutation('kombax.contact.request',{remitente_social_id,destinatario_social_id,motivo,mensaje}),
+    showcaseContact:(remitente_social_id,elemento_id,mensaje)=>kombaxSocialNetworkMutation('kombax.showcase.contact.request',{remitente_social_id,elemento_id,mensaje}),
     contactStatus:async(contacto_id,estado)=>{const out=await kombaxSocialMutation('kombax.social.contacto.estado',{contacto_id,estado});window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;},
     sendContactMessage:(contacto_id,autor_social_id,texto)=>kombaxSocialNetworkMutation('kombax.contact.message.send',{contacto_id,autor_social_id,texto}),
     closeContact:(contacto_id)=>kombaxSocialNetworkMutation('kombax.contact.close',{contacto_id}),

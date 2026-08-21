@@ -1,7 +1,7 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, dateFmt, isoDate, weekRange, sortSessionsForWeek } from '../core/utils.js';
+import { esc, dateFmt, isoDate, weekRange, sortSessionsForWeek, humanError } from '../core/utils.js';
 import { pageHeader, card, table, empty, badge, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
@@ -51,7 +51,7 @@ export async function renderSessions(){
     bind('.exception-session',id=>{const se=sessions.find(x=>x.id===id);openForm({title:'Cambio en esta sesión',subtitle:'Afecta solo a esta fecha y se notificará a alumnos/familias del grupo.',fields:[{name:'estado',label:'Estado',type:'select',required:true,value:se.estado,options:['programada','en_curso','completada','cancelada'].map(x=>({value:x,label:x}))},{name:'monitor_nombre',label:'Monitor/a',value:se.monitor_nombre||''},{name:'hora_inicio',label:'Hora inicio',type:'time',value:String(se.hora_inicio||'').slice(0,5)},{name:'hora_fin',label:'Hora fin',type:'time',value:String(se.hora_fin||'').slice(0,5)},{name:'sala',label:'Sala',value:se.sala||''},{name:'motivo',label:'Motivo / aviso',type:'textarea',full:true,placeholder:'Salud, sustitución, festivo, cambio de sala…'}],submitText:'Guardar y notificar',onSubmit:async v=>{await repos.sessions.exception({sesion_id:id,...v});toast('Cambio guardado y notificado');await reload();}})});
     bind('.delete-session',id=>confirmDialog('Eliminar sesión','Se elimina si no tiene asistencia ni check-ins. Para conservar histórico usa “Cambios / cancelar”.',async()=>{await repos.sessions.delete(id);toast('Sesión eliminada');await reload();},{confirmText:'Eliminar',danger:true}));
     bind('.force-delete-session',id=>forceConfirm('Eliminar sesión e histórico','Se borrarán también asistencias, reservas y check-ins registrados en esta sesión.',async()=>{await repos.sessions.forceDelete(id);toast('Sesión e histórico eliminados');await reload();}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Sesiones')} ${empty('No se pudieron cargar las sesiones',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Sesiones')} ${empty('No se pudieron cargar las sesiones',humanError(e))}`)}
 }
 
 export async function renderAttendance(){
@@ -72,7 +72,7 @@ export async function renderAttendance(){
       board.querySelectorAll('.do-checkin').forEach(b=>b.addEventListener('click',()=>openForm({title:'Registrar check-in',fields:[{name:'codigo',label:'Código (si aplica)'},{name:'metodo',label:'Método',type:'select',value:'manual',options:['manual','codigo','qr','nfc'].map(x=>({value:x,label:x}))}],onSubmit:async v=>{await repos.sessions.checkin({sesion_id:sid,socio_id:b.dataset.id,...v});toast('Check-in registrado');await renderAttendance();}})));
     };
     document.getElementById('attendance-session')?.addEventListener('change',e=>draw(e.target.value));draw(selected);
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Asistencia')} ${empty('No se pudo cargar la asistencia',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Asistencia')} ${empty('No se pudo cargar la asistencia',humanError(e))}`)}
 }
 
 export async function renderTracking(){
@@ -82,7 +82,7 @@ export async function renderTracking(){
     const rows=items.map(x=>`<tr><td>${dateFmt(x.fecha)}</td><td><strong>${esc(members.find(m=>m.id===x.socio_id)?.nombre||'—')}</strong></td><td>${esc(x.tipo)}</td><td>${esc(x.nota)}</td><td>${badge(x.visibilidad,'neutral')}</td></tr>`);
     setMainHtml(`${pageHeader('Seguimiento','Notas educativas y evolución',can?'<button class="btn btn-primary" id="new-tracking">Nueva nota</button>':'')}${card('Registros',rows.length?table(['Fecha','Alumno','Tipo','Nota','Visibilidad'],rows):empty('Sin registros de seguimiento'))}`);
     document.getElementById('new-tracking')?.addEventListener('click',()=>openForm({title:'Nueva nota de seguimiento',fields:[{name:'socio_id',label:'Alumno',type:'select',required:true,options:options(members,m=>`${m.apellidos}, ${m.nombre}`)},{name:'fecha',label:'Fecha',type:'date',value:isoDate(),required:true},{name:'tipo',label:'Tipo',required:true,placeholder:'progreso, conducta, objetivo…'},{name:'visibilidad',label:'Visibilidad',type:'select',value:'equipo',options:['equipo','direccion_monitor','familia'].map(x=>({value:x,label:x}))},{name:'nota',label:'Nota',type:'textarea',full:true,required:true}],onSubmit:async v=>{await repos.tracking.save(v);toast('Seguimiento guardado');await renderTracking();}}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Seguimiento')} ${empty('No se pudo cargar el seguimiento',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Seguimiento')} ${empty('No se pudo cargar el seguimiento',humanError(e))}`)}
 }
 
 
@@ -96,5 +96,5 @@ export async function renderProgress(){
       return `<tr><td><strong>${esc(x.apellidos||'')}, ${esc(x.nombre||'')}</strong></td><td>${esc(x.grado_actual||'—')}</td><td>${present}/${total}${total?` · ${pct}%`:''}</td><td>${dateFmt(x.ultima_graduacion)}</td><td>${esc(x.observaciones_seguimiento||0)}</td></tr>`;
     });
     setMainHtml(`${pageHeader('Progreso','Vista calculada desde asistencia, graduaciones y seguimiento')}${card('Evolución',rows.length?table(['Alumno','Grado actual','Asistencia','Última graduación','Observaciones'],rows):empty('Sin datos de progreso'))}`);
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Progreso')} ${empty('No se pudo cargar el progreso',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Progreso')} ${empty('No se pudo cargar el progreso',humanError(e))}`)}
 }

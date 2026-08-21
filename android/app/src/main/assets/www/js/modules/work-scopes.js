@@ -1,6 +1,6 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
-import { esc } from '../core/utils.js';
+import { esc, humanError } from '../core/utils.js';
 import { pageHeader, card, empty, badge, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 
 const financeLabel=value=>({none:'Sin acceso financiero',status:'Solo estado de pago',portfolio:'Mi cartera (importes)',collect:'Cartera + registrar cobros',receipts:'Cartera + cobros + recibos'}[value]||value||'Sin acceso financiero');
@@ -48,5 +48,5 @@ export async function renderWorkScopes(){
     document.querySelectorAll('.add-scope-group').forEach(b=>b.addEventListener('click',()=>openForm({title:'Asignar grupo completo',subtitle:'Todos los alumnos con matrícula activa en este grupo quedarán dentro del alcance operativo.',fields:[{name:'grupo_id',label:'Grupo',type:'select',required:true,options:groupOptions}],onSubmit:async v=>{await repos.scopes.mutate('ambito.group.set',{ambito_id:b.dataset.id,...v});toast('Grupo asignado');await reload();}})));
     const bindRemove=(selector,operation,label)=>document.querySelectorAll(selector).forEach(b=>b.addEventListener('click',()=>confirmDialog(`Quitar ${label}`,`Se retirará el acceso derivado de este ámbito. Si la persona/alumno/grupo está asignado en otro ámbito, conservará ese acceso.`,async()=>{const payload={ambito_id:b.dataset.scope};payload[label==='miembro'?'perfil_id':label==='alumno'?'socio_id':'grupo_id']=b.dataset.target;await repos.scopes.mutate(operation,payload);toast('Asignación retirada');await reload();},{confirmText:'Quitar',danger:true})));
     bindRemove('.remove-scope-team','ambito.team.remove','miembro');bindRemove('.remove-scope-student','ambito.student.remove','alumno');bindRemove('.remove-scope-group','ambito.group.remove','grupo');
-  }catch(error){setError(error);setMainHtml(`${pageHeader('Ámbitos y privacidad')} ${empty('No se pudieron cargar los ámbitos',error.message)}`);}
+  }catch(error){setError(error);setMainHtml(`${pageHeader('Ámbitos y privacidad')} ${empty('No se pudieron cargar los ámbitos',humanError(error))}`);}
 }

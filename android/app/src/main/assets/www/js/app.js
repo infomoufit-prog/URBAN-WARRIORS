@@ -10,7 +10,7 @@ import { renderGroups, renderMembers, renderEnrollments } from './modules/groups
 import { renderSessions, renderAttendance, renderTracking, renderProgress } from './modules/training.js';
 import { renderFinance, renderReminders } from './modules/finance.js';
 import { renderCommunications, renderMaterial, renderNotifications } from './modules/comms-material.js';
-import { renderUsers, renderSettings, renderProfile, renderDiagnostics, renderCertification, renderInstall } from './modules/admin.js';
+import { renderUsers, renderSettings, renderProfile, renderInstall } from './modules/admin.js';
 import { renderPortalDashboard, renderPortalSchedule, renderPortalRequests, renderPortalProfile } from './modules/portal.js';
 import { renderDocuments } from './modules/documents.js';
 import { renderCommunity } from './modules/community.js';
@@ -23,17 +23,18 @@ import { renderKombaxSocial } from './modules/kombax-social.js';
 import { renderShowcase } from './modules/showcase.js';
 import { renderClubKombaxHub } from './modules/club-kombax-hub.js';
 import { renderPlatformAdmin } from './modules/platform-admin.js';
+import { renderPlatformAdminAccess, renderPlatformAdminConsole } from './modules/platform-admin-access.js';
 import { renderWorkScopes } from './modules/work-scopes.js';
 import { openPasswordRecovery } from './modules/auth-recovery.js';
+import { TEAM_INVITE_ROLES, teamInviteRoleLabel } from './core/invitations.js';
 
 const isPortal=()=>['familia','alumno'].includes(state.session?.rol);
 const routes={
   dashboard:()=>isPortal()?renderPortalDashboard():renderDashboard(),catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
   sessions:renderSessions,attendance:renderAttendance,progress:renderProgress,finance:renderFinance,reminders:renderReminders,communications:renderCommunications,
-  tracking:renderTracking,material:renderMaterial,documents:renderDocuments,notifications:renderNotifications,users:renderUsers,settings:renderSettings,diagnostics:renderDiagnostics,
-  certification:renderCertification,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():(['direccion','coordinacion'].includes(state.session?.rol)?renderClubKombaxHub():renderProfile), 'personal-profile':renderProfile,'platform-admin':renderPlatformAdmin,scopes:renderWorkScopes,community:renderCommunity,social:renderKombaxSocial,showcase:renderShowcase,events:renderEvents,archive:renderLifecycle,help:renderHelpLegal
+  tracking:renderTracking,material:renderMaterial,documents:renderDocuments,notifications:renderNotifications,users:renderUsers,settings:renderSettings,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():(['direccion','coordinacion'].includes(state.session?.rol)?renderClubKombaxHub():renderProfile), 'personal-profile':renderProfile,'platform-admin':renderPlatformAdmin,scopes:renderWorkScopes,community:renderCommunity,social:renderKombaxSocial,showcase:renderShowcase,events:renderEvents,archive:renderLifecycle,help:renderHelpLegal
 };
-const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones del Club',users:'Equipo',settings:'Configuración',diagnostics:'Diagnóstico',certification:'Certificación E2E',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app',community:'Comunidad del Club',social:'KOMBAX Social',showcase:'KOMBAX Showcase','platform-admin':'Administración KOMBAX','personal-profile':'Mi perfil',scopes:'Ámbitos y privacidad',events:'Eventos',archive:'Archivo y papelera',help:'Manual interactivo'};
+const LABEL={dashboard:'Inicio',catalog:'Disciplinas y grados',groups:'Grupos',members:'Alumnos',enrollments:'Solicitudes',sessions:'Sesiones',attendance:'Asistencia',progress:'Progreso',finance:'Finanzas',reminders:'Avisos de cobro',communications:'Comunicaciones',tracking:'Seguimiento',material:'Material',documents:'Archivo documental',notifications:'Notificaciones del Club',users:'Equipo',settings:'Configuración',profile:'Mi perfil',requests:'Solicitudes',install:'Instalar app',community:'Comunidad del Club',social:'KOMBAX Social',showcase:'KOMBAX Showcase','platform-admin':'Administración KOMBAX','personal-profile':'Mi perfil',scopes:'Ámbitos y privacidad',events:'Eventos',archive:'Archivo y papelera',help:'Manual interactivo'};
 
 function navFor(session){
   const role=session?.rol;let ids;
@@ -46,7 +47,6 @@ function navFor(session){
   if(platformFeatures().social){const communityIndex=ids.indexOf('community');ids.splice(communityIndex>=0?communityIndex+1:ids.length,0,'social');}
   if(platformFeatures().showcase){const socialIndex=ids.indexOf('social');ids.splice(socialIndex>=0?socialIndex+1:ids.length,0,'showcase');}
   if(role==='direccion'||role==='coordinacion')ids.unshift('personal-profile');
-  if(session?.platform_admin===true)ids.push('platform-admin');
   return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?'Hoy':role==='monitor'&&id==='members'?'Mis alumnos':role==='monitor'&&id==='groups'?'Mis grupos':role==='monitor'&&id==='finance'?'Mi cartera':role==='alumno'&&id==='help'?'Mi manual':isPortal()&&id==='groups'?'Horarios':isPortal()&&id==='finance'?'Cuotas':(role==='direccion'||role==='coordinacion')&&id==='profile'?'Perfil del club':LABEL[id],icon:navIcon(id)}));
 }
 function mobileNavFor(session){
@@ -93,7 +93,7 @@ async function refreshHeaderSummary({announce=true}={}){
 function openSocialView(view){try{sessionStorage.setItem('kombax_social_view',view)}catch{};navigate('social');}
 function openKombaxActivity(){
   const k=kombaxHeaderActivity;const actionable=Number(k.kombax_pending||0);
-  const body=`<div class="kx-header-activity"><section><div class="kx-header-activity-icon">${icon('network',{size:22})}</div><div><small>MI RED KOMBAX</small><strong>${Number(k.relation_requests||0)} solicitud${Number(k.relation_requests||0)===1?'':'es'} pendiente${Number(k.relation_requests||0)===1?'':'s'}</strong><p>Solicitudes privadas que requieren tu decisión.</p></div><button type="button" class="btn btn-ghost btn-sm" data-kx-activity-open="relations">Revisar</button></section><section><div class="kx-header-activity-icon">${icon('message',{size:22})}</div><div><small>CONTACTO KOMBAX</small><strong>${Number(k.contact_requests||0)} solicitud${Number(k.contact_requests||0)===1?'':'es'} pendiente${Number(k.contact_requests||0)===1?'':'s'}</strong><p>Contactos que todavía esperan aceptación o rechazo.</p></div><button type="button" class="btn btn-ghost btn-sm" data-kx-activity-open="contacts">Revisar</button></section>${actionable===0?'<div class="kx-header-activity-empty"><strong>Todo al día</strong><span>No tienes solicitudes KOMBAX pendientes.</span></div>':''}</div>`;
+  const body=`<div class="kx-header-activity"><section><div class="kx-header-activity-icon">${icon('network',{size:22})}</div><div><small>MI RED KOMBAX</small><strong>${Number(k.relation_requests||0)} solicitud${Number(k.relation_requests||0)===1?'':'es'} pendiente${Number(k.relation_requests||0)===1?'':'s'}</strong><p>Solicitudes privadas que requieren tu decisión.</p></div><button type="button" class="btn btn-ghost btn-sm" data-kx-activity-open="relations">Revisar</button></section><section><div class="kx-header-activity-icon">${icon('message',{size:22})}</div><div><small>SOLICITUDES DE MENSAJERÍA</small><strong>${Number(k.contact_requests||0)} solicitud${Number(k.contact_requests||0)===1?'':'es'} pendiente${Number(k.contact_requests||0)===1?'':'s'}</strong><p>Solicitudes de conversación que todavía esperan aceptación o rechazo. Los mensajes no leídos se consultan desde el icono de Mensajes.</p></div><button type="button" class="btn btn-ghost btn-sm" data-kx-activity-open="contacts">Revisar</button></section>${actionable===0?'<div class="kx-header-activity-empty"><strong>Todo al día</strong><span>No tienes solicitudes KOMBAX pendientes.</span></div>':''}</div>`;
   const {wrap}=openDetail({title:'Notificaciones KOMBAX',subtitle:'Actividad global separada de los avisos de tu Club.',body,width:'640px',className:'kx-header-activity-modal'});
   wrap.querySelectorAll('[data-kx-activity-open]').forEach(button=>button.addEventListener('click',()=>{closeModal();openSocialView(button.dataset.kxActivityOpen)}));
 }
@@ -128,7 +128,7 @@ window.addEventListener('uw-profile-avatar-changed',()=>hydrateSessionAvatar());
 window.addEventListener('uw-native-notification-state',()=>{if(state.route==='profile')navigate('profile',{replace:true});});
 
 async function navigate(id,{replace=false}={}){
-  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));if(state.session?.platform_admin===true){allowed.add('diagnostics');allowed.add('certification');}if(['direccion','coordinacion'].includes(state.session?.rol))allowed.add('personal-profile');if(state.session?.platform_admin===true)allowed.add('platform-admin');if(!allowed.has(id))id='dashboard';state.route=id;
+  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));if(['direccion','coordinacion'].includes(state.session?.rol))allowed.add('personal-profile');if(!allowed.has(id))id='dashboard';state.route=id;
   if(replace)history.replaceState({route:id},'',`#${id}`);else if(location.hash!==`#${id}`)history.pushState({route:id},'',`#${id}`);
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
 }
@@ -153,11 +153,11 @@ function bindShellNavigation(){
   document.getElementById('message-button')?.addEventListener('click',()=>openSocialView('contacts'));
 }
 function renderShell(){
-  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));if(state.session?.platform_admin===true){allowed.add('diagnostics');allowed.add('certification');}const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
+  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
 }
 
 function renderGatewayRoot(){
-  renderKombaxGateway({onClubDirectory:()=>renderClubDirectory({onBack:renderGatewayRoot,onSelect:club=>{selectClubSlug(club.slug,club);renderClubLogin();}}),onDirectProfiles:()=>renderDirectProfiles({onBack:renderGatewayRoot})});
+  renderKombaxGateway({onClubDirectory:()=>renderClubDirectory({onBack:renderGatewayRoot,onSelect:club=>{selectClubSlug(club.slug,club);renderClubLogin();},onAdminAccess:()=>renderPlatformAdminAccess({onCancel:renderGatewayRoot,onSuccess:renderPlatformAdminConsole})}),onDirectProfiles:()=>renderDirectProfiles({onBack:renderGatewayRoot})});
 }
 
 function renderLogin(prefillEmail=''){
@@ -177,7 +177,7 @@ function renderClubLogin(prefillEmail=''){
   document.getElementById('register-btn')?.addEventListener('click',openRegistrationChoice);document.getElementById('invite-btn')?.addEventListener('click',()=>openInvitationChoice());document.getElementById('public-install')?.addEventListener('click',openPublicInstall);
   document.getElementById('forgot-password-btn')?.addEventListener('click',()=>openPasswordRecovery({prefillEmail:document.getElementById('login-email')?.value||prefillEmail,onComplete:email=>renderClubLogin(email)}));
   document.getElementById('back-to-kombax')?.addEventListener('click',()=>{clearSelectedClub();renderGatewayRoot();});
-  const params=new URLSearchParams(location.search);const accessCode=params.get('access_code')||params.get('invite');if(accessCode)setTimeout(()=>openInvitationChoice(accessCode,params.get('access_type')||params.get('invite_type')||''),50);
+  const params=new URLSearchParams(location.search);const accessCode=params.get('access_code')||params.get('invite');if(accessCode)setTimeout(()=>openInvitationChoice(accessCode,params.get('access_type')||params.get('invite_type')||'',params.get('team_role')||''),50);
 }
 
 function ageYears(value){const d=new Date(`${value}T12:00:00`);if(Number.isNaN(d.getTime()))return null;const now=new Date();let years=now.getFullYear()-d.getFullYear();const before=now.getMonth()<d.getMonth()||(now.getMonth()===d.getMonth()&&now.getDate()<d.getDate());if(before)years--;return years;}
@@ -209,11 +209,11 @@ async function openRegistration(type,invite=null){
     const grid=modal.form.querySelector('.form-grid');const legalBox=document.createElement('div');legalBox.className='registration-legal-links field full';legalBox.innerHTML=`<strong>Lee antes de aceptar</strong><div class="row-actions">${['condiciones_uso','privacidad','comunidad','derechos_imagen'].filter(k=>byType[k]).map(k=>`<button type="button" class="btn btn-ghost btn-sm legal-preview" data-type="${esc(k)}">${esc(({condiciones_uso:'Condiciones de uso',privacidad:'Privacidad',comunidad:'Comunidad del Club',derechos_imagen:'Derechos de imagen'})[k])}</button>`).join('')}</div><small>La autorización de imagen es opcional y puede retirarse posteriormente.</small>`;grid.appendChild(legalBox);legalBox.querySelectorAll('.legal-preview').forEach(b=>b.addEventListener('click',()=>showPublicLegal(byType[b.dataset.type])));
   }catch(e){setError(e)}
 }
-function openInvitationChoice(prefill='',prefillType=''){
+function openInvitationChoice(prefill='',prefillType='',prefillRole=''){
   const type=String(prefillType||'').toLowerCase();
   if(type==='alumno'||type==='alumnos'||type==='familia')return openStudentAccessCode(prefill);
-  if(type==='equipo')return openTeamAccessCode(prefill);
-  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:720px"><div class="modal-head"><div><h2>Tengo un código del club</h2><p>Introduce el código corto que te ha facilitado el club o que aparece junto a su QR.</p></div><button class="icon-btn" id="invitation-choice-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-access-kind="alumnos"><strong>Alumnos y familias</strong><small>Para solicitar el alta como alumno/a o crear una cuenta de padre, madre o tutor.</small></button><button class="choice-card" data-access-kind="equipo"><strong>Miembros del equipo</strong><small>Para crear tu cuenta y solicitar acceso al equipo del club. El rol se valida después.</small></button></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#invitation-choice-close')?.addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-access-kind]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.accessKind;closeModal();if(k==='alumnos')openStudentAccessCode(prefill);else openTeamAccessCode(prefill);}));
+  if(type==='equipo')return openTeamAccessCode(prefill,prefillRole);
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:720px"><div class="modal-head"><div><h2>Tengo un código del club</h2><p>Introduce el código corto que te ha facilitado el club o que aparece junto a su QR.</p></div><button class="icon-btn" id="invitation-choice-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-access-kind="alumnos"><strong>Alumnos y familias</strong><small>Para solicitar el alta como alumno/a o crear una cuenta de padre, madre o tutor.</small></button><button class="choice-card" data-access-kind="equipo"><strong>Miembros del equipo</strong><small>Para crear tu cuenta y solicitar acceso al equipo del club. El rol se valida después.</small></button></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#invitation-choice-close')?.addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-access-kind]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.accessKind;closeModal();if(k==='alumnos')openStudentAccessCode(prefill);else openTeamAccessCode(prefill,prefillRole);}));
 }
 function accessClubSlug(){
   const slug=selectedClubSlug();
@@ -221,26 +221,28 @@ function accessClubSlug(){
   return slug;
 }
 function openStudentAccessCode(prefill=''){
-  let slug;try{slug=accessClubSlug();}catch(error){toast(error.message,'error');return;}
+  let slug;try{slug=accessClubSlug();}catch(error){toast(humanError(error),'error');return;}
   openForm({title:'Código para alumnos y familias',subtitle:'Escribe el código de 4 o 5 dígitos del club. El mismo código puede usarse mientras el club no lo cambie.',width:'720px',fields:[{name:'code',label:'Código del club',required:true,value:prefill,placeholder:'12345',inputmode:'numeric'},{name:'modo',label:'¿Quién se registra?',type:'select',required:true,value:'adulto',options:[{value:'adulto',label:'Alumno/a de 16 años o más'},{value:'tutor',label:'Padre, madre o tutor de un menor'}]}],submitText:'Continuar',onSubmit:async v=>{
     const code=String(v.code||'').trim();if(!/^\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');
     const club=selectedClubPreview()||{slug,nombre:slug};
     setTimeout(()=>openRegistration(v.modo,{code,club_slug:slug,club_nombre:club.nombre||slug}),220);
   }});
 }
-function openTeamAccessCode(prefill=''){
-  let slug;try{slug=accessClubSlug();}catch(error){toast(error.message,'error');return;}
-  openForm({title:'Código para miembros del equipo',subtitle:'El código permite crear o vincular tu cuenta al club. No concede permisos automáticamente: Gestor o Coordinación revisarán la solicitud y asignarán el rol.',width:'760px',fields:[{name:'code',label:'Código de equipo',required:true,value:prefill,placeholder:'54321',inputmode:'numeric'},{name:'modo',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},{name:'email',label:'Email',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true},{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'}],submitText:'Enviar solicitud',onSubmit:async v=>{
+function openTeamAccessCode(prefill='',prefillRole=''){
+  let slug;try{slug=accessClubSlug();}catch(error){toast(humanError(error),'error');return;}
+  const requested=String(prefillRole||'').trim().toLowerCase();const validRequested=TEAM_INVITE_ROLES.some(x=>x.value===requested)?requested:'';
+  openForm({title:validRequested?`Invitación al equipo · ${teamInviteRoleLabel(validRequested)}`:'Código para miembros del equipo',subtitle:validRequested?`Esta invitación se ha preparado para solicitar acceso como ${teamInviteRoleLabel(validRequested)}. No concede permisos automáticamente. El club debe revisarla y aprobarla antes de activar el acceso.`:'Introduce el código y el rol para el que te han invitado. No concede permisos automáticamente. El club debe revisarla y aprobarla antes de activar el acceso.',width:'760px',fields:[{name:'code',label:'Código de equipo',required:true,value:prefill,placeholder:'54321',inputmode:'numeric'},{name:'rol',label:'Rol solicitado',type:'select',required:true,value:validRequested||'monitor',options:TEAM_INVITE_ROLES},{name:'modo',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},{name:'email',label:'Email',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true},{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'}],submitText:'Enviar solicitud',onSubmit:async v=>{
     const code=String(v.code||'').trim();if(!/^\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');
+    const role=String(v.rol||'').trim().toLowerCase();if(!TEAM_INVITE_ROLES.some(x=>x.value===role))throw new Error('Selecciona el rol para el que has recibido la invitación.');
     if(String(v.password||'').length<6)throw new Error('La contraseña debe tener al menos 6 caracteres.');
     if(v.modo==='existente'){
-      await backend.signInGlobal(v.email,v.password);await backend.requestTeamAccess(slug,code,v.email);
-      toast('Solicitud de acceso al equipo enviada. El club debe revisarla.','ok');await backend.signOut();renderClubLogin(v.email);return;
+      await backend.signInGlobal(v.email,v.password);await backend.requestTeamAccess(slug,code,v.email,role);
+      toast(`Solicitud enviada para ${teamInviteRoleLabel(role)}. El club debe aprobarla.`,'ok');await backend.signOut();renderClubLogin(v.email);return;
     }
     if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');
     const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos});
-    if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({club_slug:slug,code,email:v.email}));toast('Cuenta creada. Confirma tu email y después accede a KOMBAX; la solicitud quedará registrada.');renderGatewayRoot();return;}
-    await backend.requestTeamAccess(slug,code,v.email);toast('Cuenta creada y solicitud de equipo enviada.','ok');await backend.signOut();renderClubLogin(v.email);
+    if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({club_slug:slug,code,email:v.email,role}));toast('Cuenta creada. Confirma tu email y después accede a KOMBAX; la solicitud quedará registrada.');renderGatewayRoot();return;}
+    await backend.requestTeamAccess(slug,code,v.email,role);toast(`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');await backend.signOut();renderClubLogin(v.email);
   }});
 }
 function openPublicInstall(){
@@ -248,6 +250,12 @@ function openPublicInstall(){
 }
 
 async function boot(){
+  const adminPath=/\/admin\/?$/.test(location.pathname);
+  if(adminPath){
+    const restored=await backend.restorePlatformAdminAccess().catch(()=>null);
+    if(restored)renderPlatformAdminConsole();else renderPlatformAdminAccess({onCancel:()=>{location.href='/';},onSuccess:renderPlatformAdminConsole});
+    return;
+  }
   const entryParams=new URLSearchParams(location.search);if(entryParams.get('club')){try{const slug=selectClubSlug(entryParams.get('club'));const matches=await client.rpc('app_buscar_clubes_kombax_v040',{p_query:slug,p_limit:5}).catch(()=>[]),club=(matches||[]).find(x=>x.slug===slug);if(club)selectClubSlug(slug,club);}catch(error){console.warn('Enlace de club no válido:',error)}}
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__uwInstallPrompt=e;});
   window.addEventListener('uw-native-push-token',async e=>{try{if(state.session&&e.detail){await backend.mutate('push.registrar',{token:e.detail,plataforma:'android'});localStorage.setItem('uw_push_synced_token',`${state.session.id}:${e.detail}`);}}catch(error){console.warn('Push token:',error)}});

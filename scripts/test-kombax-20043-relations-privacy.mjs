@@ -33,9 +33,9 @@ must(repos.includes("app_kombax_perfil_publico_v068"),'frontend no usa perfil p�
 must(repos.includes("app_kombax_relaciones_v068"),'Mis relaciones no usa RPC privada v068');
 
 // UX: la persona sí conserva un espacio privado para gestionar su red.
-must(social.includes("pageHeader('Mis relaciones','Área privada."),'Relaciones no se presenta como área privada');
-must(social.includes('Ni tu lista ni el número total de relaciones se muestran públicamente.'),'solicitud no explica privacidad');
-must(social.includes('La relación es privada, requiere consentimiento'),'confirmación no explica privacidad');
+must(social.includes("pageHeader('Mi red','Área privada."),'Mi red no se presenta como área privada');
+must(social.includes('Ni tu red ni su tamaño se muestran públicamente.'),'solicitud no explica privacidad');
+must(social.includes('Mi red es privada, requiere consentimiento'),'confirmación no explica privacidad');
 
 // No introducir popularidad social pública en cards/feed/perfil.
 const publicSurface=publicProfile+social.slice(0,social.indexOf('async function renderRelations'));

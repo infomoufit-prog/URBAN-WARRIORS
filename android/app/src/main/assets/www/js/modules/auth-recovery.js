@@ -1,3 +1,4 @@
+import { humanError } from '../core/utils.js';
 import { backend } from '../core/backend.js';
 import { openForm, toast } from '../ui/components.js';
 
@@ -31,7 +32,7 @@ function openCodeStep({email,onComplete}){
   resend.addEventListener('click',async()=>{
     resend.disabled=true;
     try{await backend.requestPasswordRecovery(email);toast(neutralMessage);}
-    catch(error){toast(error.message||'No se pudo solicitar otro código.','error');}
+    catch(error){toast(humanError(error)||'No se pudo solicitar otro código.','error');}
     finally{setTimeout(()=>{if(resend.isConnected)resend.disabled=false;},60000);}
   });
   actions?.prepend(resend);

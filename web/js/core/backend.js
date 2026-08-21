@@ -1,6 +1,6 @@
 import { SupabaseClient, AuthExpiredError } from './supabase.js';
 import { state } from './state.js';
-import { uuid, humanError } from './utils.js';
+import { uuid, humanError, technicalError } from './utils.js';
 import { selectedClubSlug, selectClubSlug } from './platform.js';
 import { invalidateCache } from './query-cache.js';
 
@@ -192,7 +192,9 @@ export const backend={
       try{
         const p=JSON.parse(pendingTeam)||{};
         if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){
-          await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:p.club_slug,p_codigo:p.code});
+          const role=String(p.role||'').trim().toLowerCase()||null;
+          try{await client.rpc('app_kombax_equipo_solicitar_v109',{p_club_slug:p.club_slug,p_codigo:p.code,p_rol_solicitado:role});}
+          catch(error){if(role)throw error;await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:p.club_slug,p_codigo:p.code});}
           localStorage.removeItem('uw2_pending_team_access');
         }
       }catch(error){console.warn('Solicitud de equipo pendiente:',humanError(error));}
@@ -202,6 +204,72 @@ export const backend={
     state.setCapabilities([]);
     state.pushTrace({kind:'auth',ok:true,label:'Login KOMBAX validado',detail:session.email});
     return session;
+  },
+  async beginPlatformAdminAccess(email,password){
+    state.clearError();
+    const normalized=String(email||'').trim().toLowerCase();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized))throw new Error('Indica un correo electrónico válido.');
+    if(!String(password||''))throw new Error('Introduce tu contraseña.');
+    try{
+      await client.signIn(normalized,String(password));
+      const challenge=await client.rpc('app_kombax_platform_admin_challenge_start_v108',{});
+      await client.requestEmailOtp(normalized);
+      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: contraseña validada',detail:normalized});
+      return {challenge_id:challenge?.challenge_id||challenge?.id,email:normalized,email_masked:challenge?.email_masked||normalized,expires_at:challenge?.expires_at||null};
+    }catch(error){
+      const message=technicalError(error);
+      if(/platform_admin_required|not authorized|forbidden/i.test(message))throw new Error('Esta cuenta no tiene autorización de administración global KOMBAX.');
+      if(/invalid login credentials|invalid credentials|email or password/i.test(message))throw new Error('El correo o la contraseña no son correctos.');
+      throw new Error(humanError(error));
+    }
+  },
+  async resendPlatformAdminOtp(email){
+    const normalized=String(email||'').trim().toLowerCase();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized))throw new Error('Indica un correo electrónico válido.');
+    try{await client.requestEmailOtp(normalized);return {ok:true};}
+    catch(error){throw new Error(humanError(error));}
+  },
+  async completePlatformAdminAccess({email,token,challenge_id}){
+    state.clearError();
+    const normalized=String(email||'').trim().toLowerCase();
+    const code=String(token||'').replace(/\s+/g,'');
+    if(!/^\d{6,8}$/.test(code))throw new Error('Introduce el código de un solo uso recibido por correo.');
+    if(!challenge_id)throw new Error('La solicitud de acceso ha caducado. Vuelve a empezar.');
+    try{
+      const auth=await client.verifyEmailOtp(normalized,code);
+      const result=await client.rpc('app_kombax_platform_admin_challenge_complete_v108',{p_challenge_id:challenge_id});
+      if(result?.authorized!==true)throw new Error('No se pudo completar la verificación de administración.');
+      const session=await globalIdentityFromAuth(auth.user);
+      if(session.platform_admin!==true)throw new Error('No se pudo confirmar la autorización global KOMBAX.');
+      const adminSession={...session,scope:'platform-admin',admin_expires_at:result.expires_at||null};
+      state.session=adminSession;state.setCapabilities([]);
+      try{sessionStorage.setItem('uw2_platform_admin_session',JSON.stringify({id:adminSession.id,email:adminSession.email,expires_at:adminSession.admin_expires_at||null}))}catch{}
+      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: OTP verificado',detail:normalized});
+      return adminSession;
+    }catch(error){
+      const message=technicalError(error);
+      if(/otp|token|expired|invalid/i.test(message))throw new Error('El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.');
+      throw new Error(humanError(error));
+    }
+  },
+  async restorePlatformAdminAccess(){
+    if(!client.session?.access_token)return null;
+    try{
+      await client.fresh();
+      const context=await platformContext();
+      if(context?.authorized!==true)return null;
+      const authUser=client.session?.user;
+      if(!authUser?.id)return null;
+      const session=await globalIdentityFromAuth(authUser);
+      if(session.platform_admin!==true)return null;
+      const out={...session,scope:'platform-admin',admin_expires_at:context.expires_at||null};state.session=out;state.setCapabilities([]);return out;
+    }catch{return null;}
+  },
+  async signOutPlatformAdmin(){
+    try{
+      if(client.session?.access_token)await client.rpc('app_kombax_platform_admin_session_end_v108',{}).catch(()=>null);
+      await client.signOut();
+    }finally{state.session=null;state.setCapabilities([]);try{sessionStorage.removeItem('uw2_platform_admin_session')}catch{}}
   },
   async registerGlobalAccount({email,password,nombre='',apellidos=''}){
     state.clearError();
@@ -236,9 +304,15 @@ export const backend={
     for(const item of legalEntries){await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});}
     return {confirmationRequired:false,session};
   },
-  async requestTeamAccess(clubSlug,code,email=''){
-    if(!client.session?.access_token){localStorage.setItem('uw2_pending_team_access',JSON.stringify({club_slug:clubSlug,code:String(code||'').trim(),email}));return {loginRequired:true};}
-    const result=await this.globalWriteRpc('app_kombax_equipo_solicitar_v060',{p_club_slug:clubSlug,p_codigo:String(code||'').trim()});
+  async requestTeamAccess(clubSlug,code,email='',role=''){
+    const requestedRole=String(role||'').trim().toLowerCase()||null;
+    if(!client.session?.access_token){localStorage.setItem('uw2_pending_team_access',JSON.stringify({club_slug:clubSlug,code:String(code||'').trim(),email,role:requestedRole}));return {loginRequired:true};}
+    let result;
+    try{result=await this.globalWriteRpc('app_kombax_equipo_solicitar_v109',{p_club_slug:clubSlug,p_codigo:String(code||'').trim(),p_rol_solicitado:requestedRole});}
+    catch(error){
+      if(requestedRole)throw new Error('La invitación por rol necesita activar la actualización de equipo 109.');
+      result=await this.globalWriteRpc('app_kombax_equipo_solicitar_v060',{p_club_slug:clubSlug,p_codigo:String(code||'').trim()});
+    }
     if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');
     return {loginRequired:false,result};
   },
@@ -289,7 +363,7 @@ export const backend={
     return dedupeRead(`select:${table}:${query}`,async()=>{
       const t0=performance.now();
       try{const data=await client.select(table,query);state.pushTrace({kind:'read',ok:true,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
-      catch(error){state.pushTrace({kind:'read',ok:false,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+      catch(error){state.pushTrace({kind:'read',ok:false,label:`SELECT ${table}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
     });
   },
   async globalReadRpc(name,args={}){
@@ -297,32 +371,32 @@ export const backend={
     return dedupeRead(`globalReadRpc:${name}:${stableArgs(args)}`,async()=>{
       const t0=performance.now();
       try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
-      catch(error){state.pushTrace({kind:'read',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+      catch(error){state.pushTrace({kind:'read',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
     });
   },
   async invokeFunction(name,payload={}){
     if(!client.session?.access_token)throw new AuthExpiredError();
     const t0=performance.now();state.pushTrace({kind:'mutation',stage:'request',ok:null,label:`EDGE ${name}`});
     try{const data=await client.invokeFunction(name,payload);state.pushTrace({kind:'mutation',stage:'response',ok:true,label:`EDGE ${name}`,ms:Math.round(performance.now()-t0)});return data;}
-    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`EDGE ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`EDGE ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
   },
   async publicRpc(name,args={}){
     const t0=performance.now();
     try{const data=await withReadSlot(()=>client.rpc(name,args));state.pushTrace({kind:'read',ok:true,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
-    catch(error){state.pushTrace({kind:'read',ok:false,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+    catch(error){state.pushTrace({kind:'read',ok:false,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
   },
   async globalWriteRpc(name,args={}){
     if(!client.session?.access_token)throw new AuthExpiredError();
     const t0=performance.now();state.pushTrace({kind:'mutation',stage:'request',ok:null,label:`GLOBAL RPC ${name}`});
     try{const data=await client.rpc(name,args);state.pushTrace({kind:'mutation',stage:'response',ok:true,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
-    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw new Error(`No se guardó (${name}): ${humanError(error)}`);}
+    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw new Error(humanError(error));}
   },
   async readRpc(name,args={}){
     if(!state.session?.club_id)throw new AuthExpiredError();
     return dedupeRead(`readRpc:${name}:${stableArgs(args)}`,async()=>{
       const t0=performance.now();
       try{const data=await client.rpc(name,args);state.pushTrace({kind:'read',ok:true,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),count:Array.isArray(data)?data.length:undefined});return data;}
-      catch(error){state.pushTrace({kind:'read',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw error;}
+      catch(error){state.pushTrace({kind:'read',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
     });
   },
   async writeRpc(name,args={}){
@@ -330,7 +404,7 @@ export const backend={
     const t0=performance.now();
     state.pushTrace({kind:'mutation',stage:'request',ok:null,label:`RPC ${name}`});
     try{const data=await client.rpc(name,args);state.pushTrace({kind:'mutation',stage:'response',ok:true,label:`RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
-    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:humanError(error)});throw new Error(`No se guardó (${name}): ${humanError(error)}`);}
+    catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw new Error(humanError(error));}
   },
   async mutate(operation,payload={},options={}){
     if(!state.session?.club_id)throw new AuthExpiredError();
@@ -347,8 +421,8 @@ export const backend={
       state.pushTrace({kind:'mutation',stage:'response',ok:true,label:operation,requestId,ms:Math.round(performance.now()-t0),response});
       return response.data;
     }catch(error){
-      state.pushTrace({kind:'mutation',stage:'response',ok:false,label:operation,requestId,ms:Math.round(performance.now()-t0),error:humanError(error)});
-      throw new Error(`No se guardó (${operation}): ${humanError(error)}`);
+      state.pushTrace({kind:'mutation',stage:'response',ok:false,label:operation,requestId,ms:Math.round(performance.now()-t0),error:technicalError(error)});
+      throw new Error(humanError(error));
     }
   },
   async upload(bucket,path,file,upsert=false){const out=await client.upload(bucket,path,file,upsert);state.pushTrace({kind:'storage',ok:true,label:`UPLOAD ${bucket}`,detail:path});return out;},

@@ -1,0 +1,40 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+const root=path.resolve(path.dirname(new URL(import.meta.url).pathname),'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const cfg=read('web/config.js');
+const gradle=read('android/app/build.gradle');
+const users=read('web/js/modules/admin.js');
+const members=read('web/js/modules/groups-members.js');
+const app=read('web/js/app.js');
+const repos=read('web/js/core/repositories.js');
+const backend=read('web/js/core/backend.js');
+const invitations=read('web/js/core/invitations.js');
+const sql=read('supabase/migrations/109_kombax_role_invitations_team_filter_20065.sql');
+
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]);
+const android=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);
+assert.equal(build,20065);
+assert.equal(android,20065);
+
+assert.match(repos,/rol=in\.\(direccion,secretaria,economia,comunicacion,monitor\)/,'team repository must positively filter operational roles');
+assert.match(users,/teamRoles=new Set\(\['direccion','secretaria','economia','comunicacion','monitor'\]\)/,'frontend defensive filter must exclude alumno/familia');
+assert.doesNotMatch(users,/teamRoles=new Set\([^\n]*(?:alumno|familia)/,'team role set must not contain student/family roles');
+assert.match(users,/Invitar al equipo/);
+assert.match(users,/Rol de la invitación/);
+assert.match(users,/data-requested-role/);
+assert.match(members,/Invitar alumno \/ familia/);
+assert.match(members,/Compartir invitación/);
+assert.match(invitations,/TEAM_INVITE_ROLES/);
+assert.match(invitations,/Economía \/ Tesorería/);
+assert.match(invitations,/team_role/);
+assert.match(app,/Rol solicitado/);
+assert.match(app,/backend\.requestTeamAccess\(slug,code,v\.email,role\)/);
+assert.match(backend,/app_kombax_equipo_solicitar_v109/);
+assert.match(sql,/add column if not exists rol_solicitado text/);
+assert.match(sql,/rol_solicitado in \('coordinacion','secretaria','economia','comunicacion','monitor'\)/);
+assert.match(sql,/m\.rol in \('direccion','secretaria','economia','comunicacion','monitor'\)/);
+assert.match(sql,/nunca concede permisos/i);
+
+console.log('KOMBAX 20065 role invitations + team filter: PASS');

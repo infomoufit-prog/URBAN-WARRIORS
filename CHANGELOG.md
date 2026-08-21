@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0-rc.13 · build 20063 · Social Messaging Final QA
+
+- Chat Social: la X sale y conserva el hilo; desaparece `Cerrar chat`; `Eliminar conversación` queda como acción destructiva.
+- Comentarios inline, sin segundo modal.
+- UX pública `Mi red` / `Añadir a mi red`, manteniendo privacidad.
+- Mensajes KOMBAX con badge independiente y acceso directo.
+- Bandeja unificada con filtros Social/Showcase y contexto visual de producto.
+- Showcase comercial preparado para hilo independiente por pareja+producto.
+- Migración Supabase 107 preparada con compatibilidad v106/v104; no aplicada live al cierre del paquete.
+- Build 20063: tests PASS, build PASS, 66 archivos web/dist/Android idénticos; Netlify no desplegado.
+
 ## 2.0.0-rc.13 · build 20058 · Navigation + Session UX · intervención 1
 
 - Nueva jerarquía transversal de navegación: **Mi perfil → KOMBAX Social → KOMBAX Showcase → Mi Club**.

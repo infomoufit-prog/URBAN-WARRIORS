@@ -16,7 +16,7 @@ const [app,components,icons,repos,comms,admin,css,supa,backend,m006,m012,dispatc
 assert(!components.includes('release.version')&&!components.includes('backendVersion'),'shell cotidiano no expone versión/backend');
 assert(!/release\.version/.test(app.split('function renderLogin')[1]?.split('function openRegistrationChoice')[0]||''),'login no muestra versión técnica');
 assert(app.includes("if(role==='direccion'||role==='coordinacion') ids=['dashboard'")&&!app.match(/ids=\[[^\]]*diagnostics/),'Gestor/Coordinación no tienen diagnóstico en navegación cotidiana');
-assert(admin.includes('Herramientas técnicas')&&admin.includes('#diagnostics')&&admin.includes('#certification'),'herramientas técnicas quedan apartadas en Configuración del Gestor de la app');
+assert(!admin.includes('Herramientas técnicas')&&!admin.includes('#diagnostics')&&!admin.includes('#certification'),'herramientas técnicas no se exponen en Configuración del club');
 
 // Iconografía: SVG propio, sin dependencia de emoji como sistema de navegación.
 assert(icons.includes('<svg class="uw-icon')&&icons.includes("export const navIcon"),'sistema de iconos SVG profesional disponible');

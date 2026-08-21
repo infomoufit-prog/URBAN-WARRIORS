@@ -1,5 +1,5 @@
 import { repos } from '../core/repositories.js';
-import { esc, dtFmt } from '../core/utils.js';
+import { esc, dtFmt, humanError } from '../core/utils.js';
 import { pageHeader, card, table, empty, badge, openForm, toast, setError, setMainHtml } from '../ui/components.js';
 
 const TYPE_LABELS=Object.freeze({publicacion:'Publicaciones',comunicacion:'Comunicaciones',evento:'Eventos antiguos',notificacion:'Notificaciones informativas',material:'Archivos y material',documento:'Archivos y material',seguimiento:'Notas de seguimiento',asistencia:'Asistencia',sesion:'Sesiones finalizadas'});
@@ -24,5 +24,5 @@ export async function renderLifecycle(){
     document.getElementById('lifecycle-archive')?.addEventListener('click',()=>runAction('archivar'));
     document.getElementById('lifecycle-trash')?.addEventListener('click',()=>runAction('papelera'));
     document.getElementById('lifecycle-restore')?.addEventListener('click',()=>runAction('restaurar'));
-  }catch(error){setError(error);setMainHtml(`${pageHeader('Archivo y papelera')} ${empty('No se pudo cargar el ciclo de vida',error.message)}`);}
+  }catch(error){setError(error);setMainHtml(`${pageHeader('Archivo y papelera')} ${empty('No se pudo cargar el ciclo de vida',humanError(error))}`);}
 }

@@ -1,7 +1,7 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, dateFmt } from '../core/utils.js';
+import { esc, dateFmt, humanError } from '../core/utils.js';
 import { pageHeader, card, table, empty, badge, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 
@@ -65,5 +65,5 @@ export async function renderDocuments(){
     bind('.replace-doc',id=>{const d=docs.find(x=>x.id===id),m=memberMap.get(d.socio_id)||{};openForm({title:'Sustituir documento',subtitle:`${m.nombre||''} ${m.apellidos||''} · el archivo anterior quedará marcado como sustituido.`,width:'820px',fields:uploadFields(members,{includeMember:false}),initial:{tipo:d.tipo,nombre:d.nombre,fecha_documento:d.fecha_documento,firmado:true,visible_familia:d.visible_familia,observaciones:d.observaciones},onSubmit:async v=>{await repos.documents.upload(d.socio_id,v.archivo,{...v,reemplaza_id:id});toast('Documento sustituido con trazabilidad');await reload();}})});
     bind('.archive-doc',id=>confirmDialog('Archivar documento','El archivo seguirá disponible en el histórico del expediente.',async()=>{await repos.documents.archive(id);toast('Documento archivado');await reload();},{confirmText:'Archivar'}));
     bind('.delete-doc',id=>confirmDialog('Eliminar definitivamente','Esta acción elimina la ficha documental y el archivo de Storage. Úsala solo para duplicados o documentos subidos por error.',async()=>{await repos.documents.delete(id);toast('Documento eliminado');await reload();},{confirmText:'Eliminar',danger:true}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Archivo documental')} ${empty('No se pudo cargar el archivo',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Archivo documental')} ${empty('No se pudo cargar el archivo',humanError(e))}`)}
 }

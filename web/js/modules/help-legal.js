@@ -1,6 +1,6 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
-import { esc } from '../core/utils.js';
+import { esc, humanError } from '../core/utils.js';
 import { pageHeader, card, quickRow, empty, badge, openDetail, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { rolesLabel } from '../core/permissions.js';
@@ -121,5 +121,5 @@ export async function renderHelpLegal(){
     document.querySelectorAll('.legal-open').forEach(b=>b.addEventListener('click',()=>{const d=docs.find(x=>x.id===b.dataset.id);openDetail({title:titleFor(d.tipo),subtitle:`Versión ${d.version}`,body:legalBody(d.cuerpo),width:'900px'});}));
     const community=docs.find(d=>d.tipo==='comunidad');document.getElementById('community-consent-toggle')?.addEventListener('click',async()=>{try{const on=!accepted.has(`comunidad:${community.version}`);await repos.legal.accept('comunidad',community.version,on);toast(on?'Normas de Comunidad del Club aceptadas':'Aceptación de Comunidad del Club retirada');await renderHelpLegal();}catch(e){setError(e)}});
     const image=docs.find(d=>d.tipo==='derechos_imagen');document.getElementById('image-consent-toggle')?.addEventListener('click',async()=>{try{const on=!accepted.has(`derechos_imagen:${image.version}`);await repos.legal.accept('derechos_imagen',image.version,on);toast(on?'Autorización registrada':'Autorización retirada');await renderHelpLegal();}catch(e){setError(e)}});
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Manual interactivo')} ${empty('No se pudo cargar la ayuda',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Manual interactivo')} ${empty('No se pudo cargar la ayuda',humanError(e))}`)}
 }

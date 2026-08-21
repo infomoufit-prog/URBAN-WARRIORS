@@ -55,6 +55,8 @@ export class SupabaseClient {
   async signIn(email,password){const b=await this.request('/auth/v1/token?grant_type=password',{method:'POST',useAuth:false,body:JSON.stringify({email,password})},false);return this.#save(b)}
   async signUp(email,password,data={}){const b=await this.request('/auth/v1/signup',{method:'POST',useAuth:false,body:JSON.stringify({email,password,data})},false);if(b?.access_token)this.#save(b);return b}
   async requestPasswordRecovery(email){return this.request('/auth/v1/recover',{method:'POST',useAuth:false,body:JSON.stringify({email})},false)}
+  async requestEmailOtp(email){return this.request('/auth/v1/otp',{method:'POST',useAuth:false,body:JSON.stringify({email,create_user:false})},false)}
+  async verifyEmailOtp(email,token){const b=await this.request('/auth/v1/verify',{method:'POST',useAuth:false,body:JSON.stringify({type:'email',email,token})},false);if(!b?.access_token)throw new Error('No se pudo validar el código de acceso.');return this.#save(b)}
   async verifyPasswordRecovery(email,token){const b=await this.request('/auth/v1/verify',{method:'POST',useAuth:false,body:JSON.stringify({type:'recovery',email,token})},false);if(!b?.access_token)throw new Error('No se pudo validar el código de recuperación.');return this.#save(b)}
   async updatePassword(password){if(!this.session?.access_token)throw new AuthExpiredError('El código de recuperación debe validarse antes de cambiar la contraseña.');return this.request('/auth/v1/user',{method:'PUT',body:JSON.stringify({password})},false)}
   async signOut(){try{if(this.session)await this.request('/auth/v1/logout',{method:'POST'},false)}catch(e){console.warn('Logout remoto:',humanError(e))}finally{this.clear()}}

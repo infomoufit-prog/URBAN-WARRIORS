@@ -1,6 +1,6 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
-import { esc, dtFmt } from '../core/utils.js';
+import { esc, dtFmt, humanError } from '../core/utils.js';
 import { pageHeader, card, empty, badge, openForm, openDetail, closeModal, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { optimizeImage, formatMediaBytes, prepareVideo } from '../core/media.js';
@@ -142,5 +142,5 @@ export async function renderCommunity({append=false}={}){
     document.querySelectorAll('.community-block').forEach(b=>b.addEventListener('click',()=>confirmDialog('Bloquear perfil',`Dejarás de ver las publicaciones de ${b.dataset.name||'este perfil'} en la Comunidad del Club. Los avisos administrativos del club no se bloquean.`,async()=>{await repos.community.block(b.dataset.author,true);toast('Perfil bloqueado');await renderCommunity();},{confirmText:'Bloquear',danger:true})));
     const loadMore=()=>renderCommunity({append:true});document.getElementById('community-load-more')?.addEventListener('click',loadMore);
     const sentinel=document.getElementById('community-sentinel');if(sentinel&&'IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)){observer.disconnect();loadMore();}},{rootMargin:'500px'});observer.observe(sentinel);}
-  }catch(e){setError(e);if(!append)setMainHtml(`${pageHeader('Comunidad del Club')} ${empty('No se pudo cargar la Comunidad del Club',e.message)}`)}finally{communityLoading=false;}
+  }catch(e){setError(e);if(!append)setMainHtml(`${pageHeader('Comunidad del Club')} ${empty('No se pudo cargar la Comunidad del Club',humanError(e))}`)}finally{communityLoading=false;}
 }

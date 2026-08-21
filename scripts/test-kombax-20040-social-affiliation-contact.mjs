@@ -62,9 +62,9 @@ for(const idx of [
 must(repos.includes("app_kombax_social_feed_v065"),'frontend no usa feed 065');
 must(repos.includes("app_kombax_social_directorio_v065"),'frontend no usa directorio 065');
 must(repos.includes("app_kombax_perfil_publico_v065")||repos.includes("app_kombax_perfil_publico_v068"),'frontend no usa perfil público 065 o wrapper posterior compatible');
-must((repos.includes("app_kombax_contactos_v106")||repos.includes("app_kombax_contactos_v104")||repos.includes("app_kombax_contactos_v067")||repos.includes("app_kombax_contactos_v065")),'frontend no usa bandeja de contactos 065');
+must((repos.includes("app_kombax_contactos_v107")||repos.includes("app_kombax_contactos_v106")||repos.includes("app_kombax_contactos_v104")||repos.includes("app_kombax_contactos_v067")||repos.includes("app_kombax_contactos_v065")),'frontend no usa bandeja de contactos 065');
 must((repos.includes("app_kombax_contact_mensajes_v106")||repos.includes("app_kombax_contact_mensajes_v104")||repos.includes("app_kombax_contact_mensajes_v067")||repos.includes("app_kombax_contact_mensajes_v065")),'frontend no lee mensajes 065');
-must((repos.includes("app_kombax_social_network_mutate_v104")||repos.includes("app_kombax_social_network_mutate_v067")||repos.includes("app_kombax_social_network_mutate_v065")),'frontend no usa mutación de red 065');
+must((repos.includes("app_kombax_social_network_mutate_v107")||repos.includes("app_kombax_social_network_mutate_v104")||repos.includes("app_kombax_social_network_mutate_v067")||repos.includes("app_kombax_social_network_mutate_v065")),'frontend no usa mutación de red 065');
 
 // UX profesional y separación de identidad.
 must(social.includes('Contacto KOMBAX'),'falta etiqueta Contacto KOMBAX');

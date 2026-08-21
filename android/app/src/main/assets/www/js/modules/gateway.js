@@ -18,7 +18,7 @@ const directTypes=[
   {id:'competidor',label:'Competidor',icon:'fighter',accent:'#E21D2D',description:'Perfil oficial para peleadores y competidores. Permite solicitar verificación KOMBAX, conservar la continuidad con Miembro y desarrollar una identidad deportiva propia.',benefits:['Insignia KOMBAX','Perfil deportivo avanzado','Trayectoria y oportunidades']},
   {id:'marca',label:'Marca',icon:'brand',accent:'#FF3B4D',description:'Identidad corporativa verificada con Showcase, publicaciones y capacidades comerciales futuras.',benefits:['Marca oficial','Showcase','Analítica y oportunidades']},
   {id:'federacion',label:'Federación',icon:'federation',accent:'#F7F7F5',description:'Identidad institucional verificada para clubes, calendario, documentos y resultados oficiales futuros.',benefits:['Perfil institucional','Directorio de clubes','Calendario y documentos']},
-  {id:'profesional',label:'Profesional / Representante',icon:'professional',accent:'#8F111B',description:'Perfil reservado para una fase posterior. No recibe insignia KOMBAX en 20.044.',disabled:true},
+  {id:'profesional',label:'Profesional / Representante',icon:'professional',accent:'#8F111B',description:'Perfil profesional reservado para una fase posterior de KOMBAX.',disabled:true},
   {id:'espectador',label:'Espectador',icon:'spectator',accent:'#A7ABB4',description:'Identidad de observación reservada. Continúa cerrada hasta certificar edad, privacidad y alcance.',disabled:true}
 ];
 
@@ -30,7 +30,20 @@ const WORKFLOW_LABEL={
 const workflowTone=stateValue=>stateValue==='verified'?'ok':stateValue==='rejected'||stateValue==='suspended'?'danger':stateValue==='needs_information'||stateValue==='limited'?'warn':'neutral';
 
 
+
 const mark=({compact=false}={})=>`<div class="gateway-brand ${compact?'compact':''}"><span class="gateway-brand-symbol"><img src="${esc(KOMBAX_BRAND.symbolWhite||KOMBAX_BRAND.symbol)}" alt=""></span><div><strong>${esc(KOMBAX_BRAND.name)}</strong><small>${esc(KOMBAX_BRAND.tagline)}</small></div></div>`;
+
+function bindHiddenAdminTrigger(onAdminAccess){
+  if(typeof onAdminAccess!=='function')return;
+  const target=document.querySelector('.gateway-directory-top .gateway-brand-symbol');if(!target)return;
+  let taps=[];
+  target.setAttribute('role','presentation');
+  target.addEventListener('click',event=>{
+    const now=Date.now();taps=taps.filter(at=>now-at<=5000);taps.push(now);
+    if(taps.length<8)return;
+    taps=[];event.preventDefault();event.stopPropagation();onAdminAccess();
+  });
+}
 
 export function renderKombaxGateway({onClubDirectory,onDirectProfiles}){
   setAppHtml(`<main class="kombax-gateway gateway-premium" data-kombax-view="gateway">
@@ -82,11 +95,11 @@ function demoDetail(club){
   wrap.querySelector('#close-demo-club')?.addEventListener('click',closeModal);
 }
 
-export async function renderClubDirectory({onBack,onSelect}){
+export async function renderClubDirectory({onBack,onSelect,onAdminAccess}){
   setAppHtml(`<main class="kombax-gateway directory-mode gateway-premium" data-kombax-view="directory">
     <div class="gateway-ambient" aria-hidden="true"><i></i><i></i><i></i></div>
     <section class="gateway-directory premium-surface">
-      <div class="gateway-directory-top"><button class="gateway-icon-button" id="directory-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">CLUB ACCESS / 01</span></div>
+      <div class="gateway-directory-top"><button class="gateway-icon-button" id="directory-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">ACCESO AL CLUB</span></div>
       <header><span class="gateway-eyebrow">ENTRAR CON MI CLUB</span><h1>Encuentra tu club</h1><p>Busca por nombre, ubicación o disciplina. Cada club conserva su identidad, sus datos y sus permisos.</p></header>
       <div class="directory-search">
         <label class="directory-search-field"><span>${icon('search',{size:20})}</span><input id="club-search" type="search" autocomplete="off" placeholder="Nombre, ubicación o disciplina" aria-label="Buscar club"></label>
@@ -99,6 +112,7 @@ export async function renderClubDirectory({onBack,onSelect}){
     </section>
   </main>`);
   document.getElementById('directory-back')?.addEventListener('click',onBack);
+  bindHiddenAdminTrigger(onAdminAccess);
   const input=document.getElementById('club-search'),box=document.getElementById('club-directory-results');
   const load=async()=>{box.innerHTML='<div class="gateway-skeleton"><i></i><i></i><i></i></div>';try{const clubs=await searchClubs(input.value);box.innerHTML=clubs.length?clubs.map(c=>`<button class="club-directory-card ${esc(themeDefinition(c.theme_id).className)} ${c.demo?'is-demo':'is-real'}" type="button" data-slug="${esc(c.slug)}"><span class="club-directory-logo">${c.logo_url?`<img src="${esc(c.logo_url)}" alt="">`:esc(String(c.nombre||'K').slice(0,2).toUpperCase())}</span><span class="club-directory-copy"><span class="club-card-heading"><strong>${esc(c.nombre)}</strong>${c.demo?'<b>EJEMPLO</b>':'<b class="real-club">DISPONIBLE</b>'}</span><small>${esc([c.ciudad,c.provincia].filter(Boolean).join(' · ')||c.lema||'')}</small><em>${esc((c.disciplinas||[]).join(' · '))}</em></span><span class="club-directory-arrow">${icon('chevronRight',{size:20})}</span></button>`).join(''):'<div class="empty premium-empty"><strong>Sin resultados</strong><p>Prueba otro nombre, ubicación o disciplina.</p></div>';box.querySelectorAll('[data-slug]').forEach(button=>button.addEventListener('click',()=>{const club=clubs.find(c=>c.slug===button.dataset.slug);if(club?.demo)demoDetail(club);else if(club)onSelect(club);}));}catch(error){box.innerHTML='<div class="empty premium-empty"><strong>No se pudo consultar el directorio</strong><p>Comprueba la conexión e inténtalo de nuevo.</p><button class="btn btn-ghost btn-sm" id="directory-retry" type="button">Reintentar</button></div>';document.getElementById('directory-retry')?.addEventListener('click',load);setError(error);}};
   document.getElementById('club-search-button')?.addEventListener('click',load);input.addEventListener('keydown',e=>{if(e.key==='Enter')load();});
@@ -172,7 +186,7 @@ function profileFields(type,profile={},memberProfiles=[]){
     {name:'club_declarado',label:type==='competidor'?'Club deportivo declarado':'Entidad o vínculo principal',value:profile.club_declarado||''},
     {name:'web_publica',label:'Web pública HTTPS',type:'url',full:true,value:profile.web_publica||''}
   ];
-  if(type==='competidor')fields.splice(2,0,{name:'miembro_social_id',label:'Continuidad con mi perfil de Miembro',type:'select',value:memberProfiles.find(x=>String(x.identidad_social_id||'')===String(profile.origen_identidad_social_id||''))?.id||'',options:[{value:'',label:'Competidor independiente'},...memberProfiles.map(x=>({value:x.id,label:`Convertir ${x.nombre_publico} en Competidor (conserva Social)`}))],full:true,help:'Si eliges tu identidad de Miembro, KOMBAX conservará el mismo perfil Social, publicaciones y Relaciones al activar Competidor.'});
+  if(type==='competidor')fields.splice(2,0,{name:'miembro_social_id',label:'Continuidad con mi perfil de Miembro',type:'select',value:memberProfiles.find(x=>String(x.identidad_social_id||'')===String(profile.origen_identidad_social_id||''))?.id||'',options:[{value:'',label:'Competidor independiente'},...memberProfiles.map(x=>({value:x.id,label:`Convertir ${x.nombre_publico} en Competidor (conserva Social)`}))],full:true,help:'Si eliges tu identidad de Miembro, KOMBAX conservará el mismo perfil Social, publicaciones y Mi red al activar Competidor.'});
   return fields;
 }
 
@@ -247,7 +261,7 @@ async function saveAndSubmitApplication(type,{profile=null,application=null,onBa
 function profileEditor(type,{profile=null,onBack,memberProfiles=[]}={}){
   openForm({
     title:profile?'Editar perfil KOMBAX':`Preparar solicitud ${TYPE_LABEL[type]||type}`,
-    subtitle:type==='competidor'?'Puedes evolucionar tu Miembro actual sin perder publicaciones ni Relaciones. La insignia exige revisión y activación del servicio.':'Primero preparas la identidad. La verificación y el servicio se activan por separado.',
+    subtitle:type==='competidor'?'Puedes evolucionar tu Miembro actual sin perder publicaciones ni Mi red. La insignia exige revisión y activación del servicio.':'Primero preparas la identidad. La verificación y el servicio se activan por separado.',
     width:'840px',initial:profile||{},fields:profileFields(type,profile||{},memberProfiles),submitText:'Guardar borrador',
     onSubmit:async v=>{
       const disciplinas=String(v.disciplinas||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
@@ -312,7 +326,7 @@ async function openGlobalArea(renderer,{onBack,title}){
 
 export async function renderDirectProfileHub({onBack,pendingType=''}={}){
   if(!globalAuthenticated()){renderDirectProfiles({onBack});return;}
-  setAppHtml(`<main class="kombax-gateway direct-mode gateway-premium" data-kombax-view="profile-hub"><div class="gateway-ambient" aria-hidden="true"><i></i><i></i><i></i></div><section class="gateway-directory premium-surface"><div class="gateway-directory-top"><button class="gateway-icon-button" id="kx-hub-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">KOMBAX ID / CUENTA</span></div><div class="kx-hub-loading"><strong>Cargando identidad KOMBAX…</strong></div></section></main>`);
+  setAppHtml(`<main class="kombax-gateway direct-mode gateway-premium" data-kombax-view="profile-hub"><div class="gateway-ambient" aria-hidden="true"><i></i><i></i><i></i></div><section class="gateway-directory premium-surface"><div class="gateway-directory-top"><button class="gateway-icon-button" id="kx-hub-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">MI CUENTA KOMBAX</span></div><div class="kx-hub-loading"><strong>Cargando identidad KOMBAX…</strong></div></section></main>`);
   document.getElementById('kx-hub-back')?.addEventListener('click',onBack);
   try{
     const [profiles,applications,socialProfiles,managedClubs]=await Promise.all([repos.kombaxProfiles.mine(),repos.kombaxProfiles.applications(),repos.kombaxSocial.myProfiles().catch(()=>[]),repos.kombaxProfiles.clubs().catch(()=>[])]);
@@ -323,7 +337,7 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     setAppHtml(`<main class="kombax-gateway direct-mode gateway-premium" data-kombax-view="profile-hub">
       <div class="gateway-ambient" aria-hidden="true"><i></i><i></i><i></i></div>
       <section class="gateway-directory premium-surface">
-        <div class="gateway-directory-top"><button class="gateway-icon-button" id="kx-hub-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">KOMBAX ID / CUENTA</span></div>
+        <div class="gateway-directory-top"><button class="gateway-icon-button" id="kx-hub-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">MI CUENTA KOMBAX</span></div>
         <header class="kx-hub-header"><div><span class="gateway-eyebrow">IDENTIDAD GLOBAL</span><h1>${esc(state.session?.nombre||'Mi KOMBAX')}</h1><p>Gestiona perfiles, solicitudes y multimedia sin mezclar los datos administrativos de tus clubes.</p></div><div class="kx-account-actions"><span>${esc(state.session?.email||'')}</span><button class="btn btn-ghost btn-sm" id="kx-global-change-password">Cambiar contraseña</button><button class="btn btn-ghost btn-sm" id="kx-global-logout">Cerrar sesión</button></div></header>
         <div class="kx-hub-actions"><button class="btn btn-primary" id="kx-new-profile">+ Solicitar perfil</button><button class="btn btn-ghost" id="kx-open-social">KOMBAX Social</button><button class="btn btn-ghost" id="kx-open-showcase">Showcase</button><button class="btn btn-ghost" id="kx-account-privacy">Privacidad y eliminación</button></div>
         <section class="kx-hub-section"><div class="kx-section-title"><div><span>PERFILES</span><h2>Mis identidades</h2></div><small>${identityCount} identidad${identityCount===1?'':'es'}</small></div>
@@ -366,7 +380,7 @@ export function renderDirectProfiles({onBack}){
   setAppHtml(`<main class="kombax-gateway direct-mode gateway-premium" data-kombax-view="profiles">
     <div class="gateway-ambient" aria-hidden="true"><i></i><i></i><i></i></div>
     <section class="gateway-directory premium-surface">
-      <div class="gateway-directory-top"><button class="gateway-icon-button" id="direct-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">KOMBAX ID / 02</span></div>
+      <div class="gateway-directory-top"><button class="gateway-icon-button" id="direct-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">PERFILES KOMBAX</span></div>
       <header><span class="gateway-eyebrow">IDENTIDAD KOMBAX</span><h1>Elige el tipo de perfil</h1><p>Cuenta, perfil, verificación y capacidades son capas separadas. Están disponibles Club, Competidor, Marca y Federación. Profesional / Representante y Espectador permanecen reservados temporalmente.</p></header>
       <div class="direct-profile-grid">${directTypes.map(t=>`<button class="direct-profile-card ${t.disabled?'is-disabled':''}" type="button" style="--profile-accent:${t.accent}" data-profile-type="${esc(t.id)}" ${t.disabled?'disabled':''}><div class="direct-profile-icon">${featureIcon(t.icon,{size:58})}</div><div class="direct-profile-copy"><span>${esc(t.disabled?'RESERVADO':t.applicationOnly?'SOLICITUD DE CLUB':'SOLICITUD + REVISIÓN')}</span><h2>${esc(t.label)}</h2><p>${esc(t.description)}</p></div><footer><b>${t.disabled?`${icon('lock',{size:13})} PENDIENTE`:`${icon('shieldCheck',{size:13})} SOLICITAR`}</b><span>${icon('chevronRight',{size:18})}</span></footer></button>`).join('')}</div>
       <div class="gateway-safety-note"><span class="gateway-safety-icon">${icon('shieldCheck',{size:22})}</span><div><strong>Sin verificación automática</strong><p>Una cuenta registrada no equivale a perfil verificado. La solicitud de Club tampoco activa el espacio automáticamente. Profesional / Representante y Espectador siguen desactivados durante esta fase. Competidor ya admite solicitud y verificación KOMBAX.</p></div></div>

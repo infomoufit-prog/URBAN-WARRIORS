@@ -1,7 +1,7 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, money, dateFmt, monthStart, isoDate } from '../core/utils.js';
+import { esc, money, dateFmt, monthStart, isoDate, humanError } from '../core/utils.js';
 import { pageHeader, card, table, empty, badge, openForm, openDetail, confirmDialog, toast, setError, setMainHtml, metric } from '../ui/components.js';
 import { summarizeFinance, groupFinance } from '../core/finance-math.js';
 
@@ -83,7 +83,7 @@ async function renderMonitorFinance(){
       <div class="alert alert-info"><strong>Privacidad activa</strong><span>No puedes consultar alumnos de otros monitores. Los importes y recibos solo aparecen cuando el Gestor los habilita expresamente.</span></div>
       ${card('Cartera asignada',tr.length?table(['Alumno','Concepto','Periodo','Estado','Importe','Pendiente','Recibo','Acción'],tr):empty('Sin cargos visibles','No hay cargos en tus ámbitos o tu nivel solo permite información básica.'))}`);
     document.querySelectorAll('.monitor-collect').forEach(b=>b.addEventListener('click',()=>{const row=list.find(x=>x.cuota_id===b.dataset.id);openForm({title:'Registrar cobro',subtitle:`${row?.socio_nombre||''} · operación auditada`,fields:[{name:'importe',label:'Importe',type:'number',step:'0.01',min:.01,required:true,value:row?.saldo??''},{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()},{name:'metodo',label:'Método',type:'select',required:true,value:'efectivo',options:['transferencia','bizum','efectivo','tarjeta','otro'].map(x=>({value:x,label:x}))},{name:'referencia',label:'Referencia'},{name:'observaciones',label:'Observaciones',type:'textarea',full:true}],submitText:'Registrar cobro',onSubmit:async v=>{await repos.scopes.collect({...v,cuota_id:b.dataset.id});toast('Cobro registrado y auditado');await renderMonitorFinance();}})}));
-  }catch(error){setError(error);setMainHtml(`${pageHeader('Mi cartera')} ${empty('No se pudo cargar tu cartera',error.message)}`);}
+  }catch(error){setError(error);setMainHtml(`${pageHeader('Mi cartera')} ${empty('No se pudo cargar tu cartera',humanError(error))}`);}
 }
 
 export async function renderFinance(){
@@ -177,7 +177,7 @@ export async function renderFinance(){
     bind('.pause-fee',id=>openForm({title:'Pausar avisos',fields:[{name:'motivo',label:'Motivo',required:true},{name:'hasta',label:'Hasta',type:'date'}],onSubmit:async v=>{await repos.finance.pause(id,v.motivo,v.hasta);toast('Avisos pausados');await reload();}}));
     bind('.resume-fee',async(id,el)=>{el.disabled=true;try{await repos.finance.resume(id);toast('Avisos reactivados');await reload();}catch(e){setError(e);el.disabled=false;}});
     bind('.annul-receipt',id=>openForm({title:'Anular recibo',subtitle:'El recibo conserva su número y trazabilidad. No se borra.',fields:[{name:'motivo',label:'Motivo de anulación',type:'textarea',full:true,required:true}],submitText:'Anular recibo',onSubmit:async v=>{await repos.finance.annulReceipt(id,v.motivo);toast('Recibo anulado');await reload();}}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Finanzas')} ${empty('No se pudieron cargar las finanzas',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Finanzas')} ${empty('No se pudieron cargar las finanzas',humanError(e))}`)}
 }
 
 export async function renderReminders(){
@@ -190,5 +190,5 @@ export async function renderReminders(){
       ${card('Historial',rows.length?table(['Fecha','Aviso','Canal','Estado','Detalle'],rows):empty('Sin avisos procesados'))}`);
     document.getElementById('edit-reminders')?.addEventListener('click',()=>openForm({title:'Configurar avisos',fields:[{name:'dias',label:'Días del mes',value:(current.dias_aviso||[1,4,8,11,14]).join(','),help:'Ejemplo: 1,4,8,11,14'},{name:'hora_envio',label:'Hora de envío',type:'time',value:String(current.hora_envio||'10:00').slice(0,5)},{name:'marcar_vencida_dia',label:'Marcar vencida desde',type:'number',min:1,max:28,value:current.marcar_vencida_dia||15},{name:'zona_horaria',label:'Zona horaria',value:current.zona_horaria||'Europe/Madrid'},{name:'canal_app',label:'Canal app',type:'checkbox',value:current.canal_app!==false},{name:'canal_push',label:'Canal push',type:'checkbox',value:current.canal_push!==false},{name:'canal_email',label:'Canal email',type:'checkbox',value:current.canal_email===true},{name:'agrupar_por_familia',label:'Agrupar por familia',type:'checkbox',value:current.agrupar_por_familia!==false},{name:'activo',label:'Avisos activos',type:'checkbox',value:current.activo!==false}],onSubmit:async v=>{const dias=String(v.dias).split(',').map(x=>Number(x.trim())).filter(x=>x>=1&&x<=28);if(dias.length!==5||new Set(dias).size!==5)throw new Error('Debes indicar exactamente cinco días distintos entre 1 y 28.');await repos.reminders.save({...v,dias_aviso:dias});toast('Configuración guardada');await renderReminders();}}));
     document.getElementById('process-reminders')?.addEventListener('click',()=>openForm({title:'Procesar avisos',fields:[{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()}],submitText:'Procesar',onSubmit:async v=>{const r=await repos.reminders.process(v.fecha);toast(`Proceso completado${r?.generados!=null?`: ${r.generados} avisos`:''}`);await renderReminders();}}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Avisos de cobro')} ${empty('No se pudieron cargar los avisos',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Avisos de cobro')} ${empty('No se pudieron cargar los avisos',humanError(e))}`)}
 }

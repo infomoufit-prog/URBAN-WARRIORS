@@ -1,30 +1,43 @@
-# STATUS · KOMBAX 20.058 · NAVIGATION + HEADER ACTIVITY · INTERVENCIÓN 2
+# STATUS · KOMBAX 20.063 · SOCIAL MESSAGING FINAL QA
 
-Candidata actual de validación: **build 20058**.
+Candidata actual de validación: **build 20063**.
 
-## Implementado en 20.058 hasta esta intervención
+## Implementado
 
-- Navegación global prioritaria: `Mi perfil`, `KOMBAX Social`, `KOMBAX Showcase`.
-- `Mi Club` como acordeón de accesos operativos gobernados por rol.
-- Dirección/Coordinación: `Mi perfil` personal separado de `Perfil del club`.
-- Navegación móvil simplificada a Mi perfil / Social / Showcase / Mi Club.
-- Botón de menú móvil con mayor affordance y área táctil.
-- `Notificaciones del Club` fuera del menú lateral y mantenidas en cabecera.
-- Refresh token inválido: limpieza de sesión + mensaje humano.
-- Pérdida temporal de red durante restauración: conserva sesión local y reintenta al recuperar conectividad.
-- Sin cambios de esquema Supabase.
+- Chat Social simplificado: X conserva; `Cerrar chat` eliminado; eliminación explícita.
+- Comentarios inline.
+- `Mi red` como terminología pública y red privada.
+- Mensajes KOMBAX con badge/acceso separado.
+- Bandeja Social/Showcase con diferenciación visual.
+- Contexto de producto preparado para conversaciones Showcase.
+- CTA de contacto desde Showcase.
+- Contact Gate frontend 10–500.
+- Fallback de contratos para mantener Social compatible mientras backend 107 no esté activo.
 
-## Evidencia automática
+## Evidencia
 
-- `npm test`: **PASS**.
-- `npm run build`: **PASS**.
-- `web = dist = Android`: **65 / 65 / 65**, listas iguales y `0` diferencias de hash.
-- Android `versionCode`: **20058**.
-- Android preflight: **4/5**, solo firma local pendiente.
-- No se incluyen JKS, keystore, P12/PFX ni claves privadas en el paquete.
+- `npm test`: PASS.
+- `npm run build`: PASS.
+- web/dist/Android: 66/66/66, 0 diferencias SHA-256.
+- Android versionCode: 20063.
+- Android preflight: 4/5; solo firma local pendiente.
+- Secret files de firma dentro del paquete: 0.
 
-## Estado de release
+## Producción
 
-**CANDIDATA DE VALIDACIÓN MANUAL · NO FREEZE.**
+- **Netlify 20063 no desplegado**; mantener 20062 durante QA móvil.
+- Migración Supabase 107: preparada y preflight live correcto, **no aplicada live todavía**.
 
-La 20.058 incorpora ya separación real de cabecera **Notificaciones KOMBAX / Notificaciones del Club / Mensajes**. La actividad KOMBAX del header contabiliza solicitudes de red/contacto que requieren decisión; Mensajes contabiliza no leídos de chats aceptados; Club conserva el centro operativo existente. La siguiente intervención de 20.058 cerrará validación visual/manual y después se continuará con 20.059 para Mi red KOMBAX, Contact Gate, chat realtime, Showcase messaging y comentarios inline.
+## Release
+
+**CANDIDATA DE VALIDACIÓN MÓVIL · NO FREEZE.**
+
+Siguiente paso operativo: generar APK signed 20063 localmente con el JKS existente, validar Social; activar 107 de forma controlada para validar Showcase por producto; revalidar 20062 web; solo entonces congelar/desplegar 20063 y generar AAB para Google Play.
+
+## RC13 build 20065 · Role Invitations + Team Filter QA
+- Team listado con roles operativos únicamente; Alumno/Familia excluidos.
+- Invitaciones de alumnos/familias compartibles.
+- Invitaciones de equipo con rol solicitado y aprobación posterior.
+- Supabase 109 aplicado/verificado; 108 sigue pendiente.
+- npm test/build PASS; web=dist=Android (68 archivos).
+- APK signed y Netlify pendientes de validación móvil.

@@ -8,7 +8,7 @@ import { openKombaxPublicProfile } from './public-profile.js';
 import { openAuthenticatedPasswordChange } from './account-security.js';
 
 const PERMISSIONS=[
-  ['social.act_as_club','Publicar y actuar como Club'],['profile.public.manage','Editar perfil público'],['showcase.manage','Gestionar Showcase'],['relations.manage','Gestionar relaciones'],['contacts.manage','Gestionar contactos']
+  ['social.act_as_club','Publicar y actuar como Club'],['profile.public.manage','Editar perfil público'],['showcase.manage','Gestionar Showcase'],['relations.manage','Gestionar Mi red'],['contacts.manage','Gestionar contactos']
 ];
 function go(route){location.hash=`#${route}`;}
 async function clubSocialProfile(){const rows=await repos.kombaxSocial.myProfiles();return rows.find(x=>x.sujeto_tipo==='club'&&String(x.club_id)===String(state.session?.club_id))||null;}
@@ -39,7 +39,7 @@ export async function renderClubKombaxHub(){
       ${card('community','Comunidad del Club','Publicaciones internas para miembros del club. No se muestran automáticamente en la red pública.','users','Abrir comunidad')}
       ${card('social','KOMBAX Social','Publica texto, fotos y vídeos en la red pública utilizando la identidad del Club.','activity','Ir a Social')}
       ${card('showcase','Showcase','Productos y servicios informativos con contacto, web, tienda externa y guardados.','shoppingBag','Gestionar')}
-      ${card('relations','Relaciones','Federaciones, competidores, marcas y profesionales vinculados de forma confirmada.','network','Gestionar')}
+      ${card('relations','Mi red','Federaciones, competidores, marcas y profesionales conectados de forma privada y confirmada.','network','Gestionar')}
       ${card('contacts','Contactos','Solicitudes estructuradas recibidas y enviadas como Club.','message','Gestionar')}
       ${state.session?.rol==='direccion'?card('permissions','Permisos del equipo','Decide quién puede actuar como Club y gestionar cada área pública.','shield','Configurar'):''}
       ${card('personal','Mi perfil personal','Tu cuenta personal permanece separada de la identidad pública del Club.','user','Abrir')}

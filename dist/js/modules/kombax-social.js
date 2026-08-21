@@ -1,6 +1,6 @@
 import { repos } from '../core/repositories.js';
 import { backend } from '../core/backend.js';
-import { esc, dtFmt } from '../core/utils.js';
+import { esc, dtFmt, humanError } from '../core/utils.js';
 import { KOMBAX_BRAND } from '../core/platform.js';
 import { pageHeader, empty, badge, openForm, openDetail, closeModal, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
@@ -27,6 +27,8 @@ let activeIdentityId='';
 let feedObserver=null;
 let audiencesByProfile=new Map();
 let activeQuota=null;
+let expandedCommentPostId='';
+let contactFilter='all';
 
 const initials=name=>String(name||'K').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()).join('');
 const isOwn=id=>ownProfiles.some(p=>p.id===id);
@@ -54,8 +56,8 @@ function tabBar(){
     <button type="button" data-social-view="feed" class="${activeView==='feed'?'active':''}">${icon('activity',{size:17})} Actualidad</button>
     <button type="button" data-social-view="profiles" class="${activeView==='profiles'?'active':''}">${icon('users',{size:17})} Perfiles</button>
     <button type="button" data-social-view="saved" class="${activeView==='saved'?'active':''}">${icon('archive',{size:17})} Guardados</button>
-    <button type="button" data-social-view="relations" class="${activeView==='relations'?'active':''}">${icon('network',{size:17})} Relaciones</button>
-    <button type="button" data-social-view="contacts" class="${activeView==='contacts'?'active':''}">${icon('message',{size:17})} Contactos</button>
+    <button type="button" data-social-view="relations" class="${activeView==='relations'?'active':''}">${icon('network',{size:17})} Mi red</button>
+    <button type="button" data-social-view="contacts" class="${activeView==='contacts'?'active':''}">${icon('message',{size:17})} Mensajes</button>
     <button type="button" data-social-view="safety" class="${activeView==='safety'?'active':''}">${icon('shield',{size:17})} Seguridad</button>
   </div>`;
 }
@@ -118,11 +120,12 @@ function feedCards(){
     <footer>
       <button type="button" class="social-like ${p.liked_by_me?'active':''}" data-social-like="${esc(p.id)}" data-active="${p.liked_by_me?'true':'false'}">${icon('heart',{size:18})}<span>${Number(p.likes_count||0)}</span></button>
       <button type="button" class="${p.saved_by_me?'active':''}" data-social-save="${esc(p.id)}" data-active="${p.saved_by_me?'true':'false'}">${icon('archive',{size:17})} ${p.saved_by_me?'Guardado':'Guardar'}</button>
-      <button type="button" data-social-comments="${esc(p.id)}">${icon('message',{size:17})} ${Number(p.comentarios_count||0)} comentarios</button>
+      <button type="button" data-social-comments="${esc(p.id)}" aria-expanded="${expandedCommentPostId===String(p.id)?'true':'false'}">${icon('message',{size:17})} <span data-social-comments-count="${esc(p.id)}">${Number(p.comentarios_count||0)}</span> comentarios</button>
       ${p.audiencia==='publica'?`<button type="button" data-social-share="${esc(p.id)}" data-social-share-text="${esc(`${p.autor_nombre}: ${p.texto}`)}">${icon('arrowUpRight',{size:17})} Compartir</button>`:''}
       ${p.contactable&&!isOwn(p.autor_id)?`<button type="button" data-social-contact="${esc(p.autor_id)}" data-social-name="${esc(p.autor_nombre)}">${icon('message',{size:17})} Contactar</button>`:''}
       ${!isOwn(p.autor_id)?`<button type="button" data-social-report-post="${esc(p.id)}">${icon('alert',{size:17})} Denunciar</button><button type="button" data-social-block="${esc(p.autor_id)}" data-social-name="${esc(p.autor_nombre)}">${icon('shield',{size:17})} Bloquear</button>`:`<button type="button" data-social-delete="${esc(p.id)}">${icon('trash',{size:17})} Eliminar</button>`}
     </footer>
+    <section class="kx-inline-comments" data-kx-comments-panel="${esc(p.id)}" ${expandedCommentPostId===String(p.id)?'':'hidden'}><div class="loading-card">Cargando comentarios…</div></section>
   </article>`).join('')}</div>${done?'':'<div class="kx-feed-more"><button type="button" class="btn btn-ghost kombax-load-more" id="kombax-social-more">Cargar más</button><span id="kombax-social-sentinel" class="kx-feed-sentinel" aria-hidden="true"></span></div>'}`;
 }
 
@@ -213,6 +216,7 @@ async function openContact(targetId,targetName){
   if(!senders.length){toast('No tienes un perfil habilitado para contacto. Los perfiles personales menores de 18 años no pueden usar esta función.','error');return;}
   try{
     const existing=(await repos.kombaxSocial.contacts()).find(c=>{
+      if(String(c.canal||'social')!=='social')return false;
       const mine=senders.some(p=>String(p.id)===String(c.remitente_id)||String(p.id)===String(c.destinatario_id));
       const other=String(c.remitente_id)===String(targetId)||String(c.destinatario_id)===String(targetId);
       return mine&&other&&['pendiente','aceptada'].includes(String(c.estado));
@@ -223,7 +227,7 @@ async function openContact(targetId,targetName){
       await openContactThread(existing);return;
     }
   }catch{}
-  openForm({title:`Contactar con ${targetName}`,subtitle:'Indica el motivo y un primer mensaje. La otra persona debe aceptar la solicitud antes de que se habilite el chat.',fields:[{name:'remitente',label:'Enviar como',type:'select',required:true,value:senders[0].id,options:senders.map(p=>({value:p.id,label:p.nombre_publico}))},{name:'motivo',label:'Motivo',type:'select',required:true,value:'informacion',options:Object.entries(CONTACT_LABEL).map(([value,label])=>({value,label}))},{name:'mensaje',label:'Primer mensaje',type:'textarea',required:true,full:true,rows:5,maxLength:500,help:'Entre 10 y 500 caracteres. Se enviará junto a la solicitud. No admite imágenes, vídeos, audios ni archivos.'}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.kombaxSocial.contact(v.remitente,targetId,v.motivo,v.mensaje);toast('Solicitud de contacto enviada');activeView='contacts';await renderKombaxSocial();}});
+  openForm({title:`Contactar con ${targetName}`,subtitle:'Indica el motivo y un primer mensaje. La otra persona debe aceptar la solicitud antes de que se habilite el chat.',fields:[{name:'remitente',label:'Enviar como',type:'select',required:true,value:senders[0].id,options:senders.map(p=>({value:p.id,label:p.nombre_publico}))},{name:'motivo',label:'Motivo',type:'select',required:true,value:'informacion',options:Object.entries(CONTACT_LABEL).map(([value,label])=>({value,label}))},{name:'mensaje',label:'Primer mensaje',type:'textarea',required:true,full:true,rows:5,minLength:10,maxLength:500,help:'Entre 10 y 500 caracteres. Se enviará junto a la solicitud. No admite imágenes, vídeos, audios ni archivos.'}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.kombaxSocial.contact(v.remitente,targetId,v.motivo,v.mensaje);toast('Solicitud de contacto enviada');activeView='contacts';await renderKombaxSocial();}});
 }
 
 async function openContactThread(contact){
@@ -232,7 +236,8 @@ async function openContactThread(contact){
   const PAGE=30;
   const senderFor=()=>ownProfiles.find(p=>p.id===current.remitente_id||p.id===current.destinatario_id)||null;
   const otherName=()=>{const sender=senderFor();if(!sender)return `${current.remitente_nombre} ↔ ${current.destinatario_nombre}`;return sender.id===current.remitente_id?current.destinatario_nombre:current.remitente_nombre;};
-  const modal=openDetail({title:`Chat KOMBAX · ${otherName()}`,subtitle:`${CONTACT_LABEL[current.motivo]||current.motivo} · chat de texto`,body:'<div id="kx-contact-thread-root"><div class="loading-card">Cargando conversación…</div></div>',actions:'<button type="button" class="btn btn-ghost" id="kx-contact-close-thread">Cerrar chat</button><button type="button" class="btn btn-danger" id="kx-contact-delete-thread">Eliminar conversación</button>',width:'760px',className:'kx-contact-thread-modal'});
+  const isShowcase=()=>String(current.canal||'social')==='showcase';
+  const modal=openDetail({title:`${isShowcase()?'Showcase':'Chat KOMBAX'} · ${otherName()}`,subtitle:isShowcase()?`${current.showcase_marca_nombre||'KOMBAX Showcase'} · conversación vinculada al producto`:`${CONTACT_LABEL[current.motivo]||current.motivo} · mensajería Social`,body:'<div id="kx-contact-thread-root"><div class="loading-card">Cargando conversación…</div></div>',actions:'<button type="button" class="btn btn-danger" id="kx-contact-delete-thread">Eliminar conversación</button>',width:'760px',className:`kx-contact-thread-modal ${isShowcase()?'kx-showcase-thread-modal':'kx-social-thread-modal'}`});
   const root=modal.wrap.querySelector('#kx-contact-thread-root');
   const refreshMeta=async()=>{const all=await repos.kombaxSocial.contacts();current=all.find(x=>String(x.id)===String(current.id))||current;return current;};
   const receiptState=m=>m?.leido_en?{state:'read',label:'✓✓ Leído',title:`Leído ${dtFmt(m.leido_en)}`}:{state:'sent',label:'✓ Enviado',title:'Enviado'};
@@ -251,11 +256,11 @@ async function openContactThread(contact){
   const renderThread=(scrollBottom=false)=>{
     if(!ensureAlive())return;
     const sender=senderFor();const chatOpen=current.estado==='aceptada'&&!!sender&&current.puede_chat!==false;
-    root.innerHTML=`<section class="kx-contact-thread"><header><div><span class="page-kicker">${esc(String(current.estado||'').toUpperCase())} · ${esc(CONTACT_LABEL[current.motivo]||current.motivo)}</span><strong>${esc(current.remitente_nombre)} ↔ ${esc(current.destinatario_nombre)}</strong></div><span class="kx-chat-live-state" id="kx-chat-sync-state" data-state="ok">Actualización automática</span></header>${olderAvailable?'<div class="kx-chat-history"><button type="button" class="btn btn-ghost btn-sm" id="kx-contact-load-older">Cargar mensajes anteriores</button></div>':''}<div class="kx-contact-message-list">${messages.map(msgHtml).join('')}</div>${chatOpen?`<div class="kx-contact-composer"><textarea id="kx-contact-message-text" maxlength="500" rows="3" placeholder="Escribe un mensaje…" aria-label="Mensaje de chat KOMBAX"></textarea><div><small>Enter para enviar · Shift+Enter para salto de línea</small><button type="button" class="btn btn-primary" id="kx-contact-send">Enviar</button></div></div>`:`<div class="kx-contact-closed">${current.estado==='pendiente'?'Solicitud pendiente. El chat se habilitará cuando la otra persona la acepte.':current.estado==='rechazada'?'La solicitud fue rechazada.':'Este chat está cerrado y se conserva en modo lectura.'}</div>`}</section>`;
+    const product=isShowcase()?`<section class="kx-showcase-chat-product">${current.showcase_producto_imagen_url?`<img src="${esc(current.showcase_producto_imagen_url)}" alt="${esc(current.showcase_producto_nombre||'Producto Showcase')}">`:`<div class="kx-showcase-chat-product-fallback">${icon('shoppingBag',{size:24})}</div>`}<div><small>CONVERSACIÓN SHOWCASE</small><strong>${esc(current.showcase_producto_nombre||'Producto Showcase')}</strong><span>${esc(current.showcase_marca_nombre||'KOMBAX Showcase')}</span></div></section>`:'';
+    root.innerHTML=`<section class="kx-contact-thread ${isShowcase()?'showcase-channel':'social-channel'}">${product}<header><div><span class="page-kicker">${isShowcase()?'SHOWCASE':esc(String(current.estado||'').toUpperCase())} · ${esc(isShowcase()?'Consulta de producto':CONTACT_LABEL[current.motivo]||current.motivo)}</span><strong>${esc(current.remitente_nombre)} ↔ ${esc(current.destinatario_nombre)}</strong></div><span class="kx-chat-live-state" id="kx-chat-sync-state" data-state="ok">Actualización automática</span></header>${olderAvailable?'<div class="kx-chat-history"><button type="button" class="btn btn-ghost btn-sm" id="kx-contact-load-older">Cargar mensajes anteriores</button></div>':''}<div class="kx-contact-message-list">${messages.map(msgHtml).join('')}</div>${chatOpen?`<div class="kx-contact-composer"><textarea id="kx-contact-message-text" maxlength="500" rows="3" placeholder="Escribe un mensaje…" aria-label="Mensaje de chat KOMBAX"></textarea><div><small>Enter para enviar · Shift+Enter para salto de línea</small><button type="button" class="btn btn-primary" id="kx-contact-send">Enviar</button></div></div>`:`<div class="kx-contact-closed">${current.estado==='pendiente'?'Solicitud pendiente. El chat se habilitará cuando la otra persona la acepte.':current.estado==='rechazada'?'La solicitud fue rechazada.':'Esta conversación ya no admite nuevos mensajes.'}</div>`}</section>`;
     bindComposer();
     root.querySelector('#kx-contact-load-older')?.addEventListener('click',loadOlder);
     const list=root.querySelector('.kx-contact-message-list');if(list&&scrollBottom)list.scrollTop=list.scrollHeight;
-    const closeButton=modal.wrap.querySelector('#kx-contact-close-thread');if(closeButton)closeButton.hidden=current.estado!=='aceptada';
   };
   const loadOlder=async()=>{
     const button=root.querySelector('#kx-contact-load-older');if(button)button.disabled=true;
@@ -269,7 +274,7 @@ async function openContactThread(contact){
       olderAvailable=rows.length?rows[0].older_available===true:false;
       renderThread(false);
       const next=root.querySelector('.kx-contact-message-list');if(next)next.scrollTop=oldTop+(next.scrollHeight-oldHeight);
-    }catch(error){if(button?.isConnected)button.disabled=false;toast(error?.message||'No se pudieron cargar mensajes anteriores.','error');}
+    }catch(error){if(button?.isConnected)button.disabled=false;toast(humanError(error)||'No se pudieron cargar mensajes anteriores.','error');}
   };
   const appendRows=async rows=>{
     if(!rows?.length||!ensureAlive())return 0;
@@ -326,11 +331,12 @@ async function openContactThread(contact){
       olderAvailable=rows.length?rows[0].older_available===true:false;
       lastOrdinal=messages.reduce((max,m)=>Math.max(max,Number(m.ordinal)||0),0);
       renderThread(true);
-    }catch(error){root.innerHTML=empty('No se pudo abrir el chat',error?.message||'Revisa la conexión.');}
+    }catch(error){root.innerHTML=empty('No se pudo abrir el chat',humanError(error)||'Revisa la conexión.');}
   };
   syncPoller=createAdaptivePoller(()=>syncNew(false),{activeMs:2500,hiddenMs:0,maxMs:30000,idleMaxMs:30000,idleAfter:2,jitterRatio:.18});
   syncPoller.start({immediate:false});
-  modal.wrap.querySelector('#kx-contact-close-thread')?.addEventListener('click',async()=>{const b=modal.wrap.querySelector('#kx-contact-close-thread');b.disabled=true;try{await repos.kombaxSocial.closeContact(current.id);toast('Chat cerrado');cleanup();modal.close();await renderContacts();}catch(error){b.disabled=false;setError(error);}});
+  modal.wrap.querySelector('#modal-close')?.addEventListener('click',cleanup);
+  modal.wrap.addEventListener('click',e=>{if(e.target===modal.wrap)cleanup();});
   modal.wrap.querySelector('#kx-contact-delete-thread')?.addEventListener('click',()=>{const actor=senderFor();if(!actor){toast('No se puede identificar la copia de esta conversación.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La otra persona conservará su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(current.id,actor.id);toast('Conversación eliminada de tu bandeja');cleanup();modal.close();await renderContacts();},{confirmText:'Eliminar conversación',danger:true});});
   await loadInitial();
 }
@@ -339,22 +345,41 @@ function openReport(type,id){
   openForm({title:'Denunciar en KOMBAX Social',subtitle:'La denuncia será revisada por moderación global.',fields:[{name:'motivo',label:'Motivo',type:'select',required:true,value:'spam',options:[{value:'acoso',label:'Acoso'},{value:'odio_discriminacion',label:'Odio o discriminación'},{value:'violencia',label:'Violencia ilícita'},{value:'sexual_menores',label:'Riesgo o sexualización de menores'},{value:'privacidad',label:'Privacidad'},{value:'spam',label:'Spam'},{value:'suplantacion',label:'Suplantación'},{value:'otro',label:'Otro'}]},{name:'detalle',label:'Contexto',type:'textarea',full:true,rows:4,maxLength:1500}],submitText:'Enviar denuncia',onSubmit:async v=>{await repos.kombaxSocial.report(type,id,v.motivo,v.detalle||'');toast('Denuncia enviada');}});
 }
 
-async function openComments(postId,parentId=null){
+async function renderInlineComments(postId,replyParentId=null){
+  const panel=document.querySelector(`[data-kx-comments-panel="${CSS.escape(String(postId))}"]`);if(!panel)return;
   const post=posts.find(x=>String(x.id)===String(postId))||{id:postId,comentarios_estado:'open'};
-  const rows=await repos.kombaxSocial.comments(postId,160);
-  const replies=new Map();
-  rows.filter(x=>x.parent_id).forEach(x=>{const arr=replies.get(x.parent_id)||[];arr.push(x);replies.set(x.parent_id,arr);});
-  const roots=rows.filter(x=>!x.parent_id);
-  const one=c=>`<article class="kx-comment ${c.parent_id?'reply':''}"><button type="button" class="kombax-social-avatar kx-comment-author-open" data-social-profile-open="${esc(c.autor_id)}" aria-label="Ver perfil público de ${esc(c.autor_nombre)}">${c.autor_avatar_url||c.autor_avatar_path?`<img src="${esc(c.autor_avatar_url||mediaUrl(c.autor_avatar_path))}" alt="">`:`<span>${esc(initials(c.autor_nombre))}</span>`}</button><div><header><button type="button" class="kx-comment-author-name" data-social-profile-open="${esc(c.autor_id)}">${esc(c.autor_nombre)} ${verified(c.autor_verificado,c.autor_tipo)}</button><small>${dtFmt(c.creado_en)}</small></header><p>${esc(c.texto)}</p><footer>${!c.parent_id&&post.comentarios_estado!=='closed'&&ownProfiles.length?`<button class="btn btn-ghost btn-sm" data-kx-reply="${esc(c.id)}">Responder</button>`:''}${c.propio?`<button class="btn btn-ghost btn-sm" data-kx-comment-remove="${esc(c.id)}">Eliminar</button>`:`<button class="btn btn-ghost btn-sm" data-kx-comment-report="${esc(c.id)}">${icon('alert',{size:14})} Denunciar</button>`}</footer></div></article>`;
-  const body=roots.map(c=>`${one(c)}${(replies.get(c.id)||[]).map(one).join('')}`).join('')||'<div class="empty"><strong>Sin comentarios</strong><p>Sé el primero en participar respetando las normas.</p></div>';
-  const actions=post.comentarios_estado==='closed'?'<span class="muted">Comentarios cerrados por el autor.</span>':ownProfiles.length?'<button class="btn btn-primary" id="kx-comment-new">Comentar</button>':'<span class="muted">Necesitas un perfil autorizado para comentar.</span>';
-  const {wrap}=openDetail({title:'Comentarios',subtitle:'Una sola capa de respuesta; moderación y trazabilidad activas.',body:`<div class="kx-comments">${body}</div>`,actions,width:'820px'});
-  const compose=(parent=null)=>openForm({title:parent?'Responder comentario':'Añadir comentario',subtitle:post.comentarios_estado==='verified_only'?'Esta publicación solo admite perfiles verificados.':'Máximo 800 caracteres.',fields:[{name:'autor',label:'Comentar como',type:'select',required:true,value:activeIdentity()?.id||ownProfiles[0]?.id||'',options:ownProfiles.map(x=>({value:x.id,label:x.nombre_publico}))},{name:'texto',label:'Comentario',type:'textarea',required:true,full:true,rows:4,maxLength:800}],submitText:parent?'Responder':'Comentar',onSubmit:async v=>{await repos.kombaxSocial.comment(postId,v.autor,v.texto,parent);toast('Comentario publicado');await loadFeed(false);await openComments(postId);}});
-  wrap.querySelector('#kx-comment-new')?.addEventListener('click',()=>compose(null));
-  wrap.querySelectorAll('[data-social-profile-open]').forEach(el=>el.addEventListener('click',()=>{closeModal();openKombaxPublicProfile(el.dataset.socialProfileOpen).catch(setError);}));
-  wrap.querySelectorAll('[data-kx-reply]').forEach(b=>b.addEventListener('click',()=>compose(b.dataset.kxReply)));
-  wrap.querySelectorAll('[data-kx-comment-report]').forEach(b=>b.addEventListener('click',()=>openReport('comentario',b.dataset.kxCommentReport)));
-  wrap.querySelectorAll('[data-kx-comment-remove]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar comentario','Se retirará del contenido visible conservando trazabilidad.',async()=>{await repos.kombaxSocial.removeComment(b.dataset.kxCommentRemove);toast('Comentario retirado');await loadFeed(false);await openComments(postId);},{confirmText:'Eliminar',danger:true})));
+  panel.hidden=false;panel.innerHTML='<div class="loading-card">Cargando comentarios…</div>';
+  document.querySelectorAll('[data-social-comments]').forEach(b=>b.setAttribute('aria-expanded',String(String(b.dataset.socialComments)===String(postId))));
+  try{
+    const rows=await repos.kombaxSocial.comments(postId,160);
+    const count=document.querySelector(`[data-social-comments-count="${CSS.escape(String(postId))}"]`);if(count)count.textContent=String(rows.length);
+    const replies=new Map();rows.filter(x=>x.parent_id).forEach(x=>{const arr=replies.get(x.parent_id)||[];arr.push(x);replies.set(x.parent_id,arr);});
+    const roots=rows.filter(x=>!x.parent_id);
+    const replyTarget=replyParentId?rows.find(x=>String(x.id)===String(replyParentId)):null;
+    const allowedProfiles=post.comentarios_estado==='verified_only'?ownProfiles.filter(p=>p.verificado===true):ownProfiles;
+    const one=c=>`<article class="kx-comment ${c.parent_id?'reply':''}"><button type="button" class="kombax-social-avatar kx-comment-author-open" data-social-profile-open="${esc(c.autor_id)}" aria-label="Ver perfil público de ${esc(c.autor_nombre)}">${c.autor_avatar_url||c.autor_avatar_path?`<img src="${esc(c.autor_avatar_url||mediaUrl(c.autor_avatar_path))}" alt="">`:`<span>${esc(initials(c.autor_nombre))}</span>`}</button><div><header><button type="button" class="kx-comment-author-name" data-social-profile-open="${esc(c.autor_id)}">${esc(c.autor_nombre)} ${verified(c.autor_verificado,c.autor_tipo)}</button><small>${dtFmt(c.creado_en)}</small></header><p>${esc(c.texto)}</p><footer>${!c.parent_id&&post.comentarios_estado!=='closed'&&allowedProfiles.length?`<button class="btn btn-ghost btn-sm" data-kx-reply="${esc(c.id)}">Responder</button>`:''}${c.propio?`<button class="btn btn-ghost btn-sm" data-kx-comment-remove="${esc(c.id)}">Eliminar</button>`:`<button class="btn btn-ghost btn-sm" data-kx-comment-report="${esc(c.id)}">${icon('alert',{size:14})} Denunciar</button>`}</footer></div></article>`;
+    const body=roots.map(c=>`${one(c)}${(replies.get(c.id)||[]).map(one).join('')}`).join('')||'<div class="empty"><strong>Sin comentarios</strong><p>Sé el primero en participar respetando las normas.</p></div>';
+    let composer='';
+    if(post.comentarios_estado==='closed')composer='<div class="kx-inline-comment-locked">Comentarios cerrados por el autor.</div>';
+    else if(!allowedProfiles.length)composer=`<div class="kx-inline-comment-locked">${post.comentarios_estado==='verified_only'?'Esta publicación solo admite comentarios de perfiles verificados.':'Necesitas un perfil autorizado para comentar.'}</div>`;
+    else composer=`<form class="kx-inline-comment-composer" data-kx-comment-form="${esc(postId)}" data-parent-id="${esc(replyParentId||'')}"><div class="kx-inline-comment-context">${replyTarget?`<span>Respondiendo a <strong>${esc(replyTarget.autor_nombre)}</strong></span><button type="button" class="btn btn-ghost btn-sm" data-kx-reply-cancel>Cancelar respuesta</button>`:'<span>Escribe un comentario en esta publicación</span>'}</div><div class="kx-inline-comment-controls"><select name="autor" aria-label="Comentar como">${allowedProfiles.map(x=>`<option value="${esc(x.id)}" ${x.id===(activeIdentity()?.id||allowedProfiles[0]?.id)?'selected':''}>${esc(x.nombre_publico)}</option>`).join('')}</select><textarea name="texto" maxlength="800" rows="2" required placeholder="${replyTarget?'Escribe tu respuesta…':'Escribe un comentario…'}" aria-label="Comentario"></textarea><button type="submit" class="btn btn-primary">${replyTarget?'Responder':'Enviar'}</button></div><small>Máximo 800 caracteres.</small></form>`;
+    panel.innerHTML=`<div class="kx-inline-comments-head"><strong>Comentarios</strong><button type="button" class="btn btn-ghost btn-sm" data-kx-comments-collapse>Cerrar</button></div><div class="kx-comments">${body}</div>${composer}`;
+    panel.querySelector('[data-kx-comments-collapse]')?.addEventListener('click',()=>toggleInlineComments(postId));
+    panel.querySelectorAll('[data-social-profile-open]').forEach(el=>el.addEventListener('click',()=>openKombaxPublicProfile(el.dataset.socialProfileOpen).catch(setError)));
+    panel.querySelectorAll('[data-kx-reply]').forEach(b=>b.addEventListener('click',()=>renderInlineComments(postId,b.dataset.kxReply)));
+    panel.querySelector('[data-kx-reply-cancel]')?.addEventListener('click',()=>renderInlineComments(postId,null));
+    panel.querySelectorAll('[data-kx-comment-report]').forEach(b=>b.addEventListener('click',()=>openReport('comentario',b.dataset.kxCommentReport)));
+    panel.querySelectorAll('[data-kx-comment-remove]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar comentario','Se retirará del contenido visible conservando trazabilidad.',async()=>{await repos.kombaxSocial.removeComment(b.dataset.kxCommentRemove);toast('Comentario retirado');await renderInlineComments(postId,null);},{confirmText:'Eliminar',danger:true})));
+    panel.querySelector('[data-kx-comment-form]')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button[type="submit"]'),text=String(form.elements.texto?.value||'').trim(),author=form.elements.autor?.value;if(!text||!author)return;button.disabled=true;try{await repos.kombaxSocial.comment(postId,author,text,form.dataset.parentId||null);toast(form.dataset.parentId?'Respuesta publicada':'Comentario publicado');await renderInlineComments(postId,null);}catch(error){button.disabled=false;setError(error);}});
+  }catch(error){panel.innerHTML=empty('No se pudieron cargar los comentarios',humanError(error)||'Revisa la conexión.');}
+}
+
+function toggleInlineComments(postId){
+  const id=String(postId||'');
+  if(expandedCommentPostId===id){const panel=document.querySelector(`[data-kx-comments-panel="${CSS.escape(id)}"]`);if(panel)panel.hidden=true;document.querySelector(`[data-social-comments="${CSS.escape(id)}"]`)?.setAttribute('aria-expanded','false');expandedCommentPostId='';return;}
+  const previous=expandedCommentPostId;expandedCommentPostId=id;
+  if(previous){const old=document.querySelector(`[data-kx-comments-panel="${CSS.escape(previous)}"]`);if(old)old.hidden=true;document.querySelector(`[data-social-comments="${CSS.escape(previous)}"]`)?.setAttribute('aria-expanded','false');}
+  renderInlineComments(id,null).catch(setError);
 }
 
 async function shareSocial(button){
@@ -386,12 +411,12 @@ function possibleRelations(fromType,toType){
 
 function requestRelation(target){
   const senders=ownProfiles.filter(x=>x.id!==target.id);
-  if(!senders.length){toast('No tienes un perfil autorizado para solicitar una relación.','error');return;}
-  const modal=openForm({title:`Vincular con ${target.nombre_publico}`,subtitle:'Área privada: la otra parte debe confirmar la relación. Ni tu lista ni el número total de relaciones se muestran públicamente.',fields:[
+  if(!senders.length){toast('No tienes un perfil autorizado para añadir a esta persona a tu red.','error');return;}
+  const modal=openForm({title:`Añadir a mi red · ${target.nombre_publico}`,subtitle:'Área privada: la otra parte debe aceptar. Ni tu red ni su tamaño se muestran públicamente.',fields:[
     {name:'origen',label:'Solicitar como',type:'select',required:true,value:senders[0].id,options:senders.map(x=>({value:x.id,label:x.nombre_publico}))},
-    {name:'tipo',label:'Relación',type:'select',required:true,options:[]},
+    {name:'tipo',label:'Tipo de vínculo',type:'select',required:true,options:[]},
     {name:'nota',label:'Contexto',type:'textarea',full:true,rows:3,maxLength:500}
-  ],submitText:'Solicitar relación',onSubmit:async v=>{await repos.kombaxSocial.requestRelation(v.origen,target.id,v.tipo,v.nota||'');toast('Relación enviada para confirmación');}});
+  ],submitText:'Añadir a mi red',onSubmit:async v=>{await repos.kombaxSocial.requestRelation(v.origen,target.id,v.tipo,v.nota||'');toast('Solicitud enviada a tu red');}});
   const source=modal.form.elements.origen,type=modal.form.elements.tipo;
   const fill=()=>{
     const from=ownProfiles.find(x=>x.id===source.value);
@@ -416,7 +441,7 @@ function bindQuickComposer(){
     if(!profile||!text||button.disabled)return;
     button.disabled=true;const original=button.innerHTML;button.textContent='Publicando…';
     try{const aud=parseAudience(document.getElementById('kx-social-quick-audience')?.value);await repos.kombaxSocial.publish(profile.id,'actualizacion',text,{comentarios_estado:'open',...aud});input.value='';toast(`Publicado como ${profile.nombre_publico}`);await refreshActiveQuota();update();await loadFeed(false);document.getElementById('kombax-social-feed-top')?.scrollIntoView({behavior:'smooth',block:'start'});}
-    catch(error){const msg=String(error?.message||'');if(msg.includes('KOMBAX_POST_ACTIVE_LIMIT_30')){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(profile,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});}else if(msg.includes('KOMBAX_POST_DAILY_LIMIT_3'))toast('Has alcanzado el máximo de 3 publicaciones de hoy. Podrás volver a publicar mañana.','error');else{setError(error);toast(msg||'No se pudo publicar.','error');}}
+    catch(error){const msg=String(humanError(error)||'');if(msg.includes('KOMBAX_POST_ACTIVE_LIMIT_30')){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(profile,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});}else if(msg.includes('KOMBAX_POST_DAILY_LIMIT_3'))toast('Has alcanzado el máximo de 3 publicaciones de hoy. Podrás volver a publicar mañana.','error');else{setError(error);toast(msg||'No se pudo publicar.','error');}}
     finally{if(button){button.innerHTML=original;update();}}
   });
 }
@@ -433,7 +458,7 @@ function bindFeed(){
   document.querySelectorAll('[data-social-affiliation-club]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openKombaxPublicProfile(b.dataset.socialAffiliationClub);}));
   document.querySelectorAll('[data-social-like]').forEach(b=>b.addEventListener('click',async()=>{if(b.disabled)return;b.disabled=true;const active=b.dataset.active==='true';try{await repos.kombaxSocial.like(b.dataset.socialLike,!active);await loadFeed(false);}catch(error){b.disabled=false;setError(error);}}));
   document.querySelectorAll('[data-social-save]').forEach(b=>b.addEventListener('click',async()=>{if(b.disabled)return;b.disabled=true;const active=b.dataset.active==='true';try{await repos.kombaxSocial.save(b.dataset.socialSave,!active);await loadFeed(false);}catch(error){b.disabled=false;setError(error);}}));
-  document.querySelectorAll('[data-social-comments]').forEach(b=>b.addEventListener('click',()=>openComments(b.dataset.socialComments).catch(setError)));
+  document.querySelectorAll('[data-social-comments]').forEach(b=>b.addEventListener('click',()=>toggleInlineComments(b.dataset.socialComments)));
   document.querySelectorAll('[data-social-share]').forEach(b=>b.addEventListener('click',()=>shareSocial(b)));
   document.querySelectorAll('[data-social-contact]').forEach(b=>b.addEventListener('click',()=>openContact(b.dataset.socialContact,b.dataset.socialName)));
   document.querySelectorAll('[data-social-report-post]').forEach(b=>b.addEventListener('click',()=>openReport('publicacion',b.dataset.socialReportPost)));
@@ -444,6 +469,7 @@ function bindFeed(){
   const sentinel=document.getElementById('kombax-social-sentinel');
   if(sentinel&&!done&&'IntersectionObserver' in window){feedObserver=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!loading&&!done)loadFeed(true);},{rootMargin:'700px 0px'});feedObserver.observe(sentinel);}
   bindQuickComposer();
+  if(expandedCommentPostId)renderInlineComments(expandedCommentPostId,null).catch(setError);
 }
 
 async function loadFeed(append=false){
@@ -455,7 +481,7 @@ async function loadFeed(append=false){
     posts=append?[...posts,...page]:page;
     const last=page.at(-1);if(last)cursor={created:last.creado_en,id:last.id};done=page.length<PAGE_SIZE;
     renderFeedView();
-  }catch(error){setError(error);setMainHtml(`${socialHeader()}${pageHeader('KOMBAX Social','No se pudo cargar KOMBAX Social.','','Red profesional global')}<section class="card">${empty('KOMBAX Social no disponible',error?.message||'Inténtalo de nuevo. Si el problema continúa, contacta con el equipo del club.')}</section>`);}finally{loading=false;}
+  }catch(error){setError(error);setMainHtml(`${socialHeader()}${pageHeader('KOMBAX Social','No se pudo cargar KOMBAX Social.','','Red profesional global')}<section class="card">${empty('KOMBAX Social no disponible',humanError(error)||'Inténtalo de nuevo. Si el problema continúa, contacta con el equipo del club.')}</section>`);}finally{loading=false;}
 }
 
 function renderFeedView(){
@@ -464,26 +490,29 @@ function renderFeedView(){
 
 async function renderProfiles(){
   setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Perfiles públicos','Explora clubes, miembros y perfiles KOMBAX autorizados sin acceder a datos administrativos.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div class="kombax-social-search"><input id="kombax-profile-query" type="search" placeholder="Buscar por nombre, club o presentación"><button class="btn btn-primary" id="kombax-profile-search">Buscar</button></div><div id="kombax-profile-results"><div class="loading-card">Buscando perfiles…</div></div></div>`);bindCommon();
-  const run=async()=>{const box=document.getElementById('kombax-profile-results'),q=document.getElementById('kombax-profile-query')?.value||'';try{const rows=await repos.kombaxSocial.directory(q,40);box.innerHTML=rows.length?`<div class="kombax-profile-grid">${rows.map(p=>`<article class="kx-profile-card" data-social-profile-open="${esc(p.id)}" tabindex="0" role="button"><div class="kombax-social-avatar large">${profileAvatar(p)}</div><div><strong>${esc(p.nombre_publico)} ${verified(p.verificado,p.perfil_tipo||p.sujeto_tipo)}</strong><small>${esc(PUBLIC_TYPE_LABEL[p.perfil_tipo]||PROFILE_LABEL[p.sujeto_tipo]||p.sujeto_tipo)}</small>${affiliationChip(p)}</div><p>${esc(p.bio||(p.perfil_tipo==='miembro'?'Miembro de la comunidad KOMBAX':'Perfil público KOMBAX'))}</p><div class="row-actions">${p.contactable&&!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-contact="${esc(p.id)}" data-social-name="${esc(p.nombre_publico)}">Contactar</button>`:''}${!isOwn(p.id)&&ownProfiles.some(x=>possibleRelations(x.perfil_tipo||x.sujeto_tipo,p.perfil_tipo||p.sujeto_tipo).length)?`<button class="btn btn-ghost btn-sm" data-social-relation="${esc(p.id)}">Vincular</button>`:''}${!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-report-profile="${esc(p.id)}">Denunciar</button>`:''}</div></article>`).join('')}</div>`:empty('Sin coincidencias','Prueba con otro término.');
+  const run=async()=>{const box=document.getElementById('kombax-profile-results'),q=document.getElementById('kombax-profile-query')?.value||'';try{const rows=await repos.kombaxSocial.directory(q,40);box.innerHTML=rows.length?`<div class="kombax-profile-grid">${rows.map(p=>`<article class="kx-profile-card" data-social-profile-open="${esc(p.id)}" tabindex="0" role="button"><div class="kombax-social-avatar large">${profileAvatar(p)}</div><div><strong>${esc(p.nombre_publico)} ${verified(p.verificado,p.perfil_tipo||p.sujeto_tipo)}</strong><small>${esc(PUBLIC_TYPE_LABEL[p.perfil_tipo]||PROFILE_LABEL[p.sujeto_tipo]||p.sujeto_tipo)}</small>${affiliationChip(p)}</div><p>${esc(p.bio||(p.perfil_tipo==='miembro'?'Miembro de la comunidad KOMBAX':'Perfil público KOMBAX'))}</p><div class="row-actions">${p.contactable&&!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-contact="${esc(p.id)}" data-social-name="${esc(p.nombre_publico)}">Contactar</button>`:''}${!isOwn(p.id)&&ownProfiles.some(x=>possibleRelations(x.perfil_tipo||x.sujeto_tipo,p.perfil_tipo||p.sujeto_tipo).length)?`<button class="btn btn-ghost btn-sm" data-social-relation="${esc(p.id)}">Añadir a mi red</button>`:''}${!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-report-profile="${esc(p.id)}">Denunciar</button>`:''}</div></article>`).join('')}</div>`:empty('Sin coincidencias','Prueba con otro término.');
     box.querySelectorAll('[data-social-profile-open]').forEach(card=>{const open=()=>openKombaxPublicProfile(card.dataset.socialProfileOpen);card.addEventListener('click',e=>{if(e.target.closest('button,a'))return;open();});card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});
     box.querySelectorAll('[data-social-affiliation-club]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(b.dataset.socialAffiliationClub)openKombaxPublicProfile(b.dataset.socialAffiliationClub);}));
     box.querySelectorAll('[data-social-contact]').forEach(b=>b.addEventListener('click',()=>openContact(b.dataset.socialContact,b.dataset.socialName)));
     box.querySelectorAll('[data-social-relation]').forEach(b=>b.addEventListener('click',()=>{const target=rows.find(x=>String(x.id)===String(b.dataset.socialRelation));if(target)requestRelation(target);}));
     box.querySelectorAll('[data-social-report-profile]').forEach(b=>b.addEventListener('click',()=>openReport('perfil',b.dataset.socialReportProfile)));
-  }catch(error){box.innerHTML=empty('No se pudo buscar',error?.message||'Revisa la conexión.');}};
+  }catch(error){box.innerHTML=empty('No se pudo buscar',humanError(error)||'Revisa la conexión.');}};
   document.getElementById('kombax-profile-search')?.addEventListener('click',run);document.getElementById('kombax-profile-query')?.addEventListener('keydown',e=>{if(e.key==='Enter')run();});await run();
 }
 
 async function renderContacts(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Mensajes Social','Solicitudes de contacto con aceptación previa y chat de texto abierto. Los mensajes se sincronizan automáticamente mientras KOMBAX está abierto.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div id="kombax-contact-list"><div class="loading-card">Cargando contactos…</div></div></div>`);bindCommon();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Mensajes KOMBAX','Una sola bandeja, con separación clara entre conversaciones Social y consultas comerciales de Showcase. Salir con la X conserva el hilo; “Eliminar conversación” es la única acción destructiva.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div class="kx-message-filters" role="tablist" aria-label="Filtrar mensajes"><button type="button" data-message-filter="all" class="${contactFilter==='all'?'active':''}">Todos</button><button type="button" data-message-filter="social" class="${contactFilter==='social'?'active':''}">${icon('users',{size:15})} Social</button><button type="button" data-message-filter="showcase" class="${contactFilter==='showcase'?'active':''}">${icon('shoppingBag',{size:15})} Showcase</button></div><div id="kombax-contact-list"><div class="loading-card">Cargando mensajes…</div></div></div>`);bindCommon();
   const box=document.getElementById('kombax-contact-list');
   try{
     const rows=await repos.kombaxSocial.contacts();
-    box.innerHTML=rows.length?`<div class="kombax-contact-list">${rows.map(c=>`<article><header><div><span class="page-kicker">${esc(c.direccion==='recibida'?'RECIBIDA':c.direccion==='enviada'?'ENVIADA':'CONTACTO')} · ${esc(CONTACT_LABEL[c.motivo]||c.motivo)}</span><strong>${esc(c.remitente_nombre)} → ${esc(c.destinatario_nombre)}</strong></div>${badge(c.estado,c.estado==='aceptada'?'ok':c.estado==='rechazada'||c.estado==='cerrada'?'warn':'neutral')}</header><p>${esc(c.ultimo_mensaje||'Solicitud de contacto')}</p><div class="kx-contact-meta"><small>${dtFmt(c.ultimo_mensaje_en||c.creado_en)}</small><span>${c.estado==='aceptada'?'Chat abierto':c.estado==='pendiente'?'Pendiente de aceptación':'Conversación cerrada'}</span>${Number(c.no_leidos||0)>0?`<b>${Number(c.no_leidos)} nuevo${Number(c.no_leidos)===1?'':'s'}</b>`:''}</div><div class="row-actions">${c.gestionable?`<button class="btn btn-primary btn-sm" data-contact-state="aceptada" data-contact-id="${esc(c.id)}">Aceptar</button><button class="btn btn-ghost btn-sm" data-contact-state="rechazada" data-contact-id="${esc(c.id)}">Rechazar</button>`:''}<button class="btn btn-ghost btn-sm" data-contact-open="${esc(c.id)}">${c.estado==='aceptada'?'Abrir contacto':'Ver mensajes'}</button><button class="btn btn-danger btn-sm" data-contact-delete="${esc(c.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`).join('')}</div>`:empty('Sin contactos','Cuando envíes o recibas una solicitud aparecerá aquí. Si se acepta, se habilitará un chat de texto.');
+    const visible=rows.filter(c=>contactFilter==='all'||String(c.canal||'social')===contactFilter);
+    box.innerHTML=visible.length?`<div class="kombax-contact-list">${visible.map(c=>{const showcase=String(c.canal||'social')==='showcase';return `<article class="kx-message-card ${showcase?'showcase':'social'}"><header><div><span class="page-kicker">${showcase?'SHOWCASE':esc(c.direccion==='recibida'?'SOCIAL · RECIBIDA':c.direccion==='enviada'?'SOCIAL · ENVIADA':'SOCIAL')} ${showcase&&c.showcase_marca_nombre?`· ${esc(c.showcase_marca_nombre)}`:`· ${esc(CONTACT_LABEL[c.motivo]||c.motivo)}`}</span><strong>${esc(c.remitente_nombre)} → ${esc(c.destinatario_nombre)}</strong></div>${badge(c.estado,c.estado==='aceptada'?'ok':c.estado==='rechazada'||c.estado==='cerrada'?'warn':'neutral')}</header>${showcase?`<div class="kx-message-product">${c.showcase_producto_imagen_url?`<img src="${esc(c.showcase_producto_imagen_url)}" alt="">`:`<span>${icon('shoppingBag',{size:20})}</span>`}<div><small>Producto / servicio</small><strong>${esc(c.showcase_producto_nombre||'Ficha Showcase')}</strong></div></div>`:''}<p>${esc(c.ultimo_mensaje||'Solicitud de contacto')}</p><div class="kx-contact-meta"><small>${dtFmt(c.ultimo_mensaje_en||c.creado_en)}</small><span>${c.estado==='aceptada'?'Conversación abierta':c.estado==='pendiente'?'Pendiente de aceptación':'Conversación finalizada'}</span>${Number(c.no_leidos||0)>0?`<b>${Number(c.no_leidos)} nuevo${Number(c.no_leidos)===1?'':'s'}</b>`:''}</div><div class="row-actions">${c.gestionable?`<button class="btn btn-primary btn-sm" data-contact-state="aceptada" data-contact-id="${esc(c.id)}">Aceptar</button><button class="btn btn-ghost btn-sm" data-contact-state="rechazada" data-contact-id="${esc(c.id)}">Rechazar</button>`:''}<button class="btn btn-ghost btn-sm" data-contact-open="${esc(c.id)}">Abrir conversación</button><button class="btn btn-danger btn-sm" data-contact-delete="${esc(c.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`;}).join('')}</div>`:empty(contactFilter==='all'?'Sin mensajes':`Sin mensajes ${contactFilter==='showcase'?'Showcase':'Social'}`,contactFilter==='showcase'?'Las consultas iniciadas desde una ficha de Showcase aparecerán aquí con la imagen y el producto asociado.':'Las conversaciones iniciadas desde KOMBAX Social aparecerán aquí.');
+    document.querySelectorAll('[data-message-filter]').forEach(b=>b.addEventListener('click',()=>{contactFilter=b.dataset.messageFilter||'all';renderContacts();}));
     box.querySelectorAll('[data-contact-state]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.contactStatus(b.dataset.contactId,b.dataset.contactState);toast(b.dataset.contactState==='aceptada'?'Solicitud aceptada · contacto abierto':'Solicitud rechazada');await renderContacts();}catch(error){b.disabled=false;setError(error);}}));
     box.querySelectorAll('[data-contact-open]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactOpen));if(c)openContactThread(c);}));
-    box.querySelectorAll('[data-contact-delete]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactDelete));if(!c)return;const actor=ownProfiles.find(p=>p.id===c.remitente_id||p.id===c.destinatario_id);if(!actor){toast('No se puede identificar tu identidad en este contacto.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La contraparte conserva su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(c.id,actor.id);toast('Conversación eliminada');await renderContacts();},{confirmText:'Eliminar conversación',danger:true});}));
-  }catch(error){box.innerHTML=empty('No se pudieron cargar los contactos',error?.message||'Revisa la conexión.');}
+    box.querySelectorAll('[data-contact-delete]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactDelete));if(!c)return;const actor=ownProfiles.find(p=>p.id===c.remitente_id||p.id===c.destinatario_id);if(!actor){toast('No se puede identificar tu identidad en esta conversación.','error');return;}confirmDialog('Eliminar conversación','Se eliminará de tu bandeja y dejará de admitir nuevos mensajes. La contraparte conservará su historial hasta que también lo elimine.',async()=>{await repos.kombaxSocial.deleteContact(c.id,actor.id);toast('Conversación eliminada');await renderContacts();},{confirmText:'Eliminar conversación',danger:true});}));
+    const pendingOpen=sessionStorage.getItem('kombax_social_open_contact');if(pendingOpen){const c=rows.find(x=>String(x.id)===String(pendingOpen));sessionStorage.removeItem('kombax_social_open_contact');if(c)setTimeout(()=>openContactThread(c),0);}
+  }catch(error){box.innerHTML=empty('No se pudieron cargar los contactos',humanError(error)||'Revisa la conexión.');}
 }
 
 async function renderSaved(){
@@ -494,25 +523,25 @@ async function renderSaved(){
     box.innerHTML=rows.length?`<div class="kombax-saved-list">${rows.map(x=>`<article><div><span class="page-kicker">${esc(TYPE_LABEL[x.tipo]||x.tipo)} · ${dtFmt(x.creado_en)} · ${esc(x.audiencia_label||'Público')}</span><button type="button" class="kx-saved-author" data-social-profile-open="${esc(x.autor_id)}">${esc(x.autor_nombre)}</button><p>${esc(x.texto)}</p></div><button class="btn btn-ghost btn-sm" data-kx-unsave="${esc(x.id)}">Quitar de guardados</button></article>`).join('')}</div>`:empty('Sin guardados','Las publicaciones que guardes aparecerán aquí y no se muestran públicamente.');
     box.querySelectorAll('[data-social-profile-open]').forEach(b=>b.addEventListener('click',()=>openKombaxPublicProfile(b.dataset.socialProfileOpen)));
     box.querySelectorAll('[data-kx-unsave]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.save(b.dataset.kxUnsave,false);toast('Eliminado de guardados');await renderSaved();}catch(error){b.disabled=false;setError(error);}}));
-  }catch(error){box.innerHTML=empty('No se pudieron cargar los guardados',error?.message||'Revisa la conexión.');}
+  }catch(error){box.innerHTML=empty('No se pudieron cargar los guardados',humanError(error)||'Revisa la conexión.');}
 }
 
 async function renderRelations(selectedProfileId=''){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Mis relaciones','Área privada. Solo tú y las identidades que puedes gestionar ven esta lista; KOMBAX no publica un contador de relaciones.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div id="kombax-relations-list"><div class="loading-card">Cargando relaciones…</div></div></div>`);bindCommon();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Mi red','Área privada. Solo tú y las identidades que puedes gestionar ven esta lista; KOMBAX no publica quién forma parte de tu red ni un contador público.','','KOMBAX Social')}${identitySwitcher()}${tabBar()}<div id="kombax-relations-list"><div class="loading-card">Cargando tu red…</div></div></div>`);bindCommon();
   const box=document.getElementById('kombax-relations-list');
-  if(!ownProfiles.length){box.innerHTML=empty('Sin perfil autorizado','Necesitas un perfil KOMBAX Social autorizado para gestionar relaciones.');return;}
+  if(!ownProfiles.length){box.innerHTML=empty('Sin perfil autorizado','Necesitas un perfil KOMBAX Social autorizado para gestionar tu red.');return;}
   const selected=ownProfiles.find(x=>String(x.id)===String(selectedProfileId))||activeIdentity()||ownProfiles[0];
   try{
     const rows=await repos.kombaxSocial.relations(selected.id);
-    box.innerHTML=`<div class="kx-relations-toolbar"><label>Perfil<select id="kx-relation-profile">${ownProfiles.map(x=>`<option value="${esc(x.id)}" ${x.id===selected.id?'selected':''}>${esc(x.nombre_publico)}</option>`).join('')}</select></label></div>${rows.length?`<div class="kx-relations-list">${rows.map(r=>`<article><header><div><span class="page-kicker">${esc(RELATION_LABEL[r.tipo]||r.tipo)}</span><strong>${esc(r.origen_nombre)} ↔ ${esc(r.destino_nombre)}</strong></div>${badge(r.estado,r.estado==='confirmed'?'ok':r.estado==='rejected'||r.estado==='suspended'?'warn':'neutral')}</header>${r.nota?`<p>${esc(r.nota)}</p>`:''}<small>Solicitada ${dtFmt(r.creado_en)}${r.confirmado_en?` · confirmada ${dtFmt(r.confirmado_en)}`:''}</small><div class="row-actions">${r.gestionable?`<button class="btn btn-primary btn-sm" data-kx-relation-state="confirmed" data-kx-relation-id="${esc(r.id)}">Confirmar</button><button class="btn btn-ghost btn-sm" data-kx-relation-state="rejected" data-kx-relation-id="${esc(r.id)}">Rechazar</button>`:''}${r.estado==='confirmed'?`<button class="btn btn-ghost btn-sm" data-kx-relation-state="ended" data-kx-relation-id="${esc(r.id)}">Finalizar vínculo</button>`:''}</div></article>`).join('')}</div>`:empty('Sin relaciones','Las solicitudes y relaciones confirmadas aparecerán aquí.')}`;
+    box.innerHTML=`<div class="kx-relations-toolbar"><label>Perfil<select id="kx-relation-profile">${ownProfiles.map(x=>`<option value="${esc(x.id)}" ${x.id===selected.id?'selected':''}>${esc(x.nombre_publico)}</option>`).join('')}</select></label></div>${rows.length?`<div class="kx-relations-list">${rows.map(r=>`<article><header><div><span class="page-kicker">${esc(RELATION_LABEL[r.tipo]||r.tipo)}</span><strong>${esc(r.origen_nombre)} ↔ ${esc(r.destino_nombre)}</strong></div>${badge(r.estado,r.estado==='confirmed'?'ok':r.estado==='rejected'||r.estado==='suspended'?'warn':'neutral')}</header>${r.nota?`<p>${esc(r.nota)}</p>`:''}<small>Solicitud ${dtFmt(r.creado_en)}${r.confirmado_en?` · aceptada ${dtFmt(r.confirmado_en)}`:''}</small><div class="row-actions">${r.gestionable?`<button class="btn btn-primary btn-sm" data-kx-relation-state="confirmed" data-kx-relation-id="${esc(r.id)}">Aceptar en mi red</button><button class="btn btn-ghost btn-sm" data-kx-relation-state="rejected" data-kx-relation-id="${esc(r.id)}">Rechazar</button>`:''}${r.estado==='confirmed'?`<button class="btn btn-ghost btn-sm" data-kx-relation-state="ended" data-kx-relation-id="${esc(r.id)}">Eliminar de mi red</button>`:''}</div></article>`).join('')}</div>`:empty('Tu red está vacía','Las solicitudes y conexiones aceptadas aparecerán aquí de forma privada.')}`;
     document.getElementById('kx-relation-profile')?.addEventListener('change',e=>renderRelations(e.target.value));
     box.querySelectorAll('[data-kx-relation-state]').forEach(b=>b.addEventListener('click',()=>confirmDialog(
-      b.dataset.kxRelationState==='confirmed'?'Confirmar relación':b.dataset.kxRelationState==='rejected'?'Rechazar relación':'Finalizar relación',
-      'La relación es privada, requiere consentimiento de las partes y conserva su trazabilidad.',
-      async()=>{await repos.kombaxSocial.relationState(b.dataset.kxRelationId,b.dataset.kxRelationState);toast('Relación actualizada');await renderRelations(selected.id);},
-      {confirmText:b.dataset.kxRelationState==='confirmed'?'Confirmar':'Continuar',danger:b.dataset.kxRelationState!=='confirmed'}
+      b.dataset.kxRelationState==='confirmed'?'Aceptar en mi red':b.dataset.kxRelationState==='rejected'?'Rechazar solicitud':'Eliminar de mi red',
+      'Mi red es privada, requiere consentimiento y conserva la trazabilidad necesaria para seguridad.',
+      async()=>{await repos.kombaxSocial.relationState(b.dataset.kxRelationId,b.dataset.kxRelationState);toast('Mi red actualizada');await renderRelations(selected.id);},
+      {confirmText:b.dataset.kxRelationState==='confirmed'?'Aceptar':'Continuar',danger:b.dataset.kxRelationState!=='confirmed'}
     )));
-  }catch(error){box.innerHTML=empty('No se pudieron cargar las relaciones',error?.message||'No se pudo comprobar esta relación.');}
+  }catch(error){box.innerHTML=empty('No se pudo cargar tu red',humanError(error)||'No se pudo comprobar esta conexión.');}
 }
 
 function moderationAction(report,estado,accion){
@@ -533,7 +562,7 @@ async function renderSafety(){
 export async function renderKombaxSocial(){
   setMainHtml('<div class="loading-card">Abriendo KOMBAX Social…</div>');
   try{[socialStatus,ownProfiles]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles()]);audiencesByProfile=new Map();await Promise.all(ownProfiles.map(async p=>{const rows=await repos.kombaxSocial.audiences(p.id).catch(()=>[]);audiencesByProfile.set(String(p.id),rows?.length?rows:[{audiencia:'publica',target_social_id:null,target_club_id:null,label:'Público · Todo KOMBAX',descripcion:'Visible para toda la red KOMBAX Social.',predeterminada:true}]);}));const preferred=chooseDefaultIdentity(ownProfiles);activeIdentityId=preferred?.id||'';await refreshActiveQuota();const requested=sessionStorage.getItem('kombax_social_view');if(requested&&['feed','profiles','saved','relations','contacts','safety'].includes(requested)){activeView=requested;sessionStorage.removeItem('kombax_social_view');}}
-  catch(error){setError(error);setMainHtml(`${pageHeader('KOMBAX Social','La comunidad pública no está disponible en este momento.','','KOMBAX Social')}${empty('KOMBAX Social no disponible',error?.message||'No se pudo comprobar el acceso.')}`);return;}
+  catch(error){setError(error);setMainHtml(`${pageHeader('KOMBAX Social','La comunidad pública no está disponible en este momento.','','KOMBAX Social')}${empty('KOMBAX Social no disponible',humanError(error)||'No se pudo comprobar el acceso.')}`);return;}
   if(activeView==='profiles')return renderProfiles();
   if(activeView==='saved')return renderSaved();
   if(activeView==='relations')return renderRelations();

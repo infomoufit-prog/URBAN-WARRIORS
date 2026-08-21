@@ -1,6 +1,6 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
-import { esc, dateFmt, money, isoDate, weekRange, sortSessionsForWeek } from '../core/utils.js';
+import { esc, dateFmt, money, isoDate, weekRange, sortSessionsForWeek, humanError } from '../core/utils.js';
 import { pageHeader, hero, metric, card, empty, badge, openForm, openDetail, toast, setError, setMainHtml, profileSwitcher, progress, quickRow, table } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { renderOwnKombaxProfilePage } from './public-profile.js';
@@ -88,7 +88,7 @@ export async function renderPortalDashboard(){
     memberBind(d.members,renderPortalDashboard);bindInternalNav();document.querySelectorAll('[data-action="portal-checkin"]').forEach(b=>b.addEventListener('click',()=>openCheckin(d,d.member)));
     document.querySelector('[data-action="portal-reserve-next"]')?.addEventListener('click',async e=>{const b=e.currentTarget;b.disabled=true;try{await repos.portal.reserveSession(b.dataset.id,d.member.id);toast('Asistencia confirmada');await renderPortalDashboard();}catch(error){setError(error);b.disabled=false;}});
     document.querySelector('[data-action="portal-cancel-next"]')?.addEventListener('click',async e=>{const b=e.currentTarget;b.disabled=true;try{await repos.portal.cancelSessionReservation(b.dataset.id,d.member.id);toast('Asistencia cancelada');await renderPortalDashboard();}catch(error){setError(error);b.disabled=false;}});
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Mi espacio')} ${empty('No se pudo cargar tu espacio',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Mi espacio')} ${empty('No se pudo cargar tu espacio',humanError(e))}`)}
 }
 
 function bindInternalNav(){document.querySelectorAll('#main-view [data-nav]').forEach(b=>b.addEventListener('click',()=>document.querySelector(`.nav-item[data-nav="${b.dataset.nav}"]`)?.click()||document.querySelector(`.bottom-nav [data-nav="${b.dataset.nav}"]`)?.click()));}
@@ -118,7 +118,7 @@ export async function renderPortalSchedule(){
     document.querySelectorAll('.reserve-session').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{const out=await repos.portal.reserveSession(b.dataset.id,d.member.id);toast(`Asistencia confirmada${out?.confirmados!=null?` · ${out.confirmados} confirmados`:''}`);await renderPortalSchedule();}catch(e){setError(e);b.disabled=false;}}));
     document.querySelectorAll('.cancel-reservation').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.portal.cancelSessionReservation(b.dataset.id,d.member.id);toast('Asistencia cancelada');await renderPortalSchedule();}catch(e){setError(e);b.disabled=false;}}));
     document.querySelectorAll('.check-session').forEach(b=>b.addEventListener('click',()=>openForm({title:'Check-in',subtitle:d.groups.find(g=>g.id===d.sessions.find(s=>s.id===b.dataset.id)?.grupo_id)?.nombre||'',fields:[{name:'codigo',label:'Código de acceso'}],submitText:'Registrar',onSubmit:async v=>{await repos.portal.checkin(b.dataset.id,d.member.id,v.codigo||'');toast('Acceso registrado');await renderPortalSchedule();}})));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Horarios')} ${empty('No se pudieron cargar los horarios',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Horarios')} ${empty('No se pudieron cargar los horarios',humanError(e))}`)}
 }
 
 export async function renderPortalRequests(){
@@ -132,7 +132,7 @@ export async function renderPortalRequests(){
     const relationFields=[{name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:options(disciplines.filter(d=>d.activa))},{name:'grupo_id',label:'Grupo',type:'select',required:true,options:options(groups.filter(g=>g.activo),g=>`${disciplines.find(d=>d.id===g.disciplina_id)?.nombre||''} · ${g.nombre}`)},{name:'tarifa_id',label:'Tarifa',type:'select',options:options(tariffs.filter(t=>t.activa),t=>`${t.nombre} · ${money(t.importe)}`)}];
     document.getElementById('request-sport')?.addEventListener('click',()=>openForm({title:'Nueva solicitud deportiva',subtitle:member?`${member.nombre} ${member.apellidos||''}`:'',fields:relationFields,submitText:'Enviar solicitud',onSubmit:async v=>{await repos.portal.requestEnrollment(member.id,v.disciplina_id,v.grupo_id,v.tarifa_id);toast('Solicitud enviada al club');await renderPortalRequests();}}));
     document.getElementById('request-minor')?.addEventListener('click',()=>openForm({title:'Añadir menor',subtitle:'La solicitud quedará pendiente de aprobación por el club.',fields:[{name:'nombre',label:'Nombre del menor',required:true},{name:'apellidos',label:'Apellidos',required:true},{name:'fecha_nacimiento',label:'Fecha de nacimiento',type:'date'},{name:'parentesco',label:'Parentesco',required:true},{name:'telefono',label:'Teléfono de contacto',required:true,value:state.session?.telefono||''},...relationFields,{name:'observaciones',label:'Observaciones',type:'textarea',full:true}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.portal.requestMinor({...v,tutor_nombre:`${state.session?.nombre||''} ${state.session?.apellidos||''}`.trim(),tutor_email:state.session?.email||''});toast('Solicitud del menor enviada');await renderPortalRequests();}}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Solicitudes')} ${empty('No se pudieron cargar las solicitudes',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Solicitudes')} ${empty('No se pudieron cargar las solicitudes',humanError(e))}`)}
 }
 
 export async function renderPortalProfile(){
@@ -169,5 +169,5 @@ export async function renderPortalProfile(){
     document.getElementById('view-general-community-rules')?.addEventListener('click',()=>showGeneralCommunityRules(socialRules));
     document.getElementById('activate-general-community')?.addEventListener('click',()=>openForm({title:'Activar KOMBAX Social',subtitle:'Tu perfil KOMBAX será tu única ficha pública. El expediente administrativo del club permanece privado.',width:'650px',fields:[{name:'acepta_normas',label:'He leído y acepto las Normas de KOMBAX Social.',type:'checkbox',value:false,required:true,full:true},{name:'acepta_privacidad',label:'Entiendo qué información será pública y qué datos del club seguirán siendo privados.',type:'checkbox',value:false,required:true,full:true}],submitText:'Activar mi perfil KOMBAX',onSubmit:async v=>{if(!v.acepta_normas||!v.acepta_privacidad)throw new Error('Debes aceptar las normas y la privacidad antes de activar el servicio.');await repos.socialGeneral.activate(v);toast('Perfil KOMBAX activado');await renderPortalProfile();}}));
     await bindPrivate(document.getElementById('main-view'));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Mi perfil')} ${empty('No se pudo cargar Mi perfil',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Mi perfil')} ${empty('No se pudo cargar Mi perfil',humanError(e))}`)}
 }

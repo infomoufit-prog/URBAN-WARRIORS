@@ -1,0 +1,27 @@
+KOMBAX RC13 build 20065 · ROLE INVITATIONS + TEAM FILTER QA
+Fecha: 2026-08-21
+
+FUENTE DE TRABAJO:
+KOMBAX_Urban_Warriors_RC13_build_20065_ROLE_INVITATIONS_TEAM_FILTER_QA
+
+ESTADO:
+- Código 20065 implementado.
+- npm test PASS.
+- npm run build PASS.
+- 68 archivos; web = dist = Android.
+- Supabase 107 ACTIVO.
+- Supabase 109 ACTIVO y VERIFICADO.
+- Supabase 108 NO APLICADO.
+- Netlify NO MODIFICADO.
+- APK signed 20065 PENDIENTE de generar localmente.
+
+CAMBIOS PRINCIPALES:
+1. Equipo no muestra Alumno ni Familia.
+2. Invitación de alumnos/familias compartible.
+3. Invitación de equipo por rol solicitado.
+4. Aprobación obligatoria del rol antes de conceder permisos.
+5. Alumno puede mantener su condición y adquirir además un rol de equipo.
+
+SIGUIENTE ACCIÓN:
+Generar APK signed 20065 con el mismo JKS y ejecutar ANDROID_RC13_BUILD_20065_MOBILE_QA.md.
+No desplegar Netlify hasta congelar la candidata móvil aprobada.

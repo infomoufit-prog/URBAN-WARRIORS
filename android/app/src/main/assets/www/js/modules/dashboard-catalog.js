@@ -1,7 +1,7 @@
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
-import { esc, byName, money, dateFmt, isoDate } from '../core/utils.js';
+import { esc, byName, money, dateFmt, isoDate, humanError } from '../core/utils.js';
 import { pageHeader, hero, metric, progress, quickRow, card, table, empty, badge, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 
@@ -43,7 +43,7 @@ export async function renderDashboard(){
         ${card('Próximas sesiones',future.length?future.slice(0,8).map(x=>quickRow(String(x.fecha).slice(8,10),activeGroups.find(g=>g.id===x.grupo_id)?.nombre||'Clase',`${dateFmt(x.fecha)} · ${String(x.hora_inicio||'').slice(0,5)} · ${x.estado}`,badge(x.estado,x.estado==='completada'?'ok':x.estado==='cancelada'?'danger':'neutral'))).join(''):empty('Sin sesiones próximas'))}`);
     }
     document.querySelectorAll('#main-view [data-nav]').forEach(b=>b.addEventListener('click',()=>document.querySelector(`.nav-item[data-nav="${b.dataset.nav}"]`)?.click()||document.querySelector(`.bottom-nav [data-nav="${b.dataset.nav}"]`)?.click()));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Inicio')} ${empty('No se pudo cargar el panel',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Inicio')} ${empty('No se pudo cargar el panel',humanError(e))}`)}
 }
 
 function disciplineFields(){return [
@@ -72,5 +72,5 @@ export async function renderCatalog(){
     const openGrade=(g={})=>openForm({title:g.id?'Editar grado':'Nuevo grado',fields:gradeFields(disciplines),initial:g,onSubmit:async v=>{await repos.catalog.saveGrade({...g,...v,id:g.id||null});toast('Grado guardado');await reload();}});
     document.getElementById('new-grade')?.addEventListener('click',()=>openGrade());bind('.edit-grade',id=>openGrade(grades.find(x=>x.id===id)));bind('.add-grade',id=>openGrade({disciplina_id:id,activo:true,orden:grades.filter(g=>g.disciplina_id===id).length+1}));bind('.delete-grade',id=>confirmDialog('Eliminar grado','Se elimina si no está usado. El Gestor de la app puede usar el borrado total para retirar también su histórico de graduaciones.',async()=>{await repos.catalog.deleteGrade(id);toast('Grado eliminado');await reload();},{confirmText:'Eliminar',danger:true}));
     bind('.force-delete-grade',id=>forceConfirm('Eliminar grado e histórico','Se borrarán las graduaciones que usen este grado y se retirará de las matrículas actuales.',async()=>{await repos.catalog.forceDeleteGrade(id);toast('Grado e histórico eliminados');await reload();}));
-  }catch(e){setError(e);setMainHtml(`${pageHeader('Disciplinas y grados')} ${empty('No se pudo cargar el catálogo',e.message)}`)}
+  }catch(e){setError(e);setMainHtml(`${pageHeader('Disciplinas y grados')} ${empty('No se pudo cargar el catálogo',humanError(e))}`)}
 }

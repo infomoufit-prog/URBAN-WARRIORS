@@ -1,5 +1,5 @@
 import { repos } from '../core/repositories.js';
-import { esc, money, dtFmt } from '../core/utils.js';
+import { esc, money, dtFmt, humanError } from '../core/utils.js';
 import { KOMBAX_BRAND } from '../core/platform.js';
 import { pageHeader, empty, openForm, openDetail, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
@@ -49,12 +49,37 @@ async function shareItem(item){
 async function toggleSaved(item,force){
   const next=typeof force==='boolean'?force:!item.guardado;
   try{await repos.kombaxShowcase.toggleSaved(item.id,next);item.guardado=next;toast(next?'Guardado en tu Showcase':'Eliminado de guardados');if(activeView==='saved')await renderSaved();else renderCatalog();}
-  catch(error){setError(error);toast(error?.message||'No se pudo actualizar el guardado.','error');}
+  catch(error){setError(error);toast(humanError(error)||'No se pudo actualizar el guardado.','error');}
+}
+
+async function openShowcaseContact(item){
+  if(!item?.proveedor_social_id){toast('Este escaparate todavía no tiene un perfil KOMBAX disponible para contacto.','error');return;}
+  try{
+    const mine=await repos.kombaxSocial.myProfiles();
+    const eligible=(Array.isArray(mine)?mine:[]).filter(x=>x.contacto_habilitado&&String(x.id)!==String(item.proveedor_social_id));
+    if(!eligible.length){toast('No tienes una identidad autorizada para iniciar esta consulta de Showcase.','error');return;}
+    openForm({
+      title:`Consultar · ${item.nombre}`,
+      subtitle:`KOMBAX Showcase · ${item.marca_nombre||'Proveedor'} · la conversación quedará vinculada a este producto o servicio.`,
+      fields:[
+        {name:'remitente',label:'Consultar como',type:'select',required:true,value:eligible[0].id,options:eligible.map(x=>({value:x.id,label:x.identity_label||x.nombre_publico}))},
+        {name:'mensaje',label:'Primer mensaje',type:'textarea',required:true,full:true,rows:5,minLength:10,maxLength:500,help:'Entre 10 y 500 caracteres. El producto, su imagen y su referencia quedarán visibles dentro del chat.'}
+      ],
+      submitText:'Abrir consulta Showcase',
+      onSubmit:async v=>{
+        const out=await repos.kombaxSocial.showcaseContact(v.remitente,item.id,v.mensaje);
+        const contactId=out?.id||out?.contacto_id||out?.contact_id||'';
+        try{sessionStorage.setItem('kombax_social_view','contacts');if(contactId)sessionStorage.setItem('kombax_social_open_contact',String(contactId));}catch{}
+        toast('Consulta Showcase preparada en Mensajes KOMBAX');
+        setTimeout(()=>{const nav=document.querySelector('[data-nav="social"]');if(nav)nav.click();else location.hash='#social';},0);
+      }
+    });
+  }catch(error){setError(error);toast(humanError(error)||'No se pudo iniciar la consulta Showcase.','error');}
 }
 
 async function runPrimaryCta(item){
   const type=item.cta_tipo||'info';
-  if(type==='contact'&&item.proveedor_social_id){return openKombaxPublicProfile(item.proveedor_social_id);}
+  if(type==='contact'&&item.proveedor_social_id){return openShowcaseContact(item);}
   const external=type==='where'?safeExternal(item.donde_encontrar_url):(type==='shop'||type==='web'?safeExternal(item.visitar_url):'');
   if(external){window.open(external,'_blank','noopener,noreferrer');return;}
   if(type==='contact'){
@@ -68,8 +93,9 @@ function openItem(item){
   const visit=safeExternal(item.visitar_url),where=safeExternal(item.donde_encontrar_url),contact=safeExternal(item.contacto_url),image=safeExternal(item.imagen_url);
   const gallery=(Array.isArray(item.galeria)?item.galeria:[]).map(safeExternal).filter(Boolean).slice(0,3);
   const galleryHtml=gallery.length?`<div class="showcase-detail-gallery">${gallery.map(u=>`<img src="${esc(u)}" alt="${esc(item.nombre)}" loading="lazy">`).join('')}</div>`:'';
-  const {wrap}=openDetail({title:item.nombre,subtitle:`${item.marca_nombre} · ${item.categoria_nombre||'Showcase'}`,className:'showcase-detail',body:`<div class="showcase-detail-grid"><div><div class="showcase-detail-media">${image?`<img src="${esc(image)}" alt="${esc(item.nombre)}">`:`${categoryIcon(item.categoria_slug)}<span>${esc(item.categoria_nombre||'KOMBAX')}</span>`}</div>${galleryHtml}</div><div><span class="page-kicker">INFORMACIÓN</span><p>${esc(item.descripcion||item.resumen||'Sin descripción ampliada.')}</p>${item.precio_orientativo!=null?`<div class="showcase-reference-price"><span>Precio orientativo</span><strong>${money(item.precio_orientativo)}</strong></div>`:''}<div class="showcase-no-commerce">La contratación o compra, cuando exista, se realiza directamente con el club, la marca o su web externa.</div></div></div>`,actions:`<button class="btn btn-primary" id="showcase-primary-cta">${esc(ctaLabel(item))}</button><button class="btn btn-ghost" id="showcase-detail-save">${item.guardado?'Quitar de guardados':'Guardar'}</button><button class="btn btn-ghost" id="showcase-detail-share">Compartir</button>${item.proveedor_social_id?'<button class="btn btn-ghost" id="showcase-provider-profile">Ver perfil</button>':''}${visit&&item.cta_tipo!=='shop'&&item.cta_tipo!=='web'?`<a class="btn btn-ghost" href="${esc(visit)}" target="_blank" rel="noopener noreferrer">Web</a>`:''}${where&&item.cta_tipo!=='where'?`<a class="btn btn-ghost" href="${esc(where)}" target="_blank" rel="noopener noreferrer">Dónde encontrar</a>`:''}${contact&&item.cta_tipo!=='contact'&&!item.proveedor_social_id?`<a class="btn btn-ghost" href="${esc(contact)}" target="_blank" rel="noopener noreferrer">Contacto</a>`:''}`,width:'900px'});
+  const {wrap}=openDetail({title:item.nombre,subtitle:`${item.marca_nombre} · ${item.categoria_nombre||'Showcase'}`,className:'showcase-detail',body:`<div class="showcase-detail-grid"><div><div class="showcase-detail-media">${image?`<img src="${esc(image)}" alt="${esc(item.nombre)}">`:`${categoryIcon(item.categoria_slug)}<span>${esc(item.categoria_nombre||'KOMBAX')}</span>`}</div>${galleryHtml}</div><div><span class="page-kicker">INFORMACIÓN</span><p>${esc(item.descripcion||item.resumen||'Sin descripción ampliada.')}</p>${item.precio_orientativo!=null?`<div class="showcase-reference-price"><span>Precio orientativo</span><strong>${money(item.precio_orientativo)}</strong></div>`:''}<div class="showcase-no-commerce">La contratación o compra, cuando exista, se realiza directamente con el club, la marca o su web externa.</div></div></div>`,actions:`<button class="btn btn-primary" id="showcase-primary-cta">${esc(ctaLabel(item))}</button>${item.proveedor_social_id&&item.cta_tipo!=='contact'?`<button class="btn btn-showcase" id="showcase-chat-cta">${icon('message',{size:15})} Consultar en Showcase</button>`:''}<button class="btn btn-ghost" id="showcase-detail-save">${item.guardado?'Quitar de guardados':'Guardar'}</button><button class="btn btn-ghost" id="showcase-detail-share">Compartir</button>${item.proveedor_social_id?'<button class="btn btn-ghost" id="showcase-provider-profile">Ver perfil</button>':''}${visit&&item.cta_tipo!=='shop'&&item.cta_tipo!=='web'?`<a class="btn btn-ghost" href="${esc(visit)}" target="_blank" rel="noopener noreferrer">Web</a>`:''}${where&&item.cta_tipo!=='where'?`<a class="btn btn-ghost" href="${esc(where)}" target="_blank" rel="noopener noreferrer">Dónde encontrar</a>`:''}${contact&&item.cta_tipo!=='contact'&&!item.proveedor_social_id?`<a class="btn btn-ghost" href="${esc(contact)}" target="_blank" rel="noopener noreferrer">Contacto</a>`:''}`,width:'900px'});
   wrap.querySelector('#showcase-primary-cta')?.addEventListener('click',()=>runPrimaryCta(item));
+  wrap.querySelector('#showcase-chat-cta')?.addEventListener('click',()=>openShowcaseContact(item));
   wrap.querySelector('#showcase-detail-save')?.addEventListener('click',async e=>{await toggleSaved(item);e.currentTarget.textContent=item.guardado?'Quitar de guardados':'Guardar';});
   wrap.querySelector('#showcase-detail-share')?.addEventListener('click',()=>shareItem(item));
   wrap.querySelector('#showcase-provider-profile')?.addEventListener('click',()=>openKombaxPublicProfile(item.proveedor_social_id));
@@ -100,7 +126,7 @@ async function loadCatalog(append=false){
   try{
     const rows=await repos.kombaxShowcase.list(currentQuery,currentCategory,cursor,PAGE_SIZE);
     items=append?[...items,...rows]:rows;const last=rows.at(-1);if(last)cursor={created:last.publicado_en,id:last.id};done=rows.length<PAGE_SIZE;renderCatalog();
-  }catch(error){setError(error);setMainHtml(`${showcaseBrand()}${empty('Showcase no disponible',error?.message||'No se ha podido cargar el escaparate. Inténtalo de nuevo.')}`);}
+  }catch(error){setError(error);setMainHtml(`${showcaseBrand()}${empty('Showcase no disponible',humanError(error)||'No se ha podido cargar el escaparate. Inténtalo de nuevo.')}`);}
 }
 
 async function renderSaved(){
@@ -111,7 +137,7 @@ async function renderSaved(){
     const rows=await repos.kombaxShowcase.saved(100);
     box.innerHTML=rows.length?`<div class="showcase-saved-list">${rows.map(x=>`<article><div>${x.imagen_url?`<img src="${esc(safeExternal(x.imagen_url))}" alt="">`:icon('bookmark',{size:24})}</div><section><span class="page-kicker">${esc(x.marca_nombre)}</span><strong>${esc(x.nombre)}</strong><p>${esc(x.resumen||'')}</p><small>Guardado ${dtFmt(x.guardado_en)}</small></section><button class="btn btn-ghost btn-sm" data-saved-remove="${esc(x.id)}">Quitar</button></article>`).join('')}</div>`:empty('Sin guardados','Guarda una ficha para encontrarla rápidamente aquí.');
     box.querySelectorAll('[data-saved-remove]').forEach(b=>b.addEventListener('click',async()=>{await repos.kombaxShowcase.toggleSaved(b.dataset.savedRemove,false);toast('Eliminado de guardados');await renderSaved();}));
-  }catch(error){box.innerHTML=empty('No se pudieron cargar tus guardados',error?.message||'Inténtalo de nuevo.');}
+  }catch(error){box.innerHTML=empty('No se pudieron cargar tus guardados',humanError(error)||'Inténtalo de nuevo.');}
 }
 
 function itemEditor(brand,item=null){
@@ -179,12 +205,12 @@ async function renderManagement(selectedBrandId=''){
     box.querySelectorAll('[data-showcase-edit]').forEach(b=>b.addEventListener('click',()=>itemEditor(brand,rows.find(x=>x.id===b.dataset.showcaseEdit))));
     box.querySelectorAll('[data-showcase-state]').forEach(b=>b.addEventListener('click',()=>confirmDialog(b.dataset.showcaseState==='publicado'?'Publicar ficha':'Archivar ficha',b.dataset.showcaseState==='publicado'?'La información será visible en el escaparate público.':'La ficha dejará de mostrarse sin eliminar su historial.',async()=>{await repos.kombaxShowcase.itemState(b.dataset.showcaseId,b.dataset.showcaseState);toast(b.dataset.showcaseState==='publicado'?'Ficha publicada':'Ficha archivada');await renderManagement(brand.id);},{confirmText:b.dataset.showcaseState==='publicado'?'Publicar':'Archivar'})));
     box.querySelectorAll('[data-showcase-delete]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar ficha de Showcase','La ficha desaparecerá de Showcase, del perfil público y de los guardados. Las imágenes subidas por esta cuenta que ya no se usan también se eliminarán del almacenamiento.',async()=>{await repos.kombaxShowcase.deleteItem(b.dataset.showcaseDelete);toast('Ficha e imágenes propias eliminadas');await renderManagement(brand.id);},{confirmText:'Eliminar definitivamente',danger:true})));
-  }catch(error){box.innerHTML=empty('No se pudo cargar la gestión',error?.message||'Revisa tus permisos.');}
+  }catch(error){box.innerHTML=empty('No se pudo cargar la gestión',humanError(error)||'Revisa tus permisos.');}
 }
 
 export async function renderShowcase(){
   setMainHtml('<div class="loading-card">Abriendo KOMBAX Showcase…</div>');
-  try{[categories,managedBrands]=await Promise.all([repos.kombaxShowcase.categories(),repos.kombaxShowcase.myBrands().catch(()=>[])]);}catch(error){setError(error);setMainHtml(empty('Showcase no disponible',error?.message||'No se ha podido cargar el escaparate. Inténtalo de nuevo.'));return;}
+  try{[categories,managedBrands]=await Promise.all([repos.kombaxShowcase.categories(),repos.kombaxShowcase.myBrands().catch(()=>[])]);}catch(error){setError(error);setMainHtml(empty('Showcase no disponible',humanError(error)||'No se ha podido cargar el escaparate. Inténtalo de nuevo.'));return;}
   if(activeView==='manage'&&managedBrands.length)return renderManagement();
   if(activeView==='saved')return renderSaved();
   activeView='catalog';return loadCatalog(false);
