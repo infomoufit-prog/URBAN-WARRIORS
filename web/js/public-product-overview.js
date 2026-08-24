@@ -107,9 +107,18 @@ function bindOverview(section) {
   }));
 }
 
+function alignGatewayCopy(gateway){
+  const eyebrow=gateway.querySelector('.gateway-intro .gateway-eyebrow');
+  const title=gateway.querySelector('.gateway-intro h1');
+  if(eyebrow)eyebrow.textContent='KOMBAX · DEPORTES DE CONTACTO + ARTES MARCIALES';
+  if(title)title.textContent='LA PLATAFORMA PROFESIONAL DE LOS DEPORTES DE CONTACTO Y LAS ARTES MARCIALES';
+}
+
 function mountOverview() {
   const gateway=document.querySelector('[data-kombax-view="gateway"]');
-  if(!gateway||gateway.querySelector('[data-kx-product-overview]'))return;
+  if(!gateway)return;
+  alignGatewayCopy(gateway);
+  if(gateway.querySelector('[data-kx-product-overview]'))return;
   const hero=gateway.querySelector('.gateway-hero');
   if(!hero)return;
   hero.insertAdjacentHTML('afterend',overviewMarkup());
