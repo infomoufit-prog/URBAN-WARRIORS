@@ -29,16 +29,38 @@ async function firebaseAccessToken(account: FirebaseServiceAccount): Promise<str
 }
 
 const FINANCE_TYPES=new Set(['cuota','aviso_cobro','pago','validacion_pago','recibo'])
+const FINANCE_TARGETS=new Set(['charge','payment','receipt','automation','overview'])
+function financePushContext(notification: Json){
+  const type=String(notification.tipo||'')
+  const raw=notification.datos
+  const datos=(raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{}) as Json
+  const finance=FINANCE_TYPES.has(type)||datos.finance_v2===true||String(datos.deep_link||'').startsWith('finance:')
+  if(!finance)return {finance:false,route:String(notification.ruta||'notifications'),target:'',entity:''}
+  const target=FINANCE_TARGETS.has(String(datos.finance_target||''))?String(datos.finance_target):''
+  const entity=validUuid(datos.entity_id)?String(datos.entity_id):''
+  const exact=target&&target!=='overview'&&entity
+  return {finance:true,route:exact?`finance__${target}__${entity}`:'finance',target:exact?target:'',entity:exact?entity:''}
+}
 function systemNotificationCopy(notification: Json, clubName='KOMBAX'){
   const type=String(notification.tipo||'')
-  if(FINANCE_TYPES.has(type))return {title:clubName,body:'Tienes una actualización financiera en KOMBAX.'}
+  const raw=notification.datos
+  const datos=(raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{}) as Json
+  if(FINANCE_TYPES.has(type)||datos.finance_v2===true||String(datos.deep_link||'').startsWith('finance:'))return {title:clubName,body:'Tienes una actualización de pagos en KOMBAX.'}
   return {title:String(notification.titulo||clubName||'KOMBAX'),body:String(notification.cuerpo||'')}
 }
 
 async function sendFcm(account: FirebaseServiceAccount, accessToken: string, token: string, notification: Json, clubName='KOMBAX') {
-  const route=String(notification.ruta||'notifications')
+  const context=financePushContext(notification)
+  const route=context.route
   const copy=systemNotificationCopy(notification,clubName)
-  const response=await fetch(`https://fcm.googleapis.com/v1/projects/${account.project_id}/messages:send`,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify({message:{token,notification:copy,data:{route,payload:JSON.stringify({notification_id:notification.id||null,tipo:notification.tipo||null})},android:{priority:'high',notification:{channel_id:'urban_warriors_alerts',visibility:'PRIVATE'}},webpush:{fcm_options:{link:`/#/${route}`}}}})})
+  const data:Record<string,string>={
+    route,
+    notification_id:String(notification.id||''),
+    notification_type:String(notification.tipo||'')
+  }
+  if(context.target&&context.entity){data.finance_target=context.target;data.entity_id=context.entity}
+  const webLink=context.finance?`/#${encodeURIComponent(route)}`:`/#/${route}`
+  const response=await fetch(`https://fcm.googleapis.com/v1/projects/${account.project_id}/messages:send`,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify({message:{token,notification:copy,data,android:{priority:'high',notification:{channel_id:'urban_warriors_alerts',visibility:'PRIVATE'}},webpush:{fcm_options:{link:webLink}}}})})
   const payload=await response.json().catch(()=>({}));if(!response.ok)throw new Error(JSON.stringify(payload));return payload
 }
 
