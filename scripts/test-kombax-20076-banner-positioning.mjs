@@ -1,0 +1,12 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+const root=process.cwd(),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const cfg=read('web/config.js'),gradle=read('android/app/build.gradle'),profile=read('web/js/modules/public-profile.js'),club=read('web/js/modules/club-profile.js'),repos=read('web/js/core/repositories.js'),css=read('web/css/kombax-premium.css'),mig=read('supabase/migrations/131_kombax_profile_banner_position_20076.sql'),clubMig=read('supabase/migrations/132_kombax_club_public_banner_position_20076.sql');
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),versionCode=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);assert.ok(build>=20076);assert.ok(versionCode>=20076);
+for(const x of ['Ajustar banner','Arrastra para encuadrar','bindBannerFocalStage','banner_position_x','banner_position_y','setBannerPosition','pointerdown','pointermove'])assert.ok(profile.includes(x),`Editor banner incompleto: ${x}`);
+assert.match(profile,/object-position:\$\{pos\.x\}% \$\{pos\.y\}%/);assert.match(profile,/URL\.createObjectURL/);assert.match(profile,/Guardar encuadre/);
+assert.match(repos,/app_kombax_social_banner_position_v131/);assert.match(repos,/app_perfil_club_publico_v132/);
+for(const x of ['banner_position_x numeric','banner_position_y numeric','between 0 and 100','app_kombax_social_puede_actuar_v051','social.profile.banner.position','app_kombax_perfil_publico_v094_pre_banner_v131'])assert.ok(mig.includes(x),`Migración banner incompleta: ${x}`);
+for(const x of ['Ajustar banner','social_profile_id','srcOverride','background-position:center'])assert.ok(club.includes(x),`Club banner incompleto: ${x}`);for(const x of ['app_perfil_club_publico_v132','banner_position_x','banner_position_y','kombax_social_perfiles'])assert.ok(clubMig.includes(x),`RPC club banner incompleto: ${x}`);
+for(const x of ['touch-action:none','kx-banner-focal-marker','kx-banner-focal-controls'])assert.ok(css.includes(x),`CSS banner incompleto: ${x}`);
+assert.doesNotMatch(css,/\.kx-public-banner\{[^}]*object-position:center!important/);
+console.log('KOMBAX 20076 banner positioning: PASS');

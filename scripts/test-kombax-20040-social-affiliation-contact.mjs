@@ -19,7 +19,7 @@ const css=read('web/css/kombax-premium.css');
 // Contrato legal: la interfaz y el backend ya no pueden declarar que no existe mensajería.
 must(/'1\.2\.0'/.test(sql)&&/Contacto KOMBAX/.test(sql),'falta actualización de Normas Social 1.2');
 must(/máximo 20 mensajes totales/.test(sql)&&/menor de 18 años/.test(sql),'Normas 1.2 no reflejan límites/protección de menores');
-must((repos.includes('app_kombax_identity_mutate_v094')||repos.includes('app_kombax_identity_mutate_v065'))&&(repos.includes('app_kombax_social_mutate_v067')||repos.includes('app_kombax_social_mutate_v065'))&&repos.includes('app_kombax_social_estado_v065'),'frontend no usa gateway de identidad 065 o wrapper endurecido posterior + estado legal 065');
+must((repos.includes('app_kombax_identity_mutate_v123')||repos.includes('app_kombax_identity_mutate_v094')||repos.includes('app_kombax_identity_mutate_v065'))&&(repos.includes('app_kombax_social_mutate_v123')||repos.includes('app_kombax_social_mutate_v099')||repos.includes('app_kombax_social_mutate_v067')||repos.includes('app_kombax_social_mutate_v065'))&&(repos.includes('app_kombax_social_estado_v123')||repos.includes('app_kombax_social_estado_v065')),'frontend no usa gateway de identidad 065 o wrapper endurecido posterior + estado legal 065');
 
 // Afiliación: fuente canónica y control explícito.
 must(/add column if not exists afiliacion_visible boolean not null default true/i.test(sql),'falta control de visibilidad de afiliación');

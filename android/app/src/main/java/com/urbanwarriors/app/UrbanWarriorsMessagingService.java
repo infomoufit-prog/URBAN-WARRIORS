@@ -28,7 +28,7 @@ public class UrbanWarriorsMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
         super.onMessageReceived(message);
-        String title = "Urban Warriors";
+        String title = "KOMBAX";
         String body = "Tienes una nueva notificación.";
         if (message.getNotification() != null) {
             if (message.getNotification().getTitle() != null) title = message.getNotification().getTitle();
@@ -45,7 +45,9 @@ public class UrbanWarriorsMessagingService extends FirebaseMessagingService {
 
         NotificationManager manager = getSystemService(NotificationManager.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Alertas Urban Warriors", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Alertas KOMBAX", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Avisos privados de KOMBAX y de tu club");
+            channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PRIVATE);
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -54,6 +56,7 @@ public class UrbanWarriorsMessagingService extends FirebaseMessagingService {
             .setContentText(body)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent);
         try { manager.notify((int)(System.currentTimeMillis() % Integer.MAX_VALUE), builder.build()); }

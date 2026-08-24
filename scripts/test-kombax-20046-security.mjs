@@ -8,7 +8,7 @@ const ok=(c,m)=>{if(!c)fail(m)};
 for(const v of ['v041','v044','v053','v065','v072']) ok(mig.includes(`app_kombax_social_feed_${v}`),`cierra feed ${v}`);
 for(const v of ['v041','v044','v049','v050','v053','v065','v067']) ok(mig.includes(`app_kombax_social_mutate_${v}`),`cierra mutate ${v}`);
 ok(repo.includes("app_kombax_social_feed_v085"),'runtime usa feed 085');
-ok(repo.includes("app_kombax_social_mutate_v085")||repo.includes("app_kombax_social_mutate_v099"),'runtime usa mutate 085 o fachada endurecida posterior');
+ok(repo.includes("app_kombax_social_mutate_v085")||repo.includes("app_kombax_social_mutate_v099")||repo.includes("app_kombax_social_mutate_v123"),'runtime usa mutate 085 o fachada endurecida posterior');
 ok(repo.includes("app_kombax_social_comentarios_v083"),'runtime usa comentarios 083');
 ok(repo.includes("app_kombax_perfil_publico_v083")||repo.includes("app_kombax_perfil_publico_v094"),'runtime usa perfil 083 o wrapper posterior seguro');
 console.log('KOMBAX BUILD 20046 SECURITY · legacy Social RPC shutdown: PASS');
@@ -20,7 +20,7 @@ ok(mig85.includes('app_kombax_social_mutate_v083_pre_media_v085')&&mig85.include
 ok(mig85.includes("case when f.media_bucket='kombax-public-media' then f.media_path else null end"),'20.045 feed no expone path privado');
 ok(mig85.includes('KOMBAX_RESTRICTED_POST_REQUIRES_PRIVATE_MEDIA'),'backend impide media pública en post restringido');
 ok(mig85.includes('KOMBAX_PUBLIC_POST_REQUIRES_PUBLIC_MEDIA'),'backend impide media privada accidental en post público');
-ok(repo.includes("app_kombax_social_feed_v085")&&(repo.includes("app_kombax_social_mutate_v085")||repo.includes("app_kombax_social_mutate_v099"))&&repo.includes("app_kombax_social_media_v085"),'runtime conserva feed/media 085 y mutación 085 o fachada endurecida posterior');
+ok(repo.includes("app_kombax_social_feed_v085")&&(repo.includes("app_kombax_social_mutate_v085")||repo.includes("app_kombax_social_mutate_v099")||repo.includes("app_kombax_social_mutate_v123"))&&repo.includes("app_kombax_social_media_v085"),'runtime conserva feed/media 085 y mutación 085 o fachada endurecida posterior');
 ok(repo.includes("mediaAccessUrl")&&repo.includes("kombax-restricted-media"),'runtime usa URL firmada para media restringida');
 ok(social.includes("Las publicaciones restringidas no pueden reutilizar ni guardar multimedia en el álbum público"),'UI impide mezclar álbum público con post restringido');
 ok(social.includes("mediaAccessUrl(p.media_path,p.media_bucket"),'feed resuelve media según bucket');

@@ -1,0 +1,12 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+const root=process.cwd(),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const cfg=read('web/config.js'),gradle=read('android/app/build.gradle'),members=read('web/js/modules/groups-members.js'),repos=read('web/js/core/repositories.js'),backend=read('web/js/core/backend.js'),app=read('web/js/app.js'),edge=read('supabase/functions/invite-email/index.ts'),mig=read('supabase/migrations/059_kombax_invitation_codes.sql'),fix=read('supabase/migrations/130_kombax_student_email_invitation_constraint_20075.sql');
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),versionCode=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);assert.ok(build>=20075);assert.ok(versionCode>=20075);
+for(const x of ['Invitar alumno por email','Correo electrónico del alumno o tutor','createStudentInvitation','sendStudentInvitation'])assert.ok(members.includes(x),`UI alumnos incompleta: ${x}`);
+assert.match(repos,/p_tipo:'alumno'/);assert.match(repos,/sendStudentInvitation/);assert.match(backend,/async validateInvitation/);
+for(const x of ['^ALU-','Invitación personal de alumno o familia','validateInvitation(code,email)','La invitación no es válida para este correo o ha caducado'])assert.ok(app.includes(x),`Entrada ALU incompleta: ${x}`);
+for(const x of ["['equipo','alumno']","access_type:inviteType==='equipo'?'equipo':'alumnos'",'Te han invitado al club','Invitación segura de alumno o familia'])assert.ok(edge.includes(x),`invite-email alumno incompleto: ${x}`);
+for(const x of ["when 'alumno' then 'ALU-'","v_tipo not in ('alumno','equipo')","i.tipo_invitacion='alumno'","lower(v_inv.email)<>v_email"])assert.ok(mig.includes(x),`Backend ALU incompleto: ${x}`);
+for(const x of ["'monitor','alumno'",'invitaciones_pendientes_email_club_tipo_v130','tipo_invitacion'])assert.ok(fix.includes(x),`Migración 130 incompleta: ${x}`);
+assert.doesNotMatch(edge,/SUPABASE_SERVICE_ROLE_KEY\s*=|sb_secret_|BEGIN (?:RSA |EC )?PRIVATE KEY/);
+console.log('KOMBAX 20075 student email invitations: PASS');

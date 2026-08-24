@@ -32,10 +32,20 @@ assert.match(gateway,/now-at<=5000/,'hidden tap sequence must be time-bounded');
 assert.doesNotMatch(gateway,/No recibe insignia KOMBAX en 20\.044|CLUB ACCESS \/ 01|KOMBAX ID \/ CUENTA|KOMBAX ID \/ 02/,'gateway must not expose internal release labels');
 
 assert.match(access,/ACCESO MAESTRO/);
-assert.doesNotMatch(access,/SEGUNDO FACTOR|código de un solo uso|enviar otro código/i);
 assert.match(backend,/beginPlatformAdminAccess/);
-assert.match(backend,/app_kombax_platform_admin_password_complete_v110/);
-assert.doesNotMatch(backend,/requestEmailOtp|verifyEmailOtp|completePlatformAdminAccess|resendPlatformAdminOtp/);
+if(currentBuild>=20077){
+  assert.doesNotMatch(access,/SEGUNDO FACTOR|código de un solo uso|enviar otro código/i);
+  assert.match(access,/Abrir Consola Owner/);
+  assert.match(backend,/app_kombax_platform_admin_password_session_v139/);
+  assert.match(backend,/beginPlatformCriticalAccess|completePlatformCriticalAccess/);
+}else if(currentBuild>=20071){
+  assert.match(access,/SEGUNDO FACTOR|código de un solo uso/i);
+  assert.match(backend,/requestEmailOtp|verifyEmailOtp/);
+  assert.doesNotMatch(backend,/app_kombax_platform_admin_password_complete_v110/);
+}else{
+  assert.doesNotMatch(access,/SEGUNDO FACTOR|código de un solo uso|enviar otro código/i);
+  assert.match(backend,/app_kombax_platform_admin_password_complete_v110/);
+}
 assert.match(supabase,/requestPasswordRecovery/);
 assert.match(supabase,/verifyPasswordRecovery/);
 assert.match(backend,/app_kombax_platform_admin_session_end_v108/);

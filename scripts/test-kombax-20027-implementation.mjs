@@ -19,7 +19,7 @@ assert(repos.includes('app_kombax_perfil_mutate_v043')&&(repos.includes('app_kom
 assert(club.includes('10 fotos')&&club.includes('3 vídeos')&&club.includes('máximo 15 s'),'Club dispone de álbum 10/3/15s');
 assert(social.includes('Guardar')&&social.includes('Comentarios')&&(social.includes('Añadir a mi red')||social.includes('Vincular')),'Social expone guardados, comentarios y relaciones');
 assert(social.includes("openReport('comentario'")&&social.includes('data-kx-comment-report'),'comentarios admiten denuncia desde la interfaz');
-assert(social.includes('moderationQueue')&&social.includes('data-kx-moderate')&&repos.includes('app_kombax_moderation_queue_v050'),'moderadores disponen de cola y acciones auditadas 050');
+assert(social.includes('moderationQueue')&&social.includes('data-kx-moderate')&&(repos.includes('app_kombax_moderation_queue_v050')||repos.includes('app_kombax_moderation_queue_v114')),'moderadores disponen de cola y acciones auditadas 050 o superior');
 assert(showcase.includes("máximo 15")&&showcase.includes("máximo 30")&&showcase.includes('galeria_3')&&showcase.includes('slice(0,3)'),'Showcase comunica límites Club/Marca y galería');
 assert((repos.includes('app_kombax_showcase_mutate_v067')||repos.includes('app_kombax_showcase_mutate_v048')||repos.includes('app_kombax_showcase_mutate_v054'))&&repos.includes('app_kombax_showcase_mis_espacios_v048'),'Showcase global conserva mutación segura desacoplada y espacios 048');
 assert(help.includes('Gestionar eliminación de cuenta')&&netlify.includes('/delete-account'),'eliminación existe en app y recurso web público');

@@ -65,7 +65,9 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " UrbanWarriorsApp/2.0.0-rc.13");
+        settings.setSupportMultipleWindows(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(false);
+        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXApp/2.0.0-rc.13/20077");
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
@@ -96,11 +98,20 @@ public class MainActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
-                if (APP_HOST.equals(uri.getHost())) return false;
-                String scheme = uri.getScheme();
-                if ("https".equals(scheme) || "http".equals(scheme)) return false;
-                try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); return true; }
-                catch (Exception ignored) { return false; }
+                if (APP_HOST.equalsIgnoreCase(uri.getHost())) return false;
+                openExternalUri(uri);
+                return true;
+            }
+
+            @Override
+            @SuppressWarnings("deprecation")
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Uri uri;
+                try { uri = Uri.parse(url); }
+                catch (Exception ignored) { return true; }
+                if (APP_HOST.equalsIgnoreCase(uri.getHost())) return false;
+                openExternalUri(uri);
+                return true;
             }
         });
 
@@ -125,7 +136,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl(APP_ORIGIN + "/index.html" + routeFragment(getIntent()));
+        webView.loadUrl(APP_ORIGIN + "/index.html" + entrySuffix(getIntent()));
     }
 
     private boolean initializeFirebaseSafely() {
@@ -216,20 +227,69 @@ public class MainActivity extends Activity {
         ));
     }
 
-    private static String routeFragment(Intent intent) {
+    private void openExternalUri(Uri uri) {
+        if (uri == null) return;
+        String scheme = String.valueOf(uri.getScheme()).toLowerCase();
+        if (!("https".equals(scheme) || "http".equals(scheme) || "mailto".equals(scheme) || "tel".equals(scheme))) {
+            Log.w(LOG_TAG, "Navegación externa bloqueada por esquema no permitido: " + scheme);
+            return;
+        }
+        try {
+            Intent external = new Intent(Intent.ACTION_VIEW, uri);
+            external.addCategory(Intent.CATEGORY_BROWSABLE);
+            startActivity(external);
+        } catch (Exception error) {
+            Log.w(LOG_TAG, "No se pudo abrir el enlace externo fuera de KOMBAX.", error);
+            Toast.makeText(this, "No se pudo abrir el enlace externo", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static boolean trustedKombaxHost(String host) {
+        if (host == null) return false;
+        return "kombax.es".equalsIgnoreCase(host) || "www.kombax.es".equalsIgnoreCase(host);
+    }
+
+    private static void appendEntryParam(StringBuilder query, Uri source, String name, String pattern, int maxLength) {
+        String value = source.getQueryParameter(name);
+        if (value == null || value.isEmpty() || value.length() > maxLength || !value.matches(pattern)) return;
+        query.append(query.length() == 0 ? "?" : "&")
+            .append(Uri.encode(name)).append("=").append(Uri.encode(value));
+    }
+
+    private static String entrySuffix(Intent intent) {
         if (intent == null) return "";
+        StringBuilder query = new StringBuilder();
         String route = intent.getStringExtra("route");
-        if (route == null || !route.matches("[A-Za-z0-9_-]{1,64}")) return "";
-        return "#" + route;
+        Uri data = intent.getData();
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && data != null && trustedKombaxHost(data.getHost())) {
+            appendEntryParam(query, data, "club", "[A-Za-z0-9-]{1,80}", 80);
+            appendEntryParam(query, data, "access_type", "[A-Za-z0-9_-]{1,32}", 32);
+            appendEntryParam(query, data, "invite_type", "[A-Za-z0-9_-]{1,32}", 32);
+            appendEntryParam(query, data, "access_code", "[A-Za-z0-9_-]{1,48}", 48);
+            appendEntryParam(query, data, "invite", "[A-Za-z0-9_-]{1,48}", 48);
+            appendEntryParam(query, data, "team_role", "[A-Za-z0-9_-]{1,32}", 32);
+            String queryRoute = data.getQueryParameter("route");
+            if (queryRoute != null) route = queryRoute;
+            if ((route == null || route.isEmpty()) && data.getFragment() != null) route = data.getFragment();
+        }
+        if (route != null && route.matches("[A-Za-z0-9_-]{1,64}")) query.append("#").append(route);
+        return query.toString();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        String fragment = routeFragment(intent);
-        if (webView != null && !fragment.isEmpty()) {
-            String route = fragment.substring(1);
+        if (webView == null) return;
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            if (!trustedKombaxHost(intent.getData().getHost())) { openExternalUri(intent.getData()); return; }
+            webView.loadUrl(APP_ORIGIN + "/index.html" + entrySuffix(intent));
+            return;
+        }
+        String suffix = entrySuffix(intent);
+        int hashIndex = suffix.indexOf('#');
+        if (hashIndex >= 0) {
+            String route = suffix.substring(hashIndex + 1);
             webView.evaluateJavascript("window.location.hash=" + org.json.JSONObject.quote("#" + route) + ";", null);
         }
     }
@@ -250,8 +310,9 @@ public class MainActivity extends Activity {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Alertas Urban Warriors", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Mensualidades, clases, pagos y avisos del club");
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Alertas KOMBAX", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Avisos privados de KOMBAX y de tu club");
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
         }
     }

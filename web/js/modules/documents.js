@@ -14,6 +14,8 @@ const typeLabel=(v)=>TYPES.find(x=>x[0]===v)?.[1]||v||'Otro';
 const statusKind=(s)=>s==='vigente'?'ok':s==='sustituido'?'warn':'neutral';
 const opts=(rows,label=(r)=>`${r.apellidos}, ${r.nombre}`)=>rows.map(r=>({value:r.id,label:label(r)}));
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
+let documentLimit=60;
+let documentStatusFilter='vigente';
 async function downloadDocument(doc){const blob=await repos.documents.download(doc.storage_path);const href=URL.createObjectURL(blob);const a=document.createElement('a');a.href=href;a.download=doc.nombre||'documento';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1500);}
 
 function uploadFields(members,{includeMember=true}={}){
@@ -32,7 +34,7 @@ function uploadFields(members,{includeMember=true}={}){
 export async function renderDocuments(){
   setMainHtml('<div class="loading-card">Cargando archivo documental…</div>');
   try{
-    const [docs,members]=await Promise.all([repos.documents.list(),repos.members.list()]);
+    const [docs,members]=await Promise.all([repos.documents.list(documentLimit),repos.members.list()]);
     const can=has(state.session,'document');
     const memberMap=new Map(members.map(m=>[m.id,m]));
     const active=docs.filter(d=>d.estado!=='archivado'&&d.estado!=='sustituido');
@@ -50,14 +52,15 @@ export async function renderDocuments(){
         <td><div class="row-actions"><button class="btn btn-ghost btn-sm view-doc" data-id="${esc(d.id)}">${icon('eye',{size:14})} Ver</button><button class="btn btn-ghost btn-sm download-doc" data-id="${esc(d.id)}">${icon('download',{size:14})} Descargar</button>${can?`<button class="btn btn-ghost btn-sm edit-doc" data-id="${esc(d.id)}">${icon('edit',{size:14})} Ficha</button><button class="btn btn-ghost btn-sm replace-doc" data-id="${esc(d.id)}">${icon('refresh',{size:14})} Sustituir</button>${d.estado==='vigente'?`<button class="btn btn-ghost btn-sm archive-doc" data-id="${esc(d.id)}">Archivar</button>`:''}<button class="btn btn-danger btn-sm delete-doc" data-id="${esc(d.id)}">Eliminar</button>`:''}</div></td>
       </tr>`;
     });
-    setMainHtml(`${pageHeader('Archivo documental','Expedientes privados de inscripción, contratos, autorizaciones y documentación de alumnos',can?`<button class="btn btn-primary" id="new-document">${icon('upload',{size:16})} Subir documento</button>`:'','Secretaría · Expedientes')}
+    setMainHtml(`${pageHeader('Archivo documental','Expedientes privados de inscripción, contratos, autorizaciones y documentación de alumnos',can?`<a class="btn btn-ghost" href="#archive">Histórico</a><button class="btn btn-primary" id="new-document">${icon('upload',{size:16})} Subir documento</button>`:'','Secretaría · Expedientes')}
       <div class="metrics"><div class="metric"><span>Documentos</span><strong>${docs.length}</strong><small>expediente digital</small></div><div class="metric"><span>Vigentes</span><strong>${active.length}</strong><small>no archivados</small></div><div class="metric"><span>Firmados</span><strong>${signed}</strong><small>confirmados</small></div><div class="metric"><span>Alumnos</span><strong>${new Set(docs.map(d=>d.socio_id)).size}</strong><small>con documentación</small></div></div>
-      <div class="filter-bar"><input id="doc-search" type="search" placeholder="Buscar alumno, documento u observaciones…"><select id="doc-type"><option value="">Todos los tipos</option>${TYPES.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('')}</select><select id="doc-status"><option value="">Todos los estados</option><option value="vigente">Vigente</option><option value="archivado">Archivado</option><option value="sustituido">Sustituido</option></select><span class="badge badge-neutral" id="doc-count">${docs.length} archivos</span></div>
-      ${card('Expedientes',rows.length?table(['Alumno','Documento','Fecha','Firma','Estado','Visibilidad','Acciones'],rows):empty('Archivo vacío','Sube la inscripción física o documentación de un alumno para crear su expediente digital.'))}`);
+      <div class="filter-bar"><input id="doc-search" type="search" placeholder="Buscar alumno, documento u observaciones…"><select id="doc-type"><option value="">Todos los tipos</option>${TYPES.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('')}</select><select id="doc-status"><option value="vigente" ${documentStatusFilter==='vigente'?'selected':''}>Vigentes</option><option value="" ${documentStatusFilter===''?'selected':''}>Todos los estados</option><option value="archivado" ${documentStatusFilter==='archivado'?'selected':''}>Archivados</option><option value="sustituido" ${documentStatusFilter==='sustituido'?'selected':''}>Sustituidos</option></select><span class="badge badge-neutral" id="doc-count">${docs.length} archivos</span></div>
+      ${card('Expedientes',`${rows.length?table(['Alumno','Documento','Fecha','Firma','Estado','Visibilidad','Acciones'],rows):empty('Archivo vacío','Sube la inscripción física o documentación de un alumno para crear su expediente digital.')}${docs.length>=documentLimit&&documentLimit<500?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-documents">Cargar documentos anteriores</button></div>':''}`)}`);
 
     const reload=()=>renderDocuments();
+    document.getElementById('load-more-documents')?.addEventListener('click',()=>{documentLimit=Math.min(500,documentLimit+60);renderDocuments();});
     const apply=()=>{const q=String(document.getElementById('doc-search')?.value||'').toLowerCase().trim(),t=document.getElementById('doc-type')?.value||'',st=document.getElementById('doc-status')?.value||'';let n=0;document.querySelectorAll('[data-doc-row]').forEach(r=>{const ok=(!q||r.dataset.search.includes(q))&&(!t||r.dataset.type===t)&&(!st||r.dataset.status===st);r.style.display=ok?'':'none';if(ok)n++;});document.getElementById('doc-count').textContent=`${n} archivos`;};
-    document.getElementById('doc-search')?.addEventListener('input',apply);document.getElementById('doc-type')?.addEventListener('change',apply);document.getElementById('doc-status')?.addEventListener('change',apply);
+    document.getElementById('doc-search')?.addEventListener('input',apply);document.getElementById('doc-type')?.addEventListener('change',apply);document.getElementById('doc-status')?.addEventListener('change',e=>{documentStatusFilter=e.target.value;apply();});apply();
     document.getElementById('new-document')?.addEventListener('click',()=>openForm({title:'Subir documento al expediente',subtitle:'El archivo se almacena de forma privada y queda vinculado al alumno.',width:'820px',fields:uploadFields(members),onSubmit:async v=>{await repos.documents.upload(v.socio_id,v.archivo,v);toast('Documento archivado en el expediente');await reload();}}));
     bind('.view-doc',async id=>{try{const d=docs.find(x=>x.id===id);const url=await repos.documents.url(d.storage_path);window.open(url,'_blank','noopener,noreferrer');}catch(e){setError(e)}});
     bind('.download-doc',async id=>{try{const d=docs.find(x=>x.id===id);await downloadDocument(d);toast('Descarga iniciada');}catch(e){setError(e)}});

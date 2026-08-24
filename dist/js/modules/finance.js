@@ -8,8 +8,8 @@ import { summarizeFinance, groupFinance } from '../core/finance-math.js';
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 const opts=(rows,label)=>rows.map(r=>({value:r.id,label:label(r)}));
 const isDirection=()=>((state.session?.roles?.length?state.session.roles:[state.session?.rol]).filter(Boolean)).includes('direccion');
-const forceConfirm=(title,subtitle,onConfirm)=>openForm({title,subtitle:`${subtitle} Escribe ELIMINAR para confirmar.`,fields:[{name:'confirmacion',label:'Confirmación',required:true,placeholder:'ELIMINAR'}],submitText:'Eliminar todo definitivamente',onSubmit:async v=>{if(String(v.confirmacion||'').trim().toUpperCase()!=='ELIMINAR')throw new Error('Escribe ELIMINAR exactamente para confirmar.');return onConfirm();}});
 const financeFilters={year:'',month:'',socio:'',origin:'',status:''};
+let financeLimit=100;
 const originLabel=(x)=>({cuota:'Cuota',material:'Material',otro:'Otro'}[x]||x||'Cuota');
 const publicConcept=(value)=>String(value||'Cuota').replace(/\s\[[0-9a-f]{8}\]$/i,'');
 const monthLabel=(n)=>new Intl.DateTimeFormat('es-ES',{month:'long'}).format(new Date(2024,Number(n)-1,1));
@@ -95,8 +95,8 @@ export async function renderFinance(){
     const years=[...new Set(periodRows.map(x=>Number(String(x.periodo||'').slice(0,4))).filter(Boolean))].sort((a,b)=>b-a);
     if(!financeFilters.year)financeFilters.year=String(years.includes(new Date().getFullYear())?new Date().getFullYear():(years[0]||new Date().getFullYear()));
     const [tariffs,fees,payments,receipts,members,account,detail,annual]=await Promise.all([
-      repos.tariffs.list(),repos.finance.fees(),repos.finance.payments(),repos.finance.receipts(),repos.members.list(),repos.finance.account().catch(()=>[]),
-      portal?Promise.resolve([]):repos.finance.detail(financeFilters),
+      repos.tariffs.list(),repos.finance.fees(financeLimit),repos.finance.payments(financeLimit),repos.finance.receipts(financeLimit),repos.members.list(),repos.finance.account(financeLimit).catch(()=>[]),
+      portal?Promise.resolve([]):repos.finance.detail({...financeFilters,limit:financeLimit}),
       portal?Promise.resolve([]):repos.finance.metricsAnnual()
     ]);
     const canTariff=has(state.session,'tariff'),canGenerate=has(state.session,'feeGenerate'),canAdminPay=has(state.session,'paymentAdmin');
@@ -107,7 +107,7 @@ export async function renderFinance(){
     const validated=payments.filter(p=>p.estado_validacion==='validado');
     const collected=validated.reduce((sum,p)=>sum+Number(p.importe||0),0);
     const actions=`${canTariff?'<button class="btn btn-ghost" id="new-tariff">Nueva tarifa</button>':''}${canGenerate?'<button class="btn btn-primary" id="generate-fees">Generar cuotas</button>':''}`;
-    const tariffRows=tariffs.map(t=>`<tr><td><strong>${esc(t.nombre)}</strong><br><small>${esc(t.descripcion||'')}</small></td><td>${money(t.importe)}</td><td>${money(t.matricula)}</td><td>${esc(t.periodicidad)}</td><td>${badge(t.activa?'Activa':'Inactiva',t.activa?'ok':'neutral')}</td><td>${canTariff?`<div class="row-actions"><button class="btn btn-ghost btn-sm edit-tariff" data-id="${esc(t.id)}">Editar</button><button class="btn btn-danger btn-sm delete-tariff" data-id="${esc(t.id)}">Eliminar</button>${isDirection()?`<button class="btn btn-danger btn-sm force-delete-tariff" data-id="${esc(t.id)}">Eliminar todo</button>`:''}</div>`:''}</td></tr>`);
+    const tariffRows=tariffs.map(t=>`<tr><td><strong>${esc(t.nombre)}</strong><br><small>${esc(t.descripcion||'')}</small></td><td>${money(t.importe)}</td><td>${money(t.matricula)}</td><td>${esc(t.periodicidad)}</td><td>${badge(t.activa?'Activa':'Inactiva',t.activa?'ok':'neutral')}</td><td>${canTariff?`<div class="row-actions"><button class="btn btn-ghost btn-sm edit-tariff" data-id="${esc(t.id)}">Editar</button><button class="btn btn-danger btn-sm delete-tariff" data-id="${esc(t.id)}">Eliminar</button></div>`:''}</td></tr>`);
     const matchesFeeFilter=f=>portal||(
       (!financeFilters.year||String(f.periodo||'').slice(0,4)===String(financeFilters.year))&&
       (!financeFilters.month||Number(String(f.periodo||'').slice(5,7))===Number(financeFilters.month))&&
@@ -158,14 +158,16 @@ export async function renderFinance(){
         ${card('Recibos',receiptRows.length?table(['Número','Alumno','Concepto','Origen','Pago','Periodo','Importe','Estado','Acciones'],receiptRows):empty('Sin recibos'))}`);
     }
 
+    const financeLoaded=Math.max(fees.length,payments.length,receipts.length,account.length,detail.length);
+    if(financeLoaded>=financeLimit&&financeLimit<500){const more=document.createElement('div');more.className='load-more-wrap';more.innerHTML='<button class="btn btn-ghost" id="load-more-finance">Cargar más histórico financiero</button>';document.getElementById('main-view')?.appendChild(more);document.getElementById('load-more-finance')?.addEventListener('click',()=>{financeLimit=Math.min(500,financeLimit+100);renderFinance();});}
+
     for(const [id,key] of [['finance-year','year'],['finance-month','month'],['finance-member','socio'],['finance-origin','origin'],['finance-status','status']])document.getElementById(id)?.addEventListener('change',e=>{financeFilters[key]=e.target.value;renderFinance();});
 
     const reload=()=>renderFinance();
     const tariffFields=[{name:'nombre',label:'Nombre',required:true},{name:'importe',label:'Importe',type:'number',step:'0.01',min:0,required:true},{name:'matricula',label:'Matrícula',type:'number',step:'0.01',min:0,value:0},{name:'periodicidad',label:'Periodicidad',type:'select',value:'mensual',options:['mensual','trimestral','semestral','anual','unica'].map(x=>({value:x,label:x}))},{name:'descripcion',label:'Descripción',type:'textarea',full:true},{name:'activa',label:'Tarifa activa',type:'checkbox',value:true}];
     document.getElementById('new-tariff')?.addEventListener('click',()=>openForm({title:'Nueva tarifa',fields:tariffFields,onSubmit:async v=>{await repos.tariffs.save(v);toast('Tarifa guardada');await reload();}}));
     bind('.edit-tariff',id=>{const t=tariffs.find(x=>x.id===id);openForm({title:'Editar tarifa',fields:tariffFields,initial:t,onSubmit:async v=>{await repos.tariffs.save({...t,...v,id});toast('Tarifa actualizada');await reload();}})});
-    bind('.delete-tariff',id=>confirmDialog('Eliminar tarifa','Se elimina si no está asignada. El Gestor de la app puede usar “Eliminar todo” para retirar también sus vínculos e historial de cambios.',async()=>{await repos.tariffs.delete(id);toast('Tarifa eliminada');await reload();},{confirmText:'Eliminar',danger:true}));
-    bind('.force-delete-tariff',id=>forceConfirm('Eliminar tarifa e histórico','Se desvinculará de alumnos, solicitudes y cuotas y se borrará su historial de cambios.',async()=>{await repos.tariffs.forceDelete(id);toast('Tarifa e histórico eliminados');await reload();}));
+    bind('.delete-tariff',id=>confirmDialog('Eliminar tarifa','Solo se elimina si nunca se ha utilizado. Si ya estuvo asignada o generó cuotas, desactívala y conserva su histórico financiero.',async()=>{await repos.tariffs.delete(id);toast('Tarifa eliminada');await reload();},{confirmText:'Eliminar',danger:true}));
     document.getElementById('generate-fees')?.addEventListener('click',()=>openForm({title:'Generar cuotas del periodo',subtitle:'Puedes repetir la operación con seguridad: no duplicará cuotas del mismo periodo.',fields:[{name:'periodo',label:'Periodo',type:'date',required:true,value:monthStart()}],submitText:'Generar',onSubmit:async v=>{const r=await repos.finance.generate(v.periodo);toast(`Cuotas generadas: ${r?.creadas??0}`);await reload();}}));
     const payFields=(fee)=>[{name:'importe',label:`Importe · ${publicConcept(fee?.concepto||'Cuota')}`,type:'number',step:'0.01',min:.01,required:true,value:balanceByFee.get(fee?.id)??fee?.importe??'',help:`Pendiente específico de ${originLabel(fee?.origen)}. Puedes registrar un pago parcial.`},{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()},{name:'metodo',label:'Método',type:'select',required:true,value:'transferencia',options:['transferencia','bizum','efectivo','tarjeta','otro'].map(x=>({value:x,label:x}))},{name:'referencia',label:'Referencia'},{name:'observaciones',label:'Observaciones',type:'textarea',full:true}];
     bind('.admin-pay',id=>{const f=fees.find(x=>x.id===id);openForm({title:'Registrar cobro',fields:payFields(f),submitText:'Registrar pago',onSubmit:async v=>{await repos.finance.adminPayment({...v,cuota_id:id});toast('Pago registrado');await reload();}})});

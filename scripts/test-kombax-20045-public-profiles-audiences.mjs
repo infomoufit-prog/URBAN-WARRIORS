@@ -24,7 +24,7 @@ need(mig.includes("coalesce(to_jsonb(v_target_club),'null'::jsonb)")&&mig.includ
 need(/revoke execute on function public\.app_kombax_social_mutate_v067/.test(mig),'RPC de mutación antigua debe quedar cerrada');
 need(/revoke execute on function public\.app_kombax_social_feed_v072/.test(mig),'feed antiguo debe quedar cerrado');
 need(/return v-'relations'/.test(mig),'perfil público debe seguir sin Relaciones');
-need(repo.includes("app_kombax_social_mutate_v083")||repo.includes("app_kombax_social_mutate_v085")||repo.includes("app_kombax_social_mutate_v099"),'repositorio debe usar mutación 083 o hardening posterior');
+need(repo.includes("app_kombax_social_mutate_v083")||repo.includes("app_kombax_social_mutate_v085")||repo.includes("app_kombax_social_mutate_v099")||repo.includes("app_kombax_social_mutate_v123"),'repositorio debe usar mutación 083 o hardening posterior');
 need(repo.includes("app_kombax_social_feed_v083")||repo.includes("app_kombax_social_feed_v085"),'repositorio debe usar feed 083 o hardening posterior');
 need(repo.includes("app_kombax_perfil_publico_v083")||repo.includes("app_kombax_perfil_publico_v094"),'repositorio no usa perfil 083 o wrapper posterior que conserva audiencias');
 need(repo.includes("audiences:(autor_perfil_id)"),'repositorio no expone audiencias autorizadas');

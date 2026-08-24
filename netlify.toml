@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm run release:build"
   publish = "dist"
 [build.environment]
   NODE_VERSION = "22"
@@ -9,7 +9,10 @@
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(self), geolocation=(), microphone=()"
+    Permissions-Policy = "camera=(), geolocation=(), microphone=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://poggsobhtutbuagjiydc.supabase.co wss://poggsobhtutbuagjiydc.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
 [[headers]]
   for = "/service-worker.js"
   [headers.values]
@@ -26,6 +29,34 @@
   from = "/delete-account"
   to = "/delete-account.html"
   status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/child-safety"
+  to = "/child-safety.html"
+  status = 200
+
+[[redirects]]
+  from = "https://www.kombax.es/*"
+  to = "https://kombax.es/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://urban01.netlify.app/*"
+  to = "https://kombax.es/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://main--urban01.netlify.app/*"
+  to = "https://kombax.es/:splat"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/*"

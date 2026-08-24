@@ -39,7 +39,7 @@ ok(!mig95.includes('kombax_relaciones'),'095 no expone Relaciones');
 ok(mig95.includes('revoke all on function public.app_kombax_club_social_directory_v095(uuid,text,integer) from public,anon'),'095 no se abre a anon');
 
 // Runtime is canonical Social, not legacy sports profile.
-ok(repos.includes("app_kombax_identity_mutate_v094")&&repos.includes("app_kombax_perfil_publico_v094")&&repos.includes("app_kombax_club_social_directory_v095"),'repositorio usa contratos 094/095');
+ok((repos.includes("app_kombax_identity_mutate_v094")||repos.includes("app_kombax_identity_mutate_v123"))&&repos.includes("app_kombax_perfil_publico_v094")&&repos.includes("app_kombax_club_social_directory_v095"),'repositorio usa contratos 094/095 o wrapper de identidad endurecido posterior');
 ok(portal.includes('renderOwnKombaxProfilePage')&&portal.includes('Tu perfil KOMBAX será tu única ficha pública'),'Mi perfil del alumno usa ficha KOMBAX canónica');
 ok(!portal.includes('sports-profile.js')&&!portal.includes('Perfil deportivo compartido'),'Portal no presenta perfil deportivo separado');
 ok(community.includes('openKombaxPublicProfile')&&community.includes('data-author-social')&&community.includes('clubDirectory'),'Comunidad del Club abre identidad KOMBAX del autor');

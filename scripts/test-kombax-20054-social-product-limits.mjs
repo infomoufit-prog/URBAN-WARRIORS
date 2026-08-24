@@ -14,7 +14,7 @@ ok(social.includes('socialQuotaMarkup')&&social.includes('Gestionar publicacione
 ok(manager.includes('Ver 10 anteriores')&&manager.includes('Ir a la más antigua')&&manager.includes('MÁS ANTIGUA'),'gestión propia: reciente→antigua, 10 por bloque y acceso a la más antigua');
 ok(profile.includes('slice(0,10)')&&profile.includes('Ver publicaciones anteriores')&&profile.includes('profilePosts'),'perfil público muestra 10 y carga anteriores');
 ok(profile.includes('kx-public-manage-posts')&&profile.includes('socialQuotaMarkup'),'perfil propio muestra gestión y cupo');
-ok(repos.includes("app_kombax_social_cupo_v099")&&repos.includes("app_kombax_social_profile_posts_v099")&&repos.includes("app_kombax_social_mutate_v099"),'repositorios apuntan a RPC v099');
+ok(repos.includes("app_kombax_social_cupo_v099")&&repos.includes("app_kombax_social_profile_posts_v099")&&(repos.includes("app_kombax_social_mutate_v099")||repos.includes("app_kombax_social_mutate_v123")),'repositorios apuntan a RPC v099');
 ok(migration.includes("'active_limit',30")&&migration.includes("'daily_limit',3")&&migration.includes("'video_limit',10"),'backend conserva límites 30/3/10');
 ok(migration.includes("kombax_actor_audit")&&migration.includes("accion='social.publish'")&&migration.includes('KOMBAX_POST_DAILY_LIMIT_3'),'límite diario resiste borrado físico mediante auditoría');
 ok(migration.includes('p.creado_en<p_cursor')&&migration.includes('p.id<p_cursor_id')&&migration.includes('limit v_limit'),'perfil usa keyset pagination, no OFFSET');

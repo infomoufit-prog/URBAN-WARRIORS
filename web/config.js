@@ -12,7 +12,7 @@ window.UW_CONFIG = {
   },
   release: {
     version: '2.0.0-rc.13',
-    build: 20067,
+    build: 20077,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',
@@ -26,7 +26,7 @@ window.UW_CONFIG = {
       'notificacion.revisar','club_publico.guardar','comunidad.denunciar',
       'comunidad.bloquear','comunidad.denuncia.estado','comunidad_general.moderar_acceso'
     ],
-    webUrl: 'https://urban01.netlify.app'
+    webUrl: 'https://kombax.es'
   },
   features: {
     kombaxGateway: true,

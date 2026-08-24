@@ -5,11 +5,10 @@ import { esc, dateFmt, isoDate, weekRange, sortSessionsForWeek, humanError } fro
 import { pageHeader, card, table, empty, badge, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
+let trackingLimit=100;
 const options=(rows,label=(r)=>r.nombre)=>rows.map(r=>({value:r.id,label:label(r)}));
-const isDirection=()=>((state.session?.roles?.length?state.session.roles:[state.session?.rol]).filter(Boolean)).includes('direccion');
 let sessionWeekOffset=0;
 const weekTitle=(offset,start,end)=>offset===0?'Esta semana':offset===1?'Semana siguiente':offset===-1?'Semana anterior':`${dateFmt(start)} – ${dateFmt(end)}`;
-const forceConfirm=(title,subtitle,onConfirm)=>openForm({title,subtitle:`${subtitle} Escribe ELIMINAR para confirmar.`,fields:[{name:'confirmacion',label:'Confirmación',required:true,placeholder:'ELIMINAR'}],submitText:'Eliminar todo definitivamente',onSubmit:async v=>{if(String(v.confirmacion||'').trim().toUpperCase()!=='ELIMINAR')throw new Error('Escribe ELIMINAR exactamente para confirmar.');return onConfirm();}});
 
 export async function renderSessions(){
   setMainHtml('<div class="loading-card">Cargando sesiones…</div>');
@@ -28,10 +27,10 @@ export async function renderSessions(){
     const rows=weekSessions.map(se=>{
       const g=groups.find(x=>x.id===se.grupo_id);const confirmed=reservations.filter(r=>r.sesion_id===se.id&&r.estado==='confirmada').length;
       let actions='';
-      if(can){actions='<div class="row-actions">';if(!se.serie_id)actions+=`<button class="btn btn-ghost btn-sm edit-session" data-id="${esc(se.id)}">Editar</button>`;actions+=`<button class="btn btn-ghost btn-sm exception-session" data-id="${esc(se.id)}">Cambios / cancelar</button><button class="btn btn-danger btn-sm delete-session" data-id="${esc(se.id)}">Eliminar</button>`;if(isDirection())actions+=`<button class="btn btn-danger btn-sm force-delete-session" data-id="${esc(se.id)}">Eliminar todo</button>`;actions+='</div>';}
+      if(can){actions='<div class="row-actions">';if(!se.serie_id)actions+=`<button class="btn btn-ghost btn-sm edit-session" data-id="${esc(se.id)}">Editar</button>`;actions+=`<button class="btn btn-ghost btn-sm exception-session" data-id="${esc(se.id)}">Cambios / cancelar</button><button class="btn btn-danger btn-sm delete-session" data-id="${esc(se.id)}">Eliminar</button>`;actions+='</div>';}
       return `<tr><td>${dateFmt(se.fecha)}<br><small>${esc(String(se.hora_inicio||'').slice(0,5))}${se.hora_fin?'–'+esc(String(se.hora_fin).slice(0,5)):''}</small></td><td><strong>${esc(g?.nombre||'—')}</strong>${se.serie_id?'<br><small>Recurrente</small>':''}</td><td>${esc(se.monitor_nombre||'—')}${se.sala?'<br><small>'+esc(se.sala)+'</small>':''}</td><td>${badge(se.estado,se.estado==='completada'?'ok':se.estado==='cancelada'?'danger':se.estado==='en_curso'?'warn':'neutral')}</td><td><strong>${confirmed}</strong>${g?.plazas?' / '+esc(g.plazas):''}<br><small>confirmados</small></td><td>${actions}</td></tr>`;
     });
-    const headerActions=can?'<button class="btn btn-primary" id="new-series">Nueva serie semanal</button> <button class="btn btn-ghost" id="new-session">Sesión puntual</button>':'';
+    const headerActions=`${can?'<button class="btn btn-primary" id="new-series">Nueva serie semanal</button> <button class="btn btn-ghost" id="new-session">Sesión puntual</button>':''}<a class="btn btn-ghost" href="#archive">Histórico</a>`;
     const weekActions=`<div class="week-nav"><button class="btn btn-ghost btn-sm" id="session-week-prev">← Semana anterior</button><button class="btn btn-ghost btn-sm" id="session-week-current" ${sessionWeekOffset===0?'disabled':''}>Esta semana</button><button class="btn btn-ghost btn-sm" id="session-week-next">Semana siguiente →</button></div>`;
     const weekSummary=`<div class="week-summary"><strong>${esc(weekTitle(sessionWeekOffset,range.start,range.end))}</strong><span>${dateFmt(range.start)} – ${dateFmt(range.end)} · ${weekSessions.length} ${weekSessions.length===1?'sesión':'sesiones'}</span></div>`;
     setMainHtml(`${pageHeader('Sesiones','Organización semanal de sesiones, excepciones y confirmaciones previas',headerActions)}${card('Sesiones recurrentes',seriesRows.length?table(['Grupo','Días','Hora','Monitor','Estado','Acciones'],seriesRows):empty('Sin series recurrentes','Crea una clase semanal y KOMBAX mantendrá 12 semanas futuras generadas automáticamente.'))}${weekSummary}${card('Sesiones de la semana',rows.length?table(['Fecha','Grupo','Monitor / sala','Estado','Reservas','Acciones'],rows):empty('Sin sesiones esta semana','Usa Semana anterior / siguiente para revisar otras semanas.'),weekActions)}`);
@@ -49,8 +48,7 @@ export async function renderSessions(){
     bind('.edit-session',id=>openSession(sessions.find(x=>x.id===id)));bind('.edit-series',id=>openSeries(series.find(x=>x.id===id)));
     bind('.end-series',id=>confirmDialog('Finalizar serie','No se crearán nuevas sesiones después de hoy. Las sesiones ya generadas conservan su histórico.',async()=>{await repos.sessions.endSeries(id);toast('Serie finalizada');await reload();},{confirmText:'Finalizar serie'}));
     bind('.exception-session',id=>{const se=sessions.find(x=>x.id===id);openForm({title:'Cambio en esta sesión',subtitle:'Afecta solo a esta fecha y se notificará a alumnos/familias del grupo.',fields:[{name:'estado',label:'Estado',type:'select',required:true,value:se.estado,options:['programada','en_curso','completada','cancelada'].map(x=>({value:x,label:x}))},{name:'monitor_nombre',label:'Monitor/a',value:se.monitor_nombre||''},{name:'hora_inicio',label:'Hora inicio',type:'time',value:String(se.hora_inicio||'').slice(0,5)},{name:'hora_fin',label:'Hora fin',type:'time',value:String(se.hora_fin||'').slice(0,5)},{name:'sala',label:'Sala',value:se.sala||''},{name:'motivo',label:'Motivo / aviso',type:'textarea',full:true,placeholder:'Salud, sustitución, festivo, cambio de sala…'}],submitText:'Guardar y notificar',onSubmit:async v=>{await repos.sessions.exception({sesion_id:id,...v});toast('Cambio guardado y notificado');await reload();}})});
-    bind('.delete-session',id=>confirmDialog('Eliminar sesión','Se elimina si no tiene asistencia ni check-ins. Para conservar histórico usa “Cambios / cancelar”.',async()=>{await repos.sessions.delete(id);toast('Sesión eliminada');await reload();},{confirmText:'Eliminar',danger:true}));
-    bind('.force-delete-session',id=>forceConfirm('Eliminar sesión e histórico','Se borrarán también asistencias, reservas y check-ins registrados en esta sesión.',async()=>{await repos.sessions.forceDelete(id);toast('Sesión e histórico eliminados');await reload();}));
+    bind('.delete-session',id=>confirmDialog('Eliminar sesión','Solo se elimina si todavía no tiene reservas, asistencia ni check-ins. Si ya tuvo actividad, usa Cambios / cancelar y conserva su histórico.',async()=>{await repos.sessions.delete(id);toast('Sesión eliminada');await reload();},{confirmText:'Eliminar',danger:true}));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Sesiones')} ${empty('No se pudieron cargar las sesiones',humanError(e))}`)}
 }
 
@@ -58,7 +56,7 @@ export async function renderAttendance(){
   setMainHtml('<div class="loading-card">Cargando asistencia…</div>');
   try{
     const [sessions,groups,members,enrollments,attendance,reservations]=await Promise.all([repos.sessions.list(),repos.groups.list(),repos.members.list(),repos.members.enrollments(),repos.sessions.attendance(),repos.sessions.reservations()]);
-    const activeSessions=sessions.slice(0,60);const canAttendance=has(state.session,'attendance'),canCheckin=has(state.session,'checkin');
+    const today=isoDate();const historicalSessions=sessions.filter(x=>String(x.fecha)<=today).sort((a,b)=>`${b.fecha} ${b.hora_inicio||''}`.localeCompare(`${a.fecha} ${a.hora_inicio||''}`));const activeSessions=(historicalSessions.length?historicalSessions:sessions).slice(0,60);const canAttendance=has(state.session,'attendance'),canCheckin=has(state.session,'checkin');
     const sessionOptions=activeSessions.map(s=>({value:s.id,label:`${String(s.fecha).slice(0,10)} · ${groups.find(g=>g.id===s.grupo_id)?.nombre||'Grupo'} · ${String(s.hora_inicio||'').slice(0,5)}`}));
     const selected=activeSessions[0]?.id||'';
     setMainHtml(`${pageHeader('Asistencia','Confirmación previa + presencia real mediante check-in')}${card('Selecciona sesión',`<div class="field"><label>Sesión</label><select id="attendance-session"><option value="">Selecciona</option>${sessionOptions.map(o=>`<option value="${esc(o.value)}" ${o.value===selected?'selected':''}>${esc(o.label)}</option>`).join('')}</select></div><div id="attendance-board" style="margin-top:16px"></div>`)}`);
@@ -78,9 +76,10 @@ export async function renderAttendance(){
 export async function renderTracking(){
   setMainHtml('<div class="loading-card">Cargando seguimiento…</div>');
   try{
-    const [items,members]=await Promise.all([repos.tracking.list(),repos.members.list()]);const can=has(state.session,'tracking');
+    const [items,members]=await Promise.all([repos.tracking.list(trackingLimit),repos.members.list()]);const can=has(state.session,'tracking');
     const rows=items.map(x=>`<tr><td>${dateFmt(x.fecha)}</td><td><strong>${esc(members.find(m=>m.id===x.socio_id)?.nombre||'—')}</strong></td><td>${esc(x.tipo)}</td><td>${esc(x.nota)}</td><td>${badge(x.visibilidad,'neutral')}</td></tr>`);
-    setMainHtml(`${pageHeader('Seguimiento','Notas educativas y evolución',can?'<button class="btn btn-primary" id="new-tracking">Nueva nota</button>':'')}${card('Registros',rows.length?table(['Fecha','Alumno','Tipo','Nota','Visibilidad'],rows):empty('Sin registros de seguimiento'))}`);
+    setMainHtml(`${pageHeader('Seguimiento','Notas educativas y evolución',`${can?'<button class="btn btn-primary" id="new-tracking">Nueva nota</button>':''}<a class="btn btn-ghost" href="#archive">Histórico</a>`)}${card('Registros',`${rows.length?table(['Fecha','Alumno','Tipo','Nota','Visibilidad'],rows):empty('Sin registros de seguimiento')}${items.length>=trackingLimit&&trackingLimit<500?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-tracking">Ver historial anterior</button></div>':''}`)}`);
+    document.getElementById('load-more-tracking')?.addEventListener('click',()=>{trackingLimit=Math.min(500,trackingLimit+100);renderTracking();});
     document.getElementById('new-tracking')?.addEventListener('click',()=>openForm({title:'Nueva nota de seguimiento',fields:[{name:'socio_id',label:'Alumno',type:'select',required:true,options:options(members,m=>`${m.apellidos}, ${m.nombre}`)},{name:'fecha',label:'Fecha',type:'date',value:isoDate(),required:true},{name:'tipo',label:'Tipo',required:true,placeholder:'progreso, conducta, objetivo…'},{name:'visibilidad',label:'Visibilidad',type:'select',value:'equipo',options:['equipo','direccion_monitor','familia'].map(x=>({value:x,label:x}))},{name:'nota',label:'Nota',type:'textarea',full:true,required:true}],onSubmit:async v=>{await repos.tracking.save(v);toast('Seguimiento guardado');await renderTracking();}}));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Seguimiento')} ${empty('No se pudo cargar el seguimiento',humanError(e))}`)}
 }

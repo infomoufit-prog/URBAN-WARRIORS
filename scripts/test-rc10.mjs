@@ -26,7 +26,7 @@ assert(help.includes('Manual interactivo')&&help.includes('Cartel de descarga KO
 {const st=await stat(resolve(root,'web/assets/docs/Cartel_Descarga_KOMBAX_Club.png'));assert(st.size>1000,'cartel genérico KOMBAX existe y tiene contenido')}
 assert(!help.includes('Manual_Usuario_Urban_Warriors')&&!help.includes('Manual_Equipo_Urban_Warriors'),'manual antiguo Urban Warriors retirado del frontend');
 assert(dispatch.includes('app_generar_sesiones_recurrentes')&&dispatch.includes('FIREBASE_SERVICE_ACCOUNT_JSON'),'dispatcher mantiene horizonte recurrente y FCM');
-assert(app.includes('syncNativePushToken')&&mainActivity.includes('routeFragment')&&mainActivity.includes('onNewIntent'),'Android resincroniza token FCM y abre la ruta de una push al tocarla');
+assert(app.includes('syncNativePushToken')&&mainActivity.includes('entrySuffix')&&mainActivity.includes('onNewIntent'),'Android resincroniza token FCM y abre la ruta de una push al tocarla');
 assert(reminders.includes(".in('tipo', ['cuota','aviso_cobro','pago','validacion_pago','recibo'])"),'worker de cobros solo despacha notificaciones financieras');
 assert(sql.includes('app_diagnostico_instalacion_v166')&&sql.trimEnd().endsWith('select * from public.app_diagnostico_instalacion_v166();'),'SQL 022 termina con diagnóstico seguro para SQL Editor');
 assert(admin.includes('E2E_RC10_')&&admin.includes('Crear serie recurrente y ocurrencia')&&admin.includes('Publicar y borrar en Comunidad'),'E2E del navegador cubre recurrencia y Comunidad');

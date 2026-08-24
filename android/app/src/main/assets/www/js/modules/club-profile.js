@@ -13,10 +13,10 @@ function body(p){
   const disciplines=list(p.disciplinas).map(d=>`<span class="badge badge-neutral">${esc(d.nombre||d)}</span>`).join('');
   const location=[p.ciudad,p.provincia,p.pais].filter(Boolean).join(' · ');
   const links=[link(p.web_publica,'Web'),link(p.instagram,'Instagram'),link(p.tiktok,'TikTok'),link(p.youtube,'YouTube')].filter(Boolean).join('');
-  const cover=safeHttpsUrl(p.portada_url),logo=safeHttpsUrl(p.logo_url);
+  const cover=safeHttpsUrl(p.portada_url),logo=safeHttpsUrl(p.logo_url);const bannerX=Math.min(100,Math.max(0,Number(p.banner_position_x??50)||50)),bannerY=Math.min(100,Math.max(0,Number(p.banner_position_y??50)||50));
   const theme=themeDefinition(p.theme_id);
   return `<article class="club-public-profile ${esc(theme.className)}" data-club-theme="${esc(theme.id)}">
-    <div class="club-public-cover ${cover?'has-image':''}" ${cover?`style="background-image:linear-gradient(180deg,rgba(5,6,8,.15),rgba(5,6,8,.92)),url('${esc(cover)}')"`:''}>
+    <div class="club-public-cover ${cover?'has-image':''}" ${cover?`style="background-image:linear-gradient(180deg,rgba(5,6,8,.15),rgba(5,6,8,.92)),url('${esc(cover)}');background-position:center,${bannerX}% ${bannerY}%"`:''}>
       <div class="club-public-logo">${logo?`<img src="${esc(logo)}" alt="Logo de ${esc(p.nombre_publico)}">`:`<span>${icon('shield',{size:52})}</span>`}</div>
       <div><span class="page-kicker">PERFIL DEL CLUB</span><h2>${esc(p.nombre_publico)}</h2>${p.alias?`<strong>${esc(p.alias)}</strong>`:''}${p.lema?`<p class="club-public-motto">${esc(p.lema)}</p>`:''}${location?`<p>${icon('mapPin',{size:14})} ${esc(location)}</p>`:''}</div>
     </div>
@@ -32,9 +32,10 @@ export async function openClubPublicProfile(clubId=state.session?.club_id){
   try{
     const p=await repos.clubPublic.one(clubId);
     if(!p){toast('El perfil público del club todavía no está disponible.','error');return null;}
-    const actions=`<button class="btn btn-ghost" id="club-public-album">${icon('image',{size:15})} Álbum</button>${p.editable?`<button class="btn btn-primary" id="club-public-edit">${icon('edit',{size:15})} Editar perfil público</button>`:''}`;
+    const actions=`<button class="btn btn-ghost" id="club-public-album">${icon('image',{size:15})} Álbum</button>${p.editable&&p.portada_url&&p.social_profile_id?`<button class="btn btn-ghost" id="club-public-banner-position">Ajustar banner</button>`:''}${p.editable?`<button class="btn btn-primary" id="club-public-edit">${icon('edit',{size:15})} Editar perfil público</button>`:''}`;
     const modal=openDetail({title:p.nombre_publico,subtitle:'Perfil público del club · separado de los datos administrativos',body:body(p),actions,width:'900px',className:'club-public-modal'});
     modal.wrap.querySelector('#club-public-edit')?.addEventListener('click',()=>editClubPublicProfile(p));
+    modal.wrap.querySelector('#club-public-banner-position')?.addEventListener('click',async()=>{const {openBannerPositionEditor}=await import('./public-profile.js');openBannerPositionEditor(p,{srcOverride:safeHttpsUrl(p.portada_url),socialIdOverride:p.social_profile_id,onSaved:()=>{closeModal();setTimeout(()=>openClubPublicProfile(p.club_id),120);}});});
     modal.wrap.querySelector('#club-public-album')?.addEventListener('click',()=>openClubAlbum(p));
     return p;
   }catch(error){setError(error);return null;}
@@ -63,7 +64,7 @@ export function editClubPublicProfile(profile){
     {name:'logros',label:'Logros destacados',type:'textarea',rows:4,full:true,maxLength:2500},{name:'contacto_publico',label:'Contacto público voluntario',full:true,maxLength:240,help:'No se rellena desde los datos administrativos.'},
     {name:'web_publica',label:'Web pública (URL HTTPS)'},{name:'instagram',label:'Instagram (URL HTTPS)'},{name:'tiktok',label:'TikTok (URL HTTPS)'},{name:'youtube',label:'YouTube (URL HTTPS)'},
     {name:'logo',label:'Logo del perfil público',type:'file',accept:'image/jpeg,image/png,image/webp,image/gif',help:'Opcional · máximo 5 MB.'},{name:'quitar_logo',label:'Quitar logo público actual',type:'checkbox',value:false},
-    {name:'portada',label:'Portada del perfil público',type:'file',accept:'image/jpeg,image/png,image/webp,image/gif',help:'Opcional · máximo 5 MB. La portada llena todo el banner y puede recortarse proporcionalmente.'},{name:'quitar_portada',label:'Quitar portada pública actual',type:'checkbox',value:false}
+    {name:'portada',label:'Portada del perfil público',type:'file',accept:'image/jpeg,image/png,image/webp,image/gif',help:'Opcional · máximo 5 MB. Después de guardar podrás usar “Ajustar banner” para mover la foto y seleccionar la zona visible.'},{name:'quitar_portada',label:'Quitar portada pública actual',type:'checkbox',value:false}
   ],submitText:'Guardar perfil público',onSubmit:async v=>{
     const oldLogo=p.logo_url||'',oldCover=p.portada_url||'';let logo=v.quitar_logo?'':oldLogo,cover=v.quitar_portada?'':oldCover;let uploadedLogo='',uploadedCover='';
     try{

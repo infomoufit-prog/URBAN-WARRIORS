@@ -11,9 +11,9 @@ for(const op of ['grupo.eliminar','alumno.archivar','alumno.eliminar','preinscri
 assert(sql.includes("estado in ('vigente','archivado','sustituido')")&&sql.includes('fecha_documento')&&sql.includes('reemplazado_por'),'expediente documental con trazabilidad');
 assert(docs.includes('Archivo documental')&&docs.includes('Sustituir documento')&&docs.includes('member-documents')===false,'UI de archivo documental completa');
 assert(portal.includes('Adjuntar documento')&&portal.includes('repos.documents.upload'),'familia/alumno puede aportar documentación a su expediente');
-assert(groups.includes('Dar de baja')&&groups.includes('force-delete-member')&&groups.includes('force-delete-group'),'ciclo de vida de grupos y alumnos visible');
+assert(groups.includes('Dar de baja')&&!groups.includes('force-delete-member')&&!groups.includes('force-delete-group')&&repos.includes('alumno.eliminar_forzado')&&repos.includes('grupo.eliminar_forzado'),'ciclo de vida de grupos y alumnos visible sin borrado profundo en UX');
 assert(finance.includes('Anular recibo')&&finance.includes('annulReceipt'),'recibos se anulan con trazabilidad');
-assert(training.includes('delete-session')&&training.includes('force-delete-session'),'sesiones tienen borrado seguro y borrado total de Dirección');
+assert(training.includes('delete-session')&&!training.includes('force-delete-session')&&repos.includes('sesion.eliminar_forzado'),'sesiones conservan borrado seguro y reservan borrado profundo fuera de la UX ordinaria');
 assert(comms.includes('publication-detail')&&comms.includes('Leer más')&&comms.includes('Tienda del club')&&comms.includes('Solicitar material'),'publicaciones y tienda premium completas');
 assert(admin.includes('Personalizar el club')&&admin.includes("uploadBrandImage('logo'")&&admin.includes("uploadBrandImage('cover'")&&admin.includes('publishBranding'),'personalización versionada con logo y portada subida a Storage');
 assert(components.includes('--uw-cover-image')&&css.includes('.store-hero')&&css.includes('.brand-preview')&&css.includes('.publication-cover'),'branding premium usa color, logo y fondos');

@@ -15,10 +15,11 @@ const index=read('web/index.html');
 const worker=read('web/service-worker.js');
 const gradle=read('android/app/build.gradle');
 
-assert.equal(Number(config.match(/build:\s*(\d+)/)?.[1]),20067);
-assert.equal(Number(gradle.match(/versionCode\s+(\d+)/)?.[1]),20067);
-assert.match(index,/v=20067/);
-assert.match(worker,/rc13-20067/);
+const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]);
+assert.ok(currentBuild>=20067);
+assert.equal(Number(gradle.match(/versionCode\s+(\d+)/)?.[1]),currentBuild);
+assert.ok(index.includes(`v=${currentBuild}`));
+assert.ok(worker.includes(`rc13-${currentBuild}`));
 assert.match(gateway,/taps\.length<8/);
 assert.match(gateway,/now-at<=5000/);
 assert.match(access,/Correo autorizado/);

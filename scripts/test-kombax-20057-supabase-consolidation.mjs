@@ -16,7 +16,7 @@ for(const fn of [
  'app_kombax_social_media_v053(uuid)',
  'app_kombax_perfil_publico_v083(uuid)'
 ]) ok(m.includes(`revoke execute on function public.${fn} from public, anon, authenticated`),`cierra RPC superseded: ${fn}`);
-ok(repo.includes("globalWriteRpc('app_kombax_social_mutate_v099'")&&repo.includes("globalWriteRpc('app_kombax_identity_mutate_v094'"),'frontend usa mutaciones vigentes v099/v094');
+ok((repo.includes("globalWriteRpc('app_kombax_social_mutate_v099'")||repo.includes("globalWriteRpc('app_kombax_social_mutate_v123'"))&&(repo.includes("globalWriteRpc('app_kombax_identity_mutate_v094'")||repo.includes("globalWriteRpc('app_kombax_identity_mutate_v123'")),'frontend usa mutaciones vigentes v099/v094 o wrapper endurecido posterior');
 ok(repo.includes("globalReadRpc('app_kombax_social_feed_v085'")&&repo.includes("globalReadRpc('app_kombax_perfil_publico_v094'")&&repo.includes("globalReadRpc('app_kombax_social_media_v085'"),'frontend usa lecturas Social vigentes');
 ok(m.includes('alter policy perfil_propio on public.perfiles to authenticated')&&m.includes('alter policy socios_lectura on public.socios to authenticated')&&m.includes('alter policy notificaciones_propias on public.notificaciones to authenticated'),'policies históricas no públicas se estrechan a authenticated');
 ok(m.includes('select auth.uid()')&&m.includes('select auth.jwt()'),'RLS usa initplan estable para Auth');

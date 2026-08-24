@@ -16,6 +16,9 @@ const arr=v=>Array.isArray(v)?v:[];
 const url=path=>path?repos.kombaxSocial.mediaUrl(path):'';
 const money=(v,c='EUR')=>v==null?'':new Intl.NumberFormat('es-ES',{style:'currency',currency:c||'EUR'}).format(Number(v));
 function safeExternal(value){const s=String(value||'').trim();return /^https:\/\//i.test(s)?s:'';}
+function clampPercent(value,fallback=50){const n=Number(value);return Number.isFinite(n)?Math.min(100,Math.max(0,n)):fallback;}
+function bannerPosition(profile){return {x:clampPercent(profile?.banner_position_x,50),y:clampPercent(profile?.banner_position_y,50)};}
+function bannerPositionStyle(profile){const pos=bannerPosition(profile);return `object-position:${pos.x}% ${pos.y}%`;}
 function avatar(profile){const src=resolveIdentityMedia(profile,'avatar');return src?`<img src="${esc(src)}" alt="">`:`<span>${esc(initials(profile.nombre_publico))}</span>`;}
 function gallery(profile){
   const rows=arr(profile.album).filter(x=>['photo','video'].includes(x.tipo));
@@ -46,16 +49,16 @@ function core(profile){
 function profileArticle(p,{usage=null}={}){
   const banner=resolveIdentityMedia(p,'banner');const type=p.perfil_tipo||p.sujeto_tipo;const profileTheme=type==='club'?themeDefinition(p.theme_id):null;
   return `<article class="kx-public-profile ${profileTheme?esc(profileTheme.className):''}" ${profileTheme?`data-club-theme="${esc(profileTheme.id)}"`:''}>
-    <div class="kx-public-profile-hero">${banner?`<img class="kx-public-banner" src="${esc(banner)}" alt="">`:'<div class="kx-public-banner fallback"></div>'}<div class="kx-public-avatar">${avatar(p)}</div></div>
+    <div class="kx-public-profile-hero">${banner?`<img class="kx-public-banner" src="${esc(banner)}" alt="" style="${esc(bannerPositionStyle(p))}">`:'<div class="kx-public-banner fallback"></div>'}<div class="kx-public-avatar">${avatar(p)}</div></div>
     <div class="kx-public-title"><div><span class="page-kicker">${esc(identityTypeLabel[type]||type||'KOMBAX')}</span><h3>${esc(p.nombre_publico)} ${p.verificado?`<span class="kombax-verified" title="${esc(identityTypeLabel[type]||type)} verificado por KOMBAX">${icon('shieldCheck',{size:16})}</span>`:''}</h3>${p.bio?`<p>${esc(p.bio)}</p>`:''}</div></div>
     ${core(p)}
     ${type==='miembro'?`<section><h4>Información deportiva</h4>${sportsFacts(p)}</section>`:''}
     <section><h4>Álbum</h4>${gallery(p)}</section>
     <section><h4>Actividad KOMBAX</h4>${posts(p,usage)}</section>
-    ${(type==='club'||type==='marca')?`<section><h4>Showcase</h4>${showcase(p)}</section>`:''}
+    ${(['club','marca','federacion','competidor'].includes(type))?`<section><h4>Showcase</h4>${showcase(p)}</section>`:''}
   </article>`;
 }
-function profileActions(p,{legal=false}={}){const type=p.perfil_tipo||p.sujeto_tipo;return `${p.contactable&&!p.own?'<button class="btn btn-primary" id="kx-public-contact">Contactar</button>':''}${!p.own?'<button class="btn btn-ghost" id="kx-public-report">Denunciar</button>':''}<button class="btn btn-ghost" id="kx-public-share">Compartir</button>${p.own?'<button class="btn btn-ghost" id="kx-public-manage-posts">Gestionar publicaciones</button><button class="btn btn-ghost" id="kx-public-account-security">Seguridad y acceso</button>':''}${p.own&&type==='miembro'&&p.affiliation?.verificada?'<button class="btn btn-primary" id="kx-public-share-affiliation">Compartir afiliación</button>':''}${p.own&&type==='miembro'?'<button class="btn btn-ghost" id="kx-public-member-album">Gestionar álbum</button><button class="btn btn-ghost" id="kx-public-member-edit">Editar mi perfil</button>':''}${legal&&p.own?'<button class="btn btn-ghost" id="kx-public-legal">Privacidad y condiciones</button>':''}${p.own&&type==='club'?'<button class="btn btn-ghost" id="kx-public-club-manage">Gestionar perfil del club</button>':''}`;}
+function profileActions(p,{legal=false}={}){const type=p.perfil_tipo||p.sujeto_tipo;const hasBanner=Boolean(resolveIdentityMedia(p,'banner'));return `${p.contactable&&!p.own?'<button class="btn btn-primary" id="kx-public-contact">Contactar</button>':''}${!p.own?'<button class="btn btn-ghost" id="kx-public-report">Denunciar</button>':''}<button class="btn btn-ghost" id="kx-public-share">Compartir</button>${p.own&&hasBanner?'<button class="btn btn-ghost" id="kx-public-banner-position">Ajustar banner</button>':''}${p.own?'<button class="btn btn-ghost" id="kx-public-manage-posts">Gestionar publicaciones</button><button class="btn btn-ghost" id="kx-public-account-security">Seguridad y acceso</button>':''}${p.own&&type==='miembro'&&p.affiliation?.verificada?'<button class="btn btn-primary" id="kx-public-share-affiliation">Compartir afiliación</button>':''}${p.own&&type==='miembro'?'<button class="btn btn-ghost" id="kx-public-member-album">Gestionar álbum</button><button class="btn btn-ghost" id="kx-public-member-edit">Editar mi perfil</button>':''}${legal&&p.own?'<button class="btn btn-ghost" id="kx-public-legal">Privacidad y condiciones</button>':''}${p.own&&type==='club'?'<button class="btn btn-ghost" id="kx-public-club-manage">Gestionar perfil del club</button>':''}`;}
 async function contact(profile){
   const mine=await repos.kombaxSocial.myProfiles();const eligible=mine.filter(x=>x.contacto_habilitado);
   if(!eligible.length){toast('No tienes una identidad autorizada para iniciar Contacto KOMBAX. Los perfiles personales menores de 18 años no pueden iniciar conversaciones.','error');return;}
@@ -77,10 +80,49 @@ async function openMemberAlbum(profile,{onChanged}={}){
   }catch(error){setError(error);}
 }
 
+
+function bindBannerFocalStage(stage,xInput,yInput,initial={x:50,y:50},onChange=()=>{}){
+  if(!stage)return ()=>bannerPosition(initial);
+  const image=stage.querySelector('img'),marker=stage.querySelector('.kx-banner-focal-marker');
+  let x=clampPercent(initial.x,50),y=clampPercent(initial.y,50),dragging=false;
+  const render=()=>{
+    if(image)image.style.objectPosition=`${x}% ${y}%`;
+    if(marker){marker.style.left=`${x}%`;marker.style.top=`${y}%`;}
+    if(xInput)xInput.value=String(Math.round(x));
+    if(yInput)yInput.value=String(Math.round(y));
+    onChange({x,y});
+  };
+  const fromPointer=e=>{const r=stage.getBoundingClientRect();if(!r.width||!r.height)return;x=clampPercent(((e.clientX-r.left)/r.width)*100,50);y=clampPercent(((e.clientY-r.top)/r.height)*100,50);render();};
+  stage.addEventListener('pointerdown',e=>{dragging=true;stage.classList.add('dragging');stage.setPointerCapture?.(e.pointerId);fromPointer(e);e.preventDefault();});
+  stage.addEventListener('pointermove',e=>{if(!dragging)return;fromPointer(e);e.preventDefault();});
+  const stop=e=>{dragging=false;stage.classList.remove('dragging');if(e?.pointerId!=null)stage.releasePointerCapture?.(e.pointerId);};
+  stage.addEventListener('pointerup',stop);stage.addEventListener('pointercancel',stop);
+  xInput?.addEventListener('input',()=>{x=clampPercent(xInput.value,50);render();});
+  yInput?.addEventListener('input',()=>{y=clampPercent(yInput.value,50);render();});
+  render();
+  return ()=>({x,y});
+}
+
+function bannerFocalMarkup(src,position){
+  return `<div class="kx-banner-focal-editor"><div class="kx-banner-focal-stage" id="kx-banner-focal-stage" aria-label="Arrastra la imagen para elegir la zona visible"><img src="${esc(src)}" alt="Vista previa del banner" style="object-position:${position.x}% ${position.y}%"><span class="kx-banner-focal-marker" aria-hidden="true"></span><span class="kx-banner-focal-hint">Arrastra para encuadrar</span></div><div class="kx-banner-focal-controls"><label>Horizontal <input id="kx-banner-focal-x" type="range" min="0" max="100" step="1" value="${Math.round(position.x)}"></label><label>Vertical <input id="kx-banner-focal-y" type="range" min="0" max="100" step="1" value="${Math.round(position.y)}"></label></div><p class="muted">KOMBAX conserva la foto original. Solo guardamos el punto de encuadre que quieres mostrar en el banner.</p></div>`;
+}
+
+export function openBannerPositionEditor(profile,{onSaved,srcOverride=null,socialIdOverride=null}={}){
+  const src=srcOverride||resolveIdentityMedia(profile,'banner');if(!src){toast('Primero añade una imagen de banner.','error');return;}
+  const socialId=socialIdOverride||profile.id;if(!socialId){toast('No se pudo identificar el perfil KOMBAX asociado.','error');return;}
+  const initial=bannerPosition(profile);
+  const modal=openDetail({title:'Ajustar banner',subtitle:'Mueve la imagen hasta dejar visible exactamente la zona que quieres mostrar.',body:bannerFocalMarkup(src,initial),actions:'<button type="button" class="btn btn-ghost" id="kx-banner-focal-center">Centrar</button><button type="button" class="btn btn-primary" id="kx-banner-focal-save">Guardar encuadre</button>',width:'900px',className:'kx-banner-focal-modal'});
+  const stage=modal.wrap.querySelector('#kx-banner-focal-stage'),xInput=modal.wrap.querySelector('#kx-banner-focal-x'),yInput=modal.wrap.querySelector('#kx-banner-focal-y');
+  const getPosition=bindBannerFocalStage(stage,xInput,yInput,initial);
+  modal.wrap.querySelector('#kx-banner-focal-center')?.addEventListener('click',()=>{xInput.value='50';yInput.value='50';xInput.dispatchEvent(new Event('input',{bubbles:true}));yInput.dispatchEvent(new Event('input',{bubbles:true}));});
+  modal.wrap.querySelector('#kx-banner-focal-save')?.addEventListener('click',async e=>{const b=e.currentTarget;b.disabled=true;const original=b.textContent;b.textContent='Guardando…';try{const pos=getPosition();await repos.kombaxSocial.setBannerPosition(socialId,pos.x,pos.y);profile.banner_position_x=pos.x;profile.banner_position_y=pos.y;toast('Encuadre del banner guardado');modal.close?.();await onSaved?.();}catch(error){b.disabled=false;b.textContent=original;setError(error);}});
+}
+
 async function editMemberPublicProfile(profile,{onSaved}={}){
   const bio=profile?.core?.bio_publica||profile?.bio||'';const sports=profile?.sports||{};
   const media=await repos.kombaxSocial.media(profile.id).catch(()=>[]);const avatarMedia=media.find(x=>x.tipo==='avatar'&&x.estado==='active')||null;const bannerMedia=media.find(x=>x.tipo==='banner'&&x.estado==='active')||null;
-  openForm({
+  let pendingBannerPosition=bannerPosition(profile),bannerPreviewUrl='';
+  const formModal=openForm({
     title:'Editar mi perfil',subtitle:'Esta es tu única ficha pública KOMBAX. Los datos administrativos, financieros y documentos del club nunca forman parte de este perfil.',width:'860px',
     fields:[
       {name:'bio_publica',label:'Presentación pública',type:'textarea',value:bio,full:true,rows:4,maxLength:800,help:'Cuenta quién eres y qué quieres mostrar a la comunidad.'},
@@ -95,16 +137,26 @@ async function editMemberPublicProfile(profile,{onSaved}={}){
       {name:'afiliacion_visible',label:'Mostrar públicamente mi afiliación confirmada al club',type:'checkbox',value:profile.affiliation_visible!==false,full:true,help:'La pertenencia se valida contra tu alta real en el club; no es un texto editable.'},
       {name:'avatar',label:'Foto pública de perfil',type:'file',accept:'image/jpeg,image/png,image/webp',full:true,help:'Opcional. Si eliges una imagen sustituirá tu avatar público de KOMBAX.'},
       ...(avatarMedia?[{name:'eliminar_avatar',label:'Eliminar foto pública actual',type:'checkbox',value:false,full:true}]:[]),
-      {name:'banner',label:'Portada pública',type:'file',accept:'image/jpeg,image/png,image/webp',full:true,help:'Opcional. La portada llena el banner y puede recortarse proporcionalmente para ocupar toda el área.'},
+      {name:'banner',label:'Portada pública',type:'file',accept:'image/jpeg,image/png,image/webp',full:true,help:'Elige una imagen y después arrástrala en la vista previa para seleccionar exactamente qué zona debe verse en el banner.'},
       ...(bannerMedia?[{name:'eliminar_banner',label:'Eliminar portada pública actual',type:'checkbox',value:false,full:true}]:[])
     ],submitText:'Guardar perfil',onSubmit:async v=>{
       await repos.kombaxIdentity.updateMemberProfile(v);await repos.kombaxSocial.setAffiliationVisibility(profile.id,v.afiliacion_visible===true);
       if(v.avatar)await repos.kombaxSocial.uploadMedia(profile.id,'avatar',v.avatar,{enAlbum:false});else if(v.eliminar_avatar&&avatarMedia)await repos.kombaxSocial.removeMedia(avatarMedia);
-      if(v.banner)await repos.kombaxSocial.uploadMedia(profile.id,'banner',v.banner,{enAlbum:false});else if(v.eliminar_banner&&bannerMedia)await repos.kombaxSocial.removeMedia(bannerMedia);
+      if(v.banner){await repos.kombaxSocial.uploadMedia(profile.id,'banner',v.banner,{enAlbum:false});await repos.kombaxSocial.setBannerPosition(profile.id,pendingBannerPosition.x,pendingBannerPosition.y);}else if(v.eliminar_banner&&bannerMedia)await repos.kombaxSocial.removeMedia(bannerMedia);
       if(v.avatar||v.banner||v.eliminar_avatar||v.eliminar_banner)window.dispatchEvent(new CustomEvent('uw-kombax-social-profile-media-changed',{detail:{social_profile_id:profile.id,kind:'profile_media'}}));
+      if(bannerPreviewUrl)URL.revokeObjectURL(bannerPreviewUrl);
       toast('Perfil KOMBAX actualizado');await onSaved?.();
     }
   });
+  const bannerInput=formModal.form.elements.banner,bannerField=bannerInput?.closest('.field');
+  if(bannerInput&&bannerField){
+    const preview=document.createElement('div');preview.className='kx-banner-upload-position';preview.hidden=true;bannerField.appendChild(preview);
+    bannerInput.addEventListener('change',()=>{
+      const file=bannerInput.files?.[0]||null;if(bannerPreviewUrl)URL.revokeObjectURL(bannerPreviewUrl);bannerPreviewUrl='';preview.innerHTML='';preview.hidden=true;
+      if(!file)return;bannerPreviewUrl=URL.createObjectURL(file);pendingBannerPosition={x:50,y:50};preview.innerHTML=`<div class="kx-banner-upload-label"><strong>Encuadra tu banner</strong><span>Arrastra directamente la foto o utiliza los controles.</span></div>${bannerFocalMarkup(bannerPreviewUrl,pendingBannerPosition)}`;preview.hidden=false;
+      const stage=preview.querySelector('#kx-banner-focal-stage'),xInput=preview.querySelector('#kx-banner-focal-x'),yInput=preview.querySelector('#kx-banner-focal-y');bindBannerFocalStage(stage,xInput,yInput,pendingBannerPosition,pos=>{pendingBannerPosition=pos;});
+    });
+  }
 }
 
 function bindProfileActions(root,p,{onRefresh,legal=false}={}){
@@ -117,6 +169,7 @@ function bindProfileActions(root,p,{onRefresh,legal=false}={}){
   root.querySelector('#kx-public-account-security')?.addEventListener('click',()=>openAuthenticatedPasswordChange({onComplete:()=>location.reload()}));
   root.querySelector('[data-kx-affiliation-club]')?.addEventListener('click',()=>openKombaxPublicProfile(p.affiliation?.club_social_id));
   root.querySelector('#kx-public-share-affiliation')?.addEventListener('click',async()=>{const b=root.querySelector('#kx-public-share-affiliation');b.disabled=true;try{await repos.kombaxSocial.shareAffiliation(p.id);toast(`Afiliación con ${p.affiliation?.club_nombre||'tu club'} publicada`);await onRefresh?.();}catch(error){b.disabled=false;setError(error);}});
+  root.querySelector('#kx-public-banner-position')?.addEventListener('click',()=>openBannerPositionEditor(p,{onSaved:onRefresh}));
   root.querySelector('#kx-public-member-album')?.addEventListener('click',()=>openMemberAlbum(p,{onChanged:onRefresh}));
   root.querySelector('#kx-public-member-edit')?.addEventListener('click',()=>editMemberPublicProfile(p,{onSaved:onRefresh}));
   root.querySelector('#kx-public-legal')?.addEventListener('click',openPrivacyConditions);

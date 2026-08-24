@@ -10,6 +10,8 @@ export const client=new SupabaseClient(cfg.supabase);
 const readInflight=new Map();
 const READ_CONCURRENCY=6;
 const CONTRACT_TTL_MS=5*60*1000;
+const PLATFORM_TERMS_VERSION='1.0.0';
+const PLATFORM_PRIVACY_VERSION='1.0.0';
 let activeReads=0;
 const readQueue=[];
 const contractCache=new Map();
@@ -40,6 +42,16 @@ async function platformContext(){
   try{const value=await client.rpc('app_kombax_platform_context_v055',{});return value&&typeof value==='object'?value:{authorized:false};}
   catch{return {authorized:false};}
 }
+async function platformLegalStatus(){
+  try{const value=await client.rpc('app_kombax_platform_legal_status_v129',{});return value&&typeof value==='object'?value:{required:true};}
+  catch{return {required:true,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION};}
+}
+async function recordPlatformLegalAcceptance(){
+  return client.rpc('app_kombax_platform_legal_accept_v129',{
+    p_terms_version:PLATFORM_TERMS_VERSION,p_privacy_version:PLATFORM_PRIVACY_VERSION,
+    p_terms_accepted:true,p_privacy_acknowledged:true,p_user_agent:typeof navigator!=='undefined'?navigator.userAgent:''
+  });
+}
 
 async function globalIdentityFromAuth(authUser){
   const userId=authUser.id;
@@ -48,10 +60,12 @@ async function globalIdentityFromAuth(authUser){
   const directProfiles=await client.rpc('app_kombax_mis_perfiles_v072',{}).catch(()=>[]);
   const applications=await client.rpc('app_kombax_mis_solicitudes_v072',{}).catch(()=>[]);
   const platform=await platformContext();
+  const platformLegal=await platformLegalStatus();
   return {
     scope:'kombax',id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
     apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',
-    club_id:null,club:null,rol:'kombax',roles:['kombax'],directProfiles:Array.isArray(directProfiles)?directProfiles:[],applications:Array.isArray(applications)?applications:[],platform_admin:platform.authorized===true,platform_level:platform.nivel||null
+    club_id:null,club:null,rol:'kombax',roles:['kombax'],directProfiles:Array.isArray(directProfiles)?directProfiles:[],applications:Array.isArray(applications)?applications:[],platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
+    platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
   };
 }
 
@@ -77,11 +91,13 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
   const effectiveRole=isCoordination?'coordinacion':chosen.rol;
   const effectiveRoles=isCoordination?['coordinacion']:[...new Set(clubMemberships.map(m=>m.rol))];
   const platform=await platformContext();
+  const platformLegal=await platformLegalStatus();
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
     apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',avatar_path:profile.avatar_path||'',
     rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,
-    memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null
+    memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
+    platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
   };
 }
 
@@ -192,14 +208,23 @@ export const backend={
       try{
         const p=JSON.parse(pendingTeam)||{};
         if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){
-          const role=String(p.role||'').trim().toLowerCase()||null;
-          try{await client.rpc('app_kombax_equipo_solicitar_v109',{p_club_slug:p.club_slug,p_codigo:p.code,p_rol_solicitado:role});}
-          catch(error){if(role)throw error;await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:p.club_slug,p_codigo:p.code});}
+          if(p.kind==='one_time'){
+            await client.rpc('app_kombax_invitacion_aceptar_equipo_v059',{p_codigo:String(p.code||'').trim()});
+          }else{
+            const role=String(p.role||'').trim().toLowerCase()||null;
+            try{await client.rpc('app_kombax_equipo_solicitar_v109',{p_club_slug:p.club_slug,p_codigo:p.code,p_rol_solicitado:role});}
+            catch(error){if(role)throw error;await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:p.club_slug,p_codigo:p.code});}
+          }
           localStorage.removeItem('uw2_pending_team_access');
         }
       }catch(error){console.warn('Solicitud de equipo pendiente:',humanError(error));}
     }
-    const session=await globalIdentityFromAuth(auth.user);
+    let session=await globalIdentityFromAuth(auth.user);
+    const pendingLegal=localStorage.getItem('uw2_pending_platform_legal');
+    if(pendingLegal){
+      try{const pending=JSON.parse(pendingLegal)||{};if(!pending.email||String(pending.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){const legal=await recordPlatformLegalAcceptance();localStorage.removeItem('uw2_pending_platform_legal');session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};}}
+      catch(error){console.warn('Aceptación legal KOMBAX pendiente:',humanError(error));}
+    }
     persistSession(session);
     state.setCapabilities([]);
     state.pushTrace({kind:'auth',ok:true,label:'Login KOMBAX validado',detail:session.email});
@@ -212,22 +237,58 @@ export const backend={
     if(!String(password||''))throw new Error('Introduce tu contraseña.');
     try{
       const auth=await client.signIn(normalized,String(password));
-      const challenge=await client.rpc('app_kombax_platform_admin_challenge_start_v108',{});
-      const challengeId=challenge?.challenge_id||challenge?.id;
-      if(!challengeId)throw new Error('La solicitud de acceso ha caducado. Vuelve a empezar.');
-      const result=await client.rpc('app_kombax_platform_admin_password_complete_v110',{p_challenge_id:challengeId});
-      if(result?.authorized!==true)throw new Error('No se pudo completar la verificación de administración.');
+      const result=await client.rpc('app_kombax_platform_admin_password_session_v139',{});
+      if(result?.authorized!==true)throw new Error('No se pudo abrir la sesión de administración.');
       const session=await globalIdentityFromAuth(auth.user);
       if(session.platform_admin!==true)throw new Error('No se pudo confirmar la autorización global KOMBAX.');
-      const adminSession={...session,scope:'platform-admin',admin_expires_at:result.expires_at||null};
+      const adminSession={...session,scope:'platform-admin',admin_expires_at:result.expires_at||null,platform_auth_mode:'password'};
       state.session=adminSession;state.setCapabilities([]);
-      try{sessionStorage.setItem('uw2_platform_admin_session',JSON.stringify({id:adminSession.id,email:adminSession.email,expires_at:adminSession.admin_expires_at||null}))}catch{}
-      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: contraseña validada',detail:normalized});
+      try{sessionStorage.setItem('uw2_platform_admin_session',JSON.stringify({id:adminSession.id,email:adminSession.email,expires_at:adminSession.admin_expires_at||null,auth_mode:'password'}))}catch{}
+      state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: contraseña Owner verificada',detail:normalized});
       return adminSession;
     }catch(error){
       const message=technicalError(error);
-      if(/platform_admin_required|not authorized|forbidden/i.test(message))throw new Error('Esta cuenta no tiene autorización de administración global KOMBAX.');
-      if(/invalid login credentials|invalid credentials|email or password/i.test(message))throw new Error('El correo o la contraseña no son correctos.');
+      if(/platform_admin_required|not authorized|forbidden/i.test(message)){await client.signOut().catch(()=>{});throw new Error('Esta cuenta no tiene autorización de administración global KOMBAX.');}
+      if(/invalid login credentials|invalid credentials|email or password/i.test(message)){await client.signOut().catch(()=>{});throw new Error('El correo o la contraseña no son correctos.');}
+      await client.signOut().catch(()=>{});
+      throw new Error(humanError(error));
+    }
+  },
+  async beginPlatformCriticalAccess(){
+    state.clearError();
+    const normalized=String(client.session?.user?.email||state.session?.email||'').trim().toLowerCase();
+    if(!normalized)throw new Error('No se pudo identificar el correo Owner.');
+    try{
+      const challenge=await client.rpc('app_kombax_platform_admin_challenge_start_v108',{});
+      const challengeId=challenge?.challenge_id||challenge?.id;
+      if(!challengeId)throw new Error('La verificación crítica ha caducado. Vuelve a intentarlo.');
+      await client.requestEmailOtp(normalized);
+      state.pushTrace({kind:'auth',ok:true,label:'Elevación crítica Owner: OTP solicitado',detail:normalized});
+      return {challenge_id:challengeId,email:normalized,email_masked:challenge?.email_masked||normalized,expires_at:challenge?.expires_at||null};
+    }catch(error){
+      const message=technicalError(error);
+      if(/password_required/i.test(message))throw new Error('Por seguridad, vuelve a abrir la Consola Owner con tu contraseña antes de esta operación crítica.');
+      if(/challenge_rate_limit|rate limit/i.test(message))throw new Error('Espera unos segundos antes de solicitar otro código de seguridad.');
+      throw new Error(humanError(error));
+    }
+  },
+  async completePlatformCriticalAccess(email,token,challengeId){
+    state.clearError();
+    const normalized=String(email||'').trim().toLowerCase();
+    const code=String(token||'').replace(/\s+/g,'');
+    if(!/^\d{6}$/.test(code))throw new Error('Introduce el código de 6 dígitos recibido por correo.');
+    try{
+      const auth=await client.verifyEmailOtp(normalized,code);
+      const result=await client.rpc('app_kombax_platform_admin_challenge_complete_v108',{p_challenge_id:challengeId});
+      if(result?.authorized!==true)throw new Error('No se pudo completar la autorización crítica.');
+      const session=await globalIdentityFromAuth(auth.user);
+      const adminSession={...session,scope:'platform-admin',admin_expires_at:result.expires_at||null,platform_auth_mode:'critical-otp'};
+      state.session=adminSession;state.setCapabilities([]);
+      state.pushTrace({kind:'auth',ok:true,label:'Elevación crítica Owner: OTP verificado',detail:normalized});
+      return adminSession;
+    }catch(error){
+      const message=technicalError(error);
+      if(/otp.*expired|token.*expired|invalid.*otp|token.*invalid|invalid.*token/i.test(message))throw new Error('El código no es válido o ha caducado. Solicita uno nuevo.');
       throw new Error(humanError(error));
     }
   },
@@ -250,11 +311,22 @@ export const backend={
       await client.signOut();
     }finally{state.session=null;state.setCapabilities([]);try{sessionStorage.removeItem('uw2_platform_admin_session')}catch{}}
   },
-  async registerGlobalAccount({email,password,nombre='',apellidos=''}){
+  async registerGlobalAccount({email,password,nombre='',apellidos='',terms=false,privacy=false}){
     state.clearError();
+    if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
+    if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
     const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global'});
-    if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));return {confirmationRequired:true};}
-    const session=await globalIdentityFromAuth(auth.user);persistSession(session);state.setCapabilities([]);return {confirmationRequired:false,session};
+    if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
+    let session=await globalIdentityFromAuth(auth.user);
+    const legal=await recordPlatformLegalAcceptance();session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};
+    persistSession(session);state.setCapabilities([]);return {confirmationRequired:false,session};
+  },
+  async acceptPlatformLegal(){
+    if(!client.session?.access_token)throw new AuthExpiredError('Inicia sesión para aceptar las condiciones de KOMBAX.');
+    const legal=await recordPlatformLegalAcceptance();
+    if(legal?.required!==false)throw new Error('No se pudo registrar la aceptación legal de KOMBAX.');
+    if(state.session){const updated={...state.session,platform_legal_required:false,platform_legal:legal};persistSession(updated);}
+    return legal;
   },
   async signIn(email,password){
     state.clearError();
@@ -282,6 +354,15 @@ export const backend={
     const session=await identityFromAuth(auth.user);await this.contract(session);persistSession(session);
     for(const item of legalEntries){await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});}
     return {confirmationRequired:false,session};
+  },
+  async validateInvitation(code,email){
+    const normalized=String(email||'').trim().toLowerCase();
+    return this.publicRpc('app_kombax_invitacion_validar_v059',{p_codigo:String(code||'').trim(),p_email:normalized});
+  },
+  async validateTeamInvitation(code,email){return this.validateInvitation(code,email);},
+  async acceptTeamInvitation(code){
+    if(!client.session?.access_token)throw new AuthExpiredError();
+    return client.rpc('app_kombax_invitacion_aceptar_equipo_v059',{p_codigo:String(code||'').trim()});
   },
   async requestTeamAccess(clubSlug,code,email='',role=''){
     const requestedRole=String(role||'').trim().toLowerCase()||null;

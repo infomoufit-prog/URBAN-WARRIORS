@@ -7,6 +7,8 @@ import { openKombaxPublicProfile } from './public-profile.js';
 
 const PAGE_SIZE=24;
 const CTA_LABELS={info:'Más información',contact:'Contactar',shop:'Ir a tienda',web:'Visitar web',where:'Dónde encontrar'};
+const PROVIDER_LABELS={club:'Club',marca:'Marca',federacion:'Federación',competidor:'Competidor'};
+const LIMIT_LABELS={15:'máximo 15',30:'máximo 30'};
 let items=[];
 let categories=[];
 let managedBrands=[];
@@ -15,6 +17,7 @@ let done=false;
 let currentQuery='';
 let currentCategory='';
 let activeView='catalog';
+let managementLimit=60;
 
 const categoryIcon=slug=>icon(({equipamiento:'dumbbell',protecciones:'shield',textil:'package',nutricion:'activity',tecnologia:'settings',servicios:'users'})[slug]||'sparkles',{size:28});
 const safeExternal=url=>/^https:\/\/[^\s]+$/i.test(String(url||''))?String(url):'';
@@ -22,11 +25,11 @@ const slugify=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]
 const ctaLabel=item=>String(item?.cta_label||'').trim()||CTA_LABELS[item?.cta_tipo]||CTA_LABELS.info;
 
 function showcaseBrand(){
-  return `<section class="kombax-showcase-brand"><div class="showcase-brand-symbol"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""></div><div><span>KOMBAX</span><strong>SHOWCASE</strong><small>DESCUBRE · CONECTA · CRECE</small></div><p>Escaparate profesional de marcas, clubes, productos y servicios del mundo de los deportes de contacto.</p></section>`;
+  return `<section class="kombax-showcase-brand"><div class="showcase-brand-symbol"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""></div><div><span>KOMBAX</span><strong>SHOWCASE</strong><small>DESCUBRE · CONECTA · CRECE</small></div><p>Escaparate profesional de marcas, clubes, federaciones y competidores del mundo de los deportes de contacto.</p></section>`;
 }
 
 function controls(){
-  return `<div class="showcase-controls"><div class="showcase-search"><input id="showcase-query" type="search" value="${esc(currentQuery)}" placeholder="Buscar marcas, productos o categorías"><button class="btn btn-primary" id="showcase-search">Buscar</button></div><div class="showcase-categories"><button type="button" data-showcase-category="" class="${currentCategory?'':'active'}">Todo</button>${categories.map(c=>`<button type="button" data-showcase-category="${esc(c.slug)}" class="${currentCategory===c.slug?'active':''}">${esc(c.nombre)}</button>`).join('')}</div></div>`;
+  return `<div class="showcase-controls"><div class="showcase-search"><input id="showcase-query" type="search" value="${esc(currentQuery)}" placeholder="Buscar perfiles, productos, servicios o categorías"><button class="btn btn-primary" id="showcase-search">Buscar</button></div><div class="showcase-categories"><button type="button" data-showcase-category="" class="${currentCategory?'':'active'}">Todo</button>${categories.map(c=>`<button type="button" data-showcase-category="${esc(c.slug)}" class="${currentCategory===c.slug?'active':''}">${esc(c.nombre)}</button>`).join('')}</div></div>`;
 }
 
 function cardHtml(item){
@@ -118,7 +121,7 @@ function bindCatalog(){
 
 function renderCatalog(){
   const headActions=`<div class="row-actions">${managedBrands.length?'<button type="button" class="btn btn-ghost" id="showcase-manage">Gestionar escaparate</button>':''}<button type="button" class="btn btn-ghost" id="showcase-saved">${icon('bookmark',{size:17})} Guardados</button></div>`;
-  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader('Marcas y novedades','Descubre productos y servicios y conecta directamente con quienes los ofrecen.',headActions,'KOMBAX Showcase')}${clubFoundersPromo()}${controls()}${items.length?`<div class="showcase-grid">${items.map(cardHtml).join('')}</div>${done?'':'<button class="btn btn-ghost showcase-more" id="showcase-more">Cargar más</button>'}`:empty('Sin contenido publicado','Las fichas activas aparecerán aquí cuando sus responsables las publiquen.')}</div>`);bindCatalog();
+  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader('Perfiles y novedades','Descubre productos, servicios y proyectos de marcas, clubes, federaciones y competidores.',headActions,'KOMBAX Showcase')}${clubFoundersPromo()}${controls()}${items.length?`<div class="showcase-grid">${items.map(cardHtml).join('')}</div>${done?'':'<button class="btn btn-ghost showcase-more" id="showcase-more">Cargar más</button>'}`:empty('Sin contenido publicado','Las fichas activas aparecerán aquí cuando sus responsables las publiquen.')}</div>`);bindCatalog();
 }
 
 async function loadCatalog(append=false){
@@ -144,7 +147,7 @@ function itemEditor(brand,item=null){
   const gallery=Array.isArray(item?.galeria)?item.galeria:[];
   openForm({
     title:item?'Editar ficha informativa':'Nueva ficha informativa',
-    subtitle:`${brand.nombre} · ${brand.sujeto_tipo==='club'?'máximo 15':'máximo 30'} fichas visibles`,
+    subtitle:`${brand.nombre} · ${PROVIDER_LABELS[brand.sujeto_tipo]||'Perfil'} · ${LIMIT_LABELS[Number(brand.limite_visible||30)]||`máximo ${Number(brand.limite_visible||30)}`} fichas visibles`,
     width:'820px',initial:{...(item||{}),quitar_imagen:false},
     fields:[
       {name:'nombre',label:'Nombre',required:true,full:true},
@@ -196,12 +199,13 @@ function itemEditor(brand,item=null){
 async function renderManagement(selectedBrandId=''){
   const brand=managedBrands.find(x=>x.id===selectedBrandId)||managedBrands[0];
   if(!brand){activeView='catalog';return loadCatalog(false);}
-  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader('Gestión de Showcase','Crea fichas con imágenes, revísalas como borrador y publícalas cuando estén listas. Una ficha publicada aparece en el escaparate público de KOMBAX.','<button class="btn btn-ghost" id="showcase-back">Volver al escaparate</button>','KOMBAX Showcase')}<div class="showcase-management-head"><label>Espacio gestionado<select id="showcase-brand-select">${managedBrands.map(x=>`<option value="${esc(x.id)}" ${x.id===brand.id?'selected':''}>${esc(x.nombre)} · ${x.sujeto_tipo==='club'?'Club':'Marca'}</option>`).join('')}</select></label><div class="showcase-provider-limit"><strong>${Number(brand.publicados||0)}/${Number(brand.limite_visible||30)}</strong><span>fichas visibles</span></div><button class="btn btn-primary" id="showcase-new-item">+ Nueva ficha</button></div><div id="showcase-managed-items"><div class="loading-card">Cargando fichas…</div></div></div>`);
+  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader('Gestión de Showcase','Crea fichas con imágenes, revísalas como borrador y publícalas cuando estén listas. Una ficha publicada aparece en el escaparate público de KOMBAX.','<button class="btn btn-ghost" id="showcase-back">Volver al escaparate</button>','KOMBAX Showcase')}<div class="showcase-management-head"><label>Espacio gestionado<select id="showcase-brand-select">${managedBrands.map(x=>`<option value="${esc(x.id)}" ${x.id===brand.id?'selected':''}>${esc(x.nombre)} · ${esc(PROVIDER_LABELS[x.sujeto_tipo]||'Perfil')}</option>`).join('')}</select></label><div class="showcase-provider-limit"><strong>${Number(brand.publicados||0)}/${Number(brand.limite_visible||30)}</strong><span>fichas visibles</span></div><button class="btn btn-primary" id="showcase-new-item">+ Nueva ficha</button></div><div id="showcase-managed-items"><div class="loading-card">Cargando fichas…</div></div></div>`);
   document.getElementById('showcase-back')?.addEventListener('click',()=>{activeView='catalog';loadCatalog(false);});document.getElementById('showcase-brand-select')?.addEventListener('change',e=>renderManagement(e.target.value));document.getElementById('showcase-new-item')?.addEventListener('click',()=>itemEditor(brand));
   const box=document.getElementById('showcase-managed-items');
   try{
-    const rows=await repos.kombaxShowcase.myItems(brand.id);
-    box.innerHTML=rows.length?`<div class="showcase-manage-list">${rows.map(x=>`<article><div><span class="page-kicker">${esc(x.estado)}${x.destacado?' · destacado':''}</span><strong>${esc(x.nombre)}</strong><small>${esc(ctaLabel(x))} · Actualizado ${dtFmt(x.actualizado_en)}</small></div><div class="row-actions"><button class="btn btn-ghost btn-sm" data-showcase-edit="${esc(x.id)}">Editar</button>${x.estado!=='publicado'?`<button class="btn btn-primary btn-sm" data-showcase-state="publicado" data-showcase-id="${esc(x.id)}">Publicar</button>`:`<button class="btn btn-ghost btn-sm" data-showcase-state="archivado" data-showcase-id="${esc(x.id)}">Archivar</button>`}<button class="btn btn-danger btn-sm" data-showcase-delete="${esc(x.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`).join('')}</div>`:empty('Sin fichas','Crea la primera ficha informativa de este espacio.');
+    const rows=await repos.kombaxShowcase.myItems(brand.id,managementLimit);
+    box.innerHTML=rows.length?`<div class="showcase-manage-list">${rows.map(x=>`<article><div><span class="page-kicker">${esc(x.estado)}${x.destacado?' · destacado':''}</span><strong>${esc(x.nombre)}</strong><small>${esc(ctaLabel(x))} · Actualizado ${dtFmt(x.actualizado_en)}</small></div><div class="row-actions"><button class="btn btn-ghost btn-sm" data-showcase-edit="${esc(x.id)}">Editar</button>${x.estado!=='publicado'?`<button class="btn btn-primary btn-sm" data-showcase-state="publicado" data-showcase-id="${esc(x.id)}">Publicar</button>`:`<button class="btn btn-ghost btn-sm" data-showcase-state="archivado" data-showcase-id="${esc(x.id)}">Archivar</button>`}<button class="btn btn-danger btn-sm" data-showcase-delete="${esc(x.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`).join('')}</div>${rows.length>=managementLimit&&managementLimit<200?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-showcase-management">Cargar fichas anteriores</button></div>':''}`:empty('Sin fichas','Crea la primera ficha informativa de este espacio.');
+    box.querySelector('#load-more-showcase-management')?.addEventListener('click',()=>{managementLimit=Math.min(200,managementLimit+60);renderManagement(brand.id);});
     box.querySelectorAll('[data-showcase-edit]').forEach(b=>b.addEventListener('click',()=>itemEditor(brand,rows.find(x=>x.id===b.dataset.showcaseEdit))));
     box.querySelectorAll('[data-showcase-state]').forEach(b=>b.addEventListener('click',()=>confirmDialog(b.dataset.showcaseState==='publicado'?'Publicar ficha':'Archivar ficha',b.dataset.showcaseState==='publicado'?'La información será visible en el escaparate público.':'La ficha dejará de mostrarse sin eliminar su historial.',async()=>{await repos.kombaxShowcase.itemState(b.dataset.showcaseId,b.dataset.showcaseState);toast(b.dataset.showcaseState==='publicado'?'Ficha publicada':'Ficha archivada');await renderManagement(brand.id);},{confirmText:b.dataset.showcaseState==='publicado'?'Publicar':'Archivar'})));
     box.querySelectorAll('[data-showcase-delete]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar ficha de Showcase','La ficha desaparecerá de Showcase, del perfil público y de los guardados. Las imágenes subidas por esta cuenta que ya no se usan también se eliminarán del almacenamiento.',async()=>{await repos.kombaxShowcase.deleteItem(b.dataset.showcaseDelete);toast('Ficha e imágenes propias eliminadas');await renderManagement(brand.id);},{confirmText:'Eliminar definitivamente',danger:true})));

@@ -1,5 +1,6 @@
-import { createClient } from 'npm:@supabase/supabase-js@2'
-import { importPKCS8, SignJWT } from 'npm:jose@6'
+import { createClient } from 'npm:@supabase/supabase-js@2.112.3'
+import { importPKCS8, SignJWT } from 'npm:jose@6.2.9'
+import { authorizeCronRequest, jsonResponse, validUuid } from '../_shared/cron-security.ts'
 
 type Json = Record<string, unknown>
 type FirebaseServiceAccount = { project_id: string; client_email: string; private_key: string; token_uri?: string }
@@ -27,25 +28,35 @@ async function firebaseAccessToken(account: FirebaseServiceAccount): Promise<str
   return payload.access_token as string
 }
 
-async function sendFcm(account: FirebaseServiceAccount, accessToken: string, token: string, notification: Json) {
+const FINANCE_TYPES=new Set(['cuota','aviso_cobro','pago','validacion_pago','recibo'])
+function systemNotificationCopy(notification: Json, clubName='KOMBAX'){
+  const type=String(notification.tipo||'')
+  if(FINANCE_TYPES.has(type))return {title:clubName,body:'Tienes una actualización financiera en KOMBAX.'}
+  return {title:String(notification.titulo||clubName||'KOMBAX'),body:String(notification.cuerpo||'')}
+}
+
+async function sendFcm(account: FirebaseServiceAccount, accessToken: string, token: string, notification: Json, clubName='KOMBAX') {
   const route=String(notification.ruta||'notifications')
-  const response=await fetch(`https://fcm.googleapis.com/v1/projects/${account.project_id}/messages:send`,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify({message:{token,notification:{title:String(notification.titulo||'Urban Warriors'),body:String(notification.cuerpo||'')},data:{route,payload:JSON.stringify(notification.datos||{})},android:{priority:'high',notification:{channel_id:'urban_warriors_alerts'}},webpush:{fcm_options:{link:`/#/${route}`}}}})})
+  const copy=systemNotificationCopy(notification,clubName)
+  const response=await fetch(`https://fcm.googleapis.com/v1/projects/${account.project_id}/messages:send`,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify({message:{token,notification:copy,data:{route,payload:JSON.stringify({notification_id:notification.id||null,tipo:notification.tipo||null})},android:{priority:'high',notification:{channel_id:'urban_warriors_alerts',visibility:'PRIVATE'}},webpush:{fcm_options:{link:`/#/${route}`}}}})})
   const payload=await response.json().catch(()=>({}));if(!response.ok)throw new Error(JSON.stringify(payload));return payload
 }
 
 Deno.serve(async (request) => {
+  let requestId=crypto.randomUUID()
   try {
-    const expectedSecret=Deno.env.get('UW_CRON_SECRET'), suppliedSecret=request.headers.get('x-uw-cron-secret')
-    if(!expectedSecret||suppliedSecret!==expectedSecret)return Response.json({error:'No autorizado'},{status:401})
-    const body=request.method==='POST'?await request.json().catch(()=>({} as Json)) as Json:{} as Json
+    const guard=await authorizeCronRequest(request);requestId=guard.requestId;if(guard.response)return guard.response
+    const body=guard.body
+    if(body.club_id!=null&&!validUuid(body.club_id))return jsonResponse({error:'club_id no válido',request_id:requestId},400,requestId)
     const requestedClub=typeof body.club_id==='string'?body.club_id:null
     const supabase=createClient(Deno.env.get('SUPABASE_URL')!,getSecretKey(),{auth:{persistSession:false,autoRefreshToken:false}})
     const now=new Date().toISOString()
 
     // 1) Mantener siempre un horizonte móvil de sesiones recurrentes.
-    let clubsQuery=supabase.from('clubes').select('id').eq('activo',true)
+    let clubsQuery=supabase.from('clubes').select('id,nombre').eq('activo',true)
     if(requestedClub)clubsQuery=clubsQuery.eq('id',requestedClub)
     const {data:clubs,error:clubsError}=await clubsQuery;if(clubsError)throw clubsError
+    const clubNames=new Map((clubs||[]).map(c=>[String(c.id),String(c.nombre||'KOMBAX')]))
     let recurringGenerated=0
     for(const club of clubs||[]){const {data,error}=await supabase.rpc('app_generar_sesiones_recurrentes',{p_club_id:club.id,p_horizonte_dias:84});if(error)throw error;recurringGenerated+=Number(data||0)}
 
@@ -62,7 +73,7 @@ Deno.serve(async (request) => {
     const {data:classReminders,error:classError}=await supabase.rpc('generar_recordatorios_clase',{p_ahora:now,p_horas:3});if(classError)throw classError
 
     const firebaseRaw=Deno.env.get('FIREBASE_SERVICE_ACCOUNT_JSON')
-    if(!firebaseRaw)return Response.json({ok:true,firebase_configured:false,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,sent:0,errors:0})
+    if(!firebaseRaw)return jsonResponse({ok:true,firebase_configured:false,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,sent:0,errors:0},200,requestId)
     const account=JSON.parse(firebaseRaw) as FirebaseServiceAccount, accessToken=await firebaseAccessToken(account)
     const since=new Date(Date.now()-14*24*60*60*1000).toISOString()
     let notificationQuery=supabase.from('notificaciones').select('id,club_id,perfil_id,rol_destino,audiencia,tipo,titulo,cuerpo,ruta,datos,push_intentos,programada_para').is('push_enviado_en',null).lt('push_intentos',5).gte('creado_en',since).order('creado_en',{ascending:true}).limit(300)
@@ -83,9 +94,9 @@ Deno.serve(async (request) => {
       let tokens:{id:string;token:string}[]=[]
       if(ids.length){const {data:devices,error}=await supabase.from('dispositivos_push').select('id,token').eq('club_id',notification.club_id).eq('activo',true).in('perfil_id',ids);if(error)throw error;tokens=devices||[]}
       let delivered=false;const itemErrors:string[]=[]
-      for(const device of tokens){try{await sendFcm(account,accessToken,device.token,notification as Json);delivered=true;sent++}catch(error){errors++;const message=error instanceof Error?error.message:String(error);itemErrors.push(message);if(/UNREGISTERED|registration-token-not-registered|not found/i.test(message))await supabase.from('dispositivos_push').update({activo:false}).eq('id',device.id)}}
+      for(const device of tokens){try{await sendFcm(account,accessToken,device.token,notification as Json,clubNames.get(String(notification.club_id))||'KOMBAX');delivered=true;sent++}catch(error){errors++;const message=error instanceof Error?error.message:String(error);itemErrors.push(message);if(/UNREGISTERED|registration-token-not-registered|not found/i.test(message))await supabase.from('dispositivos_push').update({activo:false}).eq('id',device.id)}}
       await supabase.from('notificaciones').update({push_enviado_en:delivered?new Date().toISOString():null,push_intentos:Number(notification.push_intentos||0)+1,push_error:itemErrors.length?itemErrors.join(' | ').slice(0,2000):(tokens.length?null:'Sin dispositivos push activos')}).eq('id',notification.id)
     }
-    return Response.json({ok:true,firebase_configured:true,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,notifications:due.length,sent,errors})
-  }catch(error){console.error(error);return Response.json({error:error instanceof Error?error.message:String(error)},{status:500})}
+    return jsonResponse({ok:true,firebase_configured:true,recurring_generated:recurringGenerated,community_deleted:(expired||[]).length,scheduled_published:scheduledPublished||0,class_reminders:classReminders||0,notifications:due.length,sent,errors},200,requestId)
+  }catch(error){console.error(`[${requestId}]`,error);return jsonResponse({error:'Error interno',request_id:requestId},500,requestId)}
 })

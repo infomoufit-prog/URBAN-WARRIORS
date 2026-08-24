@@ -1,5 +1,6 @@
-import { createClient } from 'npm:@supabase/supabase-js@2'
-import { importPKCS8, SignJWT } from 'npm:jose@6'
+import { createClient } from 'npm:@supabase/supabase-js@2.112.3'
+import { importPKCS8, SignJWT } from 'npm:jose@6.2.9'
+import { authorizeCronRequest, jsonResponse, validIsoDate, validUuid } from '../_shared/cron-security.ts'
 
 type Json = Record<string, unknown>
 
@@ -84,11 +85,11 @@ async function sendFcm(
           notification: { title: notification.title, body: notification.body },
           data: {
             route: notification.route || 'notifications',
-            payload: JSON.stringify(notification.data || {})
+            payload: JSON.stringify({ type: 'finance' })
           },
           android: {
             priority: 'high',
-            notification: { channel_id: 'urban_warriors_alerts' }
+            notification: { channel_id: 'urban_warriors_alerts', visibility: 'PRIVATE' }
           },
           webpush: {
             fcm_options: { link: notification.route ? `/#/${notification.route}` : '/#/notifications' }
@@ -103,16 +104,12 @@ async function sendFcm(
 }
 
 Deno.serve(async (request) => {
+  let requestId=crypto.randomUUID()
   try {
-    const expectedSecret = Deno.env.get('UW_CRON_SECRET')
-    const suppliedSecret = request.headers.get('x-uw-cron-secret')
-    if (!expectedSecret || suppliedSecret !== expectedSecret) {
-      return Response.json({ error: 'No autorizado' }, { status: 401 })
-    }
-
-    const body = request.method === 'POST'
-      ? await request.json().catch(() => ({} as Json)) as Json
-      : ({} as Json)
+    const guard=await authorizeCronRequest(request);requestId=guard.requestId;if(guard.response)return guard.response
+    const body=guard.body
+    if(body.club_id!=null&&!validUuid(body.club_id))return jsonResponse({error:'club_id no válido',request_id:requestId},400,requestId)
+    if(body.date!=null&&!validIsoDate(body.date))return jsonResponse({error:'date no válida',request_id:requestId},400,requestId)
     const force = body.force === true
     const requestedClub = typeof body.club_id === 'string' ? body.club_id : null
     const requestedDate = typeof body.date === 'string' ? body.date : null
@@ -154,6 +151,9 @@ Deno.serve(async (request) => {
       const account = JSON.parse(firebaseRaw) as FirebaseServiceAccount
       const accessToken = await firebaseAccessToken(account)
       const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString()
+      const { data: clubRows, error: clubsError } = await supabase.from('clubes').select('id,nombre').in('id',pushClubIds)
+      if (clubsError) throw clubsError
+      const clubNames = new Map((clubRows || []).map((club) => [String(club.id), String(club.nombre || 'KOMBAX')]))
       const { data: notifications, error: notificationsError } = await supabase
         .from('notificaciones')
         .select('id,club_id,perfil_id,tipo,titulo,cuerpo,ruta,datos,push_intentos')
@@ -189,10 +189,10 @@ Deno.serve(async (request) => {
         for (const device of tokens) {
           try {
             await sendFcm(account, accessToken, device.token, {
-              title: notification.titulo,
-              body: notification.cuerpo,
+              title: clubNames.get(String(notification.club_id)) || 'KOMBAX',
+              body: 'Tienes una actualización financiera en KOMBAX.',
               route: notification.ruta,
-              data: notification.datos
+              data: { type: notification.tipo }
             })
             delivered = true
             pushSent += 1
@@ -216,11 +216,9 @@ Deno.serve(async (request) => {
       }
     }
 
-    return Response.json({ ok: true, processed, push_sent: pushSent, push_errors: pushErrors })
+    return jsonResponse({ ok: true, processed, push_sent: pushSent, push_errors: pushErrors },200,requestId)
   } catch (error) {
-    console.error(error)
-    return Response.json({
-      error: error instanceof Error ? error.message : String(error)
-    }, { status: 500 })
+    console.error(`[${requestId}]`,error)
+    return jsonResponse({error:'Error interno',request_id:requestId},500,requestId)
   }
 })
