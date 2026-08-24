@@ -26,7 +26,9 @@ assert(m135.includes('storage_bytes')&&m135.includes('payments_amount')&&m135.in
 assert(m138.includes('metric_date<current_date')&&m138.includes('case when p_date=current_date then v_storage_objects else 0 end'),'El backfill no debe inventar consumo histórico de Storage.');
 assert(m138.includes('creado_en::date<=p_date'),'Las métricas de estado histórico deben respetar la fecha del snapshot.');
 
-assert(/build:\s*20077/.test(config),'config.js no está en build 20077.');
-assert(/versionCode\s+20077/.test(gradle),'Android versionCode no está en 20077.');
+const configBuild=Number(config.match(/build:\s*(\d+)/)?.[1]);
+const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]);
+assert(configBuild>=20077,'config.js debe conservar como mínimo las garantías de build 20077.');
+assert(androidBuild===configBuild,'Web y Android deben compartir el mismo número de build.');
 for(const bad of ['limit=5000','limit=3000','limit=2000'])assert(!repos.includes(bad),`Queda una carga masiva ${bad} en repositorios.`);
-console.log('PASS KOMBAX 20077 · data lifecycle & history hardening');
+console.log(`PASS KOMBAX ${configBuild} · data lifecycle & history hardening`);
