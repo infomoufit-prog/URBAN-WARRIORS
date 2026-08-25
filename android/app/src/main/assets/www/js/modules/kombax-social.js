@@ -467,6 +467,9 @@ function bindQuickComposer(){
   });
 }
 
+function isBackendVersionMismatch(error){const raw=String(error?.message||error||'');return /PGRST202|schema cache|could not find the function|app_kombax_.*_v147/i.test(raw)}
+function socialUnavailable(error){return isBackendVersionMismatch(error)?'<div class="alert alert-danger"><strong>KOMBAX Social pendiente de sincronización</strong><span>La interfaz y el backend no están en la misma versión. El acceso Social queda bloqueado para evitar mezclar identidades o clubes hasta completar la actualización segura.</span></div>':empty('KOMBAX Social no disponible',humanError(error)||'No se pudo completar la operación.')}
+
 function bindCommon(){
   document.querySelectorAll('[data-social-view]').forEach(b=>b.addEventListener('click',()=>{activeView=b.dataset.socialView;renderKombaxSocial();}));
   document.getElementById('kombax-social-publish')?.addEventListener('click',openPublisher);
@@ -502,7 +505,7 @@ async function loadFeed(append=false){
     posts=append?[...posts,...page]:page;
     const last=page.at(-1);if(last)cursor={created:last.creado_en,id:last.id};done=page.length<PAGE_SIZE;
     renderFeedView();
-  }catch(error){setError(error);setMainHtml(`${socialHeader()}${pageHeader('KOMBAX Social','No se pudo cargar KOMBAX Social.','','Red profesional global')}<section class="card">${empty('KOMBAX Social no disponible',humanError(error)||'Inténtalo de nuevo. Si el problema continúa, contacta con el equipo del club.')}</section>`);}finally{loading=false;}
+  }catch(error){setError(error);setMainHtml(`${socialHeader()}${pageHeader('KOMBAX Social','No se pudo cargar KOMBAX Social.','','Red profesional global')}<section class="card">${socialUnavailable(error)}</section>`);}finally{loading=false;}
 }
 
 function renderFeedView(){
@@ -586,7 +589,7 @@ async function renderSafety(){
 export async function renderKombaxSocial(){
   setMainHtml('<div class="loading-card">Abriendo KOMBAX Social…</div>');
   try{[socialStatus,ownProfiles,minorConsentStatus]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles(),repos.kombaxSocial.minorConsentStatus().catch(()=>({mine:[],approvals:[]}))]);audiencesByProfile=new Map();await Promise.all(ownProfiles.map(async p=>{const rows=await repos.kombaxSocial.audiences(p.id).catch(()=>[]);audiencesByProfile.set(String(p.id),rows?.length?rows:[{audiencia:'publica',target_social_id:null,target_club_id:null,label:'Público · Todo KOMBAX',descripcion:'Visible para toda la red KOMBAX Social.',predeterminada:true}]);}));const preferred=chooseDefaultIdentity(ownProfiles);activeIdentityId=preferred?.id||'';await refreshActiveQuota();const requested=sessionStorage.getItem('kombax_social_view');if(requested&&['feed','profiles','saved','relations','contacts','safety'].includes(requested)){activeView=requested;sessionStorage.removeItem('kombax_social_view');}}
-  catch(error){setError(error);setMainHtml(`${pageHeader('KOMBAX Social','La comunidad pública no está disponible en este momento.','','KOMBAX Social')}${empty('KOMBAX Social no disponible',humanError(error)||'No se pudo comprobar el acceso.')}`);return;}
+  catch(error){setError(error);setMainHtml(`${pageHeader('KOMBAX Social','La comunidad pública no está disponible en este momento.','','KOMBAX Social')}${socialUnavailable(error)}`);return;}
   if(activeView==='profiles')return renderProfiles();
   if(activeView==='saved')return renderSaved();
   if(activeView==='relations')return renderRelations();

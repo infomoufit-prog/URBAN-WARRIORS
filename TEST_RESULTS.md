@@ -158,3 +158,16 @@ Supabase real fue corregido mediante la migración controlada 023. No se ha rest
 - `git diff --check`: **PASS**.
 - SQL real 029/030: pendiente de ejecución guiada en Supabase; los verificadores no sustituyen esa prueba.
 - Netlify, APK y fusión: no ejecutados.
+
+## RC13 build 20085 · Premium Finance + Social Backend Sync
+
+- npm test: PASS
+- npm run release:build: PASS
+- web = dist = Android assets: 79/79/79
+- Finance v150 E2E read: PASS
+- Social workspace v147 isolation E2E read: PASS
+- Finance QA blocking anomalies: 0
+- Data preservation: 13 cuotas / 8 pagos / 6 recibos / 9 contactos / 24 mensajes
+- Finance real recurrence: CLOSED
+- Security pilot: CLOSED
+- Android release preflight: 4/5 (firma local pendiente por diseño)

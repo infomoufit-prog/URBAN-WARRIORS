@@ -1,0 +1,18 @@
+--- android/app/src/main/AndroidManifest.xml
++++ android/app/src/main/AndroidManifest.xml
+@@ application
+- android:usesCleartextTraffic="false">
++ android:usesCleartextTraffic="false"
++ android:networkSecurityConfig="@xml/network_security_config"
++ android:fullBackupContent="false">
+--- android/app/build.gradle
++++ android/app/build.gradle
+@@ defaultConfig
+- versionCode 20078
++ versionCode 20084
+@@ MainActivity.java / onCreate
++ WebView.setWebContentsDebuggingEnabled(false);
++ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) settings.setSafeBrowsingEnabled(true);
+@@ external navigation
+- allow https/http/mailto/tel
++ allow https/mailto/tel only; block cleartext http from app navigation

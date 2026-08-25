@@ -1,0 +1,65 @@
+KOMBAX RC13 build 20084 · SECURITY GO-LIVE / PILOT READINESS
+QA RESULT · CANDIDATE CODE: PASS
+PILOT SECURITY READY (ENTORNO REAL): PENDING BY DESIGN
+
+TESTS PASS
+- OK 20079 finance premium foundation invariants
+- OK 20080 finance premium dashboard/manual-charge invariants
+- OK 20081 finance premium reports/snapshots/PDF invariants
+- OK 20082 finance premium QA/shadow gate invariants
+- OK 20082 regression matrix · 17/17 invariants
+- OK 20083 Finance Premium final pilot gate invariants
+- OK 20084 regression · 20083 workspace/private Social context isolation invariants
+- OK 20084 Security Go-Live + Owner AAL2 invariants
+- OK 20084 pilot release matrix
+- OK 20084 Android/Netlify hardening contract
+- OK 20084 cumulative release contract
+- OK 20084 SQL structural / fail-closed checks
+- JavaScript syntax checks: PASS
+
+READ-ONLY PRODUCTION AUDIT
+- Existing Owner/platform guard v055: present.
+- Existing Owner password session v139: present.
+- Existing recent-password guard v108: present.
+- Existing support entity session v114: present.
+- Existing app_mutate_v160: present.
+- Finance recurring function not present in current production: EXPECTED because cumulative Finance 143..148 has not been applied there by this work.
+- Security Advisor currently reports Leaked Password Protection disabled: blocker remains pending until platform configuration is changed.
+- Sensitive SECURITY DEFINER sample classified: deletion plan/finalize require critical authorization; moderation requires moderator; platform metrics/entities/readiness/verifier/profile-manager/subscription paths include platform guards.
+- Four anon SECURITY DEFINER warnings correspond to intended public catalog/directory/Showcase surfaces and require output-minimization QA rather than blind revocation.
+
+SECRET / CLIENT PACKAGE CHECK
+- No .jks/.keystore/.pem/.p12/.key/.env files in candidate patch.
+- No high-risk private-key / sb_secret / literal service-role-key patterns detected in generated candidate tree.
+- No eval/new Function in security-go-live-20084.js.
+- GitHub indexed search returned no matches for service_role, BEGIN PRIVATE KEY or keystore password patterns; full local checkout/history scan remains a required release control because indexes are not exhaustive.
+
+20.084 SECURITY IMPLEMENTATION
+- TOTP MFA Owner enrollment/challenge/verify integrated.
+- AAL2 fail-closed wrapper for Owner authorization after enforcement.
+- AAL2 required for privileged security attestations and final pilot enable.
+- Owner support entry routed to v149, v114 authenticated bypass revoked.
+- Support-session rate gate.
+- Security checklist/evidence ledger deny-by-default to normal users.
+- Security surface inventory Owner-only.
+- Security Pilot gate blocks Finance live activation and real recurring execution until readiness is explicitly enabled.
+- 20.083 workspace/chat isolation retained and regression tested.
+- Android security patch: versionCode 20084, network security config, WebView debug OFF, Safe Browsing, no external cleartext HTTP.
+- Netlify additive hardening supplied without replacing existing CSP.
+- Threat model, incident response, auth security, secret scan and pilot activation runbook included.
+
+PENDING EXTERNAL / DEPLOYED EVIDENCE BEFORE PILOT ENABLE
+1. Apply 143..149 in the selected environment in order.
+2. Enable Supabase Auth Leaked Password Protection.
+3. Enroll Owner TOTP through Console Security, verify AAL2, then enable Owner MFA enforcement.
+4. Perform backup restore drill.
+5. Merge and verify real Netlify headers on kombax.es.
+6. Apply Android patch to full Android checkout; build signed release APK/AAB and validate it.
+7. Execute hostile two-club / ~20-user E2E and Storage ID substitution matrix.
+8. Run full checkout/history secret scan.
+9. Re-run Supabase Security Advisors after DDL and triage remaining warnings.
+10. Attest controls with real evidence from an AAL2 Owner session.
+11. Confirm app_kombax_security_status_v149().pilot_ready=true before any explicit Security Pilot enable.
+
+PRODUCTION CHANGES PERFORMED BY THIS WORK: NONE.
+No DDL, Auth configuration, Netlify deploy, APK/AAB upload or pilot flag activation was performed.

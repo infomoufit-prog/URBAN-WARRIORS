@@ -57,7 +57,7 @@ const printReceipt=(r)=>{
   popup.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recibo ${esc(r.numero||'')}</title><link rel="stylesheet" href="${new URL('./css/app.css',location.href).href}"></head><body class="receipt-print-page">${receiptDocument(r)}<script>addEventListener('load',()=>setTimeout(()=>print(),180));<\/script></body></html>`);
   popup.document.close();
 };
-const openReceipt=(r)=>{
+export const openReceipt=(r)=>{
   if(!r)return;
   const {wrap}=openDetail({title:`Recibo ${r.numero||''}`,subtitle:'Documento de cobro verificable e imprimible',className:'receipt-modal',body:receiptDocument(r),actions:'<button class="btn btn-ghost" id="share-receipt" type="button">Compartir datos</button><button class="btn btn-primary" id="print-receipt" type="button">Imprimir / Guardar PDF</button>'});
   wrap.querySelector('#print-receipt')?.addEventListener('click',()=>{try{printReceipt(r)}catch(e){setError(e)}});

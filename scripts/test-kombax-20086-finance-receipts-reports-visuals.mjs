@@ -1,0 +1,30 @@
+import { readFile } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const r=p=>readFile(new URL(`../${p}`,import.meta.url),'utf8');
+const [premium,legacy,report,config,index,sw,gradle,main,health]=await Promise.all([
+ r('web/js/modules/finance-premium.js'),r('web/js/modules/finance.js'),r('supabase/functions/finance-report/index.ts'),r('web/config.js'),r('web/index.html'),r('web/service-worker.js'),r('android/app/build.gradle'),r('android/app/src/main/java/com/urbanwarriors/app/MainActivity.java'),r('supabase/functions/health/index.ts')
+]);
+assert.match(premium,/function histogram\(ms=\[\]\)/,'Premium must render grouped monthly histogram');
+assert.match(premium,/fv2-hist-bar/,'Histogram bars missing');
+assert.match(premium,/function aging\(a=\[\]\)/,'Debt donut/aging missing');
+assert.match(premium,/categoryBreakdown/,'Category bars missing');
+assert.match(premium,/dimensionBreakdown/,'Group\/discipline bars missing');
+assert.match(premium,/@keyframes fv2-bar-grow/,'Animated histogram growth missing');
+assert.match(premium,/@keyframes fv2-donut-draw/,'Animated debt donut missing');
+assert.match(premium,/@keyframes fv2-fill-grow/,'Animated category/group bars missing');
+assert.match(premium,/prefers-reduced-motion:reduce/,'Reduced-motion accessibility missing');
+assert.match(premium,/data-hist-month/,'Histogram drill-down missing');
+assert.match(premium,/aria-pressed=\"\$\{active\?'true':'false'\}\"/,'Persistent chart selection accessibility missing');
+assert.match(premium,/fv2-hist-bar.active/,'Selected histogram state missing');
+assert.match(premium,/fv2-donut-seg.active/,'Selected donut state missing');
+assert.match(premium,/data-aging/,'Debt donut drill-down missing');
+assert.match(premium,/import \{ openReceipt \} from '\.\/finance\.js'/,'Premium must reuse professional receipt viewer');
+assert.match(premium,/fv2-view-receipt/,'Club receipt action missing');
+assert.match(legacy,/export const openReceipt=/,'Professional receipt viewer must be reusable');
+assert.match(report,/access-control-allow-origin/,'finance-report CORS missing');
+assert.match(report,/req\.method==='OPTIONS'/,'finance-report preflight missing');
+assert.match(report,/Histograma mensual/,'PDF monthly histogram missing');
+assert.match(report,/Antiguedad de la deuda/,'PDF debt aging visualization missing');
+assert.match(report,/Detalle financiero/,'PDF financial table missing');
+for(const [name,txt] of [['config',config],['index',index],['sw',sw],['gradle',gradle],['main',main],['health',health]]) assert.match(txt,/20086/,`${name} build marker 20086 missing`);
+console.log('PASS KOMBAX 20086 · receipts + PDF reports + premium visuals');

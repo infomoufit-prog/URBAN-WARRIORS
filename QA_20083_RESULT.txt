@@ -1,0 +1,62 @@
+KOMBAX RC13 build 20083 · QA FINAL
+FINANCE PREMIUM FINAL + WORKSPACE CONTEXT ISOLATION
+Fecha: 2026-08-25
+
+RESULTADO: CANDIDATO DE CÓDIGO APROBADO PARA VALIDACIÓN CONTROLADA
+PRODUCCIÓN: SIN CAMBIOS POR ESTE TRABAJO
+
+AUDITORÍA DE CONTEXTO · PRODUCCIÓN SOLO LECTURA
+- Causa raíz confirmada: los RPC privados de Social/mensajería agregaban todos los actores gestionables por una misma cuenta autenticada.
+- Estructura Owner activa auditada sin leer contenido privado: 2 actores Social gestionables; 1 pertenece al workspace de club y 1 es perfil directo.
+- Modelo global histórico: 6 hilos privados asociados a esos actores.
+- Scope de club equivalente: 5 hilos privados.
+- 20.083 excluye del workspace el hilo del actor directo ajeno al club; el hilo histórico se conserva en su contexto correcto.
+- Tablas Social privadas: RLS activo; sin SELECT/INSERT/UPDATE directo para authenticated/anon en las tablas auditadas.
+- Tablas privadas críticas auditadas (socios, matrículas, cuotas, pagos, recibos, grupos, disciplinas, documentos, sesiones, asistencias, notificaciones, configuración, equipo): RLS activo y políticas de ámbito club.
+- Vistas financieras principales auditadas: security_invoker=true.
+- Backend push: clave única por club_id + perfil_id + token. Cliente 20.083 añade marca local por club.
+
+HARDENING 20.083
+- Workspace Social privado ligado a club actual.
+- Perfil directo (Federación/Marca/Competidor) excluido del workspace privado del club.
+- Actor activo ligado a inbox, mensajes, leído, badge y Mi red.
+- contacto_id ajeno al actor/contexto => KOMBAX_CONTACT_CONTEXT_FORBIDDEN.
+- Owner/support válido puede operar como identidad Club del workspace, sin incorporar perfiles directos.
+- selectedSocio pasa de clave global legacy a usuario + club.
+- intents privados de sessionStorage se limpian al cambiar contexto.
+- sincronización push Android marcada por usuario + club + token.
+- KOMBAX global conserva feed/directorio/perfiles directos según diseño.
+
+FINANZAS · BASELINE PRODUCCIÓN SOLO LECTURA
+- 13 cargos
+- 8 pagos
+- 6 recibos
+- 0 sobrepagos validados
+- 0 recibos emitidos antes de saldo cero
+- 0 cargos pagados sin recibo activo
+- 2 pagos pendientes de validación (correcto: no cuentan como cobrado)
+
+FINANZAS · CIERRE 20.083
+- finance_pilot_live_enabled = false por defecto.
+- Ejecución real exige simultáneamente recurring ON + QA Shadow aprobado + pilot live ON.
+- Revocar QA fuerza recurring OFF + pilot live OFF.
+- Activación exige readiness + frase literal ACTIVAR RECURRENCIA + request_id idempotente.
+- UI no expone un botón de activación real.
+- No se reescriben cargos, pagos, recibos ni snapshots históricos.
+
+TESTS
+OK 20079 finance premium foundation invariants
+OK 20080 finance premium dashboard/manual-charge invariants
+OK 20081 finance premium reports/snapshots/PDF invariants
+OK 20082 finance premium QA/shadow gate invariants
+OK 20082 regression matrix · 17/17 invariants
+OK 20083 workspace/private Social context isolation invariants
+OK 20083 Finance Premium final pilot gate invariants
+OK 20083 cumulative release contract
+OK JavaScript syntax · context-isolation-20083.js
+OK JavaScript syntax · finance-premium.js
+OK JavaScript syntax · finance-premium-bootstrap.js
+OK SQL transaction structure · migrations 143–148
+
+ROLLOUT OBLIGATORIO
+Aplicar backend 143→148 en validación, desplegar frontend/PWA/APK 20.083 de forma coordinada y ejecutar E2E multi-identidad/multiclub antes de tocar producción o abrir el gate financiero real.

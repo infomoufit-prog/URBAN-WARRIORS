@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WebView.setWebContentsDebuggingEnabled(false);
         createNotificationChannel();
         configureEdgeToEdge();
         webView = new WebView(this);
@@ -65,9 +66,10 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) settings.setSafeBrowsingEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXApp/2.0.0-rc.13/20077");
+        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXApp/2.0.0-rc.13/20086");
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
@@ -230,7 +232,7 @@ public class MainActivity extends Activity {
     private void openExternalUri(Uri uri) {
         if (uri == null) return;
         String scheme = String.valueOf(uri.getScheme()).toLowerCase();
-        if (!("https".equals(scheme) || "http".equals(scheme) || "mailto".equals(scheme) || "tel".equals(scheme))) {
+        if (!("https".equals(scheme) || "mailto".equals(scheme) || "tel".equals(scheme))) {
             Log.w(LOG_TAG, "Navegación externa bloqueada por esquema no permitido: " + scheme);
             return;
         }

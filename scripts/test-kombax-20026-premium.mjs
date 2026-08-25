@@ -14,7 +14,7 @@ const cfgBuild=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),androidBuild=Number(g
 assert(cfgBuild>=20026&&androidBuild===cfgBuild,'web y Android conservan la foundation premium desde build 20026');
 assert(gradle.includes("applicationId 'com.urbanwarriors.app'")&&manifest.includes('android:label="KOMBAX"'),'applicationId permanece intacto y launcher se presenta como KOMBAX');
 assert(/"name"\s*:\s*"KOMBAX"/.test(pwa)&&/"short_name"\s*:\s*"KOMBAX"/.test(pwa),'PWA se instala con identidad KOMBAX');
-assert(index.includes(`kombax-premium.css?v=${cfgBuild}`)&&index.includes('<title>KOMBAX · Deportes de contacto</title>'),'entrada carga la foundation premium versionada sin lenguaje técnico de plataforma');
+assert(index.includes(`kombax-premium.css?v=${cfgBuild}`)&&/<title>KOMBAX · Deportes de contacto(?: y artes marciales)?<\/title>/.test(index)&&!/<title>[^<]*plataforma/i.test(index),'entrada carga la foundation premium versionada sin lenguaje técnico de plataforma');
 assert(sw.includes(String(cfgBuild)),'service worker invalida caché para el build vigente');
 for(const token of ['--kx-black:#050608','--kx-red:','--kx-red-deep:','--kx-white:#f7f7f5'])assert(css.toLowerCase().includes(token),`foundation contiene ${token}`);
 assert(!/\bImpact\b/i.test(baseCss+css),'Impact deja de ser identidad tipográfica KOMBAX');

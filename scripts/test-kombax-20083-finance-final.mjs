@@ -1,0 +1,13 @@
+import fs from 'node:fs';import path from 'node:path';
+const root=path.resolve(import.meta.dirname,'..');
+const sql=fs.readFileSync(path.join(root,'supabase/migrations/148_kombax_finance_premium_final_gate_20083.sql'),'utf8');
+const ui=fs.readFileSync(path.join(root,'web/js/modules/finance-premium.js'),'utf8');
+const must=(x,m)=>{if(!x)throw new Error(m)};
+for(const s of ['trg_finance_final_gate_sync_v148','private.finance_final_gate_sync_v148','finance_pilot_live_enabled','app_finance_pilot_readiness_v148','finance_qa_shadow_approved','finance_recurring_enabled','FINANCE_PILOT_CONFIRMATION_REQUIRED','ACTIVAR RECURRENCIA','app_mutation_requests','procesar_cargos_recurrentes_pre_final_148'])must(sql.includes(s),`missing ${s}`);
+must(/if not p_shadow then[\s\S]*finance_recurring_enabled[\s\S]*finance_qa_shadow_approved[\s\S]*finance_pilot_live_enabled/.test(sql),'real engine is not triple-gated');
+must(/finance\.pilot\.pausar[\s\S]*finance_pilot_live_enabled[\s\S]*finance_recurring_enabled/.test(sql),'pilot pause does not close both gates');
+must(!/update public\.pagos|delete from public\.pagos|update public\.recibos_cuota|delete from public\.recibos_cuota/i.test(sql),'final gate must not rewrite payment/receipt history');
+must(ui.includes('FINAL PILOT GATE'),'final gate status missing in UI');
+must(ui.includes('app_finance_pilot_readiness_v148'),'UI readiness read missing');
+must(!ui.includes("backend.mutate('finance.pilot.activar'"),'20.083 UI must not expose one-click real recurrence activation');
+console.log('OK 20083 Finance Premium final pilot gate invariants');
