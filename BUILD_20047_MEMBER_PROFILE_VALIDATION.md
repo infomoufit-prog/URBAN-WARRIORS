@@ -17,7 +17,7 @@ Migración 093 `kombax_member_public_profile_null_badge_fix_20047` aplicada en S
 ### Verificación real
 Con sesión `authenticated` simulada y rollback:
 - Sheila Azogue: perfil público devuelve objeto válido.
-- BRYAN RIVERA GREY: perfil público devuelve objeto válido, banner/avatar por storage path, afiliación confirmada y publicaciones visibles.
+- MIEMBRO PILOTO: perfil público devuelve objeto válido, banner/avatar por storage path, afiliación confirmada y publicaciones visibles.
 - Urban Warriors: perfil público sigue válido, con insignia Club y Showcase.
 
 ## Ficha pública Miembro enriquecida

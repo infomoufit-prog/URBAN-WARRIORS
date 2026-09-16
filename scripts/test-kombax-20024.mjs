@@ -5,7 +5,7 @@ const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);
 assert(build>=20024&&Number(gradle.match(/versionCode\s+(\d+)/)?.[1])>=20024&&cfg.includes('kombaxSocial: true'),'build conserva o supera KOMBAX Social 20024');
 assert(gradle.includes("applicationId 'com.urbanwarriors.app'"),'identidad Android permanece actualizable con el JKS existente');
 assert(app.includes("renderKombaxSocial")&&app.includes("social:'KOMBAX Social'")&&app.includes("platformFeatures().social"),'ruta social está separada y protegida por feature flag');
-assert(components.includes("social:'KOMBAX'"),'navegación identifica la capa global fuera de Contenido del club');
+assert(components.includes("globalIds=[personalId,'social','kombax-events','showcase']")||components.includes("social:'KOMBAX'"),'navegación identifica Social como capa global fuera del acordeón Mi Club');
 for(const table of ['kombax_social_perfiles','kombax_social_publicaciones','kombax_social_likes','kombax_social_bloqueos','kombax_social_contactos','kombax_social_reportes','kombax_social_moderacion'])assert(sql.includes(`public.${table}`),`migración modela ${table}`);
 assert(!/create table[^;]*(seguidores|followers|amistades|conversaciones|mensajes)/is.test(sql),'no existen tablas de seguidores, amistades, conversaciones ni mensajes');
 assert(sql.includes("extract(year from age(current_date,s.fecha_nacimiento))>=18")&&sql.includes('no se permite contacto con perfiles personales menores de 18 años'),'contacto con menores se bloquea en backend, no solo en UI');

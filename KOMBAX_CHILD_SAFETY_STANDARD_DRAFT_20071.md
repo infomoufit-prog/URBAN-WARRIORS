@@ -26,7 +26,7 @@ KOMBAX aplica tolerancia cero frente a la explotación y abuso sexual infantil (
 - El tutor puede retirar la autorización de Social y el chat personal permanece bloqueado hasta los 18 años.
 
 ## Contacto de seguridad infantil
-**Contacto designado:** BRYAN RIVERA GREY — responsable humano de Seguridad Infantil durante el piloto
+**Contacto designado:** KOMBAX SPAIN — responsable humano de Seguridad Infantil durante el piloto
 **Email:** childsafety@kombax.es
 
 El contacto designado recibe escalados internos y comunicaciones de Google Play relativas a Child Safety/CSAM, puede explicar el procedimiento de revisión y está facultado para coordinar las medidas necesarias.

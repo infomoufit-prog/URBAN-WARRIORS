@@ -2,7 +2,7 @@
 
 ## Contactos operativos del piloto
 
-- Responsable primario: **BRYAN RIVERA GREY**.
+- Responsable primario: **KOMBAX SPAIN**.
 - Seguridad: **seguridad@kombax.es**.
 - Soporte: **soporte@kombax.es**.
 - Privacidad: **privacidad@kombax.es**.

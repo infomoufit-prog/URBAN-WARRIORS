@@ -1,4 +1,116 @@
+## R79 · build 20130 · i18n completion phases 6–10
+
+- Completed strict system-copy localization audit across the remaining Finance, Admin, profiles/entities, support/legal and residual operational surfaces.
+- Added 607 R79 audited source strings with 7 non-Spanish translations (EN/FR/PT/IT/DE/TH/FIL), preserving Spanish as source of truth.
+- Added R79 exact/dynamic runtime precedence above R78 while preserving user-generated content boundaries.
+- Global strict product audit reaches 0 unresolved system-copy candidates after explicit technical-code exclusions.
+- R78 phase 1–5 catalog remains intact and cumulative.
+
+
+## R78 · build 20129 · i18n phases 1–5
+- Replaced key-only localization confidence with an audited visible-system-copy catalog.
+- Added 1,086 fixed system strings with complete EN/FR/PT/IT/DE/TH/FIL precomputed translations.
+- Added exact + dynamic R78 runtime precedence and persistent locale cache.
+- Preserved UGC original-text boundaries and all R75/R77 functionality.
+# R40 · 2026-09-04
+
+- Mi red: descriptor `Contactos y conexiones KOMBAX` + CTA `Añadir a mi red`.
+- Social: Mi red, clubes seleccionados y exclusiones de clubes sin romper conexiones.
+- Events: visibilidad pública/KOMBAX/red/club/clubes/Federación/invitación.
+- Migrations: banners adicionales en Federaciones/licencias y Archivo documental.
+- Auditoría de Marca R37 confirmada.
+- Backend R40 aplicado live; sin Netlify/GitHub/Google Play/firma Android.
+
+# R39 · 2026-09-04
+
+- Reordenación del acordeón Mi Club.
+- Asistencia virtual + Migrations + Manual agrupados.
+- Mis licencias integrado dentro de Federaciones y licencias.
+- Promoción contextual directa de KOMBAX Migrations.
+
+# 20.101 R38 · Assist + Migrations Economy
+
+- KOMBAX Assist separado: email-first y chat guiado únicamente cuando soporte lo activa.
+- KOMBAX Migrations separado: acceso directo, conversación + carga de documentos en el mismo caso.
+- Confirmación humana obligatoria antes de cualquier importación.
+- Ledger privado, límites de coste/turnos/documentos y enrutamiento interno económico.
+- Backend 227–234 aplicado live; Edge Function `kombax-assist-r38` live.
+- R38 67/67; full build exit 0; web/dist/Android 189/189/189 sin diferencias.
+- Android preflight 4/5; firma local fuera del paquete.
+
+# 20.101 R35 · Event-Centric Competition Preparation
+
+- Preparación ligada a inscripción concreta, sin nueva capa permanente en Mi Club.
+- KOMBAX Events + eventos internos comparten seguimiento y pesaje oficial.
+- `Mis competiciones` para Competidor/miembro.
+- Histórico privado separado del organizador/federación.
+- Pesaje oficial bloqueado como dato del evento.
+- Backend 218/219 aplicado live; build 186/186/186 PASS.
+
+# 20.101 R3 · Event Visual Editor Hardening
+
+- Main Event premium conectado a Fight Card real y único destacado por evento.
+- upload/reencuadre persistente de cartel/banner.
+- Organiza/Avala visibles en portada.
+- fotos de participante externo y duelo visual en Social.
+- Brand Heroes reparados para que el protagonista siempre sea visible.
+- Supabase 178 aplicado; QA completo y build determinista PASS.
+
+# 20.101 · Demo Event Showcase
+- `Noche de Impacto · Barcelona · DEMO QA` instalado como evento público real en Supabase.
+- 12 participantes, 6 combates y Main Event normal del dominio Events.
+- Club Fénix Elite · DEMO + Federación Nova Combat · DEMO como organizaciones ficticias visibles.
+- Banco multimedia completo incluido; auto-hidratación Owner de 10 imágenes hacia Storage privado.
+- Seed/cleanup Owner-only e idempotentes; sin tablas/rutas demo paralelas.
+- Web/PWA/Android 20101; regresión completa y build determinista PASS: 132 archivos idénticos.
+
+# 20.100 · KOMBAX Brand Heroes
+- Hero visual compartido para Social, Events y Showcase.
+- Logo oficial KOMBAX como única marca gráfica.
+- Fondos fotográficos locales optimizados y separados del copy HTML.
+- Events adopta `FROM HYPE TO HISTORY` y `El espectáculo no empieza en el ring. Empieza aquí.`.
+- Motion ambiental accesible y responsive móvil.
+- Sin cambios Supabase ni contratos funcionales.
+
+# 20.099 · Events Official Album + HD Media
+
+- Álbum oficial Previo / Evento / Postevento.
+- 15 fotos activas + 5 vídeos almacenados activos por evento.
+- Vídeos de Eventos hasta 60 s, 1080p y 100 MB.
+- Grid fotográfico seleccionable + lightbox + filtros.
+- Multi-upload secuencial y contadores de cuota.
+- Supabase 175/176: quota transaccional + idempotencia.
+- Storage privado preservado.
+- Límites históricos de vídeo de Comunidad/Social preservados.
+
+# 20.098 · Events Large Format Experience
+
+- Eventos pasan a gran formato de una columna, diferenciados de Showcase.
+- Main Event teaser en portada y segundo nivel completo al entrar.
+- Estados separados: evento, inscripciones y tickets.
+- Venue, dirección, mapa, aforo, acceso, tickets/registro/streaming/web por enlaces HTTPS.
+- Backend real: migraciones 173 y 174 aplicadas.
+- Workspace isolation 20.097 preservado; Urban Warriors sigue sin entitlement hasta post-deploy.
+- Web/PWA/Android 20098; JKS local incluido sin contraseñas.
+
+# 20.096 · Events Premium Visual Identity
+
+- Auditoría y rediseño visual de KOMBAX Eventos sobre 20.095.
+- Iconografía propia, neon controlado, motion ambiental y acabado broadcast.
+- Visual Engine/plantillas locales rediseñadas.
+- Sin cambios backend.
+
 # Changelog
+
+## 2.0.0-rc.13 · build 20095 · Integration / Hardening Final Candidate
+
+- Deep-links Android de Eventos conservan `event` y `fight` con validación estricta.
+- Media firmada renueva firma ante fallo y descarga; degradación con reintento.
+- Identidad web/PWA/Android local sincronizada a 20095.
+- Netlify/CSP/Service Worker/Android WebView auditados.
+- Regresión completa y build determinista PASS: 101 archivos web/dist/Android idénticos.
+- Production health permanece 20094 hasta desplegar 20.095; no se realizó deploy ni publicación.
+- Espectador sigue deshabilitado.
 
 ## 2.0.0-rc.13 · build 20063 · Social Messaging Final QA
 
@@ -253,3 +365,21 @@ Ver detalle en `CHANGELOG_RC13_BUILD_20028.md`. Build 20028 separa Miembro/Compe
 - Eliminado fallback visual Urban Warriors para otros clubes; fallback neutro KOMBAX.
 - Migración 096 aplicada/verificada en vivo; cuatro recibos históricos conservan sus números y reciben snapshot del emisor.
 - Smoke financiero con rollback PASS; regresión/build PASS; web=dist=Android 63/63/63.
+
+## 20.101 R52.2 — Social Android Poster Fix
+- Corrige la resolución de portada/encuadre del vídeo en publicaciones de KOMBAX Social, especialmente en Android WebView.
+- El feed usa el `media_id` resuelto de v238 y no deja que un `{}` vacío oculte la presentación real.
+- Mantiene paridad Web / Android assets y prepara artefactos APK/AAB identificados como R52.2.
+
+## 20.106 R56 · PROFILE PUBLIC UX QA FREEZE CANDIDATE
+- Perfil público: álbum resumido a 5 elementos + álbum completo bajo demanda.
+- Mi perfil: experiencia public-first; gestión agrupada en botón contextual del hero.
+- Social 5 publicaciones y Showcase 4 productos preservados.
+- Events/Social/Showcase/repositorios preservados respecto a R55.
+- Build web/Android 20106; health sincronizado 20106.
+
+## 20.107 R57 · SOCIAL INFO UX QA FREEZE CANDIDATE · 2026-09-06
+- Identidad activa + normas/moderación completas salen del flujo principal de KOMBAX Social.
+- Nuevo acceso compacto `Información de KOMBAX Social` en cabecera.
+- Se conserva fundador, publicación, compositor, aviso corto, feed y lógica de moderación.
+- Frontend-only; sin migración DB. Health actualizado a build 20107.

@@ -5,6 +5,7 @@ export const KOMBAX_BRAND=Object.freeze({
   name:'KOMBAX',
   socialName:'KOMBAX Social',
   showcaseName:'KOMBAX Showcase',
+  eventsName:'KOMBAX Eventos',
   tagline:'Connect · Compete · Grow',
   symbol:'./assets/brand/kombax-symbol-white.png',
   symbolBlack:'./assets/kombax-symbol.png',
@@ -24,6 +25,7 @@ export const platformFeatures=()=>Object.freeze({
   directProfiles:window.UW_CONFIG?.features?.directProfiles===true,
   social:window.UW_CONFIG?.features?.kombaxSocial===true,
   showcase:window.UW_CONFIG?.features?.kombaxShowcase===true,
+  events:window.UW_CONFIG?.features?.kombaxEvents===true,
   demoDirectory:window.UW_CONFIG?.features?.demoDirectory===true,
   showcaseDemo:window.UW_CONFIG?.features?.showcaseDemo===true
 });
@@ -63,5 +65,5 @@ export function tenantKey(session,suffix=''){
 }
 
 export function publicPlatformIntroduction(){
-  return 'KOMBAX conecta clubes, miembros, competidores, marcas, federaciones y profesionales del mundo de las artes marciales y los deportes de contacto.';
+  return 'Gestiona tu actividad, conecta con el sector y abre nuevas oportunidades en un espacio creado específicamente para tu deporte.';
 }

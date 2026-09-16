@@ -59,10 +59,10 @@ export function formatMediaBytes(bytes){
   const value=Number(bytes||0);if(value<1024)return `${value} B`;if(value<1024*1024)return `${(value/1024).toFixed(0)} KB`;return `${(value/1024/1024).toFixed(1)} MB`;
 }
 
-export async function prepareVideo(file){
+export async function prepareVideo(file,{maxBytes=50*1024*1024,maxDuration=15.2,maxLongEdge=1920,maxShortEdge=1080}={}){
   if(!file||!file.size)throw new Error('Selecciona un vídeo.');
   if(!String(file.type||'').startsWith('video/'))throw new Error('El archivo seleccionado no es un vídeo.');
-  if(file.size>50*1024*1024)throw new Error('El vídeo supera 50 MB.');
+  if(file.size>maxBytes)throw new Error(`El vídeo supera ${Math.round(maxBytes/1024/1024)} MB.`);
   const url=URL.createObjectURL(file);const video=document.createElement('video');video.muted=true;video.playsInline=true;video.preload='auto';
   try{
     return await new Promise((resolve,reject)=>{
@@ -71,13 +71,13 @@ export async function prepareVideo(file){
       const capture=async()=>{try{
         const duration=Number(video.duration||0),width=Number(video.videoWidth||0),height=Number(video.videoHeight||0);
         if(!duration||!width||!height)throw new Error('El vídeo no contiene metadatos válidos.');
-        if(duration>15.2)throw new Error(`El vídeo dura ${duration.toFixed(1)} s. El máximo es 15 s.`);
-        if(Math.max(width,height)>1920||Math.min(width,height)>1080)throw new Error(`El vídeo es ${width}×${height}. La resolución final máxima admitida es 1080p.`);
+        if(duration>maxDuration)throw new Error(`El vídeo dura ${duration.toFixed(1)} s. El máximo es ${Math.floor(maxDuration)} s.`);
+        if(Math.max(width,height)>maxLongEdge||Math.min(width,height)>maxShortEdge)throw new Error(`El vídeo es ${width}×${height}. La resolución final máxima admitida es 1080p.`);
         const scale=Math.min(1,1280/Math.max(width,height));const posterWidth=Math.max(1,Math.round(width*scale)),posterHeight=Math.max(1,Math.round(height*scale));
         const canvas=document.createElement('canvas');canvas.width=posterWidth;canvas.height=posterHeight;const context=canvas.getContext('2d');if(!context)throw new Error('No se pudo generar la portada del vídeo.');
         context.drawImage(video,0,0,posterWidth,posterHeight);const blob=await toBlob(canvas,'image/webp',0.82);if(!blob)throw new Error('No se pudo generar la portada automática.');
         const cover=new File([blob],String(file.name||'video').replace(/\.[^.]+$/,'')+'-portada.webp',{type:blob.type||'image/webp',lastModified:Date.now()});
-        finish({file,duration,width,height,mime:file.type,sizeBytes:file.size,cover});
+        finish({file,duration,width,height,mime:file.type,sizeBytes:file.size,cover,coverTime:Number(video.currentTime||0)});
       }catch(error){finish(null,error);}};
       video.onerror=()=>finish(null,new Error('El formato de vídeo no puede procesarse en este navegador. Usa MP4 H.264 o WEBM.'));
       video.onloadedmetadata=()=>{const target=Math.min(Math.max(Number(video.duration||0)*0.25,0.05),Math.max(0,Number(video.duration||0)-0.05));if(target>0){video.onseeked=capture;video.currentTime=target;}else video.onloadeddata=capture;};

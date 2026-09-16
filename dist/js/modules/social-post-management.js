@@ -2,6 +2,7 @@ import { repos } from '../core/repositories.js';
 import { esc, dtFmt } from '../core/utils.js';
 import { openDetail, confirmDialog, toast, setError } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
+import { t } from '../i18n/index.js';
 
 const LIMIT=30, PAGE=10;
 const TYPE_LABEL={actualizacion:'Actualización',resultado:'Resultado',evento:'Evento',oportunidad:'Oportunidad'};
@@ -46,7 +47,7 @@ export async function openKombaxPostManager(profile,{onChanged}={}){
     const body=`<div class="kx-post-manager-intro">${socialQuotaMarkup(quota)}<p>Se muestran primero las más recientes. Carga bloques de 10 para revisar las anteriores; la publicación más antigua queda marcada cuando aparece.</p></div>
       <div class="kx-post-manage-list">${rows.length?rows.map(x=>rowMarkup(x,quota)).join(''):'<div class="empty compact"><strong>No tienes publicaciones activas</strong></div>'}</div>
       ${!done?'<div class="kx-post-manage-more"><button type="button" class="btn btn-ghost" id="kx-manage-more">Ver 10 anteriores</button><button type="button" class="btn btn-ghost" id="kx-manage-oldest">Ir a la más antigua</button></div>':''}`;
-    if(!modal){modal=openDetail({title:'Gestionar publicaciones',subtitle:`${profile.nombre_publico} · tú decides qué contenido conservar`,body,width:'900px',className:'kx-post-manager-modal'});}else{const bodyNode=modal.wrap.querySelector('.detail-modal-body');if(bodyNode)bodyNode.innerHTML=body;}
+    if(!modal){modal=openDetail({title:t('social.actions.managePosts'),subtitle:`${profile.nombre_publico} · tú decides qué contenido conservar`,body,width:'900px',className:'kx-post-manager-modal'});}else{const bodyNode=modal.wrap.querySelector('.detail-modal-body');if(bodyNode)bodyNode.innerHTML=body;}
     bind();
   };
   const bind=()=>{
@@ -56,7 +57,7 @@ export async function openKombaxPostManager(profile,{onChanged}={}){
       'Eliminar publicación',
       'La publicación y sus interacciones se eliminarán. Si su foto o vídeo pertenece también al Álbum, el Álbum se conserva.',
       async()=>{try{await repos.kombaxSocial.deletePost(b.dataset.kxManageDelete);toast('Publicación eliminada');await onChanged?.();setTimeout(()=>openKombaxPostManager(profile,{onChanged}),360);}catch(error){setError(error);}},
-      {confirmText:'Eliminar definitivamente',danger:true}
+      {confirmText:t('common.actions.delete'),danger:true}
     )));
   };
   await load({reset:true});

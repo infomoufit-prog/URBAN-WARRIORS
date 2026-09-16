@@ -17,7 +17,7 @@ const checks=[
  ['how-it-works modal',help.includes('Cómo funciona')&&help.includes('Paso a paso')&&help.includes('Reglas importantes')],
  ['deep links to real functions',help.includes('data-manual-route')&&help.includes('location.hash=`#${b.dataset.manualRoute}`')],
  ['roles and access explained',help.includes('Quién puede usarlo')&&help.includes('canOpen(item)')],
- ['social documented',help.includes('Combat Social / KOMBAX Social')&&help.includes('corazón')&&help.includes('comentarios')],
+ ['social documented',help.includes('KOMBAX Social')&&help.includes('corazón')&&help.includes('comentarios')],
  ['finance groups sessions documented',help.includes('Finanzas, cuotas y cobros')&&help.includes("title:'Grupos'")&&help.includes('Sesiones y recurrencia')],
  ['showcase non-ecommerce documented',help.includes('Showcase no es ecommerce')],
  ['club access codes documented',help.includes('Códigos del club e invitaciones')&&help.includes('4 o 5 dígitos')],
@@ -26,7 +26,7 @@ const checks=[
  ['manual has no hardcoded Urban Warriors tenant',!help.includes('Urban Warriors')],
  ['install copy generic KOMBAX',admin.includes("pageHeader('Instalar KOMBAX'")&&admin.includes('portal de tu club')],
  ['manual premium responsive CSS',css.includes('.kx-manual-shell')&&css.includes('.kx-manual-grid')&&css.includes('@media(max-width:680px)')],
- ['route label updated',app.includes("help:'Manual interactivo'")],
+ ['route label updated',app.includes("help:'Ayuda y soporte'")],
  ['build 20036+',Number((cfg.match(/build:\s*(\d+)/)||[])[1]||0)>=20036&&Number((gradle.match(/versionCode\s+(\d+)/)||[])[1]||0)>=20036]
 ];
 const failed=checks.filter(([,ok])=>!ok);

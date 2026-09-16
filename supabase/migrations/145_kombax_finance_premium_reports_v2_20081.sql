@@ -260,7 +260,7 @@ begin
 
   if v_year is not null and v_month is not null then
     v_from:=make_date(v_year,v_month,1);
-    v_to:=(v_from+interval '1 month-1 day')::date;
+    v_to:=(v_from+interval '1 month' - interval '1 day')::date;
   elsif v_year is not null then
     v_from:=make_date(v_year,1,1);v_to:=make_date(v_year,12,31);
   else

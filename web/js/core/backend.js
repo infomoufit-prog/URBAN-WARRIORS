@@ -3,6 +3,7 @@ import { state } from './state.js';
 import { uuid, humanError, technicalError } from './utils.js';
 import { selectedClubSlug, selectClubSlug } from './platform.js';
 import { invalidateCache } from './query-cache.js';
+import { getLocale } from '../i18n/index.js';
 
 const APP_SESSION='uw2_app_session';
 const cfg=window.UW_CONFIG;
@@ -10,8 +11,8 @@ export const client=new SupabaseClient(cfg.supabase);
 const readInflight=new Map();
 const READ_CONCURRENCY=6;
 const CONTRACT_TTL_MS=5*60*1000;
-const PLATFORM_TERMS_VERSION='1.0.0';
-const PLATFORM_PRIVACY_VERSION='1.0.0';
+const PLATFORM_TERMS_VERSION='1.1.0-piloto';
+const PLATFORM_PRIVACY_VERSION='1.1.0-piloto';
 let activeReads=0;
 const readQueue=[];
 const contractCache=new Map();
@@ -47,8 +48,9 @@ async function platformLegalStatus(){
   catch{return {required:true,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION};}
 }
 async function recordPlatformLegalAcceptance(){
+  const active=await platformLegalStatus();
   return client.rpc('app_kombax_platform_legal_accept_v129',{
-    p_terms_version:PLATFORM_TERMS_VERSION,p_privacy_version:PLATFORM_PRIVACY_VERSION,
+    p_terms_version:String(active?.terms_version||PLATFORM_TERMS_VERSION),p_privacy_version:String(active?.privacy_version||PLATFORM_PRIVACY_VERSION),
     p_terms_accepted:true,p_privacy_acknowledged:true,p_user_agent:typeof navigator!=='undefined'?navigator.userAgent:''
   });
 }
@@ -63,7 +65,7 @@ async function globalIdentityFromAuth(authUser){
   const platformLegal=await platformLegalStatus();
   return {
     scope:'kombax',id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',
     club_id:null,club:null,rol:'kombax',roles:['kombax'],directProfiles:Array.isArray(directProfiles)?directProfiles:[],applications:Array.isArray(applications)?applications:[],platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
     platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
   };
@@ -73,10 +75,10 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
   const userId=authUser.id;
   let memberships;
   try{
-    memberships=await client.select('miembros_club',`select=club_id,rol,coordinacion,clubes(id,nombre,slug,lema,logo_url,portada_url,color_primario,color_secundario,theme_id,branding_version)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
+    memberships=await client.select('miembros_club',`select=club_id,rol,coordinacion,clubes(id,nombre,slug,lema,logo_url,portada_url,logo_presentation,portada_presentation,color_primario,color_secundario,theme_id,branding_version)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
   }catch(error){
     // Compatibilidad temporal si RC9 se abre antes de aplicar la migración 021.
-    memberships=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,lema,logo_url,portada_url,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
+    memberships=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,lema,logo_url,portada_url,logo_presentation,portada_presentation,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);
   }
   if(!memberships?.length)throw new Error('El usuario no pertenece a ningún club activo.');
   const priority=['direccion','secretaria','economia','comunicacion','monitor','familia','alumno'];
@@ -94,7 +96,7 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
   const platformLegal=await platformLegalStatus();
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',avatar_path:profile.avatar_path||'',
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',avatar_path:profile.avatar_path||'',avatar_presentation:profile.avatar_presentation||{},
     rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,
     memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
     platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
@@ -203,6 +205,16 @@ export const backend={
   async signInGlobal(email,password){
     state.clearError();
     const auth=await client.signIn(email,password);
+    const pendingStudent=localStorage.getItem('uw2_pending_student_membership');
+    if(pendingStudent){
+      try{
+        const p=JSON.parse(pendingStudent)||{};
+        if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){
+          await client.rpc('app_kombax_alumno_aceptar_r59',{p_codigo:String(p.code||'').trim()});
+          localStorage.removeItem('uw2_pending_student_membership');
+        }
+      }catch(error){console.warn('Membresía de alumno pendiente:',humanError(error));}
+    }
     const pendingTeam=localStorage.getItem('uw2_pending_team_access');
     if(pendingTeam){
       try{
@@ -315,7 +327,7 @@ export const backend={
     state.clearError();
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
-    const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global'});
+    const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global',preferred_locale:getLocale()});
     if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
     let session=await globalIdentityFromAuth(auth.user);
     const legal=await recordPlatformLegalAcceptance();session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};
@@ -346,7 +358,7 @@ export const backend={
   },
   async registerAccount(input){
     const clubSlug=input.club_slug||selectedClubSlug()||cfg.clubSlug;
-    const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,telefono:input.telefono,tipo_cuenta:input.tipo_cuenta,club_slug:clubSlug});
+    const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,telefono:input.telefono,tipo_cuenta:input.tipo_cuenta,club_slug:clubSlug,preferred_locale:getLocale()});
     const payload={club_slug:clubSlug,tipo_cuenta:input.tipo_cuenta,adulto_nombre:input.adulto_nombre,adulto_apellidos:input.adulto_apellidos,telefono:input.telefono||'',fecha_nacimiento_adulto:input.adulto_fecha_nacimiento||null,menor_nombre:input.menor_nombre||null,menor_apellidos:input.menor_apellidos||null,fecha_nacimiento_menor:input.menor_fecha_nacimiento||null,disciplina_id:input.disciplina_id||null,grupo_id:input.grupo_id||null,tarifa_id:input.tarifa_id||null,invite_code:input.invite_code||null};
     const legalEntries=input.legal_acceptances||[];
     if(!auth?.access_token){localStorage.setItem('uw2_pending_registration',JSON.stringify({email:input.email,payload}));if(legalEntries.length)localStorage.setItem('uw2_pending_legal',JSON.stringify(legalEntries));return {confirmationRequired:true};}
@@ -360,6 +372,10 @@ export const backend={
     return this.publicRpc('app_kombax_invitacion_validar_v059',{p_codigo:String(code||'').trim(),p_email:normalized});
   },
   async validateTeamInvitation(code,email){return this.validateInvitation(code,email);},
+  async acceptStudentMembership(code){
+    if(!client.session?.access_token)throw new AuthExpiredError();
+    return client.rpc('app_kombax_alumno_aceptar_r59',{p_codigo:String(code||'').trim()});
+  },
   async acceptTeamInvitation(code){
     if(!client.session?.access_token)throw new AuthExpiredError();
     return client.rpc('app_kombax_invitacion_aceptar_equipo_v059',{p_codigo:String(code||'').trim()});
@@ -417,6 +433,16 @@ export const backend={
       if(previous?.club?.slug)selectClubSlug(previous.club.slug);persistSession(previous);throw error;
     }
   },
+  async setPreferredLocale(locale){
+    if(!client.session?.access_token)return {ok:false,local_only:true};
+    const normalized=String(locale||'').trim().toLowerCase();
+    try{const out=await client.rpc('app_kombax_set_preferred_locale_i18n_b01',{p_locale:normalized});await client.updateUserMetadata({preferred_locale:normalized}).catch(error=>console.warn('Locale Auth metadata:',humanError(error)));if(state.session){persistSession({...state.session,preferred_locale:out?.preferred_locale||normalized});}return out;}
+    catch(error){console.warn('Preferencia de idioma no persistida en cuenta:',humanError(error));return {ok:false,local_only:true};}
+  },
+  async getPreferredLocale(){
+    if(!client.session?.access_token)return state.session?.preferred_locale||null;
+    try{const out=await client.rpc('app_kombax_get_preferred_locale_i18n_b01',{});return out?.preferred_locale||state.session?.preferred_locale||null;}catch{return state.session?.preferred_locale||null;}
+  },
   hasCapability(operation){return state.can(operation)},
   async signOut({preserveTrace=false}={}){await client.signOut();persistSession(null);clearContractCache();state.moduleCache.clear();if(!preserveTrace)state.trace=[];},
   async select(table,query='select=*'){
@@ -434,11 +460,22 @@ export const backend={
       catch(error){state.pushTrace({kind:'read',ok:false,label:`GLOBAL RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
     });
   },
-  async invokeFunction(name,payload={}){
+  async invokeFunction(name,payload={},timeoutMs=30000){
     if(!client.session?.access_token)throw new AuthExpiredError();
     const t0=performance.now();state.pushTrace({kind:'mutation',stage:'request',ok:null,label:`EDGE ${name}`});
-    try{const data=await client.invokeFunction(name,payload);state.pushTrace({kind:'mutation',stage:'response',ok:true,label:`EDGE ${name}`,ms:Math.round(performance.now()-t0)});return data;}
+    try{const data=await client.invokeFunction(name,payload,timeoutMs);state.pushTrace({kind:'mutation',stage:'response',ok:true,label:`EDGE ${name}`,ms:Math.round(performance.now()-t0)});return data;}
     catch(error){state.pushTrace({kind:'mutation',stage:'response',ok:false,label:`EDGE ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
+  },
+  async downloadFunction(name,payload={},timeoutMs=30000){
+    if(!client.session?.access_token)throw new AuthExpiredError();
+    const t0=performance.now();state.pushTrace({kind:'read',stage:'request',ok:null,label:`EDGE DOWNLOAD ${name}`});
+    try{const blob=await client.downloadFunction(name,payload,timeoutMs);state.pushTrace({kind:'read',stage:'response',ok:true,label:`EDGE DOWNLOAD ${name}`,ms:Math.round(performance.now()-t0),bytes:Number(blob?.size||0)});return blob;}
+    catch(error){state.pushTrace({kind:'read',stage:'response',ok:false,label:`EDGE DOWNLOAD ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
+  },
+  async publicInvokeFunction(name,payload={},timeoutMs=30000){
+    const t0=performance.now();
+    try{const data=await withReadSlot(()=>client.invokeFunction(name,payload,timeoutMs));state.pushTrace({kind:'read',ok:true,label:`PUBLIC EDGE ${name}`,ms:Math.round(performance.now()-t0)});return data;}
+    catch(error){state.pushTrace({kind:'read',ok:false,label:`PUBLIC EDGE ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
   },
   async publicRpc(name,args={}){
     const t0=performance.now();
@@ -486,8 +523,20 @@ export const backend={
     }
   },
   async upload(bucket,path,file,upsert=false){const out=await client.upload(bucket,path,file,upsert);state.pushTrace({kind:'storage',ok:true,label:`UPLOAD ${bucket}`,detail:path});return out;},
+  async uploadResumable(bucket,path,file,{upsert=false,onProgress=null}={}){
+    const started=performance.now();
+    try{
+      const out=await client.uploadResumable(bucket,path,file,{upsert,onProgress});
+      state.pushTrace({kind:'storage',ok:true,label:`TUS ${bucket}`,detail:path,ms:Math.round(performance.now()-started)});
+      return out;
+    }catch(error){
+      state.pushTrace({kind:'storage',ok:false,label:`TUS ${bucket}`,detail:path,ms:Math.round(performance.now()-started),error:technicalError(error)});
+      throw error;
+    }
+  },
   async remove(bucket,path){const out=await client.remove(bucket,path);state.pushTrace({kind:'storage',ok:true,label:`DELETE ${bucket}`,detail:path});return out;},
   async signedUrl(bucket,path,expires=600){return client.signedUrl(bucket,path,expires)},
   async download(bucket,path,expires=600){const blob=await client.downloadSigned(bucket,path,expires);state.pushTrace({kind:'storage',ok:true,label:`DOWNLOAD ${bucket}`,detail:path});return blob;},
+  async localAssetFile(path,options={}){return client.localAssetFile(path,options)},
   publicUrl(bucket,path){return client.publicUrl(bucket,path)}
 };

@@ -1,5 +1,16 @@
-const VERSION='uw2-2.0.0-rc13-20086';
-const STATIC_CACHE=`${VERSION}-media`;
+// historical cache marker: 20110-r60
+// historical cache marker: media-r34
+// historical cache marker: media-r331
+// historical cache marker: media-r29
+// historical cache marker: media-r28
+// historical cache marker: media-r27
+const BUILD_MARKER='kombax-build-20130';
+const VERSION='kombax-2.0.0-rc13-20130-r79-i18n-completion';
+// historical cache marker: media-r36
+// historical cache marker: media-r37
+// historical cache marker: media-r38
+// historical cache marker: media-r39
+const STATIC_CACHE=`${VERSION}-media-r44`; // historical cache marker: media-r40; media-r41; media-r42; media-r43
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key!==STATIC_CACHE)await caches.delete(key);await self.clients.claim();})()));
 self.addEventListener('fetch',event=>{

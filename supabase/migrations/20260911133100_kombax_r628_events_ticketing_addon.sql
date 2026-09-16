@@ -1,0 +1,283 @@
+-- KOMBAX 20.110 R62.8 · Events commercial service and ticketing contract
+begin;
+-- 3. Commercial service catalogue + per-event Ticketing add-on
+-- ---------------------------------------------------------------------------
+create schema if not exists kombax_commercial;
+revoke all on schema kombax_commercial from public,anon,authenticated;
+grant usage on schema kombax_commercial to service_role;
+
+create table if not exists kombax_commercial.service_catalog(
+  service_code text primary key,
+  family text not null check(family in ('showcase','events')),
+  name text not null,
+  service_class text not null check(service_class in ('core','free_listing','marketplace','addon')),
+  allows_checkout boolean not null default false,
+  pricing_status text not null default 'included' check(pricing_status in ('included','free','subscription','addon_to_define')),
+  description text not null,
+  active boolean not null default true,
+  updated_at timestamptz not null default now()
+);
+create table if not exists kombax_commercial.service_access(
+  id uuid primary key default gen_random_uuid(),
+  subject_type text not null,
+  subject_id uuid not null,
+  service_code text not null references kombax_commercial.service_catalog(service_code) on delete restrict,
+  status text not null default 'requested' check(status in ('requested','under_review','active','suspended','rejected','cancelled')),
+  source text not null default 'user_request' check(source in ('user_request','owner','system','migration')),
+  requested_by uuid references public.perfiles(id) on delete set null,
+  reviewed_by uuid references public.perfiles(id) on delete set null,
+  requested_at timestamptz not null default now(),
+  reviewed_at timestamptz,
+  activated_at timestamptz,
+  review_note text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(subject_type,subject_id,service_code)
+);
+create table if not exists kombax_commercial.service_events(
+  id bigint generated always as identity primary key,
+  service_access_id uuid references kombax_commercial.service_access(id) on delete cascade,
+  actor_user_id uuid references public.perfiles(id) on delete set null,
+  event_type text not null,
+  from_status text,
+  to_status text,
+  detail jsonb not null default '{}'::jsonb,
+  request_id uuid,
+  created_at timestamptz not null default now()
+);
+create table if not exists kombax_commercial.event_contract_documents(
+  policy_code text not null,
+  version text not null,
+  title text not null,
+  body text not null,
+  required_for_ticketing boolean not null default true,
+  status text not null default 'active' check(status in ('draft','active','retired')),
+  legal_review_status text not null default 'pending' check(legal_review_status in ('pending','approved','rejected')),
+  operator_name text not null default 'KOMBAX SPAIN',
+  effective_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key(policy_code,version)
+);
+create table if not exists kombax_commercial.event_contract_acceptances(
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.kombax_eventos_publicos(id) on delete cascade,
+  organizer_subject_type text not null,
+  organizer_subject_id uuid not null,
+  policy_code text not null,
+  policy_version text not null,
+  accepted_by uuid not null references public.perfiles(id) on delete restrict,
+  accepted_at timestamptz not null default now(),
+  request_id uuid,
+  foreign key(policy_code,policy_version) references kombax_commercial.event_contract_documents(policy_code,version) on delete restrict,
+  unique(event_id,organizer_subject_type,organizer_subject_id,policy_code,policy_version)
+);
+
+alter table kombax_commercial.service_catalog enable row level security;
+alter table kombax_commercial.service_access enable row level security;
+alter table kombax_commercial.service_events enable row level security;
+alter table kombax_commercial.event_contract_documents enable row level security;
+alter table kombax_commercial.event_contract_acceptances enable row level security;
+revoke all on all tables in schema kombax_commercial from public,anon,authenticated;
+grant select,insert,update,delete on all tables in schema kombax_commercial to service_role;
+grant usage,select on all sequences in schema kombax_commercial to service_role;
+
+create index if not exists idx_commercial_service_access_status_r628 on kombax_commercial.service_access(service_code,status,updated_at desc);
+create index if not exists idx_commercial_service_access_requested_by_r628 on kombax_commercial.service_access(requested_by) where requested_by is not null;
+create index if not exists idx_commercial_service_access_reviewed_by_r628 on kombax_commercial.service_access(reviewed_by) where reviewed_by is not null;
+create index if not exists idx_commercial_service_events_access_r628 on kombax_commercial.service_events(service_access_id,created_at desc);
+create index if not exists idx_commercial_service_events_actor_r628 on kombax_commercial.service_events(actor_user_id) where actor_user_id is not null;
+create index if not exists idx_event_contract_acceptances_event_r628 on kombax_commercial.event_contract_acceptances(event_id,accepted_at desc);
+create index if not exists idx_event_contract_acceptances_actor_r628 on kombax_commercial.event_contract_acceptances(accepted_by);
+create index if not exists idx_event_contract_acceptances_policy_r628 on kombax_commercial.event_contract_acceptances(policy_code,policy_version);
+
+insert into kombax_commercial.service_catalog(service_code,family,name,service_class,allows_checkout,pricing_status,description) values
+ ('showcase_marketplace','showcase','KOMBAX Showcase Marketplace','marketplace',true,'subscription','Venta de productos dentro de Showcase. Requiere vendedor verificado, políticas vigentes y Stripe Connect.'),
+ ('showcase_professional_services','showcase','Showcase · Servicios profesionales','free_listing',false,'free','Publicación y contacto para servicios profesionales. No incluye checkout de producto.'),
+ ('events_publish','events','KOMBAX Events · Publicación','core',false,'included','Creación y publicación del evento sin venta interna de entradas.'),
+ ('events_ticketing','events','KOMBAX Events + Ticketing','addon',true,'addon_to_define','Servicio adicional por evento para venta interna de tickets, QR y control de acceso.')
+on conflict(service_code) do update set name=excluded.name,service_class=excluded.service_class,allows_checkout=excluded.allows_checkout,pricing_status=excluded.pricing_status,description=excluded.description,active=true,updated_at=now();
+
+-- Operational QA drafts. Final legal identity/fiscal data must be completed before public commercial launch.
+update kombax_commercial.event_contract_documents set status='retired',updated_at=now() where status='active';
+insert into kombax_commercial.event_contract_documents(policy_code,version,title,body,required_for_ticketing,status,legal_review_status,effective_at) values
+ ('events_organizer_terms','1.0-qa','Condiciones del organizador · KOMBAX Events','BORRADOR OPERATIVO QA · REVISIÓN JURÍDICA OBLIGATORIA. KOMBAX es la plataforma tecnológica operada bajo la denominación KOMBAX SPAIN. El organizador declara que dispone de legitimación, permisos, seguros, aforo, autorizaciones, derechos sobre contenidos y recursos necesarios para celebrar el evento. El organizador responde de la exactitud de la información publicada, seguridad y ejecución material del evento, cambios, aplazamientos o cancelaciones y atención a asistentes, sin perjuicio de las obligaciones legales indisponibles que correspondan a la plataforma. KOMBAX SPAIN/KOMBAX puede limitar o suspender funciones por fraude, riesgo, incumplimiento o requerimiento legal. Los datos fiscales, registrales y domicilio legal definitivo del operador deberán completarse antes del lanzamiento comercial público.','true','active','pending',now()),
+ ('events_ticketing_agreement','1.0-qa','Acuerdo de servicio · Events + Ticketing','BORRADOR OPERATIVO QA · REVISIÓN JURÍDICA OBLIGATORIA. Events + Ticketing es un servicio adicional por evento, separado de la mera publicación en KOMBAX Events. El organizador acepta que el pago se procesa mediante Stripe para su cuenta conectada y que KOMBAX no almacena datos completos de tarjeta ni CVC. El organizador gestiona precio, cupo, condiciones del evento, atención al comprador, preparación de devoluciones cuando proceda y consecuencias de cancelación o modificación del evento. KOMBAX genera y valida tickets y QR, conserva trazabilidad técnica y puede bloquear ventas por seguridad, fraude o incumplimiento. La comisión transaccional KOMBAX permanece en 0 mientras no exista una regla contractual distinta; el precio del add-on Events + Ticketing se definirá separadamente. Los datos legales definitivos de KOMBAX SPAIN deberán completarse antes del lanzamiento comercial público.','true','active','pending',now())
+on conflict(policy_code,version) do update set title=excluded.title,body=excluded.body,required_for_ticketing=excluded.required_for_ticketing,status=excluded.status,legal_review_status=excluded.legal_review_status,effective_at=excluded.effective_at,updated_at=now();
+
+create or replace function kombax_commercial.event_contracts_ready_r628(p_event_id uuid)
+returns boolean language sql stable security definer set search_path='' as $$
+  with seller as (select kombax_payments.event_seller_r625(p_event_id) s)
+  select not exists(
+    select 1 from kombax_commercial.event_contract_documents p,seller
+    where p.status='active' and p.required_for_ticketing
+      and not exists(
+        select 1 from kombax_commercial.event_contract_acceptances a
+        where a.event_id=p_event_id and a.organizer_subject_type=seller.s->>'subject_type'
+          and a.organizer_subject_id=(seller.s->>'subject_id')::uuid
+          and a.policy_code=p.policy_code and a.policy_version=p.version
+      )
+  );
+$$;
+revoke all on function kombax_commercial.event_contracts_ready_r628(uuid) from public,anon,authenticated;
+grant execute on function kombax_commercial.event_contracts_ready_r628(uuid) to service_role;
+
+create or replace function kombax_commercial.event_ticketing_active_r628(p_event_id uuid)
+returns boolean language sql stable security definer set search_path='' as $$
+  select exists(select 1 from kombax_commercial.service_access a where a.subject_type='event' and a.subject_id=p_event_id and a.service_code='events_ticketing' and a.status='active');
+$$;
+revoke all on function kombax_commercial.event_ticketing_active_r628(uuid) from public,anon,authenticated;
+grant execute on function kombax_commercial.event_ticketing_active_r628(uuid) to service_role;
+
+create or replace function public.app_kombax_event_commercial_status_r628(p_event_id uuid)
+returns jsonb language plpgsql stable security definer set search_path='' as $$
+declare v_uid uuid:=auth.uid();v_access kombax_commercial.service_access;v_seller jsonb;v_contracts jsonb;v_account kombax_payments.connected_accounts;
+begin
+  if v_uid is null or not public.app_kombax_evento_puede_gestionar_v160(p_event_id) then raise exception 'EVENT_MANAGE_REQUIRED'; end if;
+  select * into v_access from kombax_commercial.service_access where subject_type='event' and subject_id=p_event_id and service_code='events_ticketing';
+  v_seller:=kombax_payments.event_seller_r625(p_event_id);
+  select * into v_account from kombax_payments.connected_accounts a where a.subject_type=v_seller->>'subject_type' and a.subject_id=(v_seller->>'subject_id')::uuid;
+  select coalesce(jsonb_agg(jsonb_build_object('code',p.policy_code,'version',p.version,'title',p.title,'body',p.body,'legal_review_status',p.legal_review_status,'accepted',exists(select 1 from kombax_commercial.event_contract_acceptances a where a.event_id=p_event_id and a.organizer_subject_type=v_seller->>'subject_type' and a.organizer_subject_id=(v_seller->>'subject_id')::uuid and a.policy_code=p.policy_code and a.policy_version=p.version)) order by p.policy_code),'[]'::jsonb)
+    into v_contracts from kombax_commercial.event_contract_documents p where p.status='active' and p.required_for_ticketing;
+  return jsonb_build_object(
+    'events_publish',jsonb_build_object('status','active','service_class','core','pricing_status','included'),
+    'events_ticketing',jsonb_build_object('status',coalesce(v_access.status,'not_requested'),'service_class','addon','pricing_status','addon_to_define','request_id',v_access.id,'review_note',v_access.review_note),
+    'contracts',v_contracts,'contracts_ready',kombax_commercial.event_contracts_ready_r628(p_event_id),
+    'seller_subject_type',v_seller->>'subject_type','seller_subject_id',v_seller->>'subject_id',
+    'stripe_ready',coalesce(v_account.status='active' and v_account.charges_enabled and v_account.payouts_enabled,false)
+  );
+end $$;
+revoke all on function public.app_kombax_event_commercial_status_r628(uuid) from public,anon;
+grant execute on function public.app_kombax_event_commercial_status_r628(uuid) to authenticated;
+
+create or replace function public.app_kombax_event_ticketing_service_request_r628(p_event_id uuid,p_request_id uuid)
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare v_uid uuid:=auth.uid();v public.kombax_eventos_publicos;a kombax_commercial.service_access;v_old text;
+begin
+  if v_uid is null or p_request_id is null then raise exception 'AUTH_AND_REQUEST_REQUIRED'; end if;
+  if not public.app_kombax_evento_puede_gestionar_v160(p_event_id) then raise exception 'EVENT_MANAGE_REQUIRED'; end if;
+  select * into strict v from public.kombax_eventos_publicos where id=p_event_id;
+  select * into a from kombax_commercial.service_access where subject_type='event' and subject_id=p_event_id and service_code='events_ticketing' for update;
+  if a.id is null then
+    insert into kombax_commercial.service_access(subject_type,subject_id,service_code,status,source,requested_by) values('event',p_event_id,'events_ticketing','requested','user_request',v_uid) returning * into a;
+    v_old:=null;
+  elsif a.status in ('rejected','cancelled') then
+    v_old:=a.status; update kombax_commercial.service_access set status='requested',source='user_request',requested_by=v_uid,requested_at=now(),reviewed_by=null,reviewed_at=null,review_note=null,updated_at=now() where id=a.id returning * into a;
+  else return jsonb_build_object('ok',true,'request_id',p_request_id,'reused',true,'data',to_jsonb(a)); end if;
+  insert into kombax_commercial.service_events(service_access_id,actor_user_id,event_type,from_status,to_status,request_id,detail) values(a.id,v_uid,'ticketing.request',v_old,a.status,p_request_id,jsonb_build_object('event_id',p_event_id));
+  return jsonb_build_object('ok',true,'request_id',p_request_id,'data',to_jsonb(a));
+end $$;
+revoke all on function public.app_kombax_event_ticketing_service_request_r628(uuid,uuid) from public,anon;
+grant execute on function public.app_kombax_event_ticketing_service_request_r628(uuid,uuid) to authenticated;
+
+create or replace function public.app_kombax_event_contract_accept_r628(p_event_id uuid,p_policy_code text,p_policy_version text,p_request_id uuid)
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare v_uid uuid:=auth.uid();p kombax_commercial.event_contract_documents;v_seller jsonb;
+begin
+  if v_uid is null or p_request_id is null then raise exception 'AUTH_AND_REQUEST_REQUIRED'; end if;
+  if not public.app_kombax_evento_puede_gestionar_v160(p_event_id) then raise exception 'EVENT_MANAGE_REQUIRED'; end if;
+  select * into p from kombax_commercial.event_contract_documents where policy_code=p_policy_code and version=p_policy_version and status='active' and required_for_ticketing;
+  if p.policy_code is null then raise exception 'EVENT_CONTRACT_NOT_ACTIVE'; end if;
+  v_seller:=kombax_payments.event_seller_r625(p_event_id);
+  insert into kombax_commercial.event_contract_acceptances(event_id,organizer_subject_type,organizer_subject_id,policy_code,policy_version,accepted_by,request_id)
+  values(p_event_id,v_seller->>'subject_type',(v_seller->>'subject_id')::uuid,p.policy_code,p.version,v_uid,p_request_id)
+  on conflict(event_id,organizer_subject_type,organizer_subject_id,policy_code,policy_version) do nothing;
+  return jsonb_build_object('ok',true,'request_id',p_request_id,'contracts_ready',kombax_commercial.event_contracts_ready_r628(p_event_id));
+end $$;
+revoke all on function public.app_kombax_event_contract_accept_r628(uuid,text,text,uuid) from public,anon;
+grant execute on function public.app_kombax_event_contract_accept_r628(uuid,text,text,uuid) to authenticated;
+
+create or replace function public.app_kombax_commercial_owner_dashboard_r628(p_limit integer default 100)
+returns jsonb language plpgsql stable security definer set search_path='' as $$
+declare v_uid uuid:=auth.uid();v_queue jsonb;
+begin
+  if v_uid is null or not kombax_marketplace.is_owner_r627(v_uid) then raise exception 'PLATFORM_ADMIN_REQUIRED'; end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id',a.id,'event_id',a.subject_id,'service_code',a.service_code,'status',a.status,'requested_at',a.requested_at,'review_note',a.review_note,'event_name',e.nombre,'organizer_name',e.organizador_nombre,'event_date',e.fecha_inicio) order by a.requested_at desc),'[]'::jsonb)
+  into v_queue from (select * from kombax_commercial.service_access where service_code='events_ticketing' order by requested_at desc limit least(greatest(p_limit,1),200)) a left join public.kombax_eventos_publicos e on e.id=a.subject_id;
+  return jsonb_build_object('ok',true,'stats',jsonb_build_object(
+    'ticketing_requested',(select count(*) from kombax_commercial.service_access where service_code='events_ticketing' and status in ('requested','under_review')),
+    'ticketing_active',(select count(*) from kombax_commercial.service_access where service_code='events_ticketing' and status='active'),
+    'ticketing_suspended',(select count(*) from kombax_commercial.service_access where service_code='events_ticketing' and status='suspended'),
+    'professional_service_listings',(select count(*) from public.kombax_showcase_elementos where listing_kind='professional_service' and estado='publicado'),
+    'marketplace_products',(select count(*) from public.kombax_showcase_elementos where listing_kind='product' and estado='publicado')
+  ),'ticketing_queue',v_queue,'catalog',(select jsonb_agg(to_jsonb(c) order by c.family,c.service_code) from kombax_commercial.service_catalog c where c.active));
+end $$;
+revoke all on function public.app_kombax_commercial_owner_dashboard_r628(integer) from public,anon;
+grant execute on function public.app_kombax_commercial_owner_dashboard_r628(integer) to authenticated;
+
+create or replace function public.app_kombax_commercial_owner_service_mutate_r628(p_access_id uuid,p_status text,p_note text,p_request_id uuid)
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare v_uid uuid:=auth.uid();a kombax_commercial.service_access;v_old text;v_status text:=lower(coalesce(p_status,''));
+begin
+  if v_uid is null or p_request_id is null or not kombax_marketplace.is_owner_r627(v_uid) then raise exception 'PLATFORM_ADMIN_REQUIRED'; end if;
+  if v_status not in ('under_review','active','suspended','rejected','cancelled') then raise exception 'SERVICE_STATUS_INVALID'; end if;
+  select * into strict a from kombax_commercial.service_access where id=p_access_id for update;v_old:=a.status;
+  update kombax_commercial.service_access set status=v_status,reviewed_by=v_uid,reviewed_at=now(),activated_at=case when v_status='active' then coalesce(activated_at,now()) else activated_at end,review_note=left(nullif(btrim(p_note),''),2000),source='owner',updated_at=now() where id=a.id returning * into a;
+  insert into kombax_commercial.service_events(service_access_id,actor_user_id,event_type,from_status,to_status,detail,request_id) values(a.id,v_uid,'owner.service.review',v_old,v_status,jsonb_build_object('note',left(coalesce(p_note,''),2000)),p_request_id);
+  return jsonb_build_object('ok',true,'request_id',p_request_id,'data',to_jsonb(a));
+end $$;
+revoke all on function public.app_kombax_commercial_owner_service_mutate_r628(uuid,text,text,uuid) from public,anon;
+grant execute on function public.app_kombax_commercial_owner_service_mutate_r628(uuid,text,text,uuid) to authenticated;
+
+create or replace function public.app_event_ticket_checkout_gate_r628(p_actor_id uuid,p_event_id uuid)
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare e public.kombax_eventos_publicos;v_seller jsonb;v_account kombax_payments.connected_accounts;
+begin
+  if p_actor_id is null or not exists(select 1 from public.perfiles p where p.id=p_actor_id) then raise exception 'BUYER_REQUIRED'; end if;
+  select * into strict e from public.kombax_eventos_publicos where id=p_event_id;
+  if not e.ticketing_enabled or e.ticketing_mode<>'kombax' then raise exception 'EVENT_KOMBAX_TICKETING_NOT_ENABLED'; end if;
+  if not kombax_commercial.event_ticketing_active_r628(p_event_id) then raise exception 'EVENT_TICKETING_ADDON_REQUIRED'; end if;
+  if not kombax_commercial.event_contracts_ready_r628(p_event_id) then raise exception 'EVENT_TICKETING_CONTRACTS_REQUIRED'; end if;
+  v_seller:=kombax_payments.event_seller_r625(p_event_id);
+  select * into v_account from kombax_payments.connected_accounts a where a.subject_type=v_seller->>'subject_type' and a.subject_id=(v_seller->>'subject_id')::uuid;
+  if v_account.id is null or v_account.status<>'active' or not v_account.charges_enabled or not v_account.payouts_enabled then raise exception 'EVENT_SELLER_STRIPE_NOT_READY'; end if;
+  return jsonb_build_object('ok',true,'event_id',p_event_id,'seller_subject_type',v_seller->>'subject_type','seller_subject_id',v_seller->>'subject_id');
+end $$;
+revoke all on function public.app_event_ticket_checkout_gate_r628(uuid,uuid) from public,anon,authenticated;
+grant execute on function public.app_event_ticket_checkout_gate_r628(uuid,uuid) to service_role;
+
+-- Wrap current R62.5.3 ticketing RPCs without destroying ticket personalization.
+do $$ begin
+  if to_regprocedure('public.app_kombax_event_ticketing_manage_status_r6253(uuid)') is not null
+    and to_regprocedure('public.app_kombax_event_ticketing_manage_status_r6253_pre_commercial_r628(uuid)') is null then
+    alter function public.app_kombax_event_ticketing_manage_status_r6253(uuid) rename to app_kombax_event_ticketing_manage_status_r6253_pre_commercial_r628;
+  end if;
+  if to_regprocedure('public.app_kombax_event_ticketing_mutate_r6253(uuid,jsonb,uuid)') is not null
+    and to_regprocedure('public.app_kombax_event_ticketing_mutate_r6253_pre_commercial_r628(uuid,jsonb,uuid)') is null then
+    alter function public.app_kombax_event_ticketing_mutate_r6253(uuid,jsonb,uuid) rename to app_kombax_event_ticketing_mutate_r6253_pre_commercial_r628;
+  end if;
+end $$;
+
+create or replace function public.app_kombax_event_ticketing_manage_status_r6253(p_event_id uuid)
+returns jsonb language plpgsql stable security definer set search_path='' as $$
+declare v_base jsonb;v_commercial jsonb;
+begin
+  if auth.uid() is null or not public.app_kombax_evento_puede_gestionar_v160(p_event_id) then raise exception 'EVENT_MANAGE_REQUIRED'; end if;
+  v_base:=public.app_kombax_event_ticketing_manage_status_r6253_pre_commercial_r628(p_event_id);
+  v_commercial:=public.app_kombax_event_commercial_status_r628(p_event_id);
+  return v_base||jsonb_build_object('commercial',v_commercial);
+end $$;
+revoke all on function public.app_kombax_event_ticketing_manage_status_r6253(uuid) from public,anon;
+grant execute on function public.app_kombax_event_ticketing_manage_status_r6253(uuid) to authenticated;
+revoke all on function public.app_kombax_event_ticketing_manage_status_r6253_pre_commercial_r628(uuid) from public,anon,authenticated;
+grant execute on function public.app_kombax_event_ticketing_manage_status_r6253_pre_commercial_r628(uuid) to service_role;
+
+create or replace function public.app_kombax_event_ticketing_mutate_r6253(p_event_id uuid,p_payload jsonb,p_request_id uuid)
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare v_mode text:=lower(coalesce(nullif(p_payload->>'mode',''),'none'));v_result jsonb;
+begin
+  if auth.uid() is null or not public.app_kombax_evento_puede_gestionar_v160(p_event_id) then raise exception 'EVENT_MANAGE_REQUIRED'; end if;
+  if v_mode='kombax' then
+    if not kombax_commercial.event_ticketing_active_r628(p_event_id) then raise exception 'EVENT_TICKETING_ADDON_REQUIRED'; end if;
+    if not kombax_commercial.event_contracts_ready_r628(p_event_id) then raise exception 'EVENT_TICKETING_CONTRACTS_REQUIRED'; end if;
+  end if;
+  v_result:=public.app_kombax_event_ticketing_mutate_r6253_pre_commercial_r628(p_event_id,p_payload,p_request_id);
+  return v_result||jsonb_build_object('commercial',public.app_kombax_event_commercial_status_r628(p_event_id));
+end $$;
+revoke all on function public.app_kombax_event_ticketing_mutate_r6253(uuid,jsonb,uuid) from public,anon;
+grant execute on function public.app_kombax_event_ticketing_mutate_r6253(uuid,jsonb,uuid) to authenticated;
+revoke all on function public.app_kombax_event_ticketing_mutate_r6253_pre_commercial_r628(uuid,jsonb,uuid) from public,anon,authenticated;
+grant execute on function public.app_kombax_event_ticketing_mutate_r6253_pre_commercial_r628(uuid,jsonb,uuid) to service_role;
+
+-- ---------------------------------------------------------------------------
+commit;

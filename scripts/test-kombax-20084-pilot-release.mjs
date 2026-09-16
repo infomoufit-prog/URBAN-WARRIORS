@@ -1,5 +1,5 @@
-import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
-const root=path.resolve(new URL('..',import.meta.url).pathname);
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {fileURLToPath} from 'node:url';
+const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const docs=['docs/SECURITY_GO_LIVE_20084.md','docs/PILOT_QA_2_CLUBS_20_USERS_20084.md','docs/INCIDENT_RESPONSE_MINIMUM_20084.md','docs/SECURITY_ADVISOR_TRIAGE_20084.md','android-security-20084/ANDROID_PATCH_20084.diff','netlify.security-headers.20084.toml'];
 for(const f of docs)assert.ok(fs.existsSync(path.join(root,f)),f);
 const q=fs.readFileSync(path.join(root,'docs/PILOT_QA_2_CLUBS_20_USERS_20084.md'),'utf8');

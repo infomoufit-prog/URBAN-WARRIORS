@@ -5,7 +5,7 @@ const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),versionCode=Number(gradl
 for(const x of ['Invitar alumno por email','Correo electrónico del alumno o tutor','createStudentInvitation','sendStudentInvitation'])assert.ok(members.includes(x),`UI alumnos incompleta: ${x}`);
 assert.match(repos,/p_tipo:'alumno'/);assert.match(repos,/sendStudentInvitation/);assert.match(backend,/async validateInvitation/);
 for(const x of ['^ALU-','Invitación personal de alumno o familia','validateInvitation(code,email)','La invitación no es válida para este correo o ha caducado'])assert.ok(app.includes(x),`Entrada ALU incompleta: ${x}`);
-for(const x of ["['equipo','alumno']","access_type:inviteType==='equipo'?'equipo':'alumnos'",'Te han invitado al club','Invitación segura de alumno o familia'])assert.ok(edge.includes(x),`invite-email alumno incompleto: ${x}`);
+assert.ok(edge.includes("'equipo','alumno'")&&edge.includes('federation_team'),'invite-email mantiene alumno/equipo y amplía Federation team');for(const x of ["access_type:inviteType==='equipo'?'equipo':'alumnos'",'Te han invitado al club','Invitación segura de alumno o familia'])assert.ok(edge.includes(x),`invite-email alumno incompleto: ${x}`);
 for(const x of ["when 'alumno' then 'ALU-'","v_tipo not in ('alumno','equipo')","i.tipo_invitacion='alumno'","lower(v_inv.email)<>v_email"])assert.ok(mig.includes(x),`Backend ALU incompleto: ${x}`);
 for(const x of ["'monitor','alumno'",'invitaciones_pendientes_email_club_tipo_v130','tipo_invitacion'])assert.ok(fix.includes(x),`Migración 130 incompleta: ${x}`);
 assert.doesNotMatch(edge,/SUPABASE_SERVICE_ROLE_KEY\s*=|sb_secret_|BEGIN (?:RSA |EC )?PRIVATE KEY/);

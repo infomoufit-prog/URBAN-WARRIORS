@@ -1,0 +1,14 @@
+begin;
+drop index if exists public.idx_kombax_eventos_publicos_creado_por_v163;
+drop index if exists public.idx_kombax_evento_entidades_creado_por_v163;
+drop index if exists public.idx_kombax_evento_entidades_respondido_por_v163;
+drop index if exists public.idx_kombax_evento_participantes_competidor_v163;
+drop index if exists public.idx_kombax_evento_participantes_club_v163;
+drop index if exists public.idx_kombax_evento_participantes_creado_por_v163;
+drop index if exists public.idx_kombax_evento_combates_participante_a_v163;
+drop index if exists public.idx_kombax_evento_combates_participante_b_v163;
+drop index if exists public.idx_kombax_evento_combates_ganador_v163;
+drop index if exists public.idx_kombax_evento_combates_creado_por_v163;
+drop index if exists public.idx_kombax_evento_interes_perfil_v163;
+drop index if exists public.idx_kombax_evento_social_links_creado_por_v163;
+commit;

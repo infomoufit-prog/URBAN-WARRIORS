@@ -134,7 +134,7 @@ Smoke transaccional de edición como Brian:
 Live Urban Warriors:
 
 - Urban Warriors -> Social Club;
-- BRYAN RIVERA GREY -> Social Miembro;
+- MIEMBRO PILOTO -> Social Miembro;
 - Sheila Azogue -> Social Miembro.
 
 No devuelve Relaciones ni datos administrativos.

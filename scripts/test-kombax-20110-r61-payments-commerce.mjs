@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+
+const read=p=>readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
+const migration=read('supabase/migrations/259_kombax_payments_connect_showcase_commerce_r61.sql');
+const directMigration=read('supabase/migrations/20260909183939_kombax_connect_direct_charges_stripe_managed_fees_r62.sql');
+const webhook=read('supabase/functions/stripe-webhook/index.ts');
+const checkout=read('supabase/functions/stripe-checkout/index.ts');
+const connect=read('supabase/functions/stripe-connect/index.ts');
+const stripeShared=read('supabase/functions/_shared/stripe.ts');
+const finance=read('web/js/modules/finance.js');
+const financePremium=read('web/js/modules/finance-premium.js');
+const showcase=read('web/js/modules/showcase.js');
+const repos=read('web/js/core/repositories.js');
+
+for(const path of ['supabase/functions/_shared/stripe.ts','supabase/verification/verify_259_payments_commerce.sql','AUDIT_PAYMENTS_SHOWCASE_R61.md','TAP_TO_PAY_PHASE_2_R61.md'])assert.ok(existsSync(new URL(`../${path}`,import.meta.url)),`${path} missing`);
+for(const marker of ['connected_accounts','payment_attempts','webhook_events','showcase_orders','showcase_incidents','platform_fee_rules','payment_authorizations','kombax_commerce_entitlements'])assert.match(migration,new RegExp(marker));
+assert.match(migration,/enable row level security/);
+assert.match(migration,/revoke all on function/);assert.match(migration,/app_stripe_event_apply_v259\(jsonb\)/);
+assert.match(webhook,/crypto\.subtle\.verify/);assert.match(webhook,/300/);assert.match(webhook,/stripe-signature/);
+assert.doesNotMatch(checkout,/transfer_data\]\[destination|on_behalf_of|application_fee_amount/);
+assert.match(checkout,/stripe\('checkout\/sessions','POST',form,account/);
+assert.match(stripeShared,/https:\/\/api\.stripe\.com\/v2\//);assert.match(stripeShared,/2026-07-29\.dahlia/);assert.doesNotMatch(stripeShared,/2026-08-26\.preview/);
+assert.match(connect,/fees_collector:'stripe'/);
+assert.match(connect,/losses_collector:'stripe'/);
+assert.match(connect,/dashboard:'full'/);assert.match(connect,/card_payments:\{requested:true\}/);
+assert.match(connect,/core\/account_links/);assert.match(connect,/configurations:\['merchant'\]/);
+assert.match(directMigration,/charge_model='direct'/);
+assert.match(directMigration,/platform_transaction_fees_disabled_r62/);
+assert.match(directMigration,/app_stripe_event_apply_v260/);
+assert.match(finance,/Pagar ahora/);assert.match(finance,/Activar cobros con tarjeta/);
+assert.match(financePremium,/Activar cobros con tarjeta/);assert.match(financePremium,/connectStatus\('club',cid\(\)\)/);assert.match(financePremium,/connectOnboarding\('club',cid\(\)\)/);assert.match(financePremium,/openStripeConnectStatus/);assert.match(financePremium,/Cuenta verificada/);assert.match(financePremium,/Cobros activados/);assert.match(financePremium,/Abonos activados/);assert.doesNotMatch(financePremium,/payments-status-grid/);
+assert.match(showcase,/COMPRAR/);assert.match(showcase,/Mis pedidos/);assert.match(showcase,/Vendido por/);
+assert.match(repos,/app_showcase_commerce_details_v259/);assert.match(repos,/stripe-checkout/);
+assert.doesNotMatch(read('web/config.js'),/sk_(live|test)_|whsec_/);
+console.log('KOMBAX R61 PAYMENTS + SHOWCASE COMMERCE: PASS');

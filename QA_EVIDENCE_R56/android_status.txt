@@ -1,0 +1,7 @@
+R56 Android status
+- versionCode: 20106
+- versionName: 2.0.0-rc.13-r56-qa-freeze
+- assets parity: PASS (191/191, 0 SHA differences)
+- debug runner: reaches Gradle wrapper correctly
+- physical APK build in this environment: BLOCKED by external DNS/network (services.gradle.org UnknownHostException)
+- physical-device QA: PENDING

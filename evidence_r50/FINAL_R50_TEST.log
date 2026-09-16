@@ -1,0 +1,45 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 test:20101:r50
+> node scripts/test-kombax-20101-r50-media-framing-hd60.mjs
+
+PASS R50 plan exists
+PASS Social default framing preset remains contain
+PASS Social image uses saved presentation
+PASS Social video uses saved presentation
+PASS mobile CSS no longer hard-forces cover
+PASS Social media CSS obeys saved fit variable
+PASS Social media CSS obeys saved X/Y focus
+PASS video can open framing editor
+PASS framing editor supports video preview
+PASS framing preview CSS supports video
+PASS Social portrait media uses exact 9:16 frame
+PASS Social landscape media uses exact 16:9 frame
+PASS Social square media uses exact 1:1 frame
+PASS Social click viewer opens full original with contain
+PASS Events detects real media orientation
+PASS Events portrait media uses exact 9:16 frame
+PASS Events landscape media uses exact 16:9 frame
+PASS Events square media uses exact 1:1 frame
+PASS Events album viewer preserves full image
+PASS fullscreen remains contain for image/video
+PASS Social portrait feed uses 9:16 frame
+PASS Social landscape feed uses 16:9 frame
+PASS Social square feed uses 1:1 frame
+PASS Social framing preview uses 9:16 portrait
+PASS Social publisher communicates 60 s HD
+PASS Social direct upload prepares up to 60.2 s
+PASS R50 Social SQL raises duration to 60.2 s
+PASS R50 Social SQL raises video bytes to 100 MB
+PASS R50 live follow-up migration exists
+PASS R50 HD trigger helper fixes search_path
+PASS R50 final HD guard is orientation-safe for 1920x1080 and 1080x1920
+PASS R50 expands public/restricted media bucket headroom
+PASS Club album Social route supports 60 s
+PASS Direct profile Social route supports 60 s
+PASS Events UI keeps 60 s HD contract
+PASS Events backend already enforces <=60.2 s
+PASS Events backend already allows up to 100 MB
+PASS legacy WEBM/MOV reading/upload compatibility retained
+PASS R49 functionality remains in source
+PASS R50 npm script registered
+R50 40/40 PASS

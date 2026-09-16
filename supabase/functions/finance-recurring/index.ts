@@ -5,10 +5,10 @@ function getSecretKey(): string {
   const legacy = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
   if (legacy) return legacy
   const raw = Deno.env.get('SUPABASE_SECRET_KEYS')
-  if (!raw) throw new Error('No se encontró una clave secreta de Supabase')
+  if (!raw) throw new Error('KOMBAX_SERVICE_KEY_MISSING')
   const keys = JSON.parse(raw) as Record<string, string>
   const key = keys.default || Object.values(keys)[0]
-  if (!key) throw new Error('SUPABASE_SECRET_KEYS no contiene ninguna clave')
+  if (!key) throw new Error('KOMBAX_SERVICE_KEY_MISSING')
   return key
 }
 
@@ -32,10 +32,10 @@ Deno.serve(async (request) => {
 
     const body = guard.body
     if (body.club_id != null && !validUuid(body.club_id)) {
-      return jsonResponse({ error: 'club_id no válido', request_id: requestId }, 400, requestId)
+      return jsonResponse({ error: 'invalid_club_id', request_id: requestId }, 400, requestId)
     }
     if (body.date != null && !validIsoDate(body.date)) {
-      return jsonResponse({ error: 'date no válida', request_id: requestId }, 400, requestId)
+      return jsonResponse({ error: 'invalid_date', request_id: requestId }, 400, requestId)
     }
 
     const requestedClub = typeof body.club_id === 'string' ? body.club_id : null
@@ -76,7 +76,7 @@ Deno.serve(async (request) => {
           club_id: club.id,
           date,
           ok: false,
-          error: String(error.message || error.code || 'Error de recurrencia')
+          error: String(error.message || error.code || 'recurrence_error')
         })
         continue
       }
@@ -99,6 +99,6 @@ Deno.serve(async (request) => {
     }, errors ? 207 : 200, requestId)
   } catch (error) {
     console.error(`[${requestId}]`, error)
-    return jsonResponse({ error: 'Error interno', request_id: requestId }, 500, requestId)
+    return jsonResponse({ error: 'internal_error', request_id: requestId }, 500, requestId)
   }
 })

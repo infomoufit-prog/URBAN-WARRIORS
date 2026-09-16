@@ -1,0 +1,24 @@
+R62.5.3 primary changes vs R62.5.2
+
+SOURCE
+- package.json
+- web/css/kombax-events.css
+- web/js/core/repositories.js
+- web/js/modules/kombax-events.js
+- scripts/test-kombax-20110-r62-5-2-ticket-qr-access-sidebar.mjs
+- scripts/test-kombax-20110-r62-5-3-ticket-personalization.mjs [new]
+- supabase/migrations/20260911085236_kombax_r6253_event_ticket_personalization.sql [new]
+- supabase/verification/verify_r62_5_3_event_ticket_personalization.sql [new]
+
+GENERATED / SYNCHRONIZED BY BUILD
+- dist/css/kombax-events.css
+- dist/js/core/repositories.js
+- dist/js/modules/kombax-events.js
+- android/app/src/main/assets/www/css/kombax-events.css
+- android/app/src/main/assets/www/js/core/repositories.js
+- android/app/src/main/assets/www/js/modules/kombax-events.js
+
+DELIVERY DOCUMENTATION
+- CHANGELOG_R62_5_3.md [new]
+- R62_5_3_IMPLEMENTATION_QA.md [new]
+- R62_5_3_CHANGED_FILES.txt [new]

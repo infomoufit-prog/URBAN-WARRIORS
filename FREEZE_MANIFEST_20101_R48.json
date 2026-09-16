@@ -1,0 +1,56 @@
+{
+  "version": "20.101 R48",
+  "base": "R47 final",
+  "status": "technical PRE-QA / QA candidate",
+  "generated_utc": "2026-09-05T09:34:56.604411+00:00",
+  "comparison_scope": "source excluding generated dist/build, node_modules, .git and DOCUMENTACION_R48 duplicates",
+  "r47_files_compared": 2024,
+  "r48_files_compared": 2033,
+  "added": [
+    "AUDIT_EVENTS_PREMIUM_20101_R48.md",
+    "CHANGELOG_20101_R48.md",
+    "CYBERSECURITY_HANDOFF_20101_R48.md",
+    "LIVE_SUPABASE_EVENTS_R48.md",
+    "PACKAGE_SMOKE_20101_R48.txt",
+    "PLAN_IMPLEMENTACION_R48.md",
+    "QA_HANDOFF_20101_R48.md",
+    "SUPABASE_ADVISORS_20101_R48.md",
+    "scripts/test-kombax-20101-r48-events-premium-polish.mjs"
+  ],
+  "removed": [],
+  "changed": [
+    "android/app/src/main/assets/www/css/kombax-events.css",
+    "android/app/src/main/assets/www/js/modules/kombax-events.js",
+    "package.json",
+    "web/css/kombax-events.css",
+    "web/js/modules/kombax-events.js"
+  ],
+  "runtime_parity": {
+    "web": 189,
+    "dist": 189,
+    "android": 189,
+    "differences": 0,
+    "aggregate_sha256": "8cd3d5ee030024e4642f5aab6be2e0fada832dee8405225a23143f9ac75437f2"
+  },
+  "tests": {
+    "r48": "28/28 PASS",
+    "r44": "25/25 PASS",
+    "r47": "28/28 PASS",
+    "npm_test": "EXIT 0"
+  },
+  "build": "PASS",
+  "secret_scan": "910 files / 0 findings / PASS",
+  "android_preflight": "4/5 - local signing pending",
+  "supabase": {
+    "r48_migration": false,
+    "live_contract_readback": "VERIFIED",
+    "security_advisors": "NON-CLEAN inherited",
+    "performance_advisors": "NON-CLEAN inherited",
+    "manual_authenticated_poster_e2e": "PENDING"
+  },
+  "deployment": {
+    "netlify": false,
+    "github_push": false
+  },
+  "real_personal_data": "HOLD"
+}

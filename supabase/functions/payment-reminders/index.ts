@@ -4,6 +4,19 @@ import { authorizeCronRequest, jsonResponse, validIsoDate, validUuid } from '../
 
 type Json = Record<string, unknown>
 
+const SUPPORTED_LOCALES=new Set(['es','en','fr','pt','it','de','th','fil'])
+function normalizeLocale(value:unknown){const raw=String(value||'').trim().toLowerCase().replace('_','-');const base=raw.split('-')[0];return SUPPORTED_LOCALES.has(raw)?raw:SUPPORTED_LOCALES.has(base)?base:'es'}
+const FINANCE_COPY:Record<string,string>={
+  es:'Tienes una actualización financiera en KOMBAX.',
+  en:'You have a financial update in KOMBAX.',
+  fr:'Vous avez une mise à jour financière dans KOMBAX.',
+  pt:'Tem uma atualização financeira no KOMBAX.',
+  it:'Hai un aggiornamento finanziario in KOMBAX.',
+  de:'Du hast eine Finanzaktualisierung in KOMBAX.',
+  th:'คุณมีข้อมูลการเงินอัปเดตใน KOMBAX',
+  fil:'May financial update ka sa KOMBAX.'
+}
+
 type FirebaseServiceAccount = {
   project_id: string
   client_email: string
@@ -15,10 +28,10 @@ function getSecretKey(): string {
   const legacy = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
   if (legacy) return legacy
   const raw = Deno.env.get('SUPABASE_SECRET_KEYS')
-  if (!raw) throw new Error('No se encontró una clave secreta de Supabase')
+  if (!raw) throw new Error('KOMBAX_SERVICE_KEY_MISSING')
   const keys = JSON.parse(raw) as Record<string, string>
   const key = keys.default || Object.values(keys)[0]
-  if (!key) throw new Error('SUPABASE_SECRET_KEYS no contiene ninguna clave')
+  if (!key) throw new Error('KOMBAX_SERVICE_KEY_MISSING')
   return key
 }
 
@@ -60,7 +73,7 @@ async function firebaseAccessToken(account: FirebaseServiceAccount): Promise<str
   })
   const payload = await response.json()
   if (!response.ok || !payload.access_token) {
-    throw new Error(`No se pudo obtener token FCM: ${JSON.stringify(payload)}`)
+    throw new Error(`FCM_TOKEN_ERROR:${JSON.stringify(payload)}`)
   }
   return payload.access_token as string
 }
@@ -108,8 +121,8 @@ Deno.serve(async (request) => {
   try {
     const guard=await authorizeCronRequest(request);requestId=guard.requestId;if(guard.response)return guard.response
     const body=guard.body
-    if(body.club_id!=null&&!validUuid(body.club_id))return jsonResponse({error:'club_id no válido',request_id:requestId},400,requestId)
-    if(body.date!=null&&!validIsoDate(body.date))return jsonResponse({error:'date no válida',request_id:requestId},400,requestId)
+    if(body.club_id!=null&&!validUuid(body.club_id))return jsonResponse({error:'invalid_club_id',request_id:requestId},400,requestId)
+    if(body.date!=null&&!validIsoDate(body.date))return jsonResponse({error:'invalid_date',request_id:requestId},400,requestId)
     const force = body.force === true
     const requestedClub = typeof body.club_id === 'string' ? body.club_id : null
     const requestedDate = typeof body.date === 'string' ? body.date : null
@@ -166,6 +179,14 @@ Deno.serve(async (request) => {
       if (notificationsError) throw notificationsError
 
       const profileIds = [...new Set((notifications || []).map((item) => item.perfil_id))]
+      const localeByProfile = new Map<string,string>()
+      if(profileIds.length){
+        try{
+          const {data:profiles,error:profilesError}=await supabase.from('perfiles').select('id,preferred_locale').in('id',profileIds)
+          if(profilesError)throw profilesError
+          for(const profile of profiles||[])localeByProfile.set(String(profile.id),normalizeLocale(profile.preferred_locale))
+        }catch(error){console.warn('preferred_locale lookup unavailable; using es fallback',error)}
+      }
       const devicesByProfile = new Map<string, { id: string; token: string }[]>()
       if (profileIds.length) {
         const { data: devices, error: devicesError } = await supabase
@@ -190,7 +211,7 @@ Deno.serve(async (request) => {
           try {
             await sendFcm(account, accessToken, device.token, {
               title: clubNames.get(String(notification.club_id)) || 'KOMBAX',
-              body: 'Tienes una actualización financiera en KOMBAX.',
+              body: FINANCE_COPY[localeByProfile.get(String(notification.perfil_id))||'es']||FINANCE_COPY.es,
               route: notification.ruta,
               data: { type: notification.tipo }
             })
@@ -219,6 +240,6 @@ Deno.serve(async (request) => {
     return jsonResponse({ ok: true, processed, push_sent: pushSent, push_errors: pushErrors },200,requestId)
   } catch (error) {
     console.error(`[${requestId}]`,error)
-    return jsonResponse({error:'Error interno',request_id:requestId},500,requestId)
+    return jsonResponse({error:'internal_error',request_id:requestId},500,requestId)
   }
 })

@@ -33,7 +33,7 @@ must(/p_operation='finance\.cargo\.crear'.*finance_v2_enabled/s.test(m144),'144:
 must(/finance-v2-manual-.*perfil_id/s.test(m144)&&/Tienes un nuevo cargo del club/.test(m144),'144: manual charges must publish grouped recipient events to the existing notification pipeline');
 must(/public\.auditoria/.test(m144)&&/finance\.cargo\.crear/.test(m144),'144: manual bulk charge must be audited');
 
-must(/const names=\['Categoría','Concepto','Destinatarios','Importe','Periodo','Vencimiento','Observaciones','Preview'\]/.test(premium),'UI: + Nuevo cargo must keep the 8-step wizard');
+must(/const names=\['Categoría','Concepto','Destinatarios','Importe','Periodo','Vencimiento','Observaciones','(?:Preview|Revisión)'\]/.test(premium),'UI: + Nuevo cargo must keep the 8-step wizard');
 must(/app_finance_v2_preview_cargo_v144/.test(premium)&&/Crear cargos/.test(premium),'UI: preview-before-create flow missing');
 must(/fv2-kpi/.test(premium)&&/(fv2-bar-button|fv2-chart-svg)/.test(premium)&&/(data-aging|fv2-donut-seg)/.test(premium),'UI: interactive KPI/chart/aging controls missing');
 must(/fv2-mobile/.test(premium)&&/fv2-card/.test(premium),'UI: mobile card layout missing');
@@ -50,7 +50,7 @@ must(/'payments',coalesce\(v_payments/.test(m144)&&/'receipts',coalesce\(v_recei
 must(/v_concepto\|\|'.*left\(v_lote/.test(m144),'144: manual batch must preserve distinct same-period concepts without changing public concept');
 must(/data-state=\"\$\{state\}\"/.test(premium)&&/filters\.estado=b\.dataset\.state/.test(premium),'UI: chart series must drill into generated/collected/pending state');
 must(/name:'activa'.*value:false/.test(premium)&&/toggle-rule/.test(premium),'UI: automation must support explicit paused/active state');
-must(/payments\(D\.payments/.test(premium)&&/receipts\(D\.receipts/.test(premium),'UI: Payments/Receipts tabs must honor the dashboard cross-filter dataset');
+must((/payments\(D\.payments/.test(premium)&&/receipts\(D\.receipts/.test(premium))||(/p_filters:\(tab==='payments'\|\|tab==='receipts'\)\?currentReportFilters\(\)/.test(premium)&&/app_finance_v2_explorer_v155/.test(premium)),'UI: Payments/Receipts tabs must honor the dashboard cross-filter dataset');
 must(!/shadow:false/.test(premium),'UI: 20080 must not expose non-shadow recurring execution');
 
 for(const file of ['web/js/modules/finance-premium.js','web/js/modules/finance-premium-bootstrap.js','web/service-worker.js']){

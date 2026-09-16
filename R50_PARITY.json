@@ -1,0 +1,14 @@
+{
+  "web": {
+    "files": 189,
+    "aggregate_sha256": "b48dcfa67c4acb30a1bcf01d891df98c668861c07e18af0231df12ce40d68b4d"
+  },
+  "dist": {
+    "files": 189,
+    "aggregate_sha256": "b48dcfa67c4acb30a1bcf01d891df98c668861c07e18af0231df12ce40d68b4d"
+  },
+  "android": {
+    "files": 189,
+    "aggregate_sha256": "b48dcfa67c4acb30a1bcf01d891df98c668861c07e18af0231df12ce40d68b4d"
+  }
+}

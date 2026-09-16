@@ -1,0 +1,54 @@
+KOMBAX 20.101 R22 · PERFORMANCE SCALE + FIGHTCARD + MEDIA QUOTAS
+================================================================
+BASE: R21 Global Media Framing
+
+IMPLEMENTADO
+- Events discovery: 24 por página + keyset/cursor real.
+- Filtros de discovery server-side.
+- Sin reparación/seed automática en navegación normal.
+- Cache de detalle + bundle + lazy album media.
+- Placeholder de media no negro.
+- Main Event primero y dominante.
+- Co-Main Event soportado.
+- Undercard compacta.
+- 30 combates.
+- 30 fotos lógicas de álbum + 5 videos separados.
+- Poster/banner/fotos de peleadores fuera de cuota hasta ser añadidos al álbum.
+- Reutilización lógica de poster/banner/participant en álbum sin duplicar binario.
+
+BACKEND PRINCIPAL
+- 189 aplicado.
+- 190 aplicado.
+- 191 aplicado.
+- anon reader v191 permitido.
+- anon mutator v191 denegado.
+- authenticated mutator v191 permitido con guards internos.
+
+VALIDADO
+- R22: PASS 30/30.
+- npm test: PASS / exit 0.
+- npm run build: PASS.
+- web=dist=Android: 171/171/171, paridad SHA-256 PASS.
+- Android preflight: 4/5; firma local pendiente.
+- Seeds: R19=3 productos; R20=1 evento+2 posts; foreign=0.
+- Security Advisor ejecutado; warnings existentes/nuevos documentados.
+- Performance Advisor ejecutado; warnings existentes + discovery index recién creado aún unused.
+
+PENDIENTE
+- Validación visual física del usuario en Chrome.
+- APK Signed R22, instalación y validación física.
+- Load/stress test representativo de la escala objetivo antes de afirmar capacidad concurrente demostrada.
+
+NO MODIFICADO
+- Netlify.
+- GitHub remoto.
+- package Android com.urbanwarriors.app.
+- versionCode 20101.
+- secretos de firma.
+- Finanzas/Auth business logic.
+
+PRÓXIMO PASO
+1) usuario valida R22 en local Chrome;
+2) genera APK Signed de prueba real;
+3) comprueba Events, scroll, vuelta atrás, imágenes, Main/Co-Main, carga de más páginas y álbum;
+4) si hay anomalía, reproducir -> root cause -> fix -> regresión completa.

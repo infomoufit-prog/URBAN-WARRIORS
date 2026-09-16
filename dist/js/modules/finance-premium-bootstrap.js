@@ -24,7 +24,7 @@ async function upgradeFinance(){
   }catch(error){
     if(main&&legacy){
       if(error?.kombaxFinanceBackendMismatch){
-        main.innerHTML=`<div class="alert alert-danger" style="margin:0 0 14px"><strong>Finanzas Premium pendiente de sincronización</strong><span>La interfaz y el backend KOMBAX no están en la misma versión. No se muestran datos Premium hasta completar la actualización segura del servidor.</span></div>${legacy}`;
+        main.innerHTML=`<div class="alert alert-danger" style="margin:0 0 14px"><strong>Finanzas Premium necesita una actualización</strong><span>Esta función está temporalmente protegida mientras se completa una actualización del servicio. Tus datos permanecen guardados y no se realizará ningún cambio.</span></div>${legacy}`;
       }else main.innerHTML=legacy;
     }
     console.warn('Finanzas Premium: actualización no completada:',error);

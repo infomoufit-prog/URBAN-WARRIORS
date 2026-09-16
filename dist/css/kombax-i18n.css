@@ -1,0 +1,24 @@
+.kx-language-selector{display:inline-flex;align-items:center;gap:8px;color:var(--text-muted,#9ca3af);font-size:12px;min-width:0}.kx-language-selector>span{font-weight:700;letter-spacing:.02em}.kx-language-selector select{appearance:auto;max-width:180px;min-height:34px;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:rgba(7,9,12,.86);color:inherit;padding:6px 8px;font:inherit}.kx-language-selector select:focus{outline:2px solid rgba(255,255,255,.28);outline-offset:2px}.kx-language-selector.is-compact>span{font-size:15px}.kx-language-selector.is-compact select{max-width:132px;min-height:32px;padding:4px 6px}.login-card>.kx-language-selector{align-self:flex-end;margin:0 0 8px}.kx-settings-language{display:grid;gap:12px}.kx-settings-language .kx-language-selector{justify-self:start}@media(max-width:760px){.topbar .kx-language-selector.is-compact select{max-width:76px}.topbar .kx-language-selector.is-compact option{font-size:12px}.topbar .kx-language-selector.is-compact>span{display:none}}
+
+/* B02 F08: locale-safe typography. Thai must not be forced into western word-breaking assumptions. */
+:lang(th){font-family:system-ui,-apple-system,"Segoe UI",Tahoma,"Noto Sans Thai","Leelawadee UI",sans-serif;line-height:1.55;word-break:normal;overflow-wrap:anywhere}
+:lang(th) input,:lang(th) textarea,:lang(th) select,:lang(th) button{font-family:inherit;line-height:1.45}
+:lang(de) .btn,:lang(fr) .btn,:lang(th) .btn{white-space:normal;min-height:2.4em}
+.kx-language-selector select{overflow:hidden;text-overflow:ellipsis}
+@media(max-width:760px){:lang(de) .kx-language-selector select,:lang(fr) .kx-language-selector select,:lang(th) .kx-language-selector select{max-width:104px}}
+
+/* Universal user-authored content translation */
+.kx-content-translation-controls{display:inline-flex;align-items:center;gap:.45rem;margin:.25rem 0 .35rem;font-size:.75rem;line-height:1.25;vertical-align:middle}
+.kx-content-translation-action{appearance:none;border:0;background:transparent;padding:0;color:var(--accent,#7ee7ff);font:inherit;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.kx-content-translation-action:hover{opacity:.85}.kx-content-translation-action:disabled{opacity:.55;cursor:wait}
+.kx-content-translation-note{opacity:.68}.kx-content-translation-note.error{color:var(--danger,#ff7070);opacity:1}
+.kx-content-translated{white-space:pre-wrap}
+.kx-contact-message .kx-content-translation-controls,.kx-comment .kx-content-translation-controls{display:flex;width:max-content;margin:.15rem 0 .25rem}
+
+/* Universal onboarding locale entry point: visible before club/profile selection. */
+.gateway-onboarding-language{display:flex;align-items:flex-end;gap:8px;flex-direction:column;position:relative;z-index:4}.gateway-onboarding-language .kx-language-selector{color:#eef2f7}.gateway-onboarding-language>small{color:#8f98a6;font-size:10px;line-height:1.25;text-align:right;max-width:230px}.gateway-onboarding-language .kx-language-selector select{min-width:150px;background:rgba(7,9,12,.92)}
+@media(max-width:760px){.gateway-onboarding-language{align-items:flex-end;gap:4px}.gateway-onboarding-language>small{display:none}.gateway-onboarding-language .kx-language-selector.is-compact>span{display:inline}.gateway-onboarding-language .kx-language-selector.is-compact select{max-width:132px;min-width:112px}}
+
+/* Universal experience: language is available on the very first visible boot interface. */
+.kx-boot-language-card{min-width:min(92vw,360px);display:flex;flex-direction:column;gap:12px}.kx-boot-language-head{display:flex;align-items:center;justify-content:space-between;gap:14px}.kx-boot-language-head>strong{letter-spacing:.12em}.kx-boot-language-head label{display:flex;align-items:center;gap:7px}.kx-boot-language-head select{appearance:auto;background:#0b0f14;color:#f5f7fa;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:7px 9px;max-width:180px}.kx-boot-language-card [data-kx-boot-copy]{color:#aeb6c2;font-size:13px}
+@media(max-width:420px){.kx-boot-language-card{min-width:min(90vw,320px)}.kx-boot-language-head select{max-width:150px}}

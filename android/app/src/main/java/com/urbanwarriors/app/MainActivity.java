@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,10 +67,18 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        // QA Android: los assets viven dentro del APK; en debug evitamos que una caché WebView
+        // de una instalación anterior oculte una revisión recién instalada. Release conserva
+        // el comportamiento normal para no penalizar rendimiento.
+        if ((getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webView.clearCache(true);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) settings.setSafeBrowsingEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXApp/2.0.0-rc.13/20086");
+        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r79-i18n-completion KOMBAXApp/2.0.0-rc.13/20130");
+        // historical QA marker preserved: KOMBAXApp/2.0.0-rc.13/20101
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
         webView.setWebViewClient(new WebViewClient() {
@@ -270,6 +279,9 @@ public class MainActivity extends Activity {
             appendEntryParam(query, data, "access_code", "[A-Za-z0-9_-]{1,48}", 48);
             appendEntryParam(query, data, "invite", "[A-Za-z0-9_-]{1,48}", 48);
             appendEntryParam(query, data, "team_role", "[A-Za-z0-9_-]{1,32}", 32);
+            // KOMBAX Eventos públicos: conservar únicamente parámetros conocidos y validados.
+            appendEntryParam(query, data, "event", "[A-Za-z0-9][A-Za-z0-9-]{0,119}", 120);
+            appendEntryParam(query, data, "fight", "[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[1-5][A-Fa-f0-9]{3}-[89AaBb][A-Fa-f0-9]{3}-[A-Fa-f0-9]{12}", 36);
             String queryRoute = data.getQueryParameter("route");
             if (queryRoute != null) route = queryRoute;
             if ((route == null || route.isEmpty()) && data.getFragment() != null) route = data.getFragment();

@@ -48,3 +48,13 @@ Feeds y directorios tienen cursor/límite; los índices siguen tenant/estado/fec
 ## Android
 
 `com.urbanwarriors.app`, versionCode 20025, SDK 36, Java 17 y aplicación web embebida desde origen HTTPS virtual. La firma y Firebase se inyectan localmente.
+
+
+## R77 · Analytics & Reports
+
+- `analytics-reports-r77.js` is the shared UI layer for Showcase/Events charts, period selection and report actions.
+- Showcase tenant key remains the active provider resolved from the active club/entity; public Explore is independent.
+- Events analytics/reporting is keyed by explicit `event_id`.
+- Supabase private aggregate RPCs authorize the provider/event in backend and expose exact-range variants.
+- `kombax-report-r77` is the common PDF generator; output is stored in private `kombax-reports` and shared with expiring signed URLs.
+- R77 creates no new public business tables and does not duplicate the payment ledger.

@@ -4,9 +4,11 @@ import { openDetail, closeModal, toast, setError } from '../ui/components.js';
 
 export function showPlatformLegalGate({onAccepted,onExit}={}){
   if(state.session?.platform_legal_required!==true){onAccepted?.();return null;}
+  const termsVersion=String(state.session?.platform_legal?.terms_version||'vigente');
+  const privacyVersion=String(state.session?.platform_legal?.privacy_version||'vigente');
   const {wrap}=openDetail({
     title:'Antes de continuar en KOMBAX',
-    subtitle:'Condiciones globales de plataforma · versión 1.0.0',
+    subtitle:`Condiciones ${termsVersion} · Privacidad ${privacyVersion}`,
     width:'760px',
     body:`<div class="kx-platform-legal-gate">
       <div class="alert"><strong>Cuenta KOMBAX</strong><span>Estas condiciones son independientes de las normas y documentos específicos de tu club.</span></div>

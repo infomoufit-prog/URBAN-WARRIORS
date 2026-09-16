@@ -1,34 +1,66 @@
-# Android · KOMBAX / Urban Warriors RC13 build 20025
-
-Este es el resumen Android vigente. El procedimiento operativo completo está en `ANDROID_STUDIO_KOMBAX_RC13_BUILD_20025.md`; los documentos con build 20018, 20019 o 20021 son evidencia histórica y no instrucciones para esta candidata.
+# Android · KOMBAX 20.110 R60
 
 ## Identidad de actualización
 
-- `applicationId` y `namespace`: `com.urbanwarriors.app`.
-- `versionCode`: `20025`.
-- `versionName`: `2.0.0-rc.13`.
-- `minSdk`: 24; `compileSdk`/`targetSdk`: 36.
-- AGP: 8.10.1; Java: 17.
-- alias del JKS existente: `urban-warriors`.
+- `applicationId`: `com.urbanwarriors.app`
+- `versionCode`: `20110`
+- `versionName`: `2.0.0-rc.13-r60-migrations-guide-history`
+- `minSdk`: 24
+- `targetSdk` / `compileSdk`: 36
+- Java: 17
 
-La actualización exige el mismo paquete y la misma cadena de firma que la build 20021 instalada. El ZIP no contiene el JKS, contraseñas, `keystore.properties`, `google-services.json`, APK ni AAB.
+R60 debe firmarse con la **misma clave/cadena de firma ya utilizada por KOMBAX en Google Play**. Este ZIP no contiene JKS, contraseñas ni `android/keystore.properties`.
 
-## Web embebida
-
-`web` es la única fuente. `node scripts/build.mjs` regenera y verifica:
-
-- `web/`;
-- `dist/`;
-- `android/app/src/main/assets/www/`.
-
-La compilación local certificada contiene 60 archivos idénticos en los tres destinos. Android mantiene `usesCleartextTraffic=false`, origen WebView HTTPS virtual, safe areas y navegación nativa.
+**No crear una clave nueva** para sustituir la firma existente.
 
 ## Firma local
 
-Crear `android/keystore.properties` desde el ejemplo o usar las variables `UW_*`. Apuntar al JKS ya existente y no crear una clave nueva. El preflight debe pasar 5/5 después de añadir Firebase y firma.
+Hay dos métodos soportados:
 
-La candidata solo queda aprobada cuando el APK y el AAB se generan desde el mismo estado, `apksigner` confirma los fingerprints documentados y la APK 20025 se instala encima de 20021 sin desinstalar.
+1. Copiar `android/keystore.properties.example` como `android/keystore.properties` y completar localmente la ruta/credenciales del JKS existente.
+2. Usar variables de entorno:
+   - `UW_KEYSTORE_PATH`
+   - `UW_KEYSTORE_PASSWORD`
+   - `UW_KEY_ALIAS`
+   - `UW_KEY_PASSWORD`
 
-## Estado honesto
+Antes de una release:
 
-Configuración y recursos Android: preparados estáticamente. Gradle, Firebase real, firma JKS, APK/AAB y dispositivo físico: pendientes del ordenador autorizado.
+```bash
+npm run android:preflight
+```
+
+Debe quedar **5/5**. En el entorno de empaquetado R60 quedó 4/5 únicamente porque la firma real no se incorpora al ZIP.
+
+## APK de QA
+
+```bash
+npm run android:debug:qa
+```
+
+Cuando Gradle pueda ejecutarse, el script genera y copia:
+
+`artifacts/KOMBAX_20110_R60_MIGRATIONS_GUIDE_HISTORY_QA_DEBUG.apk`
+
+## AAB para Google Play
+
+Con la firma existente correctamente configurada:
+
+```bash
+npm run android:aab:play
+```
+
+El script genera y copia:
+
+`artifacts/KOMBAX_20110_R60_MIGRATIONS_GUIDE_HISTORY_QA_GOOGLE_PLAY.aab`
+
+Subir primero a **Google Play · Prueba interna**, instalar desde Play y realizar smoke test autenticado antes de cualquier promoción de pista.
+
+## Estado de certificación de este ZIP
+
+- Paridad `web = dist = Android`: **191 archivos**.
+- Android preflight: **4/5**, pendiente únicamente la firma local.
+- Intento Gradle del entorno de empaquetado: bloqueado por falta de acceso a `services.gradle.org`; por tanto este ZIP **no afirma que exista un APK/AAB R60 compilado**.
+- Firebase Android está presente en el proyecto.
+
+Los logs exactos están en `R60_FINAL_EVIDENCE/`.

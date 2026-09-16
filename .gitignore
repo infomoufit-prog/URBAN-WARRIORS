@@ -15,3 +15,9 @@ android/**/build/
 node_modules/
 .env
 .env.*
+
+# KOMBAX local Android release signing transfer (never commit the key)
+LOCAL_RELEASE_SIGNING/*.jks
+LOCAL_RELEASE_SIGNING/*.keystore
+LOCAL_RELEASE_SIGNING/*.p12
+LOCAL_RELEASE_SIGNING/*.pfx

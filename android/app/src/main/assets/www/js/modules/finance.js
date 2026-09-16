@@ -1,18 +1,23 @@
+import { getLocale as kxGetLocale, t } from '../i18n/index.js';
+import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { has } from '../core/permissions.js';
 import { esc, money, dateFmt, monthStart, isoDate, humanError } from '../core/utils.js';
 import { pageHeader, card, table, empty, badge, openForm, openDetail, confirmDialog, toast, setError, setMainHtml, metric } from '../ui/components.js';
 import { summarizeFinance, groupFinance } from '../core/finance-math.js';
+import { migrationAssistBanner, openMigrationPreparation } from './customer-operations.js';
+import { contentTranslationAttrs, prewarmUserContentTranslations } from '../i18n/user-content-translation.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 const opts=(rows,label)=>rows.map(r=>({value:r.id,label:label(r)}));
 const isDirection=()=>((state.session?.roles?.length?state.session.roles:[state.session?.rol]).filter(Boolean)).includes('direccion');
 const financeFilters={year:'',month:'',socio:'',origin:'',status:''};
 let financeLimit=100;
-const originLabel=(x)=>({cuota:'Cuota',material:'Material',otro:'Otro'}[x]||x||'Cuota');
-const publicConcept=(value)=>String(value||'Cuota').replace(/\s\[[0-9a-f]{8}\]$/i,'');
-const monthLabel=(n)=>new Intl.DateTimeFormat('es-ES',{month:'long'}).format(new Date(2024,Number(n)-1,1));
+const originLabel=(x)=>({cuota:t('finance.labels.fee'),material:t('finance.labels.material'),otro:t('finance.labels.other')}[x]||x||t('finance.labels.fee'));
+const publicConcept=(value)=>String(value||t('finance.labels.fee')).replace(/\s\[[0-9a-f]{8}\]$/i,'');
+const stripeStatusLabel=value=>({not_configured:t('finance.stripe.notConfigured'),pending:t('finance.stripe.configurationPending'),verification_pending:t('finance.stripe.verificationPending'),active:t('finance.stripe.active'),action_required:t('finance.stripe.actionRequired'),restricted:t('finance.stripe.restricted')})[value]||t('finance.stripe.notConfigured');
+const monthLabel=(n)=>new Intl.DateTimeFormat(kxLocaleTag(kxGetLocale()),{month:'long'}).format(new Date(2024,Number(n)-1,1));
 const receiptIssuer=r=>{
   const sessionClub=String(r?.club_id||'')===String(state.session?.club_id||'')?(state.session?.club||{}):{};
   return {
@@ -28,61 +33,61 @@ const receiptIssuer=r=>{
 const receiptLogo=club=>/^(https:\/\/|\.\/|\/)/i.test(String(club?.logo_url||''))?club.logo_url:'./assets/kombax-symbol.png';
 const receiptDocument=(r)=>{
   const club=receiptIssuer(r);
-  const status=r.anulado_en?'ANULADO':'COBRADO';
+  const status=r.anulado_en?t('finance.receipt.cancelled'):t('finance.receipt.collected');
   const rows=[
-    ['Alumno/a',r.socio_nombre],
-    ['Pagado por',r.pagado_por],
-    ['Concepto',publicConcept(r.concepto||r.actividad)],
-    ['Periodo',String(r.periodo||'').slice(0,7)],
-    ['Fecha de pago',dateFmt(r.fecha_pago)],
-    ['Método',r.metodo||'—'],
-    ['Referencia',r.referencia||'—'],
-    ['Importe',money(r.importe)]
+    [t('finance.labels.student'),r.socio_nombre],
+    [t('finance.labels.paidBy'),r.pagado_por],
+    [t('finance.labels.concept'),publicConcept(r.concepto||r.actividad)],
+    [t('finance.labels.period'),String(r.periodo||'').slice(0,7)],
+    [t('finance.labels.paymentDate'),dateFmt(r.fecha_pago)],
+    [t('finance.receipt.method'),r.metodo||'—'],
+    [t('finance.labels.reference'),r.referencia||'—'],
+    [t('finance.labels.amount'),money(r.importe)]
   ];
   const issuerMeta=[club.direccion,club.cif?`CIF/NIF ${club.cif}`:'',club.email,club.telefono,club.web].filter(Boolean);
   return `<article class="professional-receipt ${r.anulado_en?'is-annulled':''}">
-    <header><div class="receipt-brand"><img src="${esc(receiptLogo(club))}" alt="${esc(club.nombre)}"><div><small>RECIBO DE COBRO</small><h2>${esc(club.nombre)}</h2><p>${issuerMeta.map(esc).join(' · ')}</p></div></div><div class="receipt-number"><span>${status}</span><strong>${esc(r.numero||'—')}</strong><small>Emitido ${dateFmt(r.emitido_en||r.fecha_pago)}</small></div></header>
+    <header><div class="receipt-brand"><img src="${esc(receiptLogo(club))}" alt="${esc(club.nombre)}"><div><small>${t('finance.labels.paymentReceipt')}</small><h2>${esc(club.nombre)}</h2><p>${issuerMeta.map(esc).join(' · ')}</p></div></div><div class="receipt-number"><span>${status}</span><strong>${esc(r.numero||'—')}</strong><small>${t('finance.labels.issued')} ${dateFmt(r.emitido_en||r.fecha_pago)}</small></div></header>
     <div class="receipt-watermark">${esc(String(club.nombre||'KOMBAX').slice(0,2).toUpperCase())}</div>
     <section class="receipt-grid">${rows.map(([k,v])=>`<div><span>${esc(k)}</span><strong>${esc(v??'—')}</strong></div>`).join('')}</section>
-    ${r.anulado_en?`<div class="receipt-annul-note"><strong>RECIBO ANULADO</strong><span>${esc(r.motivo_anulacion||'Sin motivo indicado')}</span></div>`:''}
-    <footer><span>Documento identificable por el número ${esc(r.numero||'—')}.</span><span>${esc(club.email||club.web||club.nombre||'')}</span></footer>
+    ${r.anulado_en?`<div class="receipt-annul-note"><strong>${t('finance.labels.annulledReceipt')}</strong><span>${esc(r.motivo_anulacion||t('finance.labels.noReason'))}</span></div>`:''}
+    <footer><span>${t('finance.receipt.identifiable',{number:esc(r.numero||'—')})}</span><span>${esc(club.email||club.web||club.nombre||'')}</span></footer>
   </article>`;
 };
 
 const printReceipt=(r)=>{
   const popup=window.open('','_blank','width=860,height=960');
-  if(!popup)throw new Error('El navegador ha bloqueado la ventana de impresión. Permite ventanas emergentes e inténtalo de nuevo.');
+  if(!popup)throw new Error(t('finance.receipt.printBlocked'));
   try{popup.opener=null}catch{}
   popup.document.open();
-  popup.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recibo ${esc(r.numero||'')}</title><link rel="stylesheet" href="${new URL('./css/app.css',location.href).href}"></head><body class="receipt-print-page">${receiptDocument(r)}<script>addEventListener('load',()=>setTimeout(()=>print(),180));<\/script></body></html>`);
+  popup.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${t('finance.receipt.title',{number:esc(r.numero||'')})}</title><link rel="stylesheet" href="${new URL('./css/app.css',location.href).href}"></head><body class="receipt-print-page">${receiptDocument(r)}<script>addEventListener('load',()=>setTimeout(()=>print(),180));<\/script></body></html>`);
   popup.document.close();
 };
 export const openReceipt=(r)=>{
   if(!r)return;
-  const {wrap}=openDetail({title:`Recibo ${r.numero||''}`,subtitle:'Documento de cobro verificable e imprimible',className:'receipt-modal',body:receiptDocument(r),actions:'<button class="btn btn-ghost" id="share-receipt" type="button">Compartir datos</button><button class="btn btn-primary" id="print-receipt" type="button">Imprimir / Guardar PDF</button>'});
+  const {wrap}=openDetail({title:t('finance.receipt.title',{number:r.numero||''}),subtitle:t('finance.receipt.subtitle'),className:'receipt-modal',body:receiptDocument(r),actions:`<button class="btn btn-ghost" id="share-receipt" type="button">${t('finance.actions.shareData')}</button><button class="btn btn-primary" id="print-receipt" type="button">${t('finance.actions.printSavePdf')}</button>`});
   wrap.querySelector('#print-receipt')?.addEventListener('click',()=>{try{printReceipt(r)}catch(e){setError(e)}});
-  wrap.querySelector('#share-receipt')?.addEventListener('click',async()=>{const text=`Recibo ${r.numero} · ${r.socio_nombre} · ${money(r.importe)} · ${dateFmt(r.fecha_pago)}`;try{if(navigator.share)await navigator.share({title:`Recibo ${r.numero}`,text});else{await navigator.clipboard.writeText(text);toast('Datos del recibo copiados');}}catch(e){if(e?.name!=='AbortError')setError(e)}});
+  wrap.querySelector('#share-receipt')?.addEventListener('click',async()=>{const text=`Recibo ${r.numero} · ${r.socio_nombre} · ${money(r.importe)} · ${dateFmt(r.fecha_pago)}`;try{if(navigator.share)await navigator.share({title:`Recibo ${r.numero}`,text});else{await navigator.clipboard.writeText(text);toast(t('finance.actions.paymentCopied'));}}catch(e){if(e?.name!=='AbortError')setError(e)}});
 };
 async function renderMonitorFinance(){
-  setMainHtml('<div class="loading-card">Cargando tu cartera…</div>');
+  setMainHtml(`<div class="loading-card">${t('common.states.loadingWallet')}</div>`);
   try{
     const [ctx,rows]=await Promise.all([repos.scopes.context(),repos.scopes.finance()]);
     const level=ctx?.finance_level||'none';
-    const levelLabel={none:'Sin acceso financiero',status:'Solo estado de pago',portfolio:'Mi cartera',collect:'Mi cartera + cobros',receipts:'Mi cartera + cobros + recibos'}[level]||level;
+    const levelLabel={none:t('finance.wallet.noAccess'),status:t('finance.wallet.statusOnly'),portfolio:t('finance.wallet.portfolio'),collect:t('finance.wallet.collect'),receipts:t('finance.wallet.receipts')}[level]||level;
     if(level==='none'){
-      setMainHtml(`${pageHeader('Mi cartera','Privacidad financiera por ámbito','','Finanzas')}<div class="alert alert-info"><strong>Sin acceso financiero</strong><span>Tu cuenta puede trabajar con sus alumnos y asistencia, pero no puede consultar importes, cobros ni recibos. El Gestor puede habilitar un nivel de acceso desde Ámbitos y privacidad.</span></div>`);return;
+      setMainHtml(`${pageHeader(t('finance.wallet.title'),t('finance.wallet.privacy'),'',t('finance.title'))}<div class="alert alert-info"><strong>${t('finance.wallet.noAccess')}</strong><span>${t('finance.wallet.noAccessBody')}</span></div>`);return;
     }
     const list=Array.isArray(rows)?rows:[];
     const uniqueStudents=new Set(list.map(x=>x.socio_id));
     const pending=list.filter(x=>x.cuota_id&&['pendiente','vencida','parcialmente_pagada'].includes(x.estado));
     const visibleAmount=list.some(x=>x.importe!=null);
     const totalPending=visibleAmount?pending.reduce((a,x)=>a+Number(x.saldo||0),0):null;
-    const tr=list.filter(x=>x.cuota_id).map(x=>`<tr><td><strong>${esc(x.socio_nombre||'—')}</strong></td><td>${esc(publicConcept(x.concepto||'Cuota'))}</td><td>${esc(String(x.periodo||'').slice(0,7))}</td><td>${badge(x.estado||'—',x.estado==='pagada'?'ok':x.estado==='vencida'?'danger':'warn')}</td><td>${x.importe==null?'Privado':money(x.importe)}</td><td>${x.saldo==null?'Privado':`<strong>${money(x.saldo)}</strong>`}</td><td>${x.recibo_numero?esc(x.recibo_numero):'—'}</td><td>${x.can_collect&&x.estado!=='pagada'?`<button class="btn btn-primary btn-sm monitor-collect" data-id="${esc(x.cuota_id)}">Registrar cobro</button>`:''}</td></tr>`);
-    setMainHtml(`${pageHeader('Mi cartera','Solo alumnos y capacidades financieras asignadas a tus ámbitos','','Finanzas')}
-      <div class="metrics">${metric('Nivel',levelLabel)}${metric('Alumnos',uniqueStudents.size)}${metric('Pendientes',pending.length)}${visibleAmount?metric('Saldo visible',money(totalPending||0)):metric('Importes','Ocultos')}</div>
-      <div class="alert alert-info"><strong>Privacidad activa</strong><span>No puedes consultar alumnos de otros monitores. Los importes y recibos solo aparecen cuando el Gestor los habilita expresamente.</span></div>
-      ${card('Cartera asignada',tr.length?table(['Alumno','Concepto','Periodo','Estado','Importe','Pendiente','Recibo','Acción'],tr):empty('Sin cargos visibles','No hay cargos en tus ámbitos o tu nivel solo permite información básica.'))}`);
-    document.querySelectorAll('.monitor-collect').forEach(b=>b.addEventListener('click',()=>{const row=list.find(x=>x.cuota_id===b.dataset.id);openForm({title:'Registrar cobro',subtitle:`${row?.socio_nombre||''} · operación auditada`,fields:[{name:'importe',label:'Importe',type:'number',step:'0.01',min:.01,required:true,value:row?.saldo??''},{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()},{name:'metodo',label:'Método',type:'select',required:true,value:'efectivo',options:['transferencia','bizum','efectivo','tarjeta','otro'].map(x=>({value:x,label:x}))},{name:'referencia',label:'Referencia'},{name:'observaciones',label:'Observaciones',type:'textarea',full:true}],submitText:'Registrar cobro',onSubmit:async v=>{await repos.scopes.collect({...v,cuota_id:b.dataset.id});toast('Cobro registrado y auditado');await renderMonitorFinance();}})}));
+    const tr=list.filter(x=>x.cuota_id).map(x=>`<tr><td><strong>${esc(x.socio_nombre||'—')}</strong></td><td>${esc(publicConcept(x.concepto||'Cuota'))}</td><td>${esc(String(x.periodo||'').slice(0,7))}</td><td>${badge(x.estado||'—',x.estado==='pagada'?'ok':x.estado==='vencida'?'danger':'warn')}</td><td>${x.importe==null?t('finance.labels.private'):money(x.importe)}</td><td>${x.saldo==null?t('finance.labels.private'):`<strong>${money(x.saldo)}</strong>`}</td><td>${x.recibo_numero?esc(x.recibo_numero):'—'}</td><td>${x.can_collect&&x.estado!=='pagada'?`<button class="btn btn-primary btn-sm monitor-collect" data-id="${esc(x.cuota_id)}">${t('finance.actions.recordPayment')}</button>`:''}</td></tr>`);
+    setMainHtml(`${pageHeader(t('finance.wallet.title'),t('finance.wallet.assignedSubtitle'),'',t('finance.title'))}
+      <div class="metrics">${metric(t('finance.labels.level'),levelLabel)}${metric(t('finance.labels.students'),uniqueStudents.size)}${metric(t('finance.labels.pending'),pending.length)}${visibleAmount?metric(t('finance.labels.visibleBalance'),money(totalPending||0)):metric(t('finance.labels.amount'),t('finance.labels.hidden'))}</div>
+      <div class="alert alert-info"><strong>${t('finance.wallet.privacyActive')}</strong><span>${t('finance.wallet.privacyBody')}</span></div>
+      ${card(t('finance.wallet.assigned'),tr.length?table(['Alumno','Concepto','Periodo','Estado','Importe','Pendiente','Recibo','Acción'],tr):empty(t('finance.wallet.noVisibleCharges'),t('finance.wallet.noVisibleChargesBody')))}`);
+    document.querySelectorAll('.monitor-collect').forEach(b=>b.addEventListener('click',()=>{const row=list.find(x=>x.cuota_id===b.dataset.id);openForm({title:t('finance.actions.recordPayment'),subtitle:`${row?.socio_nombre||''} · operación auditada`,fields:[{name:'importe',label:'Importe',type:'number',step:'0.01',min:.01,required:true,value:row?.saldo??''},{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()},{name:'metodo',label:'Método',type:'select',required:true,value:'efectivo',options:['transferencia','bizum','efectivo','tarjeta','otro'].map(x=>({value:x,label:x}))},{name:'referencia',label:'Referencia'},{name:'observaciones',label:'Observaciones',type:'textarea',full:true}],submitText:'Registrar cobro',onSubmit:async v=>{await repos.scopes.collect({...v,cuota_id:b.dataset.id});toast('Cobro registrado y auditado');await renderMonitorFinance();}})}));
   }catch(error){setError(error);setMainHtml(`${pageHeader('Mi cartera')} ${empty('No se pudo cargar tu cartera',humanError(error))}`);}
 }
 
@@ -100,6 +105,7 @@ export async function renderFinance(){
       portal?Promise.resolve([]):repos.finance.metricsAnnual()
     ]);
     const canTariff=has(state.session,'tariff'),canGenerate=has(state.session,'feeGenerate'),canAdminPay=has(state.session,'paymentAdmin');
+    const connect=portal?null:await repos.payments.connectStatus('club',state.session.club_id).catch(()=>({status:'not_configured',charges_enabled:false,payouts_enabled:false}));
     const pending=fees.filter(f=>['pendiente','vencida','parcialmente_pagada'].includes(f.estado));
     const pendingAmount=(account.length?account:pending).reduce((sum,row)=>sum+Number(row.saldo??row.importe??0),0);
     const overdue=fees.filter(f=>f.estado==='vencida');
@@ -107,7 +113,7 @@ export async function renderFinance(){
     const validated=payments.filter(p=>p.estado_validacion==='validado');
     const collected=validated.reduce((sum,p)=>sum+Number(p.importe||0),0);
     const actions=`${canTariff?'<button class="btn btn-ghost" id="new-tariff">Nueva tarifa</button>':''}${canGenerate?'<button class="btn btn-primary" id="generate-fees">Generar cuotas</button>':''}`;
-    const tariffRows=tariffs.map(t=>`<tr><td><strong>${esc(t.nombre)}</strong><br><small>${esc(t.descripcion||'')}</small></td><td>${money(t.importe)}</td><td>${money(t.matricula)}</td><td>${esc(t.periodicidad)}</td><td>${badge(t.activa?'Activa':'Inactiva',t.activa?'ok':'neutral')}</td><td>${canTariff?`<div class="row-actions"><button class="btn btn-ghost btn-sm edit-tariff" data-id="${esc(t.id)}">Editar</button><button class="btn btn-danger btn-sm delete-tariff" data-id="${esc(t.id)}">Eliminar</button></div>`:''}</td></tr>`);
+    const tariffRows=tariffs.map(t=>`<tr><td><strong ${contentTranslationAttrs({contentId:t.id,contentType:'club_tariff',fieldName:'name',sourceLocale:t.source_locale||t.idioma||'',visibility:'tenant'})}>${esc(t.nombre)}</strong><br><small ${contentTranslationAttrs({contentId:t.id,contentType:'club_tariff',fieldName:'description',sourceLocale:t.source_locale||t.idioma||'',visibility:'tenant'})}>${esc(t.descripcion||'')}</small></td><td>${money(t.importe)}</td><td>${money(t.matricula)}</td><td>${esc(t.periodicidad)}</td><td>${badge(t.activa?'Activa':'Inactiva',t.activa?'ok':'neutral')}</td><td>${canTariff?`<div class="row-actions"><button class="btn btn-ghost btn-sm edit-tariff" data-id="${esc(t.id)}">Editar</button><button class="btn btn-danger btn-sm delete-tariff" data-id="${esc(t.id)}">Eliminar</button></div>`:''}</td></tr>`);
     const matchesFeeFilter=f=>portal||(
       (!financeFilters.year||String(f.periodo||'').slice(0,4)===String(financeFilters.year))&&
       (!financeFilters.month||Number(String(f.periodo||'').slice(5,7))===Number(financeFilters.month))&&
@@ -127,7 +133,7 @@ export async function renderFinance(){
     const accountRows=account.slice(0,500).map(a=>{const m=members.find(x=>x.id===a.socio_id);const saldo=Number(a.saldo||0);return `<tr><td><strong>${esc(m?`${m.apellidos}, ${m.nombre}`:'—')}</strong></td><td>${esc(String(a.periodo||'').slice(0,7))}</td><td>${esc(publicConcept(a.concepto))}</td><td>${badge(originLabel(a.origen),'neutral')}</td><td>${money(a.importe)}</td><td>${money(a.pagado_validado)}</td><td><strong>${money(saldo)}</strong></td><td>${badge(a.estado,a.estado==='pagada'||saldo<=0?'ok':a.estado==='vencida'?'danger':'warn')}</td><td>${a.recibo_numero?`<strong>${esc(a.recibo_numero)}</strong>${a.recibo_anulado_en?'<br><small>ANULADO</small>':''}`:'—'}</td></tr>`});
 
     if(portal){
-      const conceptRows=account.filter(a=>Number(a.saldo||0)>0).map(a=>{const m=members.find(x=>x.id===a.socio_id);const fee=fees.find(x=>x.id===a.cuota_id);return `<tr><td><strong>${esc(publicConcept(a.concepto))}</strong><br><small>${esc(m?`${m.nombre} ${m.apellidos}`:'')}</small></td><td>${badge(originLabel(a.origen),'neutral')}</td><td>${money(a.importe)}</td><td>${money(a.pagado_validado)}</td><td><strong>${money(a.saldo)}</strong></td><td>${dateFmt(a.vencimiento)}</td><td>${badge(a.estado,a.estado==='vencida'?'danger':'warn')}</td><td>${fee?`<button class="btn btn-primary btn-sm communicate-pay" data-id="${esc(fee.id)}">Comunicar pago</button>`:''}</td></tr>`});
+      const conceptRows=account.filter(a=>Number(a.saldo||0)>0).map(a=>{const m=members.find(x=>x.id===a.socio_id);const fee=fees.find(x=>x.id===a.cuota_id);return `<tr><td><strong>${esc(publicConcept(a.concepto))}</strong><br><small>${esc(m?`${m.nombre} ${m.apellidos}`:'')}</small></td><td>${badge(originLabel(a.origen),'neutral')}</td><td>${money(a.importe)}</td><td>${money(a.pagado_validado)}</td><td><strong>${money(a.saldo)}</strong></td><td>${dateFmt(a.vencimiento)}</td><td>${badge(a.estado,a.estado==='vencida'?'danger':'warn')}</td><td>${fee?`<div class="row-actions"><button class="btn btn-primary btn-sm stripe-pay" data-id="${esc(fee.id)}">Pagar ahora</button><button class="btn btn-ghost btn-sm communicate-pay" data-id="${esc(fee.id)}">Comunicar otro pago</button></div>`:''}</td></tr>`});
       setMainHtml(`${pageHeader('Mis pagos','Consulta únicamente tus conceptos, pagos y recibos','', 'Mi cuenta')}
         <div class="metrics">${metric('Total pendiente',money(pendingAmount),'todos tus conceptos')}${metric('Vencidos',overdue.length)}${metric('Pagos validados',validated.length)}</div>
         ${card('Conceptos pendientes',conceptRows.length?table(['Concepto','Origen','Importe','Pagado','Pendiente','Vence','Estado','Acción'],conceptRows):empty('Todo al día','No tienes conceptos pendientes.'))}
@@ -144,7 +150,14 @@ export async function renderFinance(){
       const originRows=originBreakdown.map(x=>`<tr><td>${badge(originLabel(x.value),'neutral')}</td><td>${money(x.total_generado)}</td><td>${money(x.total_cobrado)}</td><td><strong>${money(x.total_pendiente)}</strong></td><td>${money(x.total_vencido)}</td><td>${x.alumnos_con_deuda}</td></tr>`);
       const monthlyRows=filteredMonths.map(x=>`<tr><td>${esc(monthLabel(x.value))}</td><td>${money(x.total_generado)}</td><td>${money(x.total_cobrado)}</td><td>${money(x.total_pendiente)}</td><td>${money(x.total_vencido)}</td><td>${Number(x.porcentaje_cobro||0).toFixed(2)} %</td></tr>`);
       const annualRows=annual.map(x=>`<tr><td>${esc(x.anio)}</td><td>${money(x.total_generado)}</td><td>${money(x.total_cobrado)}</td><td>${money(x.total_pendiente)}</td><td>${money(x.total_vencido)}</td><td>${esc(x.porcentaje_cobro)} %</td><td>${esc(x.alumnos_con_deuda)}</td></tr>`);
+      const connectCard=[
+        `<section class="card payments-connect-card"><div class="card-head"><div><span class="page-kicker">COBROS CON TARJETA</span><h2>${esc(stripeStatusLabel(connect?.status))}</h2></div>`,
+        `<button class="btn ${connect?.status==='active'?'btn-ghost':'btn-primary'}" id="stripe-connect-start">${connect?.status==='active'?'Revisar en Stripe':'Activar cobros con tarjeta'}</button></div>`,
+        `<div class="payments-status-grid"><span>${connect?.details_submitted?'✓':'○'} Cuenta verificada</span><span>${connect?.charges_enabled?'✓':'○'} Cobros activados</span><span>${connect?.payouts_enabled?'✓':'○'} Abonos activados</span></div>`,
+        '<small>El club cobra la operación en su propia cuenta Stripe Connect. KOMBAX solo percibe, cuando corresponda, la tarifa de plataforma o servicios propios configurados; no almacena tarjetas, CVC ni cuentas bancarias.</small></section>'
+      ].join('');
       setMainHtml(`${pageHeader('Finanzas','Tarifas, cuotas, pagos, recibos y estado de cuenta',actions,'Economía')}
+        ${connectCard}
         ${filterOptions}
         <div class="metrics">${metric('Generado',money(filteredSummary.total_generado),scopeLabel)}${metric('Cobrado',money(filteredSummary.total_cobrado),scopeLabel)}${metric('Pendiente',money(filteredSummary.total_pendiente),scopeLabel)}${metric('Vencido',money(filteredSummary.total_vencido),scopeLabel)}${metric('% cobro',`${Number(filteredSummary.porcentaje_cobro||0).toFixed(2)} %`,scopeLabel)}${metric('Alumnos con deuda',filteredSummary.alumnos_con_deuda,scopeLabel)}</div>
         ${visiblePendingValidation.length?`<div class="alert alert-warning"><strong>Requiere acción</strong><span>${visiblePendingValidation.length} pago${visiblePendingValidation.length===1?'':'s'} pendiente${visiblePendingValidation.length===1?'':'s'} de validación en este filtro.</span></div>`:''}
@@ -161,16 +174,23 @@ export async function renderFinance(){
     const financeLoaded=Math.max(fees.length,payments.length,receipts.length,account.length,detail.length);
     if(financeLoaded>=financeLimit&&financeLimit<500){const more=document.createElement('div');more.className='load-more-wrap';more.innerHTML='<button class="btn btn-ghost" id="load-more-finance">Cargar más histórico financiero</button>';document.getElementById('main-view')?.appendChild(more);document.getElementById('load-more-finance')?.addEventListener('click',()=>{financeLimit=Math.min(500,financeLimit+100);renderFinance();});}
 
+    if(!portal){
+      const financeHeader=document.querySelector('#main-view .page-header');
+      financeHeader?.insertAdjacentHTML('afterend',migrationAssistBanner({title:'¿Tienes cuotas o pagos históricos fuera de KOMBAX?',body:'Importa Excel, CSV, PDF o documentos mediante KOMBAX Migrations. El asistente prepara una vista previa y no registra movimientos sin confirmación.'}));
+      document.querySelector('#main-view [data-kx-migration-assist]')?.addEventListener('click',openMigrationPreparation);
+    }
     for(const [id,key] of [['finance-year','year'],['finance-month','month'],['finance-member','socio'],['finance-origin','origin'],['finance-status','status']])document.getElementById(id)?.addEventListener('change',e=>{financeFilters[key]=e.target.value;renderFinance();});
 
     const reload=()=>renderFinance();
+    bind('.stripe-pay',async(id,button)=>{button.disabled=true;try{const out=await repos.payments.checkout('club_fee',id,1);if(!out?.url)throw new Error('No se pudo abrir el pago seguro.');location.assign(out.url);}catch(error){setError(error);button.disabled=false;}});
+    document.getElementById('stripe-connect-start')?.addEventListener('click',async e=>{const button=e.currentTarget;button.disabled=true;try{const out=await repos.payments.connectOnboarding('club',state.session.club_id);if(!out?.url)throw new Error('No se pudo iniciar la configuración segura.');location.assign(out.url);}catch(error){setError(error);button.disabled=false;}});
     const tariffFields=[{name:'nombre',label:'Nombre',required:true},{name:'importe',label:'Importe',type:'number',step:'0.01',min:0,required:true},{name:'matricula',label:'Matrícula',type:'number',step:'0.01',min:0,value:0},{name:'periodicidad',label:'Periodicidad',type:'select',value:'mensual',options:['mensual','trimestral','semestral','anual','unica'].map(x=>({value:x,label:x}))},{name:'descripcion',label:'Descripción',type:'textarea',full:true},{name:'activa',label:'Tarifa activa',type:'checkbox',value:true}];
-    document.getElementById('new-tariff')?.addEventListener('click',()=>openForm({title:'Nueva tarifa',fields:tariffFields,onSubmit:async v=>{await repos.tariffs.save(v);toast('Tarifa guardada');await reload();}}));
-    bind('.edit-tariff',id=>{const t=tariffs.find(x=>x.id===id);openForm({title:'Editar tarifa',fields:tariffFields,initial:t,onSubmit:async v=>{await repos.tariffs.save({...t,...v,id});toast('Tarifa actualizada');await reload();}})});
+    document.getElementById('new-tariff')?.addEventListener('click',()=>openForm({title:'Nueva tarifa',fields:tariffFields,onSubmit:async v=>{const saved=await repos.tariffs.save(v);const contentId=saved?.id||saved?.tariff_id||null;if(contentId){void prewarmUserContentTranslations([{contentId,contentType:'club_tariff',fieldName:'name',text:v.nombre,visibility:'tenant'},{contentId,contentType:'club_tariff',fieldName:'description',text:v.descripcion,visibility:'tenant'}]);}toast('Tarifa guardada');await reload();}}));
+    bind('.edit-tariff',id=>{const t=tariffs.find(x=>x.id===id);openForm({title:'Editar tarifa',fields:tariffFields,initial:t,onSubmit:async v=>{await repos.tariffs.save({...t,...v,id});void prewarmUserContentTranslations([{contentId:id,contentType:'club_tariff',fieldName:'name',text:v.nombre,visibility:'tenant'},{contentId:id,contentType:'club_tariff',fieldName:'description',text:v.descripcion,visibility:'tenant'}]);toast('Tarifa actualizada');await reload();}})});
     bind('.delete-tariff',id=>confirmDialog('Eliminar tarifa','Solo se elimina si nunca se ha utilizado. Si ya estuvo asignada o generó cuotas, desactívala y conserva su histórico financiero.',async()=>{await repos.tariffs.delete(id);toast('Tarifa eliminada');await reload();},{confirmText:'Eliminar',danger:true}));
     document.getElementById('generate-fees')?.addEventListener('click',()=>openForm({title:'Generar cuotas del periodo',subtitle:'Puedes repetir la operación con seguridad: no duplicará cuotas del mismo periodo.',fields:[{name:'periodo',label:'Periodo',type:'date',required:true,value:monthStart()}],submitText:'Generar',onSubmit:async v=>{const r=await repos.finance.generate(v.periodo);toast(`Cuotas generadas: ${r?.creadas??0}`);await reload();}}));
     const payFields=(fee)=>[{name:'importe',label:`Importe · ${publicConcept(fee?.concepto||'Cuota')}`,type:'number',step:'0.01',min:.01,required:true,value:balanceByFee.get(fee?.id)??fee?.importe??'',help:`Pendiente específico de ${originLabel(fee?.origen)}. Puedes registrar un pago parcial.`},{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()},{name:'metodo',label:'Método',type:'select',required:true,value:'transferencia',options:['transferencia','bizum','efectivo','tarjeta','otro'].map(x=>({value:x,label:x}))},{name:'referencia',label:'Referencia'},{name:'observaciones',label:'Observaciones',type:'textarea',full:true}];
-    bind('.admin-pay',id=>{const f=fees.find(x=>x.id===id);openForm({title:'Registrar cobro',fields:payFields(f),submitText:'Registrar pago',onSubmit:async v=>{await repos.finance.adminPayment({...v,cuota_id:id});toast('Pago registrado');await reload();}})});
+    bind('.admin-pay',id=>{const f=fees.find(x=>x.id===id);openForm({title:t('finance.actions.recordPayment'),fields:payFields(f),submitText:'Registrar pago',onSubmit:async v=>{await repos.finance.adminPayment({...v,cuota_id:id});toast('Pago registrado');await reload();}})});
     bind('.communicate-pay',id=>{const f=fees.find(x=>x.id===id);openForm({title:'Comunicar pago',subtitle:'Puedes adjuntar imagen o PDF (máx. 5 MB). El formulario no se cerrará hasta que el sistema confirme la operación.',fields:[...payFields(f),{name:'justificante',label:'Justificante',type:'file',accept:'image/*,.pdf',full:true}],submitText:'Comunicar pago',onSubmit:async v=>{const path=v.justificante?await repos.finance.uploadProof(f.socio_id,v.justificante):'';await repos.finance.communicatePayment({...v,cuota_id:id,justificante_path:path});toast('Pago comunicado');await reload();}})});
     bind('.view-proof',async(id,el)=>{el.disabled=true;try{const p=payments.find(x=>x.id===id);const url=await repos.finance.proofUrl(p?.justificante_url);if(!url)throw new Error('Este pago no tiene justificante adjunto.');window.open(url,'_blank','noopener,noreferrer');}catch(e){setError(e);}finally{el.disabled=false;}});
     bind('.validate-pay',async(id,el)=>{el.disabled=true;try{await repos.finance.validate(id,'validado');toast('Pago validado');await reload();}catch(e){setError(e);el.disabled=false;}});

@@ -6,7 +6,9 @@ for(const x of ['Ajustar banner','Arrastra para encuadrar','bindBannerFocalStage
 assert.match(profile,/object-position:\$\{pos\.x\}% \$\{pos\.y\}%/);assert.match(profile,/URL\.createObjectURL/);assert.match(profile,/Guardar encuadre/);
 assert.match(repos,/app_kombax_social_banner_position_v131/);assert.match(repos,/app_perfil_club_publico_v132/);
 for(const x of ['banner_position_x numeric','banner_position_y numeric','between 0 and 100','app_kombax_social_puede_actuar_v051','social.profile.banner.position','app_kombax_perfil_publico_v094_pre_banner_v131'])assert.ok(mig.includes(x),`Migración banner incompleta: ${x}`);
-for(const x of ['Ajustar banner','social_profile_id','srcOverride','background-position:center'])assert.ok(club.includes(x),`Club banner incompleto: ${x}`);for(const x of ['app_perfil_club_publico_v132','banner_position_x','banner_position_y','kombax_social_perfiles'])assert.ok(clubMig.includes(x),`RPC club banner incompleto: ${x}`);
+assert.ok(club.includes('Ajustar banner')||club.includes('Ajustar portada'),'Club banner incompleto: acción visible de ajuste');
+assert.ok((club.includes('social_profile_id')&&club.includes('srcOverride'))||(club.includes("mediaFraming.set('club_public_cover'")&&club.includes('portada_presentation')),'Club banner incompleto: persistencia de encuadre');
+for(const x of ['app_perfil_club_publico_v132','banner_position_x','banner_position_y','kombax_social_perfiles'])assert.ok(clubMig.includes(x),`RPC club banner incompleto: ${x}`);
 for(const x of ['touch-action:none','kx-banner-focal-marker','kx-banner-focal-controls'])assert.ok(css.includes(x),`CSS banner incompleto: ${x}`);
 assert.doesNotMatch(css,/\.kx-public-banner\{[^}]*object-position:center!important/);
 console.log('KOMBAX 20076 banner positioning: PASS');

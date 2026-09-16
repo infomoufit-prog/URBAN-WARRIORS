@@ -1,0 +1,53 @@
+export default {
+  "title": "KOMBAX Administration",
+  "team": "Team",
+  "permissions": "Team at permissions",
+  "archive": "Archive at trash",
+  "common": {
+    "loading": "Nilo-load ang administration…",
+    "platform": "Platform administration",
+    "search": "Maghanap",
+    "status": "Status",
+    "actions": "Mga aksyon",
+    "users": "Mga user",
+    "clubs": "Mga club",
+    "review": "Suriin",
+    "save": "I-save ang mga pagbabago"
+  },
+  "roles": {
+    "direction": "App Manager",
+    "coordination": "Koordinasyon",
+    "secretariat": "Sekretarya",
+    "treasury": "Pananalapi / Ingat-yaman",
+    "communications": "Komunikasyon",
+    "coach": "Coach",
+    "family": "Pamilya",
+    "student": "Mag-aaral"
+  },
+  "dashboard": {
+    "loading": "Inihahanda ang iyong dashboard…",
+    "managerKicker": "App Manager · Pangkalahatang dashboard",
+    "managerTitle": "Buong gym mo sa iisang app.",
+    "activeMembers": "Aktibong miyembro",
+    "activeStudents": "Aktibong mag-aaral",
+    "preRegistrations": "Paunang pagpaparehistro",
+    "pendingReview": "naghihintay ng pagsusuri",
+    "activeGroups": "aktibong grupo",
+    "pendingActions": "Mga nakabinbing aksyon",
+    "feesNeedFollowUp": "mga bayaring kailangang subaybayan",
+    "open": "Buksan",
+    "unassignedCoach": "Walang nakatalagang coach",
+    "noActiveGroups": "Walang aktibong grupo",
+    "noUpcomingSessions": "Walang paparating na session",
+    "configure": "I-configure",
+    "takeAttendance": "Magtala ng attendance",
+    "manageStudents": "Pamahalaan ang mga mag-aaral",
+    "pendingPreRegistrations": "Nakabinbing paunang pagpaparehistro",
+    "requestsToReview": "{{count}} kahilingang susuriin",
+    "activeRecords": "{{count}} aktibong record",
+    "overdueFees": "Overdue na bayarin",
+    "averageOccupancy": "Karaniwang occupancy",
+    "classesOccupancy": "Mga klase at occupancy",
+    "upcomingSessions": "Mga susunod na session"
+  }
+};

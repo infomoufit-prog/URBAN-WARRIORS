@@ -1,0 +1,9 @@
+KOMBAX 20.101 R51 PACKAGE SMOKE
+
+Candidate ZIP integrity: PASS
+Clean extraction: PASS
+R51 focused: 54/54 PASS
+npm test: EXIT 0
+build: PASS · 190 web = dist = Android
+
+Final ZIP is additionally re-extracted and re-tested after packaging.

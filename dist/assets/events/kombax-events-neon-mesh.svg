@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" fill="none">
+  <defs>
+    <linearGradient id="r" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff3347" stop-opacity=".5"/><stop offset="1" stop-color="#ff3347" stop-opacity="0"/></linearGradient>
+    <linearGradient id="c" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#49f3ff" stop-opacity=".34"/><stop offset="1" stop-color="#49f3ff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="v" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#a85cff" stop-opacity=".22"/><stop offset="1" stop-color="#a85cff" stop-opacity="0"/></linearGradient>
+    <pattern id="g" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0v80" stroke="#fff" stroke-opacity=".035" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g)"/>
+  <path d="M-120 720C220 450 440 340 760 310" stroke="url(#r)" stroke-width="2"/>
+  <path d="M1720 140C1320 250 1120 390 880 620" stroke="url(#c)" stroke-width="2"/>
+  <path d="M1180 -70C1010 190 950 360 960 920" stroke="url(#v)" stroke-width="1.5"/>
+  <circle cx="285" cy="610" r="210" stroke="#ff3347" stroke-opacity=".06"/>
+  <circle cx="1290" cy="230" r="300" stroke="#49f3ff" stroke-opacity=".05"/>
+  <circle cx="1290" cy="230" r="180" stroke="#a85cff" stroke-opacity=".04"/>
+</svg>

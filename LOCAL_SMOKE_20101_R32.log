@@ -1,0 +1,10 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 dev
+> node scripts/serve.mjs
+
+KOMBAX RC13 local: http://127.0.0.1:4182
+/ HTTP=200 bytes=1567
+/social HTTP=200 bytes=1567
+/events HTTP=200 bytes=1567
+/service-worker.js HTTP=200 bytes=1184
+/manifest.webmanifest HTTP=200 bytes=642

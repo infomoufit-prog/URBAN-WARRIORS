@@ -1,0 +1,65 @@
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+
+const CORS={
+  'access-control-allow-origin':'*',
+  'access-control-allow-headers':'authorization, x-client-info, apikey, content-type',
+  'access-control-allow-methods':'POST, OPTIONS'
+};
+const json=(status:number,body:unknown)=>new Response(JSON.stringify(body),{status,headers:{...CORS,'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer'}});
+const LOCALES=['es','en','fr','pt','it','de','th','fil'] as const;
+const LOCALE_SET=new Set<string>(LOCALES);
+const LOCALE_NAME:Record<string,string>={es:'Spanish',en:'English',fr:'French',pt:'Portuguese',it:'Italian',de:'German',th:'Thai',fil:'Filipino'};
+const PUBLIC_TYPES=new Set(['social_post','social_comment','club_community_post','showcase_product_name','showcase_product_description','event_name','event_description','event_comment','event_review','event_organizer_response','public_profile_bio','public_profile_description','brand_editorial','club_editorial','federation_editorial','user_generated_text']);
+const PRIVATE_TYPES=new Set(['direct_message','private_note']);
+const ALLOWED_TYPES=new Set([...PUBLIC_TYPES,...PRIVATE_TYPES]);
+const MODEL=Deno.env.get('KOMBAX_TRANSLATION_MODEL')||'gpt-5.6-luna';
+const anonWindow=new Map<string,{count:number,reset:number}>();
+function allowAnonymous(req:Request,count:number,total:number){const ip=req.headers.get('cf-connecting-ip')||req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()||'unknown';const now=Date.now(),hit=anonWindow.get(ip);if(!hit||now>hit.reset){anonWindow.set(ip,{count,reset:now+10*60*1000});return count<=30&&total<=6000;}if(hit.count+count>30||total>6000)return false;hit.count+=count;return true;}
+function keyFromMap(raw:string|undefined,name='default'){if(!raw)return '';try{const value=JSON.parse(raw);return String(value?.[name]||Object.values(value||{})[0]||'');}catch{return '';}}
+function envKeys(){return {publishable:keyFromMap(Deno.env.get('SUPABASE_PUBLISHABLE_KEYS'))||Deno.env.get('SUPABASE_ANON_KEY')||'',secret:keyFromMap(Deno.env.get('SUPABASE_SECRET_KEYS'))||Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||''};}
+function normLocale(v:unknown){const raw=String(v||'').trim().toLowerCase().replace('_','-');const base=raw.split('-')[0];return LOCALE_SET.has(raw)?raw:LOCALE_SET.has(base)?base:null;}
+function safe(v:unknown,max=20000){return String(v??'').replace(/\u0000/g,'').slice(0,max);}
+async function sha256(text:string){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return [...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function getUser(base:string,key:string,bearer:string){if(!bearer||!bearer.toLowerCase().startsWith('bearer '))return null;const r=await fetch(`${base}/auth/v1/user`,{headers:{apikey:key,authorization:bearer},signal:AbortSignal.timeout(7000)});return r.ok?await r.json().catch(()=>null):null;}
+function cacheHeaders(secret:string){return {apikey:secret,authorization:`Bearer ${secret}`,'content-type':'application/json'};}
+async function cacheGet(base:string,secret:string,item:any){
+  const q=new URLSearchParams({select:'translated_text,source_locale,provider,model_alias,source_hash',content_type:`eq.${item.content_type}`,content_id:`eq.${item.content_id}`,field_key:`eq.${item.field_key}`,source_hash:`eq.${item.source_hash}`,target_locale:`eq.${item.target_locale}`,limit:'1'});
+  const r=await fetch(`${base}/rest/v1/kombax_content_translations?${q}`,{headers:cacheHeaders(secret),signal:AbortSignal.timeout(7000)});if(!r.ok)return null;const rows=await r.json().catch(()=>[]);return Array.isArray(rows)&&rows[0]?rows[0]:null;
+}
+async function cachePut(base:string,secret:string,item:any,result:any){
+  if(item.privacy_scope==='private'||item.cache===false)return;
+  const row={content_type:item.content_type,content_id:item.content_id,field_key:item.field_key,source_hash:item.source_hash,source_locale:result.source_locale||null,target_locale:item.target_locale,translated_text:result.translated_text,privacy_scope:item.privacy_scope,provider:'openai',model_alias:MODEL,last_used_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+  await fetch(`${base}/rest/v1/kombax_content_translations?on_conflict=content_type,content_id,field_key,source_hash,target_locale`,{method:'POST',headers:{...cacheHeaders(secret),prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(row),signal:AbortSignal.timeout(7000)}).catch(()=>null);
+}
+function outputText(response:any){if(typeof response?.output_text==='string')return response.output_text;const out:string[]=[];for(const x of Array.isArray(response?.output)?response.output:[])for(const p of Array.isArray(x?.content)?x.content:[])if(p?.type==='output_text'&&typeof p.text==='string')out.push(p.text);return out.join('\n');}
+function parseJson(text:string){const raw=String(text||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');try{return JSON.parse(raw);}catch{}const s=raw.indexOf('{'),e=raw.lastIndexOf('}');if(s>=0&&e>s)try{return JSON.parse(raw.slice(s,e+1));}catch{}return null;}
+function validate(raw:any,index:number){
+  const text=safe(raw?.source_text,12000).trim(),type=String(raw?.content_type||''),target=normLocale(raw?.target_locale),source=normLocale(raw?.source_locale),field=safe(raw?.field_key||'text',80).trim()||'text',id=safe(raw?.content_id||`anonymous-${index}`,160).trim();
+  if(!ALLOWED_TYPES.has(type))throw new Error(`unsupported_content_type:${index}`);if(!target)throw new Error(`unsupported_target_locale:${index}`);if(text.length<1||text.length>12000)throw new Error(`invalid_text_length:${index}`);if(!id)throw new Error(`content_id_required:${index}`);
+  const privacy=PRIVATE_TYPES.has(type)?'private':(['members','private'].includes(String(raw?.privacy_scope||''))?String(raw.privacy_scope):'public');
+  return {client_request_id:safe(raw?.client_request_id||String(index),100),content_type:type,content_id:id,field_key:field,source_text:text,source_locale:source,target_locale:target,privacy_scope:privacy,cache:raw?.cache!==false&&privacy!=='private'};
+}
+Deno.serve(async req=>{
+  if(req.method==='OPTIONS')return new Response('ok',{headers:CORS});if(req.method!=='POST')return json(405,{ok:false,error:'method_not_allowed'});
+  const base=(Deno.env.get('SUPABASE_URL')||'').replace(/\/+$/,'');const {publishable,secret}=envKeys();const openai=Deno.env.get('OPENAI_API_KEY')||'';if(!base||!publishable||!secret)return json(503,{ok:false,error:'backend_not_configured'});
+  let body:any={};try{body=await req.json();}catch{return json(400,{ok:false,error:'invalid_json'});}const rawItems=Array.isArray(body?.items)?body.items:[body];if(!rawItems.length||rawItems.length>12)return json(400,{ok:false,error:'invalid_batch_size'});
+  let items:any[];try{items=rawItems.map(validate);}catch(error){return json(400,{ok:false,error:String(error instanceof Error?error.message:error)});}const total=items.reduce((n,x)=>n+x.source_text.length,0);if(total>30000)return json(413,{ok:false,error:'batch_too_large'});
+  const bearer=req.headers.get('authorization')||'';const user=await getUser(base,publishable,bearer);if(items.some(x=>x.privacy_scope==='private')&&!user)return json(401,{ok:false,error:'authentication_required_for_private_translation'});if(!user&&!allowAnonymous(req,items.length,total))return json(429,{ok:false,error:'anonymous_translation_rate_limited'});
+  for(const item of items)item.source_hash=await sha256(item.source_text);
+  const results:any[]=[];const missing:any[]=[];
+  for(const item of items){if(item.source_locale&&item.source_locale===item.target_locale){results.push({...item,translated_text:item.source_text,detected_source_locale:item.source_locale,cached:true,same_language:true});continue;}const hit=item.cache?await cacheGet(base,secret,item):null;if(hit){results.push({...item,translated_text:String(hit.translated_text||''),detected_source_locale:hit.source_locale||item.source_locale||null,cached:true,same_language:false});}else missing.push(item);}
+  if(missing.length){
+    if(!openai)return json(503,{ok:false,error:'translation_ai_not_configured',partial_results:results.map(x=>({client_request_id:x.client_request_id,translated_text:x.translated_text,detected_source_locale:x.detected_source_locale,cached:true}))});
+    const targetGroups=new Map<string,any[]>();for(const item of missing){const list=targetGroups.get(item.target_locale)||[];list.push(item);targetGroups.set(item.target_locale,list);}
+    for(const [target,group] of targetGroups){
+      const payload=group.map((x,i)=>({index:i,source_locale:x.source_locale||null,text:x.source_text}));
+      const instructions=`Translate user-authored KOMBAX content into ${LOCALE_NAME[target]}. Preserve meaning, tone, paragraph breaks, emoji, @handles, URLs, email addresses, hashtags, product/model codes, IDs, amounts and proper names. Never translate the trademarks KOMBAX, KOMBAX Social, KOMBAX Showcase, KOMBAX Events, KOMBAX Assist, KOMBAX Migrations, Stripe or QR. Do not add explanations. If a text is already naturally in the target language, return it unchanged. Detect the source language when source_locale is null. Return ONLY JSON: {"items":[{"index":0,"detected_source_locale":"es","translation":"..."}]}. detected_source_locale must be one of es,en,fr,pt,it,de,th,fil when confidently identifiable, otherwise null.`;
+      const r=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{authorization:`Bearer ${openai}`,'content-type':'application/json'},body:JSON.stringify({model:MODEL,instructions,input:[{role:'user',content:[{type:'input_text',text:JSON.stringify(payload)}]}],max_output_tokens:Math.min(12000,Math.max(800,group.reduce((n,x)=>n+x.source_text.length,0)*2)),store:false}),signal:AbortSignal.timeout(55000)});
+      const raw=await r.text();let response:any=null;try{response=raw?JSON.parse(raw):null}catch{response={error:{message:raw}}}if(!r.ok)return json(502,{ok:false,error:'translation_provider_error',detail:safe(response?.error?.message||`OPENAI_${r.status}`,240)});
+      const parsed=parseJson(outputText(response));const translated=Array.isArray(parsed?.items)?parsed.items:[];
+      for(let i=0;i<group.length;i++){const item=group[i],row=translated.find((x:any)=>Number(x?.index)===i)||translated[i];const text=safe(row?.translation,20000).trim();if(!text)return json(502,{ok:false,error:'translation_response_invalid'});const detected=normLocale(row?.detected_source_locale)||item.source_locale||null;const result={...item,translated_text:text,detected_source_locale:detected,cached:false,same_language:detected===item.target_locale&&text===item.source_text};results.push(result);await cachePut(base,secret,item,{translated_text:text,source_locale:detected});}
+    }
+  }
+  const ordered=items.map(item=>{const row=results.find(x=>x.client_request_id===item.client_request_id);return {client_request_id:item.client_request_id,content_id:item.content_id,content_type:item.content_type,field_key:item.field_key,target_locale:item.target_locale,detected_source_locale:row?.detected_source_locale||null,translated_text:row?.translated_text||item.source_text,source_hash:item.source_hash,cached:row?.cached===true,same_language:row?.same_language===true};});
+  return json(200,{ok:true,items:ordered,model_alias:MODEL,privacy:{original_preserved:true,private_translation_persisted:false}});
+});

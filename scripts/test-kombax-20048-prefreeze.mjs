@@ -51,13 +51,13 @@ ok(profile.includes('photos.length>=10')&&profile.includes('videos.length>=3')&&
 ok(legal.includes('Mi perfil KOMBAX')&&legal.includes('no existe un segundo perfil deportivo visible'),'manual explica arquitectura de un solo perfil');
 ok(!legal.includes('perfil deportivo interno'),'centro legal ya no describe una capa deportiva pública separada');
 
-// Club shell brand background: black + blurred logo, never cover image.
+// R41 supersedes the old tenant-logo shell watermark: structural background is neutral KOMBAX.
 const shell=(css.match(/\.content-shell::before\{[^}]+\}/)||[])[0]||'';
 const store=(css.match(/\.store-hero::after\{[^}]+\}/)||[])[0]||'';
-ok(shell.includes('var(--uw-logo-image)')&&!shell.includes('var(--uw-cover-image)'),'shell global usa logo, no portada');
-ok(shell.includes('blur(10px)')&&shell.includes('grayscale(1)')&&shell.includes('opacity:.055'),'marca de agua shell está difuminada y atenuada');
+ok(shell.includes('var(--kx-shell-image')&&!shell.includes('var(--uw-cover-image)'),'shell global usa KOMBAX, nunca la portada del club');
+ok(shell.includes('blur(10px)')&&shell.includes('grayscale(1)')&&/opacity:\.05[0-9]/.test(shell),'marca de agua shell KOMBAX está difuminada y atenuada');
 ok(css.includes('.content-shell{')&&css.includes('background:#050608'),'shell mantiene negro dominante');
-ok(store.includes('var(--uw-logo-image)')&&!store.includes('var(--uw-cover-image)')&&store.includes('blur(7px)'),'hero de tienda usa misma marca de agua difuminada');
+ok(store.includes('var(--uw-logo-image)')&&!store.includes('var(--uw-cover-image)')&&store.includes('blur(7px)'),'hero de tienda conserva branding explícito del club');
 ok(premium.includes('20.048 · Perfil Miembro canónico'),'estilos del perfil canónico están incluidos');
 
 // Security/privacy/product invariants.

@@ -18,7 +18,7 @@ assert.match(sql,/app_kombax_perfil_servicio_activo_v071/);
 assert.match(sql,/app_kombax_puede_gestionar_perfil_v070/);
 assert.match(sql,/app_kombax_plan_limite_v071/);
 assert.match(sql,/app_kombax_perfil_publico_v094/);
-assert.ok(publicProfile.includes("['club','marca','federacion','competidor']"));
+assert.ok(publicProfile.includes('<section><h4>Showcase</h4>${showcase(p)}</section>'),'perfil público expone Showcase universal y conserva tipos publicadores soportados en backend');
 assert.ok(!showcase.includes("x.sujeto_tipo==='club'?'Club':'Marca'"),'la UI no degrada Federación/Competidor a Marca');
 const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]);
 assert.ok(currentBuild>=20068);

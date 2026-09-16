@@ -1,34 +1,20 @@
-# Índice documental vigente · RC13 build 20030
+# KOMBAX Documentation Index · current build 20.101 R3
 
-## Fuente de verdad operativa
+## Fuente de verdad actual
+1. `README.md` — resumen de la candidata actual.
+2. `STATUS.md` — estado operativo 20.101 R3.
+3. `BUILD_20101_EVENT_VISUAL_EDITOR_HARDENING_VALIDATION.md` — QA y cierre R3.
+4. `SUPABASE_EVENT_VISUAL_AUDIT_20101_R3.md` — backend real v178/ACL/advisors.
+5. `LOCAL_QA_CHECKLIST_20101_R3.md` — cuatro recorridos manuales de aceptación.
+6. `PATCH_NOTES_20101_R3.md` — cambios concretos.
+7. `PROMPT_MAESTRO_CONTINUIDAD_20101.md` — continuidad obligatoria.
+8. `RELEASE_IDENTITY_20101.txt` — identidad resumida.
+9. `ANDROID.md` — continuidad Android/firma.
+10. `BUILD_MANIFEST_SHA256_20101_R3.txt` — manifiesto íntegro final.
+11. `QA_20101_R3_FULL_RESULT.txt` / `BUILD_20101_R3_FULL_RESULT.txt` — evidencias ejecutables.
 
-1. `README.md`: alcance y orden de continuación.
-2. `STATUS.md`: estado honesto de puertas locales y externas.
-3. `FINAL_RELEASE_AUDIT_RC13_BUILD_20025.md`: auditoría de entrega.
-4. `ARCHITECTURE.md`, `DATABASE.md`, `SECURITY.md` y `PLATFORM_EVOLUTION_RULES.md`: contratos vigentes.
-5. `SUPABASE_KOMBAX_RC13_20022_20025_RUNBOOK.md`: única secuencia SQL nueva autorizada.
-6. `ANDROID_STUDIO_KOMBAX_RC13_BUILD_20025.md`: única guía de firma de esta candidata.
-7. `NETLIFY_KOMBAX_BUILD_20025_RUNBOOK.md`: única guía de despliegue web de esta candidata.
-8. `LOAD_TEST_RUNBOOK_KOMBAX_100_CLUBS.md`: preparación y criterio de carga, no certificación actual.
+## Backend
+20.101 R3 añade migración 178 ya aplicada al Supabase principal. Los lectores y mutaciones de Events prefieren v178 con fallback compatible. No se ha adelantado `health` productivo ni se ha hecho deploy frontend.
 
-## Evidencia histórica
-
-Los documentos cuyo título o nombre indica RC10, RC12, build 20018, 20019, 20020, 20021, 20022, 20023 o 20024 conservan decisiones y resultados de su fase. No deben usarse para desplegar, firmar o migrar build 20025. En caso de discrepancia prevalece siempre la fuente de verdad anterior.
-
-## Regla anti-contradicción
-
-No combinar pasos SQL o Android de dos runbooks. Para build 20025 se parte del estado real verificado del entorno, se ejecuta el preflight vigente y se detiene el proceso ante cualquier diferencia; nunca se fuerza una migración porque un informe histórico la describa como pendiente o aplicada.
-
-## KOMBAX build 20028
-- `RC13_BUILD_20028_IMPLEMENTATION_REPORT.md` — implementación y límites de certificación.
-- `SUPABASE_KOMBAX_RC13_20028_RUNBOOK.md` — secuencia 051–056.
-- `RC13_BUILD_20028_LOCAL_QA.md` — gates local/Supabase/Android.
-- `CHANGELOG_RC13_BUILD_20028.md` — cambios funcionales.
-- `BUILD_MANIFEST_SHA256_20028.txt` — integridad del paquete final.
-## KOMBAX build 20030
-- `RC13_BUILD_20030_IMPLEMENTATION_REPORT.md` — arquitectura 057 y validación local.
-- `SUPABASE_KOMBAX_RC13_20030_RUNBOOK.md` — fuente operativa vigente; continuar desde 052 y aplicar 057 después de 056.
-- `RC13_BUILD_20030_LOCAL_QA.md` — matriz de privacidad Monitor A/B, ámbitos y cartera.
-- `CHANGELOG_RC13_BUILD_20030.md` — cambios del build.
-- `BUILD_MANIFEST_SHA256_20030.txt` — integridad del paquete final.
-
+## Históricos
+Los documentos 20.101 iniciales y builds anteriores se conservan como evidencia. Para nuevas pruebas de esta candidata usar exclusivamente los documentos R3.

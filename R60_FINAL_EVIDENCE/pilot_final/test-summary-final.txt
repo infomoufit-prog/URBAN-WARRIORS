@@ -1,0 +1,376 @@
+===== scripts/test-kombax-20110-r60-final-pilot-assist-conversations.mjs =====
+PASS unified conversation route exists
+PASS formal Support has its own full route
+PASS Social messages leave the Social feed layer
+PASS Showcase interest routes to conversation layer
+PASS conversation shell exposes five isolated channels
+PASS all four approved Assist/Migrations visuals are local assets
+PASS Assist hero and Migrations hero are wired
+PASS robot avatar and chat empty-state are wired
+PASS Assist is management AI for Club Federation Brand
+PASS formal Support is separate from management AI
+PASS formal Support exposes privacy security and child-safety channels
+PASS formal Support preserves human verification/review
+PASS guided Support cannot self-activate
+PASS guided Support status is customer-safe and separate
+PASS Management is a new direct category rather than replacement Support
+PASS Management monthly allowance is independent from guided Support counters
+PASS frontend exposes monthly conversations and per-conversation message limits
+PASS backend exposes plan message limits to UI
+PASS management direct-profile hub is available to Federation and Brand
+PASS backend enforces org authorization and Brand access without Brand migrations
+PASS AI management context is read-only and compact
+PASS AI Support prompt is distinct from management and Migrations
+PASS AI sends legal privacy security matters to human Support
+PASS history deletion separates Management from Support and Migrations
+PASS premium chat shell has safe-area sticky composer
+PASS formal Support has responsive dedicated visual layer
+PASS Social mobile hero opens framing instead of recentering
+PASS mobile bottom navigation remains hidden
+OK 28/28 R60 pilot final · Assist + Migrations + Support guided + Conversations
+RESULT: PASS
+
+===== scripts/test-kombax-20110-r60-events-navigation-flow.mjs =====
+PASS 1: event detail requests are deduplicated in flight
+PASS 2: event cards prefetch detail before click when possible
+PASS 3: opening an event exposes immediate busy feedback
+PASS 4: slow opens show a non-blocking loading state
+PASS 5: loading modal morphs into detail without a second modal transition
+PASS 6: closing/replacing a pending open does not hijack navigation
+PASS 7: competition preparation no longer blocks primary event detail
+PASS 8: preparation hydration is guarded against stale opens
+PASS 9: Events shell paints before organizer/invitation requests settle
+PASS 10: discovery refresh avoids destructive identical list repaint
+PASS 11: cached discovery paints immediately on re-entry
+PASS 12: motion feedback respects reduced-motion preference
+R60 EVENTS NAVIGATION FLOW: PASS 12/12
+RESULT: PASS
+
+===== scripts/test-kombax-20110-r60-mobile-nav-media-hero-flow.mjs =====
+PASS mobile bottom navigation hidden
+PASS mobile content no longer reserves tabbar height
+PASS toast respects system bottom inset without tabbar
+PASS generic immersive media viewer exported
+PASS immersive layer preserves underlying modal
+PASS immersive media CSS covers viewport
+PASS public profile photos and videos can expand
+PASS member album video expand control exists
+PASS direct profile album photos and videos can expand
+PASS events portrait focal point keeps both faces
+PASS social portrait focal point centers fighter
+PASS event detail request is deduplicated
+PASS event detail is prefetched before click
+PASS event loading feedback is delayed, not a page reload
+PASS event preparation leaves first-paint critical path
+PASS event discovery preserves cached cards
+OK 16/16 R60 mobile nav + media fullscreen + hero focus + Events flow
+RESULT: PASS
+
+===== scripts/test-kombax-20101-r44-events-flow-stability.mjs =====
+PASS 1: existe resolución de detalle independiente de la cartelera
+PASS 2: el detalle puede recuperarse por ID aunque no esté en discovery
+PASS 3: se elimina el dead-click silencioso dependiente de caché
+PASS 4: fallo de apertura informa al usuario en vez de cortar silenciosamente
+PASS 5: las aperturas rápidas descartan respuestas fuera de orden
+PASS 6: menú de gestión limpia listeners al cerrar/reemplazar modal
+PASS 7: cierre del modal elimina estado global de gestión
+PASS 8: la infraestructura modal emite el lifecycle usado por Events
+PASS 9: existe invalidación central de caché de detalle
+PASS 10: mutaciones principales invalidan el detalle obsoleto
+PASS 11: guardar y previsualizar fuerzan detalle fresco
+PASS 12: la transición post-guardado ya no espera a reconstruir toda la cartelera
+PASS 13: editor resuelve contexto organizador activo de forma explícita
+PASS 14: un evento gestionado desde Club prioriza el workspace exacto
+PASS 15: edición conserva identidad organizadora aunque el select disabled no entre en FormData
+PASS 16: no se envía event.save sin sujeto válido
+PASS 17: rutas demo relativas no contaminan inputs HTML type=url
+PASS 18: guardar demo conserva visual local si no se reemplaza
+PASS 19: gestor de álbum ya no mezcla media sintética demo con media persistida
+PASS 20: cuota del gestor usa solo media real/persistida
+PASS 21: flujo mantiene gateway y bundle productivos de Events
+PASS 22: plan R44 existe
+PASS 23: changelog R44 existe
+PASS 24: package expone test R44
+PASS 25: regresión completa incorpora R44
+R44 EVENTS FLOW STABILITY: PASS 25/25
+RESULT: PASS
+
+===== scripts/test-kombax-20104-r54-events-flow-mobile-quality.mjs =====
+PASS build web >=20104 preserves R54 behavior
+PASS android version >=20104 preserves R54 behavior
+PASS Events read recovery retries transient failures
+PASS discovery preserves existing cards on fetch failure
+PASS event opening has actionable retry without toast-only failure
+PASS event cards are keyboard accessible
+PASS QA demo panel is not rendered
+PASS visible pilot stabilization marker removed
+PASS builder visible version marker removed
+PASS upload preflight validates complete selection
+PASS upload feedback remains inside album flow
+PASS mobile event card uses compact fixed visual stage
+PASS mobile card hides teaser and secondary external actions
+PASS media status tones styled
+R54 Events flow/mobile quality: 14/14 PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20105-r55-events-media-load-budget.mjs =====
+PASS worst-case physical media budget <800 MiB (760.3 MiB)
+PASS thumbnail grid theoretical photo transfer reduction >20x (23.4x)
+PASS 100 MiB video uses 17 resumable chunks at 6 MiB
+PASS 1000 participants require at most 10 server pages of 100 and are not loaded on initial event open
+PASS Fight Card/player imagery is lazy decoded and video uses metadata preload
+R55 Events load-budget simulation: 5/5 PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20101-r53-pilot-network-profile-events.mjs =====
+PASS R53 plan covers network, public profiles, Events, video covers and three-surface closure
+PASS generic private KOMBAX connection type is added at DB constraint level
+PASS generic relation prevents duplicate reciprocal open connections
+PASS generic relation request RPC requires owned source and visible active target
+PASS network UI always offers a generic KOMBAX connection
+PASS network request requires acceptance and is explicitly private
+PASS Social directory uses shared network request flow
+PASS repository routes generic requests through R53 RPC
+PASS public profile exposes Add to my network for non-own profiles
+PASS public album is classified as All Photos Videos
+PASS public profile initially shows the latest five visible posts
+PASS public profile always renders a Showcase area with empty state
+PASS Showcase initially limits visible cards and can expand all
+PASS Events visibility editor refuses to overwrite when current visibility cannot be read
+PASS Events visibility editor refuses selector changes when directory cannot load
+PASS Events editor reports missing event data instead of silently returning
+PASS R52.2 Social video poster chain remains present
+PASS PWA build preserves R53 lineage at build 20103 or later
+PASS Android pilot version remains monotonic after R53 and user agent matches build
+PASS Android debug artifact is named for current build
+PASS Google Play artifact is named for current build
+R53 21/21 PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20107-r57-social-info-ux.mjs =====
+PASS R57 baseline is preserved in build 20107 or later
+PASS service worker is R57 or later
+PASS Android is R57 or later
+PASS R57 Android artifact names or later release naming
+PASS Social exposes compact information trigger
+PASS information trigger is bound to a real panel
+PASS information panel contains active identity
+PASS information panel contains topic moderation policy
+PASS information panel contains full publication rules
+PASS feed no longer renders identity switcher inline
+PASS feed no longer renders large topic policy inline
+PASS feed no longer renders rules card inline
+PASS feed keeps founders launch promotion
+PASS feed keeps existing publish action unchanged
+PASS composer keeps small contextual moderation reminder
+PASS composer keeps publishing identity context
+PASS identity can still be changed from information panel
+PASS all principal Social views use secondary information action
+PASS information control remains compact on mobile
+PASS information panel resets old inline card margins
+PASS Events module historical hash only enforced on R57
+PASS Showcase historical hash only enforced on R57
+PASS public profile historical hash only enforced on R57
+PASS repositories historical hash only enforced on R57
+PASS R57 itself remains frontend-only; later migrations are allowed
+R57 Social information UX / QA freeze candidate: 25/25 PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20063-social-messaging-final.mjs =====
+OK web/PWA/Android conservan 20063+ y permanecen alineados
+OK X conserva el hilo y Cerrar chat desaparece de la UI
+OK comentarios se escriben inline sin segundo modal
+OK terminología visible normalizada a Mi red
+OK Contact Gate aplica 10–500 caracteres desde frontend
+OK bandeja diferencia Social y Showcase y muestra contexto de producto
+OK Showcase inicia consulta comercial ligada a ficha
+OK repositorio prioriza lector acotado v133, conserva fallback v107→v106→v104 y bloquea Showcase si backend 107 aún no está activo
+OK schema separa canal y un hilo por pareja+producto
+OK badge superior cuenta conversaciones no leídas, no mensajes individuales
+OK notificaciones KOMBAX no duplican el contenido del chat
+OK tratamiento visual Social/Showcase e inline comments disponible
+OK verificación SQL v107 incluida
+KOMBAX BUILD 20063 · SOCIAL MESSAGING FINAL QA: PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20068-showcase-profiles.mjs =====
+KOMBAX 20068 Showcase perfiles: PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20101-r49-social-events-final-polish.mjs =====
+PASS R49 master prompt exists
+PASS R49 plan exists
+PASS public Like action uses heart
+PASS Like still uses public like mutation
+PASS interest UI uses thumbs up/down
+PASS interest remains tri-state
+PASS private preference uses dedicated R49 RPC
+PASS private preference does not mutate likes
+PASS R49 feed keeps like and interest independent
+PASS repository prefers R49 feed with fallbacks
+PASS engagement summary exposes likes not interest counts
+PASS own posts do not expose preference/like controls
+PASS other posts expose four primary actions
+PASS KOMBAX Social thematic policy notice exists
+PASS publisher repeats thematic rule
+PASS off-topic report is exposed for posts
+PASS off-topic moderation is supported by backend constraint
+PASS off-topic report feeds existing moderation table
+PASS event discovery poster has touch motion
+PASS event detail poster is keyboard/touch expandable
+PASS public event poster is expandable too
+PASS immersive poster viewer uses contain
+PASS poster motion respects reduced motion
+PASS R48 Main Event hierarchy preserved
+PASS R48 Co-Main hierarchy preserved
+PASS fight cards still support optional photos/fallback
+PASS full Fight Card poster remains supported
+PASS no new Events backend table introduced
+PASS R49 npm script registered
+R49 29/29 PASS
+RESULT: PASS
+
+===== scripts/test-kombax-20101-r38-assist-chat-migration-economy.mjs =====
+PASS 1: foundation de economía/chat R38 existe
+PASS 2: API customer-safe R38 existe
+PASS 3: API service-only R38 existe
+PASS 4: metering documental R38 existe
+PASS 5: hardening R38 existe
+PASS 6: separación Assist/Migrations R38 existe
+PASS 7: gate customer-safe de activación Assist R38 existe
+PASS 8: índices de rendimiento R38 existen
+PASS 9: Edge Function KOMBAX Assist R38 existe
+PASS 10: economía privada limita coste mensual y por caso
+PASS 11: Basic tiene guardrails económicos explícitos
+PASS 12: Premium tiene guardrails económicos explícitos
+PASS 13: Federation tiene guardrails económicos explícitos
+PASS 14: router privado contempla modelo económico y escalado
+PASS 15: procesamiento limita archivos, visuales y MB por lote
+PASS 16: visión restringida a detalle low/auto
+PASS 17: chat y ledger de turnos son persistentes
+PASS 18: ledger privado tiene RLS
+PASS 19: ledger de coste no tiene acceso directo de cliente
+PASS 20: dashboard customer-safe existe
+PASS 21: dashboard visible no expone modelo, tokens ni coste
+PASS 22: RPC interna mutable usa VOLATILE y search_path vacío
+PASS 23: contexto interno solo se concede a service_role
+PASS 24: cliente no puede leer política/modelo interno
+PASS 25: guardrails bloquean consumo anómalo antes de nueva llamada
+PASS 26: migración conserva caso por ticket
+PASS 27: migración admite hojas, PDF e imágenes
+PASS 28: registro de archivos aplica límites de documentos y volumen
+PASS 29: documentos y MB se contabilizan al subir
+PASS 30: vista previa exige confirmación antes de importar
+PASS 31: resultados extraídos se cachean por archivo
+PASS 32: Edge Function usa secreto de entorno y no contiene API key
+PASS 33: Responses API desactiva almacenamiento remoto de la respuesta
+PASS 34: runtime envía imágenes y archivos mediante inputs multimodales
+PASS 35: visión/PDF usa detalle económico configurado
+PASS 36: salida está acotada por política
+PASS 37: parser soporta salida REST anidada de Responses API
+PASS 38: facturación usa alias de política y no un identificador devuelto inesperado
+PASS 39: migración devuelve y guarda análisis por lote
+PASS 40: runtime identifica Migrations como canal visible independiente
+PASS 41: prompt de migración prohíbe importación automática
+PASS 42: KOMBAX Assist mantiene ruta visible propia aunque R39 simplifique su etiqueta
+PASS 43: KOMBAX Migrations tiene ruta visible independiente
+PASS 44: Assist y Migrations siguen en navegación y la ruta histórica de licencias permanece compatible
+PASS 45: frontend consume cupo customer-safe
+PASS 46: frontend usa metering y preview R38
+PASS 47: chat invoca Edge Function con timeout adecuado para IA
+PASS 48: stack frontend permite timeout específico sin afectar otras funciones
+PASS 49: Migrations visible incluye hilo y compositor
+PASS 50: usuario ve límites separados y comprensibles sin tokens
+PASS 51: migración visible es directa y conserva una acción real de inicio
+PASS 52: UI explica continuidad del mismo caso de migración
+PASS 53: UI mantiene gate de confirmación
+PASS 54: Assist de gestión y Soporte formal aparecen como líneas distintas
+PASS 55: backend conserva activación guiada para Soporte y exime Management/Migrations
+PASS 56: cliente no puede autoactivar el chat guiado formal mediante RPC customer-safe
+PASS 57: frontend usa mutación customer-safe v233 y no expone autoactivación
+PASS 58: R38 indexa FKs de turnos y mensajes señaladas por advisor
+PASS 59: R38 indexa FKs de análisis de migración señaladas por advisor
+PASS 60: Privacidad/soporte mantiene correo humano como entrada formal y separado de Assist
+PASS 61: banner de perfiles anuncia acceso directo a migración multimodal
+PASS 62: R38 añade diseño responsive específico de chat/cupos
+PASS 63: R38 Assist/Migrations no toca preparación ni peso privado
+PASS 64: R38 permanece preservado en la cadena PWA
+PASS 65: R38 permanece preservado en la cadena del service worker
+PASS 66: package expone test R38
+PASS 67: regresión completa incorpora R38
+R38 ASSIST CHAT MIGRATION ECONOMY: PASS 67/67
+RESULT: PASS
+
+===== scripts/test-kombax-20101-assistance-allowances-v213.mjs =====
+KOMBAX assistance allowances v2.13 static contract: OK
+RESULT: PASS
+
+===== scripts/test-kombax-20110-r60-migrations-guide-history.mjs =====
+PASS 1: guide backend uses the existing organization authorization gate
+PASS 2: ticket history is scoped to the exact Club/Federation tenant
+PASS 3: deletion plan is owner + exact tenant constrained
+PASS 4: service finalizer rejects mixed-tenant batches
+PASS 5: usage turns are detached rather than deleted when customer content is erased
+PASS 6: quota and usage ledgers are not deleted
+PASS 7: minimal deletion audit table exists without customer content columns
+PASS 8: Storage deletion happens before database finalization
+PASS 9: history deletion reports preserved allowance and idempotent empty retries
+PASS 10: PDF is served only after backend authorization
+PASS 11: professional protected migration guide PDF is packaged
+PASS 12: authorized edge guide contains the current professional PDF payload
+PASS 13: PDF generator documents commercial promise, examples/checklist and support route
+PASS 14: guide PDF is not exposed as a public static web asset
+PASS 15: authenticated binary guide download is wired through client/backend/repository
+PASS 16: repository uses R60 scoped history and deletion edge function
+PASS 17: guide UX explicitly identifies Club/Federation scope
+PASS 18: in-app guide uses KOMBAX branding and commercial promise
+PASS 19: in-app guide includes practical Club, finance, Federation/PDF examples and FAQ
+PASS 20: professional responsive guide styling is packaged
+PASS 21: history deletion UX includes individual/bulk actions and no-quota-refund warning
+PASS 22: frontend constructs exact Federation and Club tenant references
+PASS 23: Club profile exposes the migration guide
+PASS 24: Federation profile receives both migration guide and management Assist modules
+PASS 25: other direct profile types do not receive the migration guide module
+PASS 26: Federation actions pass its exact direct-profile ID
+PASS 27: R59 adult/minor activation safety remains present
+PASS 28: R59 duplicate prevention and claim resolution remain present
+PASS 29: web/service-worker/Android identity is R60 build 20110
+PASS 30: operational Android scripts name APK/AAB as R60 build 20110
+PASS 31: health endpoint advertises R60 build 20110
+PASS 32: top-level web HTML cache references moved to build 20110
+OK KOMBAX 20.110 R60 focused QA · 32/32
+RESULT: PASS
+
+===== scripts/test-kombax-20101-r33-1-federation-ux.mjs =====
+PASS 1: plan R33.1 documenta cierre UX transversal
+PASS 2: Mi Club tiene ruta visible a Federaciones y licencias
+PASS 3: Mi Club/Mi Cuenta tiene ruta de Mis licencias personales
+PASS 4: administración federativa del Club se limita en navegación a roles autorizados
+PASS 5: Mis licencias mantiene acceso de cuenta; R39 puede agruparlo dentro de Federaciones y licencias
+PASS 6: sidebar/área federativa mantiene agrupación coherente de licencias
+PASS 7: sidebar tiene iconografía para ambos accesos
+PASS 8: hub de identidades tiene matriz UX federativa explícita
+PASS 9: Mi Federación expone administración, federados, licencias, clubes y equipo
+PASS 10: Mi Competidor expone Mis licencias
+PASS 11: Mi actividad expone sus propias licencias
+PASS 12: licencias de terceros en Profesional siguen condicionadas por capability
+PASS 13: Federación, Marca y Espectador reciben herramienta de licencias personales de cuenta
+PASS 14: UX aclara que Mis licencias personales no concede poderes a la identidad activa
+PASS 15: renderer de licencias soporta identidad o cuenta y modo embebido
+PASS 16: Mis licencias preserva el shell de Mi Club cuando se abre desde sidebar
+PASS 17: error de Mis licencias embebidas no destruye el shell del Club
+PASS 18: Mi Federación acepta foco de navegación por módulo
+PASS 19: Mi Federación enfoca Equipo o Clubes relacionados desde tarjetas
+PASS 20: Mi Federación enfoca Federados/Licencias desde tarjetas
+PASS 21: backend workspace R33.1 anuncia módulos federativos
+PASS 22: backend workspace anuncia licencias de Competidor y Profesional
+PASS 23: RPC workspace identifica versión R33.1
+PASS 24: migración no abre RPC a anon y conserva authenticated
+PASS 25: cache R33.1 permanece preservada en la cadena PWA
+PASS 26: herramienta transversal de cuenta tiene tratamiento responsive propio
+PASS 27: regresión completa incluye el test R33.1
+R33.1 FEDERATION UX ALL PROFILES: PASS 27/27
+RESULT: PASS
+
+CURATED_TEST_FILES_PASS=15
+CURATED_TEST_FILES_FAIL=0

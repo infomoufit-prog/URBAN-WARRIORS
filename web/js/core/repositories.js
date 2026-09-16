@@ -1,5 +1,7 @@
 import { backend } from './backend.js';
+import { getLocale } from '../i18n/index.js';
 // Contrato histórico app_kombax_perfil_mutate_v043 · legacy cerrado desde 20.044; repositorio activo usa v072.
+// Compatibilidad estática 20.044: app_kombax_mis_perfiles_v072 · app_kombax_perfil_mutate_v072. R28 enruta perfil/mutación por v196.
 import { state } from './state.js';
 import { isoDate, monthStart } from './utils.js';
 import { optimizeImage, prepareVideo } from './media.js';
@@ -9,10 +11,28 @@ import { tenantKey } from './platform.js';
 const enc=(v)=>encodeURIComponent(String(v??''));
 const session=()=>state.session;
 const filterClub=()=>`club_id=eq.${enc(session()?.club_id)}`;
+const eventMediaUrlCache=new Map();
+function eventMediaUrlCacheKey(mediaId,variant='asset'){return `${String(mediaId||'')}:${String(variant||'asset')}`;}
+async function eventMediaAccessUrl(mediaId,variant='asset'){
+  const key=eventMediaUrlCacheKey(mediaId,variant),now=Date.now(),hit=eventMediaUrlCache.get(key);
+  if(hit?.value&&hit.expires>now)return hit.value;
+  if(hit?.promise)return hit.promise;
+  const promise=backend.publicInvokeFunction('event-media-url',{media_id:mediaId,variant}).then(value=>{eventMediaUrlCache.set(key,{value,expires:Date.now()+10*60*1000});return value;}).catch(error=>{eventMediaUrlCache.delete(key);throw error;});
+  eventMediaUrlCache.set(key,{promise,expires:0});return promise;
+}
+function invalidateEventMediaUrl(mediaId){const prefix=`${String(mediaId||'')}:`;for(const key of [...eventMediaUrlCache.keys()])if(key.startsWith(prefix))eventMediaUrlCache.delete(key);}
 
 async function read(table,query){return backend.select(table,query)}
 async function mutation(op,payload){const out=await backend.mutate(op,payload);invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);return out}
 const cachedRead=(suffix,loader,ttl=45000,force=false)=>cached(tenantKey(session(),suffix),loader,{ttl,force});
+async function enrichEventTicketing(rows=[]){
+  const list=Array.isArray(rows)?rows:[];const ids=[...new Set(list.map(x=>x?.id).filter(Boolean))];if(!ids.length)return list;
+  try{
+    const ticketRows=await backend.publicRpc('app_kombax_event_ticketing_public_r625',{p_event_ids:ids});
+    const map=new Map((Array.isArray(ticketRows)?ticketRows:[]).map(x=>[String(x.event_id),x]));
+    return list.map(x=>({...x,...(map.get(String(x.id))||{})}));
+  }catch(error){if(!isMissingRpc(error,'app_kombax_event_ticketing_public_r625'))throw error;return list;}
+}
 
 const PUBLIC_IMAGE_TYPES=new Set(['image/jpeg','image/png','image/webp','image/gif']);
 async function uploadPublicImage(kind,file){
@@ -76,6 +96,16 @@ async function kombaxShowcaseMutation(operation,payload={}){
   invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);
   return response.data;
 }
+async function kombaxEventsMutation(operation,payload={}){
+  const requestId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const args={p_operation:operation,p_payload:{...payload,workspace_club_id:session()?.club_id||null},p_request_id:requestId};
+  let response;
+  try{response=await backend.globalWriteRpc('app_kombax_eventos_mutate_v253',args);}
+  catch(error){if(!isMissingRpc(error,'app_kombax_eventos_mutate_v253'))throw error;try{response=await backend.globalWriteRpc('app_kombax_eventos_mutate_v191',args);}catch(r191){if(!isMissingRpc(r191,'app_kombax_eventos_mutate_v191'))throw r191;try{response=await backend.globalWriteRpc('app_kombax_eventos_mutate_v189',args);}catch(inner){if(!isMissingRpc(inner,'app_kombax_eventos_mutate_v189'))throw inner;try{response=await backend.globalWriteRpc('app_kombax_eventos_mutate_v181',args);}catch(legacy){if(!isMissingRpc(legacy,'app_kombax_eventos_mutate_v181'))throw legacy;response=await backend.globalWriteRpc('app_kombax_eventos_mutate_v175',args);}}}}
+  if(!response?.ok||response.operation!==operation||response.request_id!==requestId)throw new Error(`Respuesta KOMBAX Eventos no verificable para ${operation}.`);
+  invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);
+  return response.data;
+}
 async function kombaxIdentityMutation(operation,payload={}){
   const requestId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const response=await backend.globalWriteRpc('app_kombax_identity_mutate_v123',{p_operation:operation,p_payload:{...payload,club_id:payload.club_id||session()?.club_id||null},p_request_id:requestId});
@@ -112,8 +142,8 @@ async function uploadKombaxSocialMedia(socialId,type,file,{enAlbum=false,audienc
   if(!socialId)throw new Error('Selecciona la identidad con la que quieres publicar.');
   const isVideo=type==='video'||String(file?.type||'').startsWith('video/');
   const normalizedType=['avatar','banner'].includes(type)?type:(isVideo?'video':'photo');
-  const prepared=isVideo?await prepareVideo(file):await optimizeImage(file,{maxEdge:type==='banner'?2560:1920,maxBytes:5*1024*1024});
-  if(prepared.file.size>25*1024*1024)throw new Error('El archivo supera 25 MB.');
+  const prepared=isVideo?await prepareVideo(file,{maxBytes:100*1024*1024,maxDuration:60.2,maxLongEdge:1920,maxShortEdge:1080}):await optimizeImage(file,{maxEdge:type==='banner'?2560:1920,maxBytes:5*1024*1024});
+  if(prepared.file.size>(isVideo?100:25)*1024*1024)throw new Error(isVideo?'El vídeo supera 100 MB.':'El archivo supera 25 MB.');
   const ext=(prepared.file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'')||'bin';
   const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
   const restricted=String(audience||'publica')!=='publica'&& !['avatar','banner'].includes(normalizedType);
@@ -124,7 +154,11 @@ async function uploadKombaxSocialMedia(socialId,type,file,{enAlbum=false,audienc
     const operation=normalizedType==='avatar'?'kombax.social.media.avatar':normalizedType==='banner'?'kombax.social.media.banner':'kombax.social.media.add';
     const data=await kombaxSocialMutation(operation,{social_profile_id:socialId,tipo:normalizedType,storage_path:path,storage_bucket:bucket,mime_type:prepared.mime||prepared.file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,duration_seconds:prepared.duration||null,en_album:restricted?false:enAlbum===true});
     if(data?.old_storage_path&&String(data.old_storage_path).startsWith(`${session().id}/social/`))await backend.remove(data.old_storage_bucket||'kombax-public-media',data.old_storage_path).catch(()=>{});
-    return {...data,storage_bucket:bucket,public_url:restricted?'':backend.publicUrl('kombax-public-media',path)};
+    let mediaPresentation=data?.media_presentation||{};
+    if(isVideo&&prepared.cover&&data?.id){
+      try{const cover=await storeMediaCover('social_media',data.id,prepared.cover,{bucket,pathPrefix:`${session().id}/social/${socialId}/${data.id}`,presentation:mediaPresentation,mode:'auto',time:prepared.coverTime||0});mediaPresentation=cover.presentation;}catch(error){console.warn('KOMBAX Social video cover:',error);}
+    }
+    return {...data,media_presentation:mediaPresentation,storage_bucket:bucket,public_url:restricted?'':backend.publicUrl('kombax-public-media',path)};
   }catch(error){await backend.remove(bucket,path).catch(()=>{});throw error;}
 }
 async function syncPrivateAvatarToKombaxSocial(socialId,sourcePath=session()?.avatar_path){
@@ -151,24 +185,167 @@ async function uploadKombaxShowcaseImage(brandId,file){
   return {path,url:backend.publicUrl('kombax-public-media',path)};
 }
 
+async function uploadReputationMedia(scope,targetId,file,{allowVideo=false}={}){
+  if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+  if(!targetId)throw new Error('Contenido de reputación no disponible.');
+  if(!file?.size)throw new Error('Selecciona un archivo.');
+  const isVideo=String(file.type||'').startsWith('video/');
+  if(isVideo&&!allowVideo)throw new Error('Las reseñas de producto admiten fotografías.');
+  if(!isVideo&&!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');
+  if(isVideo&&!['video/mp4','video/webm','video/quicktime'].includes(file.type))throw new Error('Usa MP4, WEBM o MOV.');
+  const prepared=isVideo?await prepareVideo(file,{maxBytes:50*1024*1024,maxDuration:60.2,maxLongEdge:1920,maxShortEdge:1080}):await optimizeImage(file,{maxEdge:1920,maxBytes:5*1024*1024});
+  if(prepared.file.size>(isVideo?50:5)*1024*1024)throw new Error(isVideo?'El vídeo supera 50 MB.':'La imagen supera 5 MB.');
+  const ext=(prepared.file.name?.split('.').pop()||file.name?.split('.').pop()||(isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();
+  const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+  const path=`${session().id}/reputation/${scope}/${targetId}/${Date.now()}-${token}.${ext}`;
+  await backend.upload('kombax-public-media',path,prepared.file,false);
+  return {path,url:backend.publicUrl('kombax-public-media',path),type:isVideo?'video':'image',mime:prepared.mime||prepared.file.type,duration:isVideo?prepared.duration||null:null};
+}
+async function removeOwnedReputationMedia(items=[]){
+  let removed=0;for(const item of items||[]){const url=typeof item==='string'?item:item?.url;const path=kombaxPublicMediaPath(url);if(!path||!path.startsWith(`${session()?.id}/reputation/`))continue;try{await backend.remove('kombax-public-media',path);removed++;}catch{}}return removed;
+}
+
+async function readMediaPresentations(scope,ids=[]){
+  const safe=[...new Set((ids||[]).filter(Boolean).map(String))].slice(0,200);
+  if(!safe.length)return new Map();
+  try{
+    const rows=await rpcWithFallback(()=>backend.publicRpc('app_kombax_media_presentations_v188',{p_scope:scope,p_ids:safe}),()=>backend.publicRpc('app_kombax_media_presentations_v187',{p_scope:scope,p_ids:safe}),'app_kombax_media_presentations_v188');
+    return new Map((rows||[]).map(x=>[String(x.id),x.presentation||{}]));
+  }catch(error){
+    if(!isMissingRpc(error,'app_kombax_media_presentations_v188')&&!isMissingRpc(error,'app_kombax_media_presentations_v187'))console.warn('Media framing read:',error);
+    return new Map();
+  }
+}
+function hasMediaPresentation(value){return Boolean(value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length);}
+function resolveMediaPresentation(...values){for(const value of values){if(hasMediaPresentation(value))return value;}return {};}
+async function enrichMediaPresentations(scope,rows=[],idKey='id',field='media_presentation'){
+  const list=Array.isArray(rows)?rows:[];const map=await readMediaPresentations(scope,list.map(x=>x?.[idKey]));
+  return list.map(x=>({...x,[field]:resolveMediaPresentation(x?.[field],map.get(String(x?.[idKey]||'')))}));
+}
+async function enrichShowcaseMedia(rows=[]){
+  let out=await enrichMediaPresentations('showcase_item',rows,'id','imagen_presentacion');
+  const ids=out.map(x=>x?.id).filter(Boolean);
+  if(!ids.length)return out;
+  const maps=await Promise.all([0,1,2].map(i=>readMediaPresentations(`showcase_gallery_${i}`,ids)));
+  out=out.map(x=>({...x,galeria_presentacion:Object.fromEntries([0,1,2].map(i=>[String(i),maps[i].get(String(x.id))||x?.galeria_presentacion?.[String(i)]||{}]))}));
+  try{
+    const [commerce,listing]=await Promise.all([
+      backend.globalReadRpc('app_showcase_commerce_details_v259',{p_ids:ids}),
+      backend.publicRpc('app_showcase_listing_details_r628',{p_ids:ids}).catch(error=>{if(!isMissingRpc(error,'app_showcase_listing_details_r628'))throw error;return [];})
+    ]);
+    const byId=new Map((Array.isArray(commerce)?commerce:[]).map(x=>[String(x.id),x]));
+    const listingById=new Map((Array.isArray(listing)?listing:[]).map(x=>[String(x.id),x]));
+    return out.map(x=>({...x,...(byId.get(String(x.id))||{}),...(listingById.get(String(x.id))||{})}));
+  }catch(error){if(!isMissingRpc(error,'app_showcase_commerce_details_v259'))console.warn('Showcase Commerce:',error);return out;}
+}
+
+async function readSocialProfilePosts(socialId,cursor=null,limit=10){
+  const args={p_social_id:socialId,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(10,Math.max(1,Number(limit)||10))};
+  const rows=await rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_profile_posts_v256',args),()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_profile_posts_v255',args),()=>backend.globalReadRpc('app_kombax_social_profile_posts_v099',args),'app_kombax_social_profile_posts_v255'),'app_kombax_social_profile_posts_v256');
+  const list=Array.isArray(rows)?rows:[];
+  const socialIds=list.filter(x=>x.media_scope==='social_media').map(x=>x.media_id).filter(Boolean);
+  const profileIds=list.filter(x=>x.media_scope==='profile_media').map(x=>x.media_id).filter(Boolean);
+  const [socialMap,profileMap]=await Promise.all([readMediaPresentations('social_media',socialIds),readMediaPresentations('profile_media',profileIds)]);
+  return Promise.all(list.map(async x=>{
+    const scope=String(x.media_scope||'');const id=String(x.media_id||'');
+    const presentation=resolveMediaPresentation(x.media_presentation,scope==='social_media'?socialMap.get(id):profileMap.get(id));
+    const bucket=String(x.media_bucket||'kombax-public-media');const path=String(x.media_path||'');
+    let media_url='';let media_cover_url='';
+    if(path){try{media_url=bucket==='kombax-restricted-media'?await backend.signedUrl(bucket,path,600):backend.publicUrl('kombax-public-media',path);}catch{media_url='';}}
+    const coverPath=String(presentation?.cover_storage_path||'');const coverBucket=String(presentation?.cover_storage_bucket||bucket||'kombax-public-media');
+    if(coverPath){try{media_cover_url=coverBucket==='kombax-restricted-media'?await backend.signedUrl(coverBucket,coverPath,600):backend.publicUrl('kombax-public-media',coverPath);}catch{media_cover_url='';}}
+    return {...x,media_presentation:presentation,media_url,media_cover_url};
+  }));
+}
+
+async function setMediaPresentation(scope,targetId,presentation={}){
+  if(!targetId)throw new Error('Contenido multimedia no disponible.');
+  const current=(await readMediaPresentations(scope,[targetId]).catch(()=>new Map())).get(String(targetId))||{};
+  const merged={...current,...(presentation&&typeof presentation==='object'?presentation:{})};
+  const out=await rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_media_presentation_set_v188',{p_scope:scope,p_target_id:targetId,p_presentation:merged}),()=>backend.globalWriteRpc('app_kombax_media_presentation_set_v187',{p_scope:scope,p_target_id:targetId,p_presentation:merged}),'app_kombax_media_presentation_set_v188');
+  invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);
+  return out;
+}
+
+async function storeMediaCover(scope,targetId,file,{bucket='kombax-public-media',pathPrefix='',presentation={},mode='upload',time=0}={}){
+  if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+  if(!targetId)throw new Error('Vídeo no disponible.');
+  const prepared=await optimizeImage(file,{maxEdge:1600,maxBytes:2*1024*1024});
+  const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/jpeg'?'jpg':'webp';
+  const prefix=String(pathPrefix||`${session().id}/covers/${scope}/${targetId}`).replace(/^\/+|\/+$/g,'');
+  const path=`${prefix}/cover-${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;
+  await backend.upload(bucket,path,prepared.file,false);
+  const previous=presentation&&typeof presentation==='object'?presentation:{};
+  const next={...previous,cover_mode:['auto','frame','upload'].includes(mode)?mode:'upload',cover_storage_path:path,cover_storage_bucket:bucket,cover_mime_type:prepared.mime||prepared.file.type,cover_time:Number.isFinite(Number(time))?Math.max(0,Number(time)):0};
+  try{
+    await setMediaPresentation(scope,targetId,next);
+    const oldPath=String(previous.cover_storage_path||''),oldBucket=String(previous.cover_storage_bucket||bucket);
+    if(oldPath&&oldPath!==path)await backend.remove(oldBucket,oldPath).catch(()=>{});
+    return {presentation:next,path,bucket,url:bucket==='kombax-public-media'?backend.publicUrl(bucket,path):''};
+  }catch(error){await backend.remove(bucket,path).catch(()=>{});throw error;}
+}
+
+function coverPathFromPresentation(presentation={}){return String(presentation?.cover_storage_path||'').trim();}
+function coverBucketFromPresentation(presentation={},fallback='kombax-public-media'){return String(presentation?.cover_storage_bucket||fallback||'kombax-public-media').trim();}
+async function removeMediaCover(presentation={},fallbackBucket='kombax-public-media'){const path=coverPathFromPresentation(presentation);if(!path)return false;const bucket=coverBucketFromPresentation(presentation,fallbackBucket);await backend.remove(bucket,path).catch(()=>{});return true;}
+function thumbPathFromPresentation(presentation={}){return String(presentation?.thumb_storage_path||'').trim();}
+function thumbBucketFromPresentation(presentation={},fallback='kombax-events-media'){return String(presentation?.thumb_storage_bucket||fallback||'kombax-events-media').trim();}
+async function removeMediaThumbnail(presentation={},fallbackBucket='kombax-events-media'){const path=thumbPathFromPresentation(presentation);if(!path)return false;await backend.remove(thumbBucketFromPresentation(presentation,fallbackBucket),path).catch(()=>{});return true;}
+async function storeEventMediaThumbnail(eventId,targetId,file,presentation={}){
+  if(!eventId||!targetId||!file?.size)return {presentation};
+  const prepared=await optimizeImage(file,{maxEdge:960,maxBytes:350*1024});
+  const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/jpeg'?'jpg':'webp';
+  const path=`${eventId}/${targetId}/thumb-${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;
+  await backend.upload('kombax-events-media',path,prepared.file,false);
+  const previous=presentation&&typeof presentation==='object'?presentation:{};
+  const next={...previous,thumb_storage_path:path,thumb_storage_bucket:'kombax-events-media',thumb_mime_type:prepared.mime||prepared.file.type,thumb_width:prepared.width||null,thumb_height:prepared.height||null,thumb_status:'ready'};
+  try{
+    await setMediaPresentation('event_media',targetId,next);
+    const old=String(previous.thumb_storage_path||'');if(old&&old!==path)await backend.remove(String(previous.thumb_storage_bucket||'kombax-events-media'),old).catch(()=>{});
+    invalidateEventMediaUrl(targetId);return {presentation:next,path};
+  }catch(error){await backend.remove('kombax-events-media',path).catch(()=>{});throw error;}
+}
+async function storeEventVideoCoverWithRetry(eventId,targetId,file,{presentation={},mode='auto',time=0,attempts=3}={}){
+  let lastError=null;
+  for(let attempt=1;attempt<=Math.max(1,attempts);attempt++){
+    try{
+      const out=await storeMediaCover('event_media',targetId,file,{bucket:'kombax-events-media',pathPrefix:`${eventId}/${targetId}`,presentation:{...(presentation||{}),cover_status:'ready'},mode,time});
+      invalidateEventMediaUrl(targetId);return {...out,status:'ready',attempt};
+    }catch(error){lastError=error;if(attempt<attempts)await new Promise(resolve=>setTimeout(resolve,attempt*350));}
+  }
+  const pending={...(presentation||{}),cover_status:'pending',cover_time:Number.isFinite(Number(time))?Math.max(0,Number(time)):0,cover_last_error_at:new Date().toISOString()};
+  await setMediaPresentation('event_media',targetId,pending).catch(()=>{});invalidateEventMediaUrl(targetId);
+  return {presentation:pending,status:'pending',error:lastError};
+}
+
 async function kombaxGlobalMutation(endpoint,operation,payload={}){
   const requestId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const response=await backend.globalWriteRpc(endpoint,{p_operation:operation,p_payload:payload,p_request_id:requestId});
   if(!response?.ok||response.operation!==operation||response.request_id!==requestId)throw new Error(`Respuesta KOMBAX no verificable para ${operation}.`);
   return response.data;
 }
+async function kombaxProfileMutationR58(operation,payload={}){
+  try{return await kombaxGlobalMutation('app_kombax_perfil_mutate_r58',operation,payload);}
+  catch(error){
+    // Compatibilidad R57 mientras Work aplica la migración 249. El endpoint histórico sigue siendo v196.
+    if(String(payload?.tipo||'').toLowerCase()==='media')throw error;
+    return kombaxGlobalMutation('app_kombax_perfil_mutate_v196',operation,payload);
+  }
+}
 async function uploadKombaxProfileMedia(profileId,type,file){
   if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
   let prepared;
-  if(type==='video')prepared=await prepareVideo(file);else prepared=await optimizeImage(file,{maxEdge:type==='banner'?2560:1920,maxBytes:5*1024*1024});
-  if(prepared.file.size>25*1024*1024)throw new Error('El archivo supera 25 MB.');
+  if(type==='video')prepared=await prepareVideo(file,{maxBytes:100*1024*1024,maxDuration:60.2,maxLongEdge:1920,maxShortEdge:1080});else prepared=await optimizeImage(file,{maxEdge:type==='banner'?2560:1920,maxBytes:5*1024*1024});
+  if(prepared.file.size>(type==='video'?100:25)*1024*1024)throw new Error(type==='video'?'El vídeo supera 100 MB.':'El archivo supera 25 MB.');
   const ext=(prepared.file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'')||'bin';
   const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
   const path=`${session().id}/${profileId}/${Date.now()}-${token}.${ext}`;
   await backend.upload('kombax-public-media',path,prepared.file,false);
   try{
     const data=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.add',{perfil_directo_id:profileId,tipo,storage_path:path,mime_type:prepared.mime||prepared.file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,duration_seconds:prepared.duration||null});
-    return {...data,public_url:backend.publicUrl('kombax-public-media',path)};
+    let mediaPresentation=data?.media_presentation||{};
+    if(type==='video'&&prepared.cover&&data?.id){try{const cover=await storeMediaCover('profile_media',data.id,prepared.cover,{bucket:'kombax-public-media',pathPrefix:`${session().id}/${profileId}/${data.id}`,presentation:mediaPresentation,mode:'auto',time:prepared.coverTime||0});mediaPresentation=cover.presentation;}catch(error){console.warn('KOMBAX profile video cover:',error);}}
+    return {...data,media_presentation:mediaPresentation,public_url:backend.publicUrl('kombax-public-media',path)};
   }catch(error){await backend.remove('kombax-public-media',path).catch(()=>{});throw error;}
 }
 async function uploadKombaxClubMedia(clubId,type,file){
@@ -181,15 +358,17 @@ async function uploadKombaxClubMedia(clubId,type,file){
   if(!normalizedType)throw new Error('Tipo de contenido no válido. Usa una fotografía o un vídeo compatible.');
   if(detected&&requested&&['photo','video'].includes(requested)&&detected!==requested)throw new Error('El tipo seleccionado no coincide con el archivo elegido.');
   let prepared;
-  if(normalizedType==='video')prepared=await prepareVideo(file);else prepared=await optimizeImage(file,{maxEdge:1920,maxBytes:5*1024*1024});
-  if(prepared.file.size>25*1024*1024)throw new Error('El archivo supera 25 MB.');
+  if(normalizedType==='video')prepared=await prepareVideo(file,{maxBytes:100*1024*1024,maxDuration:60.2,maxLongEdge:1920,maxShortEdge:1080});else prepared=await optimizeImage(file,{maxEdge:1920,maxBytes:5*1024*1024});
+  if(prepared.file.size>(normalizedType==='video'?100:25)*1024*1024)throw new Error(normalizedType==='video'?'El vídeo supera 100 MB.':'El archivo supera 25 MB.');
   const ext=(prepared.file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'')||'bin';
   const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
   const path=`${session().id}/club/${clubId}/${Date.now()}-${token}.${ext}`;
   await backend.upload('kombax-public-media',path,prepared.file,false);
   try{
     const data=await kombaxGlobalMutation('app_kombax_club_media_mutate_v046','kombax.club.media.add',{club_id:clubId,tipo:normalizedType,storage_path:path,mime_type:prepared.mime||prepared.file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,duration_seconds:prepared.duration||null});
-    return {...data,public_url:backend.publicUrl('kombax-public-media',path)};
+    let mediaPresentation=data?.media_presentation||{};
+    if(normalizedType==='video'&&prepared.cover&&data?.id){try{const cover=await storeMediaCover('club_media',data.id,prepared.cover,{bucket:'kombax-public-media',pathPrefix:`${session().id}/club/${clubId}/${data.id}`,presentation:mediaPresentation,mode:'auto',time:prepared.coverTime||0});mediaPresentation=cover.presentation;}catch(error){console.warn('KOMBAX club video cover:',error);}}
+    return {...data,media_presentation:mediaPresentation,public_url:backend.publicUrl('kombax-public-media',path)};
   }catch(error){await backend.remove('kombax-public-media',path).catch(()=>{});throw error;}
 }
 
@@ -272,12 +451,15 @@ export const repos={
     deactivateEnrollment:(matricula_id)=>mutation('matricula.desactivar',{matricula_id}),
     graduation:(p)=>mutation('graduacion.registrar',{socio_id:p.socio_id,disciplina_id:p.disciplina_id,grado_id:p.grado_id,fecha:p.fecha||isoDate(),examinador:p.examinador||'',nota:p.nota||''}),
     archive:(socio_id,motivo='',fecha_baja=isoDate())=>mutation('alumno.archivar',{socio_id,motivo,fecha_baja}),
+    inviteAccess:(socio_id,email='')=>backend.writeRpc('app_kombax_alumno_invitar_r58',{p_club_id:session()?.club_id,p_socio_id:socio_id,p_email:String(email||'').trim().toLowerCase()||null}),
+    claims:()=>backend.readRpc('app_kombax_membership_claims_club_r59',{p_club_id:session()?.club_id}),
+    resolveClaim:(claim_id,approve)=>backend.writeRpc('app_kombax_membership_claim_resolve_r59',{p_claim_id:claim_id,p_aprobar:approve===true}),
     delete:(socio_id)=>mutation('alumno.eliminar',{socio_id}), async forceDelete(socio_id){const out=await mutation('alumno.eliminar_forzado',{socio_id});await Promise.all([(out?.document_paths||[]).map(p=>backend.remove('member-documents',p).catch(()=>{})),(out?.payment_paths||[]).map(p=>backend.remove('justificantes-pago',p).catch(()=>{}))].flat());return out;}
   },
   preenrollments:{
     list:(limit=100)=>read('preinscripciones',`select=*&${filterClub()}&order=creado_en.desc&limit=${Math.min(500,Math.max(20,Number(limit)||100))}`),
-    create:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:p.tipo_solicitud||'adulto',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa_id||null,parentesco:p.parentesco||null,observaciones:p.observaciones||null}),
-    approve:(id)=>mutation('preinscripcion.aprobar',{preinscripcion_id:id}), wait:(id,motivo)=>mutation('preinscripcion.espera',{preinscripcion_id:id,motivo:motivo||null}), reject:(id,motivo)=>mutation('preinscripcion.rechazar',{preinscripcion_id:id,motivo:motivo||''}),
+    create:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:p.tipo_solicitud||'adulto',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.email_acceso||p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa_id||null,parentesco:p.parentesco||null,observaciones:p.observaciones||null}),
+    approve:(id)=>rpcWithFallback(()=>backend.writeRpc('app_kombax_preinscripcion_aprobar_r59',{p_preinscripcion_id:id}),()=>mutation('preinscripcion.aprobar',{preinscripcion_id:id}),'app_kombax_preinscripcion_aprobar_r59'), wait:(id,motivo)=>mutation('preinscripcion.espera',{preinscripcion_id:id,motivo:motivo||null}), reject:(id,motivo)=>mutation('preinscripcion.rechazar',{preinscripcion_id:id,motivo:motivo||''}),
     cancel:(id,motivo)=>mutation('preinscripcion.cancelar',{preinscripcion_id:id,motivo:motivo||''}),
     delete:(id)=>mutation('preinscripcion.eliminar',{preinscripcion_id:id})
   },
@@ -308,6 +490,43 @@ export const repos={
     validate:(pago_id,decision,motivo)=>mutation('pago.validar',{pago_id,decision,motivo:motivo||null}),
     pause:(cuota_id,motivo,hasta)=>mutation('cuota.pausar_avisos',{cuota_id,motivo,hasta:hasta||null}), resume:(cuota_id)=>mutation('cuota.reactivar_avisos',{cuota_id}),
     annulReceipt:(recibo_id,motivo)=>mutation('recibo.anular',{recibo_id,motivo})
+  },
+  payments:{
+    connectStatus:(subject_type,subject_id)=>backend.invokeFunction('stripe-connect',{action:'status',subject_type,subject_id},25000),
+    connectOnboarding:(subject_type,subject_id)=>backend.invokeFunction('stripe-connect',{action:'onboarding',subject_type,subject_id},35000),
+    checkout:(kind,reference_id,quantity=1)=>backend.invokeFunction('stripe-checkout',{kind,reference_id,quantity,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
+    refund:(payload={})=>backend.invokeFunction('stripe-refund',{action:'single',...payload,user_locale:payload.user_locale||getLocale(),request_id:payload.request_id||crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},45000),
+    refundEventBatch:(event_id,reason='')=>backend.invokeFunction('stripe-refund',{action:'event_batch',event_id,reason,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},90000),
+    accountFinance:(scope,subject_id)=>backend.invokeFunction('stripe-account-finance',{scope,subject_id},35000),
+    myOrders:(limit=100)=>backend.globalReadRpc('app_showcase_my_orders_v259',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    sellerOrders:(provider_id,limit=100)=>backend.globalReadRpc('app_showcase_seller_orders_v259',{p_provider_id:provider_id,p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    orderMutate:(operation,payload={})=>backend.globalWriteRpc('app_showcase_order_mutate_v259',{p_operation:operation,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
+  },
+  commercialCompliance:{
+    purchaseEligibility:()=>backend.globalReadRpc('app_kombax_commercial_purchase_eligibility_r63',{}),
+    report:(target_type,target_id,reason,detail='')=>backend.globalWriteRpc('app_kombax_commercial_report_r63',{p_target_type:target_type,p_target_id:target_id,p_reason:reason,p_detail:detail,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    cancelEventPlan:(event_id,reason)=>backend.globalWriteRpc('app_kombax_event_cancel_commercial_plan_r63',{p_event_id:event_id,p_reason:reason,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
+  },
+  marketplace:{
+    sellerCenter:(provider_id)=>backend.globalReadRpc('app_showcase_seller_center_r627',{p_provider_id:provider_id}),
+    sellerApplication:(provider_id,operation,payload={})=>backend.globalWriteRpc('app_showcase_seller_application_mutate_r627',{p_provider_id:provider_id,p_operation:operation,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    acceptSellerPolicy:(provider_id,policy_code,policy_version)=>backend.globalWriteRpc('app_showcase_seller_policy_accept_r627',{p_provider_id:provider_id,p_policy_code:policy_code,p_policy_version:policy_version,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    buyerTrust:()=>backend.globalReadRpc('app_kombax_buyer_trust_r627',{}),
+    acceptBuyerPolicy:(policy_code,policy_version)=>backend.globalWriteRpc('app_kombax_buyer_policy_accept_r627',{p_policy_code:policy_code,p_policy_version:policy_version,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    buyerIdentitySubmit:(payload={})=>backend.globalWriteRpc('app_kombax_buyer_identity_mutate_r627',{p_operation:'submit',p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    async uploadBuyerIdentityDocument(identity_request_id,document_type,file){
+      if(!file||!file.size)throw new Error('Selecciona un documento.');
+      if(file.size>15*1024*1024)throw new Error('El documento supera el límite de 15 MB.');
+      const allowed=new Set(['application/pdf','image/jpeg','image/png','image/webp']);
+      if(!allowed.has(file.type))throw new Error('Formato no admitido. Usa PDF, JPG, PNG o WEBP.');
+      const uid=session()?.id;if(!uid)throw new Error('Sesión requerida.');
+      const ext=(file.name.split('.').pop()||'bin').replace(/[^a-z0-9]/gi,'').toLowerCase();
+      const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+      const path=`${uid}/buyer/${identity_request_id}/${Date.now()}-${token}.${ext}`;
+      await backend.upload('kombax-verification-docs',path,file,false);
+      try{return await backend.globalWriteRpc('app_kombax_buyer_identity_document_r627',{p_request_id:identity_request_id,p_document_type:document_type,p_storage_path:path,p_mime_type:file.type,p_bytes:file.size,p_request_token:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`});}
+      catch(error){await backend.remove('kombax-verification-docs',path).catch(()=>{});throw error;}
+    }
   },
   reminders:{
     load:()=>read('configuracion_avisos_cuota',`select=*&${filterClub()}&limit=1`), history:()=>read('historial_avisos_cuota',`select=*&${filterClub()}&order=fecha_programada.desc&limit=250`),
@@ -372,9 +591,9 @@ export const repos={
     createInvitation:(tipo,email,rol=null,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:String(tipo||'').trim().toLowerCase(),p_email:String(email||'').trim().toLowerCase(),p_rol:rol?String(rol).trim().toLowerCase():null,p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),
     createTeamInvitation:(email,rol,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:'equipo',p_email:String(email||'').trim().toLowerCase(),p_rol:String(rol||'').trim().toLowerCase(),p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),
     createStudentInvitation:(email,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:'alumno',p_email:String(email||'').trim().toLowerCase(),p_rol:null,p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),
-    sendInvitation:(invitation_id)=>backend.invokeFunction('invite-email',{invitation_id}),
-    sendTeamInvitation:(invitation_id)=>backend.invokeFunction('invite-email',{invitation_id}),
-    sendStudentInvitation:(invitation_id)=>backend.invokeFunction('invite-email',{invitation_id})
+    sendInvitation:(invitation_id)=>backend.invokeFunction('invite-email',{invitation_id,user_locale:getLocale()}),
+    sendTeamInvitation:(invitation_id)=>backend.invokeFunction('invite-email',{invitation_id,user_locale:getLocale()}),
+    sendStudentInvitation:(invitation_id)=>backend.invokeFunction('invite-email',{invitation_id,user_locale:getLocale()})
   },
   accessCodes:{
     get:()=>backend.readRpc('app_kombax_codigos_club_v060',{p_club_id:session()?.club_id}),
@@ -441,20 +660,21 @@ export const repos={
     avatarUrl:(path)=>path?backend.signedUrl('profile-media',path,3600):Promise.resolve('')
   },
   clubPublic:{
-    async one(club_id=session()?.club_id){const rows=await rpcWithFallback(()=>backend.readRpc('app_perfil_club_publico_v132',{p_club_id:club_id}),()=>backend.readRpc('app_perfil_club_publico_v061',{p_club_id:club_id}),'app_perfil_club_publico_v132');return rows?.[0]||null;},
+    async one(club_id=session()?.club_id){const rows=await rpcWithFallback(()=>backend.readRpc('app_perfil_club_publico_v132',{p_club_id:club_id}),()=>backend.readRpc('app_perfil_club_publico_v061',{p_club_id:club_id}),'app_perfil_club_publico_v132');const out=rows?.[0]||null;if(!out)return null;const [logo,cover]=await Promise.all([readMediaPresentations('club_public_logo',[club_id]),readMediaPresentations('club_public_cover',[club_id])]);return {...out,logo_presentation:out.logo_presentation||logo.get(String(club_id))||{},portada_presentation:out.portada_presentation||cover.get(String(club_id))||{}};},
     save:(p)=>mutation('club_publico.guardar',{slug:p.slug,nombre_publico:p.nombre_publico,alias:p.alias||'',lema:p.lema||'',descripcion:p.descripcion||'',historia:p.historia||'',ciudad:p.ciudad||'',provincia:p.provincia||'',pais:p.pais||'España',logros:p.logros||'',contacto_publico:p.contacto_publico||'',web_publica:p.web_publica||'',instagram:p.instagram||'',tiktok:p.tiktok||'',youtube:p.youtube||'',logo_url:p.logo_url||'',portada_url:p.portada_url||'',visible:true}),
     uploadImage:(kind,file)=>uploadPublicImage(kind==='cover'?'public-club-cover':'public-club-logo',file),
     removeImage:(url)=>removePublicImage(url),
-    album:(club_id=session()?.club_id)=>backend.globalReadRpc('app_kombax_club_album_v046',{p_club_id:club_id}),
+    album:async(club_id=session()?.club_id)=>enrichMediaPresentations('club_media',await backend.globalReadRpc('app_kombax_club_album_v046',{p_club_id:club_id})),
     albumUrl:(path)=>backend.publicUrl('kombax-public-media',path),
     uploadAlbumMedia:(club_id,type,file)=>uploadKombaxClubMedia(club_id,type,file),
-    removeAlbumMedia:async(club_id,media)=>{const out=await kombaxGlobalMutation('app_kombax_club_media_mutate_v046','kombax.club.media.remove',{club_id,media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});return out;}
+    setVideoCover:(club_id,media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('club_media',media.id,file,{bucket:'kombax-public-media',pathPrefix:`${session()?.id}/club/${club_id}/${media.id}`,presentation,mode,time}),
+    removeAlbumMedia:async(club_id,media)=>{const out=await kombaxGlobalMutation('app_kombax_club_media_mutate_v046','kombax.club.media.remove',{club_id,media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');return out;}
   },
   publicIdentity:{
     search:(query='')=>backend.readRpc('app_buscar_identidades_publicas_v035',{p_club_id:session()?.club_id,p_query:query||'',p_limit:60})
   },
   sportsProfiles:{
-    list:(socio_id=null)=>backend.readRpc('app_perfiles_deportivos_publicos_v032',{p_club_id:session()?.club_id,p_socio_id:socio_id||null}),
+    list:async(socio_id=null)=>enrichMediaPresentations('sports_profile',await backend.readRpc('app_perfiles_deportivos_publicos_v032',{p_club_id:session()?.club_id,p_socio_id:socio_id||null}),'socio_id','foto_presentation'),
     async one(socio_id){const rows=await this.list(socio_id);return rows?.[0]||null;},
     save:(p)=>mutation('perfil_deportivo.guardar',{socio_id:p.socio_id,apodo:p.apodo||'',presentacion:p.presentacion||'',experiencia_anos:p.experiencia_anos===''||p.experiencia_anos==null?null:Number(p.experiencia_anos),guardia:p.guardia||'',tecnica_favorita:p.tecnica_favorita||'',especialidad:p.especialidad||'',categoria_competitiva:p.categoria_competitiva||'',competiciones_logros:p.competiciones_logros||'',objetivos:p.objetivos||'',visible:p.visible!==false}),
     moderate:(socio_id,visible,motivo='')=>mutation('perfil_deportivo.moderar',{socio_id,visible:visible===true,motivo:motivo||''}),
@@ -471,6 +691,226 @@ export const repos={
     },
     async removePhoto(socio_id){const out=await mutation('perfil_deportivo.foto',{socio_id,foto_path:null});if(out?.old_foto_path)await backend.remove('sports-profile-media',out.old_foto_path).catch(()=>{});return out;},
     photoUrl:(path)=>path?backend.signedUrl('sports-profile-media',path,3600):Promise.resolve('')
+  },
+  mediaFraming:{
+    get:(scope,ids=[])=>readMediaPresentations(scope,ids),
+    enrich:(scope,rows=[],idKey='id',field='media_presentation')=>enrichMediaPresentations(scope,rows,idKey,field),
+    set:(scope,targetId,presentation)=>setMediaPresentation(scope,targetId,presentation),
+    setCover:(scope,targetId,file,options={})=>storeMediaCover(scope,targetId,file,options),
+    coverPath:(presentation)=>coverPathFromPresentation(presentation),
+    coverBucket:(presentation,fallback)=>coverBucketFromPresentation(presentation,fallback)
+  },
+  kombaxEvents:{
+    async list({query='',tipo='',estado='',limit=24}={}){const rows=await rpcWithFallback(()=>backend.globalReadRpc('app_kombax_eventos_publicos_v178',{p_query:query||'',p_tipo:tipo||null,p_estado:estado||null,p_limit:Math.min(100,Math.max(1,Number(limit)||24))}),()=>backend.globalReadRpc('app_kombax_eventos_publicos_v173',{p_query:query||'',p_tipo:tipo||null,p_estado:estado||null,p_limit:Math.min(100,Math.max(1,Number(limit)||24))}),'app_kombax_eventos_publicos_v178');return enrichEventTicketing(rows);},
+    promoted:async(limit=6)=>{try{const rows=await backend.publicRpc('app_kombax_promoted_events_r64',{p_limit:Math.min(12,Math.max(1,Number(limit)||6))});return enrichEventTicketing((rows||[]).map(x=>({...x,kombax_promoted:true})));}catch(error){if(!isMissingRpc(error,'app_kombax_promoted_events_r64'))console.warn('Events promoted R64:',error);return [];}},
+    async listPage({query='',tipo='',estado='',phase='',cursor=null,limit=24}={}){
+      try{
+        const out=await backend.globalReadRpc('app_kombax_eventos_visible_page_v236',{p_query:String(query||'').trim(),p_tipo:tipo||null,p_estado:estado||null,p_phase:phase||null,p_cursor_bucket:cursor?.bucket??null,p_cursor_fecha:cursor?.fecha||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(48,Math.max(1,Number(limit)||24))});
+        return {items:await enrichEventTicketing(Array.isArray(out?.items)?out.items:[]),has_more:out?.has_more===true,next_cursor:out?.next_cursor||null,keyset:true};
+      }catch(error){
+        if(!isMissingRpc(error,'app_kombax_eventos_visible_page_v236'))throw error;
+        try{
+          const out=await backend.globalReadRpc('app_kombax_eventos_publicos_page_v191',{p_query:String(query||'').trim(),p_tipo:tipo||null,p_estado:estado||null,p_phase:phase||null,p_cursor_bucket:cursor?.bucket??null,p_cursor_fecha:cursor?.fecha||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(48,Math.max(1,Number(limit)||24))});
+          return {items:await enrichEventTicketing(Array.isArray(out?.items)?out.items:[]),has_more:out?.has_more===true,next_cursor:out?.next_cursor||null,keyset:true};
+        }catch(fallbackError){
+          if(!isMissingRpc(fallbackError,'app_kombax_eventos_publicos_page_v191'))throw fallbackError;
+          const items=await this.list({query,tipo,estado,limit});return {items:Array.isArray(items)?items:[],has_more:false,next_cursor:null,keyset:false};
+        }
+      }
+    },
+    live:({limit=24}={})=>backend.publicRpc('app_kombax_eventos_live_v164',{p_limit:Math.min(48,Math.max(1,Number(limit)||24))}),
+    async detail(id){
+      const bundled=await rpcWithFallback(
+        ()=>backend.globalReadRpc('app_kombax_evento_bundle_v253',{p_evento_id:id,p_workspace_club_id:session()?.club_id||null}),
+        ()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_evento_bundle_v189',{p_evento_id:id,p_workspace_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_evento_publico_detalle_v178',{p_evento_id:id}),'app_kombax_evento_bundle_v189'),
+        'app_kombax_evento_bundle_v253'
+      );
+      if(!bundled)return bundled;
+      if(bundled.event){
+        const baseEvent=bundled.event||{};const event=(await enrichEventTicketing([baseEvent]))[0]||baseEvent;const participants=await enrichMediaPresentations('event_participant',bundled.participants||[]);const participantPresentation=new Map(participants.map(x=>[String(x.id),x.media_presentation||{}]));
+        const fights=(bundled.fights||[]).map(x=>({...x,a_media_presentation:participantPresentation.get(String(x.participante_a_id||''))||{},b_media_presentation:participantPresentation.get(String(x.participante_b_id||''))||{}}));
+        const media=await enrichMediaPresentations('event_media',bundled.media||[]);
+        return {...event,main_event:bundled.main_event||null,entities:bundled.entities||[],participants,participants_count:Number(bundled.participants_count??participants.length),participants_accepted_count:Number(bundled.participants_accepted_count??participants.filter(x=>x.estado_inscripcion==='aceptada').length),participants_pending_count:Number(bundled.participants_pending_count??participants.filter(x=>x.estado_inscripcion==='pendiente').length),participants_has_more:bundled.participants_has_more===true,participants_next_cursor:bundled.participants_next_cursor||null,fights,media,engagement:bundled.engagement||null,can_manage:bundled.can_manage===true,can_manage_fights:bundled.can_manage_fights===true};
+      }
+      return bundled;
+    },
+    async detailBySlug(slug){
+      const normalized=String(slug||'').trim().toLowerCase();
+      const out=await rpcWithFallback(
+        ()=>backend.publicRpc('app_kombax_evento_slug_v253',{p_slug:normalized}),
+        ()=>rpcWithFallback(
+          ()=>rpcWithFallback(()=>backend.publicRpc('app_kombax_evento_publico_slug_v178',{p_slug:normalized}),()=>backend.publicRpc('app_kombax_evento_publico_slug_v173',{p_slug:normalized}),'app_kombax_evento_publico_slug_v178'),
+          ()=>backend.publicRpc('app_kombax_evento_publico_slug_v166',{p_slug:normalized}),
+          'app_kombax_evento_publico_slug_v178'
+        ),
+        'app_kombax_evento_slug_v253'
+      );
+      if(!out?.event)return out;
+      const publicEvent=(await enrichEventTicketing([out.event]))[0]||out.event;
+      const participants=await enrichMediaPresentations('event_participant',out.participants||[]);
+      const participantPresentation=new Map(participants.map(x=>[String(x.id),x.media_presentation||{}]));
+      const fights=(out.fights||[]).map(x=>({...x,a_media_presentation:participantPresentation.get(String(x.participante_a_id||''))||{},b_media_presentation:participantPresentation.get(String(x.participante_b_id||''))||{}}));
+      const media=await enrichMediaPresentations('event_media',out.media||await backend.publicRpc('app_kombax_evento_media_v175',{p_evento_id:out.event.id,p_workspace_club_id:null}).catch(()=>[]));
+      return {...publicEvent,main_event:out.main_event||null,fase_temporal:out.fase_temporal||publicEvent?.fase_temporal||null,entities:out.entities||[],participants,participants_count:Number(out.participants_count??participants.length),participants_accepted_count:Number(out.participants_accepted_count??participants.filter(x=>x.estado_inscripcion==='aceptada').length),participants_pending_count:Number(out.participants_pending_count??0),participants_has_more:out.participants_has_more===true,participants_next_cursor:out.participants_next_cursor||null,fights,media,engagement:out.engagement||null,can_manage:out.can_manage===true,can_manage_fights:out.can_manage_fights===true};
+    },
+    engagement:(id)=>backend.globalReadRpc('app_kombax_evento_engagement_v162',{p_evento_id:id}).then(rows=>Array.isArray(rows)?rows[0]||null:rows),
+    participants:async(id)=>enrichMediaPresentations('event_participant',await backend.globalReadRpc('app_kombax_evento_participantes_v161',{p_evento_id:id})),
+    async participantsPage(id,{query='',cursor=null,limit=40}={}){
+      try{
+        const out=await backend.publicRpc('app_kombax_evento_participantes_page_v253',{p_evento_id:id,p_query:String(query||'').trim(),p_cursor_creado_en:cursor?.creado_en||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(100,Math.max(1,Number(limit)||40))});
+        const items=await enrichMediaPresentations('event_participant',Array.isArray(out?.items)?out.items:[]);
+        return {...out,items,total_count:Number(out?.total_count||0),accepted_count:Number(out?.accepted_count||0),pending_count:Number(out?.pending_count||0),has_more:out?.has_more===true,next_cursor:out?.next_cursor||null};
+      }catch(error){
+        if(!isMissingRpc(error,'app_kombax_evento_participantes_page_v253'))throw error;
+        const items=await this.participants(id);return {items,total_count:items.length,accepted_count:items.filter(x=>x.estado_inscripcion==='aceptada').length,pending_count:items.filter(x=>x.estado_inscripcion==='pendiente').length,has_more:false,next_cursor:null};
+      }
+    },
+    fights:(id)=>backend.globalReadRpc('app_kombax_evento_resultados_v164',{p_evento_id:id}),
+    media:async(id)=>enrichMediaPresentations('event_media',await backend.publicRpc('app_kombax_evento_media_v175',{p_evento_id:id,p_workspace_club_id:session()?.club_id||null})),
+    async mediaQuota(id){
+      try{const rows=await backend.globalReadRpc('app_kombax_evento_media_cuota_v253',{p_evento_id:id,p_workspace_club_id:session()?.club_id||null});return Array.isArray(rows)?rows[0]||null:rows;}
+      catch(error){if(!isMissingRpc(error,'app_kombax_evento_media_cuota_v253'))throw error;const rows=await backend.globalReadRpc('app_kombax_evento_media_cuota_v175',{p_evento_id:id,p_workspace_club_id:session()?.club_id||null});return Array.isArray(rows)?rows[0]||null:rows;}
+    },
+    mediaUrl:(media_id,variant='asset')=>eventMediaAccessUrl(media_id,variant),
+    history:(social_profile_id,limit=60)=>backend.publicRpc('app_kombax_evento_historial_competidor_v166',{p_social_profile_id:social_profile_id,p_limit:Math.min(100,Math.max(1,Number(limit)||60))}),
+    visibility:(id)=>backend.globalReadRpc('app_kombax_event_visibility_v236',{p_evento_id:id}),
+    setVisibility:(id,payload)=>backend.globalWriteRpc('app_kombax_event_visibility_mutate_v236',{p_evento_id:id,p_payload:payload}),
+    organizerContexts:()=>session()?.club_id?backend.globalReadRpc('app_kombax_eventos_organizador_contexto_v171',{p_club_id:session().club_id}):backend.globalReadRpc('app_kombax_eventos_mis_organizadores_v160',{}),
+    myManagedEvents:(limit=100)=>backend.globalReadRpc('app_kombax_event_center_list_r69',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    community:(event_id,limit=100)=>backend.publicRpc('app_kombax_event_community_r73',{p_event_id:event_id,p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    communityManage:(event_id,limit=150)=>backend.globalReadRpc('app_kombax_event_community_manage_r73',{p_event_id:event_id,p_limit:Math.min(200,Math.max(1,Number(limit)||150))}),
+    comment:(event_id,body,parent_id=null,media=[],kind='comment')=>backend.globalWriteRpc('app_kombax_event_comment_upsert_r73',{p_event_id:event_id,p_body:String(body||''),p_parent_id:parent_id||null,p_media:Array.isArray(media)?media:[],p_kind:String(kind||'comment')}),
+    reactionSet:(event_id,reaction='like')=>backend.globalWriteRpc('app_kombax_event_reaction_set_r73',{p_event_id:event_id,p_reaction:String(reaction||'like')}),
+    commentWithdraw:(comment_id)=>backend.globalWriteRpc('app_kombax_event_comment_withdraw_r72',{p_comment_id:comment_id}),
+    reviewUpsert:(event_id,rating,body='',media=[])=>backend.globalWriteRpc('app_kombax_event_review_upsert_r72',{p_event_id:event_id,p_rating:Number(rating),p_body:String(body||''),p_media:Array.isArray(media)?media:[]}),
+    reviewWithdraw:(review_id)=>backend.globalWriteRpc('app_kombax_event_review_withdraw_r72',{p_review_id:review_id}),
+    reviewRespond:(review_id,response='')=>backend.globalWriteRpc('app_kombax_event_review_respond_r72',{p_review_id:review_id,p_response:String(response||'')}),
+    uploadCommunityMedia:(event_id,file)=>uploadReputationMedia('events',event_id,file,{allowVideo:true}),
+    removeCommunityMedia:(items)=>removeOwnedReputationMedia(items),
+    reputationReport:(target_type,target_id,reason,detail='')=>backend.globalWriteRpc('app_kombax_reputation_report_r72',{p_target_type:target_type,p_target_id:target_id,p_reason:String(reason||''),p_detail:String(detail||'')}),
+    invitations:()=>session()?.club_id?backend.globalReadRpc('app_kombax_eventos_invitaciones_contexto_v172',{p_club_id:session().club_id}):backend.globalReadRpc('app_kombax_eventos_invitaciones_v160',{}),
+    ticketingPublic:(event_ids=[])=>backend.publicRpc('app_kombax_event_ticketing_public_r625',{p_event_ids:event_ids}),
+    ticketingManageStatus:(event_id)=>backend.globalReadRpc('app_kombax_event_ticketing_manage_status_r6253',{p_event_id:event_id}),
+    ticketingSave:(event_id,payload={})=>backend.globalWriteRpc('app_kombax_event_ticketing_mutate_r6253',{p_event_id:event_id,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    ticketingServiceRequest:(event_id)=>backend.globalWriteRpc('app_kombax_event_ticketing_service_request_r628',{p_event_id:event_id,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    ticketingContractAccept:(event_id,policy_code,policy_version)=>backend.globalWriteRpc('app_kombax_event_contract_accept_r628',{p_event_id:event_id,p_policy_code:policy_code,p_policy_version:policy_version,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    myTickets:(limit=100)=>backend.globalReadRpc('app_kombax_my_event_tickets_r6253',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    ticketSales:(event_id,limit=200)=>backend.globalReadRpc('app_kombax_event_ticket_sales_r65',{p_event_id:event_id,p_limit:Math.min(500,Math.max(1,Number(limit)||200))}),
+    ticketDashboard:(event_id)=>backend.globalReadRpc('app_kombax_event_ticket_dashboard_r6252',{p_event_id:event_id}),
+    finance:(event_id)=>backend.globalReadRpc('app_kombax_event_finance_r65',{p_event_id:event_id}),
+    communications:(event_id,limit=100)=>backend.globalReadRpc('app_kombax_commerce_communications_r65',{p_scope:'event',p_subject_id:event_id,p_limit:limit}),
+    attendeeMessage:(event_id,subject,message)=>backend.globalWriteRpc('app_kombax_event_attendee_message_r65',{p_event_id:event_id,p_subject:subject,p_message:message,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    businessIntelligence:(event_id,days=30)=>backend.globalReadRpc('app_kombax_event_bi_r65',{p_event_id:event_id,p_days:days}),
+    analytics:(event_id,days=30)=>backend.globalReadRpc('app_kombax_event_analytics_r77',{p_event_id:event_id,p_days:Math.min(365,Math.max(1,Number(days)||30))}),
+    analyticsRange:(event_id,from,to)=>backend.globalReadRpc('app_kombax_event_analytics_range_r77',{p_event_id:event_id,p_from:from,p_to:to}),
+    reportPayload:(event_id,report_type='results',days=30)=>backend.globalReadRpc('app_kombax_report_payload_r77',{p_scope:'event',p_subject_id:event_id,p_report_type:report_type,p_days:Math.min(365,Math.max(1,Number(days)||30))}),
+    report:(event_id,report_type='general',period=30)=>{const range=period&&typeof period==='object'?period:null;return backend.invokeFunction('kombax-report-r77',{scope:'event',subject_id:event_id,report_type,...(range?.from&&range?.to?{from:range.from,to:range.to,days:range.days||30}:{days:Math.min(365,Math.max(1,Number(period)||30))}),user_locale:getLocale()},60000)},
+    checkinHistory:(event_id,limit=200)=>backend.globalReadRpc('app_kombax_event_checkin_history_r65',{p_event_id:event_id,p_limit:limit}),
+    track:(event_type,event_id,source=null,metadata={})=>backend.globalWriteRpc('app_kombax_commerce_track_r65',{p_event_type:event_type,p_provider_id:null,p_product_id:null,p_event_id:event_id,p_order_id:null,p_source:source,p_amount_minor:null,p_metadata:metadata}),
+    ticketAccessStatus:(event_id)=>backend.globalReadRpc('app_kombax_event_ticket_access_status_r6252',{p_event_id:event_id}),
+    ticketCheckin:(event_id,code)=>backend.globalWriteRpc('app_kombax_event_ticket_checkin_r6252',{p_event_id:event_id,p_code:String(code||'').trim()}),
+    ticketStaff:(event_id)=>backend.globalReadRpc('app_kombax_event_ticket_staff_r6252',{p_event_id:event_id}),
+    ticketStaffMutate:(event_id,email,role_code,active=true)=>backend.globalWriteRpc('app_kombax_event_ticket_staff_mutate_r6252',{p_event_id:event_id,p_email:String(email||'').trim(),p_role_code:role_code,p_active:active===true}),
+    ticketUse:(ticket_id)=>backend.globalWriteRpc('app_kombax_event_ticket_mutate_r625',{p_operation:'event.ticket.use',p_payload:{ticket_id},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    async uploadVisual(evento_id,kind,file){
+      if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+      if(!evento_id)throw new Error('Guarda primero el evento.');
+      if(!['cartel','banner'].includes(kind))throw new Error('Tipo visual no válido.');
+      if(!file?.size)throw new Error('Selecciona una imagen.');
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');
+      const prepared=await optimizeImage(file,{maxEdge:kind==='banner'?2560:2200,maxBytes:6*1024*1024});
+      const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/webp'?'webp':'jpg';
+      const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+      const path=`${session().id}/events/${evento_id}/${kind}-${Date.now()}-${token}.${ext}`;
+      await backend.upload('kombax-public-media',path,prepared.file,false);
+      return {path,url:backend.publicUrl('kombax-public-media',path),width:prepared.width||null,height:prepared.height||null};
+    },
+    async uploadParticipantPhoto(evento_id,file){
+      if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+      if(!evento_id)throw new Error('Evento no disponible.');
+      if(!file?.size)throw new Error('Selecciona una imagen.');
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');
+      const prepared=await optimizeImage(file,{maxEdge:1600,maxBytes:4*1024*1024});
+      const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/webp'?'webp':'jpg';
+      const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+      const path=`${session().id}/events/${evento_id}/fighters/${Date.now()}-${token}.${ext}`;
+      await backend.upload('kombax-public-media',path,prepared.file,false);
+      return {path,url:backend.publicUrl('kombax-public-media',path),width:prepared.width||null,height:prepared.height||null};
+    },
+    save:(payload)=>kombaxEventsMutation('event.save',payload),
+    addEntity:(payload)=>kombaxEventsMutation('event.entity.add',payload),
+    removeEntity:(entity_id)=>kombaxEventsMutation('event.entity.remove',{entity_id}),
+    respondInvitation:(entity_id,aceptar)=>kombaxEventsMutation('event.entity.respond',{entity_id,aceptar:aceptar===true}),
+    submitParticipant:(payload)=>kombaxEventsMutation('event.participant.submit',payload),
+    setParticipantStatus:(participant_id,estado)=>kombaxEventsMutation('event.participant.status',{participant_id,estado}),
+    updateParticipant:(payload)=>kombaxEventsMutation('event.participant.update',payload),
+    withdrawParticipant:(participant_id)=>kombaxEventsMutation('event.participant.withdraw',{participant_id}),
+    saveFight:(payload)=>kombaxEventsMutation('event.fight.save',payload),
+    removeFight:(fight_id)=>kombaxEventsMutation('event.fight.remove',{fight_id}),
+    setFightResult:(payload)=>kombaxEventsMutation('event.fight.result.set',payload),
+    setInterest:(evento_id,estado='interesado',notificaciones=true)=>kombaxEventsMutation('event.interest.set',{evento_id,estado,notificaciones:notificaciones===true}),
+    linkSocial:(payload)=>kombaxEventsMutation('event.social.link',payload),
+    async uploadMedia(evento_id,file,{tipo='',combate_id=null,competidor_social_profile_id=null,titulo='',descripcion='',destacado=false,allow_download=false,orden=0,estado='visible',momento='evento',onProgress=null}={}){
+      if(!file?.size)throw new Error('Selecciona una foto o vídeo.');
+      const isVideo=String(file.type||'').startsWith('video/');
+      const allowed=isVideo?['video/mp4','video/webm','video/quicktime']:['image/jpeg','image/png','image/webp'];
+      if(!allowed.includes(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP, MP4, WEBM o MOV.');
+      if(file.size>(isVideo?100:10)*1024*1024)throw new Error(isVideo?'El vídeo supera 100 MB.':'La imagen supera 10 MB.');
+      onProgress?.({stage:'prepare',uploaded:0,total:Number(file.size||0),percent:0});
+      const prepared=isVideo?await prepareVideo(file,{maxBytes:100*1024*1024,maxDuration:60.2,maxLongEdge:1920,maxShortEdge:1080}):await optimizeImage(file,{maxEdge:2560,maxBytes:8*1024*1024});
+      const mediaId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const ext=(prepared.file.name?.split('.').pop()||file.name?.split('.').pop()||(isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();
+      const path=`${evento_id}/${mediaId}/${Date.now()}-asset.${ext}`;
+      const total=Number(prepared.file.size||0);
+      const report=(uploaded,totalBytes=total)=>onProgress?.({stage:'upload',uploaded:Number(uploaded||0),total:Number(totalBytes||total),percent:totalBytes?Math.min(100,Math.max(0,Math.round(Number(uploaded||0)/Number(totalBytes)*100))):0});
+      if(isVideo||total>6*1024*1024)await backend.uploadResumable('kombax-events-media',path,prepared.file,{upsert:false,onProgress:report});
+      else{await backend.upload('kombax-events-media',path,prepared.file,false);report(total,total);}
+      try{
+        onProgress?.({stage:'register',uploaded:total,total,percent:100});
+        const data=await kombaxEventsMutation('event.media.register',{media_id:mediaId,evento_id,tipo:tipo||(isVideo?'clip':'foto'),combate_id,competidor_social_profile_id,storage_path:path,mime_type:prepared.mime||prepared.file.type||file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,duration_seconds:isVideo?prepared.duration:null,momento,titulo,descripcion,destacado:destacado===true,allow_download:allow_download===true,orden:Number(orden)||0,estado});
+        let mediaPresentation=data?.media_presentation||{};let coverStatus='not_applicable',thumbStatus='not_applicable';
+        if(isVideo){
+          coverStatus=repos.mediaFraming.coverPath(mediaPresentation)?'ready':'pending';
+          if(prepared.cover){
+            onProgress?.({stage:'cover',uploaded:total,total,percent:100});
+            const cover=await storeEventVideoCoverWithRetry(evento_id,mediaId,prepared.cover,{presentation:mediaPresentation,mode:'auto',time:prepared.coverTime||0,attempts:3});
+            mediaPresentation=cover.presentation||mediaPresentation;coverStatus=cover.status||coverStatus;
+          }
+        }else{
+          try{
+            onProgress?.({stage:'thumbnail',uploaded:total,total,percent:100});
+            const thumb=await storeEventMediaThumbnail(evento_id,mediaId,prepared.file,mediaPresentation);mediaPresentation=thumb.presentation||mediaPresentation;thumbStatus='ready';
+          }catch(error){
+            thumbStatus='pending';mediaPresentation={...mediaPresentation,thumb_status:'pending',thumb_last_error_at:new Date().toISOString()};await setMediaPresentation('event_media',mediaId,mediaPresentation).catch(()=>{});
+          }
+        }
+        invalidateEventMediaUrl(mediaId);
+        onProgress?.({stage:'done',uploaded:total,total,percent:100,cover_status:coverStatus,thumb_status:thumbStatus});
+        return {...data,media_presentation:mediaPresentation,cover_status:coverStatus,thumb_status:thumbStatus};
+      }catch(error){await backend.remove('kombax-events-media',path).catch(()=>{});invalidateEventMediaUrl(mediaId);throw error;}
+    },
+    registerExternalVideo:(evento_id,external_url,{combate_id=null,competidor_social_profile_id=null,titulo='',descripcion='',destacado=false,orden=0,estado='visible',momento='evento'}={})=>kombaxEventsMutation('event.media.register',{media_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`,evento_id,tipo:'video_externo',combate_id,competidor_social_profile_id,external_url,momento,titulo,descripcion,destacado:destacado===true,allow_download:false,orden:Number(orden)||0,estado}),
+    addMediaReference:(evento_id,{source_kind,source_id=null,titulo='',momento='evento'}={})=>kombaxEventsMutation('event.media.reference.add',{evento_id,source_kind,source_id,titulo,momento}),
+    updateMedia:(payload)=>kombaxEventsMutation('event.media.update',payload),
+    async setVideoCover(evento_id,media,file,{presentation={},mode='upload',time=0}={}){const out=await storeEventVideoCoverWithRetry(evento_id,media.id,file,{presentation,mode,time,attempts:3});if(out.status!=='ready')throw out.error||new Error('La portada quedó pendiente de regeneración.');return out;},
+    async uploadDemoMedia(evento_id,file,{media_id,titulo='',descripcion='',destacado=false,orden=0,momento='evento'}={}){
+      if(!state.session?.platform_admin)throw new Error('PLATFORM_OWNER_REQUIRED');
+      if(!media_id||!file?.size)throw new Error('DEMO_MEDIA_INVALID');
+      const prepared=await optimizeImage(file,{maxEdge:2560,maxBytes:8*1024*1024});
+      const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/webp'?'webp':'jpg';
+      const path=`${evento_id}/${media_id}/demo-${String(titulo||'asset').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'asset'}.${ext}`;
+      await backend.remove('kombax-events-media',path).catch(()=>{});
+      await backend.upload('kombax-events-media',path,prepared.file,false);
+      try{
+        return await backend.globalWriteRpc('app_kombax_eventos_mutate_v175',{p_operation:'event.media.register',p_payload:{media_id,evento_id,tipo:'foto',storage_path:path,mime_type:prepared.mime||prepared.file.type||file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,momento,titulo,descripcion,destacado:destacado===true,allow_download:false,orden:Number(orden)||0,estado:'visible'},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`});
+      }catch(error){await backend.remove('kombax-events-media',path).catch(()=>{});throw error;}
+    },
+    demoAssetFile:(path,options={})=>backend.localAssetFile(path,options),
+    seedDemoEvent:()=>rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_demo_event_seed_v178',{}),()=>backend.globalWriteRpc('app_kombax_demo_event_seed_v177',{}),'app_kombax_demo_event_seed_v178'),
+    seedUrbanWarriorsJiuJitsuDemoEvent:()=>backend.globalWriteRpc('app_kombax_demo_urban_warriors_jiujitsu_seed_v180',{}),
+    cleanupDemoEvent:()=>backend.globalWriteRpc('app_kombax_demo_event_cleanup_v177',{}),
+    cleanupUrbanWarriorsJiuJitsuDemoEvent:()=>backend.globalWriteRpc('app_kombax_demo_urban_warriors_jiujitsu_cleanup_v180',{}),
+    async removeMedia(media){const out=await kombaxEventsMutation('event.media.remove',{media_id:media.id});if(media?.storage_path)await backend.remove('kombax-events-media',media.storage_path).catch(()=>{});await Promise.all([removeMediaCover(media?.media_presentation,'kombax-events-media'),removeMediaThumbnail(media?.media_presentation,'kombax-events-media')]);invalidateEventMediaUrl(media?.id);return out;}
   },
   events:{
     list:(limit=100)=>read('eventos_competicion',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=fecha.desc,hora_inicio.asc,id.desc&limit=${Math.min(300,Math.max(20,Number(limit)||100))}`),
@@ -496,7 +936,7 @@ export const repos={
     },
     async quota(){const rows=await read('publicaciones_comunidad',`select=id,autor_perfil_id,creado_en&${filterClub()}&ciclo_estado=eq.activo&autor_perfil_id=eq.${enc(session()?.id)}&creado_en=gte.${enc(new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString())}&limit=20`);const staff=['direccion','coordinacion','secretaria','comunicacion'].includes(session()?.rol);return {used:rows.length,limit:staff?5:3};},
     async upload(file){if(!file||!file.size)throw new Error('Selecciona una imagen o vídeo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP, MP4, WEBM o MOV.');if(file.size>(isVideo?50:5)*1024*1024)throw new Error(isVideo?'El vídeo supera 50 MB.':'La imagen supera 5 MB.');const ext=(file.name.split('.').pop()|| (isVideo?'mp4':'jpg')).replace(/[^a-z0-9]/gi,'').toLowerCase();const path=`${session().club_id}/${session().id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;await backend.upload('community-media',path,file,false);return path;},
-    mediaUrl:(path)=>backend.signedUrl('community-media',path,3600),
+    mediaUrl:(path)=>String(path||'').startsWith('demo-static:')?Promise.resolve('./'+String(path).slice('demo-static:'.length).replace(/^\.?\//,'')):backend.signedUrl('community-media',path,3600),
     publish:(p)=>mutation('comunidad.publicar',{texto:p.texto||'',media_path:p.media_path,media_tipo:p.media_tipo,duracion_segundos:p.duracion_segundos||null,media_mime:p.media_mime||null,media_width:p.media_width||null,media_height:p.media_height||null,media_size_bytes:p.media_size_bytes||null,portada_automatica_path:p.portada_automatica_path||null,portada_manual_path:p.portada_manual_path||null}),
     async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});for(const path of [...new Set([out?.media_path,out?.portada_automatica_path,out?.portada_manual_path].filter(Boolean))])await backend.remove('community-media',path).catch(()=>{});return out;},
     moderate:(publicacion_id,oculta=true,motivo='')=>mutation('comunidad.moderar',{publicacion_id,oculta,motivo}),
@@ -510,19 +950,60 @@ export const repos={
     removePath:(path)=>path?backend.remove('community-media',path):Promise.resolve()
   },
   kombaxProfiles:{
-    mine:()=>backend.globalReadRpc('app_kombax_mis_perfiles_v072',{}),
+    mine:()=>backend.globalReadRpc('app_kombax_mis_perfiles_v196',{}),
+    taxonomy:()=>backend.publicRpc('app_kombax_profile_taxonomy_v196',{}),
+    capabilities:(profileId)=>backend.globalReadRpc('app_kombax_profile_capabilities_v196',{p_perfil_directo_id:profileId}),
+    workspace:(profileId)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_managed_profile_hub_v200',{p_perfil_directo_id:profileId}),()=>backend.globalReadRpc('app_kombax_managed_profile_hub_v197',{p_perfil_directo_id:profileId}),'app_kombax_managed_profile_hub_v200'),
+    professionalWorkspace:(profileId)=>backend.globalReadRpc('app_kombax_professional_workspace_v198',{p_profile_id:profileId}),
+    professionalMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_mutate_v198',operation,payload),
+    professionalFinance:(profileId)=>backend.globalReadRpc('app_kombax_professional_finance_v199',{p_profile_id:profileId}),
+    professionalFinanceNotifications:(profileId)=>backend.globalReadRpc('app_kombax_professional_finance_notifications_v199',{p_profile_id:profileId}),
+    professionalFinanceMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_finance_mutate_v199',operation,payload),
     clubs:()=>backend.globalReadRpc('app_kombax_mis_clubes_v097',{}),
     applications:()=>backend.globalReadRpc('app_kombax_mis_solicitudes_v072',{}),
-    album:(profileId)=>backend.globalReadRpc('app_kombax_album_v072',{p_perfil_directo_id:profileId}),
-    saveProfile:(payload)=>kombaxGlobalMutation('app_kombax_perfil_mutate_v072','kombax.profile.save',payload),
-    saveApplication:(payload)=>kombaxGlobalMutation('app_kombax_perfil_mutate_v072','kombax.application.save',payload),
-    submitApplication:(solicitud_id)=>kombaxGlobalMutation('app_kombax_perfil_mutate_v072','kombax.application.submit',{solicitud_id}),
+    album:async(profileId)=>enrichMediaPresentations('profile_media',await backend.globalReadRpc('app_kombax_album_v072',{p_perfil_directo_id:profileId})),
+    saveProfile:(payload)=>kombaxProfileMutationR58('kombax.profile.save',payload),
+    saveApplication:(payload)=>kombaxProfileMutationR58('kombax.application.save',payload),
+    submitApplication:(solicitud_id)=>kombaxProfileMutationR58('kombax.application.submit',{solicitud_id}),
     withdrawApplication:(solicitud_id)=>kombaxGlobalMutation('app_kombax_perfil_mutate_v072','kombax.application.withdraw',{solicitud_id}),
     managers:(profileId)=>backend.globalReadRpc('app_kombax_profile_managers_v070',{p_perfil_directo_id:profileId}),
     setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070','kombax.profile.manager.set',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),
     uploadMedia:uploadKombaxProfileMedia,
-    removeMedia:async(media)=>{const out=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.remove',{media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});return out;},
+    setVideoCover:(profileId,media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('profile_media',media.id,file,{bucket:'kombax-public-media',pathPrefix:`${session()?.id}/${profileId}/${media.id}`,presentation,mode,time}),
+    removeMedia:async(media)=>{const out=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.remove',{media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');return out;},
     uploadVerificationDocument:uploadKombaxVerificationDocument
+  },
+  kombaxMemberships:{
+    active:()=>backend.globalReadRpc('app_kombax_mis_membresias_r58',{}),
+    pending:()=>backend.globalReadRpc('app_kombax_membresias_pendientes_r58',{}),
+    requestClaim:(socio_id)=>backend.globalWriteRpc('app_kombax_membresia_solicitar_r58',{p_socio_id:socio_id}),
+    contactClub:(club_id,mensaje)=>backend.globalWriteRpc('app_kombax_club_interest_send_r58',{p_club_id:club_id,p_mensaje:String(mensaje||'').trim()})
+  },
+  federationLicenses:{
+    federationContext:(profileId)=>backend.globalReadRpc('app_kombax_federation_context_v200',{p_federation_profile_id:profileId}),
+    clubContext:(clubId)=>backend.globalReadRpc('app_kombax_club_federation_context_v200',{p_club_id:clubId}),
+    self:(profileId=null)=>backend.globalReadRpc('app_kombax_self_licenses_v200',{p_direct_profile_id:profileId||null}),
+    professional:(profileId)=>backend.globalReadRpc('app_kombax_professional_authorized_licenses_v200',{p_professional_profile_id:profileId}),
+    directory:(query='',limit=100)=>backend.globalReadRpc('app_kombax_federation_directory_v200',{p_query:String(query||'').trim(),p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    pendingInvitations:()=>backend.globalReadRpc('app_kombax_federation_team_pending_invitations_v200',{}),
+    documents:(licenseId)=>backend.globalReadRpc('app_kombax_federation_license_documents_v200',{p_license_id:licenseId}),
+    saveRelationship:(federationProfileId,clubId,status='active',relationshipLabel='afiliado',privateNote='')=>backend.globalWriteRpc('app_kombax_federation_relationship_save_v200',{p_federation_profile_id:federationProfileId,p_club_id:clubId,p_status:status,p_relationship_label:relationshipLabel,p_private_note:privateNote}),
+    mutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_federation_mutate_v200',operation,payload),
+    sendInvitation:(federation_invitation_id)=>backend.invokeFunction('invite-email',{federation_invitation_id,user_locale:getLocale()}),
+    async uploadDocument(licenseId,file,{documentType='administrative'}={}){
+      if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+      if(!licenseId)throw new Error('Licencia no disponible.');
+      if(!file?.size)throw new Error('Selecciona un documento.');
+      if(!['application/pdf','image/jpeg','image/png'].includes(file.type))throw new Error('Formato no admitido. Usa PDF, JPG o PNG.');
+      if(file.size>10*1024*1024)throw new Error('El documento supera 10 MB.');
+      const ext=file.type==='application/pdf'?'pdf':file.type==='image/png'?'png':'jpg';
+      const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+      const path=`${session().id}/${licenseId}/${Date.now()}-${token}.${ext}`;
+      await backend.upload('federation-license-documents',path,file,false);
+      try{return await kombaxGlobalMutation('app_kombax_federation_mutate_v200','federation.document.register',{license_id:licenseId,storage_path:path,file_name:String(file.name||`documento.${ext}`).slice(0,220),mime_type:file.type,size_bytes:file.size,document_type:documentType});}
+      catch(error){await backend.remove('federation-license-documents',path).catch(()=>{});throw error;}
+    },
+    documentUrl:(path)=>backend.signedUrl('federation-license-documents',path,300)
   },
   socialGeneral:{
     status:()=>backend.readRpc('app_kombax_social_estado_v123',{p_club_id:session()?.club_id}),
@@ -543,13 +1024,57 @@ export const repos={
   kombaxSocial:{
     status:()=>backend.globalReadRpc('app_kombax_social_estado_v123',{p_club_id:session()?.club_id||null}),
     myProfiles:()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),
-    feed:(cursor=null,limit=20)=>backend.globalReadRpc('app_kombax_social_feed_v085',{p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(20,Math.max(1,Number(limit)||20))}),
+    networkProfiles:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_network_profiles_v255',{p_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),'app_kombax_social_network_profiles_v255'),
+    promotions:async(limit=2)=>{try{return await backend.globalReadRpc('app_kombax_social_promotions_r64',{p_limit:Math.min(2,Math.max(1,Number(limit)||2))});}catch(error){if(!isMissingRpc(error,'app_kombax_social_promotions_r64'))console.warn('Social promotions R64:',error);return [];}},
+    promotionImpression:(campaign_id)=>backend.globalWriteRpc('app_kombax_social_promotion_impression_r64',{p_campaign_id:campaign_id,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    feed:async(cursor=null,limit=20)=>{
+      const args={p_cursor_score:cursor?.score??null,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(20,Math.max(1,Number(limit)||20))};
+      let rows;
+      try{rows=await backend.globalReadRpc('app_kombax_social_feed_v238',args);}catch(error238){if(!isMissingRpc(error238,'app_kombax_social_feed_v238'))throw error238;try{rows=await backend.globalReadRpc('app_kombax_social_feed_v237',args);}catch(error){if(!isMissingRpc(error,'app_kombax_social_feed_v237'))throw error;try{rows=await backend.globalReadRpc('app_kombax_social_feed_v236',args);}catch(error236){if(!isMissingRpc(error236,'app_kombax_social_feed_v236'))throw error236;rows=await backend.globalReadRpc('app_kombax_social_feed_v085',{p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:args.p_limit});}}}
+      const ids=(rows||[]).map(x=>x.id).filter(Boolean);if(!ids.length)return rows||[];
+      const links=await backend.globalReadRpc('app_kombax_eventos_social_links_v162',{p_publicacion_ids:ids}).catch(()=>[]);
+      const map=new Map((links||[]).map(x=>[String(x.publicacion_id),x]));
+      // v238 devuelve el multimedia resuelto en `media_id` (social_media o profile_media), no necesariamente en `social_media_id`.
+      // Resolver ambas fuentes evita que Android/WebView pierda poster/encuadre aunque el feed venga de una referencia de álbum.
+      const resolvedMediaIds=(rows||[]).map(x=>x.social_media_id||x.media_id).filter(Boolean);
+      const [socialMediaMap,profileMediaMap]=await Promise.all([
+        readMediaPresentations('social_media',resolvedMediaIds),
+        readMediaPresentations('profile_media',resolvedMediaIds)
+      ]);
+      return (rows||[]).map(x=>{
+        const resolvedId=String(x.social_media_id||x.media_id||'');
+        const isSocialMedia=socialMediaMap.has(resolvedId);
+        return {...x,event_link:map.get(String(x.id))||null,social_media_id:x.social_media_id||(isSocialMedia?x.media_id:null),media_presentation:resolveMediaPresentation(x.media_presentation,socialMediaMap.get(resolvedId),profileMediaMap.get(resolvedId))};
+      });
+    },
     directory:(query='',limit=30)=>backend.globalReadRpc('app_kombax_social_directorio_v072',{p_query:String(query||'').trim(),p_limit:Math.min(50,Math.max(1,Number(limit)||30))}),
     clubDirectory:(query='',limit=100)=>backend.globalReadRpc('app_kombax_club_social_directory_v095',{p_club_id:session()?.club_id||null,p_query:String(query||'').trim(),p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
     // Compatibilidad contractual de regresiones históricas: app_kombax_perfil_publico_v068 · app_kombax_perfil_publico_v072 · app_kombax_social_feed_v065 · app_kombax_social_feed_v072 · app_kombax_social_directorio_v065 · app_kombax_social_comentarios_v053
-    publicProfile:(social_id)=>backend.globalReadRpc('app_kombax_perfil_publico_v094',{p_social_id:social_id}),
+    publicProfile:async(social_id)=>{
+      const profile=await backend.globalReadRpc('app_kombax_perfil_publico_v094',{p_social_id:social_id});
+      if(!profile?.id)return profile;
+      const type=profile.perfil_tipo||profile.sujeto_tipo;
+      const albumScope=type==='club'?'club_media':type==='miembro'?'social_media':'profile_media';
+      if(Array.isArray(profile.album))profile.album=await enrichMediaPresentations(albumScope,profile.album);
+      if(Array.isArray(profile.showcase))profile.showcase=await enrichMediaPresentations('showcase_item',profile.showcase,'id','imagen_presentacion');
+      try{profile.posts=await readSocialProfilePosts(social_id,null,5);}catch{}
+      if(type==='miembro'){
+        try{
+          const media=await enrichMediaPresentations('social_media',await backend.globalReadRpc('app_kombax_social_media_v085',{p_social_id:social_id}));
+          const avatar=media.find(x=>x.tipo==='avatar'&&x.estado==='active');
+          if(avatar){profile.avatar_media_id=avatar.id;profile.avatar_media_scope='social_media';profile.avatar_media_presentation=avatar.media_presentation||{};}
+        }catch{}
+      }else if(profile.perfil_directo_id){
+        try{
+          const media=await enrichMediaPresentations('profile_media',await backend.globalReadRpc('app_kombax_album_v072',{p_perfil_directo_id:profile.perfil_directo_id}));
+          const avatar=media.find(x=>x.tipo==='avatar'&&x.estado==='active');
+          if(avatar){profile.avatar_media_id=avatar.id;profile.avatar_media_scope='profile_media';profile.avatar_media_presentation=avatar.media_presentation||{};}
+        }catch{}
+      }
+      return profile;
+    },
     quota:(social_id)=>backend.globalReadRpc('app_kombax_social_cupo_v099',{p_social_id:social_id}),
-    profilePosts:(social_id,cursor=null,limit=10)=>backend.globalReadRpc('app_kombax_social_profile_posts_v099',{p_social_id:social_id,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(10,Math.max(1,Number(limit)||10))}),
+    profilePosts:(social_id,cursor=null,limit=10)=>readSocialProfilePosts(social_id,cursor,limit),
     headerActivity:()=>backend.globalReadRpc('app_kombax_header_activity_v106',{}),
     contacts:(limit=50)=>rpcWithFallback(
       ()=>backend.globalReadRpc('app_kombax_contactos_v133',{p_limit:Math.min(200,Math.max(20,Number(limit)||50))}),
@@ -569,18 +1094,33 @@ export const repos={
     activate:({acepta_normas,acepta_privacidad,acepta_seguridad_menor=false})=>kombaxIdentityMutation('kombax.identity.member.activate',{club_id:session()?.club_id||null,acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,acepta_seguridad_menor:acepta_seguridad_menor===true,user_agent:navigator.userAgent}),
     activateDirect:(perfil_directo_id,{acepta_normas,acepta_privacidad,acepta_seguridad_menor=false})=>kombaxSocialMutation('kombax.social.direct.activate',{perfil_directo_id,acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,acepta_seguridad_menor:acepta_seguridad_menor===true,user_agent:navigator.userAgent}),
     audiences:(autor_perfil_id)=>backend.globalReadRpc('app_kombax_social_audiencias_v083',{p_autor_social_id:autor_perfil_id}),
-    publish:(autor_perfil_id,tipo,texto,options={})=>kombaxSocialMutation('kombax.social.publicar',{autor_perfil_id,tipo,texto,comentarios_estado:options.comentarios_estado||'open',social_media_id:options.social_media_id||null,audiencia:options.audiencia||'publica',audiencia_club_id:options.audiencia_club_id||null,audiencia_federacion_social_id:options.audiencia_federacion_social_id||null}),
-    media:(social_id)=>backend.globalReadRpc('app_kombax_social_media_v085',{p_social_id:social_id}),
+    publish:(autor_perfil_id,tipo,texto,options={})=>kombaxSocialMutation('kombax.social.publicar',{autor_perfil_id,tipo,texto,comentarios_estado:options.comentarios_estado||'open',social_media_id:options.social_media_id||null,audiencia:options.audiencia||'publica',audiencia_club_id:options.audiencia_club_id||null,audiencia_federacion_social_id:options.audiencia_federacion_social_id||null,audiencia_club_ids:Array.isArray(options.audiencia_club_ids)?options.audiencia_club_ids:[],audiencia_excluded_club_ids:Array.isArray(options.audiencia_excluded_club_ids)?options.audiencia_excluded_club_ids:[],audiencia_profile_ids:Array.isArray(options.audiencia_profile_ids)?options.audiencia_profile_ids:[],audiencia_profile_types:Array.isArray(options.audiencia_profile_types)?options.audiencia_profile_types:[]}),
+    media:async(social_id)=>enrichMediaPresentations('social_media',await backend.globalReadRpc('app_kombax_social_media_v085',{p_social_id:social_id})),
     setBannerPosition:(social_id,x=50,y=50)=>backend.globalWriteRpc('app_kombax_social_banner_position_v131',{p_social_id:social_id,p_x:Number(x),p_y:Number(y)}),
     uploadMedia:(social_id,type,file,options={})=>uploadKombaxSocialMedia(social_id,type,file,options),
     syncPrivateAvatar:(social_id,source_path=session()?.avatar_path)=>syncPrivateAvatarToKombaxSocial(social_id,source_path),
-    attachAlbumMedia:(social_profile_id,source_type,source_id)=>kombaxSocialMutation('kombax.social.media.from_album',{social_profile_id,source_type,source_id}),
-    removeMedia:async(media)=>{const out=await kombaxSocialMutation('kombax.social.media.remove',{media_id:media.id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||media.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});return out;},
+    attachAlbumMedia:async(social_profile_id,source_type,source_id,sourcePresentation={})=>{
+      const out=await kombaxSocialMutation('kombax.social.media.from_album',{social_profile_id,source_type,source_id});
+      const inherited=out?.media_presentation&&typeof out.media_presentation==='object'?out.media_presentation:{};
+      const source=sourcePresentation&&typeof sourcePresentation==='object'?sourcePresentation:{};
+      if(out?.id&&!Object.keys(inherited).length&&Object.keys(source).length){
+        await setMediaPresentation('social_media',out.id,source);
+        return {...out,media_presentation:source};
+      }
+      return out;
+    },
+    removeMedia:async(media)=>{const out=await kombaxSocialMutation('kombax.social.media.remove',{media_id:media.id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||media.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,media?.storage_bucket||'kombax-public-media');return out;},
     mediaUrl:(path)=>backend.publicUrl('kombax-public-media',path),
     mediaAccessUrl:(path,bucket='kombax-public-media')=>bucket==='kombax-restricted-media'?backend.signedUrl('kombax-restricted-media',path,600):Promise.resolve(backend.publicUrl('kombax-public-media',path)),
+    setVideoCover:(media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('social_media',media.id,file,{bucket:media.storage_bucket||'kombax-public-media',pathPrefix:`${session()?.id}/social/${media.social_profile_id||media.autor_id||'media'}/${media.id}`,presentation,mode,time}),
     withdraw:(publicacion_id)=>kombaxSocialMutation('kombax.social.retirar',{publicacion_id}),
     deletePost:async(publicacion_id)=>{const out=await kombaxSocialMutation('kombax.social.eliminar',{publicacion_id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});return out;},
     like:(publicacion_id,activo)=>kombaxSocialMutation('kombax.social.like',{publicacion_id,activo:activo===true}),
+    // R47 compatibility marker: kombax.social.preferencia is superseded in R49 by a dedicated RPC so it cannot mutate public Likes.
+    preference:(publicacion_id,valor=0)=>backend.globalWriteRpc('app_kombax_social_preference_v240',{p_publicacion_id:publicacion_id,p_valor:Number(valor)||0,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    reportOffTopic:(publicacion_id,detalle='')=>backend.globalWriteRpc('app_kombax_social_report_offtopic_v240',{p_publicacion_id:publicacion_id,p_detalle:String(detalle||'').trim()}),
+    visibilityConfig:(publicacion_id)=>backend.globalReadRpc('app_kombax_social_visibility_config_v237',{p_post_id:publicacion_id}),
+    setVisibility:(publicacion_id,options={})=>kombaxSocialMutation('kombax.social.visibilidad',{publicacion_id,audiencia:options.audiencia||'publica',audiencia_club_id:options.audiencia_club_id||null,audiencia_federacion_social_id:options.audiencia_federacion_social_id||null,audiencia_club_ids:Array.isArray(options.audiencia_club_ids)?options.audiencia_club_ids:[],audiencia_excluded_club_ids:Array.isArray(options.audiencia_excluded_club_ids)?options.audiencia_excluded_club_ids:[],audiencia_profile_ids:Array.isArray(options.audiencia_profile_ids)?options.audiencia_profile_ids:[],audiencia_profile_types:Array.isArray(options.audiencia_profile_types)?options.audiencia_profile_types:[]}),
     block:(perfil_social_id,bloquear=true)=>kombaxSocialMutation('kombax.social.bloquear',{perfil_social_id,bloquear:bloquear===true}),
     contact:(remitente_social_id,destinatario_social_id,motivo,mensaje)=>kombaxSocialNetworkMutation('kombax.contact.request',{remitente_social_id,destinatario_social_id,motivo,mensaje}),
     showcaseContact:(remitente_social_id,elemento_id,mensaje)=>kombaxSocialNetworkMutation('kombax.showcase.contact.request',{remitente_social_id,elemento_id,mensaje}),
@@ -604,24 +1144,139 @@ export const repos={
     removeComment:(comentario_id,motivo='')=>kombaxSocialMutation('kombax.social.comentario.eliminar',{comentario_id,motivo}),
     saved:(limit=100)=>backend.globalReadRpc('app_kombax_social_guardados_v083',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
     relations:(social_id,limit=50)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_relaciones_v133',{p_social_id:social_id,p_limit:Math.min(150,Math.max(20,Number(limit)||50))}),()=>backend.globalReadRpc('app_kombax_relaciones_v068',{p_social_id:social_id}),'app_kombax_relaciones_v133'),
-    requestRelation:async(origen_social_id,destino_social_id,tipo,nota='')=>{const out=await kombaxGlobalMutation('app_kombax_relacion_mutate_v045','kombax.relation.request',{origen_social_id,destino_social_id,tipo,nota,club_id:session()?.club_id||null});window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;},
-    relationState:async(relacion_id,estado)=>{const out=await kombaxGlobalMutation('app_kombax_relacion_mutate_v045','kombax.relation.state',{relacion_id,estado,club_id:session()?.club_id||null});window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;}
+    requestRelation:async(origen_social_id,destino_social_id,tipo='conexion_kombax',nota='')=>{let out;if(String(tipo||'')==='conexion_kombax'){const args={p_origen_social_id:origen_social_id,p_destino_social_id:destino_social_id,p_nota:nota||null,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`};out=await rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_relation_request_v255',args),()=>backend.globalWriteRpc('app_kombax_relation_request_v247',args),'app_kombax_relation_request_v255');}else{out=await kombaxGlobalMutation('app_kombax_relacion_mutate_v045','kombax.relation.request',{origen_social_id,destino_social_id,tipo,nota,club_id:session()?.club_id||null});}window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;},
+    relationState:async(relacion_id,estado)=>{const args={p_relacion_id:relacion_id,p_estado:estado,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`};const out=await rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_relation_state_v255',args),()=>kombaxGlobalMutation('app_kombax_relacion_mutate_v045','kombax.relation.state',{relacion_id,estado,club_id:session()?.club_id||null}),'app_kombax_relation_state_v255');window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;}
   },
   kombaxShowcase:{
     categories:()=>backend.globalReadRpc('app_kombax_showcase_categorias_v042',{}),
-    list:(query='',category='',cursor=null,limit=24)=>backend.globalReadRpc('app_kombax_showcase_list_v054',{p_query:String(query||'').trim(),p_categoria:category||null,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(24,Math.max(1,Number(limit)||24))}),
-    saved:(limit=100)=>backend.globalReadRpc('app_kombax_showcase_guardados_v054',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    list:async(query='',category='',cursor=null,limit=24)=>enrichShowcaseMedia(await backend.globalReadRpc('app_kombax_showcase_list_v054',{p_query:String(query||'').trim(),p_categoria:category||null,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(24,Math.max(1,Number(limit)||24))})),
+    saved:async(limit=100)=>enrichShowcaseMedia(await backend.globalReadRpc('app_kombax_showcase_guardados_v054',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))})),
     toggleSaved:(elemento_id,activo=true)=>kombaxShowcaseMutation(activo?'kombax.showcase.guardar':'kombax.showcase.desguardar',{elemento_id}),
     myBrands:()=>backend.globalReadRpc('app_kombax_showcase_mis_espacios_v048',{p_club_id:session()?.club_id||null}),
-    myItems:(marca_id,limit=60)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_showcase_mis_elementos_v133',{p_marca_id:marca_id,p_limit:Math.min(200,Math.max(20,Number(limit)||60))}),()=>backend.globalReadRpc('app_kombax_showcase_mis_elementos_v054',{p_marca_id:marca_id}),'app_kombax_showcase_mis_elementos_v133'),
+    myItems:async(marca_id,limit=60)=>enrichShowcaseMedia(await rpcWithFallback(()=>backend.globalReadRpc('app_kombax_showcase_mis_elementos_v133',{p_marca_id:marca_id,p_limit:Math.min(200,Math.max(20,Number(limit)||60))}),()=>backend.globalReadRpc('app_kombax_showcase_mis_elementos_v054',{p_marca_id:marca_id}),'app_kombax_showcase_mis_elementos_v133')),
     saveBrand:(payload)=>kombaxShowcaseMutation('kombax.showcase.marca.guardar',payload),
     brandState:(marca_id,estado,verificada=false)=>kombaxShowcaseMutation('kombax.showcase.marca.estado',{marca_id,estado,verificada:verificada===true}),
     saveItem:(payload)=>kombaxShowcaseMutation('kombax.showcase.elemento.guardar',payload),
     uploadImage:(marca_id,file)=>uploadKombaxShowcaseImage(marca_id,file),
     removeUploadedImage:(path)=>path&&String(path).startsWith(`${session()?.id}/showcase/`)?backend.remove('kombax-public-media',path):Promise.resolve(false),
     itemState:(elemento_id,estado,options={})=>kombaxShowcaseMutation('kombax.showcase.elemento.estado',{elemento_id,estado,destacado:options.destacado===true,etiqueta_destacada:options.etiqueta_destacada||''}),
-    deleteItem:async(elemento_id)=>{const out=await kombaxShowcaseMutation('kombax.showcase.elemento.eliminar',{elemento_id});await removeOwnedShowcaseImages([out?.imagen_url,...(Array.isArray(out?.galeria)?out.galeria:[])]);return out;},
+    capacity:(provider_id,reconcile=true)=>backend.globalReadRpc('app_kombax_showcase_capacity_r72',{p_provider_id:provider_id,p_reconcile:reconcile===true}),
+    reviews:(product_id,filter='recent',limit=50)=>backend.publicRpc('app_kombax_showcase_reviews_r73',{p_product_id:product_id,p_filter:filter,p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
+    reviewUpsert:(product_id,rating,body='',media=[])=>backend.globalWriteRpc('app_kombax_showcase_review_upsert_r72',{p_product_id:product_id,p_rating:Number(rating),p_body:String(body||''),p_media:Array.isArray(media)?media:[]}),
+    reviewWithdraw:(review_id)=>backend.globalWriteRpc('app_kombax_showcase_review_withdraw_r72',{p_review_id:review_id}),
+    reviewRespond:(review_id,response='')=>backend.globalWriteRpc('app_kombax_showcase_review_respond_r72',{p_review_id:review_id,p_response:String(response||'')}),
+    sellerReviews:(provider_id,limit=100)=>backend.globalReadRpc('app_kombax_showcase_seller_reviews_r73',{p_provider_id:provider_id,p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    uploadReviewMedia:(product_id,file)=>uploadReputationMedia('showcase',product_id,file,{allowVideo:false}),
+    removeReviewMedia:(items)=>removeOwnedReputationMedia(items),
+    deleteItem:async(elemento_id)=>{const out=await kombaxShowcaseMutation('kombax.showcase.elemento.eliminar',{elemento_id});if(out?.deleted===true)await removeOwnedShowcaseImages([out?.imagen_url,...(Array.isArray(out?.galeria)?out.galeria:[])]);return out;},
+    inquiryRequest:(elemento_id,mensaje)=>backend.globalWriteRpc('app_kombax_showcase_inquiry_request_r58',{p_elemento_id:elemento_id,p_mensaje:String(mensaje||'').trim()}),
+    myInquiries:(limit=50)=>backend.globalReadRpc('app_kombax_showcase_my_inquiries_r58',{p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
+    providerInquiries:(marca_id,limit=80)=>backend.globalReadRpc('app_kombax_showcase_provider_inquiries_r58',{p_marca_id:marca_id,p_limit:Math.min(150,Math.max(1,Number(limit)||80))}),
+    inquiryMessages:(inquiry_id,limit=150)=>backend.globalReadRpc('app_kombax_showcase_inquiry_messages_r58',{p_inquiry_id:inquiry_id,p_limit:Math.min(300,Math.max(1,Number(limit)||150))}),
+    inquirySend:(inquiry_id,mensaje)=>backend.globalWriteRpc('app_kombax_showcase_inquiry_send_r58',{p_inquiry_id:inquiry_id,p_mensaje:String(mensaje||'').trim()}),
+    saveCommerce:(item_id,payload)=>backend.globalWriteRpc('app_showcase_commerce_mutate_v259',{p_item_id:item_id,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    saveListingMeta:(item_id,payload)=>backend.globalWriteRpc('app_showcase_listing_meta_mutate_r628',{p_item_id:item_id,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    sellerDashboard:(provider_id)=>backend.globalReadRpc('app_showcase_seller_dashboard_r628',{p_provider_id:provider_id}),
+    finance:(provider_id)=>backend.globalReadRpc('app_kombax_showcase_finance_r65',{p_provider_id:provider_id}),
+    stockMovements:(provider_id,product_id=null,limit=150)=>backend.globalReadRpc('app_kombax_showcase_stock_movements_r65',{p_provider_id:provider_id,p_product_id:product_id,p_limit:limit}),
+    stockAdjust:(product_id,new_stock,note='')=>backend.globalWriteRpc('app_kombax_showcase_stock_adjust_r65',{p_product_id:product_id,p_new_stock:Number(new_stock),p_note:note||null,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    communications:(provider_id,limit=100)=>backend.globalReadRpc('app_kombax_commerce_communications_r65',{p_scope:'showcase',p_subject_id:provider_id,p_limit:limit}),
+    businessIntelligence:(provider_id,days=30)=>backend.globalReadRpc('app_kombax_showcase_bi_r65',{p_provider_id:provider_id,p_days:days}),
+    analytics:(provider_id,days=30)=>backend.globalReadRpc('app_kombax_showcase_analytics_r77',{p_provider_id:provider_id,p_days:Math.min(365,Math.max(1,Number(days)||30))}),
+    analyticsRange:(provider_id,from,to)=>backend.globalReadRpc('app_kombax_showcase_analytics_range_r77',{p_provider_id:provider_id,p_from:from,p_to:to}),
+    report:(provider_id,report_type='general',period=30)=>{const range=period&&typeof period==='object'?period:null;return backend.invokeFunction('kombax-report-r77',{scope:'showcase',subject_id:provider_id,report_type,...(range?.from&&range?.to?{from:range.from,to:range.to,days:range.days||30}:{days:Math.min(365,Math.max(1,Number(period)||30))}),user_locale:getLocale()},60000)},
+    track:(event_type,{provider_id=null,product_id=null,event_id=null,order_id=null,source=null,amount_minor=null,metadata={}}={})=>backend.globalWriteRpc('app_kombax_commerce_track_r65',{p_event_type:event_type,p_provider_id:provider_id,p_product_id:product_id,p_event_id:event_id,p_order_id:order_id,p_source:source,p_amount_minor:amount_minor,p_metadata:metadata}),
     removeOwnedImages:(urls)=>removeOwnedShowcaseImages(urls)
+  },
+  supportPrivacy:{
+    list:(subject_type,subject_id,limit=25)=>backend.globalReadRpc('app_kombax_support_authorizations_v194',{p_subject_type:subject_type,p_subject_id:subject_id,p_limit:Math.min(100,Math.max(1,Number(limit)||25))}),
+    create:(payload)=>backend.globalWriteRpc('app_kombax_support_authorization_mutate_v194',{p_operation:'support.authorization.create',p_payload:payload}),
+    revoke:(authorization_id)=>backend.globalWriteRpc('app_kombax_support_authorization_mutate_v194',{p_operation:'support.authorization.revoke',p_payload:{authorization_id}})
+  },
+  brandBusiness:{
+    workspace:(brand_profile_id)=>backend.globalReadRpc('app_kombax_brand_workspace_v223',{p_brand_profile_id:brand_profile_id}),
+    discovery:(brand_profile_id,{target_type='fighter',query='',discipline=null,territory=null,limit=30}={})=>backend.globalReadRpc('app_kombax_brand_discovery_v224',{p_brand_profile_id:brand_profile_id,p_target_type:target_type,p_query:String(query||'').trim(),p_discipline:discipline||null,p_territory:territory||null,p_limit:Math.min(100,Math.max(1,Number(limit)||30))}),
+    openCampaigns:(profile_id=null,limit=50)=>backend.globalReadRpc('app_kombax_brand_open_campaigns_v223',{p_profile_id:profile_id||null,p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
+    preferences:(profile_id)=>backend.globalReadRpc('app_kombax_brand_collaboration_preferences_v223',{p_profile_id:profile_id}),
+    inbox:(profile_id,limit=100)=>backend.globalReadRpc('app_kombax_brand_inbox_v223',{p_profile_id:profile_id,p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    publicProfile:(brand_profile_id)=>backend.publicRpc('app_kombax_brand_public_profile_v224',{p_brand_profile_id:brand_profile_id}),
+    targetPreferences:(target_type,target_id)=>backend.globalReadRpc('app_kombax_brand_target_preferences_v224',{p_target_type:target_type,p_target_id:target_id}),
+    saveTargetPreferences:(operation,payload={})=>backend.globalWriteRpc('app_kombax_brand_target_preferences_mutate_v224',{p_operation:operation,p_payload:payload}),
+    mutate:(operation,payload={})=>backend.globalWriteRpc('app_kombax_brand_mutate_v223',{p_operation:operation,p_payload:payload})
+  },
+  eventConnections:{
+    get:({internal_event_id=null,public_event_id=null}={})=>backend.globalReadRpc('app_kombax_event_connections_v220',{p_internal_event_id:internal_event_id,p_public_event_id:public_event_id}),
+    listForPublic:(public_event_id)=>backend.globalReadRpc('app_kombax_event_connections_for_public_v261',{p_public_event_id:public_event_id}),
+    participants:(connection_id)=>backend.globalReadRpc('app_kombax_event_connection_participants_v261',{p_connection_id:connection_id}),
+    mutate:(operation,payload={})=>backend.globalWriteRpc('app_kombax_event_connection_mutate_v220',{p_operation:operation,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    publicProjection:(public_event_id)=>backend.publicRpc('app_kombax_event_public_projection_v220',{p_public_event_id:public_event_id})
+  },
+  fighterDiscovery:{
+    search:({query='',discipline=null,category=null,weight_kg=null,level=null,territory=null,short_notice=false,limit=30}={})=>backend.globalReadRpc('app_kombax_fighter_discovery_search_v221',{p_query:String(query||'').trim(),p_discipline:discipline||null,p_category:category||null,p_weight_kg:weight_kg===''||weight_kg==null?null:Number(weight_kg),p_level:level||null,p_territory:territory||null,p_short_notice:short_notice===true,p_limit:Math.min(100,Math.max(1,Number(limit)||30))}),
+    mine:(competitor_profile_id)=>backend.globalReadRpc('app_kombax_fighter_discovery_me_v221',{p_competitor_profile_id:competitor_profile_id}),
+    save:(competitor_profile_id,payload={})=>backend.globalWriteRpc('app_kombax_fighter_discovery_mutate_v221',{p_competitor_profile_id:competitor_profile_id,p_payload:payload}),
+    invitations:({event_id=null,competitor_profile_id=null,limit=50}={})=>backend.globalReadRpc('app_kombax_fight_invitations_v221',{p_event_id:event_id,p_competitor_profile_id:competitor_profile_id,p_limit:Math.min(200,Math.max(1,Number(limit)||50))}),
+    invite:(payload)=>backend.globalWriteRpc('app_kombax_fight_invitation_mutate_v221',{p_operation:'invite',p_payload:payload}),
+    respond:(invitation_id,status,response_note='')=>backend.globalWriteRpc('app_kombax_fight_invitation_mutate_v221',{p_operation:'respond',p_payload:{invitation_id,status,response_note}}),
+    withdraw:(invitation_id)=>backend.globalWriteRpc('app_kombax_fight_invitation_mutate_v221',{p_operation:'withdraw',p_payload:{invitation_id}}),
+    register:(invitation_id,registered_participant_id)=>backend.globalWriteRpc('app_kombax_fight_invitation_mutate_v221',{p_operation:'register',p_payload:{invitation_id,registered_participant_id}})
+  },
+  discovery:{
+    search:(filters={})=>backend.globalReadRpc('app_kombax_discovery_search_r626',{p_filters:filters||{}}),
+    profile:(profile_id)=>backend.globalReadRpc('app_kombax_discovery_profile_r626',{p_profile_id:profile_id}),
+    save:(profile_id,payload={})=>backend.globalWriteRpc('app_kombax_discovery_mutate_r626',{p_profile_id:profile_id,p_payload:payload||{},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    publicProfile:(social_profile_id)=>backend.globalReadRpc('app_kombax_discovery_public_profile_r626',{p_social_profile_id:social_profile_id}),
+    slots:(profile_id)=>backend.globalReadRpc('app_kombax_discovery_slots_r626',{p_profile_id:profile_id}),
+    saveSlot:(profile_id,payload={})=>backend.globalWriteRpc('app_kombax_discovery_slot_mutate_r626',{p_profile_id:profile_id,p_operation:'save',p_payload:payload||{},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    deleteSlot:(profile_id,slot_id)=>backend.globalWriteRpc('app_kombax_discovery_slot_mutate_r626',{p_profile_id:profile_id,p_operation:'delete',p_payload:{id:slot_id},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
+  },
+  competitionPreparation:{
+    list:({competitor_profile_id=null,socio_id=null,club_id=null}={},limit=100)=>backend.globalReadRpc('app_kombax_preparations_v216',{p_competitor_profile_id:competitor_profile_id,p_socio_id:socio_id,p_club_id:club_id,p_limit:Math.min(300,Math.max(1,Number(limit)||100))}),
+    measurements:(preparation_id,limit=120)=>backend.globalReadRpc('app_kombax_weight_measurements_v216',{p_preparation_id:preparation_id,p_limit:Math.min(500,Math.max(1,Number(limit)||120))}),
+    candidates:(preparation_id)=>backend.globalReadRpc('app_kombax_preparation_candidates_v216',{p_preparation_id:preparation_id}),
+    eventRoster:(event_source,event_id)=>backend.globalReadRpc('app_kombax_event_preparation_roster_v218',{p_event_source:event_source,p_event_id:event_id}),
+    registrationMutate:(operation,payload={})=>backend.globalWriteRpc('app_kombax_event_preparation_mutate_v218',{p_operation:operation,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    mutate:(operation,payload={})=>backend.globalWriteRpc('app_kombax_preparation_mutate_v216',{p_operation:operation,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    async uploadEvidence(preparation_id,measurement_id,file){
+      if(!file||!file.size)return null;if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');
+      const prepared=await optimizeImage(file,{maxEdge:1600,maxBytes:4*1024*1024});if(prepared.file.size>5*1024*1024)throw new Error('La imagen supera 5 MB.');
+      const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/webp'?'webp':'jpg';const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+      const path=`${preparation_id}/${measurement_id}/${Date.now()}-${token}.${ext}`;await backend.upload('competition-weight-evidence',path,prepared.file,false);
+      try{await backend.globalWriteRpc('app_kombax_preparation_mutate_v216',{p_operation:'measurement.attach_photo',p_payload:{measurement_id,evidence_path:path},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`});return path;}catch(error){await backend.remove('competition-weight-evidence',path).catch(()=>{});throw error;}
+    },
+    evidenceUrl:(path)=>backend.signedUrl('competition-weight-evidence',path,900)
+  },
+  customerOps:{
+    tickets:(tenant_ref=null,limit=50)=>backend.globalReadRpc('app_kombax_customer_ops_tickets_r60',{p_tenant_ref:tenant_ref,p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
+    supportTickets:(limit=50)=>backend.globalReadRpc('app_kombax_customer_ops_tickets_v211',{p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
+    supportGuidedStatus:(ticket_id)=>backend.globalReadRpc('app_kombax_support_guided_status_r60',{p_ticket_id:ticket_id}),
+    allowance:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_assistance_allowance_v213',{p_tenant_ref:tenant_ref}),
+    dashboard:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_assist_dashboard_v227',{p_tenant_ref:tenant_ref}),
+    guideAccess:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_org_guide_access_r60',{p_tenant_ref:tenant_ref}),
+    downloadGuide:(tenant_ref=null)=>backend.downloadFunction('migration-guide-r60',{tenant_ref,user_locale:getLocale()},30000),
+    deleteHistory:({ticket_id=null,mode=null,tenant_ref=null}={})=>backend.invokeFunction('kombax-history-delete-r60',{ticket_id,mode,tenant_ref},45000),
+    messages:(ticket_id,limit=100)=>backend.globalReadRpc('app_kombax_assist_messages_v227',{p_ticket_id:ticket_id,p_limit:Math.min(120,Math.max(1,Number(limit)||100))}),
+    createTicket:(payload)=>backend.globalWriteRpc('app_kombax_customer_ops_mutate_v233',{p_operation:'ticket.create',p_payload:payload}),
+    requestHuman:(ticket_id)=>backend.globalWriteRpc('app_kombax_customer_ops_mutate_v233',{p_operation:'ticket.human_review',p_payload:{ticket_id}}),
+    migrationFiles:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_files_v228',{p_ticket_id:ticket_id}),
+    migrationPreview:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_preview_v228',{p_ticket_id:ticket_id}),
+    chat:(ticket_id,message,specialty='management',client_request_id=(crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`))=>backend.invokeFunction('kombax-assist-r38',{ticket_id,message,specialty,client_request_id,user_locale:getLocale()},70000),
+    async stageMigrationFiles(ticket_id,files=[],onProgress=null){
+      const uid=session()?.id;if(!uid)throw new Error('AUTH_REQUIRED');
+      const mimeByExt={pdf:'application/pdf',csv:'text/csv',xls:'application/vnd.ms-excel',xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp'};
+      const allowed=new Set(Object.values(mimeByExt));const input=[...(files||[])];if(!input.length)throw new Error('Selecciona al menos un archivo para la migración.');
+      const staged=[];
+      for(let i=0;i<input.length;i++){
+        const file=input[i],ext=String(file?.name||'').split('.').pop().toLowerCase(),mime=allowed.has(file?.type)?file.type:mimeByExt[ext];
+        if(!mime)throw new Error(`Formato no admitido: ${file?.name||'archivo'}.`);if(!file?.size||file.size>10*1024*1024)throw new Error(`El archivo ${file?.name||''} supera el límite de 10 MB.`);
+        const uploadFile=file.type===mime?file:new File([file],file.name,{type:mime,lastModified:file.lastModified});const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);const path=`${uid}/${ticket_id}/${Date.now()}-${token}.${ext}`;
+        await backend.upload('kombax-migration-staging',path,uploadFile,false);
+        try{const meta=await backend.globalWriteRpc('app_kombax_migration_file_register_v228',{p_ticket_id:ticket_id,p_storage_path:path,p_original_name:String(file.name||'archivo').slice(0,255),p_mime_type:mime,p_size_bytes:file.size});staged.push({...meta,original_name:file.name,size_bytes:file.size});}
+        catch(error){await backend.remove('kombax-migration-staging',path).catch(()=>{});throw error;}
+        onProgress?.({done:i+1,total:input.length,file:file.name});
+      }
+      return staged;
+    }
   },
   platformAdmin:{
     context:()=>backend.globalReadRpc('app_kombax_platform_context_v055',{}),
@@ -631,7 +1286,7 @@ export const repos={
     verificationDocumentUrl:(path)=>backend.signedUrl('kombax-verification-docs',path,600),
     club:(club_id)=>backend.globalReadRpc('app_kombax_platform_club_v055',{p_club_id:club_id}),
     releaseContract:()=>backend.globalReadRpc('app_kombax_release_contract_v056',{}),
-    reviewApplication:(solicitud_id,estado,motivo='')=>kombaxGlobalMutation('app_kombax_perfil_mutate_v072','kombax.application.review',{solicitud_id,estado,motivo}),
+    reviewApplication:(solicitud_id,estado,motivo='')=>kombaxGlobalMutation('app_kombax_perfil_mutate_v196','kombax.application.review',{solicitud_id,estado,motivo}),
     createClub:(payload)=>kombaxGlobalMutation('app_kombax_platform_mutate_v097','kombax.platform.club.create',payload),
     setProfileService:(perfil_directo_id,plan_codigo,estado='activa')=>kombaxGlobalMutation('app_kombax_subscription_mutate_v071','kombax.subscription.set',{perfil_directo_id,plan_codigo,estado}),
     setTeamPermission:(club_id,perfil_id,permiso,activo=true)=>kombaxGlobalMutation('app_kombax_platform_mutate_v055','kombax.platform.team.permission.set',{club_id,perfil_id,permiso,activo:activo===true}),
@@ -651,7 +1306,24 @@ export const repos={
     reviewDeletion:(solicitud_id,estado,resolucion='',nota_retencion='')=>kombaxGlobalMutation('app_kombax_eliminacion_mutate_v047','kombax.deletion.review',{solicitud_id,estado,resolucion,nota_retencion}),
     executeDeletion:(solicitud_id)=>backend.invokeFunction('account-deletion-executor',{solicitud_id}),
     metrics:(days=90)=>backend.globalReadRpc('app_kombax_metrics_platform_v133',{p_days:Math.min(365,Math.max(7,Number(days)||90))}),
-    clubMetrics:(club_id,days=90)=>backend.globalReadRpc('app_kombax_metrics_club_v133',{p_club_id:club_id,p_days:Math.min(365,Math.max(7,Number(days)||90))})
+    clubMetrics:(club_id,days=90)=>backend.globalReadRpc('app_kombax_metrics_club_v133',{p_club_id:club_id,p_days:Math.min(365,Math.max(7,Number(days)||90))}),
+    marketplace:(days=30)=>backend.globalReadRpc('app_kombax_marketplace_owner_dashboard_r627',{p_days:Math.min(365,Math.max(7,Number(days)||30))}),
+    marketplaceSellerReview:(application_id,status,note='')=>backend.globalWriteRpc('app_kombax_marketplace_owner_seller_review_r627',{p_application_id:application_id,p_status:status,p_note:String(note||'').trim(),p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    marketplaceBuyerDetail:(identity_request_id)=>backend.globalReadRpc('app_kombax_marketplace_owner_buyer_detail_r627',{p_identity_request_id:identity_request_id}),
+    marketplaceBuyerReview:(identity_request_id,status,note='')=>backend.globalWriteRpc('app_kombax_marketplace_owner_buyer_review_r627',{p_identity_request_id:identity_request_id,p_status:status,p_note:String(note||'').trim(),p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    commercialServices:(limit=100)=>backend.globalReadRpc('app_kombax_commercial_owner_dashboard_r628',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    commercialServiceReview:(access_id,status,note='')=>backend.globalWriteRpc('app_kombax_commercial_owner_service_mutate_r628',{p_access_id:access_id,p_status:status,p_note:String(note||'').trim(),p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    commercialRequests:(limit=100)=>backend.globalReadRpc('app_kombax_commercial_owner_requests_r642',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
+    activateCommercialPlan:(plan_request_id,note='')=>backend.globalWriteRpc('app_kombax_commercial_admin_activate_plan_r642',{p_plan_request_id:plan_request_id,p_note:String(note||'').trim()}),
+    rejectCommercialPlan:(plan_request_id,note='')=>backend.globalWriteRpc('app_kombax_commercial_admin_reject_plan_r642',{p_plan_request_id:plan_request_id,p_note:String(note||'').trim()}),
+    decideCommercialEntitlement:(entitlement_id,decision,note='')=>backend.globalWriteRpc('app_kombax_commercial_admin_entitlement_decide_r642',{p_entitlement_id:entitlement_id,p_decision:decision,p_note:String(note||'').trim()})
+  },
+  commercial:{
+    catalog:(audience=null)=>backend.globalReadRpc('app_kombax_commercial_catalog_r64',{p_audience:audience||null}),
+    context:(subject_type,subject_id)=>backend.globalReadRpc('app_kombax_commercial_context_r64',{p_subject_type:subject_type,p_subject_id:subject_id}),
+    requestPlan:(subject_type,subject_id,plan_code,billing_cycle='monthly')=>backend.globalWriteRpc('app_kombax_commercial_plan_request_r64',{p_subject_type:subject_type,p_subject_id:subject_id,p_plan_code:plan_code,p_billing_cycle:billing_cycle,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    requestActivation:(subject_type,subject_id,entitlement_code,{scope_id=null,days=null}={})=>backend.globalWriteRpc('app_kombax_commercial_activation_request_r64',{p_subject_type:subject_type,p_subject_id:subject_id,p_entitlement_code:entitlement_code,p_scope_id:scope_id,p_days:days,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    requestPromotion:(content_type,content_id,days)=>backend.globalWriteRpc('app_kombax_content_promotion_request_r64',{p_content_type:content_type,p_content_id:content_id,p_days:days,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
   },
   accountDeletion:{
     list:()=>backend.globalReadRpc('app_kombax_solicitudes_eliminacion_v047',{}),

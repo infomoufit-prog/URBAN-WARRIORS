@@ -6,6 +6,11 @@ import { icon } from '../ui/icons.js';
 import { openClubPublicProfile, openClubAlbum, editClubPublicProfile } from './club-profile.js';
 import { openKombaxPublicProfile } from './public-profile.js';
 import { openAuthenticatedPasswordChange } from './account-security.js';
+import { renderClubFederationAdmin } from './federation-licenses.js';
+import { migrationAssistBanner } from './competition-preparation.js';
+import { openMigrationPreparation, openMigrationGuide } from './customer-operations.js';
+import { openClubBrandCollaborationSettings } from './brand-business.js';
+import { contentTranslationAttrs } from '../i18n/user-content-translation.js';
 
 const PERMISSIONS=[
   ['social.act_as_club','Publicar y actuar como Club'],['profile.public.manage','Editar perfil público'],['showcase.manage','Gestionar Showcase'],['relations.manage','Gestionar Mi red'],['contacts.manage','Gestionar contactos']
@@ -32,14 +37,20 @@ export async function renderClubKombaxHub(){
   setMainHtml(`<div class="kx-club-hub">
     ${pageHeader('Perfil del Club','Gestiona la presencia pública de tu club y mantén separada la información interna.','','KOMBAX')}
     <section class="kx-acting-banner"><div>${icon('shieldCheck',{size:24})}</div><div><small>ESTÁS GESTIONANDO</small><strong>${esc(acting)}</strong><span>Las acciones públicas se atribuyen al Club; KOMBAX registra internamente qué miembro del equipo las realiza.</span></div></section>
-    <section class="kx-hub-summary"><div class="kx-hub-brand">${publicProfile?.logo_url?`<img src="${esc(publicProfile.logo_url)}" alt="">`:`<span>${esc((club.nombre||'C').slice(0,2).toUpperCase())}</span>`}</div><div><span class="page-kicker">PERFIL PÚBLICO KOMBAX</span><h2>${esc(publicProfile?.nombre_publico||club.nombre)}</h2><p>${esc(publicProfile?.descripcion||club.lema||'Completa el perfil público para presentar el club en KOMBAX.')}</p><div class="kx-hub-stats"><span>${photos}/10 fotos</span><span>${videos}/3 vídeos</span><span>${social?'Social activo':'Social pendiente'}</span></div></div><button class="btn btn-primary" id="kx-hub-public-preview">Ver como público</button></section>
+    ${migrationAssistBanner()}
+    <section class="kx-hub-summary"><div class="kx-hub-brand">${publicProfile?.logo_url?`<img src="${esc(publicProfile.logo_url)}" alt="">`:`<span>${esc((club.nombre||'C').slice(0,2).toUpperCase())}</span>`}</div><div><span class="page-kicker">PERFIL PÚBLICO KOMBAX</span><h2>${esc(publicProfile?.nombre_publico||club.nombre)}</h2><p ${contentTranslationAttrs({contentId:publicProfile?.club_id||publicProfile?.id||club.id,contentType:'club_editorial',fieldName:publicProfile?.descripcion?'description':'motto',sourceLocale:publicProfile?.source_locale||publicProfile?.idioma||'',visibility:'public'})}>${esc(publicProfile?.descripcion||club.lema||'Completa el perfil público para presentar el club en KOMBAX.')}</p><div class="kx-hub-stats"><span>${photos}/10 fotos</span><span>${videos}/3 vídeos</span><span>${social?'Social activo':'Social pendiente'}</span></div></div><button class="btn btn-primary" id="kx-hub-public-preview">Ver como público</button></section>
     <div class="kx-hub-grid">
       ${card('public','Perfil público','Logo, banner, descripción, disciplinas, ubicación, enlaces y datos visibles.','user','Gestionar')}
       ${card('album','Álbum','Hasta 10 fotos y 3 vídeos de 15 segundos. Avatar y portada no cuentan.','image','Gestionar')}
       ${card('community','Comunidad del Club','Publicaciones internas para miembros del club. No se muestran automáticamente en la red pública.','users','Abrir comunidad')}
       ${card('social','KOMBAX Social','Publica texto, fotos y vídeos en la red pública utilizando la identidad del Club.','activity','Ir a Social')}
-      ${card('showcase','Showcase','Productos y servicios informativos con contacto, web, tienda externa y guardados.','shoppingBag','Gestionar')}
+      ${card('showcase','Showcase','Crea y gestiona el escaparate del Club. Club incluye 15 modelos; Premium amplía a 25 y ya incluye Commerce.','shoppingBag','Gestionar productos')}
+      ${card('kombax-events','KOMBAX Events','Crea y gestiona eventos públicos. Premium incluye hasta 2 publicaciones al mes; Ticketing se activa aparte.','calendar','Gestionar eventos')}
       ${card('relations','Mi red','Federaciones, competidores, marcas y profesionales conectados de forma privada y confirmada.','network','Gestionar')}
+      ${card('plans-services','Plan y servicios','Consulta tu plan KOMBAX, límites, fees y servicios puntuales disponibles.','creditCard','Ver planes')}
+      ${card('migration-guide','Guía de migración','Tutorial para trasladar alumnos, grupos, cuotas, licencias y documentos desde Excel, CSV, PDF o imágenes, con revisión antes de importar.','fileText','Abrir guía')}
+      ${card('federations','Federaciones y licencias','Gestiona múltiples Federaciones, federados, licencias, vencimientos y documentación administrativa de forma privada.','shieldCheck','Gestionar')}
+      ${card('brand-collaboration','Colaboraciones y patrocinios','Decide expresamente si las Marcas pueden localizar al Club y enviar propuestas comerciales.','sparkles','Configurar')}
       ${card('contacts','Contactos','Solicitudes estructuradas recibidas y enviadas como Club.','message','Gestionar')}
       ${state.session?.rol==='direccion'?card('permissions','Permisos del equipo','Decide quién puede actuar como Club y gestionar cada área pública.','shield','Configurar'):''}
       ${card('personal','Mi perfil personal','Tu cuenta personal permanece separada de la identidad pública del Club.','user','Abrir')}
@@ -47,6 +58,7 @@ export async function renderClubKombaxHub(){
     </div>
     <section class="kx-internal-separation"><div>${icon('lock',{size:22})}</div><div><strong>Información interna separada</strong><p>Alumnos, cuotas, asistencia, documentación, teléfonos, emails y datos familiares nunca forman parte del perfil público KOMBAX.</p></div></section>
   </div>`);
+  document.querySelector('[data-kx-migration-assist]')?.addEventListener('click',openMigrationPreparation);
   document.getElementById('kx-hub-public-preview')?.addEventListener('click',()=>social?openKombaxPublicProfile(social.id):openClubPublicProfile(state.session.club_id));
   document.querySelectorAll('[data-kx-hub]').forEach(b=>b.addEventListener('click',async()=>{
     const a=b.dataset.kxHub;
@@ -54,8 +66,13 @@ export async function renderClubKombaxHub(){
     else if(a==='public'){if(publicProfile?.editable)editClubPublicProfile(publicProfile);else openClubPublicProfile(state.session.club_id);}
     else if(a==='album'){const p=publicProfile||await repos.clubPublic.one(state.session.club_id);if(p)openClubAlbum(p);}
     else if(a==='social')go('social');
-    else if(a==='showcase')go('showcase');
+    else if(a==='showcase')go('my-showcase');
+    else if(a==='kombax-events')go('kombax-events');
     else if(a==='relations'){sessionStorage.setItem('kombax_social_view','relations');go('social');}
+    else if(a==='plans-services')go('plans-services');
+    else if(a==='migration-guide')openMigrationGuide();
+    else if(a==='federations')renderClubFederationAdmin(state.session.club_id,{onBack:renderClubKombaxHub});
+    else if(a==='brand-collaboration')openClubBrandCollaborationSettings(state.session.club_id);
     else if(a==='contacts'){sessionStorage.setItem('kombax_social_view','contacts');go('social');}
     else if(a==='permissions')editPermissions();
     else if(a==='personal')go('personal-profile');

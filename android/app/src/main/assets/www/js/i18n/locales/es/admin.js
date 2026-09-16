@@ -1,0 +1,53 @@
+export default {
+  "title": "Administración KOMBAX",
+  "team": "Equipo",
+  "permissions": "Equipo y permisos",
+  "archive": "Archivo y papelera",
+  "common": {
+    "loading": "Cargando administración…",
+    "platform": "Administración de plataforma",
+    "search": "Buscar",
+    "status": "Estado",
+    "actions": "Acciones",
+    "users": "Usuarios",
+    "clubs": "Clubes",
+    "review": "Revisar",
+    "save": "Guardar cambios"
+  },
+  "roles": {
+    "direction": "Gestor de la app",
+    "coordination": "Coordinación",
+    "secretariat": "Secretaría",
+    "treasury": "Economía / Tesorería",
+    "communications": "Comunicación",
+    "coach": "Monitor",
+    "family": "Familia",
+    "student": "Alumno"
+  },
+  "dashboard": {
+    "loading": "Preparando tu panel…",
+    "managerKicker": "Gestor de la app · Panel global",
+    "managerTitle": "Todo el gimnasio, en una sola app.",
+    "activeMembers": "Socios activos",
+    "activeStudents": "Alumnos activos",
+    "preRegistrations": "Preinscripciones",
+    "pendingReview": "pendientes de revisar",
+    "activeGroups": "grupos activos",
+    "pendingActions": "Acciones pendientes",
+    "feesNeedFollowUp": "cuotas requieren seguimiento",
+    "open": "Abrir",
+    "unassignedCoach": "Sin monitor asignado",
+    "noActiveGroups": "Sin grupos activos",
+    "noUpcomingSessions": "Sin sesiones próximas",
+    "configure": "Configurar",
+    "takeAttendance": "Pasar asistencia",
+    "manageStudents": "Gestionar alumnos",
+    "pendingPreRegistrations": "Preinscripciones pendientes",
+    "requestsToReview": "{{count}} solicitudes por revisar",
+    "activeRecords": "{{count}} fichas activas",
+    "overdueFees": "Cuotas vencidas",
+    "averageOccupancy": "Ocupación media",
+    "classesOccupancy": "Clases y ocupación",
+    "upcomingSessions": "Próximas sesiones"
+  }
+};

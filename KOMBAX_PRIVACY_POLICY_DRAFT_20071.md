@@ -3,9 +3,9 @@
 > Versión preparada para el piloto controlado de dos clubes. Debe revisarse de nuevo antes de una apertura pública o cambio material de proveedores, escala o categorías de datos.
 
 ## 1. Responsable del tratamiento
-**Responsable:** BRYAN RIVERA GREY
-**NIF:** 42303973G
-**Domicilio:** Calle Ramon Turro 54, piso 1, puerta 2, Palafolls, Barcelona, España
+**Responsable:** KOMBAX SPAIN
+**NIF:** [PENDIENTE DATOS FISCALES/REGISTRALES DE KOMBAX SPAIN]
+**Domicilio:** [PENDIENTE DOMICILIO LEGAL DE KOMBAX SPAIN]
 **Email de privacidad:** privacidad@kombax.es
 **DPO/DPD:** No designado en la fase piloto actual. A fecha de esta versión no se aprecia obligación de designación conforme al art. 37 RGPD y al art. 34 LOPDGDD por la escala y naturaleza actuales del tratamiento; esta conclusión se revisará antes de ampliar sustancialmente la escala, el seguimiento sistemático o el tratamiento de categorías especiales.
 

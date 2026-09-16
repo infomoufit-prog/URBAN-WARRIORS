@@ -35,7 +35,7 @@ assert.match(finance,/morosidad_pct/);
 assert.match(finance,/data-chart-point/);
 assert.match(finance,/data-category/);
 assert.match(finance,/data-dimension/);
-assert.match(bootstrap,/pendiente de sincronización/);
+assert.match(bootstrap,/(?:pendiente de sincronización|Finanzas Premium necesita una actualización)/);
 assert.match(social,/KOMBAX Social pendiente de sincronización/);
 assert.match(isolation,/app_kombax_workspace_social_profiles_v147/);
 assert.match(isolation,/app_kombax_contactos_contexto_v147/);

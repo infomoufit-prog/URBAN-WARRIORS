@@ -1,9 +1,9 @@
 # KOMBAX RC13 build 20077 · Legal Release Gate · 24/08/2026
 
 ## Datos globales
-- Titular: BRYAN RIVERA GREY
-- NIF: 42303973G
-- Domicilio: Calle Ramon Turro 54, piso 1, puerta 2, Palafolls, Barcelona, España
+- Titular: KOMBAX SPAIN
+- NIF: [PENDIENTE DATOS FISCALES/REGISTRALES DE KOMBAX SPAIN]
+- Domicilio: [PENDIENTE DOMICILIO LEGAL DE KOMBAX SPAIN]
 - Soporte: soporte@kombax.es
 - Privacidad: privacidad@kombax.es
 - Seguridad: seguridad@kombax.es

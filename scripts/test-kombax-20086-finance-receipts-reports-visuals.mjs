@@ -26,5 +26,5 @@ assert.match(report,/req\.method==='OPTIONS'/,'finance-report preflight missing'
 assert.match(report,/Histograma mensual/,'PDF monthly histogram missing');
 assert.match(report,/Antiguedad de la deuda/,'PDF debt aging visualization missing');
 assert.match(report,/Detalle financiero/,'PDF financial table missing');
-for(const [name,txt] of [['config',config],['index',index],['sw',sw],['gradle',gradle],['main',main],['health',health]]) assert.match(txt,/20086/,`${name} build marker 20086 missing`);
+for(const [name,txt] of [['config',config],['index',index],['sw',sw],['gradle',gradle],['main',main],['health',health]]) { const nums=[...txt.matchAll(/20\d{3}/g)].map(m=>Number(m[0])); assert.ok(nums.some(n=>n>=20086),`${name} build marker 20086+ missing`); }
 console.log('PASS KOMBAX 20086 · receipts + PDF reports + premium visuals');

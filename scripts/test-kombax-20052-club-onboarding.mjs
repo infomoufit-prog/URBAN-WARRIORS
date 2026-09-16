@@ -3,6 +3,7 @@ const read=p=>fs.readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
 const fail=m=>{console.error('FAIL 20052 CLUB ONBOARDING:',m);process.exit(1)};
 const ok=(c,m)=>{if(!c)fail(m)};
 const gateway=read('web/js/modules/gateway.js');
+const registry=read('web/js/core/profile-registry.js');
 const repos=read('web/js/core/repositories.js');
 const admin=read('web/js/modules/platform-admin.js');
 const migration=read('supabase/migrations/097_kombax_club_onboarding_20052.sql');
@@ -12,7 +13,7 @@ const sw=read('web/service-worker.js');
 const idx=read('web/index.html');
 const gradle=read('android/app/build.gradle');
 
-ok(gateway.includes("{id:'club',label:'Club',icon:'club'")&&gateway.includes("const available=directTypes.filter(x=>!x.disabled);"),'Club aparece al mismo nivel del selector oficial');
+ok((registry.includes("id:'club'")&&registry.includes("label:'Club'")&&registry.includes("icon:'club'"))&&gateway.includes("const available=directTypes.filter(x=>!x.disabled&&!x.baseOnly);"),'Club aparece al mismo nivel del selector oficial mediante el registro canónico de perfiles');
 ok(gateway.includes("b.dataset.kxPick==='club'?saveAndSubmitApplication('club'")&&!gateway.includes('id="kx-new-club-application"'),'alta Club usa el selector común sin botón duplicado');
 ok(gateway.includes('repos.kombaxProfiles.clubs()')&&gateway.includes('data-kx-club-enter')&&gateway.includes('data-kx-club-public')&&gateway.includes('data-kx-club-security'),'Club aprobado aparece en Mis identidades con gestión, perfil público y seguridad');
 ok(gateway.includes("featureIcon('club',{size:44})"),'Club usa iconografía KOMBAX propia');

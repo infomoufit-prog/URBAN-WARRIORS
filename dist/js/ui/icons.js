@@ -13,6 +13,9 @@ const paths = {
   megaphone:'<path d="m3 11 14-5v12L3 13v-2Z"/><path d="M11.5 16.3 13 21H8l-1.6-6.1"/><path d="M21 9v6"/>',
   message:'<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>',
   heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/>',
+  thumbsUp:'<path d="M7 10v11H3V10h4ZM7 19h9.4a3 3 0 0 0 2.9-2.3l1.2-5A2.2 2.2 0 0 0 18.4 9H14l.7-3.3A2.2 2.2 0 0 0 12.6 3L7 10Z"/>',
+  thumbsDown:'<path d="M7 14V3H3v11h4ZM7 5h9.4a3 3 0 0 1 2.9 2.3l1.2 5a2.2 2.2 0 0 1-2.1 2.7H14l.7 3.3a2.2 2.2 0 0 1-2.1 2.7L7 14Z"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>',
   clipboard:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6M9 14h6"/>',
   package:'<path d="m21 8-9 5-9-5 9-5 9 5Z"/><path d="M3 8v9l9 5 9-5V8M12 13v9"/>',
   settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>',
@@ -64,7 +67,13 @@ const paths = {
   bookmarkCheck:'<path d="M6 3h12v18l-6-4-6 4V3Z"/><path d="m9 10 2 2 4-4"/>',
   eyeOff:'<path d="M3 3l18 18M10.6 6.2A10.8 10.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3 3.7M6.3 6.3C3.8 8.2 2.5 12 2.5 12s3.5 6 9.5 6a9.6 9.6 0 0 0 3-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
   filter:'<path d="M4 6h16M7 12h10M10 18h4"/>',
-  sparkles:'<path d="m12 3 1.3 3.7L17 8l-3.7 1.3L12 13l-1.3-3.7L7 8l3.7-1.3L12 3Z"/><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15ZM5 14l.7 1.8L7.5 16l-1.8.7L5 18.5l-.7-1.8L2.5 16l1.8-.2L5 14Z"/>'
+  trophy:'<path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 12v5M8 21h8M9 17h6"/>',
+  sparkles:'<path d="m12 3 1.3 3.7L17 8l-3.7 1.3L12 13l-1.3-3.7L7 8l3.7-1.3L12 3Z"/><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15ZM5 14l.7 1.8L7.5 16l-1.8.7L5 18.5l-.7-1.8L2.5 16l1.8-.2L5 14Z"/>',
+  arena:'<path d="M4 7.5 12 3l8 4.5-8 4.5-8-4.5Z"/><path d="M5 11.5v5L12 21l7-4.5v-5"/><path d="m8 10 4 2 4-2M12 12v9"/><path d="M8.5 6.9 12 8.8l3.5-1.9"/>',
+  bolt:'<path d="M13 2 5 13h6l-1 9 8-12h-6l1-8Z"/>',
+  medal:'<circle cx="12" cy="14" r="5"/><path d="m8 2 4 7 4-7M8 2H5l4.5 8M16 2h3l-4.5 8"/>',
+  flame:'<path d="M12 22c4 0 7-3 7-7 0-5-4-8-5-12-3 2-2 6-5 8-2 1-4 3-4 6 0 3 3 5 7 5Z"/><path d="M12 22c-2 0-4-1.6-4-3.8 0-2.4 2.2-3.6 3.3-5.7.7 2 3.2 2.8 3.2 5.3 0 2.3-1.3 4.2-2.5 4.2Z"/>',
+  broadcast:'<path d="M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/>'
 };
 
 export function icon(name,{size=20,className=''}={}){
@@ -72,7 +81,7 @@ export function icon(name,{size=20,className=''}={}){
   return `<svg class="uw-icon ${className}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${body}</svg>`;
 }
 
-export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkin',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'idCard',requests:'plus',documents:'folder',archive:'archive',install:'download',community:'dojo',social:'network',showcase:'spotlight','platform-admin':'key','personal-profile':'idCard',scopes:'shieldCheck',events:'calendar',help:'fileText',more:'more'}[id]||'activity');
+export const navIcon = (id) => icon({dashboard:'home',catalog:'layers',groups:'users',members:'user',enrollments:'userPlus',sessions:'calendar',attendance:'checkin',progress:'chart',finance:'wallet',reminders:'bell',communications:'megaphone',tracking:'clipboard',material:'package',notifications:'bell',users:'users',settings:'settings',diagnostics:'activity',certification:'shieldCheck',profile:'idCard',requests:'plus',documents:'folder',archive:'archive',install:'download',community:'dojo',social:'network',showcase:'spotlight','kombax-events':'arena','my-events':'calendar','my-showcase':'shoppingBag','platform-admin':'key','personal-profile':'idCard',scopes:'shieldCheck',events:'calendar',assist:'sparkles',migrations:'upload',help:'fileText','federation-admin':'federation','my-licenses':'idCard',more:'more'}[id]||'activity');
 
 
 const featurePaths={

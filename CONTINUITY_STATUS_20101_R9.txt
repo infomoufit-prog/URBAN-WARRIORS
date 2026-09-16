@@ -1,0 +1,16 @@
+KOMBAX 20.101 R9 · VISUAL HERO FIX
+BASE: KOMBAX 20.101 R8
+STATUS: BUILD PASS / READY FOR LOCAL + SIGNED APK QA
+
+FIXED:
+- Gateway approved fighter image visible.
+- Gateway red/blue animated smoke visible.
+- Gateway legacy CSS specificity collision removed.
+- Social fighter enlarged/reframed desktop + mobile.
+- Noche de Impacto Main Event teaser compacted.
+- Event hero lower-right organization rail reserved and supports up to 6 visible institutional entities.
+- Cache bust R9.
+
+REGRESSION: npm run build PASS · 148 files · web = dist = Android.
+BACKEND: unchanged in R9.
+SIGNING: JKS preserved; keystore.properties secrets intentionally not embedded.

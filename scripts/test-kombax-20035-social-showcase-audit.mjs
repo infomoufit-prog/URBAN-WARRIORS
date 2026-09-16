@@ -16,7 +16,7 @@ const checks=[
  ['showcase upload path',repo.includes('/showcase/${brandId}/')||repo.includes('showcase/${brandId}/')],
  ['showcase RLS depth fixed',mig.includes("array_length(storage.foldername(name),1)>=3")&&!mig.includes("array_length(storage.foldername(name),1)>=4")],
  ['comment parent guard',mig.includes('KOMBAX_COMMENT_PARENT_POST_MISMATCH')&&mig.includes('KOMBAX_COMMENT_REPLY_DEPTH_LIMIT')],
- ['build 20035+',/build:\s*200(?:3[5-9]|[4-9]\d)/.test(cfg)&&/versionCode\s+200(?:3[5-9]|[4-9]\d)/.test(gradle)]
+ ['build 20035+',Number(cfg.match(/build:\s*(\d+)/)?.[1]||0)>=20035&&Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0)>=20035]
 ];
 const failed=checks.filter(([,ok])=>!ok);
 for(const [name,ok] of checks)console.log(`${ok?'PASS':'FAIL'} ${name}`);

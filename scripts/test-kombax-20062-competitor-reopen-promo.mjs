@@ -16,7 +16,7 @@ ok(continuity.includes('Upgrade reversible Miembro ↔ Competidor')&&continuity.
 ok(guards.includes("d.tipo='competidor'")&&guards.includes('fecha_nacimiento_verificada'),'guardas Social Competidor permanecen activas');
 const socialPromo=social.match(/function competitorFoundersPromo\(\)[\s\S]*?\n\}/)?.[0]||'';
 const clubPromo=showcase.match(/function clubFoundersPromo\(\)[\s\S]*?\n\}/)?.[0]||'';
-ok(socialPromo.includes('COMBAT SOCIAL · LANZAMIENTO')&&socialPromo.includes('PRIMEROS 20 · COMPETIDORES FUNDADORES')&&socialPromo.includes('ventaja especial de lanzamiento'),'Combat Social muestra campaña primeros 20 competidores');
+ok(socialPromo.includes('KOMBAX SOCIAL · LANZAMIENTO')&&socialPromo.includes('PRIMEROS 20 · COMPETIDORES FUNDADORES')&&socialPromo.includes('ventaja especial de lanzamiento'),'KOMBAX Social muestra campaña primeros 20 competidores');
 ok(clubPromo.includes('KOMBAX SHOWCASE · LANZAMIENTO')&&clubPromo.includes('PRIMEROS 20 · CLUBES FUNDADORES')&&clubPromo.includes('ventaja especial de lanzamiento'),'Showcase muestra campaña primeros 20 clubes');
 ok(!/(€|descuento|porcentaje|\bprecio\b|%)/i.test(socialPromo+clubPromo),'campañas no anuncian precio, descuento ni porcentaje concreto');
 ok(social.includes('${competitorFoundersPromo()}')&&showcase.includes('${clubFoundersPromo()}'),'promociones están insertadas en feed Social y catálogo Showcase');

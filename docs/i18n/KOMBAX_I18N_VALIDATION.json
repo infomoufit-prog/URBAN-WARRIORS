@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-09-16T09:42:22.675Z",
+  "master_locale": "es",
+  "master_catalog_keys": 1316,
+  "locales": {
+    "es": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "en": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "fr": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "pt": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "it": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "de": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "th": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    },
+    "fil": {
+      "translated_catalog_keys": 1316,
+      "catalog_coverage_percent": 100,
+      "missing_keys": [],
+      "extra_keys": [],
+      "empty_keys": [],
+      "placeholder_mismatches": [],
+      "technical_leaks": []
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "active_translation_references": 808,
+  "missing_active_keys_by_locale": {
+    "es": [],
+    "en": [],
+    "fr": [],
+    "pt": [],
+    "it": [],
+    "de": [],
+    "th": [],
+    "fil": []
+  },
+  "remaining_ui_es_es_hardcodes": []
+}

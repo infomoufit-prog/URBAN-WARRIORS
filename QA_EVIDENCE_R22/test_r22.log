@@ -1,0 +1,33 @@
+PASS first viewport=24
+PASS no 100+120 initial merge
+PASS no auto installer on render
+PASS detail cache
+PASS lazy media observer
+PASS main before undercard
+PASS undercard excludes main
+PASS co-main UI
+PASS 30 fights UI
+PASS 30 album UI and arithmetic
+PASS bundle reader
+PASS R22 mutator v191 first
+PASS backend 30 photos
+PASS backend 30 fights
+PASS co-main backend
+PASS discovery index
+PASS stable non-black placeholder
+PASS keyset RPC
+PASS frontend keyset append
+PASS server-side filters
+PASS bounded page size
+PASS reference photo type
+PASS reference does not duplicate binary
+PASS reference unique active
+PASS reference counts logical album quota
+PASS album reuse UI
+PASS participant edit can add album
+PASS poster/banner edit can add album
+PASS framing editor secondary action
+PASS asset reuse responsive UI
+R22 30/30
+
+EXIT_CODE=0

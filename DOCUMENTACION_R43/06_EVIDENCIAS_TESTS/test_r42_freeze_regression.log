@@ -1,0 +1,25 @@
+PASS 1: plan R42 existe
+PASS 2: changelog R42 existe
+PASS 3: modal explicador ya no fuerza 100vw x 100dvh en móvil
+PASS 4: modal respeta safe area superior
+PASS 5: modal respeta safe area inferior
+PASS 6: modal respeta safe area izquierda
+PASS 7: modal respeta safe area derecha
+PASS 8: contenido del explicador no desborda horizontalmente
+PASS 9: shell del explicador puede encoger dentro del viewport
+PASS 10: títulos largos pueden envolver en móvil
+PASS 11: modal móvil conserva margen visual y esquinas contenidas
+PASS 12: shell resuelve asset estructural desde marca KOMBAX
+PASS 13: shell inyecta fondo estructural KOMBAX
+PASS 14: logo del club se conserva como identidad explícita
+PASS 15: fondo general de herramienta usa KOMBAX
+PASS 16: navegación lateral usa marca de agua KOMBAX
+PASS 17: héroes estructurales usan KOMBAX y no el club como fondo
+PASS 18: branding de club se conserva en contenido explícitamente propio del club
+PASS 19: portada pública del club sigue siendo configurable y no se elimina
+PASS 20: navegación global KOMBAX permanece intacta
+PASS 21: PWA avanza a R42 preservando R40
+PASS 22: service worker avanza a R42 preservando cache R40
+PASS 23: package expone test R42
+PASS 24: regresión completa incorpora R42
+R42 MOBILE SHELL + NEUTRAL BRANDING: PASS 24/24

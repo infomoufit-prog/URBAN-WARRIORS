@@ -4,6 +4,8 @@ import { has } from '../core/permissions.js';
 import { esc, dateFmt, humanError } from '../core/utils.js';
 import { pageHeader, card, table, empty, badge, openForm, confirmDialog, toast, setError, setMainHtml } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
+import { migrationAssistBanner, openMigrationPreparation } from './customer-operations.js';
+import { contentTranslationAttrs } from '../i18n/user-content-translation.js';
 
 const TYPES=[
   ['inscripcion_asociacion','Inscripción asociación'],['contrato_alta','Ficha / contrato de alta'],['autorizacion','Autorización'],
@@ -44,7 +46,7 @@ export async function renderDocuments(){
       const search=`${m.nombre||''} ${m.apellidos||''} ${d.nombre||''} ${typeLabel(d.tipo)} ${d.observaciones||''}`.toLowerCase();
       return `<tr data-doc-row data-search="${esc(search)}" data-status="${esc(d.estado||'vigente')}" data-type="${esc(d.tipo||'otro')}">
         <td><strong>${esc(m.apellidos||'')}, ${esc(m.nombre||'')}</strong></td>
-        <td><strong>${esc(d.nombre)}</strong><br><small>${esc(typeLabel(d.tipo))}</small></td>
+        <td><strong ${contentTranslationAttrs({contentId:d.id,contentType:'document_description',fieldName:'name',sourceLocale:d.source_locale||d.idioma||'',visibility:'private',auto:false})}>${esc(d.nombre)}</strong><br><small>${esc(typeLabel(d.tipo))}</small></td>
         <td>${dateFmt(d.fecha_documento||d.creado_en)}</td>
         <td>${badge(d.firmado?'Firmado':'Pendiente',d.firmado?'ok':'warn')}</td>
         <td>${badge(d.estado||'vigente',statusKind(d.estado||'vigente'))}</td>
@@ -53,10 +55,12 @@ export async function renderDocuments(){
       </tr>`;
     });
     setMainHtml(`${pageHeader('Archivo documental','Expedientes privados de inscripción, contratos, autorizaciones y documentación de alumnos',can?`<a class="btn btn-ghost" href="#archive">Histórico</a><button class="btn btn-primary" id="new-document">${icon('upload',{size:16})} Subir documento</button>`:'','Secretaría · Expedientes')}
+      ${migrationAssistBanner({title:'¿Tienes carpetas, fichas o documentos que migrar?',body:'Sube Excel, CSV, PDF o imágenes a KOMBAX Migrations. La IA asistida organiza el contenido por lotes y te muestra una vista previa antes de importar.'})}
       <div class="metrics"><div class="metric"><span>Documentos</span><strong>${docs.length}</strong><small>expediente digital</small></div><div class="metric"><span>Vigentes</span><strong>${active.length}</strong><small>no archivados</small></div><div class="metric"><span>Firmados</span><strong>${signed}</strong><small>confirmados</small></div><div class="metric"><span>Alumnos</span><strong>${new Set(docs.map(d=>d.socio_id)).size}</strong><small>con documentación</small></div></div>
       <div class="filter-bar"><input id="doc-search" type="search" placeholder="Buscar alumno, documento u observaciones…"><select id="doc-type"><option value="">Todos los tipos</option>${TYPES.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('')}</select><select id="doc-status"><option value="vigente" ${documentStatusFilter==='vigente'?'selected':''}>Vigentes</option><option value="" ${documentStatusFilter===''?'selected':''}>Todos los estados</option><option value="archivado" ${documentStatusFilter==='archivado'?'selected':''}>Archivados</option><option value="sustituido" ${documentStatusFilter==='sustituido'?'selected':''}>Sustituidos</option></select><span class="badge badge-neutral" id="doc-count">${docs.length} archivos</span></div>
       ${card('Expedientes',`${rows.length?table(['Alumno','Documento','Fecha','Firma','Estado','Visibilidad','Acciones'],rows):empty('Archivo vacío','Sube la inscripción física o documentación de un alumno para crear su expediente digital.')}${docs.length>=documentLimit&&documentLimit<500?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-documents">Cargar documentos anteriores</button></div>':''}`)}`);
 
+    document.querySelector('[data-kx-migration-assist]')?.addEventListener('click',openMigrationPreparation);
     const reload=()=>renderDocuments();
     document.getElementById('load-more-documents')?.addEventListener('click',()=>{documentLimit=Math.min(500,documentLimit+60);renderDocuments();});
     const apply=()=>{const q=String(document.getElementById('doc-search')?.value||'').toLowerCase().trim(),t=document.getElementById('doc-type')?.value||'',st=document.getElementById('doc-status')?.value||'';let n=0;document.querySelectorAll('[data-doc-row]').forEach(r=>{const ok=(!q||r.dataset.search.includes(q))&&(!t||r.dataset.type===t)&&(!st||r.dataset.status===st);r.style.display=ok?'':'none';if(ok)n++;});document.getElementById('doc-count').textContent=`${n} archivos`;};

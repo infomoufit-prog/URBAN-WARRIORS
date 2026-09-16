@@ -1,5 +1,5 @@
-import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
-const root=path.resolve(new URL('..',import.meta.url).pathname);
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {fileURLToPath} from 'node:url';
+const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const sql=fs.readFileSync(path.join(root,'supabase/migrations/149_kombax_security_go_live_20084.sql'),'utf8');
 const js=fs.readFileSync(path.join(root,'web/js/core/security-go-live-20084.js'),'utf8');
 const idx=fs.readFileSync(path.join(root,'web/index.html'),'utf8');

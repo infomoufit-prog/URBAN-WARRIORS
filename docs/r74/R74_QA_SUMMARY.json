@@ -1,0 +1,90 @@
+{
+  "release": "R74",
+  "build": 20125,
+  "baseline": "R73 / build 20124",
+  "status": "PILOT_FREEZE_CANDIDATE",
+  "implementation_complete": true,
+  "tests": {
+    "r74": {
+      "passed": 47,
+      "total": 47
+    },
+    "r36": {
+      "passed": 49,
+      "total": 49
+    },
+    "r73": {
+      "passed": 7,
+      "total": 7
+    },
+    "r72_release": {
+      "passed": 22,
+      "total": 22
+    },
+    "r72_commercial": {
+      "passed": 18,
+      "total": 18
+    },
+    "r72_identity": {
+      "passed": 15,
+      "total": 15
+    },
+    "r72_showcase": {
+      "passed": 13,
+      "total": 13
+    },
+    "r72_events": {
+      "passed": 15,
+      "total": 15
+    },
+    "r72_sidebar": {
+      "passed": 9,
+      "total": 9
+    },
+    "r72_reputation_catalog": {
+      "passed": 14,
+      "total": 14
+    },
+    "npm_test_exit": 0,
+    "build_exit": 0
+  },
+  "i18n": {
+    "runtime_copy": "4687/4687",
+    "unresolved": 0,
+    "english_quality": "2180/2180",
+    "enabled_locales": [
+      "en",
+      "es",
+      "fr",
+      "pt",
+      "it",
+      "de",
+      "th",
+      "fil"
+    ]
+  },
+  "parity": {
+    "web_dist_android_files": 450,
+    "status": "PASS"
+  },
+  "supabase": {
+    "r74_migrations_live": 4,
+    "event_connections_existing": 0,
+    "participant_shares_existing": 0,
+    "old_public_event_unique_index": false,
+    "multiclub_unique_index": true,
+    "showcase_duplicate_club_providers": 0,
+    "urban_warriors_clubs": 1,
+    "urban_warriors_showcase_providers": 1,
+    "urban_warriors_active_manager_profiles": 2,
+    "performance_unindexed_fk_before": 219,
+    "performance_unindexed_fk_after": 215,
+    "new_private_rpc_anon_execute": false
+  },
+  "external_release_requirements": [
+    "Android local signing: android/keystore.properties + signing secret are intentionally not packaged.",
+    "Authenticated/device visual smoke remains a manual release step; automated i18n/layout gates pass."
+  ],
+  "deployment_performed": false,
+  "git_push_performed": false
+}

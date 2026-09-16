@@ -1,0 +1,51 @@
+{
+  "version": "KOMBAX_20101_R44_EVENTS_FLOW_STABILIZATION",
+  "base": "R43_ORG_ASSIST_PRIORITY",
+  "status": "PRE_QA_FREEZE_CANDIDATE",
+  "events": {
+    "targeted_test": "PASS 25/25",
+    "root_cause_general_fixed": true,
+    "demo_specific_compatibility_fixed": true,
+    "live_event_data_integrity_read_audited": true,
+    "authenticated_browser_e2e": "PENDING_MANUAL_QA"
+  },
+  "regression": {
+    "npm_test_exit": 0,
+    "r25": "PASS 24/24",
+    "r40": "PASS 74/74",
+    "r42": "PASS 24/24",
+    "r43": "PASS 18/18"
+  },
+  "build": {
+    "npm_run_build_exit": 0,
+    "web_files": 189,
+    "dist_files": 189,
+    "android_web_files": 189,
+    "runtime_differences": 0,
+    "aggregate_sha256": "10f14e4bc87cc0779d3aadfbafaa4496e1a050279fbb5b04681e4bcb60722718"
+  },
+  "backend": {
+    "supabase_source_same_as_r43": true,
+    "supabase_r43_files": 540,
+    "supabase_r44_files": 540,
+    "ddl_or_event_mutation_performed_for_r44": false,
+    "live_events_total": 3,
+    "live_demo_events": 3,
+    "live_non_demo_events": 0,
+    "urban_owned_events": 2
+  },
+  "security": {
+    "secret_pattern_scan": "PASS",
+    "files_scanned": 1596,
+    "findings": 0
+  },
+  "android_release": {
+    "preflight": "4/5",
+    "signing": "PENDING_LOCAL_KEYSTORE_PROPERTIES",
+    "signed_release_ready": false
+  },
+  "deployment": {
+    "netlify_deployed": false,
+    "github_pushed": false
+  }
+}

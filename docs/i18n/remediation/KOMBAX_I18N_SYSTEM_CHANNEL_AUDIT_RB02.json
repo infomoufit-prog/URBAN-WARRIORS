@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-09-16T09:42:22.422Z",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "client errors are localized before render",
+      "status": "PASS"
+    },
+    {
+      "name": "checkout and refunds propagate user_locale",
+      "status": "PASS"
+    },
+    {
+      "name": "Stripe Checkout localizes KOMBAX copy and does not force Spanish",
+      "status": "PASS"
+    },
+    {
+      "name": "refund system reasons are locale-aware",
+      "status": "PASS"
+    },
+    {
+      "name": "push finance and session system copy uses recipient preferred_locale",
+      "status": "PASS"
+    },
+    {
+      "name": "payment reminders, invite email, reports and AI receive locale",
+      "status": "PASS"
+    },
+    {
+      "name": "cron/API transport errors use language-neutral stable codes",
+      "status": "PASS"
+    },
+    {
+      "name": "six Supabase Auth templates support all 8 locales via preferred_locale",
+      "status": "PASS"
+    }
+  ]
+}

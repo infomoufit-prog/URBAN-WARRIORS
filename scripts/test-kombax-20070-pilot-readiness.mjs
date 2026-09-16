@@ -9,7 +9,7 @@ assert.match(migration,/app_kombax_platform_admin_password_complete_v110/);asser
 assert.match(cronFix,/auth\.jwt\(\)->>'role'/);assert.match(cronFix,/grant execute[\s\S]*service_role/);
 assert.match(repos,/app_kombax_platform_profiles_v117/);assert.match(repos,/setVerifier/);assert.match(admin,/Verificación privada/);assert.match(admin,/PREPARACIÓN DE PILOTO/);
 assert.match(app,/installClientTelemetry/);assert.match(telemetry,/\[REDACTED\]/);assert.match(netlify,/Content-Security-Policy/);assert.match(netlify,/Strict-Transport-Security/);
-for(const edge of [notify,pay]){assert.match(edge,/supabase-js@2\.112\.3/);assert.match(edge,/jose@6\.2\.9/);assert.match(edge,/authorizeCronRequest/);assert.match(edge,/Error interno/);assert.doesNotMatch(edge,/suppliedSecret\s*!==\s*expectedSecret/)}
+for(const edge of [notify,pay]){assert.match(edge,/supabase-js@2\.112\.3/);assert.match(edge,/jose@6\.2\.9/);assert.match(edge,/authorizeCronRequest/);assert.match(edge,/(?:Error interno|internal_error)/);assert.doesNotMatch(edge,/suppliedSecret\s*!==\s*expectedSecret/)}
 const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]);assert.ok(currentBuild>=20070);assert.match(index,new RegExp(`v=${currentBuild}`));assert.equal(Number(gradle.match(/versionCode\s+(\d+)/)?.[1]),currentBuild);
 for(const source of [repos,admin,app,telemetry]){assert.doesNotMatch(source,/signInWithOtp|verifyOtp/)}
 console.log('OK build 20070 · permisos privados, readiness, telemetría, headers y cron hardening');

@@ -10,8 +10,8 @@ const [media,repos,ui,sql,rollback,dispatch]=await Promise.all([
   read('supabase/functions/notification-dispatch/index.ts')
 ]);
 
-assert(media.includes('50*1024*1024')&&media.includes('duration>15.2'),'cliente valida 50 MB y 15 segundos');
-assert(media.includes('Math.max(width,height)>1920')&&media.includes('Math.min(width,height)>1080'),'cliente garantiza máximo 1080p en horizontal o vertical');
+assert(media.includes('50*1024*1024')&&(media.includes('duration>15.2')||media.includes('maxDuration=15.2')),'cliente conserva por defecto 50 MB y 15 segundos');
+assert((media.includes('Math.max(width,height)>1920')||media.includes('maxLongEdge=1920'))&&(media.includes('Math.min(width,height)>1080')||media.includes('maxShortEdge=1080')),'cliente conserva por defecto máximo 1080p en horizontal o vertical');
 assert(media.includes("'-portada.webp'")&&media.includes("context.drawImage(video"),'portada automática se extrae del vídeo');
 assert(ui.includes('preload="none"')&&ui.includes('poster='),'feed no precarga vídeo y usa miniatura');
 assert(ui.includes('Portada manual (opcional, solo vídeo)')&&ui.includes('Cambiar portada'),'Gestor/Coordinación puede elegir y cambiar portada');

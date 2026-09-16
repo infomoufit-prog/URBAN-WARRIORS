@@ -3,9 +3,9 @@
 Registro operativo para el piloto controlado. Debe mantenerse vivo y revisarse ante cambios de finalidad, proveedor, escala o categorías de datos.
 
 ## Responsable
-- Titular: BRYAN RIVERA GREY
-- NIF/CIF: 42303973G
-- Domicilio: Calle Ramon Turro 54, piso 1, puerta 2, Palafolls, Barcelona, España
+- Titular: KOMBAX SPAIN
+- NIF/CIF: [PENDIENTE DATOS FISCALES/REGISTRALES DE KOMBAX SPAIN]
+- Domicilio: [PENDIENTE DOMICILIO LEGAL DE KOMBAX SPAIN]
 - Contacto privacidad: privacidad@kombax.es
 - DPO, si procede: No designado en la fase piloto actual. A fecha de esta versión no se aprecia obligación de designación conforme al art. 37 RGPD y al art. 34 LOPDGDD por la escala y naturaleza actuales del tratamiento; esta conclusión se revisará antes de ampliar sustancialmente la escala, el seguimiento sistemático o el tratamiento de categorías especiales.
 

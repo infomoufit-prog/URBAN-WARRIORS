@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-09-15T22:55:00+02:00",
+  "coverage_semantics": "Software/system copy is strict direct i18n in all eight locales. User-authored content preserves the original as source of truth and is universally translatable through derived cached translations, with private content opt-in/requester-scoped.",
+  "master_catalog_keys": 1088,
+  "active_translation_references": 656,
+  "locales": {
+    "es": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "en": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "fr": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "pt": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "it": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "de": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "th": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    },
+    "fil": {
+      "translated_catalog_keys": 1088,
+      "catalog_coverage_percent": 100,
+      "supported": true,
+      "enabled": true,
+      "qa_gate": "STRICT_DIRECT_CATALOG_PASS_ALL8"
+    }
+  },
+  "application_extraction": {
+    "runtime_copy": {
+      "covered": 4715,
+      "audited": 4715,
+      "coverage_percent": 100,
+      "unresolved": 0,
+      "skipped_classified_technical_or_user_fixtures": 366
+    },
+    "english_exact_historical_copy": {
+      "exact_translations": 2180,
+      "audited_sources": 2180,
+      "placeholder_drift": 0,
+      "strong_spanish_residue": 0
+    },
+    "direct_legacy_copy_by_newly_activated_locale": {
+      "fr": {
+        "direct_phrases": 2580,
+        "placeholder_drift": 0
+      },
+      "pt": {
+        "direct_phrases": 2580,
+        "placeholder_drift": 0
+      },
+      "it": {
+        "direct_phrases": 2580,
+        "placeholder_drift": 0
+      },
+      "de": {
+        "direct_phrases": 2580,
+        "placeholder_drift": 0
+      },
+      "th": {
+        "direct_phrases": 2580,
+        "placeholder_drift": 0
+      },
+      "fil": {
+        "direct_phrases": 2580,
+        "placeholder_drift": 0
+      }
+    },
+    "public_legal": {
+      "direct_strings_per_non_spanish_locale": 133,
+      "non_spanish_locales": 7,
+      "status": "PASS"
+    },
+    "public_pages": {
+      "pages": 4,
+      "status": "PASS"
+    },
+    "system_channels": {
+      "passed": 8,
+      "checks": 8,
+      "status": "PASS"
+    },
+    "all8_activation_gate": "PASS",
+    "manual_authenticated_visual_e2e": "PENDING_RELEASE_VALIDATION"
+  },
+  "thai_finance_pdf": {
+    "status": "DIRECT_UNICODE_SUPPORT_IMPLEMENTED_WITH_SAFE_FALLBACK",
+    "font_strategy": "Runtime Noto Sans Thai URL configurable via KOMBAX_THAI_FONT_URL; font binaries are not bundled in the ZIP.",
+    "release_validation": "Validate outbound font fetch or configured font URL in staging/production-like environment. Safe English document fallback remains if the font cannot be loaded."
+  },
+  "user_content": "Preserved in original by design. Future derived translation contract exists but See translation is not live.",
+  "application_wide_status": "ALL8 implementation-complete under automated catalog/runtime/public/system gates; authenticated/manual visual and real external-service QA remains before production release validation.",
+  "dynamic_user_content_translation": {
+    "status": "IMPLEMENTED_NOT_DEPLOYED",
+    "supported_locales": [
+      "es",
+      "en",
+      "fr",
+      "pt",
+      "it",
+      "de",
+      "th",
+      "fil"
+    ],
+    "preserve_original": true,
+    "public_auto_translate_default": true,
+    "manual_view_original": true,
+    "private_auto_translate": false,
+    "cache_invalidation": "SHA-256 source hash",
+    "static_gate": "PASS 15/15",
+    "onboarding_language_selector": "PASS"
+  }
+}

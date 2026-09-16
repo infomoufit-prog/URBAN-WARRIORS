@@ -1,0 +1,7 @@
+KOMBAX 20.101 R7 · GATEWAY ATMOSPHERIC HERO
+BASE: KOMBAX_20101_R6_EVENTS_FILTER_CREATE_FIX_WITH_SIGNING
+STATUS: IMPLEMENTED + FULL REGRESSION PASS + DETERMINISTIC BUILD PASS
+BACKEND: UNCHANGED / NO MIGRATION REQUIRED
+DEPLOY: NOT PERFORMED
+ANDROID SIGNING: LOCAL_RELEASE_SIGNING preserved from base
+NEXT: physical/browser visual QA of gateway crop and motion; then continue premium visual audit/refinement of Events/Social/Showcase without functional rewrites.

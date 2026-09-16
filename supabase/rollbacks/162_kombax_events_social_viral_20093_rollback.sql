@@ -1,0 +1,10 @@
+begin;
+drop function if exists public.app_kombax_eventos_mutate_v162(text,jsonb,uuid);
+drop function if exists public.app_kombax_eventos_social_links_v162(uuid[]);
+drop function if exists public.app_kombax_evento_publico_slug_v162(text);
+drop function if exists public.app_kombax_evento_engagement_v162(uuid);
+drop table if exists public.kombax_evento_social_links;
+drop table if exists public.kombax_evento_interes;
+delete from public.kombax_plan_capacidades where capacidad_clave in ('events.public.engage','events.public.share.social');
+delete from public.kombax_capacidades where clave in ('events.public.engage','events.public.share.social');
+commit;

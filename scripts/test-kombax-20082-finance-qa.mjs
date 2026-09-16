@@ -38,9 +38,9 @@ must(/app_finance_v2_preview_cargo_v144/.test(m144),'regression: mandatory manua
 must(/FINANCE_REPORT_FILE_IMMUTABLE/.test(m145)&&/FINANCE_REPORT_SNAPSHOT_IMMUTABLE/.test(m145),'regression: immutable reports missing');
 must(/values\('finance-reports','finance-reports',false/.test(m145),'regression: finance reports storage must remain private');
 
-must(/app_finance_v2_qa_status_v146/.test(ui)&&/Ejecutar Shadow QA/.test(ui),'UI: QA center/status missing');
+must(/app_finance_v2_qa_status_v146/.test(ui)&&(/Ejecutar Shadow QA/.test(ui)||/Ejecutar comprobación/.test(ui)),'UI: finance verification center/status missing');
 must(/finance\.qa\.shadow\.run/.test(ui)&&/finance\.qa\.aprobar/.test(ui)&&/finance\.qa\.revocar/.test(ui),'UI: QA actions missing');
-must(/Dos Shadow equivalentes/.test(ui)&&/Anomalías bloqueantes/.test(ui),'UI: approval evidence not visible');
+must((/Dos Shadow equivalentes/.test(ui)||/Dos simulaciones coincidentes/.test(ui))&&(/Anomalías bloqueantes/.test(ui)||/Incidencias que impiden activar/.test(ui)),'UI: approval evidence not visible');
 must(!/shadow\s*:\s*false/.test(ui),'UI: 20082 must not expose a non-shadow recurring execution');
 must(!/finance_recurring_enabled[^\n]{0,120}true/.test(ui),'UI: 20082 must not enable recurring mode');
 

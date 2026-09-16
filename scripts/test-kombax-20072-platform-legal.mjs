@@ -16,7 +16,7 @@ if(!backend.includes("platform_legal_required")||!backend.includes("acceptPlatfo
 if(!gateway.includes("showPlatformLegalGate")||!gateway.includes("terms.html")||!gateway.includes("privacy.html"))throw new Error('Alta global/gateway no presenta los documentos KOMBAX.');
 if(!app.includes('renderClubSessionOrLegal')||!app.includes('showPlatformLegalGate'))throw new Error('Las cuentas de club no están protegidas por el gate global.');
 if(!gate.includes('La lectura de la política de privacidad no se utiliza como consentimiento general'))throw new Error('El gate confunde información de privacidad con consentimiento.');
-if(!terms.includes('Versión de condiciones: <strong>1.0.0</strong>'))throw new Error('Falta versión contractual 1.0.0.');
+if(!terms.includes('Versión de condiciones: <strong>1.2.0-piloto</strong>')||!terms.includes('KOMBAX SPAIN'))throw new Error('Falta versión contractual 1.2.0-piloto / KOMBAX SPAIN.');
 if(!releaseGate.includes("'web/terms.html'"))throw new Error('Release gate no inspecciona los Términos globales.');
 if(/Mínimo 6 caracteres/.test(gateway)||/password\|\|''\)\.length<6/.test(gateway))throw new Error('Alta global mantiene mínimo de contraseña inferior a 8.');
 console.log('KOMBAX 20072 platform legal acceptance: PASS');

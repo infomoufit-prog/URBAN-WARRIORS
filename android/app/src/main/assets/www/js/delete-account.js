@@ -1,3 +1,5 @@
+import { getLocale as kxGetLocale } from './i18n/index.js';
+import { localeTag as kxLocaleTag } from './i18n/formatters.js';
 import { backend } from './core/backend.js';
 import { repos } from './core/repositories.js';
 import { state } from './core/state.js';
@@ -8,7 +10,7 @@ const OPEN_STATES=new Set(['requested','in_review','needs_information','confirme
 const CANCELLABLE=new Set(['requested','needs_information']);
 
 const errorText=error=>String(error?.message||error||'No se pudo completar la operación.').replace(/^Error:\s*/,'');
-const date=value=>{try{return new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value));}catch{return String(value||'');}};
+const date=value=>{try{return new Intl.DateTimeFormat(kxLocaleTag(kxGetLocale()),{dateStyle:'medium',timeStyle:'short'}).format(new Date(value));}catch{return String(value||'');}};
 
 function bindLogin(){
   const form=document.getElementById('kx-delete-login-form');

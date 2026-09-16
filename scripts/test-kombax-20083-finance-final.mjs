@@ -7,7 +7,7 @@ for(const s of ['trg_finance_final_gate_sync_v148','private.finance_final_gate_s
 must(/if not p_shadow then[\s\S]*finance_recurring_enabled[\s\S]*finance_qa_shadow_approved[\s\S]*finance_pilot_live_enabled/.test(sql),'real engine is not triple-gated');
 must(/finance\.pilot\.pausar[\s\S]*finance_pilot_live_enabled[\s\S]*finance_recurring_enabled/.test(sql),'pilot pause does not close both gates');
 must(!/update public\.pagos|delete from public\.pagos|update public\.recibos_cuota|delete from public\.recibos_cuota/i.test(sql),'final gate must not rewrite payment/receipt history');
-must(ui.includes('FINAL PILOT GATE'),'final gate status missing in UI');
+must(ui.includes('COMPROBACIÓN DE AUTOMATIZACIONES')||ui.includes('FINAL PILOT GATE'),'final automation safety status missing in UI');
 must(ui.includes('app_finance_pilot_readiness_v148'),'UI readiness read missing');
 must(!ui.includes("backend.mutate('finance.pilot.activar'"),'20.083 UI must not expose one-click real recurrence activation');
 console.log('OK 20083 Finance Premium final pilot gate invariants');

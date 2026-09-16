@@ -64,9 +64,9 @@ No se debe crear una biblioteca paralela de material denunciado ni exportar cont
 - En riesgo inmediato, indicar que se contacte con los servicios de emergencia o autoridades competentes de la jurisdicción del usuario.
 
 ## 8. Contactos operativos
-- Responsable de Seguridad Infantil: BRYAN RIVERA GREY
+- Responsable de Seguridad Infantil: KOMBAX SPAIN
 - Email público de seguridad infantil: childsafety@kombax.es
-- Responsable/Owner de plataforma: BRYAN RIVERA GREY
+- Responsable/Owner de plataforma: KOMBAX SPAIN
 - Canal de seguridad general: seguridad@kombax.es
 - El responsable de Seguridad Infantil mantiene capacidad de respuesta a solicitudes de Google Play sobre Child Safety/CSAM y puede coordinar medidas y comunicaciones externas.
 

@@ -1,0 +1,105 @@
+{
+  "artifact": "KOMBAX 20101 R42 Freeze Candidate",
+  "created_utc": "2026-09-04T22:13:44.151930+00:00",
+  "authoritative_base": "R40",
+  "r41_usage": "delta donor only; not inherited as base",
+  "status": {
+    "code_freeze_candidate": "PASS",
+    "pre_qa": "READY",
+    "real_data_pilot": "HOLD"
+  },
+  "automated_evidence": {
+    "targeted_test": "24/24 PASS",
+    "full_regression": "exit 0 PASS",
+    "r40_inherited_suite": "74/74 PASS",
+    "build": "exit 0 PASS",
+    "runtime_parity": "189 web / 189 dist / 189 android; 0 SHA differences",
+    "android_preflight": "PASS",
+    "backend_immutability": "PASS",
+    "secret_pattern_scan": "910 scanned / 0 findings / PASS"
+  },
+  "live_supabase_mutations_performed": false,
+  "live_security_advisor_evidence": "PENDING - no verifiable advisor output captured into artifact",
+  "evidence_files": [
+    {
+      "path": "PLAN_IMPLEMENTACION_R42.md",
+      "size": 1111,
+      "sha256": "5ab6fff3a1afd0fec860d0f5b82adbf4e8ad6a211ce6d94727bd1b49049a265e"
+    },
+    {
+      "path": "CHANGELOG_20101_R42.md",
+      "size": 525,
+      "sha256": "5e256fba2cb2663e95fbf9c4b6c9bc696ff89da4b401cd214254a0ea8578fa3e"
+    },
+    {
+      "path": "AUDIT_FREEZE_READINESS_20101_R42.md",
+      "size": 4903,
+      "sha256": "b3d523bf4e4e2f52beab8512bf66c5a8a140cd13dc53ff51bf6d232e7c802001"
+    },
+    {
+      "path": "QA_HANDOFF_20101_R42.md",
+      "size": 2385,
+      "sha256": "b37db9003f23416e35122986be748863d6c66b3708143df68ce768a1abe299f8"
+    },
+    {
+      "path": "CYBERSECURITY_HANDOFF_20101_R42.md",
+      "size": 2544,
+      "sha256": "01bd17c361bb22f2369978e4a19a2c655baa6016c05cbc03172c2b8e697245ba"
+    },
+    {
+      "path": "LIVE_ENVIRONMENT_GATE_20101_R42.md",
+      "size": 1128,
+      "sha256": "88fbfa89af28f6281a5529379d485fd13de1e5ac4fe3711559aa59683ebbeec3"
+    },
+    {
+      "path": "FULL_TEST_LOG_20101_R42.txt",
+      "size": 174554,
+      "sha256": "c6eb5c5d31b05ee0cb7115ea78a05fe5c61bf4d3af138542e1af5db137caaea4"
+    },
+    {
+      "path": "BUILD_LOG_20101_R42.txt",
+      "size": 174685,
+      "sha256": "ef4963be7be45adc1d5599607a1acff0bdf770ae0682c6881250725b6e4727b9"
+    },
+    {
+      "path": "ANDROID_PREFLIGHT_20101_R42.txt",
+      "size": 618,
+      "sha256": "49be7ae9d94100ddf32ebc8aa89fd811ef4387a0a45c2a275f7cdfd550156307"
+    },
+    {
+      "path": "PARITY_20101_R42.json",
+      "size": 510,
+      "sha256": "c15ad07a4b2fead38dd01e6299ea50f6e308363fb9a5fbbd680d7f4db21dfec1"
+    },
+    {
+      "path": "BACKEND_IMMUTABILITY_R40_TO_R42.json",
+      "size": 140,
+      "sha256": "5891b53dabe1aabbd36617d3039f4a844dcd6bc65a0e5470e63e73b1579ae170"
+    },
+    {
+      "path": "SECRET_PATH_AUDIT_20101_R42.json",
+      "size": 65,
+      "sha256": "d3c524613423c530eb6169713d186fb676d1cc9b39e63ed35ad70e86e9e08eb9"
+    },
+    {
+      "path": "scripts/test-kombax-20101-r42-freeze-candidate.mjs",
+      "size": 3995,
+      "sha256": "6cbbe9ea742348970805a52fcb217f47f6757fcdb8168b56bf7d2f96e25a9066"
+    },
+    {
+      "path": "web/css/app.css",
+      "size": 157858,
+      "sha256": "378c676bf69896f55365c9909952fbbb393a6d53b920c9cee35f35a88b051815"
+    },
+    {
+      "path": "web/css/kombax-public-overview.css",
+      "size": 20822,
+      "sha256": "df97d6e89b72d181cb2b8105967b319344647f3c0dbf69012f9e09a7e2f3fb56"
+    },
+    {
+      "path": "web/js/ui/components.js",
+      "size": 22022,
+      "sha256": "c3567edfd14ddcb0abe7113751872521e160ba6ef9614b4fc5ae142eda9a9b0b"
+    }
+  ]
+}

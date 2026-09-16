@@ -1,0 +1,1 @@
+begin;drop function if exists public.app_kombax_eventos_mutate_v166(text,jsonb,uuid);drop function if exists public.app_kombax_evento_historial_competidor_v166(uuid,integer);drop function if exists public.app_kombax_evento_publico_slug_v166(text);commit;

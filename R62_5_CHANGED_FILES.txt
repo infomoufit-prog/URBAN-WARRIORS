@@ -1,0 +1,43 @@
+R62.5 CHANGED FILES VS R62.4
+================================
+Changed/new: 33
+New: 7
+Deleted: 0
+
+CHANGED / NEW
+CHANGELOG_R62_5.md
+R62_5_SHOWCASE_EVENTS_TICKETING_QA.md
+R62_5_TEST_CHECKLIST.md
+R62_5_VALIDATION_RESULT.md
+android/app/src/main/assets/www/css/app.css
+android/app/src/main/assets/www/css/kombax-events.css
+android/app/src/main/assets/www/js/app.js
+android/app/src/main/assets/www/js/core/repositories.js
+android/app/src/main/assets/www/js/modules/kombax-events.js
+android/app/src/main/assets/www/js/modules/showcase.js
+dist/css/app.css
+dist/css/kombax-events.css
+dist/js/app.js
+dist/js/core/repositories.js
+dist/js/modules/kombax-events.js
+dist/js/modules/showcase.js
+package.json
+scripts/test-kombax-20063-social-messaging-final.mjs
+scripts/test-kombax-20098-events-large-format.mjs
+scripts/test-kombax-20105-r55-events-media-architecture.mjs
+scripts/test-kombax-20106-r56-profile-public-ux.mjs
+scripts/test-kombax-20110-r62-4-stripe-connect-hardening.mjs
+scripts/test-kombax-20110-r62-5-showcase-events-ticketing.mjs
+supabase/functions/stripe-checkout/index.ts
+supabase/functions/stripe-connect/index.ts
+supabase/migrations/20260910192600_kombax_showcase_orders_events_ticketing_stripe_r62_5.sql
+supabase/verification/verify_r62_5_showcase_events_ticketing.sql
+web/css/app.css
+web/css/kombax-events.css
+web/js/app.js
+web/js/core/repositories.js
+web/js/modules/kombax-events.js
+web/js/modules/showcase.js
+
+DELETED
+(none)

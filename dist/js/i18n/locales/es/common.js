@@ -1,0 +1,112 @@
+export default {
+  "actions": {
+    "save": "Guardar",
+    "saved": "Guardado",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "back": "Volver",
+    "continue": "Continuar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "archive": "Archivar",
+    "restore": "Restaurar",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "install": "Instalar aplicación",
+    "select": "Selecciona",
+    "logout": "Cerrar sesión",
+    "changeClub": "Cambiar club",
+    "retry": "Reintentar"
+  },
+  "states": {
+    "loading": "Cargando…",
+    "starting": "Iniciando KOMBAX…",
+    "empty": "Sin datos",
+    "emptyDescription": "No hay registros para mostrar.",
+    "error": "Error",
+    "warning": "Atención",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "pending": "Pendiente",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "cancelled": "Cancelado",
+    "paid": "Pagado",
+    "unpaid": "No pagado",
+    "refunded": "Reembolsado",
+    "shipped": "Enviado",
+    "delivered": "Entregado",
+    "verified": "Verificado",
+    "unverified": "No verificado",
+    "available": "Disponible",
+    "unavailable": "No disponible",
+    "loadingWallet": "Cargando tu cartera…"
+  },
+  "accessibility": {
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "mainNavigation": "Navegación principal",
+    "mobileNavigation": "Navegación móvil",
+    "profilePhoto": "Foto de perfil",
+    "fullscreenImage": "Imagen a pantalla completa",
+    "fullscreenVideo": "Vídeo a pantalla completa",
+    "back": "Volver",
+    "close": "Cerrar"
+  },
+  "language": {
+    "label": "Idioma",
+    "selector": "Cambiar idioma",
+    "onboardingHint": "Elige tu idioma antes de empezar. Podrás cambiarlo después.",
+    "comingSoon": "Disponible en un próximo bloque de traducción"
+  },
+  "translation": {
+    "seeTranslation": "Ver traducción",
+    "viewOriginal": "Ver original",
+    "translating": "Traduciendo…",
+    "translated": "Traducido",
+    "failed": "No se pudo traducir"
+  },
+  "app": {
+    "technology": "Tecnología KOMBAX",
+    "clubFallback": "Tu club",
+    "activeClub": "Club activo",
+    "communityTagline": "Tu comunidad deportiva",
+    "supportMode": "MODO SOPORTE KOMBAX",
+    "supportAccess": "Acceso administrativo auditado",
+    "exitSupport": "Salir del modo soporte"
+  },
+  "people": {
+    "student": "Alumno"
+  },
+  "media": {
+    "content": "Contenido multimedia",
+    "fullscreenClose": "Cerrar pantalla completa"
+  },
+  "analytics": {
+    "newPeriod": "Nuevo periodo",
+    "period": "Periodo",
+    "period7": "7 días",
+    "period30": "30 días",
+    "periodCurrentMonth": "Este mes",
+    "periodPreviousMonth": "Mes anterior",
+    "periodCustom": "Personalizado",
+    "from": "Desde",
+    "to": "Hasta",
+    "applyPeriod": "Aplicar",
+    "invalidPeriod": "Periodo no válido.",
+    "periodQuarter": "Trimestre",
+    "periodYear": "Año",
+    "days": "días",
+    "histogram": "Histograma",
+    "noData": "Sin datos confirmados para este periodo.",
+    "reports": "Informes",
+    "privateReports": "informes privados",
+    "generatePdf": "Generar PDF",
+    "generating": "Generando…",
+    "reportError": "No se pudo generar el informe.",
+    "reportReady": "Informe listo",
+    "loadError": "No se pudieron cargar las estadísticas."
+  }
+};

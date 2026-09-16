@@ -1,0 +1,24 @@
+KOMBAX 20.101 R18 · URBAN WARRIORS REALISM PASS
+STATUS: IMPLEMENTED + BACKEND LIVE + REGRESSION PASS
+
+URBAN WARRIORS LIVE BACKEND
+- 10 participants
+- 10 unique photo URLs
+- 5 fights
+- 1 Main Event
+- seed idempotency verified
+
+NEW LOCAL ASSETS
+- 10 unique realistic fictional fighter WEBPs
+- packaged in web/dist/android
+- reused as demo album media
+
+QA
+- dedicated realism test PASS
+- full npm run build PASS
+- 162 files · web = dist = Android
+- Supabase security/performance advisors run; historical/global notices remain
+- Android preflight 4/5; signing properties pending locally
+
+NO SIGNED APK GENERATED.
+DEVICE VISUAL ACCEPTANCE STILL REQUIRED AFTER NEW APK/PWA DEPLOY.

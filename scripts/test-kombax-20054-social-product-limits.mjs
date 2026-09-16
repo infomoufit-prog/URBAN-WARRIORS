@@ -12,7 +12,7 @@ const config=read('web/config.js');const gradle=read('android/app/build.gradle')
 ok(social.includes('Cómo funciona KOMBAX Social')&&social.includes('30 publicaciones activas')&&social.includes('3 publicaciones nuevas al día'),'normas visibles en la entrada de KOMBAX Social');
 ok(social.includes('socialQuotaMarkup')&&social.includes('Gestionar publicaciones'),'compositor muestra cupo y acceso a gestión');
 ok(manager.includes('Ver 10 anteriores')&&manager.includes('Ir a la más antigua')&&manager.includes('MÁS ANTIGUA'),'gestión propia: reciente→antigua, 10 por bloque y acceso a la más antigua');
-ok(profile.includes('slice(0,10)')&&profile.includes('Ver publicaciones anteriores')&&profile.includes('profilePosts'),'perfil público muestra 10 y carga anteriores');
+ok(profile.includes('slice(0,5)')&&profile.includes('Ver todas las publicaciones')&&profile.includes('profilePosts'),'perfil público muestra las 5 últimas y permite cargar anteriores');
 ok(profile.includes('kx-public-manage-posts')&&profile.includes('socialQuotaMarkup'),'perfil propio muestra gestión y cupo');
 ok(repos.includes("app_kombax_social_cupo_v099")&&repos.includes("app_kombax_social_profile_posts_v099")&&(repos.includes("app_kombax_social_mutate_v099")||repos.includes("app_kombax_social_mutate_v123")),'repositorios apuntan a RPC v099');
 ok(migration.includes("'active_limit',30")&&migration.includes("'daily_limit',3")&&migration.includes("'video_limit',10"),'backend conserva límites 30/3/10');

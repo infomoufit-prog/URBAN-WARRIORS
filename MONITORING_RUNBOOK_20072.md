@@ -4,7 +4,7 @@
 
 Monitorización mínima para el piloto controlado de **2 clubes**. No sustituye un servicio externo de observabilidad ni una guardia 24/7. El objetivo es detectar con rapidez indisponibilidad, fallos de jobs, errores de Auth/Edge y regresiones críticas sin exponer datos personales.
 
-Responsable operativo primario: **BRYAN RIVERA GREY**  
+Responsable operativo primario: **KOMBAX SPAIN**  
 Canal de seguridad/alerta: **seguridad@kombax.es**  
 Canal general: **soporte@kombax.es**  
 Child Safety: **childsafety@kombax.es**

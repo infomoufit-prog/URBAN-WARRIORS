@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-09-16T09:42:22.230Z",
+  "files": [
+    "web/privacy.html",
+    "web/terms.html",
+    "web/child-safety.html",
+    "web/delete-account.html"
+  ],
+  "audited_spanish_system_strings": 92,
+  "unresolved": 0,
+  "status": "PASS"
+}

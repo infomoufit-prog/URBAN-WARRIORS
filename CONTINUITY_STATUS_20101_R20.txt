@@ -1,0 +1,42 @@
+KOMBAX 20.101 R20 · URBAN WARRIORS MUAY THAI SEMINAR
+=====================================================
+BASE: KOMBAX 20.101 R19 · SHOWCASE URBAN WARRIORS PRODUCTS
+
+IMPLEMENTADO
+- Seminario Pro de Muay Thai · Adrián Serrano en dominio real KOMBAX Events.
+- Urban Warriors como organizador.
+- Adrián Serrano como protagonista demo ficticio.
+- Poster, banner, 2 fotos de álbum y retrato local derivado.
+- 2 publicaciones internas de Comunidad Urban Warriors.
+- Seed idempotente y aislado por club.
+- Resolver frontend de media demo-static en Comunidad.
+- Supresión segura de Fight Card vacío para seminarios sin combates.
+- Migración 186 + verificación + test R20.
+
+VALIDADO
+- Migración R20 aplicada al Supabase principal autorizado.
+- RPC público Events devuelve el evento.
+- Segunda ejecución seed: 1 evento / 1 protagonista / 2 posts / 0 cross-club.
+- Test específico R20 PASS.
+- Regresión completa npm test PASS.
+- npm run build PASS.
+- Paridad: 170 web = 170 dist = 170 Android.
+- Security Advisor ejecutado; warnings históricos/globales permanecen.
+- Performance Advisor ejecutado; warnings históricos/globales permanecen.
+
+PENDIENTE
+- Deploy frontend R20 a Netlify/GitHub (no realizado sin autorización explícita de deploy).
+- Validación visual física del evento y Comunidad en deployment R20.
+- APK/AAB Signed R20 y prueba de instalación física.
+- android/keystore.properties debe restaurarse localmente para firmar.
+
+NO MODIFICADO
+- Finanzas.
+- Auth.
+- Showcase R19 y sus 3 productos.
+- Social público general.
+- versionCode/versionName Android.
+- Keystore/passwords.
+
+NOTA OPERATIVA
+El backend R20 ya contiene el evento y los dos posts. Sus imágenes son assets locales de la build R20; el deployment R19 actual no contiene esos nuevos assets ni el resolver demo-static de Comunidad. No declarar visibilidad gráfica completa en producción hasta desplegar el frontend R20.

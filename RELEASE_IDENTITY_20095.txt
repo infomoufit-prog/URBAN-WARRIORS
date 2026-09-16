@@ -1,0 +1,12 @@
+KOMBAX RC13 BUILD 20.095
+Name: INTEGRATION_HARDENING_FINAL_CANDIDATE
+Web build: 20095
+Android versionCode: 20095
+Service Worker cache: 20095
+Local health source: 20095 STAGED / NOT DEPLOYED
+Production health at packaging: v14 / build 20094
+Event media signer: event-media-url v1 ACTIVE
+Spectator: DISABLED pending age/privacy gate
+Public Events and Mi Club Events: SEPARATE DOMAINS
+Netlify deploy: NOT EXECUTED
+APK/AAB signing: NOT EXECUTED

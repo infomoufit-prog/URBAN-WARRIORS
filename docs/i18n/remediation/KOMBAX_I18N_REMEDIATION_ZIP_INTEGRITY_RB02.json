@@ -1,0 +1,34 @@
+{
+  "project": "KOMBAX",
+  "artifact": "I18N REMEDIATION B02 R06-10",
+  "generated_at": "2026-09-15T19:20:00+02:00",
+  "source_base": "I18N REMEDIATION B01 R01-05",
+  "complete_project_tree": true,
+  "required_files_checked": [
+    "docs/i18n/KOMBAX_I18N_HANDOFF.json",
+    "docs/i18n/KOMBAX_I18N_TRANSLATION_COVERAGE.json",
+    "docs/i18n/remediation/KOMBAX_I18N_REMEDIATION_HANDOFF.json",
+    "docs/i18n/remediation/KOMBAX_I18N_REMEDIATION_RELEASE_REPORT_RB02.md",
+    "docs/i18n/remediation/KOMBAX_I18N_RUNTIME_COPY_AUDIT_RB02.json",
+    "docs/i18n/remediation/KOMBAX_I18N_SYSTEM_CHANNEL_AUDIT_RB02.json",
+    "web/js/i18n/legacy-copy-en-rb02-exact.js",
+    "web/manifest-en.webmanifest",
+    "supabase/auth_templates/confirmation_20124_i18n.html"
+  ],
+  "missing_required_files": [],
+  "qa": {
+    "npm_test": "PASS",
+    "build": "PASS 417 web=dist=Android",
+    "legal_gate": "PASS",
+    "android_preflight": "PARTIAL 4/5 local signing only"
+  },
+  "english_gates": {
+    "catalog": "1077/1077",
+    "runtime_copy": "4715/4715; 0 unresolved",
+    "exact_copy": "2180/2180",
+    "public_surfaces": "92/92",
+    "system_channels": "8/8"
+  },
+  "archive_sha256": "recorded in external .zip.sha256 sidecar after final packaging to avoid self-referential archive hash",
+  "status": "READY_TO_PACKAGE"
+}

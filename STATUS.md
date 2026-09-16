@@ -1,43 +1,30 @@
-# STATUS · KOMBAX 20.063 · SOCIAL MESSAGING FINAL QA
+# R40 · SOCIAL / EVENTS VISIBILITY + MIGRATIONS PILOT UX
 
-Candidata actual de validación: **build 20063**.
+R40 es la base candidata de continuidad para el piloto. Añade Mi red accionable, audiencias Social con inclusión/exclusión de clubes, visibilidad avanzada de KOMBAX Events y promoción contextual adicional de KOMBAX Migrations. Brand Business Hub R37 ha sido auditado y preservado. Backend R40 live: migraciones 20260904172146 y 20260904172248. Full test/build local: PASS. Android: 4/5, firma local pendiente.
 
-## Implementado
+# R39 · CLUB NAVIGATION + MIGRATIONS PILOT UX
 
-- Chat Social simplificado: X conserva; `Cerrar chat` eliminado; eliminación explícita.
-- Comentarios inline.
-- `Mi red` como terminología pública y red privada.
-- Mensajes KOMBAX con badge/acceso separado.
-- Bandeja Social/Showcase con diferenciación visual.
-- Contexto de producto preparado para conversaciones Showcase.
-- CTA de contacto desde Showcase.
-- Contact Gate frontend 10–500.
-- Fallback de contratos para mantener Social compatible mientras backend 107 no esté activo.
+R39 es la base actual de continuidad para pruebas locales. La navegación global KOMBAX se preserva; la reorganización afecta exclusivamente a Mi Club.
 
-## Evidencia
+# KOMBAX · STATUS
 
-- `npm test`: PASS.
-- `npm run build`: PASS.
-- web/dist/Android: 66/66/66, 0 diferencias SHA-256.
-- Android versionCode: 20063.
-- Android preflight: 4/5; solo firma local pendiente.
-- Secret files de firma dentro del paquete: 0.
+## Base de continuidad actual
+**20.101 R40 · SOCIAL / EVENTS VISIBILITY + MIGRATIONS PILOT UX**
 
-## Producción
+- Mi red accionable con CTA visible para añadir conexiones.
+- Social con audiencia por red/club/federación/clubes seleccionados y exclusiones de clubes.
+- Events con visibilidad avanzada independiente de la política de publicación R36.
+- KOMBAX Migrations promocionado de forma contextual en Mi Club.
+- Brand Business Hub R37 auditado y preservado.
+- Backend R40 aplicado en Supabase live.
+- R40 targeted QA: PASS 74/74.
+- Regresión R39→R32: PASS.
+- Full regression/build: exit 0.
+- Build/paridad: 189 archivos · web = dist = Android · 0 diferencias.
+- Android preflight: 4/5; falta únicamente la configuración de firma local/JKS autorizada.
+- No Netlify deploy, GitHub push, Google Play publish ni APK/AAB firmado en este cierre.
 
-- **Netlify 20063 no desplegado**; mantener 20062 durante QA móvil.
-- Migración Supabase 107: preparada y preflight live correcto, **no aplicada live todavía**.
+Consultar `CONTINUITY_STATUS_20101_R40.md`, `AUDIT_VERIFICATION_20101_R40.md` y `QA_VALIDATION_20101_R40.md`.
 
-## Release
-
-**CANDIDATA DE VALIDACIÓN MÓVIL · NO FREEZE.**
-
-Siguiente paso operativo: generar APK signed 20063 localmente con el JKS existente, validar Social; activar 107 de forma controlada para validar Showcase por producto; revalidar 20062 web; solo entonces congelar/desplegar 20063 y generar AAB para Google Play.
-
-## RC13 build 20065 · Role Invitations + Team Filter QA
-- Team listado con roles operativos únicamente; Alumno/Familia excluidos.
-- Invitaciones de alumnos/familias compartibles.
-- Invitaciones de equipo con rol solicitado y aprobación posterior.
-- Supabase 109 aplicado/verificado; 108 sigue pendiente.
-- npm test/build PASS; web=dist=Android (68 archivos).
-- APK signed y Netlify pendientes de validación móvil.
+## 2026-09-06 · R57 build 20107
+QA FREEZE CANDIDATE. Cambio frontend Social: identidad/normas extensas movidas a panel de información. `npm test` PASS; `release:build` PASS; Web/Dist/Android 191/191/191 sin diferencias. APK físico pendiente por acceso Gradle del sandbox. Google Play preflight 4/5 por firma local.

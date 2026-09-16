@@ -135,12 +135,12 @@ assert.ok(sql126.includes('app_kombax_codigo_validar_v060')&&sql126.includes('fr
 
 // Recursos públicos de cumplimiento y gate de publicación.
 assert.match(privacyPage,/Política de Privacidad/);
-assert.match(privacyPage,/BRYAN RIVERA GREY/);
-assert.match(privacyPage,/42303973G/);
+assert.match(privacyPage,/KOMBAX SPAIN/);
+assert.match(privacyPage,/Datos fiscales y registrales/);
 assert.match(privacyPage,/privacidad@kombax\.es/);
 assert.doesNotMatch(privacyPage,/\[\[KOMBAX_/);
 assert.match(childSafetyPage,/tolerancia cero/i);
-assert.match(childSafetyPage,/BRYAN RIVERA GREY/);
+assert.match(childSafetyPage,/KOMBAX SPAIN/);
 assert.match(childSafetyPage,/childsafety@kombax\.es/);
 assert.doesNotMatch(childSafetyPage,/KOMBAX_CHILD_SAFETY_CONTACT_EMAIL/);
 assert.match(netlify,/from = "\/privacy"/);

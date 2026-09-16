@@ -1,0 +1,41 @@
+KOMBAX 20.101 R14 · EVENT CREATOR COMPLETE
+BASE: R13 Mobile + Events Fight Cards
+STATUS: IMPLEMENTADO + BACKEND REAL APLICADO + REGRESIÓN PASS + LISTO PARA VALIDACIÓN LOCAL/APK
+
+IMPLEMENTADO
+- Constructor de evento de 6 etapas.
+- Ficha / portada / organización / participantes+fotos / Fight Card+horarios / álbum+multimedia.
+- Crear evento continúa al constructor.
+- Participante externo editable con reemplazo posterior de foto.
+- Fight Card gestionable con emparejamiento, orden, hora y tatami/ring.
+- Álbum visible al organizador aunque esté vacío: Álbum · 0.
+- CTA directo para subir fotos/vídeos.
+- Asociación opcional media -> combate.
+- Asociación opcional media -> Competidor KOMBAX.
+- Cuota existente 15 fotos / 5 vídeos y límites vídeo conservados.
+
+SUPABASE REAL
+- Migración 181 aplicada a poggsobhtutbuagjiydc.
+- RPC v181 activo.
+- anon EXECUTE false.
+- authenticated EXECUTE true + guard workspace v171.
+- Advisors seguridad/rendimiento ejecutados.
+
+REGRESIÓN
+- test R14 PASS.
+- npm run build PASS.
+- 152 archivos · web = dist = Android.
+
+ANDROID
+- JKS preservado, SHA256 7c70adc0d8e7b9426990d86a3f4743e2794e391f725dd708082e48264183a415.
+- Preflight 4/5: solo falta restaurar android/keystore.properties local con secretos.
+- NO se incluye contraseña ni keystore.properties en el ZIP.
+
+EVENTOS ACTUALES EN SUPABASE
+- Noche de Impacto: 12 participantes / 6 combates / álbum 0.
+- Urban Warriors Jiu-Jitsu: 12 participantes / 6 combates / álbum 0.
+
+FUERA DE R14
+- brackets/árboles
+- card_role estructural Main/Co-Main/Featured
+- drag & drop avanzado de programación

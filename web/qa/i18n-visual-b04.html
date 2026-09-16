@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>KOMBAX i18n visual QA B04</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;background:#0b0d12;color:#f4f6fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai","Noto Sans",sans-serif;line-height:1.45}
+    main{max-width:1180px;margin:auto;padding:max(16px,env(safe-area-inset-top)) 16px max(22px,env(safe-area-inset-bottom))}
+    h1{font-size:clamp(24px,4vw,42px);margin:0 0 8px}.muted{color:#aab1c0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}.card{border:1px solid #2d3340;border-radius:16px;background:#121722;padding:16px;min-width:0}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{appearance:none;border:1px solid #46506a;border-radius:10px;background:#1a2231;color:inherit;padding:10px 12px;max-width:100%;white-space:normal;overflow-wrap:anywhere}.input{width:100%;min-height:44px;border:1px solid #46506a;border-radius:10px;background:#0d111a;color:inherit;padding:10px 12px}.pill{display:inline-flex;border-radius:999px;border:1px solid #46506a;padding:6px 10px;max-width:100%;white-space:normal}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px}.tab{flex:0 0 auto;max-width:70vw}.tableWrap{overflow-x:auto}.table{width:100%;min-width:520px;border-collapse:collapse}.table th,.table td{border-bottom:1px solid #2d3340;text-align:left;padding:10px}.stress{font-size:clamp(16px,2vw,22px);overflow-wrap:anywhere}.bad-overflow{outline:3px solid #ff3b57!important} [lang="th"] body{line-height:1.65} [lang="th"] .btn,[lang="th"] .input,[lang="th"] .pill{line-height:1.55}
+    @media(max-width:600px){main{padding-left:12px;padding-right:12px}.card{padding:13px}.table{min-width:460px}}
+  </style>
+</head>
+<body>
+<main id="app" data-overflow-count="pending" data-font-ready="pending"></main>
+<script type="module">
+import {setLocale,getLocale,t,formatDate,formatCurrency,formatPercent} from '../js/i18n/index.js';
+const qs=new URLSearchParams(location.search); const requested=qs.get('locale')||'es'; setLocale(requested,{allowSupported:true,persist:false}); const locale=getLocale();
+const text=(k,v={})=>t(k,v,locale);
+const sections=[
+  ['Social',['social.hero.headline','social.hero.body','social.actions.addNetwork','social.actions.searchContacts','social.safety.moderation']],
+  ['Showcase',['showcase.page.title','showcase.page.subtitle','showcase.actions.contactSeller','showcase.labels.verifiedPurchase','showcase.labels.recentReviews']],
+  ['Events / Ticketing',['events.title','events.actions.share','ticketing.detail.ticketNumber','ticketing.detail.entryCode','ticketing.actions.buyTicket']],
+  ['Assist / Migrations',['assist.title','assist.subtitle','migrations.title','migrations.subtitle','common.actions.continue']],
+  ['Legal / Settings',['legal.title','legal.metadata.jurisdiction','settings.language.title','common.language.selector','common.actions.save']]
+];
+const app=document.querySelector('#app');
+app.innerHTML=`<h1>KOMBAX · i18n QA <span class="pill">${locale}</span></h1><p class="muted stress">${text('common.app.communityTagline')}</p>
+<div class="grid">${sections.map(([name,keys])=>`<section class="card"><h2>${name}</h2>${keys.map(k=>`<p class="stress" data-key="${k}">${text(k)}</p>`).join('')}<div class="row"><button class="btn">${text('common.actions.save')}</button><button class="btn">${text('common.actions.cancel')}</button><button class="btn">${text('common.actions.continue')}</button></div></section>`).join('')}</div>
+<section class="card" style="margin-top:12px"><div class="tabs"><button class="btn tab">${text('social.tabs.feed')}</button><button class="btn tab">${text('social.tabs.discover')}</button><button class="btn tab">${text('navigation.routes.myShowcase')}</button><button class="btn tab">${text('navigation.routes.myEvents')}</button></div><p><input class="input" aria-label="${text('common.actions.search')}" placeholder="${text('common.actions.search')}" /></p></section>
+<section class="card tableWrap" style="margin-top:12px"><table class="table"><thead><tr><th>${text('common.states.pending')}</th><th>${text('common.states.verified')}</th><th>${text('common.states.delivered')}</th></tr></thead><tbody><tr><td>${formatDate(new Date('2026-09-15T12:00:00Z'))}</td><td>${formatCurrency(1234.56,{currency:'EUR'})}</td><td>${formatPercent(.875)}</td></tr></tbody></table></section>`;
+document.documentElement.lang=locale;
+await document.fonts.ready;
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  const els=[...document.querySelectorAll('main *,body')]; let count=0;
+  for(const el of els){if(el.classList.contains('tableWrap')||el.classList.contains('tabs'))continue; const dx=el.scrollWidth-el.clientWidth; const dy=el.scrollHeight-el.clientHeight; if(dx>2 || dy>2){el.classList.add('bad-overflow');count++;}}
+  app.dataset.overflowCount=String(count); app.dataset.fontReady=String(document.fonts.status==='loaded'); app.dataset.locale=locale; document.title=`KOMBAX QA ${locale} overflow=${count}`;
+}));
+</script>
+</body>
+</html>

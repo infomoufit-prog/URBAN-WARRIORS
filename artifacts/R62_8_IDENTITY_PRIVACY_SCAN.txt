@@ -1,0 +1,5 @@
+KOMBAX R62.8 IDENTITY / PRIVACY FINAL SCAN
+Expected public operator: KOMBAX SPAIN
+Incorrect prior operator labels: 0 expected
+incorrect_operator_files=0
+former_personal_operator_files_in_legal_runtime=0

@@ -33,7 +33,7 @@ need(social.includes('Público es la opción predeterminada.'),'UI no explica au
 need(social.includes('data-social-profile-open'),'autores no son navegables al perfil público');
 need(social.includes('kx-saved-author'),'Guardados no permite abrir autor');
 need(social.includes("p.audiencia==='publica'?"),'publicaciones restringidas aún permiten compartir externamente');
-need(profile.includes("audiencia_label||'Público'"),'perfil no muestra alcance de publicación');
+need(!profile.includes("audiencia_label||'Público'")&&repo.includes('app_kombax_social_profile_posts_v256'),'perfil público mantiene privacidad del alcance y usa proyección redacted v256');
 need(!club.includes("name:'visible',label:'Mostrar este perfil"),'el club conserva opción de perfil privado');
 need(repo.includes('portada_url:p.portada_url||\'\',visible:true'), 'guardado de Club no fuerza perfil público');
 need(css.includes('.kx-public-banner{object-fit:cover!important'),'banner Social no usa cover');

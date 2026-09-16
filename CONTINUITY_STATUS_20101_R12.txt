@@ -1,0 +1,18 @@
+KOMBAX 20.101 R12 · GATEWAY REFRAME FINAL
+BASE: 20.101 R11 Real Alpha Smoke
+STATUS: IMPLEMENTED + TESTED + BUILT
+
+NEW:
+- Gateway hero image reframed/rescaled without replacing the approved artwork.
+- Gateway added smoke reduced because the artwork already carries atmosphere.
+- Desktop/tablet/mobile crop tuned.
+- Cache bust raised to 20101r12 / media-r12.
+- Dedicated R12 gateway regression test added.
+
+REGRESSION:
+- node scripts/test-kombax-20101-gateway-reframe-r12.mjs PASS
+- npm run build PASS
+- build PASS · web = dist = Android
+
+IMPORTANT:
+If an older local/PWA session still shows the previous gateway composition, do one hard refresh or reinstall once so the R12 static assets replace cached files.

@@ -1,0 +1,19 @@
+KOMBAX 20.101 R15 · RESPONSIVE VISUAL TUNING
+BASE: 20.101 R14 Event Creator Complete
+STATUS: IMPLEMENTED + TESTED + BUILT
+
+NEW
+- Gateway mobile/tablet/landscape reframing refined.
+- Social / Events / Showcase receive explicit tablet/mobile/landscape crop rules.
+- Mobile zoom perception reduced.
+- No backend changes.
+
+REGRESSION
+- R15 responsive test PASS
+- npm run build PASS
+- web = dist = Android
+
+READY
+- Local validation
+- PWA validation
+- Android APK Signed generation

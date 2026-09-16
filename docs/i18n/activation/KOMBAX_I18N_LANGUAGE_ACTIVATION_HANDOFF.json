@@ -1,0 +1,151 @@
+{
+  "project": "KOMBAX",
+  "project_area": "i18n_all8_activation",
+  "status": "implementation_complete_automated_gates_pass_manual_release_qa_pending",
+  "source_version": "KOMBAX 20124 R73 I18N REMEDIATION B02 R06-10",
+  "source_zip_sha256": "529ced2c51f701920e893c1cf509d6bdf2dd98e6e837d02aab11a1b4ba64dd45",
+  "output_version": "KOMBAX 20124 R73 I18N ALL8 ACTIVATED FINAL",
+  "completed_at": "2026-09-15T22:05:41+02:00",
+  "supported_locales": [
+    "es",
+    "en",
+    "fr",
+    "pt",
+    "it",
+    "de",
+    "th",
+    "fil"
+  ],
+  "enabled_locales": [
+    "es",
+    "en",
+    "fr",
+    "pt",
+    "it",
+    "de",
+    "th",
+    "fil"
+  ],
+  "master_locale": "es",
+  "fallback_order": [
+    "selected_locale",
+    "en",
+    "es"
+  ],
+  "direct_catalog": {
+    "es": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "en": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "fr": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "pt": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "it": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "de": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "th": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    },
+    "fil": {
+      "keys": 1077,
+      "coverage_percent": 100,
+      "strict": true
+    }
+  },
+  "legacy_runtime": {
+    "fr": 2580,
+    "pt": 2580,
+    "it": 2580,
+    "de": 2580,
+    "th": 2580,
+    "fil": 2580,
+    "english_exact_audited_phrases": 2180,
+    "english_auto_fallback_for_new_active_locales": false
+  },
+  "public_legal": {
+    "direct_strings_per_non_spanish_locale": 133,
+    "locales": [
+      "en",
+      "fr",
+      "pt",
+      "it",
+      "de",
+      "th",
+      "fil"
+    ],
+    "status": "PASS"
+  },
+  "public_pages": {
+    "pages": 4,
+    "status": "PASS"
+  },
+  "auth_templates": {
+    "templates": 6,
+    "locales": 8,
+    "status": "PASS"
+  },
+  "pwa_manifests": {
+    "locales": 8,
+    "status": "PASS"
+  },
+  "system_channels": {
+    "checks": 8,
+    "passed": 8,
+    "status": "PASS"
+  },
+  "thai_finance_pdf": {
+    "status": "direct_unicode_support_implemented_with_safe_fallback",
+    "bundled_font_binary": false,
+    "deployment_validation": "required for remote/configured font reachability"
+  },
+  "automated_qa": {
+    "npm_test": "PASS",
+    "all8_activation_gate": "PASS",
+    "build": "PASS 449 files; web = dist = Android",
+    "legal_gate": "PASS",
+    "android_preflight": "PARTIAL 4/5 local signing external"
+  },
+  "user_content_policy": "Original user-authored content is preserved; no automatic overwrite/translation.",
+  "known_release_gates": [
+    "Authenticated/manual visual and end-to-end QA across real identities, desktop/mobile/PWA/Android is still required before production release validation, with special attention to FR/DE long strings and TH rendering.",
+    "Android release preflight remains 4/5 because android/keystore.properties is intentionally external to the portable ZIP.",
+    "Thai dynamic finance PDF direct Unicode rendering depends on runtime access to the configured Noto Sans Thai font URL; a safe English document fallback remains if the font cannot be loaded.",
+    "Prepared Supabase i18n migrations are included but were not automatically deployed; live RLS/RPC behavior must be reviewed in the authorized environment."
+  ],
+  "next_actions": [
+    "Run authenticated/manual QA for all 8 active locales using representative roles and real navigation paths, including PWA/Android.",
+    "Validate real Stripe Checkout/refund, Auth email, push, Assist/Migrations and generated-document flows in authorized staging/production-like environments for each locale.",
+    "Validate Thai finance PDF runtime font reachability or configure KOMBAX_THAI_FONT_URL in the deployment environment.",
+    "Provide local Android signing configuration and build signed APK/AAB outside the portable ZIP.",
+    "Deploy prepared Supabase i18n migrations only through the approved deployment process after live RLS/RPC review."
+  ],
+  "delta_vs_rb02": {
+    "base_files": 3865,
+    "current_files": 3976,
+    "added": 111,
+    "modified": 63,
+    "deleted": 0
+  }
+}

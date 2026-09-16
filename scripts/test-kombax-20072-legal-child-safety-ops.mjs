@@ -29,7 +29,7 @@ assert.match(privacy,/Prestación y mantenimiento del servicio/);
 assert.match(privacy,/Seguridad y prevención del abuso/);
 assert.match(privacy,/Supabase/);
 assert.match(privacy,/Firebase Cloud Messaging/);
-assert.match(privacy,/BRYAN RIVERA GREY/);
+assert.match(privacy,/KOMBAX SPAIN/);
 assert.match(privacy,/privacidad@kombax\.es/);
 assert.match(privacy,/contraseña reciente/);
 assert.doesNotMatch(privacy,/\[\[KOMBAX_/);

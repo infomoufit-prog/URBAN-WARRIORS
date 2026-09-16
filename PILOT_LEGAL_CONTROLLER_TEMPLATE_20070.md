@@ -4,9 +4,9 @@ Estado build 20077: **DATOS DEL TITULAR COMPLETADOS PARA PILOTO**. El gate contr
 
 ## Responsable del tratamiento
 
-- Denominación legal / titular: `BRYAN RIVERA GREY`
-- NIF: `42303973G`
-- Domicilio: `Calle Ramon Turro 54, piso 1, puerta 2, Palafolls, Barcelona, España`
+- Denominación legal / titular: `KOMBAX SPAIN`
+- NIF: `[PENDIENTE DATOS FISCALES/REGISTRALES DE KOMBAX SPAIN]`
+- Domicilio: `[PENDIENTE DOMICILIO LEGAL DE KOMBAX SPAIN]`
 - Correo de privacidad: `privacidad@kombax.es`
 - Contacto general: `soporte@kombax.es`
 - Seguridad: `seguridad@kombax.es`

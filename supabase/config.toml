@@ -3,3 +3,21 @@ verify_jwt = false
 
 [functions.payment-reminders]
 verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.stripe-connect]
+verify_jwt = true
+
+[functions.stripe-checkout]
+verify_jwt = true
+
+[functions.stripe-refund]
+verify_jwt = true
+
+[functions.stripe-account-finance]
+verify_jwt = true
+
+[functions.kombax-content-translate]
+verify_jwt = true

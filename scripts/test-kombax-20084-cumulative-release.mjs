@@ -1,5 +1,5 @@
-import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
-const root=path.resolve(new URL('..',import.meta.url).pathname);
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {fileURLToPath} from 'node:url';
+const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 for(const n of [143,144,145,146,147,148,149]){const files=fs.readdirSync(path.join(root,'supabase/migrations')).filter(f=>f.startsWith(`${n}_`));assert.equal(files.length,1,`migration ${n}`);}
 const idx=fs.readFileSync(path.join(root,'web/index.html'),'utf8');
 const sw=fs.readFileSync(path.join(root,'web/service-worker.js'),'utf8');

@@ -1,0 +1,12 @@
+KOMBAX 20.101 R50 · PACKAGE SMOKE
+
+Candidate ZIP clean extraction:
+- ZIP integrity: PASS
+- R50 focused: 40/40 PASS
+- npm test: EXIT 0
+- build: PASS (189 web = 189 dist = 189 Android)
+- runtime parity: 0 missing / 0 extra / 0 hash differences
+- runtime aggregate SHA-256: b48dcfa67c4acb30a1bcf01d891df98c668861c07e18af0231df12ce40d68b4d
+- active runtime naming: 0 occurrences of legacy "Combat Social" / "Combat Events"
+
+The final ZIP is regenerated after embedding this smoke evidence and is tested again from a fresh extraction before delivery.

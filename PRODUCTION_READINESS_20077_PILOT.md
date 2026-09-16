@@ -20,7 +20,7 @@ No se ha encontrado un P0 de seguridad o integridad en el candidato local ni en 
 
 Implementado y verificado:
 
-- responsable: BRYAN RIVERA GREY, NIF 42303973G;
+- responsable: KOMBAX SPAIN, NIF [PENDIENTE DATOS FISCALES/REGISTRALES DE KOMBAX SPAIN];
 - domicilio legal facilitado incorporado;
 - canales `soporte@kombax.es`, `privacidad@kombax.es`, `childsafety@kombax.es`, `seguridad@kombax.es` y `auth@kombax.es` documentados;
 - política de privacidad, términos, estándar Child Safety, runbook Child Safety, registro de tratamientos y gate legal actualizados;

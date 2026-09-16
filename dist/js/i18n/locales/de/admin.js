@@ -1,0 +1,53 @@
+export default {
+  "title": "KOMBAX Verwaltung",
+  "team": "Team",
+  "permissions": "Team und Berechtigungen",
+  "archive": "Archiv und Papierkorb",
+  "common": {
+    "loading": "Verwaltung wird geladen…",
+    "platform": "Plattformverwaltung",
+    "search": "Suchen",
+    "status": "Status",
+    "actions": "Aktionen",
+    "users": "Benutzer",
+    "clubs": "Clubs",
+    "review": "Prüfen",
+    "save": "Änderungen speichern"
+  },
+  "roles": {
+    "direction": "App-Verwaltung",
+    "coordination": "Koordination",
+    "secretariat": "Sekretariat",
+    "treasury": "Finanzen / Kasse",
+    "communications": "Kommunikation",
+    "coach": "Trainer",
+    "family": "Familie",
+    "student": "Schüler"
+  },
+  "dashboard": {
+    "loading": "Dashboard wird vorbereitet…",
+    "managerKicker": "App-Verwaltung · Gesamtübersicht",
+    "managerTitle": "Dein gesamtes Gym in einer App.",
+    "activeMembers": "Aktive Mitglieder",
+    "activeStudents": "Aktive Schüler",
+    "preRegistrations": "Voranmeldungen",
+    "pendingReview": "zur Prüfung",
+    "activeGroups": "aktive Gruppen",
+    "pendingActions": "Offene Aufgaben",
+    "feesNeedFollowUp": "Beiträge benötigen Nachverfolgung",
+    "open": "Öffnen",
+    "unassignedCoach": "Kein Trainer zugewiesen",
+    "noActiveGroups": "Keine aktiven Gruppen",
+    "noUpcomingSessions": "Keine anstehenden Termine",
+    "configure": "Konfigurieren",
+    "takeAttendance": "Anwesenheit erfassen",
+    "manageStudents": "Schüler verwalten",
+    "pendingPreRegistrations": "Offene Voranmeldungen",
+    "requestsToReview": "{{count}} Anfragen zur Prüfung",
+    "activeRecords": "{{count}} aktive Datensätze",
+    "overdueFees": "Überfällige Beiträge",
+    "averageOccupancy": "Durchschnittliche Auslastung",
+    "classesOccupancy": "Kurse und Auslastung",
+    "upcomingSessions": "Nächste Termine"
+  }
+};

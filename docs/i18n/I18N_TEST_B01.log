@@ -1,0 +1,25 @@
+✓ 8 supported locales
+✓ Block 1 only enables Spanish
+✓ fallback order selected > en > es
+✓ regional locale normalizes without architecture rewrite
+✓ Spanish master translation works
+✓ interpolation works
+✓ supported untranslated locale falls back to Spanish in B01
+✓ missing key never leaks technical key or undefined/null markers
+✓ central formatter accepts currency independent from language
+✓ locale es architecture exists
+✓ locale en architecture exists
+✓ locale fr architecture exists
+✓ locale pt architecture exists
+✓ locale it architecture exists
+✓ locale de architecture exists
+✓ locale th architecture exists
+✓ locale fil architecture exists
+✓ master namespace files are split
+✓ account locale migration is additive and authenticated
+✓ language selector exposes supported locales but gates activation
+✓ R73 product identity is preserved
+✓ technical routes are not translated
+✓ inventory and permanent handoff directory exist
+
+KOMBAX I18N B01: 23/23 passed

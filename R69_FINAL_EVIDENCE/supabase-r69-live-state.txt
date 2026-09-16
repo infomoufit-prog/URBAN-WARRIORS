@@ -1,0 +1,10 @@
+KOMBAX R69 live Supabase verification
+Project: poggsobhtutbuagjiydc
+Migration: 20260914083811_kombax_r69_event_center_operations
+RPC: public.app_kombax_event_center_list_r69(integer)
+anon EXECUTE: false
+authenticated EXECUTE: true
+Health: ACTIVE · version 28 · build 20120 · verify_jwt=false (public health endpoint retained)
+Frontend/Netlify deployment: NOT PERFORMED
+GitHub push: NOT PERFORMED
+Google Play publication: NOT PERFORMED

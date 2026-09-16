@@ -7,9 +7,9 @@ Plantilla operativa para formalizar antes de incorporar datos reales de cada clu
 **NIF/CIF:** [NIF/CIF DEL CLUB]
 **Representante:** [NOMBRE Y CARGO]
 
-**Encargado:** BRYAN RIVERA GREY, titular de KOMBAX
-**NIF:** 42303973G
-**Domicilio:** Calle Ramon Turro 54, piso 1, puerta 2, Palafolls, Barcelona, España
+**Encargado:** KOMBAX SPAIN, operador de KOMBAX
+**NIF:** [PENDIENTE DATOS FISCALES/REGISTRALES DE KOMBAX SPAIN]
+**Domicilio:** [PENDIENTE DOMICILIO LEGAL DE KOMBAX SPAIN]
 **Privacidad:** privacidad@kombax.es
 
 ## 2. Objeto y duración
@@ -47,4 +47,4 @@ Los incidentes se gestionan conforme a `INCIDENT_RESPONSE_RUNBOOK_20070.md`. Los
 ## 9. Evidencia de aceptación
 **Club:** ____________________  **Fecha:** __________
 **Representante:** ____________________
-**KOMBAX / BRYAN RIVERA GREY:** ____________________  **Fecha:** __________
+**KOMBAX / KOMBAX SPAIN:** ____________________  **Fecha:** __________

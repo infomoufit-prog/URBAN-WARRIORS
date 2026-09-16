@@ -14,16 +14,16 @@ async function safeEqual(left:string,right:string){
 }
 export async function authorizeCronRequest(request:Request){
   const requestId=crypto.randomUUID()
-  if(request.method!=='POST')return {response:jsonResponse({error:'Método no permitido',request_id:requestId},405,requestId),requestId,body:{} as Json}
-  if(!String(request.headers.get('content-type')||'').toLowerCase().includes('application/json'))return {response:jsonResponse({error:'Formato no admitido',request_id:requestId},415,requestId),requestId,body:{} as Json}
+  if(request.method!=='POST')return {response:jsonResponse({error:'method_not_allowed',request_id:requestId},405,requestId),requestId,body:{} as Json}
+  if(!String(request.headers.get('content-type')||'').toLowerCase().includes('application/json'))return {response:jsonResponse({error:'unsupported_media_type',request_id:requestId},415,requestId),requestId,body:{} as Json}
   const declared=Number(request.headers.get('content-length')||0)
-  if(declared>16384)return {response:jsonResponse({error:'Solicitud demasiado grande',request_id:requestId},413,requestId),requestId,body:{} as Json}
+  if(declared>16384)return {response:jsonResponse({error:'request_too_large',request_id:requestId},413,requestId),requestId,body:{} as Json}
   const expected=Deno.env.get('UW_CRON_SECRET')||'',supplied=request.headers.get('x-uw-cron-secret')||''
-  if(!expected||!supplied||!await safeEqual(expected,supplied))return {response:jsonResponse({error:'No autorizado',request_id:requestId},401,requestId),requestId,body:{} as Json}
+  if(!expected||!supplied||!await safeEqual(expected,supplied))return {response:jsonResponse({error:'unauthorized',request_id:requestId},401,requestId),requestId,body:{} as Json}
   const raw=await request.text()
-  if(raw.length>16384)return {response:jsonResponse({error:'Solicitud demasiado grande',request_id:requestId},413,requestId),requestId,body:{} as Json}
-  let body:Json={};try{body=raw?JSON.parse(raw):{}}catch{return {response:jsonResponse({error:'JSON no válido',request_id:requestId},400,requestId),requestId,body:{}}}
-  if(!body||Array.isArray(body)||typeof body!=='object')return {response:jsonResponse({error:'JSON no válido',request_id:requestId},400,requestId),requestId,body:{}}
+  if(raw.length>16384)return {response:jsonResponse({error:'request_too_large',request_id:requestId},413,requestId),requestId,body:{} as Json}
+  let body:Json={};try{body=raw?JSON.parse(raw):{}}catch{return {response:jsonResponse({error:'invalid_json',request_id:requestId},400,requestId),requestId,body:{}}}
+  if(!body||Array.isArray(body)||typeof body!=='object')return {response:jsonResponse({error:'invalid_json',request_id:requestId},400,requestId),requestId,body:{}}
   return {response:null,requestId,body}
 }
 export function validUuid(value:unknown){return typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)}

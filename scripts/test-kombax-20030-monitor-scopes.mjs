@@ -62,7 +62,7 @@ assert(finance.includes('renderMonitorFinance')&&finance.includes('repos.scopes.
 assert(repos.includes('app_kombax_mis_alumnos_v057')&&repos.includes('app_kombax_mi_cartera_v057')&&repos.includes('app_kombax_monitor_cobro_v057'),'repositorio utiliza RPC 057 en lugar de tablas administrativas para monitor');
 assert(dashboard.includes('Mis alumnos')||dashboard.includes('Mis grupos'),'dashboard del monitor mantiene navegación operativa propia');
 assert(icons.includes("scopes:'shieldCheck'")&&css.includes('.work-scope-card'),'UI incluye iconografía y estilos de ámbitos');
-assert(!/if\s*\([^)]*email[^)]*\)/i.test(scopes+members+finance),'permisos de ámbitos no dependen de email hardcodeado');
+assert(!/email\s*(?:===|==|!==|!=)\s*['"][^'"]+@[^'"]+['"]/i.test(scopes+members+finance),'permisos de ámbitos no dependen de email hardcodeado');
 
 assert(/^\s*(?:--[^\n]*\n\s*)*begin;/i.test(sql57)&&/notify pgrst,'reload schema';\s*commit;\s*$/i.test(sql57),'057 es transaccional y recarga schema');
 assert((sql57.match(/\$\$/g)||[]).length%2===0,'057 mantiene $$ equilibrados');

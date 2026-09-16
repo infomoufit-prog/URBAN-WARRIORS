@@ -1,0 +1,105 @@
+{
+  "release": "R79",
+  "build": 20130,
+  "version": "2.0.0-rc.13-r79-i18n-completion",
+  "classification": "PILOT FREEZE CANDIDATE",
+  "i18n": {
+    "active_languages": [
+      "es",
+      "en",
+      "fr",
+      "pt",
+      "it",
+      "de",
+      "th",
+      "fil"
+    ],
+    "r78_source_strings": 1086,
+    "r79_source_strings": 607,
+    "r79_translations_per_non_es_locale": 607,
+    "r79_total_non_es_translations": 4249,
+    "full_product_audit": {
+      "candidates": 4825,
+      "r79": 656,
+      "r78": 1253,
+      "legacy_7of7": 2916,
+      "unresolved": 0
+    },
+    "runtime_copy_audit": {
+      "covered": 4678,
+      "total": 4678,
+      "percent": 100,
+      "unresolved": 0,
+      "technical_or_user_fixtures_skipped": 365
+    },
+    "public_surface_audit": {
+      "pages": 4,
+      "spanish_system_strings_localized_to_en": 92,
+      "unresolved": 0
+    },
+    "r79_gate": {
+      "passed": 26,
+      "total": 26
+    }
+  },
+  "tests": {
+    "npm_test_exit": 0,
+    "build_exit": 0
+  },
+  "parity": {
+    "web_files": 455,
+    "dist_files": 455,
+    "android_assets_files": 455,
+    "equal": true
+  },
+  "android_preflight": {
+    "passed": 4,
+    "total": 5,
+    "pending": [
+      "android/keystore.properties local signing configuration"
+    ]
+  },
+  "security": {
+    "secret_pattern_hits": 0,
+    "real_env_files": 0,
+    "private_signing_files": 0,
+    "only_env_example": true
+  },
+  "supabase": {
+    "project": "poggsobhtutbuagjiydc",
+    "health_edge_version": 32,
+    "health_build": 20130,
+    "health_release": "r79-i18n-completion",
+    "r78_catalog": "1086 sources x 7 non-ES locales",
+    "r79_catalog": "607 sources x 7 non-ES locales",
+    "temporary_i18n_helpers": "retired; JWT required; HTTP 410 stubs"
+  },
+  "critical_hashes": {
+    "index.html": "00634097138999c605a17918711b865246966110cad2d74f70f061af19c27716",
+    "service-worker.js": "8dd0f8f549f4fc0bac2b3e7f6e95cceb0798a1f65dbb8190713c567351ce0b9e",
+    "js/i18n/r79-system-source.js": "8de6021a8345cfa47fb286cf54a8d151418069d4026b273560f7d1760752f2bc",
+    "js/i18n/r79-system-runtime.js": "962acbb1c156ed7681c17d91a4f81a189957bd4b9bee238685494826a4d95cad",
+    "js/i18n/r78-system-source.js": "986c3b219f0b43922a770eac94d2c2242f645a272623c4bd425bf5fb8b31e821",
+    "js/app.js": "fcb1a660847a32e05bb5175941dc8192979279306bce91951d28ad0095e7eb62"
+  },
+  "external_pending": [
+    "authenticated real-user smoke",
+    "physical/device Android smoke",
+    "local release signing with owner keystore"
+  ],
+  "deployments_not_performed": [
+    "GitHub push",
+    "Netlify deploy",
+    "Google Play publish",
+    "signed Android production release"
+  ],
+  "packaging": {
+    "manifest_files": 4080,
+    "manifest_verified": true,
+    "zip_files": 4080,
+    "crc_pass": true,
+    "critical_missing": 0,
+    "forbidden_sensitive_files": 0,
+    "zip_size_approx_mb": 78
+  }
+}

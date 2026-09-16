@@ -1,0 +1,28 @@
+PASS 1: plan R33.1 documenta cierre UX transversal
+PASS 2: Mi Club tiene ruta visible a Federaciones y licencias
+PASS 3: Mi Club/Mi Cuenta tiene ruta de Mis licencias personales
+PASS 4: administración federativa del Club se limita en navegación a roles autorizados
+PASS 5: Mis licencias se inserta en la navegación de todos los roles Club/miembro
+PASS 6: sidebar agrupa Federación y licencias en secciones coherentes
+PASS 7: sidebar tiene iconografía para ambos accesos
+PASS 8: hub de identidades tiene matriz UX federativa explícita
+PASS 9: Mi Federación expone administración, federados, licencias, clubes y equipo
+PASS 10: Mi Competidor expone Mis licencias
+PASS 11: Mi actividad expone sus propias licencias
+PASS 12: licencias de terceros en Profesional siguen condicionadas por capability
+PASS 13: Federación, Marca y Espectador reciben herramienta de licencias personales de cuenta
+PASS 14: UX aclara que Mis licencias personales no concede poderes a la identidad activa
+PASS 15: renderer de licencias soporta identidad o cuenta y modo embebido
+PASS 16: Mis licencias preserva el shell de Mi Club cuando se abre desde sidebar
+PASS 17: error de Mis licencias embebidas no destruye el shell del Club
+PASS 18: Mi Federación acepta foco de navegación por módulo
+PASS 19: Mi Federación enfoca Equipo o Clubes relacionados desde tarjetas
+PASS 20: Mi Federación enfoca Federados/Licencias desde tarjetas
+PASS 21: backend workspace R33.1 anuncia módulos federativos
+PASS 22: backend workspace anuncia licencias de Competidor y Profesional
+PASS 23: RPC workspace identifica versión R33.1
+PASS 24: migración no abre RPC a anon y conserva authenticated
+PASS 25: cache PWA avanza a R33.1 para invalidar APK/PWA anterior
+PASS 26: herramienta transversal de cuenta tiene tratamiento responsive propio
+PASS 27: regresión completa incluye el test R33.1
+R33.1 FEDERATION UX ALL PROFILES: PASS 27/27
