@@ -120,18 +120,24 @@ function capabilityReason(capability:any,prefix:string){
 export function stripeV2AccountState(account:any){
   const merchant=account?.configuration?.merchant||{};
   const card=merchant?.capabilities?.card_payments||{};
+  const sepa=merchant?.capabilities?.sepa_debit_payments||{};
   const payouts=merchant?.capabilities?.stripe_balance?.payouts||{};
   const entries=Array.isArray(account?.requirements?.entries)?account.requirements.entries:[];
   const futureEntries=Array.isArray(account?.future_requirements?.entries)?account.future_requirements.entries:[];
   const due=entries.filter((entry:any)=>entry?.awaiting_action_from!=='stripe'&&['currently_due','past_due'].includes(requirementDeadline(entry))).map(compactRequirement);
   const pending=entries.filter((entry:any)=>entry?.awaiting_action_from==='stripe').map(compactRequirement);
   const eventually=[...entries,...futureEntries].filter((entry:any)=>entry?.awaiting_action_from!=='stripe'&&requirementDeadline(entry)==='eventually_due').map(compactRequirement);
-  const chargesEnabled=String(card?.status||'')==='active';
-  const payoutsEnabled=String(payouts?.status||'')==='active';
-  const reasons=[...capabilityReason(card,'card_payments'),...capabilityReason(payouts,'payouts')];
-  const disabledReason=account?.closed?'account_closed':(reasons.length?reasons.join(','):null);
+  const cardPaymentsStatus=String(card?.status||'inactive');
+  const sepaDebitPaymentsStatus=String(sepa?.status||'inactive');
+  const payoutsStatus=String(payouts?.status||'inactive');
+  const chargesEnabled=cardPaymentsStatus==='active';
+  const payoutsEnabled=payoutsStatus==='active';
+  // SEPA is an independent method: a restricted SEPA capability must not disable otherwise valid card checkout.
+  const coreReasons=[...capabilityReason(card,'card_payments'),...capabilityReason(payouts,'payouts')];
+  const sepaReasons=capabilityReason(sepa,'sepa_debit_payments');
+  const disabledReason=account?.closed?'account_closed':(coreReasons.length?coreReasons.join(','):null);
   const detailsSubmitted=chargesEnabled&&payoutsEnabled||due.length===0&&pending.length>0;
-  return {detailsSubmitted,chargesEnabled,payoutsEnabled,requirementsDue:due,requirementsEventuallyDue:eventually,requirementsPendingVerification:pending,disabledReason};
+  return {detailsSubmitted,chargesEnabled,payoutsEnabled,cardPaymentsStatus,sepaDebitPaymentsStatus,payoutsStatus,sepaReasons,requirementsDue:due,requirementsEventuallyDue:eventually,requirementsPendingVerification:pending,disabledReason};
 }
 
 export function safeError(error:unknown){return String(error instanceof Error?error.message:error).replace(/sk_(live|test)_[A-Za-z0-9]+/g,'[secret]').slice(0,300);}

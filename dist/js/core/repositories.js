@@ -494,6 +494,13 @@ export const repos={
   payments:{
     connectStatus:(subject_type,subject_id)=>backend.invokeFunction('stripe-connect',{action:'status',subject_type,subject_id},25000),
     connectOnboarding:(subject_type,subject_id)=>backend.invokeFunction('stripe-connect',{action:'onboarding',subject_type,subject_id},35000),
+    paymentMethodsStatus:(subject_type,subject_id)=>backend.globalReadRpc('app_stripe_payment_methods_status_r80',{p_subject_type:subject_type,p_subject_id:subject_id}),
+    paymentMethodToggle:(subject_type,subject_id,method,enabled)=>backend.globalWriteRpc('app_stripe_payment_method_toggle_r80',{p_subject_type:subject_type,p_subject_id:subject_id,p_method:method,p_enabled:!!enabled}),
+    payerOptions:(club_id)=>backend.globalReadRpc('app_stripe_payer_options_r80',{p_club_id:club_id}),
+    sepaSetup:(fee_id)=>backend.invokeFunction('stripe-sepa',{action:'setup',fee_id,request_id:crypto.randomUUID()},35000),
+    sepaChargeFee:(fee_id)=>backend.invokeFunction('stripe-sepa',{action:'charge_fee',fee_id,request_id:crypto.randomUUID()},35000),
+    sepaDueFees:(club_id,limit=50)=>backend.globalReadRpc('app_stripe_sepa_due_fees_r80',{p_club_id:club_id,p_limit:limit}),
+    sepaSummary:(club_id)=>backend.globalReadRpc('app_stripe_sepa_summary_r80',{p_club_id:club_id}),
     checkout:(kind,reference_id,quantity=1)=>backend.invokeFunction('stripe-checkout',{kind,reference_id,quantity,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
     refund:(payload={})=>backend.invokeFunction('stripe-refund',{action:'single',...payload,user_locale:payload.user_locale||getLocale(),request_id:payload.request_id||crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},45000),
     refundEventBatch:(event_id,reason='')=>backend.invokeFunction('stripe-refund',{action:'event_batch',event_id,reason,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},90000),

@@ -3,7 +3,7 @@ import { state } from '../core/state.js';
 import { backend } from '../core/backend.js';
 import { esc, dtFmt, humanError } from '../core/utils.js';
 import { KOMBAX_BRAND } from '../core/platform.js';
-import { pageHeader, empty, badge, openForm, openDetail, closeModal, confirmDialog, toast, setError, setMainHtml, subviewActions, bindSubviewActions, goBackOrFallback } from '../ui/components.js';
+import { pageHeader, empty, badge, openForm, openDetail, openImmersiveMedia, closeModal, confirmDialog, toast, setError, setMainHtml, subviewActions, bindSubviewActions, goBackOrFallback } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { chooseDefaultIdentity, setActiveIdentity, identityLabel } from '../core/identity-context.js';
 import { openKombaxPublicProfile } from './public-profile.js';
@@ -117,13 +117,10 @@ function guardianConsentPanel(){
 }
 
 const mediaUrl=path=>path?backend.publicUrl('kombax-public-media',path):'';
-function openSocialMediaViewer(post){
+function openSocialMediaViewer(post,sourceVideo=null){
   const url=post?.media_url||mediaUrl(post?.media_path);if(!url)return;
   const caption=`${post?.autor_nombre||'KOMBAX'} · ${TYPE_LABEL[post?.tipo]||post?.tipo||'Publicación'}`;
-  const body=post?.media_tipo==='video'
-    ? `<div class="kx-social-immersive-stage"><video src="${esc(url)}" controls autoplay playsinline></video></div>`
-    : `<div class="kx-social-immersive-stage"><img src="${esc(url)}" alt="${esc(caption)}"></div>`;
-  openDetail({title:'',subtitle:'',body,actions:'',width:'100vw',className:'kx-social-immersive-modal'});
+  return openImmersiveMedia({src:url,type:post?.media_tipo==='video'?'video':'image',poster:post?.media_cover_url||'',alt:caption,sourceVideo});
 }
 function postMedia(p){
   if(!p.media_path)return '';
@@ -547,7 +544,7 @@ function bindFeed(){
   document.querySelectorAll('[data-social-profile-open]').forEach(el=>{const open=()=>openKombaxPublicProfile(el.dataset.socialProfileOpen);el.addEventListener('click',e=>{if(e.target.closest('button,a')&&e.currentTarget!==e.target)return;open();});el.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button,a')){e.preventDefault();open();}});});
   document.querySelectorAll('[data-social-affiliation-club]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openKombaxPublicProfile(b.dataset.socialAffiliationClub);}));
   document.querySelectorAll('[data-social-media-open]').forEach(b=>b.addEventListener('click',()=>{const post=posts.find(x=>String(x.id)===String(b.dataset.socialMediaOpen));if(post)openSocialMediaViewer(post);}));
-  document.querySelectorAll('[data-social-video-open]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const post=posts.find(x=>String(x.id)===String(b.dataset.socialVideoOpen));if(post)openSocialMediaViewer(post);}));
+  document.querySelectorAll('[data-social-video-open]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const post=posts.find(x=>String(x.id)===String(b.dataset.socialVideoOpen));if(post)openSocialMediaViewer(post,b.closest('[data-kx-media-shell]')?.querySelector('video')||null);}));
   document.querySelectorAll('[data-social-frame]').forEach(b=>b.addEventListener('click',()=>{const post=posts.find(x=>String(x.id)===String(b.dataset.socialFrame));if(!post?.social_media_id)return;const src=post.media_url||mediaUrl(post.media_path);const mediaType=post.media_tipo==='video'?'video':'image';openMediaFramingEditor({title:'Ajustar encuadre de la publicación',subtitle:'Elige entre ver el contenido completo o rellenar el marco. El original completo seguirá disponible al abrirlo.',src,mediaType,initial:post.media_presentation,preset:'social',onSave:async presentation=>{await repos.mediaFraming.set('social_media',post.social_media_id,presentation);post.media_presentation=presentation;await loadFeed(false);}});}));
   document.querySelectorAll('[data-social-cover]').forEach(b=>b.addEventListener('click',()=>{const post=posts.find(x=>String(x.id)===String(b.dataset.socialCover));if(!post?.social_media_id||post.media_tipo!=='video')return;const src=post.media_url||mediaUrl(post.media_path);openVideoCoverEditor({src,initial:post.media_presentation,title:'Portada del vídeo · KOMBAX Social',subtitle:'Usa la automática, elige un fotograma exacto o sube una imagen propia.',onSave:async({file,mode,time})=>{const media={id:post.social_media_id,storage_bucket:post.media_bucket||'kombax-public-media',social_profile_id:post.autor_id};const saved=await repos.kombaxSocial.setVideoCover(media,file,{presentation:post.media_presentation||{},mode,time});post.media_presentation=saved.presentation;post.media_cover_url=await repos.kombaxSocial.mediaAccessUrl(saved.path,saved.bucket).catch(()=> '');await loadFeed(false);}});}));
   document.querySelectorAll('[data-social-save]').forEach(b=>b.addEventListener('click',async()=>{if(b.disabled)return;b.disabled=true;const active=b.dataset.active==='true';try{await repos.kombaxSocial.save(b.dataset.socialSave,!active);await loadFeed(false);}catch(error){b.disabled=false;setError(error);}}));

@@ -37,6 +37,11 @@ Deno.serve(async(request:Request)=>{
     const prepared=await serviceRpc('app_stripe_checkout_prepare_internal_v259',{p_actor_id:user.id,p_kind:kind,p_reference_id:referenceId,p_quantity:Number(body.quantity||1),p_request_id:requestId});
     const account=String(prepared.stripe_account_id||'');
     if(!/^acct_[A-Za-z0-9]+$/.test(account))throw new Error('CONNECTED_ACCOUNT_REQUIRED');
+    await serviceRpc('app_stripe_payment_method_gate_internal_r80',{p_stripe_account_id:account,p_method:'card',p_use_case:kind==='event_ticket'?'event_ticketing':kind==='showcase_order'?'showcase_checkout':'club_fee_card'}).catch(async error=>{
+      // R79 rolling deploy: if the R80 gate is not installed yet, preserve the existing checkout behaviour.
+      if(/function|schema cache|PGRST202|404/i.test(String(error?.message||error)))return null;
+      throw error;
+    });
     if(prepared?.stripe_checkout_session_id){const existing=await stripe(`checkout/sessions/${prepared.stripe_checkout_session_id}`,'GET',{},account);return json(200,{ok:true,url:existing.url,session_id:existing.id,reused:true});}
     const attemptId=String(prepared.attempt_id);
     const form:Record<string,unknown>={

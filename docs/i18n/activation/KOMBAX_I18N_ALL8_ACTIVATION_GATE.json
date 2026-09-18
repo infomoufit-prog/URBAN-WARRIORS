@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T09:42:21.683Z",
+  "generated_at": "2026-09-18T08:59:55.743Z",
   "status": "PASS",
   "enabled_locales": [
     "es",
@@ -13,49 +13,49 @@
   ],
   "catalog": {
     "es": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "en": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "fr": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "pt": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "it": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "de": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "th": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0
     },
     "fil": {
-      "keys": 1316,
+      "keys": 1382,
       "coverage": 100,
       "empty": 0,
       "placeholder_mismatches": 0

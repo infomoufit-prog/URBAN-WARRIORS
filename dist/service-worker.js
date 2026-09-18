@@ -4,8 +4,8 @@
 // historical cache marker: media-r29
 // historical cache marker: media-r28
 // historical cache marker: media-r27
-const BUILD_MARKER='kombax-build-20130';
-const VERSION='kombax-2.0.0-rc13-20130-r79-i18n-completion';
+const BUILD_MARKER='kombax-build-20131';
+const VERSION='kombax-2.0.0-rc13-20131-r80-stripe-sepa-payments';
 // historical cache marker: media-r36
 // historical cache marker: media-r37
 // historical cache marker: media-r38

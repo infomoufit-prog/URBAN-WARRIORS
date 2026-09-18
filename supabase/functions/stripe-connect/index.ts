@@ -9,17 +9,21 @@ async function syncAccount(accountId:string){
   const account=await stripeV2(`core/accounts/${accountId}`,'GET',{include:ACCOUNT_INCLUDE});
   const state=stripeV2AccountState(account);
   const cfg=env();
-  await serviceRpc('app_stripe_connect_sync_internal_v261',{
-    p_stripe_account_id:accountId,
-    p_details_submitted:state.detailsSubmitted,
-    p_charges_enabled:state.chargesEnabled,
-    p_payouts_enabled:state.payoutsEnabled,
-    p_requirements_due:state.requirementsDue,
-    p_requirements_eventually_due:state.requirementsEventuallyDue,
-    p_requirements_pending_verification:state.requirementsPendingVerification,
-    p_disabled_reason:state.disabledReason,
-    p_api_version:cfg.stripeConnectApiVersion
-  });
+  try{
+    await serviceRpc('app_stripe_connect_sync_internal_r80',{
+      p_stripe_account_id:accountId,p_details_submitted:state.detailsSubmitted,p_charges_enabled:state.chargesEnabled,p_payouts_enabled:state.payoutsEnabled,
+      p_requirements_due:state.requirementsDue,p_requirements_eventually_due:state.requirementsEventuallyDue,p_requirements_pending_verification:state.requirementsPendingVerification,
+      p_disabled_reason:state.disabledReason,p_stripe_api_version:cfg.stripeConnectApiVersion,p_card_payments_status:state.cardPaymentsStatus,
+      p_sepa_debit_payments_status:state.sepaDebitPaymentsStatus,p_payouts_status:state.payoutsStatus
+    });
+  }catch(error){
+    console.warn('stripe-connect-r80-sync-fallback',safeError(error));
+    await serviceRpc('app_stripe_connect_sync_internal_v261',{
+      p_stripe_account_id:accountId,p_details_submitted:state.detailsSubmitted,p_charges_enabled:state.chargesEnabled,p_payouts_enabled:state.payoutsEnabled,
+      p_requirements_due:state.requirementsDue,p_requirements_eventually_due:state.requirementsEventuallyDue,p_requirements_pending_verification:state.requirementsPendingVerification,
+      p_disabled_reason:state.disabledReason,p_api_version:cfg.stripeConnectApiVersion
+    });
+  }
   return state;
 }
 
@@ -52,7 +56,7 @@ Deno.serve(async(request:Request)=>{
         display_name:String(context?.display_name||'KOMBAX seller'),
         dashboard:'full',
         identity:{country:'es'},
-        configuration:{merchant:{capabilities:{card_payments:{requested:true}}}},
+        configuration:{merchant:{capabilities:{card_payments:{requested:true},sepa_debit_payments:{requested:true}}}},
         defaults:{currency:'eur',responsibilities:{fees_collector:'stripe',losses_collector:'stripe'},locales:['es-ES']},
         include:ACCOUNT_INCLUDE
       },{idempotencyKey:`kombax-connect-${subjectType}-${subjectId}`});
@@ -60,11 +64,21 @@ Deno.serve(async(request:Request)=>{
       if(!/^acct_[A-Za-z0-9]+$/.test(accountId))throw new Error('CONNECTED_ACCOUNT_CREATE_FAILED');
       await serviceRpc('app_stripe_connect_attach_internal_v259',{p_actor_id:user.id,p_subject_type:subjectType,p_subject_id:subjectId,p_stripe_account_id:accountId});
       const state=stripeV2AccountState(account);
-      await serviceRpc('app_stripe_connect_sync_internal_v261',{
-        p_stripe_account_id:accountId,p_details_submitted:state.detailsSubmitted,p_charges_enabled:state.chargesEnabled,p_payouts_enabled:state.payoutsEnabled,
-        p_requirements_due:state.requirementsDue,p_requirements_eventually_due:state.requirementsEventuallyDue,p_requirements_pending_verification:state.requirementsPendingVerification,
-        p_disabled_reason:state.disabledReason,p_api_version:cfg.stripeConnectApiVersion
-      });
+      try{
+        await serviceRpc('app_stripe_connect_sync_internal_r80',{
+          p_stripe_account_id:accountId,p_details_submitted:state.detailsSubmitted,p_charges_enabled:state.chargesEnabled,p_payouts_enabled:state.payoutsEnabled,
+          p_requirements_due:state.requirementsDue,p_requirements_eventually_due:state.requirementsEventuallyDue,p_requirements_pending_verification:state.requirementsPendingVerification,
+          p_disabled_reason:state.disabledReason,p_stripe_api_version:cfg.stripeConnectApiVersion,p_card_payments_status:state.cardPaymentsStatus,
+          p_sepa_debit_payments_status:state.sepaDebitPaymentsStatus,p_payouts_status:state.payoutsStatus
+        });
+      }catch(error){
+        console.warn('stripe-connect-r80-create-sync-fallback',safeError(error));
+        await serviceRpc('app_stripe_connect_sync_internal_v261',{
+          p_stripe_account_id:accountId,p_details_submitted:state.detailsSubmitted,p_charges_enabled:state.chargesEnabled,p_payouts_enabled:state.payoutsEnabled,
+          p_requirements_due:state.requirementsDue,p_requirements_eventually_due:state.requirementsEventuallyDue,p_requirements_pending_verification:state.requirementsPendingVerification,
+          p_disabled_reason:state.disabledReason,p_api_version:cfg.stripeConnectApiVersion
+        });
+      }
     }else{
       try{await syncAccount(accountId)}catch(error){console.warn('stripe-connect-onboarding-sync',safeError(error));}
     }

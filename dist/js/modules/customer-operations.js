@@ -126,7 +126,7 @@ async function sendChat(wrap,ticketId,{migration=false,support=false,specialty=D
     await refreshChat(wrap,ticketId,{migration,support,tenantRefValue});
     if(!support&&!migration&&out?.action?.type==='stripe_connect_onboarding'){
       const subject=stripeConnectSubject(context);
-      if(subject)confirmDialog('Activar cobros con tarjeta','Stripe verificará de forma segura la identidad y la cuenta bancaria. No introduzcas datos bancarios, documentos ni claves en KOMBAX Assist.',async()=>{const onboarding=await repos.payments.connectOnboarding(subject.type,subject.id);if(!onboarding?.url)throw new Error('No se pudo abrir la configuración segura.');location.assign(onboarding.url);},{confirmText:'Abrir Stripe'});
+      if(subject)confirmDialog('Configurar cobros y domiciliaciones',t('payments.assistStripeSafety'),async()=>{const onboarding=await repos.payments.connectOnboarding(subject.type,subject.id);if(!onboarding?.url)throw new Error('No se pudo abrir la configuración segura.');location.assign(onboarding.url);},{confirmText:'Abrir Stripe'});
       else toast('Selecciona una organización gestionable para iniciar el alta segura de Stripe.','error');
     }
     if(status)status.textContent=support?`Respuesta de soporte guiado preparada${out?.turns_remaining!=null?` · ${out.turns_remaining} mensaje(s) disponibles`:''}. Si el caso requiere intervención directa, Soporte KOMBAX gestionará internamente la escalada.`:migration?'Análisis actualizado. Puedes continuar o añadir más documentos.':`Respuesta preparada${out?.turns_remaining!=null?` · ${out.turns_remaining} mensaje(s) disponibles en esta conversación`:''}.`;

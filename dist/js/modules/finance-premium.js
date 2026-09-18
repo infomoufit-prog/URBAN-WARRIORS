@@ -1,4 +1,4 @@
-import { getLocale as kxGetLocale } from '../i18n/index.js';
+import { getLocale as kxGetLocale, t } from '../i18n/index.js';
 import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { backend } from '../core/backend.js';
 import { repos } from '../core/repositories.js';
@@ -7,6 +7,7 @@ import { has } from '../core/permissions.js';
 import { esc,money,dateFmt,isoDate } from '../core/utils.js';
 import { pageHeader,card,table,empty,badge,openForm,openDetail,closeModal,toast,setError,setMainHtml } from '../ui/components.js';
 import { openReceipt } from './finance.js';
+import { openPaymentCenter } from './payments-center.js';
 
 const cid=()=>state.session?.club_id, enc=v=>encodeURIComponent(String(v??'')), PAGE=20, EXPLORER_PAGE=20;
 const labelCat=x=>({cuota:'Cuota',matricula:'Matrícula',licencia:'Licencia',material:'Material',competicion:'Competición',evento:'Evento',desplazamiento:'Desplazamiento',otro:'Otro'}[x]||x||'Otro');
@@ -168,7 +169,7 @@ function activateKeyboardButtons(){document.querySelectorAll('[role="button"][ta
 export async function renderFinancePremium(){
   styles();setMainHtml('<div class="loading-card">Cargando Finanzas Premium…</div>');
   try{
-    const [F,D,R,connect]=await Promise.all([flags(),dash(),dict(),repos.payments.connectStatus('club',cid()).catch(()=>({status:'not_configured',details_submitted:false,charges_enabled:false,payouts_enabled:false}))]);
+    const [F,D,R,connect]=await Promise.all([flags(),dash(),dict(),repos.payments.paymentMethodsStatus('club',cid()).catch(()=>({status:'not_configured',details_submitted:false,charges_enabled:false,payouts_enabled:false,card_enabled:true,sepa_enabled:false}))]);
     if(!F.finance_v2_enabled||!F.finance_dashboard_v2_enabled)throw Error('FINANCE_V2_DISABLED');
     if(Number(D.analytics_version||0)<150)throw Error('FINANCE_ANALYTICS_BACKEND_REQUIRED');
     const [X,I,Q,P]=await Promise.all([
@@ -177,7 +178,7 @@ export async function renderFinancePremium(){
       tab==='automations'?pilotStatus().catch(()=>null):Promise.resolve(null)
     ]);
     const H=tab==='reports'?(X?.rows||[]):[];
-    const stripeAction=connect.status==='active'?'Stripe · Cobros activos':'Activar cobros con tarjeta';
+    const stripeAction=t('payments.openCenter');
     const actions=`<div class="fv2-actions"><button class="btn btn-primary" id="new-charge">+ Nuevo cargo</button><button class="btn btn-ghost" id="new-rule">Nueva automatización</button><button class="btn btn-ghost" id="stripe-connect-start" title="${esc(stripeStatusLabel(connect.status))}">${stripeAction}</button><button class="btn btn-ghost" id="pending">Pagos por validar · ${D.pending_validation||0}</button><button class="btn btn-ghost" id="report">Generar informe</button></div>`;
     let content='';
     if(tab==='summary')content=`<div class="fv2-shell">${filtersHtml(R)}${filterContext(R)}${kpis(D.summary,D)}<div class="fv2-dashboard-grid">${premiumPanel('HISTOGRAMA','12 meses · generado, cobrado y pendiente','Pulsa una barra, una serie o un mes para filtrar el detalle.',`<div class="fv2-desktop-chart">${histogram(D.months)}</div><div class="fv2-mobile-chart">${histogramResponsive(D.months,6)}</div>`)}${premiumPanel('RIESGO','Antigüedad de deuda','Distribución clicable del saldo pendiente.',aging(D.aging))}</div><div class="fv2-breakdowns">${premiumPanel('COMPOSICIÓN','Cargos por categoría','Cada barra filtra el dashboard completo.',categoryBreakdown(D.categories||[]))}${premiumPanel('ACTIVIDAD','Distribución por grupo / disciplina','Atribución según afiliación activa actual.',dimensionBreakdown(D))}</div>${card(`Detalle reciente · ${D.total_rows||0} cargos`,charges((D.rows||[]).slice(0,10))+`<div class="fv2-actions" style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="view-all-charges">Ver todos los cargos</button></div>`)}</div>`;
@@ -206,7 +207,7 @@ export async function renderFinancePremium(){
     document.querySelectorAll('[data-charge]').forEach(b=>b.addEventListener('click',()=>detail(D.rows.find(x=>String(x.cuota_id)===String(b.dataset.charge)),F.finance_reports_enabled===true)));
     document.getElementById('prev')?.addEventListener('click',()=>{offset=Math.max(0,offset-PAGE);renderFinancePremium()});document.getElementById('next')?.addEventListener('click',()=>{offset+=PAGE;renderFinancePremium()});
     document.getElementById('new-charge')?.addEventListener('click',()=>wizard(R));document.getElementById('new-rule')?.addEventListener('click',()=>newRule(R));document.getElementById('pending')?.addEventListener('click',()=>{tab='payments';renderFinancePremium()});document.getElementById('report')?.addEventListener('click',()=>{tab='reports';renderFinancePremium()});document.getElementById('export')?.addEventListener('click',()=>csv(D.rows));document.getElementById('report-current')?.addEventListener('click',()=>generateReport('vista_actual'));document.getElementById('report-new')?.addEventListener('click',()=>openReportWizard(R));document.getElementById('report-account-current')?.addEventListener('click',()=>generateReport('estado_cuenta',{socio:filters.socio}));document.querySelectorAll('.report-open').forEach(b=>b.addEventListener('click',()=>{const r=H.find(x=>String(x.id)===String(b.dataset.id));if(r)openReportPdf(r)}));document.querySelectorAll('.report-refresh').forEach(b=>b.addEventListener('click',()=>{const r=H.find(x=>String(x.id)===String(b.dataset.id));if(r)generateReport(r.tipo,{source_report_id:r.id})}));document.getElementById('qa-shadow-run')?.addEventListener('click',runQaShadow);document.getElementById('qa-approve')?.addEventListener('click',approveQa);document.getElementById('qa-revoke')?.addEventListener('click',revokeQa);document.querySelectorAll('.sim').forEach(b=>b.addEventListener('click',()=>simulate(b.dataset.id)));document.querySelectorAll('.toggle-rule').forEach(b=>b.addEventListener('click',()=>{const r=R.rules.find(x=>String(x.id)===String(b.dataset.id));if(r)toggleRule(r)}));document.querySelectorAll('.val').forEach(b=>b.addEventListener('click',async()=>{try{b.disabled=true;await repos.finance.validate(b.dataset.id,'validado');toast('Pago validado');await renderFinancePremium()}catch(e){setError(e);b.disabled=false}}));document.querySelectorAll('.rej').forEach(b=>b.addEventListener('click',()=>openForm({title:'Rechazar pago',fields:[{name:'motivo',label:'Motivo',type:'textarea',required:true,full:true}],onSubmit:async v=>{await repos.finance.validate(b.dataset.id,'rechazado',v.motivo);toast('Pago rechazado');await renderFinancePremium()}})));document.querySelectorAll('.rej-dup').forEach(b=>b.addEventListener('click',()=>openForm({title:'Rechazar pago duplicado',subtitle:'La cuota ya está cubierta. Este pago no puede validarse sin superar el importe.',fields:[{name:'motivo',label:'Motivo',type:'textarea',required:true,full:true,value:'Pago duplicado o comunicación pendiente posterior a cuota ya pagada.'}],submitText:'Rechazar duplicado',onSubmit:async v=>{await repos.finance.validate(b.dataset.id,'rechazado',v.motivo);toast('Pago duplicado rechazado');await renderFinancePremium()}})));
-    document.getElementById('stripe-connect-start')?.addEventListener('click',()=>openStripeConnectStatus(connect));
+    document.getElementById('stripe-connect-start')?.addEventListener('click',()=>openPaymentCenter({subjectType:'club',subjectId:cid(),title:t('payments.title'),assistContext:{clubId:cid(),onBack:renderFinancePremium}}).catch(setError));
     document.querySelectorAll('.fv2-view-receipt').forEach(b=>b.addEventListener('click',()=>{const r=((tab==='receipts'?(X?.rows||[]):(D.receipts||[]))).find(x=>String(x.id)===String(b.dataset.receiptId));if(r)openReceipt(r)}));
     activateKeyboardButtons();
   }catch(e){

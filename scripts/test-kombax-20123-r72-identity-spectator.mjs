@@ -19,10 +19,10 @@ const sw=read('web/service-worker.js');
 const health=read('supabase/functions/health/index.ts');
 const marketingEs=read('web/js/i18n/locales/es/marketing.js');
 
-test('R72 identity is build 20130 across Web Android SW and health',()=>{
-  has(config,"version: '2.0.0-rc.13-r79-i18n-completion'");has(config,'build: 20130');
-  has(gradle,'versionCode 20130');has(gradle,"versionName '2.0.0-rc.13-r79-i18n-completion'");
-  has(sw,'kombax-build-20130');has(health,'build:20130');
+test('R72 identity is build 20131 across Web Android SW and health',()=>{
+  has(config,"version: '2.0.0-rc.13-r80-stripe-sepa-payments'");has(config,'build: 20131');
+  has(gradle,'versionCode 20131');has(gradle,"versionName '2.0.0-rc.13-r80-stripe-sepa-payments'");
+  has(sw,'kombax-build-20131');has(health,'build:20131');
 });
 
 test('Public gateway offers a profile-free spectator path',()=>{

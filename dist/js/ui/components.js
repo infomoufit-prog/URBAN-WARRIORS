@@ -232,21 +232,24 @@ export function openDetail({title='',subtitle='',body='',actions='',width='860px
   return {wrap,close,back};
 }
 export function closeModal(){const layer=activeModalLayer();if(layer){layer.dispatchEvent(new CustomEvent('kx:modal-before-close'));layer.remove();}while(modalStack.length){const suspended=modalStack.pop();suspended?.dispatchEvent?.(new CustomEvent('kx:modal-before-close'));suspended?.remove?.();}}
-export function openImmersiveMedia({src='',type='image',alt=t('common.media.content'),poster='' }={}){
+export function openImmersiveMedia({src='',type='image',alt=t('common.media.content'),poster='',sourceVideo=null}={}){
   const source=String(src||'').trim();if(!source)return null;
   document.getElementById('kx-immersive-media-layer')?.remove();
+  const sourceState=type==='video'&&sourceVideo?{time:Number(sourceVideo.currentTime||0),paused:sourceVideo.paused,volume:Number(sourceVideo.volume??1),muted:sourceVideo.muted,rate:Number(sourceVideo.playbackRate||1)}:null;
+  sourceVideo?.pause?.();
   const layer=document.createElement('div');layer.className='kx-immersive-media-layer';layer.id='kx-immersive-media-layer';layer.setAttribute('role','dialog');layer.setAttribute('aria-modal','true');layer.setAttribute('aria-label',type==='video'?t('common.accessibility.fullscreenVideo'):t('common.accessibility.fullscreenImage'));
   const media=type==='video'
     ? `<video class="kx-immersive-media-content" src="${esc(source)}" ${poster?`poster="${esc(poster)}"`:''} controls autoplay playsinline></video>`
     : `<img class="kx-immersive-media-content" src="${esc(source)}" alt="${esc(alt)}">`;
-  layer.innerHTML=`<div class="kx-immersive-media-shell"><div class="kx-immersive-media-nav"><button type="button" class="btn btn-ghost btn-sm kx-immersive-media-back" aria-label="${esc(t('common.actions.back'))}">${icon('chevronLeft',{size:15})}<span>${esc(t('common.actions.back'))}</span></button><button type="button" class="icon-btn kx-immersive-media-close" aria-label="${esc(t('common.media.fullscreenClose'))}">${icon('close')}</button></div><div class="kx-immersive-media-stage">${media}</div></div>`;
+  layer.innerHTML=`<div class="kx-immersive-media-shell"><div class="kx-immersive-media-nav"><button type="button" class="btn btn-ghost btn-sm kx-immersive-media-back" aria-label="${esc(t('common.actions.back'))}">${icon('chevronLeft',{size:15})}<span>${esc(t('common.actions.back'))}</span></button><button type="button" class="btn btn-ghost btn-sm kx-immersive-media-minimize" aria-label="${esc(t('common.media.fullscreenClose'))}">${icon('close',{size:15})}<span>${esc(t('common.media.fullscreenClose'))}</span></button></div><div class="kx-immersive-media-stage">${media}</div></div>`;
   document.body.appendChild(layer);
-  const video=layer.querySelector('video');
-  const close=()=>{video?.pause?.();layer.remove();document.removeEventListener('keydown',onKey);};
+  const video=layer.querySelector('video');let closed=false;
+  const syncBack=()=>{if(!sourceVideo||!video)return;try{sourceVideo.currentTime=Number(video.currentTime||0);sourceVideo.volume=video.volume;sourceVideo.muted=video.muted;sourceVideo.playbackRate=video.playbackRate;}catch{}};
+  const close=()=>{if(closed)return;closed=true;syncBack();video?.pause?.();layer.remove();document.removeEventListener('keydown',onKey);if(sourceVideo&&sourceState&&!video?.ended&&!sourceState.paused)sourceVideo.play?.().catch(()=>{});};
   const onKey=e=>{if(e.key==='Escape')close();};
-  layer.querySelector('.kx-immersive-media-back')?.addEventListener('click',close);layer.querySelector('.kx-immersive-media-close')?.addEventListener('click',close);layer.addEventListener('click',e=>{if(e.target===layer)close();});document.addEventListener('keydown',onKey);
-  video?.play?.().catch(()=>{});
-  return {wrap:layer,close};
+  layer.querySelector('.kx-immersive-media-back')?.addEventListener('click',close);layer.querySelector('.kx-immersive-media-minimize')?.addEventListener('click',close);layer.addEventListener('click',e=>{if(e.target===layer)close();});document.addEventListener('keydown',onKey);
+  if(video&&sourceState){const apply=()=>{try{video.currentTime=sourceState.time;video.volume=sourceState.volume;video.muted=sourceState.muted;video.playbackRate=sourceState.rate;}catch{}if(sourceState.paused)video.pause();else video.play?.().catch(()=>{});};if(video.readyState>=1)apply();else video.addEventListener('loadedmetadata',apply,{once:true});}else video?.play?.().catch(()=>{});
+  return {wrap:layer,close,video};
 }
 export function confirmDialog(title,text,onConfirm,{confirmText=t('common.actions.confirm'),danger=false}={}){openForm({title,subtitle:text,fields:[],submitText:confirmText,onSubmit:async()=>onConfirm(),width:'480px'});if(danger)document.getElementById('modal-submit')?.classList.add('btn-danger');}
 export function setError(error){state.error=humanError(error);const box=document.getElementById('global-alerts');if(box){box.innerHTML=alertHtml();bindDismissAlerts();}else{toast(state.error,'error');}console.error(error)}

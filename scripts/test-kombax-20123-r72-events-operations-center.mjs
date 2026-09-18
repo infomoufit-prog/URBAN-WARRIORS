@@ -19,11 +19,11 @@ const mainActivity=read('android/app/src/main/java/com/urbanwarriors/app/MainAct
 const sw=read('web/service-worker.js');
 const health=read('supabase/functions/health/index.ts');
 
-test('R72 continuity runs on R75 build 20130 across Web Android SW and health',()=>{
-  has(config,"version: '2.0.0-rc.13-r79-i18n-completion'");has(config,'build: 20130');
-  has(gradle,'versionCode 20130');has(gradle,"versionName '2.0.0-rc.13-r79-i18n-completion'");
-  has(mainActivity,'KOMBAXRevision/r79-i18n-completion');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20130');
-  has(sw,'kombax-build-20130');has(health,'build:20130');
+test('R72 continuity runs on R75 build 20131 across Web Android SW and health',()=>{
+  has(config,"version: '2.0.0-rc.13-r80-stripe-sepa-payments'");has(config,'build: 20131');
+  has(gradle,'versionCode 20131');has(gradle,"versionName '2.0.0-rc.13-r80-stripe-sepa-payments'");
+  has(mainActivity,'KOMBAXRevision/r80-stripe-sepa-payments');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20131');
+  has(sw,'kombax-build-20131');has(health,'build:20131');
 });
 
 test('Organizer navigation exposes Mis Eventos without replacing the existing editor',()=>{

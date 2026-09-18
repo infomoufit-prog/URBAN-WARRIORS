@@ -25,11 +25,11 @@ const founderGuard=read('supabase/migrations/20260913233235_kombax_r66_founder_m
 
 // Identity / discovery
 
-test('R72 release identity is build 20130 everywhere',()=>{
-  has(config,"version: '2.0.0-rc.13-r79-i18n-completion'");has(config,'build: 20130');
-  has(gradle,'versionCode 20130');has(gradle,"versionName '2.0.0-rc.13-r79-i18n-completion'");
-  has(mainActivity,'KOMBAXRevision/r79-i18n-completion');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20130');
-  has(health,'build:20130');has(sw,'kombax-build-20130');has(index,'v=20130');
+test('R72 release identity is build 20131 everywhere',()=>{
+  has(config,"version: '2.0.0-rc.13-r80-stripe-sepa-payments'");has(config,'build: 20131');
+  has(gradle,'versionCode 20131');has(gradle,"versionName '2.0.0-rc.13-r80-stripe-sepa-payments'");
+  has(mainActivity,'KOMBAXRevision/r80-stripe-sepa-payments');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20131');
+  has(health,'build:20131');has(sw,'kombax-build-20131');has(index,'v=20131');
 });
 
 test('Global commercial discovery explains free account and organization-scoped plans',()=>{

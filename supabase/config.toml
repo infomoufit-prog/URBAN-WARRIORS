@@ -16,6 +16,9 @@ verify_jwt = true
 [functions.stripe-refund]
 verify_jwt = true
 
+[functions.stripe-sepa]
+verify_jwt = true
+
 [functions.stripe-account-finance]
 verify_jwt = true
 

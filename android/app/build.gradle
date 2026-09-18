@@ -36,8 +36,8 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 24
         targetSdk 36
-        versionCode 20130
-        versionName '2.0.0-rc.13-r79-i18n-completion'
+        versionCode 20131
+        versionName '2.0.0-rc.13-r80-stripe-sepa-payments'
         // historical regression markers: versionCode 20101 · versionName '2.0.0-rc.13'
     }
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T09:42:22.062Z",
+  "generated_at": "2026-09-18T08:59:56.114Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/adaptive-poller.js",
@@ -57,6 +57,7 @@
     "web/js/modules/kombax-social.js",
     "web/js/modules/lifecycle.js",
     "web/js/modules/managed-profile-hub.js",
+    "web/js/modules/payments-center.js",
     "web/js/modules/plan-services.js",
     "web/js/modules/platform-admin-access.js",
     "web/js/modules/platform-admin.js",
@@ -83,8 +84,8 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4678,
-  "covered": 4678,
+  "phrases": 4663,
+  "covered": 4663,
   "unresolved": 0,
   "coverage": 100,
   "skipped": 365,
@@ -102,8 +103,8 @@
       "coverage": 100
     },
     "web/js/core/assist-specialists.js": {
-      "total": 27,
-      "covered": 27,
+      "total": 24,
+      "covered": 24,
       "skipped": 0,
       "coverage": 100
     },
@@ -276,8 +277,8 @@
       "coverage": 100
     },
     "web/js/modules/club-profile.js": {
-      "total": 58,
-      "covered": 58,
+      "total": 59,
+      "covered": 59,
       "skipped": 0,
       "coverage": 100
     },
@@ -306,8 +307,8 @@
       "coverage": 100
     },
     "web/js/modules/customer-operations.js": {
-      "total": 208,
-      "covered": 208,
+      "total": 206,
+      "covered": 206,
       "skipped": 4,
       "coverage": 100
     },
@@ -366,8 +367,8 @@
       "coverage": 100
     },
     "web/js/modules/finance.js": {
-      "total": 74,
-      "covered": 74,
+      "total": 70,
+      "covered": 70,
       "skipped": 9,
       "coverage": 100
     },
@@ -402,8 +403,8 @@
       "coverage": 100
     },
     "web/js/modules/kombax-events.js": {
-      "total": 812,
-      "covered": 812,
+      "total": 810,
+      "covered": 810,
       "skipped": 49,
       "coverage": 100
     },
@@ -420,14 +421,20 @@
       "coverage": 100
     },
     "web/js/modules/managed-profile-hub.js": {
-      "total": 39,
-      "covered": 39,
+      "total": 33,
+      "covered": 33,
       "skipped": 3,
       "coverage": 100
     },
+    "web/js/modules/payments-center.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/plan-services.js": {
-      "total": 69,
-      "covered": 69,
+      "total": 71,
+      "covered": 71,
       "skipped": 2,
       "coverage": 100
     },
@@ -480,8 +487,8 @@
       "coverage": 100
     },
     "web/js/modules/showcase.js": {
-      "total": 350,
-      "covered": 350,
+      "total": 349,
+      "covered": 349,
       "skipped": 11,
       "coverage": 100
     },

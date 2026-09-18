@@ -1,4 +1,4 @@
-import { getLocale as kxGetLocale } from '../i18n/index.js';
+import { getLocale as kxGetLocale, t } from '../i18n/index.js';
 import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
@@ -27,6 +27,9 @@ function planRows(plan,audience){
   rows.push(['Commerce',plan.plan_code==='club'&&plan.commerce_mode==='temporary'?'12 €/mes':modeLabel(plan.commerce_mode)]);
   rows.push(['Events',eventsLabel(plan.events_monthly_limit)]);
   rows.push(['Ticketing',modeLabel(plan.ticketing_mode)]);
+  rows.push(['Stripe Connect',t('payments.planAccordingToServices')]);
+  rows.push(['Tarjeta','Commerce · Ticketing · cobros inmediatos']);
+  if(audience==='club'||audience==='federation')rows.push(['SEPA',t('payments.planSepaRecurring')]);
   rows.push(['Destacar','Extra']);
   rows.push(['Assist',titleLevel(plan.assist_level)]);
   rows.push(['Migrations',titleLevel(plan.migrations_level)]);
@@ -116,7 +119,8 @@ export async function renderPlanServices({audience='club',subjectType=null,subje
       <section class="kx-price-grid">${plans.map(p=>planCard(p,audience,context,billing,catalog.config?.founder_sales_open!==false,{selectMode})).join('')}</section>
       ${activationGrid(catalog,audience,{canRequest:Boolean(resolvedSubjectId&&remote),context})}
       ${audience==='federation'?partnerSection(catalog):''}
-      <section class="kx-commercial-section kx-economic-rules"><h2>Reglas claras</h2><ul><li><b>Cuenta ≠ identidad ≠ plan.</b> Registrarte no activa una tarifa.</li><li><b>Publicar ≠ Destacar ≠ Ticketing.</b></li><li>Ticketing agrupa QR, lector y control de acceso: no se cobran como servicios separados.</li><li>Los límites Showcase son capacidad incluida. Puedes ampliar en bloques de +25 por 8 €/30 días; archivar libera un slot sin perder reputación ni historial.</li><li>Las variantes de talla, color, peso o formato no consumen productos adicionales.</li><li>Toda compra comercial personal exige 18 años.</li><li>Stripe Connect mantiene direct charges: el vendedor u organizador cobra en su cuenta conectada y KOMBAX percibe únicamente las tarifas aplicables.</li></ul></section>
+      <section class="kx-commercial-section kx-payments-subscription-note"><div class="kx-commercial-section-title"><small>${esc(t('payments.planIntegratedKicker'))}</small><h2>${esc(t('payments.planTitle'))}</h2></div><div class="kx-activation-grid"><article><h3>${esc(t('payments.planIdentityTitle'))}</h3><p>${esc(t('payments.planIdentityBody'))}</p></article><article><h3>${esc(t('payments.cardTitle'))}</h3><p>${esc(t('payments.planCardBody'))}</p></article><article><h3>${esc(t('payments.sepaTitle'))}</h3><p>${esc(t('payments.planSepaBody'))}</p></article><article><h3>${esc(t('payments.planGuideTitle'))}</h3><p>${esc(t('payments.planGuideBody'))}</p><a class="btn btn-ghost" href="./assets/docs/GUIA_KOMBAX_COBROS_STRIPE_SEPA_R80.pdf" target="_blank" rel="noopener">${esc(t('payments.planOpenGuide'))}</a></article></div></section>
+      <section class="kx-commercial-section kx-economic-rules"><h2>Reglas claras</h2><ul><li><b>Cuenta ≠ identidad ≠ plan.</b> Registrarte no activa una tarifa.</li><li><b>Publicar ≠ Destacar ≠ Ticketing.</b></li><li>Ticketing agrupa QR, lector y control de acceso: no se cobran como servicios separados.</li><li>Los límites Showcase son capacidad incluida. Puedes ampliar en bloques de +25 por 8 €/30 días; archivar libera un slot sin perder reputación ni historial.</li><li>Las variantes de talla, color, peso o formato no consumen productos adicionales.</li><li>Toda compra comercial personal exige 18 años.</li><li>Stripe Connect mantiene direct charges: el vendedor u organizador cobra en su cuenta conectada y KOMBAX percibe únicamente las tarifas aplicables.</li><li><b>Tarjeta y SEPA son métodos independientes.</b> Se activan desde Cobros y Stripe cuando el perfil dispone de un servicio comercial compatible.</li><li><b>Commerce y Ticketing inmediato usan tarjeta.</b> SEPA queda reservado a cuotas y cobros recurrentes o diferidos compatibles, porque su confirmación no es instantánea.</li></ul></section>
     </div>`;
     if(onBack)setAppHtml(`<main id="main-view" class="main-view kx-commercial-standalone">${html}</main>`);else setMainHtml(html);
     if(onBack)bindSubviewActions(document,{backId:'kx-commercial-back',closeId:'kx-commercial-close',onBack,onClose:onBack});

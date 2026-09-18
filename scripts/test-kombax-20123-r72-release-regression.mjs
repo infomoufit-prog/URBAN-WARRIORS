@@ -40,10 +40,10 @@ const r628Show=read('supabase/migrations/20260911133000_kombax_r628_showcase_ord
 const r628Events=read('supabase/migrations/20260911133100_kombax_r628_events_ticketing_addon.sql');
 const supaConfig=read('supabase/config.toml');
 
-test('Release identity is R72 build 20130 everywhere',()=>{
-  has(config,"version: '2.0.0-rc.13-r79-i18n-completion'");has(config,'build: 20130');
-  has(gradle,'versionCode 20130');has(gradle,"versionName '2.0.0-rc.13-r79-i18n-completion'");
-  has(index,'v=20130');has(sw,"kombax-build-20130");
+test('Release identity is R72 build 20131 everywhere',()=>{
+  has(config,"version: '2.0.0-rc.13-r80-stripe-sepa-payments'");has(config,'build: 20131');
+  has(gradle,'versionCode 20131');has(gradle,"versionName '2.0.0-rc.13-r80-stripe-sepa-payments'");
+  has(index,'v=20131');has(sw,"kombax-build-20131");
 });
 
 test('R64.1 responsive global navigation is preserved',()=>{

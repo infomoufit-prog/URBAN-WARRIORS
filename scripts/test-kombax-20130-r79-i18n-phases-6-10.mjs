@@ -39,11 +39,11 @@ test('User-created content remains outside automatic system-copy localization',(
 test('Frontend does not reference translation batch/seed secrets',()=>{for(const txt of [source,runtime,legacy]){not(txt,'x-uw-cron-secret');not(txt,'kombax-system-i18n-r79-batch');not(txt,'kombax-system-i18n-r79-seed');not(txt,'SUPABASE_SERVICE_ROLE_KEY');}});
 test('Global strict audit records zero unresolved system copy',()=>assert.equal(audit.unresolved,0));
 test('Global audit covers thousands of visible candidates',()=>assert.ok(audit.candidates>4000));
-test('Release config identifies R79 build 20130',()=>{has(config,"version: '2.0.0-rc.13-r79-i18n-completion'");has(config,'build: 20130');});
-test('Service worker identifies R79 build 20130',()=>{has(sw,"BUILD_MARKER='kombax-build-20130'");has(sw,'20130-r79-i18n-completion');});
-test('Android identifies R79 build 20130',()=>{has(gradle,'versionCode 20130');has(gradle,"versionName '2.0.0-rc.13-r79-i18n-completion'");has(mainActivity,'KOMBAXRevision/r79-i18n-completion');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20130');});
-test('Health identifies build 20130 in body and HEAD',()=>{has(health,'build:20130');has(health,"'x-kombax-build':'20130'");});
-test('App shell cache-busters are build 20130',()=>{has(index,'v=20130');not(index,'v=20129');});
+test('Current release stays cumulative beyond R79 build 20130',()=>{const m=config.match(/build:\s*(\d+)/);assert.ok(m&&Number(m[1])>=20130);});
+test('Service worker release stays cumulative beyond R79',()=>{const m=sw.match(/kombax-build-(\d+)/);assert.ok(m&&Number(m[1])>=20130);});
+test('Android release stays cumulative beyond R79',()=>{const m=gradle.match(/versionCode\s+(\d+)/);assert.ok(m&&Number(m[1])>=20130);has(mainActivity,'KOMBAXApp/2.0.0-rc.13/');});
+test('Health release stays cumulative beyond R79',()=>{const m=health.match(/build:(\d+)/);assert.ok(m&&Number(m[1])>=20130);});
+test('App shell cache-busters do not regress to build 20129',()=>{not(index,'v=20129');assert.ok(/v=2013\d/.test(index));});
 test('R79 inventory includes Finance, Admin, legal/support and residual Events copy',()=>{for(const token of ['FINANZAS','PRIVACIDAD','Solicitud','Cartel oficial'])assert.ok(texts.some(x=>x.includes(token)),`Missing ${token}`);});
 test('R79 includes long-form copy as well as actions',()=>{assert.ok(texts.some(x=>x.length>250));assert.ok(texts.some(x=>x==='Activar'));});
 let passed=0;for(const [name,fn] of tests){try{fn();console.log(`✓ ${name}`);passed++;}catch(e){console.error(`✗ ${name}`);console.error(e.message);}}

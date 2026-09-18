@@ -22,11 +22,11 @@ const m260=await txt('supabase/migrations/260_kombax_showcase_club_autoprovision
 const m261=await txt('supabase/migrations/261_kombax_events_multiclub_authorized_connections.sql');
 const m263=await txt('supabase/migrations/263_kombax_events_multiclub_fk_indexes_r74.sql');
 
-ok(/r79-i18n-completion/.test(config)&&/build: 20130/.test(config),'R75 queda formalizada como build 20130');
-ok(/kombax-build-20130/.test(sw),'service worker usa build 20130');
-ok(/versionCode 20130/.test(gradle)&&/r79-i18n-completion/.test(gradle),'Android identifica R75 build 20130');
-ok(/build:20130/.test(health),'health source identifica build 20130');
-ok(/KOMBAXRevision\/r79-i18n-completion/.test(mainActivity)&&/KOMBAXApp\/2\.0\.0-rc\.13\/20130/.test(mainActivity),'WebView Android identifica R75 build 20130');
+ok(/r80-stripe-sepa-payments/.test(config)&&/build: 20131/.test(config),'R75 queda formalizada como build 20131');
+ok(/kombax-build-20131/.test(sw),'service worker usa build 20131');
+ok(/versionCode 20131/.test(gradle)&&/r80-stripe-sepa-payments/.test(gradle),'Android identifica R75 build 20131');
+ok(/build:20131/.test(health),'health source identifica build 20131');
+ok(/KOMBAXRevision\/r80-stripe-sepa-payments/.test(mainActivity)&&/KOMBAXApp\/2\.0\.0-rc\.13\/20131/.test(mainActivity),'WebView Android identifica R75 build 20131');
 
 ok(await exists('supabase/migrations/260_kombax_showcase_club_autoprovision.sql'),'migración 260 Showcase autoprovision existe');
 ok(await exists('supabase/migrations/261_kombax_events_multiclub_authorized_connections.sql'),'migración 261 Events multiclub existe');
