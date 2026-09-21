@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const js=await readFile(new URL('../web/js/modules/kombax-events.js',import.meta.url),'utf8');
+const css=await readFile(new URL('../web/css/kombax-events.css',import.meta.url),'utf8');
+const cfg=await readFile(new URL('../web/config.js',import.meta.url),'utf8');
+const gradle=await readFile(new URL('../android/app/build.gradle',import.meta.url),'utf8');
+const check=(name,value)=>{assert.ok(value,name);console.log('PASS',name)};
+check('build web >=20104 preserves R54 behavior',Number(cfg.match(/build:\s*(\d+)/)?.[1]||0)>=20104);
+check('android version >=20104 preserves R54 behavior',Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0)>=20104&&/r(?:5[4-9]|6\d)(?:\.\d+)?-/.test(gradle));
+check('Events read recovery retries transient failures',js.includes('resilientEventRead')&&js.includes('isTransientEventError'));
+check('discovery preserves existing cards on fetch failure',js.includes('Preserve already rendered cards instead of blanking Events')&&!/catch\(error\)\{if\(seq===discoveryRequestSeq\)\{if\(!append\)cached=\[\]/.test(js));
+check('event opening has actionable retry without toast-only failure',js.includes('openEventRecovery')&&js.includes('kx-event-open-retry'));
+check('event cards are keyboard accessible',js.includes('tabindex="0" role="button"')&&js.includes("event.key==='Enter'||event.key===' '"));
+check('QA demo panel is not rendered',/function demoQaPanel\(\)\{[\s\S]*?return '';[\s\S]*?\}/.test(js));
+check('visible pilot stabilization marker removed',!js.includes('<span>R25 · PILOT STABILIZATION · FLOW PRESERVED</span>'));
+check('builder visible version marker removed',!js.includes("EVENT CREATOR · R48 · ${training?"));
+check('upload preflight validates complete selection',js.includes('validateUploadFiles')&&js.includes('bindSelectionPreview'));
+check('upload feedback remains inside album flow',js.includes('batchStatus')&&js.includes("data-tone=\"success\"" )===false); // style is CSS; JS uses dataset tone
+check('mobile event card uses compact fixed visual stage',css.includes('grid-template-rows:180px auto')&&css.includes('.kx-event-card-stage{min-height:0;height:180px}'));
+check('mobile card hides teaser and secondary external actions',css.includes('.kx-event-card-large-body>.kx-event-main-teaser{display:none}')&&css.includes('.kx-event-large-actions>a{display:none!important}'));
+check('media status tones styled',css.includes('.kx-media-batch-status[data-tone="error"]')&&css.includes('.kx-media-batch-status[data-tone="success"]'));
+console.log('R54 Events flow/mobile quality: 14/14 PASS');

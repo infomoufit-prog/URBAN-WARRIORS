@@ -1,0 +1,5 @@
+KOMBAX 20.108 R58
+IDENTITY_MEMBERSHIPS_SPECTATOR_MEDIA_QA
+Derived from KOMBAX 20.107 R57 SOCIAL_INFO_UX_QA.
+QA candidate for Work/local/Supabase/Netlify/Android continuation.
+Not production-ready until migration 249 + authenticated manual RLS/multiclub QA + release signing checks are completed.

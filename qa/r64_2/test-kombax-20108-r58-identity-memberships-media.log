@@ -1,0 +1,20 @@
+PASS administrative student access lifecycle
+PASS same-account duplicate guard inside one club
+PASS bound invitation activates existing student record
+PASS independent multi-club membership queries
+PASS membership access is revoked per club on exit/suspension
+PASS spectator can contact clubs as future student
+PASS spectator has Showcase product-only inquiry channel
+PASS Media / Creator backend profile and entitlements
+PASS verified Media gains Social + Showcase publishing
+PASS spectator has no publishing entitlement by default
+PASS frontend exposes Media and keeps Spectator as base-only state
+PASS identity context labels Media
+PASS repositories expose memberships, activation and inquiry flows
+PASS existing imported student can activate without duplicate
+PASS Showcase accepts Media provider UI
+PASS gateway does not offer Spectator as a requested profile
+PASS Android preserves R58+ monotonic identity
+PASS web preserves R58+ monotonic build identity
+PASS service worker preserves R58 lineage through current release
+OK KOMBAX 20.108 R58 focused QA

@@ -1,0 +1,27 @@
+{
+  "changed": 100,
+  "added": 478,
+  "removed": 0,
+  "locale_only_business_files": [
+    "web/js/delete-account.js",
+    "web/js/modules/showcase.js",
+    "web/js/modules/professional-operations.js",
+    "web/js/modules/brand-business.js",
+    "web/js/modules/kombax-event-visuals.js",
+    "web/js/modules/public-profile.js",
+    "web/js/modules/help-legal.js",
+    "web/js/modules/professional-finance.js",
+    "web/js/modules/plan-services.js",
+    "web/js/modules/platform-admin.js",
+    "web/js/modules/kombax-events.js",
+    "web/js/modules/event-connections.js",
+    "web/js/modules/finance.js",
+    "web/js/modules/finance-premium.js",
+    "web/js/modules/gateway.js",
+    "web/js/modules/events.js",
+    "web/js/modules/federation-licenses.js",
+    "web/js/modules/kombax-discovery.js",
+    "web/js/core/finance-adapter.js"
+  ],
+  "unexpected_business_changes": []
+}

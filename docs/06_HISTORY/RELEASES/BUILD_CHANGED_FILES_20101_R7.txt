@@ -1,0 +1,33 @@
+KOMBAX 20.101 R7 · ARCHIVOS LÓGICOS MODIFICADOS / AÑADIDOS
+
+Frontend fuente:
+- web/js/modules/gateway.js
+- web/css/kombax-premium.css
+- web/css/kombax-brand-heroes.css
+- web/js/ui/brand-hero.js
+- web/index.html
+- web/service-worker.js
+- web/assets/brand-heroes/gateway-kombax-community.webp [NEW]
+
+QA / scripts:
+- scripts/test-kombax-20101-gateway-atmospheric-r7.mjs [NEW]
+- package.json
+
+Documentación R7:
+- PHASE_20101_R7_GATEWAY_ATMOSPHERIC_HERO_IMPLEMENTATION_PLAN.md
+- VISUAL_AUDIT_20101_R7.md
+- CHANGELOG_20101_R7.md
+- QA_VALIDATION_20101_R7.md
+- LOCAL_MOBILE_CHECKLIST_20101_R7.md
+- CONTINUITY_STATUS_20101_R7.txt
+- BUILD_CHANGED_FILES_20101_R7.txt
+
+Generados por build determinista:
+- dist/** (espejo de web)
+- android/app/src/main/assets/www/** (espejo de web)
+
+Sin cambios:
+- supabase/**
+- backend contracts / RLS / RPC / Edge Functions
+- android native source / Gradle identity
+- LOCAL_RELEASE_SIGNING keystore

@@ -1,0 +1,30 @@
+-- KOMBAX universal user-authored content translation cache.
+-- Additive only. Original authored content remains in its source tables and is never overwritten.
+create table if not exists public.kombax_content_translations (
+  id uuid primary key default gen_random_uuid(),
+  content_type text not null,
+  content_id text not null,
+  field_key text not null default 'text',
+  source_hash text not null,
+  source_locale text,
+  target_locale text not null,
+  translated_text text not null,
+  privacy_scope text not null default 'public',
+  provider text not null default 'openai',
+  model_alias text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  last_used_at timestamptz not null default now(),
+  constraint kombax_content_translations_target_locale_ck check (target_locale in ('es','en','fr','pt','it','de','th','fil')),
+  constraint kombax_content_translations_source_locale_ck check (source_locale is null or source_locale in ('es','en','fr','pt','it','de','th','fil')),
+  constraint kombax_content_translations_privacy_ck check (privacy_scope in ('public','members','private')),
+  constraint kombax_content_translations_text_ck check (length(translated_text) between 1 and 20000),
+  constraint kombax_content_translations_unique unique(content_type,content_id,field_key,source_hash,target_locale)
+);
+create index if not exists kombax_content_translations_lookup_idx on public.kombax_content_translations(content_type,content_id,field_key,target_locale,source_hash);
+create index if not exists kombax_content_translations_usage_idx on public.kombax_content_translations(last_used_at);
+alter table public.kombax_content_translations enable row level security;
+-- Intentionally no anon/authenticated direct policies: translations are served through the Edge Function,
+-- which revalidates request shape and never returns cached content without the caller supplying the same source text/hash.
+revoke all on table public.kombax_content_translations from anon, authenticated;
+comment on table public.kombax_content_translations is 'Derived translations only. Original user-authored content stays immutable in source tables. Private/direct-message translations are not persisted by the translation Edge Function.';

@@ -1,0 +1,15 @@
+PASS Showcase product/service model and seller analytics
+PASS Seller owns fulfillment status updates
+PASS Buyer order center is visible and responsibilities are explicit
+PASS Seller dashboard includes stock classification
+PASS Events core/add-on split and server checkout gate
+PASS Events UI exposes add-on and contract acceptance
+PASS Owner commercial service review area
+PASS Repositories expose commercial service APIs
+PASS Stripe checkout enforces product and ticketing gates
+PASS KOMBAX SPAIN is the public legal operator label
+PASS Public legal pages exclude former personal operator data
+PASS Public legal pages exclude former personal operator data
+PASS Public legal pages exclude former personal operator data
+PASS Ticket legal copy identifies KOMBAX SPAIN
+R62.8 static QA PASS

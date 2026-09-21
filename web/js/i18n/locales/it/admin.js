@@ -1,0 +1,53 @@
+export default {
+  "title": "Amministrazione KOMBAX",
+  "team": "Team",
+  "permissions": "Team e permessi",
+  "archive": "Archivio e cestino",
+  "common": {
+    "loading": "Caricamento amministrazione…",
+    "platform": "Amministrazione piattaforma",
+    "search": "Cerca",
+    "status": "Stato",
+    "actions": "Azioni",
+    "users": "Utenti",
+    "clubs": "Club",
+    "review": "Rivedi",
+    "save": "Salva modifiche"
+  },
+  "roles": {
+    "direction": "Gestore dell’app",
+    "coordination": "Coordinamento",
+    "secretariat": "Segreteria",
+    "treasury": "Finanze / Tesoreria",
+    "communications": "Comunicazione",
+    "coach": "Allenatore",
+    "family": "Famiglia",
+    "student": "Allievo"
+  },
+  "dashboard": {
+    "loading": "Preparazione della dashboard…",
+    "managerKicker": "Gestore dell’app · Dashboard globale",
+    "managerTitle": "Tutta la palestra in un’unica app.",
+    "activeMembers": "Soci attivi",
+    "activeStudents": "Allievi attivi",
+    "preRegistrations": "Pre-iscrizioni",
+    "pendingReview": "da rivedere",
+    "activeGroups": "gruppi attivi",
+    "pendingActions": "Azioni in sospeso",
+    "feesNeedFollowUp": "quote da monitorare",
+    "open": "Apri",
+    "unassignedCoach": "Nessun allenatore assegnato",
+    "noActiveGroups": "Nessun gruppo attivo",
+    "noUpcomingSessions": "Nessuna sessione imminente",
+    "configure": "Configura",
+    "takeAttendance": "Registra presenze",
+    "manageStudents": "Gestisci allievi",
+    "pendingPreRegistrations": "Pre-iscrizioni in sospeso",
+    "requestsToReview": "{{count}} richieste da rivedere",
+    "activeRecords": "{{count}} schede attive",
+    "overdueFees": "Quote scadute",
+    "averageOccupancy": "Occupazione media",
+    "classesOccupancy": "Lezioni e occupazione",
+    "upcomingSessions": "Prossime sessioni"
+  }
+};

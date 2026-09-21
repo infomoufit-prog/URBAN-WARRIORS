@@ -1,0 +1,15 @@
+PASS · three local Showcase product assets exist
+PASS · three local product images are distinct
+PASS · three product assets copied to dist and Android
+PASS · migration targets the existing Urban Warriors club brand
+PASS · migration resolves categories by slug
+PASS · exactly three R19 demo slugs are seeded
+PASS · prices are the approved reference values
+PASS · all three products use in-app contact CTA
+PASS · nutrition demo avoids invented label macros and carries legal warning
+PASS · Showcase contact CTA remains product-linked
+PASS · Showcase preserves legacy external CTA or later KOMBAX commerce evolution
+PASS · verification checks Urban ownership and uniqueness
+PASS · cache bumped to R19
+PASS · R18 Urban realism preserved
+OK KOMBAX 20.101 R19 Urban Warriors Showcase Products

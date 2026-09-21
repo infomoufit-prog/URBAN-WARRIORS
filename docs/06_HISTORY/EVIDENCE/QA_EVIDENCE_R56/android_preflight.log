@@ -1,0 +1,15 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 android:preflight
+> node scripts/android-release-preflight.mjs
+
+
+Urban Warriors · preflight Android RC13 build 20106
+
+OK · Identidad Android estable — com.urbanwarriors.app
+OK · Versionado de actualización — versionCode 20106
+OK · Aplicación web embebida — assets/www presente
+OK · Firebase para notificaciones push — configuración presente
+PENDIENTE · Firma local — copia android/keystore.properties.example como android/keystore.properties
+
+Resultado: 4/5 comprobaciones preparadas.
+No generes la release definitiva hasta resolver los elementos PENDIENTE.

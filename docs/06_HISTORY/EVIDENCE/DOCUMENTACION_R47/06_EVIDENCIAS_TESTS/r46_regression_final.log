@@ -1,0 +1,17 @@
+PASS · primary action says Me interesa
+PASS · R46 personal hide contract is superseded safely by R47 preference
+PASS · post menu moves secondary actions out of primary row
+PASS · primary row is preference comment share
+PASS · mobile feed is continuous edge-to-edge
+PASS · mobile media can use more viewport
+PASS · repository preserves R46 relevance feed as active or fallback
+PASS · repository retains legacy fallback
+PASS · cursor carries relevance score
+PASS · private hidden table is RPC only
+PASS · feed excludes personally hidden posts
+PASS · ranking uses recency and engagement
+PASS · ranking uses author affinity
+PASS · hide gateway is idempotent
+PASS · hide does not mutate post global state
+
+R46 15/15 PASS

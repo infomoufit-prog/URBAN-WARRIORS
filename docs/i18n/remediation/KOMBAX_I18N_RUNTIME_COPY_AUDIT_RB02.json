@@ -1,0 +1,587 @@
+{
+  "generated_at": "2026-09-18T13:20:29.959Z",
+  "targets": [
+    "web/js/app.js",
+    "web/js/core/adaptive-poller.js",
+    "web/js/core/assist-specialists.js",
+    "web/js/core/backend.js",
+    "web/js/core/capability-resolver.js",
+    "web/js/core/commercial-pricing.js",
+    "web/js/core/context-isolation-20083.js",
+    "web/js/core/demo-directory.js",
+    "web/js/core/demo-showcase.js",
+    "web/js/core/finance-adapter.js",
+    "web/js/core/finance-math.js",
+    "web/js/core/identity-context.js",
+    "web/js/core/invitations.js",
+    "web/js/core/media.js",
+    "web/js/core/permissions.js",
+    "web/js/core/platform.js",
+    "web/js/core/profile-registry.js",
+    "web/js/core/query-cache.js",
+    "web/js/core/repositories.js",
+    "web/js/core/security-go-live-20084.js",
+    "web/js/core/state.js",
+    "web/js/core/supabase.js",
+    "web/js/core/telemetry.js",
+    "web/js/core/utils.js",
+    "web/js/delete-account.js",
+    "web/js/modules/account-security.js",
+    "web/js/modules/admin.js",
+    "web/js/modules/auth-recovery.js",
+    "web/js/modules/brand-business.js",
+    "web/js/modules/brand-hub.js",
+    "web/js/modules/club-kombax-hub.js",
+    "web/js/modules/club-profile.js",
+    "web/js/modules/comms-material.js",
+    "web/js/modules/community.js",
+    "web/js/modules/competition-preparation.js",
+    "web/js/modules/competitor-hub.js",
+    "web/js/modules/customer-operations.js",
+    "web/js/modules/dashboard-catalog.js",
+    "web/js/modules/documents.js",
+    "web/js/modules/event-connections.js",
+    "web/js/modules/events.js",
+    "web/js/modules/federation-hub.js",
+    "web/js/modules/federation-licenses.js",
+    "web/js/modules/fighter-discovery.js",
+    "web/js/modules/finance-premium-bootstrap.js",
+    "web/js/modules/finance-premium.js",
+    "web/js/modules/finance.js",
+    "web/js/modules/gateway.js",
+    "web/js/modules/groups-members.js",
+    "web/js/modules/help-legal.js",
+    "web/js/modules/kombax-discovery.js",
+    "web/js/modules/kombax-event-visuals.js",
+    "web/js/modules/kombax-events.js",
+    "web/js/modules/kombax-social.js",
+    "web/js/modules/lifecycle.js",
+    "web/js/modules/managed-profile-hub.js",
+    "web/js/modules/payments-center.js",
+    "web/js/modules/plan-services.js",
+    "web/js/modules/platform-admin-access.js",
+    "web/js/modules/platform-admin.js",
+    "web/js/modules/platform-legal.js",
+    "web/js/modules/portal.js",
+    "web/js/modules/professional-finance.js",
+    "web/js/modules/professional-hub.js",
+    "web/js/modules/professional-operations.js",
+    "web/js/modules/public-profile.js",
+    "web/js/modules/showcase.js",
+    "web/js/modules/social-network.js",
+    "web/js/modules/social-post-management.js",
+    "web/js/modules/spectator-hub.js",
+    "web/js/modules/sports-profile.js",
+    "web/js/modules/support-privacy.js",
+    "web/js/modules/training.js",
+    "web/js/modules/work-scopes.js",
+    "web/js/public-product-overview.js",
+    "web/js/ui/analytics-reports-r77.js",
+    "web/js/ui/brand-hero.js",
+    "web/js/ui/components.js",
+    "web/js/ui/conversation-ui.js",
+    "web/js/ui/icons.js",
+    "web/js/ui/media-framing.js",
+    "web/js/ui/video-cover.js"
+  ],
+  "phrases": 4663,
+  "covered": 4663,
+  "unresolved": 0,
+  "coverage": 100,
+  "skipped": 365,
+  "files": {
+    "web/js/app.js": {
+      "total": 117,
+      "covered": 117,
+      "skipped": 6,
+      "coverage": 100
+    },
+    "web/js/core/adaptive-poller.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/assist-specialists.js": {
+      "total": 24,
+      "covered": 24,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/backend.js": {
+      "total": 41,
+      "covered": 41,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/core/capability-resolver.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/commercial-pricing.js": {
+      "total": 4,
+      "covered": 4,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/context-isolation-20083.js": {
+      "total": 1,
+      "covered": 1,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/core/demo-directory.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/core/demo-showcase.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 13,
+      "coverage": 100
+    },
+    "web/js/core/finance-adapter.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/finance-math.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/identity-context.js": {
+      "total": 5,
+      "covered": 5,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/core/invitations.js": {
+      "total": 6,
+      "covered": 6,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/media.js": {
+      "total": 11,
+      "covered": 11,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/permissions.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/platform.js": {
+      "total": 7,
+      "covered": 7,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/profile-registry.js": {
+      "total": 18,
+      "covered": 18,
+      "skipped": 6,
+      "coverage": 100
+    },
+    "web/js/core/query-cache.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/repositories.js": {
+      "total": 42,
+      "covered": 42,
+      "skipped": 73,
+      "coverage": 100
+    },
+    "web/js/core/security-go-live-20084.js": {
+      "total": 7,
+      "covered": 7,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/state.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/supabase.js": {
+      "total": 9,
+      "covered": 9,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/telemetry.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/utils.js": {
+      "total": 37,
+      "covered": 37,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/delete-account.js": {
+      "total": 17,
+      "covered": 17,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/account-security.js": {
+      "total": 13,
+      "covered": 13,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/admin.js": {
+      "total": 158,
+      "covered": 158,
+      "skipped": 6,
+      "coverage": 100
+    },
+    "web/js/modules/auth-recovery.js": {
+      "total": 18,
+      "covered": 18,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/brand-business.js": {
+      "total": 115,
+      "covered": 115,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/modules/brand-hub.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/club-kombax-hub.js": {
+      "total": 46,
+      "covered": 46,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/club-profile.js": {
+      "total": 59,
+      "covered": 59,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/comms-material.js": {
+      "total": 89,
+      "covered": 89,
+      "skipped": 11,
+      "coverage": 100
+    },
+    "web/js/modules/community.js": {
+      "total": 77,
+      "covered": 77,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/competition-preparation.js": {
+      "total": 83,
+      "covered": 83,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/modules/competitor-hub.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/customer-operations.js": {
+      "total": 206,
+      "covered": 206,
+      "skipped": 4,
+      "coverage": 100
+    },
+    "web/js/modules/dashboard-catalog.js": {
+      "total": 39,
+      "covered": 39,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/modules/documents.js": {
+      "total": 40,
+      "covered": 40,
+      "skipped": 5,
+      "coverage": 100
+    },
+    "web/js/modules/event-connections.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/events.js": {
+      "total": 79,
+      "covered": 79,
+      "skipped": 15,
+      "coverage": 100
+    },
+    "web/js/modules/federation-hub.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/federation-licenses.js": {
+      "total": 99,
+      "covered": 99,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/fighter-discovery.js": {
+      "total": 32,
+      "covered": 32,
+      "skipped": 4,
+      "coverage": 100
+    },
+    "web/js/modules/finance-premium-bootstrap.js": {
+      "total": 3,
+      "covered": 3,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/finance-premium.js": {
+      "total": 110,
+      "covered": 110,
+      "skipped": 24,
+      "coverage": 100
+    },
+    "web/js/modules/finance.js": {
+      "total": 70,
+      "covered": 70,
+      "skipped": 9,
+      "coverage": 100
+    },
+    "web/js/modules/gateway.js": {
+      "total": 172,
+      "covered": 172,
+      "skipped": 5,
+      "coverage": 100
+    },
+    "web/js/modules/groups-members.js": {
+      "total": 157,
+      "covered": 157,
+      "skipped": 11,
+      "coverage": 100
+    },
+    "web/js/modules/help-legal.js": {
+      "total": 329,
+      "covered": 329,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/modules/kombax-discovery.js": {
+      "total": 66,
+      "covered": 66,
+      "skipped": 10,
+      "coverage": 100
+    },
+    "web/js/modules/kombax-event-visuals.js": {
+      "total": 7,
+      "covered": 7,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/kombax-events.js": {
+      "total": 810,
+      "covered": 810,
+      "skipped": 49,
+      "coverage": 100
+    },
+    "web/js/modules/kombax-social.js": {
+      "total": 257,
+      "covered": 257,
+      "skipped": 6,
+      "coverage": 100
+    },
+    "web/js/modules/lifecycle.js": {
+      "total": 14,
+      "covered": 14,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/modules/managed-profile-hub.js": {
+      "total": 33,
+      "covered": 33,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/modules/payments-center.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/plan-services.js": {
+      "total": 71,
+      "covered": 71,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/modules/platform-admin-access.js": {
+      "total": 24,
+      "covered": 24,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/platform-admin.js": {
+      "total": 265,
+      "covered": 265,
+      "skipped": 14,
+      "coverage": 100
+    },
+    "web/js/modules/platform-legal.js": {
+      "total": 9,
+      "covered": 9,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/portal.js": {
+      "total": 105,
+      "covered": 105,
+      "skipped": 10,
+      "coverage": 100
+    },
+    "web/js/modules/professional-finance.js": {
+      "total": 29,
+      "covered": 29,
+      "skipped": 6,
+      "coverage": 100
+    },
+    "web/js/modules/professional-hub.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/professional-operations.js": {
+      "total": 33,
+      "covered": 33,
+      "skipped": 4,
+      "coverage": 100
+    },
+    "web/js/modules/public-profile.js": {
+      "total": 81,
+      "covered": 81,
+      "skipped": 9,
+      "coverage": 100
+    },
+    "web/js/modules/showcase.js": {
+      "total": 349,
+      "covered": 349,
+      "skipped": 11,
+      "coverage": 100
+    },
+    "web/js/modules/social-network.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/modules/social-post-management.js": {
+      "total": 14,
+      "covered": 14,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/spectator-hub.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/sports-profile.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/support-privacy.js": {
+      "total": 40,
+      "covered": 40,
+      "skipped": 1,
+      "coverage": 100
+    },
+    "web/js/modules/training.js": {
+      "total": 52,
+      "covered": 52,
+      "skipped": 9,
+      "coverage": 100
+    },
+    "web/js/modules/work-scopes.js": {
+      "total": 37,
+      "covered": 37,
+      "skipped": 4,
+      "coverage": 100
+    },
+    "web/js/public-product-overview.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/ui/analytics-reports-r77.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/brand-hero.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/components.js": {
+      "total": 5,
+      "covered": 5,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/ui/conversation-ui.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/icons.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/media-framing.js": {
+      "total": 10,
+      "covered": 10,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/video-cover.js": {
+      "total": 12,
+      "covered": 12,
+      "skipped": 0,
+      "coverage": 100
+    }
+  },
+  "unresolved_samples": []
+}

@@ -1,0 +1,2 @@
+# KOMBAX RC13 build 20089 · continuidad
+Fuente de verdad: build 20089 FULL. Finanzas Premium mantiene Finance Explorer 20087 y responsive/rotación 20088. Cambio 20089: limpieza completa de tecnicismos visibles en Finanzas. No reintroducir números de build, nombres RPC, RLS, Supabase, backend mismatch, QA/Shadow, flags/gates o códigos internos en textos mostrados a clubes. Mantener diagnóstico técnico solo en logs, tests y backend. Próximo QA: validar móvil/PWA/desktop, especialmente Automatizaciones, mensajes de error, Pagos, Recibos e Informes.

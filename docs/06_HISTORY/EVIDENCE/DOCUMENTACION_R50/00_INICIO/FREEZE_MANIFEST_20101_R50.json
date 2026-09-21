@@ -1,0 +1,14 @@
+{
+  "product": "KOMBAX",
+  "version": "20.101 R50",
+  "base": "R49",
+  "status": "PRE-QA",
+  "runtime_files": {"web": 189, "dist": 189, "android": 189},
+  "runtime_aggregate_sha256": "b48dcfa67c4acb30a1bcf01d891df98c668861c07e18af0231df12ce40d68b4d",
+  "r50_focused": "40/40 PASS",
+  "npm_test": "EXIT 0",
+  "android_preflight": "4/5 - local signing pending",
+  "netlify_deploy": false,
+  "github_push": false,
+  "product_names": ["KOMBAX Social", "KOMBAX Events"]
+}

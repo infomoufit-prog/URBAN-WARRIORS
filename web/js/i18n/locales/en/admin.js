@@ -1,0 +1,53 @@
+export default {
+  "title": "KOMBAX Administration",
+  "team": "Team",
+  "permissions": "Team and permissions",
+  "archive": "Archive and trash",
+  "common": {
+    "loading": "Loading administration…",
+    "platform": "Platform administration",
+    "search": "Search",
+    "status": "Status",
+    "actions": "Actions",
+    "users": "Users",
+    "clubs": "Clubs",
+    "review": "Review",
+    "save": "Save changes"
+  },
+  "roles": {
+    "direction": "App Manager",
+    "coordination": "Coordination",
+    "secretariat": "Secretariat",
+    "treasury": "Finance / Treasury",
+    "communications": "Communications",
+    "coach": "Coach",
+    "family": "Family",
+    "student": "Student"
+  },
+  "dashboard": {
+    "loading": "Preparing your dashboard…",
+    "managerKicker": "App Manager · Global dashboard",
+    "managerTitle": "Your whole gym in one app.",
+    "activeMembers": "Active members",
+    "activeStudents": "Active students",
+    "preRegistrations": "Pre-registrations",
+    "pendingReview": "pending review",
+    "activeGroups": "active groups",
+    "pendingActions": "Pending actions",
+    "feesNeedFollowUp": "fees require follow-up",
+    "open": "Open",
+    "unassignedCoach": "No coach assigned",
+    "noActiveGroups": "No active groups",
+    "noUpcomingSessions": "No upcoming sessions",
+    "configure": "Configure",
+    "takeAttendance": "Take attendance",
+    "manageStudents": "Manage students",
+    "pendingPreRegistrations": "Pending pre-registrations",
+    "requestsToReview": "{{count}} requests to review",
+    "activeRecords": "{{count}} active records",
+    "overdueFees": "Overdue fees",
+    "averageOccupancy": "Average occupancy",
+    "classesOccupancy": "Classes and occupancy",
+    "upcomingSessions": "Upcoming sessions"
+  }
+};

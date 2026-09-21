@@ -1,0 +1,34 @@
+name: KombaxIOS
+options:
+  bundleIdPrefix: es.kombax
+  deploymentTarget:
+    iOS: "15.0"
+packages:
+  StripeTerminal:
+    url: https://github.com/stripe/stripe-terminal-ios
+    from: 5.8.0
+targets:
+  KombaxIOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: KombaxIOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: es.kombax.app
+        MARKETING_VERSION: 2.0.0
+        CURRENT_PROJECT_VERSION: 20133
+        SWIFT_VERSION: 6.0
+        CODE_SIGN_ENTITLEMENTS: KombaxIOS/KombaxIOS.entitlements
+    info:
+      path: KombaxIOS/Info.plist
+      properties:
+        CFBundleDisplayName: KOMBAX
+        UILaunchScreen: {}
+        NSLocationWhenInUseUsageDescription: KOMBAX utiliza tu ubicación para asociar de forma segura Tap to Pay a la ubicación comercial de Stripe Terminal.
+        NSBluetoothAlwaysUsageDescription: KOMBAX puede utilizar Bluetooth si conectas un lector Stripe Terminal compatible.
+    entitlements:
+      path: KombaxIOS/KombaxIOS.entitlements
+    dependencies:
+      - package: StripeTerminal
+        product: StripeTerminal

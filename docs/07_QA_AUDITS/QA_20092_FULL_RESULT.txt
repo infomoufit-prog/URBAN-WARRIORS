@@ -1,0 +1,8 @@
+KOMBAX RC13 build 20.092 · FINAL QA
+
+KOMBAX health endpoint contract (>=20072, current 20092): PASS
+KOMBAX health endpoint contract (>=20072, current 20092): PASS
+PASS 20090 KOMBAX Events Foundation
+PASS 20091 KOMBAX Public Events & Organizations
+PASS 20092 KOMBAX Fighters & Fight Cards
+OK build 94 archivos · web = dist = Android

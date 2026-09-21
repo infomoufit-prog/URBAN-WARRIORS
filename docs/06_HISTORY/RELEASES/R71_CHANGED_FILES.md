@@ -1,0 +1,55 @@
+# R71 Changed Files
+
+Changed/added vs R70: **51**
+
+- `R71_FINAL_EVIDENCE/android-preflight-r71-final.exitcode`
+- `R71_FINAL_EVIDENCE/android-preflight-r71-final.log`
+- `R71_FINAL_EVIDENCE/build-r71-final.exitcode`
+- `R71_FINAL_EVIDENCE/build-r71-final.log`
+- `R71_FINAL_EVIDENCE/npm-test-r71-final.exitcode`
+- `R71_FINAL_EVIDENCE/npm-test-r71-final.log`
+- `R71_FINAL_REPORT.md`
+- `R71_IMPLEMENTATION_PLAN.md`
+- `R71_PACKAGE_SECURITY_SCAN.md`
+- `R71_QA_PILOT_CHECKLIST.md`
+- `R71_RELEASE_NOTES.md`
+- `android/app/build.gradle`
+- `android/app/src/main/assets/www/child-safety.html`
+- `android/app/src/main/assets/www/config.js`
+- `android/app/src/main/assets/www/css/kombax-premium.css`
+- `android/app/src/main/assets/www/delete-account.html`
+- `android/app/src/main/assets/www/index.html`
+- `android/app/src/main/assets/www/js/app.js`
+- `android/app/src/main/assets/www/js/ui/components.js`
+- `android/app/src/main/assets/www/privacy.html`
+- `android/app/src/main/assets/www/service-worker.js`
+- `android/app/src/main/assets/www/terms.html`
+- `android/app/src/main/java/com/urbanwarriors/app/MainActivity.java`
+- `dist/child-safety.html`
+- `dist/config.js`
+- `dist/css/kombax-premium.css`
+- `dist/delete-account.html`
+- `dist/index.html`
+- `dist/js/app.js`
+- `dist/js/ui/components.js`
+- `dist/privacy.html`
+- `dist/service-worker.js`
+- `dist/terms.html`
+- `package.json`
+- `scripts/test-kombax-20122-r71-commercial-continuity.mjs`
+- `scripts/test-kombax-20122-r71-events-operations-center.mjs`
+- `scripts/test-kombax-20122-r71-identity-spectator.mjs`
+- `scripts/test-kombax-20122-r71-release-regression.mjs`
+- `scripts/test-kombax-20122-r71-showcase-seller-center.mjs`
+- `scripts/test-kombax-20122-r71-sidebar-product-accordions.mjs`
+- `supabase/functions/health/index.ts`
+- `web/child-safety.html`
+- `web/config.js`
+- `web/css/kombax-premium.css`
+- `web/delete-account.html`
+- `web/index.html`
+- `web/js/app.js`
+- `web/js/ui/components.js`
+- `web/privacy.html`
+- `web/service-worker.js`
+- `web/terms.html`

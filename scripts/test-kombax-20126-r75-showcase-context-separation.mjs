@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
+const showcase=read('web/js/modules/showcase.js');
+const app=read('web/js/app.js');
+const hub=read('web/js/modules/club-kombax-hub.js');
+const sql=read('supabase/migrations/264_kombax_showcase_multiclub_context_r75.sql');
+let pass=0;const ok=(cond,msg)=>{if(!cond)throw new Error(`FAIL R75: ${msg}`);pass++;console.log(`PASS ${pass}: ${msg}`)};
+ok(/export async function renderShowcase\(\)[\s\S]*activeView='catalog';[\s\S]*managedBrands=\[\];[\s\S]*categories=await repos\.kombaxShowcase\.categories\(\)/.test(showcase),'Explorar Showcase resetea estado y carga solo catálogo público');
+ok(!/export async function renderShowcase\(\)[\s\S]*Promise\.all\(\[repos\.kombaxShowcase\.categories\(\),repos\.kombaxShowcase\.myBrands/.test(showcase),'Explorar Showcase no depende de espacios privados');
+ok(/export async function renderMyShowcase\(\)[\s\S]*repos\.kombaxShowcase\.myBrands\(\)/.test(showcase),'Mi Showcase resuelve explícitamente el espacio privado');
+ok(/openPrivateShowcaseRoute/.test(showcase)&&/openPublicShowcaseRoute/.test(showcase),'Navegación pública y privada usa rutas separadas');
+ok(/else if\(a==='showcase'\)go\('my-showcase'\)/.test(hub),'Hub del Club entra por la ruta privada dedicada');
+ok(/PRIVATE_SHOWCASE_ROLES=new Set\(\['direccion','coordinacion'\]\)/.test(app),'Navegación privada se alinea con Dirección/Coordinación');
+ok(/if p_club_id is not null then[\s\S]*v_id:=public\.app_kombax_showcase_ensure_club_v045\(p_club_id\);[\s\S]*m\.club_id=p_club_id[\s\S]*return;/.test(sql),'RPC con club_id devuelve exclusivamente el club activo');
+ok(/if p_club_id is not null then[\s\S]*return;[\s\S]*for r in[\s\S]*perfiles_kombax_directos/.test(sql),'Perfiles directos no se autoprovisionan durante Mi Showcase de Club');
+ok(/app_kombax_showcase_validar_marca_v042[\s\S]*SHOWCASE_HTTPS_URL_REQUIRED/.test(sql)&&!/SHOWCASE_BRAND_PROFILE_REQUIRED/.test(sql),'Validador histórico deja de forzar tipo Marca y conserva seguridad URL');
+ok(/m\.sujeto_tipo in\('marca','federacion','competidor'\)/.test(sql),'Contexto global mantiene espacios directos separados');
+console.log(`R75 SHOWCASE CONTEXT SEPARATION: PASS ${pass}/${pass}`);

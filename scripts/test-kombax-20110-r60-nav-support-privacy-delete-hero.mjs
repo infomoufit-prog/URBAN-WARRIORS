@@ -1,0 +1,34 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');
+let pass=0,fail=0;
+const ok=(cond,msg)=>{if(cond){console.log(`PASS ${msg}`);pass++;}else{console.error(`FAIL ${msg}`);fail++;}};
+const conv=read('web/js/ui/conversation-ui.js');
+const social=read('web/js/modules/kombax-social.js');
+const ops=read('web/js/modules/customer-operations.js');
+const profile=read('web/js/modules/public-profile.js');
+const repos=read('web/js/core/repositories.js');
+const components=read('web/js/ui/components.js');
+const css=read('web/css/kombax-brand-heroes.css');
+const uiCss=read('web/css/kombax-ui-stabilization-r60.css');
+const sql=read('supabase/migrations/258_kombax_pilot_navigation_privacy_history_delete_r60.sql');
+const edge=read('supabase/functions/kombax-history-delete-r60/index.ts');
+
+ok(conv.includes("CONVERSATION_CHANNELS=['social','showcase','assist','migrations']")&&!conv.includes("['support','Support']"),'Conversaciones KOMBAX keeps exactly four channels; Support is separate');
+ok(social.includes("const filterTabs=standalone?'':"),'Standalone Social/Showcase inbox removes duplicated lower filter row');
+ok(ops.includes("Primero por correo. Escalamos solo cuando aporta valor.")&&ops.includes('No lo activa el cliente')&&ops.includes('Combots puede asignar asistencia humana'),'Support escalation is email-first and controlled by KOMBAX, not requested by customer');
+ok(ops.includes("subviewActions({backId:'kx-migration-back'")&&ops.includes("bindSubviewActions(root,{backId:'kx-migration-back'"),'Migrations conversation has visible Back and Close controls');
+ok(ops.includes("subviewActions({backId:'kx-assist-back'")&&ops.includes("subviewActions({backId:'kx-support-back'"),'Assist and Support guided subviews expose Back and Close controls');
+ok(ops.includes("kx-support-home-back")&&ops.includes("kx-assist-home-back")&&ops.includes("kx-migrations-home-back"),'Support/Assist/Migrations home subviews expose Back and Close controls');
+ok(components.includes('id="modal-back"')&&components.includes("wrap.querySelector('#modal-back')?.addEventListener('click',back)")&&components.includes('const back=()=>popModal()'),'Generic modals expose Back plus Close and restore the parent modal when nested');
+ok(uiCss.includes('.modal-head-actions')&&uiCss.includes('.kx-subview-actions'),'Responsive Back/Close controls have shared mobile/PWA styling');
+ok(css.includes('SOCIAL HERO NO-CROP MASTER')&&css.includes('object-fit:cover!important')&&css.includes('transform:none!important'),'Social hero final override removes zoom clipping');
+ok(css.includes('@media(max-width:620px) and (orientation:portrait)')&&css.includes('@media(max-width:900px) and (orientation:landscape)')&&css.includes('@media(min-width:621px) and (max-width:1024px)')&&css.includes('@media(min-width:1025px)'),'Social hero has phone portrait, phone landscape, tablet and desktop/PWA rules');
+ok(!/function postRow\(p\).*audiencia_label/.test(profile),'Public profile activity cards never reveal publication audience');
+ok(repos.includes("app_kombax_social_profile_posts_v256"),'Frontend prefers privacy-redacted profile-post RPC v256');
+ok(sql.includes('case when v_owner then p.audiencia else null::text end')&&sql.includes('app_kombax_social_puede_ver_publicacion_v083'),'Backend enforces visibility but redacts audience metadata for non-owners');
+ok(sql.includes('v_uid uuid:=auth.uid()')&&sql.includes('app_kombax_customer_history_delete_finalize_v256')&&sql.includes('grant execute on function public.app_kombax_customer_history_delete_finalize_v256(text[]) to authenticated'),'History delete finalizer derives authenticated owner server-side');
+ok(edge.includes("app_kombax_customer_history_delete_finalize_v256")&&edge.includes("rpc(base,pub,bearer")&&!edge.includes("Bearer ${secret}`,'app_kombax_customer_history_delete_finalize"),'History delete finalization uses the real user JWT after Storage cleanup');
+ok(ops.includes("id=\"kx-delete-current-ticket\"")&&ops.includes("id=\"kx-clear-migrations\""),'Migrations supports deleting current conversation and full visible history');
+
+console.log(`\nR60 Nav/Support/Privacy/Delete/Hero: ${pass} passed, ${fail} failed`);
+if(fail)process.exit(1);

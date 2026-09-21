@@ -1,7 +1,0 @@
-KOMBAX R79 / build 20130 — Android Studio ready
-
-Open THIS folder directly in Android Studio.
-Required root files: settings.gradle, build.gradle, gradlew, gradlew.bat.
-Do not open the parent KOMBAX ZIP root as an Android project.
-Do not run AGP Upgrade Assistant for this release.
-For a signed release APK/AAB, keep your own keystore.properties/keystore local; they are intentionally not included.

@@ -1,0 +1,12 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+const root=process.cwd();const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const finance=read('web/js/modules/finance-premium.js');const center=read('web/js/modules/payments-center.js');const connect=read('supabase/functions/stripe-connect/index.ts');const es=read('web/js/i18n/locales/es/payments.js');const cfg=read('web/config.js');const sw=read('web/service-worker.js');
+assert.match(finance,/paymentCenterSummaryHtml\(connect,\{subjectType:'club'/,'Finance summary must expose payment center directly');
+assert.match(finance,/bindPaymentCenter\(paymentsCenter/,'Embedded payment center must be interactive');
+assert.match(finance,/backend_pending:true/,'Missing R80 backend must degrade visibly instead of generic failure');
+assert.match(center,/backendPendingTitle/,'Payment center must render backend pending warning');
+assert.match(center,/available:backendReady&&sepaAllowed/,'SEPA toggle must be disabled while backend is missing');
+assert.match(es,/backendPendingBody/,'Hotfix warning must be translated');
+assert.match(connect,/capabilities\[sepa_debit_payments\]\[requested\]/,'Existing Connect accounts must explicitly request SEPA capability before onboarding');
+const currentBuild=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);assert.ok(currentBuild>=20132,'Current web build must preserve R80 hotfix');const swBuild=Number(sw.match(/kombax-build-(\d+)/)?.[1]||0);assert.ok(swBuild>=20132,'Current service worker must preserve R80 hotfix');
+console.log('KOMBAX R80 build 20132 payments visibility hotfix: 9/9 PASS');

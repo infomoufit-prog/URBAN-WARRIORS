@@ -1,0 +1,202 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 build
+> npm test && node scripts/build.mjs
+
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 pretest
+> node scripts/test-kombax-20069-global-admin-moderation.mjs && node scripts/test-kombax-20070-pilot-readiness.mjs && node scripts/test-kombax-20071-security-privacy-hardening.mjs && node scripts/test-kombax-20072-legal-child-safety-ops.mjs && node scripts/test-kombax-20072-verifier-storage.mjs && node scripts/test-kombax-20077-backup-export-gateway.mjs && node scripts/test-disaster-recovery-20072.mjs && node scripts/test-kombax-20077-backup-ops.mjs && node scripts/test-health-20072.mjs && node scripts/test-auth-email-templates-20072.mjs && node scripts/test-auth-email-templates-20073.mjs && node scripts/test-kombax-20073-email-ux-polish.mjs && node scripts/test-kombax-20072-platform-legal.mjs && node scripts/test-kombax-20074-team-email-invitations.mjs && node scripts/test-kombax-20075-student-email-invitations.mjs && node scripts/test-kombax-20076-banner-positioning.mjs && node scripts/test-kombax-20077-data-lifecycle.mjs && node scripts/test-kombax-20077-owner-password-critical-otp.mjs && node scripts/test-kombax-20077-owner-support.mjs
+
+KOMBAX 20069 GLOBAL ADMIN + MODERATION: PASS
+OK build 20070 · permisos privados, readiness, telemetría, headers y cron hardening
+KOMBAX 20071 security/privacy hardening: PASS
+KOMBAX 20072 legal/child-safety operational closure: PASS
+KOMBAX 20072 verifier Storage least-privilege: PASS
+PASS KOMBAX 20077 backup export/verify hardening
+OK backup completo incluye PostgreSQL
+OK backup completo incluye todos los buckets Storage
+OK backup completo genera manifiesto de integridad
+OK script no incrusta secreto
+OK restore DB exige destino aislado y credencial separada
+OK restore DB usa pg_restore controlado
+OK tooling Storage admite backup total y bloquea restore live
+KOMBAX 20072 disaster recovery tooling: PASS
+KOMBAX 20077 backup/verify operational controls: PASS
+KOMBAX health endpoint contract (>=20072, current 20124): PASS
+KOMBAX 20072 auth email templates: PASS
+KOMBAX 20073 premium auth email templates: PASS
+KOMBAX 20073 email UX polish/build identity: PASS
+KOMBAX 20072 platform legal acceptance: PASS
+KOMBAX 20074 team email invitations: PASS
+KOMBAX 20075 student email invitations: PASS
+KOMBAX 20076 banner positioning: PASS
+PASS KOMBAX 20124 · data lifecycle & history hardening
+KOMBAX 20077 Owner password + critical OTP: PASS
+PASS support helper
+PASS no fake membership
+PASS club central guards
+PASS professional support
+PASS showcase support
+PASS support audit
+PASS admin support button
+PASS app support handler
+PASS support banner
+PASS repository audit
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 test
+> node scripts/test-kombax-i18n-b01.mjs && node scripts/test-kombax-20124-r73-reputation-community-completion.mjs && node scripts/test-kombax-20123-r72-release-regression.mjs && node scripts/test-kombax-20123-r72-commercial-continuity.mjs && node scripts/test-kombax-20123-r72-identity-spectator.mjs && node scripts/test-kombax-20123-r72-showcase-seller-center.mjs && node scripts/test-kombax-20123-r72-events-operations-center.mjs && node scripts/test-kombax-20123-r72-sidebar-product-accordions.mjs && node scripts/test-kombax-20123-r72-reputation-catalog.mjs
+
+✓ 8 supported locales
+✓ Block 1 only enables Spanish
+✓ fallback order selected > en > es
+✓ regional locale normalizes without architecture rewrite
+✓ Spanish master translation works
+✓ interpolation works
+✓ supported untranslated locale falls back to Spanish in B01
+✓ missing key never leaks technical key or undefined/null markers
+✓ central formatter accepts currency independent from language
+✓ locale es architecture exists
+✓ locale en architecture exists
+✓ locale fr architecture exists
+✓ locale pt architecture exists
+✓ locale it architecture exists
+✓ locale de architecture exists
+✓ locale th architecture exists
+✓ locale fil architecture exists
+✓ master namespace files are split
+✓ account locale migration is additive and authenticated
+✓ language selector exposes supported locales but gates activation
+✓ R73 product identity is preserved
+✓ technical routes are not translated
+✓ inventory and permanent handoff directory exist
+
+KOMBAX I18N B01: 23/23 passed
+✓ R73 identity is build 20124
+✓ R73 derives verified purchase dynamically
+✓ Mi Showcase reputation dashboard includes requested advanced metrics
+✓ Events supports questions and reactions without duplicating interest/share
+✓ Attendance badges are derived from current ticket check-in evidence
+✓ Event center exposes community interaction metrics
+✓ R73 responsive UI additions exist
+
+R73 REPUTATION + COMMUNITY COMPLETION: 7/7 passed
+✓ Release identity is R72 build 20124 everywhere
+✓ R64.1 responsive global navigation is preserved
+✓ R64.4 pricing remains the commercial baseline
+✓ Club/Premium/Enterprise Showcase limits are preserved
+✓ Stripe checkout stays on direct charges with platform application fees
+✓ 18+ commercial purchase gate remains server-enforced
+✓ Showcase seller controls preserve stock, fulfillment and order state ownership
+✓ Events core/add-on split, ticketing and QR access remain present
+✓ R65 migration history matches the eight migrations already applied live
+✓ R65 private ledgers are service-role only and RLS protected
+✓ R65 supports partial refunds without collapsing entire orders
+✓ Refunds are idempotent and use direct-charge application-fee returns
+✓ Restock is separate from the financial refund and auditable
+✓ Showcase Finance Center includes retained platform fee and live Stripe context
+✓ Events Finance Center and resumable batch refunds are wired
+✓ Transactional communication queue and email dispatcher are wired
+✓ Enterprise BI is gated and available in Showcase and Events
+✓ QR access audit is exposed to organizers
+✓ Sensitive R65 Edge functions require JWT while webhook keeps signature auth
+✓ R66 commercial-discovery migrations are additive on top of the closed R65 ledger
+✓ KOMBAX SaaS Billing phase 10 remains intentionally out of scope
+✓ Commercial PDF remains packaged
+
+R72 RELEASE REGRESSION: 22/22 passed
+✓ R72 release identity is build 20124 everywhere
+✓ Global commercial discovery explains free account and organization-scoped plans
+✓ Gateway exposes pricing before and after authentication
+✓ Club, Brand and Federation onboarding are plan-first
+✓ Commercial plan selection survives account/profile creation until verification submission
+✓ Brand and Federation verification forms carry plan and billing cycle
+✓ Admin review makes selected commercial plan visible without pretending to bill
+✓ R66 backend requires valid commercial plan intent for Brand/Federation workflow
+✓ Verification creates an auditable plan request but never SaaS Billing
+✓ Founder is monthly-only in UI and server-side activation
+✓ Showcase routes Club Basic Commerce into the exact commercial context
+✓ Showcase explains Federation limitations instead of dead-ending
+✓ Events converts plan restrictions into contextual commercial guidance
+✓ Brand is discoverable as an Event organizer while entitlements remain authoritative
+✓ Seller Center only exposes subject identity after manager authorization
+✓ R64.4 commercial prices and limits remain unchanged
+✓ R66 migrations match the two live-applied migration versions packaged for Work
+✓ SaaS Billing remains intentionally out of scope
+
+R72 COMMERCIAL CONTINUITY: 18/18 passed
+✓ R72 identity is build 20124 across Web Android SW and health
+✓ Public gateway offers a profile-free spectator path
+✓ A fresh KOMBAX account is explicitly explained as Spectator
+✓ Spectator home exposes Social Showcase and Events as primary discovery cards
+✓ Spectator home does not surface organization-only Assist or Migrations
+✓ Every creatable identity has a branded presentation before creation
+✓ Club onboarding discovers identity before plan selection
+✓ Commercial profiles still enter plan-first onboarding after presentation
+✓ Non-commercial profiles continue to their profile editor/auth flow after presentation
+✓ Existing authenticated identities can still open Social Showcase and Events
+✓ Public overview accurately counts the spectator participation mode
+✓ Marketing campaigns can deep-link directly to an identity presentation
+✓ R72 preserves responsive presentation/spectator styles
+✓ R64.4 pricing is untouched by the discovery release
+✓ Founder monthly-only guard and Billing-out-of-scope message remain visible
+
+R72 IDENTITY + SPECTATOR: 15/15 passed
+✓ R72 continuity runs on R73 build 20124 across Web Android SW and health
+✓ Showcase catalog exposes Mi Showcase for managed sellers
+✓ Club Basic seller account remains accessible without Commerce
+✓ Seller verification and commercial plan rights are separate backend states
+✓ Seller activation definition requires verification policies and Stripe
+✓ Seller Center explicitly explains active account vs Commerce
+✓ Basic catalog creation remains available while checkout fields are locked
+✓ Seller workspace exposes products and statistics independent from Commerce
+✓ Orders stock finance and communications are visible but gated by checkout
+✓ Enterprise BI remains plan gated
+✓ R72 preserves responsive seller workspace styling
+✓ R64.4 pricing baseline is unchanged
+✓ R72 preserves separation: seller verification does not turn Commerce on
+
+R72 SHOWCASE SELLER CENTER CONTINUITY: 13/13 passed
+✓ R72 continuity runs on R73 build 20124 across Web Android SW and health
+✓ Organizer navigation exposes Mis Eventos without replacing the existing editor
+✓ Private managed-event repository uses the R72 manager RPC
+✓ R72 private event-center RPC includes drafts/private events only when user can manage them
+✓ R72 RPC explicitly denies anon/public execution and grants authenticated
+✓ Mis Eventos exposes operational summary cards and per-event center entry
+✓ Center keeps basic publication statistics available without Ticketing
+✓ Ticketing-dependent operational tools remain visible but locked when inactive
+✓ Ticketing activation is visibly separated into service config contracts and Stripe
+✓ Existing operational backends are reused for sales access finance communications and BI
+✓ Organizer can inspect attendees derived from existing paid-ticket ledger
+✓ Event management menu now links to Center without removing editor/ticketing/access
+✓ R72 center has responsive Events-specific styling
+✓ R64.4 Events pricing and buyer/platform fees remain unchanged
+✓ R72 does not conflate publication with Ticketing
+
+R72 EVENTS OPERATIONS CENTER: 15/15 passed
+✓ R72 continuity runs on R73 build 20124 across Web Android SW and health
+✓ Events and Showcase are rendered as product accordions, not flat private links
+✓ Events accordion contains public Explore and private Mis Eventos child
+✓ Showcase accordion contains public Explore and private Mi Showcase child
+✓ Private children stay permission-gated by navFor
+✓ Accordions auto-open for active public/private route and persist user preference
+✓ Accordions reuse Mi Club interaction language with dedicated Events/Showcase accents
+✓ Direct public/private routes are unchanged
+✓ Mobile nav remains public-product-first and Mi Club more menu remains intact
+
+R72 SIDEBAR PRODUCT ACCORDIONS: 9/9 passed
+✓ catalog add-on is +25 / 30 days / 8 EUR and stackable
+✓ included capacities remain 15/25/100 and Enterprise unlimited
+✓ catalog add-on is independent from Commerce
+✓ capacity can reconcile overflow without deleting references
+✓ archive and safe delete preserve history
+✓ Showcase supports ratings photos verified purchase and seller replies
+✓ Showcase reviews are private for non-public retired/archive product unless manager
+✓ Events community supports comments reviews media and verified attendance
+✓ Event community works before during and after event
+✓ Organizer center exposes community but not unilateral delete
+✓ Platform moderation queue and decisions exist
+✓ R72 terms and privacy cover UGC and preserved reputation
+✓ R72 seller and Events policies are versioned legal-review drafts
+✓ R72 CSS includes marketplace reputation and event community responsive surfaces
+
+R72 REPUTATION + CATALOG: 14/14 passed
+OK build 243 archivos · web = dist = Android

@@ -1,0 +1,16 @@
+KOMBAX RC13 build 20.101 R3 · EVENT VISUAL EDITOR HARDENING
+web/PWA build: 20101
+Android versionCode: 20101
+applicationId: com.urbanwarriors.app
+Example event slug (technical): noche-de-impacto-barcelona-demo
+Example event public name: Noche de Impacto · Barcelona
+Example event UUID: d9886aba-0cc4-4269-a7c5-7708f63f31f4
+Supabase migrations: 177 + 178 applied
+Current Events mutation/read contract: v178 with compatible fallbacks
+Frontend source: web/
+Build parity: 132 web = 132 dist = 132 Android
+Netlify deploy: NOT PERFORMED
+Google Play publish: NOT PERFORMED
+JKS included: LOCAL_RELEASE_SIGNING/kombax-release.jks
+JKS SHA-256: 7c70adc0d8e7b9426990d86a3f4743e2794e391f725dd708082e48264183a415
+Passwords / android/keystore.properties: NOT INCLUDED

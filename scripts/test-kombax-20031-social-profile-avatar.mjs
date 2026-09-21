@@ -1,0 +1,14 @@
+import { readFile } from 'node:fs/promises';
+const R=new URL('../',import.meta.url),read=p=>readFile(new URL(p,R),'utf8');
+const [cfg,index,sw,gradle,admin,social,pub,mig,pkg]=await Promise.all([read('web/config.js'),read('web/index.html'),read('web/service-worker.js'),read('android/app/build.gradle'),read('web/js/modules/admin.js'),read('web/js/modules/kombax-social.js'),read('web/js/modules/public-profile.js'),read('supabase/migrations/058_kombax_social_profile_avatar_consistency.sql'),read('package.json')]);
+const assert=(ok,msg)=>{if(!ok)throw new Error(`FAIL KOMBAX 20031: ${msg}`);console.log(`OK KOMBAX 20031: ${msg}`)};
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),android=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+assert(build>=20031&&android>=20031&&index.includes(`?v=${build}`)&&sw.includes(String(build)),'web, caché y Android conservan o superan build 20031');
+assert(admin.includes("name:'public_social'")&&admin.includes("repos.kombaxSocial.uploadMedia(memberSocial.id,'avatar'")&&admin.includes('open-public-social-profile'),'Mi perfil ofrece sincronización pública explícita y acceso al perfil KOMBAX');
+assert(social.includes('kx-social-profile-cue')&&social.includes('Ver perfil')&&social.includes("openKombaxPublicProfile(el.dataset.socialProfileOpen)")&&social.includes("e.key==='Enter'"),'autor de publicación abre perfil público con affordance y teclado');
+assert(pub.includes('uw-kombax-social-profile-media-changed')&&pub.includes('Foto pública de perfil'),'editor público notifica cambios de avatar/banner');
+assert(mig.includes('array_length(storage.foldername(name),1)>=3')&&mig.includes('app_kombax_social_media_sync_profile_v058')&&mig.includes('app_kombax_social_avatar_path_v058'),'058 corrige Storage y consolida avatar canónico');
+assert(mig.includes('where sp.id=p_social_id')&&mig.includes('where p.id=p_publicacion_id'),'058 evita referencias id ambiguas');
+assert(mig.includes("'build',20031"),'contrato backend declara build 20031');
+assert(pkg.includes('test-kombax-20031-social-profile-avatar.mjs'),'suite incluye regresión 20031');
+console.log('KOMBAX BUILD 20031 SOCIAL PROFILE + AVATAR: PASS');

@@ -1,0 +1,5 @@
+KOMBAX RC13 build 20062 · continuidad
+APK signed: CREADA, en validación manual.
+Web: usuario informa despliegue ya realizado en delivery/Netlify; verificar destino/commit antes de afirmar detalles.
+Siguiente bug confirmado: Contact Gate permite enviar primer mensaje <10 chars y expone error técnico backend; corregir UX sin relajar backend.
+Siguiente release móvil: generar/verificar AAB signed tras cerrar validaciones APK.

@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const src=fs.readFileSync(path.join(root,'supabase/functions/health/index.ts'),'utf8');
+const cfg=fs.readFileSync(path.join(root,'web/config.js'),'utf8');
+const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]);
+assert.ok(build>=20072,`Health no puede retroceder por debajo de build 20072: ${build}`);
+assert.match(src,new RegExp(`build:${build}`));
+assert.match(src,new RegExp(`x-kombax-build':'${build}`));
+assert.match(src,/app_kombax_showcase_categorias_v042/);
+assert.match(src,/SUPABASE_ANON_KEY/);
+assert.doesNotMatch(src,/SUPABASE_SERVICE_ROLE_KEY/);
+assert.match(src,/cache-control':'no-store/);
+assert.match(src,/AbortSignal\.timeout\(3500\)/);
+assert.doesNotMatch(src,/console\.log|service_role.*return|error\.message/i);
+console.log(`KOMBAX health endpoint contract (>=20072, current ${build}): PASS`);

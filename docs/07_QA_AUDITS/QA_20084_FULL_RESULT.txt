@@ -1,0 +1,24 @@
+KOMBAX RC13 build 20084 · FULL CANDIDATE
+BASE REAL: 20077 PILOT READINESS CANDIDATE
+INTEGRACIÓN: 20078 -> 20084
+
+STATIC / REGRESSION
+- npm run test:20084: PASS
+- npm test histórico + 20078..20084: PASS
+- build determinista web = dist = Android assets: PASS (79 archivos)
+- Android applicationId: com.urbanwarriors.app
+- Android versionCode: 20084
+- Firebase Android: PRESENT
+- Android signing secret/keystore: NOT PACKAGED BY DESIGN
+- Android preflight: 4/5 until local signing config is supplied
+
+SECURITY / FINANCE
+- Finance migrations 143..148: PRESENT
+- Security migration 149: PRESENT
+- Workspace/private Social isolation 20083: PRESENT
+- Owner MFA TOTP/AAL2 20084: PRESENT
+- Netlify hardening merged into active netlify.toml
+- Finance real recurrence: CLOSED BY DEFAULT
+- Security Pilot: CLOSED BY DEFAULT pending deployed evidence
+
+PRODUCTION ACTIONS PERFORMED BY THIS PACKAGING WORK: NONE.

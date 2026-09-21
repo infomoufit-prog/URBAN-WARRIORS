@@ -1,0 +1,135 @@
+{
+  "version": "20.096",
+  "offline": true,
+  "engine": "local-canvas-svg-qr",
+  "templates": [
+    {
+      "id": "event-poster-fight",
+      "file": "templates/event-poster-fight.svg",
+      "use": [
+        "open",
+        "interclub",
+        "velada",
+        "torneo"
+      ]
+    },
+    {
+      "id": "event-poster-arena",
+      "file": "templates/event-poster-arena.svg",
+      "use": [
+        "campeonato",
+        "gala"
+      ]
+    },
+    {
+      "id": "event-poster-federation",
+      "file": "templates/event-poster-federation.svg",
+      "use": [
+        "federativo"
+      ]
+    },
+    {
+      "id": "event-poster-seminar",
+      "file": "templates/event-poster-seminar.svg",
+      "use": [
+        "seminario",
+        "clinic",
+        "masterclass",
+        "stage",
+        "campus"
+      ]
+    },
+    {
+      "id": "fight-card-frame",
+      "file": "templates/fight-card-frame.svg",
+      "use": [
+        "fight-card"
+      ],
+      "phase": "foundation"
+    },
+    "templates/organization-lockup.svg",
+    "templates/sponsor-strip.svg",
+    {
+      "id": "fight-card-square",
+      "file": "templates/fight-card-square.svg",
+      "use": [
+        "fight-card",
+        "social-square"
+      ],
+      "phase": "fighters"
+    },
+    {
+      "id": "fight-card-story",
+      "file": "templates/fight-card-story.svg",
+      "use": [
+        "fight-card",
+        "story"
+      ],
+      "phase": "fighters"
+    },
+    {
+      "id": "fighter-placeholder",
+      "file": "templates/fighter-placeholder.svg",
+      "use": [
+        "fighter-placeholder"
+      ],
+      "phase": "fighters"
+    },
+    {
+      "id": "event-share-square",
+      "file": "templates/event-share-square.svg",
+      "use": [
+        "social-share",
+        "external-share"
+      ],
+      "phase": "social-viral"
+    },
+    {
+      "id": "event-share-story",
+      "file": "templates/event-share-story.svg",
+      "use": [
+        "social-share",
+        "external-share"
+      ],
+      "phase": "social-viral"
+    },
+    {
+      "id": "fight-share-square",
+      "file": "templates/fight-share-square.svg",
+      "use": [
+        "social-share",
+        "external-share"
+      ],
+      "phase": "social-viral"
+    },
+    {
+      "id": "fight-share-story",
+      "file": "templates/fight-share-story.svg",
+      "use": [
+        "social-share",
+        "external-share"
+      ],
+      "phase": "social-viral"
+    },
+    {
+      "id": "result-share-square",
+      "file": "templates/result-share-square.svg",
+      "use": [
+        "social-share",
+        "external-share"
+      ],
+      "phase": "social-viral"
+    },
+    {
+      "id": "result-share-story",
+      "file": "templates/result-share-story.svg",
+      "use": [
+        "social-share",
+        "external-share"
+      ],
+      "phase": "social-viral"
+    }
+  ],
+  "notes": "Plantillas Premium locales 20.096 para Eventos/Fight Cards/Resultados. Rojo KOMBAX + acentos neon, Canvas + SVG + QR local; sin API key de generación.",
+  "build": 20101
+}

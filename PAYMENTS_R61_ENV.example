@@ -1,0 +1,19 @@
+# KOMBAX Stripe Connect · configurar como secretos de Supabase Edge Functions.
+# Nunca copiar valores reales al repositorio, web/, dist/ ni Android assets.
+STRIPE_CONNECT_SECRET_KEY=replace_in_supabase_secrets
+STRIPE_CONNECT_WEBHOOK_SECRET=replace_in_supabase_secrets
+
+# Accounts v2 estable verificado para R62.4 (Dahlia). Se puede omitir para usar el default del código.
+STRIPE_CONNECT_API_VERSION=2026-07-29.dahlia
+
+# Producción:
+KOMBAX_APP_URL=https://kombax.es
+# QA local del frontend (usar temporalmente en el proyecto TEST si los Account Links de la cuenta lo admiten):
+# KOMBAX_APP_URL=http://127.0.0.1:4173
+
+# Stripe Billing para las suscripciones SaaS KOMBAX usa credenciales y webhooks separados.
+STRIPE_BILLING_SECRET_KEY=replace_only_when_billing_is_implemented
+STRIPE_BILLING_WEBHOOK_SECRET=replace_only_when_billing_is_implemented
+
+# Supabase inyecta automáticamente SUPABASE_URL y sus claves del proyecto.
+# No exponer ninguna clave Stripe ni SUPABASE_SECRET_KEYS en web/config.js.

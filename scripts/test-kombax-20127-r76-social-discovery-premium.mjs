@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=process.cwd();
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+let passed=0;const test=(name,fn)=>{try{fn();passed++;console.log(`✓ ${name}`)}catch(e){console.error(`✗ ${name}\n  ${e.message}`);process.exitCode=1}};
+const has=(s,x)=>{if(!s.includes(x))throw new Error(`Falta: ${x}`)};
+const index=read('web/index.html');
+const css=read('web/css/kombax-social.css');
+const mod=read('web/js/modules/kombax-discovery.js');
+const repos=read('web/js/core/repositories.js');
+const config=read('web/config.js');
+const sw=read('web/service-worker.js');
+const gradle=read('android/app/build.gradle');
+
+test('R76 formalizado como build 20133',()=>{has(config,"r81-tap-to-pay");has(config,'build: 20133');has(sw,'kombax-build-20133');has(gradle,'versionCode 20133')});
+test('index carga realmente la hoja Social Discovery',()=>has(index,'./css/kombax-social.css?v=20133'));
+test('Discovery recibe una capa visual dedicada, no el modal genérico',()=>{has(mod,"wrap.classList.add('kx-discovery-layer')");has(css,'.kx-discovery-layer{');has(css,'.kx-discovery-modal{')});
+test('workspace elimina la superficie gris plana',()=>{has(css,'radial-gradient(circle at 13% 8%,rgba(241,58,55,.17)');has(css,'linear-gradient(155deg,#0c1015 0%,#07090c 48%,#050608 100%)')});
+test('filtros tienen superficie premium y foco Social',()=>{has(css,'.kx-discovery-filters{');has(css,'border-color:rgba(241,58,55,.55)');has(css,'background:linear-gradient(135deg,#ff7a35,#f13a37)')});
+test('tarjetas de peleadores tienen jerarquía y separación visual',()=>{has(css,'.kx-discovery-card{');has(css,'min-height:230px');has(css,'.kx-discovery-avatar{');has(css,'width:70px;height:70px');has(css,'object-position:center 22%')});
+test('resultados siguen en grid desktop y una columna responsive',()=>{has(css,'.kx-discovery-grid{display:grid;grid-template-columns:repeat(2');has(css,'@media(max-width:900px)');has(css,'.kx-discovery-grid{grid-template-columns:1fr}')});
+test('móvil deja de usar la sensación de bottom-sheet pegado',()=>{has(css,'.kx-discovery-layer{align-items:center!important');has(css,'border-radius:20px!important')});
+test('lógica de búsqueda y privacidad no cambia',()=>{has(mod,'repos.discovery.search(filters)');has(mod,'repos.kombaxSocial.contact(');has(mod,'No se comparte teléfono, email ni dirección.');has(repos,'app_kombax_discovery_search_r626')});
+test('la base funcional histórica R62.6 permanece declarada',()=>has(css,'KOMBAX 20.110 R62.6 · Social Discovery'));
+console.log(`\nKOMBAX R76 SOCIAL DISCOVERY PREMIUM: ${passed}/10 PASS`);if(process.exitCode)process.exit(1);

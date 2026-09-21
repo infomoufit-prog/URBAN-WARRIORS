@@ -1,0 +1,6 @@
+-- Ejecutar UNA VEZ desde SQL Editor con el UUID real del perfil que será administrador global.
+-- No usar email en frontend ni guardar esta copia con UUID real en Git.
+-- Sustituye 00000000-0000-0000-0000-000000000000 por auth.users.id / perfiles.id.
+insert into public.kombax_platform_admins(perfil_id,nivel,activo,motivo)
+values('00000000-0000-0000-0000-000000000000'::uuid,'owner',true,'Administrador propietario KOMBAX')
+on conflict(perfil_id) do update set nivel='owner',activo=true,actualizado_en=now();

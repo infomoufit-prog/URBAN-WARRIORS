@@ -1,0 +1,27 @@
+PASS 1: new adult pre-enrollment requires access email
+PASS 2: new minor pre-enrollment requires tutor identity/email
+PASS 3: new enrollment preserves autonomous student access from age 16
+PASS 4: duplicate prevention protects imported/existing members
+PASS 5: approved pre-enrollment prepares bound invitation
+PASS 6: activation requires DOB; under-16 uses tutor while 16+ links the student account
+PASS 7: club can review and resolve spectator membership claims
+PASS 8: backend blocks autonomous student membership for minors
+PASS 9: club UX exposes migration/activation statuses, DOB safety and claim queue
+PASS 10: pre-enrollment UX captures access email and sends activation after approval
+PASS 11: repositories use R59 approval/claim RPCs
+PASS 12: web activation uses R59 student acceptance
+PASS 13: club self-registration UI follows existing 16+ autonomous student rule
+PASS 14: R58 multiclub/spectator/media foundation remains present
+PASS 15: internal account/membership report documents operational flows
+file:///mnt/data/kombax_r64_2_work/KOMBAX_20113_R64_2_CLUB_ONBOARDING_PREMIUM_READY/scripts/test-kombax-20109-r59-enrollment-activation-accounts.mjs:3
+let n=0;const ok=(cond,msg)=>{n++;if(!cond)throw new Error(`R59 QA FAIL ${n}: ${msg}`);console.log(`PASS ${n}: ${msg}`)};
+                                                 ^
+
+Error: R59 QA FAIL 16: R59 feature foundation is tested on R59 or a later additive build 20110 identity
+    at ok (file:///mnt/data/kombax_r64_2_work/KOMBAX_20113_R64_2_CLUB_ONBOARDING_PREMIUM_READY/scripts/test-kombax-20109-r59-enrollment-activation-accounts.mjs:3:50)
+    at file:///mnt/data/kombax_r64_2_work/KOMBAX_20113_R64_2_CLUB_ONBOARDING_PREMIUM_READY/scripts/test-kombax-20109-r59-enrollment-activation-accounts.mjs:30:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.16.0

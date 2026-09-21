@@ -1,0 +1,39 @@
+import assert from 'node:assert/strict';
+import {readFile,access,stat} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {resources} from '../web/js/i18n/resources.js';
+import {SUPPORTED_LOCALES,ENABLED_LOCALES} from '../web/js/i18n/index.js';
+
+const root=resolve(import.meta.dirname,'..');
+let pass=0;
+const ok=(name,fn)=>Promise.resolve().then(fn).then(()=>{pass++;console.log(`✓ ${name}`)});
+const read=rel=>readFile(resolve(root,rel),'utf8');
+const flatten=(o,p='',out={})=>{for(const [k,v] of Object.entries(o||{})){const q=p?`${p}.${k}`:k;if(v&&typeof v==='object')flatten(v,q,out);else out[q]=v}return out};
+
+await ok('B03 keeps all 8 supported locales and activation enables all validated locales',()=>{assert.deepEqual(SUPPORTED_LOCALES,['es','en','fr','pt','it','de','th','fil']);assert.deepEqual(ENABLED_LOCALES,SUPPORTED_LOCALES)});
+await ok('all active catalogs match the Spanish master',()=>{const master=Object.keys(flatten(resources.es)).sort();for(const locale of ENABLED_LOCALES)assert.deepEqual(Object.keys(flatten(resources[locale])).sort(),master,`${locale} catalog drift`)});
+await ok('Social uses semantic i18n keys in its public shell',async()=>{const s=await read('web/js/modules/kombax-social.js');assert.match(s,/t\('social\.hero\.headline'\)/);assert.match(s,/t\('social\.actions\./)});
+await ok('Social keeps user-authored post text unmodified',async()=>{const s=await read('web/js/modules/kombax-social.js');assert.match(s,/p\.texto/);assert.doesNotMatch(s,/t\(\s*p\.texto/)});
+await ok('Showcase uses semantic i18n keys for catalog UI',async()=>{const s=await read('web/js/modules/showcase.js');assert.match(s,/t\('showcase\.page\.title'\)/);assert.match(s,/t\('showcase\.actions\./)});
+await ok('Showcase keeps seller product names/descriptions as content',async()=>{const s=await read('web/js/modules/showcase.js');assert.match(s,/item\.nombre/);assert.match(s,/item\.resumen/);assert.doesNotMatch(s,/t\(\s*item\.(?:nombre|resumen|descripcion)/)});
+await ok('Events and Ticketing use semantic i18n presentation keys',async()=>{const s=await read('web/js/modules/kombax-events.js');assert.match(s,/t\('events\.actions\.share'\)/);assert.match(s,/t\('ticketing\.detail\.ticketNumber'/);assert.match(s,/t\('ticketing\.detail\.entryCode'/)});
+await ok('QR payload remains locale-independent and token-based',async()=>{const s=await read('web/js/modules/kombax-events.js');assert.match(s,/function ticketQrPayload\(ticket\)\{return ticket\?\.ticket_token\?`KXEVT:\$\{ticket\.ticket_token\}`:'';\}/);assert.doesNotMatch(s,/function ticketQrPayload[\s\S]{0,220}(?:getLocale|kxGetLocale|user_locale)/)});
+await ok('ticket use mutation still sends only the technical ticket id',async()=>{const s=await read('web/js/core/repositories.js');const line=s.split('\n').find(x=>x.includes('ticketUse:(ticket_id)'));assert.ok(line);assert.match(line,/p_payload:\{ticket_id\}/);assert.doesNotMatch(line,/locale|language/i)});
+await ok('Assist and Migrations requests propagate user_locale',async()=>{const s=await read('web/js/core/repositories.js');assert.match(s,/kombax-assist-r38'.*user_locale:getLocale\(\)/);assert.match(s,/migration-guide-r60'.*user_locale:getLocale\(\)/)});
+await ok('invite emails propagate user_locale',async()=>{const s=await read('web/js/core/repositories.js');assert.match(s,/invite-email'.*user_locale:getLocale\(\)/)});
+await ok('the single Luna/Assist agent is locale-aware without duplication',async()=>{const s=await read('supabase/functions/kombax-assist-r38/index.ts');assert.match(s,/localeInstruction\(/);assert.match(s,/Preserve KOMBAX product names, proper names, IDs/);assert.match(s,/const userLocale=normalizeLocale\(body\?\.user_locale\)/);assert.doesNotMatch(s,/Luna_(?:es|en|fr|pt|it|de|th|fil)/i)});
+await ok('Assist localized fallback copy covers all 8 locales',async()=>{const s=await read('supabase/functions/kombax-assist-r38/index.ts');for(const l of SUPPORTED_LOCALES)assert.match(s,new RegExp(`\\b${l}:\\{`))});
+await ok('invitation email function localizes system copy for all 8 locales',async()=>{const s=await read('supabase/functions/invite-email/index.ts');assert.match(s,/normalizeLocale\(body\?\.user_locale\)/);for(const l of SUPPORTED_LOCALES)assert.match(s,new RegExp(`\\b${l}:\\{`))});
+await ok('finance notification push reads preferred_locale safely',async()=>{const s=await read('supabase/functions/notification-dispatch/index.ts');assert.match(s,/select\('id,preferred_locale'\)/);assert.match(s,/FINANCE_COPY/);assert.match(s,/using es fallback/)});
+await ok('generic/user-authored push copy is not machine-translated',async()=>{const s=await read('supabase/functions/notification-dispatch/index.ts');assert.match(s,/titulo/);assert.match(s,/cuerpo/);assert.doesNotMatch(s,/translate\s*\(/i)});
+await ok('scheduled payment-reminder push uses each profile preferred_locale',async()=>{const s=await read('supabase/functions/payment-reminders/index.ts');assert.match(s,/select\('id,preferred_locale'\)/);assert.match(s,/FINANCE_COPY/);assert.match(s,/localeByProfile/)});
+await ok('migration guide endpoint selects a locale-specific PDF',async()=>{const s=await read('supabase/functions/migration-guide-r60/index.ts');assert.match(s,/GUIDE_PDF_BASE64_BY_LOCALE\[locale\]/);assert.match(s,/content-language/)});
+await ok('all 8 generated migration guides are valid PDF artifacts',async()=>{for(const l of SUPPORTED_LOCALES){const p=resolve(root,`docs/i18n/generated-guides-b03/KOMBAX_MIGRATIONS_GUIDE_${l}.pdf`);await access(p);const st=await stat(p);assert.ok(st.size>10000,`${l} PDF too small`);const b=await readFile(p);assert.equal(b.subarray(0,5).toString(),'%PDF-')}});
+await ok('finance report receives locale while keeping EUR independent',async()=>{const caller=await read('web/js/modules/finance-premium.js');const edge=await read('supabase/functions/finance-report/index.ts');assert.match(caller,/finance-report'.*user_locale:kxGetLocale\(\)/);assert.match(edge,/function eur\(v:unknown,locale='es'\)/);assert.match(edge,/\} EUR`/);assert.match(edge,/const requestedLocale=normalizeLocale\(body\.user_locale\)/)});
+await ok('Thai dynamic finance PDF embeds Thai Unicode font with safe fallback',async()=>{const s=await read('supabase/functions/finance-report/index.ts');assert.match(s,/@pdf-lib\/fontkit/);assert.match(s,/NotoSansThai/);assert.match(s,/documentLocale:'th'/);assert.match(s,/requested_locale:requestedLocale,document_locale:pdfLocale/)});
+await ok('legal metadata separates locale, jurisdiction and legal version',async()=>{const sql=await read('supabase/migrations/20260914233000_kombax_i18n_legal_metadata_b03.sql');assert.match(sql,/add column if not exists locale/);assert.match(sql,/jurisdiction/);assert.match(sql,/legal_version/);assert.match(sql,/kombax_compliance\.legal_documents/);assert.doesNotMatch(sql,/drop table|truncate/i)});
+await ok('legal UI renders metadata without translating legal body content',async()=>{const s=await read('web/js/modules/help-legal.js');assert.match(s,/legal\.metadata\.jurisdiction/);assert.match(s,/legalBody\(d\.cuerpo\)/);assert.doesNotMatch(s,/t\(\s*d\.cuerpo/)});
+await ok('B03 migration remains additive and does not deploy anything',async()=>{const sql=await read('supabase/migrations/20260914233000_kombax_i18n_legal_metadata_b03.sql');assert.match(sql,/add column if not exists/);assert.doesNotMatch(sql,/drop\s+(?:table|column)|truncate|delete\s+from/i)});
+await ok('B03 continuity documentation directory is present',async()=>{for(const f of ['KOMBAX_I18N_HANDOFF.json','KOMBAX_I18N_CHANGELOG.md','KOMBAX_I18N_QA.md','KOMBAX_I18N_TRANSLATION_COVERAGE.json','KOMBAX_I18N_ARCHITECTURE.md','KOMBAX_I18N_NEXT_BLOCK.md'])await access(resolve(root,'docs/i18n',f))});
+
+console.log(`\nKOMBAX I18N B03: ${pass}/${pass} passed`);

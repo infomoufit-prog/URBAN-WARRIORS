@@ -1,0 +1,109 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 build
+> npm test && node scripts/build.mjs
+
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 pretest
+> node scripts/test-kombax-20069-global-admin-moderation.mjs && node scripts/test-kombax-20070-pilot-readiness.mjs && node scripts/test-kombax-20071-security-privacy-hardening.mjs && node scripts/test-kombax-20072-legal-child-safety-ops.mjs && node scripts/test-kombax-20072-verifier-storage.mjs && node scripts/test-kombax-20077-backup-export-gateway.mjs && node scripts/test-disaster-recovery-20072.mjs && node scripts/test-kombax-20077-backup-ops.mjs && node scripts/test-health-20072.mjs && node scripts/test-auth-email-templates-20072.mjs && node scripts/test-auth-email-templates-20073.mjs && node scripts/test-kombax-20073-email-ux-polish.mjs && node scripts/test-kombax-20072-platform-legal.mjs && node scripts/test-kombax-20074-team-email-invitations.mjs && node scripts/test-kombax-20075-student-email-invitations.mjs && node scripts/test-kombax-20076-banner-positioning.mjs && node scripts/test-kombax-20077-data-lifecycle.mjs && node scripts/test-kombax-20077-owner-password-critical-otp.mjs && node scripts/test-kombax-20077-owner-support.mjs
+
+KOMBAX 20069 GLOBAL ADMIN + MODERATION: PASS
+OK build 20070 · permisos privados, readiness, telemetría, headers y cron hardening
+KOMBAX 20071 security/privacy hardening: PASS
+KOMBAX 20072 legal/child-safety operational closure: PASS
+KOMBAX 20072 verifier Storage least-privilege: PASS
+PASS KOMBAX 20077 backup export/verify hardening
+OK backup completo incluye PostgreSQL
+OK backup completo incluye todos los buckets Storage
+OK backup completo genera manifiesto de integridad
+OK script no incrusta secreto
+OK restore DB exige destino aislado y credencial separada
+OK restore DB usa pg_restore controlado
+OK tooling Storage admite backup total y bloquea restore live
+KOMBAX 20072 disaster recovery tooling: PASS
+KOMBAX 20077 backup/verify operational controls: PASS
+KOMBAX health endpoint contract (>=20072, current 20118): PASS
+KOMBAX 20072 auth email templates: PASS
+KOMBAX 20073 premium auth email templates: PASS
+KOMBAX 20073 email UX polish/build identity: PASS
+KOMBAX 20072 platform legal acceptance: PASS
+KOMBAX 20074 team email invitations: PASS
+KOMBAX 20075 student email invitations: PASS
+KOMBAX 20076 banner positioning: PASS
+PASS KOMBAX 20118 · data lifecycle & history hardening
+KOMBAX 20077 Owner password + critical OTP: PASS
+PASS support helper
+PASS no fake membership
+PASS club central guards
+PASS professional support
+PASS showcase support
+PASS support audit
+PASS admin support button
+PASS app support handler
+PASS support banner
+PASS repository audit
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 test
+> node scripts/test-kombax-20118-r67-release-regression.mjs && node scripts/test-kombax-20118-r67-commercial-continuity.mjs && node scripts/test-kombax-20118-r67-identity-spectator.mjs
+
+✓ Release identity is R67 build 20118 everywhere
+✓ R64.1 responsive global navigation is preserved
+✓ R64.4 pricing remains the commercial baseline
+✓ Club/Premium/Enterprise Showcase limits are preserved
+✓ Stripe checkout stays on direct charges with platform application fees
+✓ 18+ commercial purchase gate remains server-enforced
+✓ Showcase seller controls preserve stock, fulfillment and order state ownership
+✓ Events core/add-on split, ticketing and QR access remain present
+✓ R65 migration history matches the eight migrations already applied live
+✓ R65 private ledgers are service-role only and RLS protected
+✓ R65 supports partial refunds without collapsing entire orders
+✓ Refunds are idempotent and use direct-charge application-fee returns
+✓ Restock is separate from the financial refund and auditable
+✓ Showcase Finance Center includes retained platform fee and live Stripe context
+✓ Events Finance Center and resumable batch refunds are wired
+✓ Transactional communication queue and email dispatcher are wired
+✓ Enterprise BI is gated and available in Showcase and Events
+✓ QR access audit is exposed to organizers
+✓ Sensitive R65 Edge functions require JWT while webhook keeps signature auth
+✓ R66 commercial-discovery migrations are additive on top of the closed R65 ledger
+✓ KOMBAX SaaS Billing phase 10 remains intentionally out of scope
+✓ Commercial PDF remains packaged
+
+R67 RELEASE REGRESSION: 22/22 passed
+✓ R67 release identity is build 20118 everywhere
+✓ Global commercial discovery explains free account and organization-scoped plans
+✓ Gateway exposes pricing before and after authentication
+✓ Club, Brand and Federation onboarding are plan-first
+✓ Commercial plan selection survives account/profile creation until verification submission
+✓ Brand and Federation verification forms carry plan and billing cycle
+✓ Admin review makes selected commercial plan visible without pretending to bill
+✓ R66 backend requires valid commercial plan intent for Brand/Federation workflow
+✓ Verification creates an auditable plan request but never SaaS Billing
+✓ Founder is monthly-only in UI and server-side activation
+✓ Showcase routes Club Basic Commerce into the exact commercial context
+✓ Showcase explains Federation limitations instead of dead-ending
+✓ Events converts plan restrictions into contextual commercial guidance
+✓ Brand is discoverable as an Event organizer while entitlements remain authoritative
+✓ Seller Center only exposes subject identity after manager authorization
+✓ R64.4 commercial prices and limits remain unchanged
+✓ R66 migrations match the two live-applied migration versions packaged for Work
+✓ SaaS Billing remains intentionally out of scope
+
+R67 COMMERCIAL CONTINUITY: 18/18 passed
+✓ R67 identity is build 20118 across Web Android SW and health
+✓ Public gateway offers a profile-free spectator path
+✓ A fresh KOMBAX account is explicitly explained as Spectator
+✓ Spectator home exposes Social Showcase and Events as primary discovery cards
+✓ Spectator home does not surface organization-only Assist or Migrations
+✓ Every creatable identity has a branded presentation before creation
+✓ Club onboarding discovers identity before plan selection
+✓ Commercial profiles still enter plan-first onboarding after presentation
+✓ Non-commercial profiles continue to their profile editor/auth flow after presentation
+✓ Existing authenticated identities can still open Social Showcase and Events
+✓ Public overview accurately counts the spectator participation mode
+✓ Marketing campaigns can deep-link directly to an identity presentation
+✓ R67 responsive presentation/spectator styles exist
+✓ R64.4 pricing is untouched by the discovery release
+✓ Founder monthly-only guard and Billing-out-of-scope message remain visible
+
+R67 IDENTITY + SPECTATOR: 15/15 passed
+OK build 206 archivos · web = dist = Android

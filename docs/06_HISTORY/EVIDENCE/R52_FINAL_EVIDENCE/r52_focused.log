@@ -1,0 +1,20 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 test:20101:r52
+> node scripts/test-kombax-20101-r52-social-video-cover-inheritance.mjs
+
+PASS R52 preserves R51 cover metadata contract
+PASS album attach repository accepts source presentation
+PASS album attach has client fallback when backend did not inherit
+PASS new Club upload passes generated cover presentation to Social
+PASS new direct profile upload passes generated cover presentation to Social
+PASS album selection passes existing framing/cover in one attach call
+PASS R52 backend trigger inherits Club presentation
+PASS R52 backend trigger inherits direct-profile presentation
+PASS R52 normalizes inherited presentation through R51 contract
+PASS R52 trigger only runs before Social media insert
+PASS R52 migration backfills existing empty Social references
+PASS R52 backfill is restricted to exact shared storage path
+PASS R52 keeps historical media guard enabled after backfill
+PASS KOMBAX Social renderer still uses poster URL
+PASS feed still resolves inherited cover through bucket access rules
+R52 15/15 PASS

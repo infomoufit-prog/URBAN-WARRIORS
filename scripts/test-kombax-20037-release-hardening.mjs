@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=process.cwd();const read=p=>fs.readFileSync(path.join(root,p),'utf8');const exists=p=>fs.existsSync(path.join(root,p));
+const assert=(ok,msg)=>{if(!ok)throw new Error(`20037 release hardening: ${msg}`)};
+const [ui,css,help,app,cfg,gradle,index,sw,comms,portal,events,training,community]=['web/js/ui/components.js','web/css/app.css','web/js/modules/help-legal.js','web/js/app.js','web/config.js','android/app/build.gradle','web/index.html','web/service-worker.js','web/js/modules/comms-material.js','web/js/modules/portal.js','web/js/modules/events.js','web/js/modules/training.js','web/js/modules/community.js'].map(read);
+assert(ui.includes('BODY_THEME_CLASSES')&&ui.includes('syncBodyTheme(app)')&&ui.includes("app.querySelector('.app-shell[class*=\\\"theme-\\\"],.login-shell[class*=\\\"theme-\\\"]')"),'body theme sync missing');
+for(const target of ['body[class*="theme-"] .modal','body[class*="theme-"] .modal-actions','body[class*="theme-"] :is(.field input,.field select,.field textarea)','body[class*="theme-"] .legal-dialog','body[class*="theme-"] .toast:not(.toast-error)'])assert(css.includes(target),`overlay theme missing ${target}`);
+for(const target of ['.app-shell[class*="theme-"] .kombax-showcase-page','.app-shell[class*="theme-"] .kombax-showcase-brand','.app-shell[class*="theme-"] .showcase-item','.app-shell[class*="theme-"] .community-hero','.app-shell[class*="theme-"] :is(.filter-bar,.finance-filters,.feed-card,.product-card,.pipeline-col,.pipeline-card,.week-summary,.technical-tools,.community-post,.community-hero,.community-quota)','.app-shell[class*="theme-"] :is(.action-tile,.personal-kpi,.event-card,.event-detail-hero,.event-panel,.event-participant,.event-fight,.publication-meta-grid>div,.product-detail-media,.variant-chip)','.app-shell[class*="theme-"] .store-hero'])assert(css.includes(target),`specialized theme coverage missing ${target}`);
+assert(css.includes('--sh-red:var(--theme-accent)'),'Showcase accent does not inherit club theme');
+assert(![ui,app,comms,portal,events,training,community].some(src=>/Urban Warriors|URBAN WARRIORS/.test(src)),'generic club runtime still contains tenant-specific Urban Warriors copy');
+assert(app.includes('Usa el código de equipo del club')&&app.includes('Gestor o Coordinación'),'team registration still describes obsolete individual invitation flow');
+assert(css.includes(".community-hero:after{content:'KX';")&&!css.includes(".community-hero:after{content:'UW';"),'tenant-specific Community watermark remains');
+assert(!/id:'catalog'[\s\S]{0,260}roles:\[[^\]]*'monitor'/.test(help),'monitor is offered inaccessible catalog route');
+const roleRoutes={};
+const grab=rx=>new Set(((app.match(rx)||[])[1]||'').match(/'[^']+'/g)?.map(x=>x.slice(1,-1))||[]);
+roleRoutes.direccion=grab(/if\(role==='direccion'\|\|role==='coordinacion'\) ids=\[([^\]]+)\]/);roleRoutes.coordinacion=new Set(roleRoutes.direccion);
+roleRoutes.secretaria=grab(/else if\(role==='secretaria'\) ids=\[([^\]]+)\]/);roleRoutes.economia=grab(/else if\(role==='economia'\) ids=\[([^\]]+)\]/);roleRoutes.comunicacion=grab(/else if\(role==='comunicacion'\) ids=\[([^\]]+)\]/);roleRoutes.monitor=grab(/else if\(role==='monitor'\) ids=\[([^\]]+)\]/);roleRoutes.alumno=grab(/else ids=\[([^\]]+)\]/);roleRoutes.familia=new Set(roleRoutes.alumno);
+Object.values(roleRoutes).forEach(routes=>{routes.add('social');routes.add('showcase')});
+const manualEntries=[...help.matchAll(/\{id:'([^']+)',group:'[^']+',icon:'[^']+',title:'[^']+',summary:'[^']+',route:'([^']+)',roles:\[([^\]]+)\]/g)].map(m=>({id:m[1],route:m[2],roles:[...m[3].matchAll(/'([^']+)'/g)].map(x=>x[1])}));
+assert(manualEntries.length>=28,'manual route audit could not parse all topics');
+for(const item of manualEntries){const roles=item.roles.includes('todos')?Object.keys(roleRoutes):item.roles;for(const role of roles){if(roleRoutes[role])assert(roleRoutes[role].has(item.route),`manual route ${item.id}/${item.route} is not navigable for ${role}`)}}
+assert(exists('supabase/verification/verify_058_social_profile_avatar_consistency.sql'),'missing verify 058');
+assert(exists('supabase/verification/verify_062_social_showcase_audit_hardening.sql'),'missing verify 062');
+const cfgBuild=Number((cfg.match(/build:\s*(\d+)/)||[])[1]||0),androidBuild=Number((gradle.match(/versionCode\s+(\d+)/)||[])[1]||0);
+const indexBuild=Math.max(...[...index.matchAll(/v=(20\d{3})/g)].map(m=>Number(m[1])),0),swBuild=Math.max(...[...sw.matchAll(/20\d{3}/g)].map(m=>Number(m[0])),0);
+assert(cfgBuild>=20037&&androidBuild===cfgBuild&&indexBuild===cfgBuild&&swBuild===cfgBuild,'20037+ trace mismatch');
+console.log('KOMBAX 20037 RELEASE HARDENING: PASS');

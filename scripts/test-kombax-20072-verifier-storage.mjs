@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const sql=fs.readFileSync(path.join(root,'supabase/migrations/128_kombax_verifier_storage_least_privilege_20072.sql'),'utf8');
+assert.match(sql,/kombax_verification_docs_select_v128/);
+assert.match(sql,/app_kombax_es_verificador_v117\(\)/);
+assert.match(sql,/kombax_verification_docs_delete_v128/);
+const del=sql.split('create policy kombax_verification_docs_delete_v128')[1].split('create policy kombax_verification_docs_select_v128')[0];
+assert.doesNotMatch(del,/app_kombax_es_verificador_v117/);
+assert.match(del,/storage\.foldername\(name\)\)\[1\].*auth\.uid|storage\.foldername\(name\).*auth\.uid/s);
+console.log('KOMBAX 20072 verifier Storage least-privilege: PASS');

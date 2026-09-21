@@ -1,0 +1,13 @@
+begin;
+drop trigger if exists club_public_sync_kombax_social_v051 on public.perfiles_club_publicos;
+drop function if exists public.app_kombax_social_sync_club_public_v051();
+drop function if exists public.app_kombax_identity_mutate_v051(text,jsonb,uuid);
+drop function if exists public.app_kombax_social_estado_v051(uuid);
+drop function if exists public.app_kombax_social_mis_perfiles_v051(uuid);
+drop function if exists public.app_kombax_social_puede_actuar_v051(uuid);
+drop function if exists public.app_kombax_social_tipo_v051(uuid);
+drop function if exists public.app_kombax_club_permiso_v051(uuid,text);
+drop table if exists public.kombax_actor_audit;
+drop table if exists public.kombax_club_team_permissions;
+notify pgrst,'reload schema';
+commit;

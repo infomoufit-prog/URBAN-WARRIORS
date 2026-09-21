@@ -1,0 +1,67 @@
+import {readFile,access} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
+let pass=0;
+function ok(cond,msg){if(!cond)throw new Error(`FAIL R32: ${msg}`);pass++;console.log(`PASS ${pass}: ${msg}`)}
+async function txt(p){return readFile(resolve(root,p),'utf8')}
+async function exists(p){try{await access(resolve(root,p));return true}catch{return false}}
+
+const registry=await txt('web/js/core/profile-registry.js');
+const gateway=await txt('web/js/modules/gateway.js');
+const hub=await txt('web/js/modules/managed-profile-hub.js');
+const identity=await txt('web/js/core/identity-context.js');
+const capResolver=await txt('web/js/core/capability-resolver.js');
+const repos=await txt('web/js/core/repositories.js');
+const adapter=await txt('web/js/core/finance-adapter.js');
+const financeUi=await txt('web/js/modules/professional-finance.js');
+const r29=await txt('supabase/migrations/199_kombax_managed_profile_hubs_20101_r29.sql');
+const r30=await txt('supabase/migrations/200_kombax_professional_relations_operations_20101_r30.sql');
+const r30h=await txt('supabase/migrations/201_kombax_professional_relations_r30_advisor_hardening.sql');
+const r31schema=await txt('supabase/migrations/202_kombax_professional_basic_finance_20101_r31.sql');
+const r31runtime=await txt('supabase/migrations/203_kombax_professional_finance_runtime_20101_r31.sql');
+const r31policy=await txt('supabase/migrations/204_kombax_professional_notifications_policy_hardening_20101_r31.sql');
+const index=await txt('web/index.html');
+const sw=await txt('web/service-worker.js');
+const gradle=await txt('android/app/build.gradle');
+const css=(await Promise.all(['web/css/app.css','web/css/kombax-premium.css','web/css/kombax-events.css'].map(txt))).join('\n');
+const plan=await txt('docs/06_HISTORY/PLANS/PLAN_IMPLEMENTACION_R32.md');
+
+ok(await exists('docs/05_GUIDES/KOMBAX_20101_R28_PROFILE_CAPABILITY_MASTER_IMPLEMENTATION_PLAN.pdf') && await exists('docs/06_HISTORY/PLANS/KOMBAX_20101_R28_PROFILE_CAPABILITY_MASTER_IMPLEMENTATION_PLAN.md'),'Plan Maestro PDF + transcripción Markdown empaquetables');
+ok(/id:'competidor'/.test(registry)&&/id:'profesional'/.test(registry)&&/id:'espectador'/.test(registry),'taxonomía contiene Competidor, Profesional y Espectador');
+ok(/id:'competidor'/.test(registry) && /id:'profesional'/.test(registry) && /competitor_is_professional_subtype:false/.test(registry) && !/code:'competidor/.test(registry),'Competidor permanece fuera del catálogo Profesional');
+ok(['entrenador','representante_manager','medico_sanitario','arbitro_juez','promotor_organizador'].every(x=>registry.includes(`code:'${x}'`)),'catálogo Profesional controlado incluye cinco especialidades iniciales');
+ok(/Actividad profesional 18\+/.test(gateway)&&/Perfil Profesional: alta autónoma 18\+/.test(gateway),'age gate Profesional 18+ visible y persistente');
+ok(/id:'espectador'[\s\S]{0,260}baseOnly:true/.test(registry)&&/Espectador: alta autónoma 16\+/.test(gateway),'Espectador permanece identidad base y conserva age gate 16+');
+ok(/Espectador.*No publica ni requiere verificación profesional/.test(gateway.replace(/\n/g,' ')) && /p\.tipo!=='espectador'.*profile-verify/.test(gateway.replace(/\n/g,' ')),'Espectador no publica ni entra al flujo de verificación profesional por defecto');
+ok(/Mi Federación/.test(hub)&&/Mi Marca/.test(hub)&&/Mi actividad/.test(hub)&&/Mi Competidor/.test(hub)&&/espectador:\{title:'Mi perfil'/.test(hub),'shells gestionados son distintos y coherentes');
+ok(/Frontera de privacidad federativa/.test(hub)&&/no concede acceso a alumnos, finanzas, asistencia, documentos privados, comunidad interna ni datos de menores/.test(hub),'Mi Federación explicita frontera privada respecto a Club');
+ok(/private_club_access',false/.test(r29)&&/cross_profile_private_access',false/.test(r29),'workspace Federación backend declara no acceso privado Club/cross-profile');
+ok(/STORAGE_PREFIX='kombax_active_identity'/.test(identity)&&/kombax-identity-changed/.test(identity),'identidad activa tiene storage segregado y evento explícito de cambio');
+ok(/app_kombax_profile_capabilities_v196/.test(capResolver)&&/profileHasCapability/.test(capResolver),'resolver central consulta capacidades efectivas del backend');
+ok(/app_kombax_managed_profile_hub_v197/.test(repos)&&/app_kombax_professional_workspace_v198/.test(repos)&&/app_kombax_professional_finance_v199/.test(repos),'repositories conectan hubs, operaciones y Finanzas por RPC versionada');
+ok(/status text not null default 'requested'/.test(r30)&&/accepted/.test(r30)&&/revoked/.test(r30)&&/expires_at/.test(r30),'Manager usa delegación solicitada/aceptada/revocable/expirable');
+ok(/clinical_health_records_enabled',false/.test(r30)&&!/clinical_records|medical_history|historia_clinica|expediente_clinico/i.test(r30),'Médico no incorpora expediente/historia clínica');
+ok(/events\.medical\.assignments\.read/.test(r30)&&/events\.official\.assignments\.read/.test(r30)&&/KOMBAX_MEDICAL_SPECIALTY_REQUIRED/.test(r30)&&/KOMBAX_OFFICIAL_SPECIALTY_REQUIRED/.test(r30),'Médico/Árbitro limitados por especialidad y asignación Events');
+ok(/promotor_organizador','events\.public\.organize'/.test(r30)&&/events\.public\.partners\.manage/.test(r30)&&/events\.public\.fights\.manage/.test(r30),'Promotor obtiene Events mediante capacidades específicas');
+ok(/professional\.finance\.manage/.test(r31schema)&&/professional\.finance\.reports/.test(r31schema),'Finanzas Profesionales están detrás de capabilities propias');
+const financeBlocks=[...r31schema.matchAll(/create table if not exists public\.(kombax_professional_(?:services|charges|payments|expenses|finance_audit)_v199)\(([\s\S]*?)\);/gi)];
+ok(financeBlocks.length===5 && financeBlocks.every(([,_,b])=>!/\bclub_id\b/i.test(b)),'tablas Finanzas Profesionales no contienen fake club_id');
+ok(/professional_profile_id/.test(r31schema)&&/enable row level security/.test(r31schema)&&/revoke all on public\.kombax_professional_/.test(r31schema),'Finanzas Profesionales se aíslan por subject y cierran DML directo');
+ok(/KOMBAX_FINANCE_OVERPAYMENT_INVALID/.test(r31runtime)&&/KOMBAX_FINANCE_AMOUNT_BELOW_REGISTERED_PAYMENTS/.test(r31runtime),'runtime financiero protege sobrepago y edición por debajo de pagos registrados');
+ok(/processes_money',false/.test(r31runtime)&&/fiscal_invoicing',false/.test(r31runtime)&&/fake_club',false/.test(r31runtime),'backend declara no cobro, no facturación fiscal y no fake Club');
+ok(/FINANCE_SCOPE/.test(adapter)&&/CLUB/.test(adapter)&&/PROFESSIONAL/.test(adapter),'adapter financiero común mantiene scope Club/Professional explícito');
+ok(/no procesa (?:el cobro|dinero)/i.test(financeUi)&&/no actúa como pasarela de pago/i.test(financeUi),'UI profesional no se presenta como pasarela de cobro');
+ok(/subject_type='direct_profile'/.test(r31runtime)&&/subject_id=p_profile_id/.test(r31runtime)&&/club_id,perfil_id/.test(r31runtime),'avisos profesionales reutilizan notificaciones con subject direct_profile');
+ok(/drop policy if exists notificaciones_direct_profile_read_v199/.test(r31policy)&&/create policy notificaciones_propias/.test(r31policy)&&/subject_type='direct_profile'/.test(r31policy),'hardening fusiona direct_profile en la policy histórica de notificaciones');
+ok(/professional_finance/.test(hub)&&/professional\.finance\.manage/.test(hub)&&/professional\.finance\.reports/.test(hub),'Mi actividad solo muestra Finanzas cuando capabilities lo permiten');
+ok(/KOMBAX Social/.test(hub)&&/KOMBAX Showcase/.test(hub)&&/KOMBAX Events/.test(hub)&&/Privacidad y soporte/.test(hub),'servicios globales permanecen compartidos entre shells');
+ok(/FINANCE_SCOPE/.test(adapter)&&/club/i.test(adapter),'Club sigue siendo un scope financiero independiente, no migrado al subject Profesional');
+ok(!/\btruncate\b|drop\s+table\s+(?:public\.)?(?:clubes|socios|cuotas|pagos|perfiles_kombax_directos)/i.test([r29,r30,r30h,r31schema,r31runtime,r31policy].join('\n')),'migraciones R29–R31 no contienen destrucción masiva de dominios existentes');
+ok(await exists('scripts/test-kombax-20060-performance-scale.mjs')&&await exists('scripts/test-kombax-20061-10k-scale.mjs'),'pruebas históricas de escala/10K siguen incluidas para compatibilidad multi-club');
+ok(/applicationId\s+['"]com\.urbanwarriors\.app['"]/.test(gradle)&&await exists('android/app/google-services.json'),'Android conserva applicationId y Firebase');
+ok(/20101r3[2-9]/.test(index)&&/media-r3[2-9]/.test(sw),'PWA/cache R32 o posterior conservando build 20.101');
+ok(/@media\(max-width:(?:390|430|520|620|760|820|900)px\)/.test(css)&&/@media\(min-width:/.test(css),'responsive conserva gates móvil/tablet/desktop');
+ok(/no se ha ejecutado GitHub\/Netlify|push GitHub o deploy Netlify/i.test(plan),'plan R32 prohíbe deploy/push durante este cierre');
+ok(/pagos\/ticketing internos/.test(plan)&&/expediente o historia clínica/.test(plan)&&/publicación social libre del Espectador/.test(plan),'R32 mantiene fuera de alcance pagos, salud clínica y publicación libre Espectador');
+console.log(`R32 PROFILE MATRIX HARDENING: PASS ${pass}/${pass}`);

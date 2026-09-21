@@ -1,0 +1,45 @@
+KOMBAX 20.101 R25 · PILOT STABILIZATION
+
+BASE:
+- R23 is the functional base.
+- R24 is discarded as a candidate.
+- R24 DB RPC additions v192/v193 were rolled back previously.
+- The R24 batch Edge Function is neutralized (JWT + HTTP 410, no data access) and is not used by R23/R25.
+
+R25 PURPOSE:
+- Stabilize Events navigation/render lifecycle before the first three-club pilot.
+- No new product features.
+- No R25 backend migrations.
+
+ROOT CAUSES FIXED:
+- async event.currentTarget after await (`Me interesa` and same-class latent handlers)
+- destructive/premature media replacement
+- forced whole-album hydration burst
+- missing observer cleanup signal
+- unbounded event detail cache
+- excessive mobile compositor effects during Events detail scroll
+
+QA:
+- R25 24/24 PASS
+- R22 30/30 PASS
+- R23 15/15 PASS
+- npm test EXIT 0
+- build PASS, 171 files
+- SHA parity web/dist/Android: exact
+- Android preflight 4/5; signing pending locally
+
+BACKEND:
+- v189/v191 Events backend preserved
+- v192/v193 absent
+- no R25 schema/data change
+
+PENDING:
+- physical signed-APK validation for continuous scroll/zero-flash and Me interesa
+- pilot event with real club media
+- future load/stress test before claims of tens-of-thousands concurrent scale
+- inherited Supabase Security/Performance Advisor backlog
+
+DO NOT:
+- deploy Netlify or push GitHub without explicit authorization
+- call R25 physically zero-flash validated until tested on device
+- claim signed APK exists unless generated locally and verified

@@ -1,0 +1,32 @@
+KOMBAX RC13 build 20082 · QA IMPLEMENTATION RESULT
+
+Static/cumulative verification:
+- OK 20079 finance premium foundation invariants
+- OK 20080 finance premium dashboard/manual-charge invariants
+- OK 20081 finance premium reports/snapshots/PDF invariants
+- OK 20082 finance premium QA/shadow gate invariants
+- OK 20082 regression matrix · 17/17 invariants
+- SQL transaction/dollar-quote structural checks: OK for migrations 143-146
+- JavaScript syntax checks: OK
+
+Production read-only baseline (2026-08-25):
+- cuotas: 13
+- pagos: 8
+- recibos: 6
+- validated overpayment: 0
+- receipt before full payment: 0
+- paid without active receipt: 0
+- pending validation: 2 (valid warning state; excluded from collected until validation)
+
+Server primitives verified read-only:
+- pg_try_advisory_xact_lock(bigint): available
+- hashtextextended(text,bigint): available
+- tiene_rol_club(uuid,rol_club[]): available
+- v_estado_cuenta_socio: available
+
+NOT performed:
+- No migration applied to production.
+- No Edge Function deployed.
+- No feature flag enabled.
+- No live recurring charge created.
+- Full authenticated/multirole E2E requires a validation environment with migrations 143-146 applied.

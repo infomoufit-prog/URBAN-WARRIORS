@@ -1,0 +1,6 @@
+KOMBAX 20.115 R64.4 - FINAL PRICING QA READY
+versionCode: 20115
+versionName: 2.0.0-rc.13-r64.4-final-pricing
+Base: KOMBAX 20.114 R64.3
+Focus: Destacar accesible 3/5/8 EUR + cierre runtime Stripe + pricing vigente.
+No Netlify/GitHub/Play deployment included.

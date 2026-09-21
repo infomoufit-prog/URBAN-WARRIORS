@@ -1,0 +1,1027 @@
+{
+  "generated_at": "2026-09-14T21:22:59.295Z",
+  "method": "static candidate inventory; assets counted by filename/type only, no OCR",
+  "classifications": {
+    "SYSTEM_UI": 6589,
+    "USER_CONTENT": 1791,
+    "ASSET_TEXT": 105,
+    "TECHNICAL_VALUE": 2304,
+    "LEGAL_CONTENT": 1384
+  },
+  "source_files_scanned": 723,
+  "asset_files_counted": 105,
+  "locale_hardcodes": 64,
+  "modules": {
+    "web": {
+      "files": 50,
+      "system_ui_candidates": 271,
+      "user_content_boundaries": 49,
+      "technical_values": 23,
+      "legal_candidates": 70,
+      "locale_hardcodes": 3
+    },
+    "core:adaptive-poller": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:assist-specialists": {
+      "files": 1,
+      "system_ui_candidates": 8,
+      "user_content_boundaries": 8,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:backend": {
+      "files": 1,
+      "system_ui_candidates": 49,
+      "user_content_boundaries": 22,
+      "technical_values": 0,
+      "legal_candidates": 14,
+      "locale_hardcodes": 0
+    },
+    "core:capability-resolver": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:commercial-pricing": {
+      "files": 1,
+      "system_ui_candidates": 6,
+      "user_content_boundaries": 0,
+      "technical_values": 2,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:context-isolation-20083": {
+      "files": 1,
+      "system_ui_candidates": 8,
+      "user_content_boundaries": 13,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:demo-directory": {
+      "files": 1,
+      "system_ui_candidates": 3,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:demo-showcase": {
+      "files": 1,
+      "system_ui_candidates": 7,
+      "user_content_boundaries": 6,
+      "technical_values": 0,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "core:finance-adapter": {
+      "files": 1,
+      "system_ui_candidates": 3,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 1
+    },
+    "core:finance-math": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:identity-context": {
+      "files": 1,
+      "system_ui_candidates": 3,
+      "user_content_boundaries": 3,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:invitations": {
+      "files": 1,
+      "system_ui_candidates": 10,
+      "user_content_boundaries": 0,
+      "technical_values": 1,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:media": {
+      "files": 1,
+      "system_ui_candidates": 14,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:permissions": {
+      "files": 1,
+      "system_ui_candidates": 1,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:platform": {
+      "files": 1,
+      "system_ui_candidates": 10,
+      "user_content_boundaries": 4,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:profile-registry": {
+      "files": 1,
+      "system_ui_candidates": 9,
+      "user_content_boundaries": 7,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:query-cache": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:repositories": {
+      "files": 1,
+      "system_ui_candidates": 116,
+      "user_content_boundaries": 26,
+      "technical_values": 13,
+      "legal_candidates": 5,
+      "locale_hardcodes": 0
+    },
+    "core:security-go-live-20084": {
+      "files": 1,
+      "system_ui_candidates": 17,
+      "user_content_boundaries": 11,
+      "technical_values": 7,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:state": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:supabase": {
+      "files": 1,
+      "system_ui_candidates": 10,
+      "user_content_boundaries": 24,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:telemetry": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 4,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "core:utils": {
+      "files": 1,
+      "system_ui_candidates": 34,
+      "user_content_boundaries": 2,
+      "technical_values": 0,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "account-security": {
+      "files": 1,
+      "system_ui_candidates": 10,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "admin": {
+      "files": 1,
+      "system_ui_candidates": 78,
+      "user_content_boundaries": 12,
+      "technical_values": 12,
+      "legal_candidates": 10,
+      "locale_hardcodes": 0
+    },
+    "auth-recovery": {
+      "files": 1,
+      "system_ui_candidates": 17,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "brand-business": {
+      "files": 1,
+      "system_ui_candidates": 54,
+      "user_content_boundaries": 10,
+      "technical_values": 16,
+      "legal_candidates": 4,
+      "locale_hardcodes": 1
+    },
+    "brand-hub": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "club-kombax-hub": {
+      "files": 1,
+      "system_ui_candidates": 26,
+      "user_content_boundaries": 3,
+      "technical_values": 1,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "club-profile": {
+      "files": 1,
+      "system_ui_candidates": 38,
+      "user_content_boundaries": 13,
+      "technical_values": 0,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "comms-material": {
+      "files": 1,
+      "system_ui_candidates": 51,
+      "user_content_boundaries": 8,
+      "technical_values": 8,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "community": {
+      "files": 1,
+      "system_ui_candidates": 42,
+      "user_content_boundaries": 7,
+      "technical_values": 3,
+      "legal_candidates": 4,
+      "locale_hardcodes": 0
+    },
+    "competition-preparation": {
+      "files": 1,
+      "system_ui_candidates": 46,
+      "user_content_boundaries": 6,
+      "technical_values": 2,
+      "legal_candidates": 3,
+      "locale_hardcodes": 0
+    },
+    "competitor-hub": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "customer-operations": {
+      "files": 1,
+      "system_ui_candidates": 93,
+      "user_content_boundaries": 15,
+      "technical_values": 1,
+      "legal_candidates": 7,
+      "locale_hardcodes": 0
+    },
+    "dashboard-catalog": {
+      "files": 1,
+      "system_ui_candidates": 24,
+      "user_content_boundaries": 7,
+      "technical_values": 6,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "documents": {
+      "files": 1,
+      "system_ui_candidates": 17,
+      "user_content_boundaries": 2,
+      "technical_values": 1,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "event-connections": {
+      "files": 1,
+      "system_ui_candidates": 15,
+      "user_content_boundaries": 5,
+      "technical_values": 0,
+      "legal_candidates": 6,
+      "locale_hardcodes": 1
+    },
+    "events": {
+      "files": 1,
+      "system_ui_candidates": 50,
+      "user_content_boundaries": 5,
+      "technical_values": 11,
+      "legal_candidates": 0,
+      "locale_hardcodes": 1
+    },
+    "federation-hub": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "federation-licenses": {
+      "files": 1,
+      "system_ui_candidates": 40,
+      "user_content_boundaries": 11,
+      "technical_values": 15,
+      "legal_candidates": 1,
+      "locale_hardcodes": 1
+    },
+    "fighter-discovery": {
+      "files": 1,
+      "system_ui_candidates": 9,
+      "user_content_boundaries": 9,
+      "technical_values": 3,
+      "legal_candidates": 2,
+      "locale_hardcodes": 0
+    },
+    "finance-premium-bootstrap": {
+      "files": 1,
+      "system_ui_candidates": 3,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "finance-premium": {
+      "files": 1,
+      "system_ui_candidates": 54,
+      "user_content_boundaries": 9,
+      "technical_values": 61,
+      "legal_candidates": 0,
+      "locale_hardcodes": 4
+    },
+    "finance": {
+      "files": 1,
+      "system_ui_candidates": 62,
+      "user_content_boundaries": 5,
+      "technical_values": 25,
+      "legal_candidates": 2,
+      "locale_hardcodes": 1
+    },
+    "gateway": {
+      "files": 1,
+      "system_ui_candidates": 165,
+      "user_content_boundaries": 23,
+      "technical_values": 8,
+      "legal_candidates": 24,
+      "locale_hardcodes": 2
+    },
+    "groups-members": {
+      "files": 1,
+      "system_ui_candidates": 46,
+      "user_content_boundaries": 4,
+      "technical_values": 11,
+      "legal_candidates": 2,
+      "locale_hardcodes": 0
+    },
+    "help-legal": {
+      "files": 1,
+      "system_ui_candidates": 63,
+      "user_content_boundaries": 11,
+      "technical_values": 0,
+      "legal_candidates": 17,
+      "locale_hardcodes": 1
+    },
+    "kombax-discovery": {
+      "files": 1,
+      "system_ui_candidates": 16,
+      "user_content_boundaries": 6,
+      "technical_values": 12,
+      "legal_candidates": 0,
+      "locale_hardcodes": 1
+    },
+    "kombax-event-visuals": {
+      "files": 1,
+      "system_ui_candidates": 3,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 1
+    },
+    "kombax-events": {
+      "files": 1,
+      "system_ui_candidates": 298,
+      "user_content_boundaries": 144,
+      "technical_values": 96,
+      "legal_candidates": 12,
+      "locale_hardcodes": 18
+    },
+    "kombax-social": {
+      "files": 1,
+      "system_ui_candidates": 120,
+      "user_content_boundaries": 48,
+      "technical_values": 30,
+      "legal_candidates": 5,
+      "locale_hardcodes": 0
+    },
+    "lifecycle": {
+      "files": 1,
+      "system_ui_candidates": 8,
+      "user_content_boundaries": 0,
+      "technical_values": 4,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "managed-profile-hub": {
+      "files": 1,
+      "system_ui_candidates": 13,
+      "user_content_boundaries": 7,
+      "technical_values": 1,
+      "legal_candidates": 6,
+      "locale_hardcodes": 0
+    },
+    "plan-services": {
+      "files": 1,
+      "system_ui_candidates": 41,
+      "user_content_boundaries": 5,
+      "technical_values": 2,
+      "legal_candidates": 2,
+      "locale_hardcodes": 5
+    },
+    "platform-admin-access": {
+      "files": 1,
+      "system_ui_candidates": 5,
+      "user_content_boundaries": 5,
+      "technical_values": 7,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "platform-admin": {
+      "files": 1,
+      "system_ui_candidates": 88,
+      "user_content_boundaries": 18,
+      "technical_values": 44,
+      "legal_candidates": 9,
+      "locale_hardcodes": 4
+    },
+    "platform-legal": {
+      "files": 1,
+      "system_ui_candidates": 7,
+      "user_content_boundaries": 1,
+      "technical_values": 0,
+      "legal_candidates": 11,
+      "locale_hardcodes": 0
+    },
+    "portal": {
+      "files": 1,
+      "system_ui_candidates": 34,
+      "user_content_boundaries": 5,
+      "technical_values": 1,
+      "legal_candidates": 2,
+      "locale_hardcodes": 0
+    },
+    "professional-finance": {
+      "files": 1,
+      "system_ui_candidates": 15,
+      "user_content_boundaries": 4,
+      "technical_values": 3,
+      "legal_candidates": 0,
+      "locale_hardcodes": 1
+    },
+    "professional-hub": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "professional-operations": {
+      "files": 1,
+      "system_ui_candidates": 14,
+      "user_content_boundaries": 2,
+      "technical_values": 1,
+      "legal_candidates": 0,
+      "locale_hardcodes": 1
+    },
+    "public-profile": {
+      "files": 1,
+      "system_ui_candidates": 65,
+      "user_content_boundaries": 14,
+      "technical_values": 7,
+      "legal_candidates": 12,
+      "locale_hardcodes": 1
+    },
+    "showcase": {
+      "files": 1,
+      "system_ui_candidates": 127,
+      "user_content_boundaries": 28,
+      "technical_values": 58,
+      "legal_candidates": 15,
+      "locale_hardcodes": 8
+    },
+    "social-network": {
+      "files": 1,
+      "system_ui_candidates": 18,
+      "user_content_boundaries": 4,
+      "technical_values": 2,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "social-post-management": {
+      "files": 1,
+      "system_ui_candidates": 12,
+      "user_content_boundaries": 2,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "spectator-hub": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 0,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "sports-profile": {
+      "files": 1,
+      "system_ui_candidates": 23,
+      "user_content_boundaries": 2,
+      "technical_values": 0,
+      "legal_candidates": 1,
+      "locale_hardcodes": 0
+    },
+    "support-privacy": {
+      "files": 1,
+      "system_ui_candidates": 26,
+      "user_content_boundaries": 4,
+      "technical_values": 3,
+      "legal_candidates": 8,
+      "locale_hardcodes": 0
+    },
+    "training": {
+      "files": 1,
+      "system_ui_candidates": 20,
+      "user_content_boundaries": 0,
+      "technical_values": 1,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "work-scopes": {
+      "files": 1,
+      "system_ui_candidates": 17,
+      "user_content_boundaries": 2,
+      "technical_values": 3,
+      "legal_candidates": 5,
+      "locale_hardcodes": 0
+    },
+    "ui:brand-hero": {
+      "files": 1,
+      "system_ui_candidates": 0,
+      "user_content_boundaries": 2,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "ui:components": {
+      "files": 1,
+      "system_ui_candidates": 23,
+      "user_content_boundaries": 15,
+      "technical_values": 6,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "ui:conversation-ui": {
+      "files": 1,
+      "system_ui_candidates": 1,
+      "user_content_boundaries": 0,
+      "technical_values": 1,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "ui:icons": {
+      "files": 1,
+      "system_ui_candidates": 1,
+      "user_content_boundaries": 5,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "ui:media-framing": {
+      "files": 1,
+      "system_ui_candidates": 7,
+      "user_content_boundaries": 3,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "ui:video-cover": {
+      "files": 1,
+      "system_ui_candidates": 9,
+      "user_content_boundaries": 5,
+      "technical_values": 0,
+      "legal_candidates": 0,
+      "locale_hardcodes": 0
+    },
+    "supabase:functions": {
+      "files": 22,
+      "system_ui_candidates": 72,
+      "user_content_boundaries": 149,
+      "technical_values": 23,
+      "legal_candidates": 14,
+      "locale_hardcodes": 3
+    },
+    "supabase:migrations": {
+      "files": 308,
+      "system_ui_candidates": 1920,
+      "user_content_boundaries": 852,
+      "technical_values": 1713,
+      "legal_candidates": 880,
+      "locale_hardcodes": 4
+    },
+    "scripts": {
+      "files": 266,
+      "system_ui_candidates": 2004,
+      "user_content_boundaries": 115,
+      "technical_values": 56,
+      "legal_candidates": 225,
+      "locale_hardcodes": 1
+    }
+  },
+  "examples": {
+    "locale_hardcodes": [
+      {
+        "file": "web/config.js",
+        "line": 5,
+        "value": "'es-ES'"
+      },
+      {
+        "file": "web/js/core/finance-adapter.js",
+        "line": 4,
+        "value": "Intl.NumberFormat('es-ES'"
+      },
+      {
+        "file": "web/js/delete-account.js",
+        "line": 11,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/i18n/formatters.js",
+        "line": 2,
+        "value": "'es-ES'"
+      },
+      {
+        "file": "web/js/modules/brand-business.js",
+        "line": 17,
+        "value": "toLocaleDateString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/event-connections.js",
+        "line": 18,
+        "value": "toLocaleDateString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/events.js",
+        "line": 137,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/federation-licenses.js",
+        "line": 11,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/finance-premium.js",
+        "line": 60,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/finance-premium.js",
+        "line": 71,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/finance-premium.js",
+        "line": 78,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/finance-premium.js",
+        "line": 81,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/finance.js",
+        "line": 17,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/gateway.js",
+        "line": 56,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/gateway.js",
+        "line": 57,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/help-legal.js",
+        "line": 102,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-discovery.js",
+        "line": 53,
+        "value": "toLocaleDateString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-event-visuals.js",
+        "line": 49,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 150,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 168,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 169,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 423,
+        "value": "Intl.DateTimeFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 427,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 879,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 895,
+        "value": "toLocaleDateString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 909,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 957,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 985,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 986,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 1134,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 1136,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/kombax-events.js",
+        "line": 1153,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/plan-services.js",
+        "line": 7,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/plan-services.js",
+        "line": 31,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/plan-services.js",
+        "line": 61,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/plan-services.js",
+        "line": 68,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/plan-services.js",
+        "line": 112,
+        "value": "toLocaleString('es-ES'"
+      },
+      {
+        "file": "web/js/modules/platform-admin.js",
+        "line": 15,
+        "value": "Intl.NumberFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/platform-admin.js",
+        "line": 16,
+        "value": "Intl.NumberFormat('es-ES'"
+      },
+      {
+        "file": "web/js/modules/platform-admin.js",
+        "line": 17,
+        "value": "toLocaleString('es-ES'"
+      }
+    ],
+    "technical_values": [
+      {
+        "file": "web/js/app.js",
+        "line": 189,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/app.js",
+        "line": 194,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/app.js",
+        "line": 406,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/app.js",
+        "line": 410,
+        "value": "'cancelled'"
+      },
+      {
+        "file": "web/js/app.js",
+        "line": 416,
+        "value": "'cancelled'"
+      },
+      {
+        "file": "web/js/core/commercial-pricing.js",
+        "line": 8,
+        "value": "'pending'"
+      },
+      {
+        "file": "web/js/core/commercial-pricing.js",
+        "line": 19,
+        "value": "'pending'"
+      },
+      {
+        "file": "web/js/core/invitations.js",
+        "line": 46,
+        "value": "'cancelled'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 315,
+        "value": "'pending'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 317,
+        "value": "'pending'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 448,
+        "value": "'activo'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 732,
+        "value": "'pendiente'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 764,
+        "value": "'pendiente'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 868,
+        "value": "'pending'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 879,
+        "value": "'pending'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 920,
+        "value": "'pendiente'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 965,
+        "value": "'activo'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 985,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 1059,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/core/repositories.js",
+        "line": 1065,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/core/security-go-live-20084.js",
+        "line": 51,
+        "value": "'verified'"
+      },
+      {
+        "file": "web/js/core/security-go-live-20084.js",
+        "line": 208,
+        "value": "'PENDIENTE'"
+      },
+      {
+        "file": "web/js/core/security-go-live-20084.js",
+        "line": 218,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/core/security-go-live-20084.js",
+        "line": 219,
+        "value": "'active'"
+      },
+      {
+        "file": "web/js/i18n/locales/es/common.js",
+        "line": 3,
+        "value": "'Activo'"
+      }
+    ],
+    "legal_files": [
+      "web/child-safety.html",
+      "web/delete-account.html",
+      "web/js/app.js",
+      "web/js/core/backend.js",
+      "web/js/core/demo-showcase.js",
+      "web/js/core/repositories.js",
+      "web/js/core/utils.js",
+      "web/js/i18n/locales/es/index.js",
+      "web/js/i18n/locales/es/legal.js",
+      "web/js/i18n/locales/es/navigation.js",
+      "web/js/i18n/locales/es/settings.js",
+      "web/js/modules/admin.js",
+      "web/js/modules/brand-business.js",
+      "web/js/modules/club-profile.js",
+      "web/js/modules/community.js",
+      "web/js/modules/competition-preparation.js",
+      "web/js/modules/customer-operations.js",
+      "web/js/modules/documents.js",
+      "web/js/modules/event-connections.js",
+      "web/js/modules/federation-licenses.js",
+      "web/js/modules/fighter-discovery.js",
+      "web/js/modules/finance.js",
+      "web/js/modules/gateway.js",
+      "web/js/modules/groups-members.js",
+      "web/js/modules/help-legal.js"
+    ]
+  },
+  "asset_extensions": {
+    ".webp": 70,
+    ".png": 16,
+    ".svg": 19
+  }
+}

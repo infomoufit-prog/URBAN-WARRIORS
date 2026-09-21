@@ -1,0 +1,22 @@
+{
+  "release": "R76",
+  "build": 20127,
+  "scope": "KOMBAX Social Discovery premium visual workspace",
+  "root_cause": [
+    "kombax-social.css existed but was not linked from web/index.html",
+    "Discovery inherited the generic grey modal presentation"
+  ],
+  "tests": {
+    "r76_visual_gate": "10/10 PASS",
+    "r62_6_social_discovery": "PASS",
+    "npm_test": "PASS",
+    "i18n_runtime": "4687/4687; 0 unresolved",
+    "css_parse": "PASS; 0 errors",
+    "web_dist_android_parity": "PASS; 450 files",
+    "android_preflight": "4/5; signing secret intentionally external"
+  },
+  "backend_changes": false,
+  "supabase_migration": false,
+  "functional_discovery_logic_changed": false,
+  "screenshot_capture": "BLOCKED_BY_CONTAINER_CHROMIUM_DBUS_SANDBOX"
+}

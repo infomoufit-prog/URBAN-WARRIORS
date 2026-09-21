@@ -1,0 +1,186 @@
+/* KOMBAX 20.100 · OFFICIAL BRAND HEROES
+   One official KOMBAX mark. Photography is atmosphere, never a substitute logo. */
+.kx-brand-hero{--kx-hero-accent:#ff3146;--kx-hero-rgb:255,49,70;--kx-hero-photo-position:center;--kx-hero-media-scale:1.025;position:relative;isolation:isolate;min-height:clamp(390px,42vw,560px);margin:-4px 0 26px;border:1px solid rgba(255,255,255,.105);border-radius:28px;overflow:hidden;background:#050608;box-shadow:0 28px 80px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.035)}
+.kx-brand-hero-social{--kx-hero-photo-position:79% 26%;--kx-hero-media-scale:1.03}.kx-brand-hero-events{--kx-hero-accent:#46e7ff;--kx-hero-rgb:70,231,255;--kx-hero-photo-position:center 22%}.kx-brand-hero-showcase{--kx-hero-accent:#f1ae35;--kx-hero-rgb:241,174,53;--kx-hero-photo-position:center 21%}
+.kx-brand-hero-media{position:absolute;inset:0;z-index:0;overflow:hidden;background:#050608;transform:scale(var(--kx-hero-media-scale));animation:kxHeroBreathe 14s ease-in-out infinite alternate;pointer-events:none}.kx-brand-hero-photo{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;object-position:var(--kx-hero-photo-position);pointer-events:none;user-select:none;filter:saturate(1.03) contrast(1.03)}.kx-brand-hero-media:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(3,4,6,.985) 0%,rgba(3,4,6,.92) 24%,rgba(3,4,6,.6) 49%,rgba(3,4,6,.14) 74%,rgba(3,4,6,.04) 100%),linear-gradient(0deg,rgba(4,5,7,.4),transparent 48%);pointer-events:none}
+.kx-brand-hero-social .kx-brand-hero-photo{transform:scale(1.055) translate3d(-1.1%,0,0);transform-origin:79% 26%}
+.kx-brand-hero-social .kx-brand-hero-copy{width:min(58%,760px)}.kx-brand-hero-social .kx-brand-hero-media:after{background:linear-gradient(90deg,rgba(3,4,6,.988) 0%,rgba(3,4,6,.92) 23%,rgba(3,4,6,.5) 45%,rgba(3,4,6,.13) 69%,rgba(3,4,6,.04) 100%),linear-gradient(0deg,rgba(4,5,7,.34),transparent 50%)}
+.kx-brand-hero:before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 74% 42%,rgba(var(--kx-hero-rgb),.11),transparent 28%),linear-gradient(115deg,transparent 54%,rgba(var(--kx-hero-rgb),.055) 64%,transparent 72%);mix-blend-mode:screen;pointer-events:none}
+.kx-brand-hero:after{content:"";position:absolute;inset:0;z-index:2;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.013) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(90deg,#000,transparent 72%);pointer-events:none}
+.kx-brand-hero-copy{position:relative;z-index:4;display:flex;min-height:inherit;flex-direction:column;justify-content:center;width:min(61%,820px);padding:clamp(28px,4.4vw,62px)}
+.kx-brand-hero-lockup{display:flex;align-items:center;gap:14px;margin-bottom:clamp(25px,3vw,38px)}.kx-brand-hero-lockup img{width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(var(--kx-hero-rgb),.16))}.kx-brand-hero-lockup>div{display:grid;line-height:.94}.kx-brand-hero-lockup span{font:900 13px/1.1 var(--kx-title,"Bahnschrift Condensed","Aptos Display",Arial,sans-serif);letter-spacing:.34em;color:#fff}.kx-brand-hero-lockup strong{font:950 31px/.95 var(--kx-title,"Bahnschrift Condensed","Aptos Display",Arial,sans-serif);letter-spacing:.105em;color:var(--kx-hero-accent);margin:5px 0}.kx-brand-hero-lockup small{font-size:9px;font-weight:900;letter-spacing:.27em;color:#c4cbd3;text-transform:uppercase}
+.kx-brand-hero h1{max-width:760px;margin:0;font:950 clamp(42px,5.3vw,78px)/.89 var(--kx-title,"Bahnschrift Condensed","Aptos Display",Arial,sans-serif);letter-spacing:-.045em;text-transform:uppercase;color:#f7f8fa;text-wrap:balance;text-shadow:0 12px 34px rgba(0,0,0,.5)}.kx-brand-hero h1 em{font-style:normal;color:var(--kx-hero-accent);text-shadow:0 0 28px rgba(var(--kx-hero-rgb),.16)}
+.kx-brand-hero p{max-width:700px;margin:20px 0 0;color:#b6bec8;font-size:13px;line-height:1.62}.kx-brand-hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.kx-brand-hero-actions .btn{min-height:44px;padding-inline:19px;border-color:rgba(var(--kx-hero-rgb),.38);backdrop-filter:blur(10px)}.kx-brand-hero-actions .btn-primary{background:linear-gradient(135deg,var(--kx-hero-accent),color-mix(in srgb,var(--kx-hero-accent) 68%,#8b0015));border-color:transparent;color:#fff;box-shadow:0 10px 30px rgba(var(--kx-hero-rgb),.16)}
+.kx-brand-hero-features{display:flex;gap:15px;flex-wrap:wrap;margin-top:25px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}.kx-brand-hero-features span{display:inline-flex;align-items:center;gap:6px;color:#9da7b3;font-size:9px;letter-spacing:.08em;text-transform:uppercase}.kx-brand-hero-features svg{color:var(--kx-hero-accent);filter:drop-shadow(0 0 8px rgba(var(--kx-hero-rgb),.22))}.kx-brand-hero-features b{font-weight:900;color:#d9dee4}
+.kx-brand-hero-atmosphere{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}.kx-brand-hero-atmosphere i{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--kx-hero-accent);box-shadow:0 0 14px rgba(var(--kx-hero-rgb),.7);opacity:.32;animation:kxHeroParticle 7s ease-in-out infinite}.kx-brand-hero-atmosphere i:nth-child(1){left:68%;top:18%;animation-delay:-1s}.kx-brand-hero-atmosphere i:nth-child(2){left:85%;top:62%;width:3px;height:3px;animation-delay:-3.5s}.kx-brand-hero-atmosphere i:nth-child(3){left:59%;top:77%;width:4px;height:4px;animation-delay:-5s}.kx-brand-hero-edge{position:absolute;z-index:5;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--kx-hero-accent),transparent);opacity:.56;box-shadow:0 0 18px rgba(var(--kx-hero-rgb),.42);animation:kxHeroEdge 4.6s ease-in-out infinite}
+.kx-brand-hero-copy:before{content:"";position:absolute;z-index:-1;left:clamp(10px,2.2vw,28px);top:13%;width:min(720px,92%);height:72%;border-radius:42% 58% 52% 48%/52% 38% 62% 48%;background:radial-gradient(ellipse at 32% 44%,rgba(0,0,0,.62),rgba(0,0,0,.26) 48%,transparent 72%),radial-gradient(circle at 18% 58%,rgba(var(--kx-hero-rgb),.1),transparent 38%);filter:blur(13px);opacity:.95;pointer-events:none;animation:kxHeroCloud 9s ease-in-out infinite alternate}.kx-brand-hero-lockup:after{content:"";width:64px;height:1px;margin-left:4px;background:linear-gradient(90deg,var(--kx-hero-accent),transparent);box-shadow:0 0 16px rgba(var(--kx-hero-rgb),.5)}
+@keyframes kxHeroCloud{from{transform:translate3d(-1%,1%,0) scale(.98);opacity:.78}to{transform:translate3d(2%,-1%,0) scale(1.035);opacity:1}}@keyframes kxHeroBreathe{from{transform:scale(1.025) translate3d(0,0,0)}to{transform:scale(1.055) translate3d(-.45%,0,0)}}@keyframes kxHeroParticle{0%,100%{transform:translateY(16px) scale(.7);opacity:.12}50%{transform:translateY(-22px) scale(1.15);opacity:.45}}@keyframes kxHeroEdge{0%,100%{opacity:.28;transform:scaleX(.72)}50%{opacity:.8;transform:scaleX(1)}}
+@media(max-width:900px){.kx-brand-hero{min-height:500px}.kx-brand-hero-copy{width:min(75%,720px);padding:38px}.kx-brand-hero-media:after{background:linear-gradient(90deg,rgba(3,4,6,.98) 0%,rgba(3,4,6,.86) 38%,rgba(3,4,6,.31) 72%,rgba(3,4,6,.08) 100%)}.kx-brand-hero h1{font-size:clamp(42px,8vw,68px)}}
+@media(max-width:620px){
+  .kx-brand-hero{min-height:590px;border-radius:22px;margin-top:0;background:#050608}
+  .kx-brand-hero-media{inset:0 0 auto 0;height:61%;transform:none!important;animation:none!important;overflow:hidden}
+  .kx-brand-hero-media:after{background:linear-gradient(180deg,rgba(3,4,6,.03) 0%,rgba(3,4,6,.08) 48%,rgba(3,4,6,.72) 79%,#050608 100%),linear-gradient(90deg,rgba(3,4,6,.20),transparent 28%,transparent 80%,rgba(3,4,6,.08))}
+  .kx-brand-hero-photo{object-fit:cover;object-position:50% 20%!important;transform:none!important;filter:saturate(1.02) contrast(1.03)}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-position:68% 18%!important;transform:none!important}
+  .kx-brand-hero-events .kx-brand-hero-photo{object-position:50% 18%!important;transform:none!important}
+  .kx-brand-hero-showcase .kx-brand-hero-photo{object-position:60% 18%!important;transform:none!important}
+  .kx-brand-hero-copy{justify-content:flex-end;width:100%!important;min-height:590px;padding:250px 20px 27px;background:linear-gradient(180deg,transparent 34%,rgba(5,6,8,.12) 49%,rgba(5,6,8,.88) 70%,#050608 87%)}
+  .kx-brand-hero-lockup{margin-bottom:17px}.kx-brand-hero-lockup img{width:42px;height:42px}.kx-brand-hero-lockup strong{font-size:24px}.kx-brand-hero-lockup small{font-size:7px;letter-spacing:.18em}
+  .kx-brand-hero h1{font-size:clamp(36px,11.2vw,52px);line-height:.9}.kx-brand-hero p{font-size:11px;margin-top:13px;max-width:96%}.kx-brand-hero-actions{margin-top:16px}.kx-brand-hero-actions .btn{flex:1;justify-content:center;min-width:134px}.kx-brand-hero-features{gap:9px;margin-top:16px}.kx-brand-hero-features span{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.kx-brand-hero-media,.kx-brand-hero-copy:before,.kx-brand-hero-atmosphere i,.kx-brand-hero-edge{animation:none!important}.kx-brand-hero-media{transform:none!important}}
+
+/* KOMBAX 20.101 R11 · REAL ALPHA SMOKE
+   Sprites WEBP transparentes y coloreados de origen; sin hue-rotate, sin bandas y sin vídeo/WebGL. */
+.kx-brand-hero{--kx-smoke-a:url('../assets/brand-heroes/smoke-alpha-red.webp');--kx-smoke-b:url('../assets/brand-heroes/smoke-alpha-neutral.webp');--kx-smoke-c:url('../assets/brand-heroes/smoke-alpha-red.webp');--kx-smoke-opacity-a:.24;--kx-smoke-opacity-b:.16;--kx-smoke-opacity-c:.13;--kx-smoke-low-a:.16;--kx-smoke-low-b:.10;--kx-smoke-low-c:.08}
+.kx-brand-hero-events{--kx-smoke-a:url('../assets/brand-heroes/smoke-alpha-cyan.webp');--kx-smoke-b:url('../assets/brand-heroes/smoke-alpha-neutral.webp');--kx-smoke-c:url('../assets/brand-heroes/smoke-alpha-cyan.webp');--kx-smoke-opacity-a:.31;--kx-smoke-opacity-b:.19;--kx-smoke-opacity-c:.17;--kx-smoke-low-a:.21;--kx-smoke-low-b:.12;--kx-smoke-low-c:.10}
+.kx-brand-hero-showcase{--kx-smoke-a:url('../assets/brand-heroes/smoke-alpha-warm.webp');--kx-smoke-b:url('../assets/brand-heroes/smoke-alpha-neutral.webp');--kx-smoke-c:url('../assets/brand-heroes/smoke-alpha-warm.webp');--kx-smoke-opacity-a:.15;--kx-smoke-opacity-b:.10;--kx-smoke-opacity-c:.08;--kx-smoke-low-a:.09;--kx-smoke-low-b:.06;--kx-smoke-low-c:.05}
+.kx-brand-hero-smoke{position:absolute;display:block;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;will-change:transform,opacity;transform:translate3d(0,0,0);mix-blend-mode:screen}
+.kx-brand-hero-smoke.smoke-a{left:36%;bottom:1%;width:70%;height:48%;background-image:var(--kx-smoke-a);opacity:var(--kx-smoke-opacity-a);animation:kxSmokeDriftA 19s ease-in-out infinite alternate}
+.kx-brand-hero-smoke.smoke-b{right:-9%;top:4%;width:62%;height:43%;background-image:var(--kx-smoke-b);opacity:var(--kx-smoke-opacity-b);animation:kxSmokeDriftB 24s ease-in-out infinite alternate}
+.kx-brand-hero-smoke.smoke-c{left:49%;top:27%;width:55%;height:37%;background-image:var(--kx-smoke-c);opacity:var(--kx-smoke-opacity-c);animation:kxSmokeDriftC 28s ease-in-out infinite alternate}
+.kx-brand-hero-social .kx-brand-hero-smoke.smoke-a{left:39%;bottom:-2%;width:70%;height:46%}.kx-brand-hero-social .kx-brand-hero-smoke.smoke-c{left:52%;top:30%;width:49%;height:34%}
+.kx-brand-hero-events .kx-brand-hero-smoke.smoke-a{left:25%;bottom:-2%;width:80%;height:52%}.kx-brand-hero-events .kx-brand-hero-smoke.smoke-b{right:-7%;top:0;width:69%;height:48%}.kx-brand-hero-events .kx-brand-hero-smoke.smoke-c{left:37%;top:29%;width:66%;height:39%}
+.kx-brand-hero-showcase .kx-brand-hero-smoke.smoke-a{left:43%;bottom:0;width:63%;height:43%}.kx-brand-hero-showcase .kx-brand-hero-smoke.smoke-b{right:-8%;top:7%;width:57%;height:38%}.kx-brand-hero-showcase .kx-brand-hero-smoke.smoke-c{left:57%;top:35%;width:42%;height:30%}
+@keyframes kxSmokeDriftA{0%{transform:translate3d(-6%,3%,0) scale(.96);opacity:var(--kx-smoke-low-a)}45%{opacity:var(--kx-smoke-opacity-a)}100%{transform:translate3d(8%,-4%,0) scale(1.08);opacity:var(--kx-smoke-low-a)}}
+@keyframes kxSmokeDriftB{0%{transform:translate3d(5%,-2%,0) scale(1.02);opacity:var(--kx-smoke-low-b)}52%{opacity:var(--kx-smoke-opacity-b)}100%{transform:translate3d(-9%,5%,0) scale(.94);opacity:var(--kx-smoke-low-b)}}
+@keyframes kxSmokeDriftC{0%{transform:translate3d(-3%,2%,0) scale(.93);opacity:var(--kx-smoke-low-c)}55%{opacity:var(--kx-smoke-opacity-c)}100%{transform:translate3d(7%,-5%,0) scale(1.1);opacity:var(--kx-smoke-low-c)}}
+@media(max-width:620px){
+  .kx-brand-hero-smoke{background-size:cover}
+  .kx-brand-hero-smoke.smoke-a{left:7%;bottom:auto;top:30%;width:94%;height:24%}.kx-brand-hero-smoke.smoke-b{right:-20%;top:5%;width:76%;height:23%}.kx-brand-hero-smoke.smoke-c{left:32%;top:23%;width:70%;height:20%}
+  .kx-brand-hero-social{--kx-smoke-opacity-a:.15;--kx-smoke-opacity-b:.09;--kx-smoke-opacity-c:.07;--kx-smoke-low-a:.09;--kx-smoke-low-b:.05;--kx-smoke-low-c:.04}.kx-brand-hero-events{--kx-smoke-opacity-a:.19;--kx-smoke-opacity-b:.11;--kx-smoke-opacity-c:.09;--kx-smoke-low-a:.12;--kx-smoke-low-b:.065;--kx-smoke-low-c:.055}.kx-brand-hero-showcase{--kx-smoke-opacity-a:.09;--kx-smoke-opacity-b:.055;--kx-smoke-opacity-c:.04;--kx-smoke-low-a:.05;--kx-smoke-low-b:.03;--kx-smoke-low-c:.025}
+}
+@media(prefers-reduced-motion:reduce){.kx-brand-hero-smoke{animation:none!important;will-change:auto!important;transform:none!important}}
+
+
+/* KOMBAX 20.101 R15 · RESPONSIVE VISUAL TUNING
+   Ajustes diferenciados para PWA/tablet/móvil vertical y móvil horizontal. */
+@media(min-width:621px) and (max-width:1024px){
+  .kx-brand-hero{min-height:clamp(430px,52vw,520px)}
+  .kx-brand-hero-copy{width:min(64%,640px);padding:32px 30px 34px}
+  .kx-brand-hero h1{font-size:clamp(38px,5.9vw,58px);line-height:.9}
+  .kx-brand-hero p{max-width:560px;font-size:12px;line-height:1.56}
+  .kx-brand-hero-features{gap:12px}
+  .kx-brand-hero-social{--kx-hero-photo-position:74% 24%;--kx-hero-media-scale:1.01}
+  .kx-brand-hero-events{--kx-hero-photo-position:54% 20%;--kx-hero-media-scale:1.005}
+  .kx-brand-hero-showcase{--kx-hero-photo-position:58% 20%;--kx-hero-media-scale:1.005}
+  .kx-brand-hero-social .kx-brand-hero-photo{transform:scale(1.018) translate3d(-1.8%,0,0);transform-origin:74% 24%}
+  .kx-brand-hero-events .kx-brand-hero-photo{transform:scale(1.008) translate3d(-.8%,0,0);transform-origin:54% 20%}
+  .kx-brand-hero-showcase .kx-brand-hero-photo{transform:scale(1.01) translate3d(-1.2%,0,0);transform-origin:58% 20%}
+}
+@media(max-width:620px){
+  .kx-brand-hero{min-height:620px}
+  .kx-brand-hero-media{height:56%}
+  .kx-brand-hero-media:after{background:linear-gradient(180deg,rgba(3,4,6,.02) 0%,rgba(3,4,6,.07) 44%,rgba(3,4,6,.66) 73%,#050608 100%),linear-gradient(90deg,rgba(3,4,6,.16),transparent 26%,transparent 82%,rgba(3,4,6,.08))}
+  .kx-brand-hero-photo{object-position:50% 16%!important}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-position:64% 15%!important}
+  .kx-brand-hero-events .kx-brand-hero-photo{object-position:52% 15%!important}
+  .kx-brand-hero-showcase .kx-brand-hero-photo{object-position:58% 15%!important}
+  .kx-brand-hero-copy{min-height:620px;padding:228px 20px 30px;background:linear-gradient(180deg,transparent 28%,rgba(5,6,8,.10) 43%,rgba(5,6,8,.86) 67%,#050608 84%)}
+  .kx-brand-hero h1{font-size:clamp(35px,10.7vw,50px)}
+  .kx-brand-hero p{font-size:11.2px;line-height:1.52}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .kx-brand-hero{min-height:420px}
+  .kx-brand-hero-media{inset:0 0 0 34%;height:auto;transform:none!important;animation:none!important}
+  .kx-brand-hero-media:after{background:linear-gradient(90deg,#050608 0%,rgba(5,6,8,.94) 19%,rgba(5,6,8,.74) 39%,rgba(5,6,8,.18) 72%,rgba(5,6,8,.04) 100%),linear-gradient(180deg,rgba(3,4,6,.08),rgba(3,4,6,.24))}
+  .kx-brand-hero-copy{justify-content:center;width:min(56%,480px)!important;min-height:420px;padding:26px 22px 24px;background:none}
+  .kx-brand-hero h1{font-size:clamp(28px,5.8vw,42px)}
+  .kx-brand-hero p{font-size:11px;max-width:100%}
+  .kx-brand-hero-actions{gap:8px}
+  .kx-brand-hero-actions .btn{min-height:40px;padding-inline:14px}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-position:73% 17%!important}
+  .kx-brand-hero-events .kx-brand-hero-photo{object-position:54% 16%!important}
+  .kx-brand-hero-showcase .kx-brand-hero-photo{object-position:61% 16%!important}
+}
+
+/* R60 · HERO FOCAL TUNING · real-device crop correction
+   Keeps both Events faces visible and centers the Social fighter on narrow cards without altering source assets. */
+@media(max-width:620px) and (orientation:portrait){
+  .kx-brand-hero-events .kx-brand-hero-photo{object-position:68% 15%!important}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-position:70% 15%!important}
+}
+@media(min-width:621px) and (max-width:1024px){
+  .kx-brand-hero-events{--kx-hero-photo-position:64% 20%}
+  .kx-brand-hero-social{--kx-hero-photo-position:73% 24%}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .kx-brand-hero-events .kx-brand-hero-photo{object-position:64% 16%!important}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-position:73% 17%!important}
+}
+
+/* R60 FINAL PILOT · SOCIAL HERO OPEN FRAMING
+   Keep the lead fighter intentionally right-weighted. The correction is less crop/zoom,
+   not recentering: on portrait phones the photo band is shallower so more companions
+   remain visible inside the original landscape composition. Source asset is untouched. */
+@media(max-width:620px) and (orientation:portrait){
+  .kx-brand-hero-social{--kx-hero-media-scale:1}
+  .kx-brand-hero-social .kx-brand-hero-media{height:40%;transform:none!important;animation:none!important;background:#050608}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-fit:cover;object-position:70% 14%!important;transform:none!important}
+  .kx-brand-hero-social .kx-brand-hero-copy{padding-top:215px;background:linear-gradient(180deg,transparent 22%,rgba(5,6,8,.16) 37%,rgba(5,6,8,.90) 61%,#050608 81%)}
+}
+@media(min-width:621px) and (max-width:1024px){
+  .kx-brand-hero-social{--kx-hero-photo-position:76% 24%;--kx-hero-media-scale:1}
+  .kx-brand-hero-social .kx-brand-hero-photo{transform:none!important}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .kx-brand-hero-social .kx-brand-hero-photo{object-position:77% 17%!important;transform:none!important}
+}
+
+/* R60 PILOT FINAL · SOCIAL HERO HEADROOM HOTFIX
+   Open the portrait crop vertically without recentering the lead fighter. */
+@media(max-width:620px) and (orientation:portrait){
+  .kx-brand-hero-social .kx-brand-hero-media{height:47%;transform:none!important;animation:none!important}
+  .kx-brand-hero-social .kx-brand-hero-photo{object-fit:cover;object-position:70% 27%!important;transform:none!important}
+  .kx-brand-hero-social .kx-brand-hero-copy{padding-top:230px;background:linear-gradient(180deg,transparent 25%,rgba(5,6,8,.12) 41%,rgba(5,6,8,.88) 64%,#050608 82%)}
+}
+
+
+/* R60 PILOT FINAL · SOCIAL HERO TRUE WIDE FRAME
+   The source image is landscape and the lead fighter is intentionally right-weighted.
+   Keep the whole vertical source visible (no face/head crop) and only apply a restrained,
+   top-anchored scale so companions remain part of the scene across phone/tablet/PWA. */
+.kx-brand-hero-social{--kx-hero-media-scale:1!important}
+.kx-brand-hero-social .kx-brand-hero-media{transform:none!important;animation:none!important;background:#050608}
+.kx-brand-hero-social .kx-brand-hero-photo{
+  top:12px!important;right:0!important;bottom:auto!important;left:0!important;
+  width:100%!important;height:calc(100% - 12px)!important;
+  object-fit:contain!important;object-position:center top!important;
+  transform:scale(1.02)!important;transform-origin:70% 0!important;
+}
+@media(max-width:620px) and (orientation:portrait){
+  .kx-brand-hero-social .kx-brand-hero-media{height:42%!important}
+  .kx-brand-hero-social .kx-brand-hero-photo{top:10px!important;height:calc(100% - 10px)!important;transform:scale(1.16)!important;transform-origin:70% 0!important}
+  .kx-brand-hero-social .kx-brand-hero-copy{padding-top:218px!important;background:linear-gradient(180deg,transparent 24%,rgba(5,6,8,.15) 39%,rgba(5,6,8,.90) 62%,#050608 82%)!important}
+}
+@media(min-width:621px) and (max-width:1024px){
+  .kx-brand-hero-social .kx-brand-hero-photo{top:12px!important;height:calc(100% - 12px)!important;transform:scale(1.08)!important;transform-origin:70% 0!important}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .kx-brand-hero-social .kx-brand-hero-photo{top:8px!important;height:calc(100% - 8px)!important;transform:scale(1.08)!important;transform-origin:70% 0!important}
+}
+
+/* R60 PILOT FINAL · SOCIAL HERO NO-CROP MASTER
+   Definitive override for PWA / Android phone / tablet. The source is intentionally
+   right-weighted. Remove transform zoom, anchor the source to the top and reduce the
+   portrait media band so the full head stays visible while more companions enter frame. */
+.kx-brand-hero-social{--kx-hero-media-scale:1!important}
+.kx-brand-hero-social .kx-brand-hero-media{transform:none!important;animation:none!important;background:#050608!important}
+.kx-brand-hero-social .kx-brand-hero-photo{
+  inset:14px 0 auto 0!important;width:100%!important;height:calc(100% - 28px)!important;
+  object-fit:cover!important;object-position:68% top!important;transform:none!important;transform-origin:68% 0!important;
+}
+@media(max-width:620px) and (orientation:portrait){
+  .kx-brand-hero-social .kx-brand-hero-media{height:43%!important}
+  .kx-brand-hero-social .kx-brand-hero-photo{inset:18px 0 auto 0!important;height:calc(100% - 36px)!important;object-position:68% top!important;transform:none!important}
+  .kx-brand-hero-social .kx-brand-hero-copy{padding-top:224px!important;background:linear-gradient(180deg,transparent 23%,rgba(5,6,8,.14) 39%,rgba(5,6,8,.90) 62%,#050608 82%)!important}
+}
+@media(min-width:621px) and (max-width:1024px){
+  .kx-brand-hero-social .kx-brand-hero-photo{inset:16px 0 auto 0!important;height:calc(100% - 32px)!important;object-position:68% top!important;transform:none!important}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .kx-brand-hero-social .kx-brand-hero-photo{inset:12px 0 auto 0!important;height:calc(100% - 24px)!important;object-position:68% top!important;transform:none!important}
+}
+@media(min-width:1025px){
+  .kx-brand-hero-social .kx-brand-hero-photo{inset:14px 0 auto 0!important;height:calc(100% - 28px)!important;object-position:68% top!important;transform:none!important}
+}

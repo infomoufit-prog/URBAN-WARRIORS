@@ -1,0 +1,1 @@
+export default {install:{title:'Instalar KOMBAX',subtitle:'Lleva tu portal de club contigo en el móvil.',scan:'Escanea el QR o instala la PWA desde el navegador.',browserHint:'Usa el menú del navegador → Instalar aplicación.'},account:{created:'Cuenta creada',checkEmail:'Revisa tu email para confirmar la cuenta'}};

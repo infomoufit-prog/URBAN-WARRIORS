@@ -1,0 +1,43 @@
+-- KOMBAX 20.110 R62.8 · KOMBAX SPAIN policy refresh and public professional Showcase
+begin;
+-- 4. Marketplace policy refresh · operator KOMBAX SPAIN (QA draft)
+-- ---------------------------------------------------------------------------
+update kombax_marketplace.policy_documents set status='retired',updated_at=now() where status='active';
+insert into kombax_marketplace.policy_documents(policy_code,version,title,body,audience,required_for_seller,required_for_buyer,status,legal_review_status,effective_at) values
+ ('marketplace_terms','1.1-qa','Condiciones KOMBAX Showcase Marketplace','BORRADOR QA · REVISIÓN JURÍDICA OBLIGATORIA. KOMBAX Showcase funciona como marketplace tecnológico operado bajo la denominación KOMBAX SPAIN. Los productos con compra directa son ofrecidos y vendidos por el vendedor identificado en la ficha. KOMBAX facilita catálogo, checkout, trazabilidad del pedido, soporte técnico e incidencias; Stripe procesa el pago para la cuenta conectada del vendedor. Los servicios profesionales se publican como fichas de contacto y no utilizan el checkout de producto. Los datos fiscales, registrales y domicilio legal definitivo del operador deben completarse antes del lanzamiento comercial público.','both',true,true,'active','pending',now()),
+ ('seller_agreement','1.1-qa','Acuerdo de vendedor KOMBAX Showcase','BORRADOR QA · REVISIÓN JURÍDICA OBLIGATORIA. El vendedor actúa por cuenta propia, declara que su identidad y actividad son veraces y asume responsabilidad sobre producto, legalidad, stock, precio, descripción, entrega, garantías, devoluciones y atención al comprador. El vendedor actualizará en KOMBAX el estado del pedido durante preparación, envío y entrega. La venta directa requiere verificación KOMBAX, aceptación de políticas y Stripe Connect operativo. KOMBAX no almacena datos completos de tarjeta ni CVC. Comisión transaccional KOMBAX actual: 0 mientras no exista una regla contractual distinta.','seller',true,false,'active','pending',now()),
+ ('buyer_protection','1.1-qa','Protección del comprador KOMBAX Showcase','BORRADOR QA · REVISIÓN JURÍDICA OBLIGATORIA. El comprador dispone de Mis pedidos para consultar pago, preparación, envío, seguimiento, entrega, incidencias y reembolsos. El vendedor es responsable de actualizar los estados de preparación, envío y entrega. KOMBAX conserva trazabilidad técnica y puede facilitar la gestión de incidencias. La identificación reforzada del comprador no se exige en compras ordinarias salvo necesidad de seguridad o riesgo.','buyer',false,true,'active','pending',now()),
+ ('prohibited_products','1.1-qa','Política de productos prohibidos y restringidos','BORRADOR QA · REVISIÓN JURÍDICA OBLIGATORIA. No pueden ofrecerse productos ilegales, falsificados, robados, peligrosos o sujetos a restricciones incompatibles con el servicio. El vendedor debe cumplir normativa de consumo, seguridad de producto, etiquetado, propiedad intelectual, fiscalidad y restricciones de edad o comercialización aplicables. KOMBAX puede retirar fichas o suspender la venta ante riesgo o incumplimiento.','seller',true,false,'active','pending',now())
+on conflict(policy_code,version) do update set title=excluded.title,body=excluded.body,audience=excluded.audience,required_for_seller=excluded.required_for_seller,required_for_buyer=excluded.required_for_buyer,status=excluded.status,legal_review_status=excluded.legal_review_status,effective_at=excluded.effective_at,updated_at=now();
+
+-- Professional public profiles also surface their service listings. Preserve current profile projection first.
+do $$ begin
+  if to_regprocedure('public.app_kombax_perfil_publico_v094(uuid)') is not null
+    and to_regprocedure('public.app_kombax_perfil_publico_v094_pre_showcase_r628(uuid)') is null then
+    alter function public.app_kombax_perfil_publico_v094(uuid) rename to app_kombax_perfil_publico_v094_pre_showcase_r628;
+  end if;
+end $$;
+create or replace function public.app_kombax_perfil_publico_v094(p_social_id uuid)
+returns jsonb language plpgsql stable security definer set search_path='' as $$
+declare v jsonb;sp public.kombax_social_perfiles;v_showcase jsonb:='[]'::jsonb;
+begin
+  if auth.uid() is null then raise exception 'AUTH_REQUIRED'; end if;
+  v:=public.app_kombax_perfil_publico_v094_pre_showcase_r628(p_social_id);
+  if v is null then return null; end if;
+  select * into sp from public.kombax_social_perfiles where id=p_social_id;
+  if sp.sujeto_tipo='club' then
+    select coalesce(jsonb_agg(jsonb_build_object('id',e.id,'nombre',e.nombre,'resumen',e.resumen,'imagen_url',e.imagen_url,'precio_orientativo',e.precio_orientativo,'moneda',e.moneda,'visitar_url',e.visitar_url,'contacto_url',e.contacto_url,'donde_encontrar_url',e.donde_encontrar_url,'listing_kind',e.listing_kind,'product_type',e.product_type) order by e.destacado desc,e.publicado_en desc),'[]'::jsonb)
+    into v_showcase from public.kombax_showcase_marcas m join public.kombax_showcase_elementos e on e.marca_id=m.id and e.estado='publicado' where m.sujeto_tipo='club' and m.club_id=sp.club_id and m.estado='publicada';
+  elsif sp.sujeto_tipo='perfil_directo' then
+    select coalesce(jsonb_agg(jsonb_build_object('id',e.id,'nombre',e.nombre,'resumen',e.resumen,'imagen_url',e.imagen_url,'precio_orientativo',e.precio_orientativo,'moneda',e.moneda,'visitar_url',e.visitar_url,'contacto_url',e.contacto_url,'donde_encontrar_url',e.donde_encontrar_url,'listing_kind',e.listing_kind,'product_type',e.product_type) order by e.destacado desc,e.publicado_en desc),'[]'::jsonb)
+    into v_showcase from public.kombax_showcase_marcas m join public.kombax_showcase_elementos e on e.marca_id=m.id and e.estado='publicado' where m.sujeto_tipo in ('marca','media','federacion','competidor','profesional') and m.perfil_directo_id=sp.perfil_directo_id and m.estado='publicada';
+  end if;
+  return jsonb_set(v,'{showcase}',coalesce(v_showcase,'[]'::jsonb),true);
+end $$;
+revoke all on function public.app_kombax_perfil_publico_v094(uuid) from public,anon;
+grant execute on function public.app_kombax_perfil_publico_v094(uuid) to authenticated;
+revoke all on function public.app_kombax_perfil_publico_v094_pre_showcase_r628(uuid) from public,anon,authenticated;
+grant execute on function public.app_kombax_perfil_publico_v094_pre_showcase_r628(uuid) to service_role;
+
+notify pgrst,'reload schema';
+commit;

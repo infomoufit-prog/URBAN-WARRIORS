@@ -1,0 +1,14 @@
+OK 20097: identidad 20097 o superior consistente en web/PWA/Android/health local
+OK 20097: organizador se resuelve por club activo
+OK 20097: invitaciones se resuelven por club activo
+OK 20097: mutaciones usan gateway 171+ y transportan workspace_club_id explícito
+OK 20097: detalle revalida permisos de gestión dentro del workspace, directa o mediante bundle actual
+OK 20097: editor y detalle mantienen señal contextual/separación explícita
+OK 20097: gateway bloquea cruces club ↔ perfil directo
+OK 20097: RPC contextual devuelve solo el perfil Club del workspace
+OK 20097: migración contextual no consulta Eventos internos de Mi Club
+OK 20097: invitaciones quedan filtradas al perfil público del club
+OK 20097: activación piloto Urban Warriors está preparada como post-deploy explícito
+OK 20097: migraciones de aislamiento son genéricas y no hardcodean el piloto
+OK 20097: Android identifica build 20097 o superior
+PASS 20097 KOMBAX Events Workspace Isolation

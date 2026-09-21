@@ -1,0 +1,16 @@
+# KOMBAX 20.084 security header additions. Merge into the active netlify.toml; preserve the current CSP/connect-src used by FCM/Supabase.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Permitted-Cross-Domain-Policies = "none"
+    Origin-Agent-Cluster = "?1"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"

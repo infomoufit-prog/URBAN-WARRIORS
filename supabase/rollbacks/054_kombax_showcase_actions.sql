@@ -1,0 +1,13 @@
+begin;
+drop policy if exists kombax_showcase_media_delete_v054 on storage.objects;
+drop policy if exists kombax_showcase_media_insert_v054 on storage.objects;
+drop function if exists public.app_kombax_showcase_mutate_v054(text,jsonb,uuid);
+drop function if exists public.app_kombax_showcase_mis_elementos_v054(uuid);
+drop function if exists public.app_kombax_showcase_guardados_v054(integer);
+drop function if exists public.app_kombax_showcase_list_v054(text,text,timestamptz,uuid,integer);
+drop table if exists public.kombax_showcase_guardados;
+alter table public.kombax_showcase_elementos drop constraint if exists kombax_showcase_elementos_cta_label_check;
+alter table public.kombax_showcase_elementos drop constraint if exists kombax_showcase_elementos_cta_tipo_check;
+alter table public.kombax_showcase_elementos drop column if exists cta_label;
+alter table public.kombax_showcase_elementos drop column if exists cta_tipo;
+notify pgrst,'reload schema';commit;

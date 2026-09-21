@@ -1,0 +1,17 @@
+PASS · R14 builder exists
+PASS · creator continues into builder after first save
+PASS · builder integrates six operational steps
+PASS · manager album nav remains visible when empty
+PASS · empty manager album has direct upload CTA
+PASS · participant photo replacement UI exists
+PASS · participant update repository uses v181
+PASS · participant update migration preserves workspace management
+PASS · fight card manager exists
+PASS · album upload can link to fight
+PASS · album upload can link to KOMBAX competitor
+PASS · album retains valid photo/video quota after later expansion
+PASS · R14 responsive builder CSS exists
+PASS · cache bust R14
+PASS · Urban Warriors assets preserved
+PASS · signing remains externally configured
+OK KOMBAX 20.101 R14 Event Creator Complete

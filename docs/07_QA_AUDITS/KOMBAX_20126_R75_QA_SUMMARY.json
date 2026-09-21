@@ -1,0 +1,67 @@
+{
+  "release": {
+    "revision": "R75",
+    "build": 20126,
+    "tag": "r75-showcase-multiclub-context",
+    "base": "R74/build 20125",
+    "date": "2026-09-16"
+  },
+  "root_cause": [
+    "Public Explore and private My Showcase shared mutable activeView state.",
+    "Public Showcase rendering depended on private myBrands resolution.",
+    "Club private RPC autoprovisioned unrelated direct identities and could fail with SHOWCASE_BRAND_PROFILE_REQUIRED."
+  ],
+  "architecture": {
+    "explore_showcase": "public_catalog_only",
+    "my_showcase": "active_club_private_workspace",
+    "multiclub_key": "active club_id",
+    "direct_profiles": "separate_context",
+    "duplicate_club_provider_count": 0
+  },
+  "urban_warriors_live": {
+    "status": "PASS",
+    "plan": "premium",
+    "provider_count": 1,
+    "provider_status": "publicada",
+    "published_products": 5,
+    "visible_capacity": 25
+  },
+  "supabase": {
+    "migration": "kombax_showcase_multiclub_context_r75",
+    "local_file": "supabase/migrations/264_kombax_showcase_multiclub_context_r75.sql",
+    "applied": true,
+    "private_rpc_anon_execute": false,
+    "private_rpc_authenticated_execute": true,
+    "search_path_locked": true
+  },
+  "tests": {
+    "r75_showcase_context": "PASS 10/10",
+    "r74_cumulative": "PASS 47/47",
+    "r36": "PASS 49/49",
+    "r73": "PASS 7/7",
+    "r72_release": "PASS 22/22",
+    "commercial": "PASS 18/18",
+    "identity": "PASS 15/15",
+    "showcase_seller_center": "PASS 13/13",
+    "events_center": "PASS 15/15",
+    "sidebar_navigation": "PASS 9/9",
+    "reputation_catalog": "PASS 14/14",
+    "npm_test": "PASS",
+    "i18n_runtime": "PASS 4687/4687",
+    "english_quality": "PASS 2180/2180",
+    "secret_scan": "PASS 0 hits"
+  },
+  "build": {
+    "web": 20126,
+    "android_version_code": 20126,
+    "android_version_name": "2.0.0-rc.13-r75-showcase-multiclub-context",
+    "parity": "PASS 450 files web=dist=android",
+    "android_preflight": "4/5",
+    "android_release_signing": "BLOCKED_EXTERNAL_MISSING_LOCAL_KEYSTORE_PROPERTIES"
+  },
+  "deployment": {
+    "github_push": false,
+    "netlify": false,
+    "play_store": false
+  }
+}

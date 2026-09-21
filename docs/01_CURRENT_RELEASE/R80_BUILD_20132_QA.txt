@@ -1,0 +1,16 @@
+KOMBAX R80 build 20132 — QA CIERRE
+
+PASS 9/9 · test-kombax-20132-r80-payments-visibility-hotfix.mjs
+PASS · npm test acumulativo
+PASS · build determinista 465 archivos · web = dist = Android
+PASS · Supabase R80 RPC presentes
+PASS · stripe-connect v8 ACTIVE
+PASS · stripe-sepa v1 ACTIVE
+PASS · stripe-webhook v7 ACTIVE
+PASS · Nuevo cargo preview/shadow sin escritura
+PASS · 0 Stripe live secrets en paquete
+PASS · 0 .env reales en paquete
+PASS · 0 keystore/JKS privados en paquete
+PENDIENTE LOCAL · android/keystore.properties para firma de APK/AAB
+PENDIENTE OPERATIVO · completar requisitos Stripe Connect de Urban Warriors para activar card/SEPA/payouts
+PENDIENTE DESPLIEGUE FRONTEND · publicar build 20132 en el proyecto Netlify/GitHub de KOMBAX

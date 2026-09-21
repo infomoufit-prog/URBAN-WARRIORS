@@ -1,0 +1,19 @@
+KOMBAX 20.101 R10 · SOCIAL HERO + SMOKE HARDENING
+BASE: 20.101 R9 Visual Hero Fix
+STATUS: IMPLEMENTED + TESTED + BUILT
+
+NEW:
+- Approved new KOMBAX Social hero image integrated.
+- Social desktop/mobile framing retuned for the new composition.
+- Smoke route replaced with visible asset-driven animated layers.
+- Gateway smoke also hardened with the same route.
+- Cache bust raised to 20101r10 / media-r10.
+- Dedicated R10 regression test added.
+
+REGRESSION:
+- node scripts/test-kombax-20101-social-smoke-r10.mjs PASS
+- npm run build PASS
+- build PASS · 150 archivos · web = dist = Android
+
+IMPORTANT:
+This build is ready for local validation and for the next APK / Google Play packaging step. If an installed PWA or APK still shows the old imagery, force-refresh / reinstall once so the new `20101r10` static assets replace the previous cache.

@@ -1,0 +1,4 @@
+select '062.01 showcase insert depth 3' check_name,exists(select 1 from pg_policies where schemaname='storage' and tablename='objects' and policyname='kombax_showcase_media_insert_v054' and with_check like '%array_length(storage.foldername(name), 1) >= 3%') ok
+union all select '062.02 showcase delete depth 3',exists(select 1 from pg_policies where schemaname='storage' and tablename='objects' and policyname='kombax_showcase_media_delete_v054' and qual like '%array_length(storage.foldername(name), 1) >= 3%')
+union all select '062.03 comment parent guard function',to_regprocedure('public.app_kombax_social_comment_parent_guard_v062()') is not null
+union all select '062.04 comment parent guard trigger',exists(select 1 from pg_trigger where tgname='kombax_social_comment_parent_guard_v062' and not tgisinternal);

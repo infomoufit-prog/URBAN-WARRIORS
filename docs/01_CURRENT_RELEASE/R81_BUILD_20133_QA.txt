@@ -1,0 +1,41 @@
+KOMBAX R81 build 20133 - FINAL RELEASE QA
+
+Release: R81
+Build: 20133
+Base: R80 build 20132 cumulative
+
+R81 contract test: 40/40 PASS
+Full npm test: PASS
+Netlify exact production command (npm run release:build): PASS
+Release legal gate: PASS
+R79 strict i18n audit: 4811 candidates, 0 unresolved
+8-language catalog gate: 1437/1437 keys for ES, EN, FR, PT, IT, DE, TH, FIL
+Runtime copy audit: 4663/4663, 0 unresolved
+Build: 466 files, web = dist = Android
+PDF guide: 14 pages, openable, unencrypted, rendered 14/14, visual contact review PASS
+Swift source parse: PASS (Swift 6.2.1 Linux parser)
+Android preflight: 4/5 prepared
+Android pending item: android/keystore.properties (private local signing config, intentionally excluded)
+
+LIVE SUPABASE R81
+Migration kombax_r81_terminal_tap_to_pay: APPLIED
+RPC/tables live check: PASS
+RLS terminal_locations_r81: ON
+RLS terminal_sales_r81: ON
+stripe-terminal: ACTIVE, JWT required
+stripe-webhook: ACTIVE, Stripe signature authentication, v267 reconciler path
+stripe-connect: ACTIVE, JWT required
+stripe-sepa: ACTIVE, JWT required
+health: ACTIVE, build 20133
+
+SECURITY
+No Stripe sk_live/sk_test secret-looking tokens found.
+No private signing files found (.jks/.keystore/.p12/.pfx/.mobileprovision/keystore.properties).
+No real .env files found.
+No private key PEM markers found.
+Terminal tables remain deny-by-default through RLS + service-role/RPC design.
+
+PLATFORM RELEASE NOTES
+Android Tap to Pay final APK/AAB compilation/signing must be run in Android Studio on a development machine. This container cannot download Gradle/Stripe dependencies from the Internet; this is an environment restriction, not a compiler failure.
+iOS final build requires macOS/Xcode, Apple Developer signing and Apple-approved Tap to Pay on iPhone entitlement.
+No live payment or movement of real money was performed during release QA.

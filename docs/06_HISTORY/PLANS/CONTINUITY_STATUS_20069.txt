@@ -1,0 +1,9 @@
+KOMBAX RC13 BUILD 20069 · CONTINUIDAD
+
+BASE: build 20068 validada.
+CONSERVADO: Owner password-only v110; Showcase Club/Marca/Federación/Competidor; registro, verificación, recuperación y correos Auth; Social; mensajes; Mi Club; QA fixes.
+NUEVO: sesión administrativa temporal por entidad, auditoría privilegiada, búsqueda global y decisiones de moderación estructuradas.
+NO REALIZADO: deploy Netlify, APK/AAB signed, publicación.
+SUPABASE: migración 114 aditiva y correcciones incrementales 115/116 aplicadas; v110 no se duplicó.
+QA: backend transaccional PASS, suite completa PASS, build PASS y paridad 68/68 PASS.
+ANDROID: preflight 4/5; firma local pendiente por diseño. No se generó APK/AAB.
