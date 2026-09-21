@@ -1,4 +1,0 @@
-PRE-FINAL ZIP SMOKE
-zip_integrity=PASS
-r47_focused=R47 28/28 PASS
-npm_test=EXIT 0

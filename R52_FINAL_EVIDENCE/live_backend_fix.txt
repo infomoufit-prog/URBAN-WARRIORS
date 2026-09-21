@@ -1,3 +1,0 @@
-Supabase project principal: migración kombax_social_album_cover_inheritance_r52 aplicada correctamente.
-Verificación posterior: el vídeo Social más reciente de Urban Warriors conserva ahora cover_mode=auto, cover_time=9.47 y cover_storage_path heredido desde el álbum Club.
-Trigger activo: trg_kombax_social_media_inherit_album_presentation_r52.

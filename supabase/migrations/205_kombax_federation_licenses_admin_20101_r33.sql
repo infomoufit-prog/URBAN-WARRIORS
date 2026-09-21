@@ -1,7 +1,0 @@
--- KOMBAX 20.101 R33 · LIVE MIGRATION TRACEABILITY SNAPSHOT
--- Live version: 20260831111254
--- Live name: kombax_federation_licenses_admin_20101_r33
--- Canonical live SQL SHA-256: 5802559718b6734385453faae040676e016e0cee9d44575d97aec0510fa1935b
--- IMPORTANT: this file is a traceability marker, not a reconstructed historical body.
--- The exact SQL remains preserved in supabase_migrations.schema_migrations.statements on the principal project.
--- Current R33 runtime is verified against that applied migration. See R33_BACKEND_RECONCILIATION.md.

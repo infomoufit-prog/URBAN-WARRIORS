@@ -1,9 +1,0 @@
-{
-  "counts": {
-    "web": 171,
-    "dist": 171,
-    "android": 171
-  },
-  "web_equals_dist": true,
-  "web_equals_android": true
-}

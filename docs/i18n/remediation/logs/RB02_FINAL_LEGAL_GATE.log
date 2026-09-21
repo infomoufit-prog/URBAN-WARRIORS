@@ -1,5 +1,0 @@
-
-> urban-warriors-2.0.0-rc13@2.0.0-rc.13 release:legal-gate
-> node scripts/release-legal-gate.mjs
-
-KOMBAX release legal gate: PASS

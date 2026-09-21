@@ -1,4 +1,0 @@
-Source files excluding manifest: 1965
-web: 188
-dist: 188
-android assets: 188

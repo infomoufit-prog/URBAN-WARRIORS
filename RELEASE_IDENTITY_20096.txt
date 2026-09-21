@@ -1,6 +1,0 @@
-KOMBAX RC13 build 20.096 · Events Premium Visual Identity
-web=20096
-android.versionCode=20096
-service-worker=20096
-base=20.095
-backend_changes=none

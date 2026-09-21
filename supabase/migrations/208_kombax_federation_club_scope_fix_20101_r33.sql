@@ -1,5 +1,0 @@
--- KOMBAX 20.101 R33 · LIVE MIGRATION TRACEABILITY SNAPSHOT
--- Live version: 20260831112640
--- Live name: kombax_federation_club_scope_fix_20101_r33
--- Canonical live SQL SHA-256: cf1f12dbb5548cbf87f914e7f88f597a0894e60f2af8e4829e2a227f7b983e08
--- Exact historical SQL is preserved in Supabase migration history. See R33_BACKEND_RECONCILIATION.md.

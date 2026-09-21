@@ -1,5 +1,0 @@
-KOMBAX 20.113 R64.2 — CLUB ONBOARDING + PREMIUM READY
-Build: 20113
-Version: 2.0.0-rc.13-r64.2-club-onboarding-premium
-Base: KOMBAX 20.112 R64.1 RESPONSIVE_NAV_LOCAL_QA
-Status: local QA package; no production deployment performed.

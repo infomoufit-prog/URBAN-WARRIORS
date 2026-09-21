@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Silueta de competidor KOMBAX">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#151822"/><stop offset="1" stop-color="#08090c"/></linearGradient><radialGradient id="r"><stop stop-color="#e51f3d" stop-opacity=".45"/><stop offset="1" stop-color="#e51f3d" stop-opacity="0"/></radialGradient></defs>
-  <rect width="800" height="1000" fill="url(#g)"/><circle cx="400" cy="430" r="360" fill="url(#r)"/>
-  <circle cx="400" cy="300" r="118" fill="#d8d8dc" opacity=".3"/>
-  <path d="M205 900c20-245 72-386 195-386s175 141 195 386Z" fill="#d8d8dc" opacity=".22"/>
-  <path d="M110 865 690 690" stroke="#fff" stroke-opacity=".08" stroke-width="28"/>
-  <text x="400" y="950" text-anchor="middle" fill="#fff" opacity=".42" font-family="Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="7">KOMBAX FIGHTER</text>
-</svg>

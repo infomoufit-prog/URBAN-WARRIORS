@@ -1,9 +1,0 @@
-KOMBAX 20.110 R60
-Revision: MIGRATIONS_GUIDE_HISTORY_QA
-Web build: 20110
-Service Worker: uw2-build-20110 / uw2-2.0.0-rc13-20110-r60-migrations-guide-history
-Android versionCode: 20110
-Android versionName: 2.0.0-rc.13-r60-migrations-guide-history
-Android UA revision: r60-migrations-guide-history
-Base: KOMBAX 20.109 R59
-Status: QA stabilization candidate; not production-ready until authenticated backend QA, advisors and Android signing are closed.

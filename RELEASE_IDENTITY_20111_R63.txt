@@ -1,8 +1,0 @@
-KOMBAX 20.111 R63 — SHOWCASE_EVENTS_COMPLIANCE_HARDENING
-
-Base: KOMBAX 20.110 R62.8 SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_READY
-Android versionCode: 20111
-Android versionName: 2.0.0-rc.13-r63-compliance
-Purpose: cumulative commercial compliance hardening for Showcase + Events + Stripe Connect.
-No frontend/Netlify/GitHub/Google Play deployment performed by this package.
-Supabase migration is additive/conservative and must be applied through normal release procedure after preflight.

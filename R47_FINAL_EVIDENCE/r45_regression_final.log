@@ -1,7 +1,0 @@
-PASS mobile breakpoint exists
-PASS mobile showcase uses square ratio
-PASS mobile image preserves cover fit
-PASS legacy fixed 170px removed
-PASS desktop showcase height preserved
-PASS tablet 2-column layout preserved
-R45 6/6 PASS

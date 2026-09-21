@@ -1,4 +1,0 @@
-APLICADO: migración kombax_org_assist_priority_r43 al proyecto principal.
-NO CERRADO: relectura ACL/DDL vivo y advisors con captura reproducible.
-MOTIVO: la consulta posterior fue bloqueada por la capa de herramienta al no poder determinar el estado de seguridad de la solicitud.
-NO INTERPRETAR este paquete como autorización para datos reales hasta completar el gate.

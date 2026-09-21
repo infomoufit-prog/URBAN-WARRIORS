@@ -1,9 +1,0 @@
-KOMBAX RC13 BUILD 20.094
-Name: LIVE_RESULTS_HIGHLIGHTS_HISTORY
-Web build: 20094
-Android versionCode: 20094
-Service Worker cache: 20094
-Supabase health: v14 / build 20094
-Event media signer: event-media-url v1 ACTIVE
-Spectator: DISABLED pending age/privacy gate
-Public Events and Mi Club Events: SEPARATE DOMAINS

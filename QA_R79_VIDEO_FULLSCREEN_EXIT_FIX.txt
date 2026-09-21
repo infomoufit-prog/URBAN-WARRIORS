@@ -1,8 +1,0 @@
-KOMBAX R79 build 20130 · VIDEO FULLSCREEN EXIT FIX
-PASS · Social routes expanded video through openImmersiveMedia.
-PASS · Immersive viewer has explicit minimize/close-fullscreen action.
-PASS · Source video state sync includes currentTime, volume, muted, playbackRate and prior pause/play state.
-PASS · Club album video has explicit expand control and immersive return path.
-PASS · web/dist/Android assets synchronized by deterministic build.
-PASS · Full npm test suite passed.
-NOTE · Android signing preflight requires local android/keystore.properties; secret material is intentionally not packaged.

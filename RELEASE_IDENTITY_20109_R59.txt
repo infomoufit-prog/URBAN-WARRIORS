@@ -1,6 +1,0 @@
-KOMBAX 20.109 R59
-ENROLLMENT_ACTIVATION_ACCOUNT_FLOW_QA
-Derived from KOMBAX 20.108 R58 IDENTITY_MEMBERSHIPS_SPECTATOR_MEDIA_QA.
-Includes internal account/membership flow report.
-QA candidate for Work/local/Supabase/Netlify/Android continuation.
-Not production-ready until migration 250 + authenticated multiclub/RLS/minor activation QA + release signing checks are completed.

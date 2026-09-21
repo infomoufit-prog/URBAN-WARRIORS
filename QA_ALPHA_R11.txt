@@ -1,8 +1,0 @@
-    Alpha: 8-bit
-  Channel statistics:
-    Pixels: 720000
-    Red:
-      min: 0  (0)
---
-    Alpha:
-      min: 0  (0)

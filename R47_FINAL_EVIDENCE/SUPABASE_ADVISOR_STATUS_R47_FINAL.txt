@@ -1,4 +1,0 @@
-KOMBAX R47 · Supabase Advisors final status
-Security Advisor: no se consiguió capturar una ejecución nueva fiable en este cierre; no se declara limpio.
-Performance Advisor: no se consiguió capturar una ejecución nueva fiable en este cierre; no se declara limpio.
-Known prior platform warnings must remain tracked; this document is not a clean cybersecurity sign-off.

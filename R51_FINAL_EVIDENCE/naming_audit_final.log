@@ -1,3 +1,0 @@
-# R51 runtime naming audit
-Expected: zero occurrences of legacy labels Combat Social / Combat Events in active runtime roots.
-PASS: 0 legacy naming matches in active runtime.

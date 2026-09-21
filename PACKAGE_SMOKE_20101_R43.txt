@@ -1,9 +1,0 @@
-KOMBAX 20.101 R43 PACKAGE SMOKE
-===============================
-ZIP clean extraction: PASS
-ZIP integrity pre-check: PASS
-R43 focused from clean extraction: R43 ORGANIZATION ASSIST PRIORITY: PASS 18/18
-R42 regression from clean extraction: R42 MOBILE SHELL + NEUTRAL BRANDING: PASS 24/24
-Runtime parity from clean extraction: PASS
-Source exclusions: .git and node_modules are not packaged.
-Android signing secret/configuration is not packaged; local android/keystore.properties remains required for signed release.
