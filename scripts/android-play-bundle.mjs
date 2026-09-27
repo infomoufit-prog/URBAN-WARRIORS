@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, statSync, mkdirSync, copyFileSync } from 'node:fs';
+import { existsSync, statSync, mkdirSync, copyFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 
@@ -18,20 +18,27 @@ const runGradle=(args)=>{
   }else run('sh',['./gradlew',...args],android);
 };
 
-const npmCommand=process.platform==='win32'?'npm.cmd':'npm';
-run(npmCommand,['run','release:build']);
+const gradle=readFileSync(resolve(android,'app/build.gradle'),'utf8');
+const versionCode=gradle.match(/^\s*versionCode\s+(\d+)\s*$/m)?.[1];
+if(!versionCode)throw new Error('No se pudo leer versionCode de android/app/build.gradle');
+run(process.execPath,['scripts/release-legal-gate.mjs']);
+run(process.execPath,['scripts/release-netlify-r104-3.mjs']);
 run(process.execPath,['scripts/android-release-preflight.mjs']);
-runGradle(['clean','bundleRelease']);
+runGradle(['clean',':app:assembleRelease',':app:bundleRelease']);
 const aab=resolve(android,'app/build/outputs/bundle/release/app-release.aab');
+const apk=resolve(android,'app/build/outputs/apk/release/app-release.apk');
 if(!existsSync(aab) || statSync(aab).size<1024){console.error(`\nERROR: no se encontró AAB válido en ${aab}`);process.exit(1);}
+if(!existsSync(apk) || statSync(apk).size<1024){console.error(`\nERROR: no se encontró APK válido en ${apk}`);process.exit(1);}
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedAab=resolve(artifacts,'KOMBAX_20144_R91_PILOT_GOOGLE_PLAY.aab');
+const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R104_3_PILOT_GOOGLE_PLAY.aab`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R104_3_PILOT_SIGNED.apk`);
 copyFileSync(aab,namedAab);
-console.log('\nOK · KOMBAX R91 build 20144 · Google Play bundle');
+copyFileSync(apk,namedApk);
+console.log(`\nOK · KOMBAX R104.3 build ${versionCode} · Android release`);
 console.log('AAB Gradle: android/app/build/outputs/bundle/release/app-release.aab');
-console.log('AAB Play: artifacts/KOMBAX_20144_R91_PILOT_GOOGLE_PLAY.aab');
-console.log('Android R91: versionCode 20144 · versionName 2.0.0-rc.13-r91-public-guides-r100-1');
+console.log(`AAB Play: ${namedAab}`);
+console.log(`APK firmada: ${namedApk}`);
 
 // Historical QA artifact marker retained for R52.1/R52.2 regression: KOMBAX_20101_R52_2_SOCIAL_ANDROID_POSTER_FIX_GOOGLE_PLAY.aab
 

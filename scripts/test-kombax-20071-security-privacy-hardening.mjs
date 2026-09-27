@@ -145,7 +145,8 @@ assert.match(childSafetyPage,/childsafety@kombax\.es/);
 assert.doesNotMatch(childSafetyPage,/KOMBAX_CHILD_SAFETY_CONTACT_EMAIL/);
 assert.match(netlify,/from = "\/privacy"/);
 assert.match(netlify,/from = "\/child-safety"/);
-assert.equal(pkg.scripts['release:build'],'npm run release:legal-gate && npm run build');
+assert.equal(pkg.scripts['release:build'],'npm run release:legal-gate && node scripts/release-netlify-r104-3.mjs');
+assert.match(read('scripts/release-netlify-r104-3.mjs'),/scripts\/build\.mjs/);
 assert.match(legalGate,/RELEASE BLOCKED/);
 assert.match(netlify,/command = "npm run release:build"/);
 

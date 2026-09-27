@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T17:53:22.403Z",
+  "generated_at": "2026-09-27T22:11:14.231Z",
   "master_locale": "es",
   "master_catalog_keys": 1706,
   "locales": {
@@ -76,9 +76,15 @@
       "technical_leaks": []
     }
   },
-  "errors": [],
+  "errors": [
+    {
+      "regional_hardcodes": [
+        "web/js/modules/customer-operations.js"
+      ]
+    }
+  ],
   "warnings": [],
-  "active_translation_references": 1151,
+  "active_translation_references": 1146,
   "missing_active_keys_by_locale": {
     "es": [],
     "en": [],
@@ -89,5 +95,7 @@
     "th": [],
     "fil": []
   },
-  "remaining_ui_es_es_hardcodes": []
+  "remaining_ui_es_es_hardcodes": [
+    "web/js/modules/customer-operations.js"
+  ]
 }

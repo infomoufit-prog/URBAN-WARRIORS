@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) settings.setSafeBrowsingEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r103-ai-credits KOMBAXApp/2.0.0-rc.13/20155");
+        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r104-public-logo KOMBAXApp/2.0.0-rc.13/20156");
         // historical QA marker preserved: KOMBAXApp/2.0.0-rc.13/20101
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");

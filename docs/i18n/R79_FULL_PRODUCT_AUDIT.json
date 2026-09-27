@@ -1,10 +1,2520 @@
 {
-  "generated_at": "2026-09-24T17:53:10.791Z",
-  "candidates": 4796,
-  "covered_r79": 653,
-  "covered_r78": 1235,
-  "covered_legacy_all7": 2908,
-  "unresolved": 0,
-  "by_file": {},
-  "unresolved_rows": []
+  "generated_at": "2026-09-27T22:11:00.364Z",
+  "candidates": 4968,
+  "covered_r79": 652,
+  "covered_r78": 1238,
+  "covered_legacy_all7": 2885,
+  "unresolved": 193,
+  "by_file": {
+    "web/js/modules/customer-operations.js": 67,
+    "web/js/modules/gateway.js": 35,
+    "web/js/modules/plan-services.js": 32,
+    "web/js/modules/platform-admin.js": 26,
+    "web/js/modules/media-content-center.js": 12,
+    "web/js/modules/managed-profile-hub.js": 11,
+    "web/js/modules/showcase.js": 3,
+    "web/js/modules/admin.js": 2,
+    "web/js/modules/club-profile.js": 2,
+    "web/js/core/media.js": 1,
+    "web/js/modules/groups-members.js": 1,
+    "web/js/modules/kombax-social.js": 1
+  },
+  "unresolved_rows": [
+    {
+      "file": "web/js/core/media.js",
+      "value": "El logo supera 5 MB. Selecciona una versión más ligera.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/admin.js",
+      "value": "Cambiar logo en perfil público",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/admin.js",
+      "value": "Configura el logo en el perfil público del club. Se utilizará en Social, tickets vinculados, informes y nuevos recibos.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/club-profile.js",
+      "value": "Perfil público del club · el logo y la portada se comparten con la identidad del club",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/club-profile.js",
+      "value": "Máximo 5 MB. Se usa también en Social, tickets vinculados al club, informes y nuevos recibos.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Has utilizado los Créditos IA incluidos en tu plan.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Te quedan pocos Créditos IA.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Has utilizado la mayor parte de tus Créditos IA de este periodo.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Ver Créditos IA disponibles",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Créditos IA",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Pendiente de análisis",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "PENDIENTE",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Referencia de la fila del alumno",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿cuál es su nombre y apellido completos?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿qué disciplina o arte marcial practica?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿en qué grupo y horario entrena? El horario se toma del grupo elegido.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿a qué alumno de esta migración corresponde la cuota?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿cuál es el periodo y la fecha de vencimiento?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿cuál es el importe de la cuota?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿a qué cuota de esta migración corresponde el pago?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿cuál es el importe pagado?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "el pago supera el importe de la cuota; ¿qué importe es correcto?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿cuál fue el método de pago?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "fecha de nacimiento",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "correo o teléfono de contacto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Selecciona los registros que quieras incorporar.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "No hay suficientes Créditos IA disponibles para reservar esta tarea. Puedes esperar la renovación o consultar con soporte.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "No se pudo confirmar el consumo de esta operación. No se han cobrado créditos; vuelve a intentarlo.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "La prueba de demostración ha terminado. Verifica tu club para continuar.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Durante la prueba solo se admiten preguntas de demostración sin datos personales.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Analizando la migración…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Análisis actualizado. Completa las preguntas pendientes y autoriza la incorporación cuando todo esté listo.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Archivos guardados. Analizando automáticamente; después podrás revisar y confirmar las filas.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Analiza los archivos pendientes. Extrae los datos sin inventarlos y señala qué debo revisar antes de incorporarlos.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Análisis terminado. Revisa las filas y confirma la importación cuando estén correctas.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Resume las funciones principales de KOMBAX para un club de demostración.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿Cómo puedo organizar grupos y horarios en KOMBAX?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Explícame cómo funcionan las cuotas de demostración.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Durante la prueba usa las consultas de demostración de arriba.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Utiliza la consulta de demostración.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Selecciona al menos un registro.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Autorizar incorporación de datos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "No se confirmó la importación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Sí, incorporar",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "¿Cómo reviso una migración de ejemplo antes de confirmar?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Créditos IA · saldo no disponible",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "créditos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Próxima renovación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Assist y Migrations utilizan el mismo saldo de esta organización. Las tareas sencillas consumen menos que los análisis extensos o las migraciones.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Cómo funcionan los créditos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Los Créditos IA permiten utilizar las herramientas inteligentes de KOMBAX. Todos tus asistentes comparten el mismo saldo. Las tareas sencillas consumen menos que los análisis extensos, documentos o migraciones complejas. El consumo se calcula automáticamente según los recursos utilizados.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Assist y Migrations comparten el saldo de esta organización.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "El agente identificará los datos y pedirá lo que falte. Después de tu autorización visible, los incorporará y te indicará dónde comprobarlos.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Revisión e importación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Cuando el análisis detecte filas, aparecerán aquí para corregirlas y decidir qué importar.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Alumno de esta migración",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Cargo de esta migración",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Sí, incorporar estos datos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Hasta 200 filas por operación. Los alumnos entran como prealta, las cuotas quedan pendientes y los pagos requieren validación. No se actualizan fichas existentes.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "El agente ha propuesto {VAR} dato(s) a partir de tu respuesta. Comprueba los campos resaltados antes de autorizar la incorporación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "La incorporación directa está habilitada actualmente para Club. Federación y Marca pueden continuar con el análisis y solicitar revisión humana.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Información que podrás completar ahora o verificar después en Alumnos:",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Y {VAR} ficha(s) más.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Hay {VAR} pregunta(s) más. Completa las filas marcadas antes de continuar.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Si falta un grupo u horario, créalo en Mi Club → Grupos y vuelve a esta migración.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Guía práctica para incorporar alumnos, cuotas y pagos al Club con autorización final. Federaciones y Marcas pueden analizar sus documentos y solicitar revisión humana.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Canal de Club, Federación y Marca para analizar archivos. La incorporación directa está disponible en Club para alumnos, cuotas y pagos tras autorización final; los demás perfiles usan revisión humana.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "0 / 12 mensajes en esta conversación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Sube tus archivos. El agente identifica los datos, pregunta lo pendiente y solicita tu autorización antes de incorporarlos.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Prueba con datos de demostración",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "La carga de fichas y documentos reales se habilita al verificar el club. No incluyas datos personales de alumnos ni menores en esta prueba.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/customer-operations.js",
+      "value": "Ver cuotas y pagos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Identidad pública gratuita · plan opcional",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Accede con tu cuenta KOMBAX para solicitar la vinculación con un club.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Este club todavía no admite solicitudes desde KOMBAX.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Solicitar vinculación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Solicitud enviada al club para su revisión.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Tu club revisará si ya existe tu ficha. Este mensaje no crea una membresía ni publica un perfil.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Mensaje para el club",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Formo parte del club y quiero vincular mi cuenta KOMBAX. ¿Podéis revisar mi ficha o enviarme una invitación?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Enviar al club",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Mensaje enviado. El club podrá indicarte cómo completar la vinculación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "No se pudo comprobar la vinculación. Revisa que tu correo esté confirmado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Acceso al club",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "¿Tu club aún no aparece?",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Puedes invitarlo a KOMBAX y solicitar después tu vinculación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Prepararemos un correo para que tú mismo se lo envíes al club.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Preparar invitación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Invitación a KOMBAX para mi club",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Mi perfil de Miembro",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "KOMBAX conservará tu perfil Social, publicaciones y Mi red al activar Competidor.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Solo identidad pública gratuita",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Puedes solicitar la identidad pública sin plan. La verificación no realiza ningún cobro ni activa funciones de pago.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Solo perfil público gratuito",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Puedes solicitar el perfil público sin contratar la gestión privada. La verificación del Club no realiza ningún cobro.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Solicito participar en el piloto de clubes (1 de octubre a 15 de noviembre de 2026)",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Sin tarjeta ni cobro durante el piloto. La plaza y el nivel de acceso requieren aprobación de KOMBAX. Deja el plan opcional en «Solo perfil público gratuito».",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Para solicitar el piloto, deja el plan opcional en «Solo perfil público gratuito». Administración asignará el nivel piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Esta cuenta ya tiene asignado su tipo de perfil.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Como miembro puedes solicitar tu perfil de Competidor.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Elige el tipo de cuenta que quieres crear. La identidad elegida quedará vinculada a este correo.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "La plaza y el nivel de acceso requieren confirmación de KOMBAX. No necesitas tarjeta para el piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Perfil público gratuito · planes opcionales",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Empieza con una cuenta KOMBAX gratuita. Club, Marca y Federación pueden solicitar primero su identidad pública gratuita. Los planes de gestión se consultan por separado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Un tipo de cuenta por correo",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Elige Club, Competidor, Marca, Federación, Profesional o Media. Cada cuenta conserva su tipo. Si eres Miembro de un club, puedes añadir tu perfil de Competidor. Los perfiles oficiales se revisan antes de mostrar su verificación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "value": "Revisa si existe su ficha y utiliza “Invitar alumno por email” si corresponde. Este mensaje todavía no confirma la membresía.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/kombax-social.js",
+      "value": "Miembro muestra su comunidad y afiliación al club. Competidor es una identidad deportiva distinta, con verificación y Discovery. Media / Creador publica desde su espacio de contenido.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Publicaciones, álbum y presencia de creador dentro de KOMBAX Social y Showcase.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Mi Showcase · vendedor",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Comparte contenido desde una identidad activa y conecta con tu comunidad. Publicar requiere el vínculo o la verificación correspondiente; explorar perfiles públicos sigue disponible.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Presenta productos o servicios en un escaparate público. La venta, el carrito y los cobros requieren Commerce y la verificación del vendedor. Una ampliación de catálogo no activa Commerce.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Primero verifica tu identidad de Competidor o Media / Creador y activa la capacidad Showcase de tu plan. Después podrás solicitar la verificación independiente como vendedor, aceptar las condiciones y configurar Stripe. Cobrar requiere además Commerce activo.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Descubre experiencias y prepara eventos desde tu identidad. Publicar un evento, destacarlo y vender entradas son capacidades independientes; Ticketing incluye entradas y control QR.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Consulta licencias profesionales únicamente cuando una federación o entidad competente te haya concedido autorización. Tu perfil no obtiene acceso a datos privados de un club por sí solo.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Esta función requiere una capacidad activa para la identidad seleccionada.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Vista previa de la función",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "consulta las capacidades de tu identidad, los límites aplicables y su estado de verificación. Encontrarás pasos y ejemplos en Recursos · Guías.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "value": "Si hay una prueba disponible, aparecerá en Plan y servicios cuando esté habilitada para esta organización.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Publicación multimedia",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Cargando Mi contenido…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Gestiona tus publicaciones y tu material visual con la identidad Media / Creador. El contenido público y los datos privados de tu cuenta permanecen separados.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Ver mi perfil público",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Abrir Showcase",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Identidad Social pendiente",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Cuando tu identidad Media / Creador esté activa en Social, aquí aparecerán sus publicaciones. Puedes abrir Social para consultar los pasos de activación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Las 10 publicaciones más recientes · {VAR} visibles",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Aún no hay publicaciones visibles",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Crea tu primera publicación desde KOMBAX Social.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Álbum y material visual",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/media-content-center.js",
+      "value": "Desde tu perfil público podrás añadir fotografías y vídeos a tu presentación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Perfil Marca",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Plan Marca",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Perfil Federación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Plan Federación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Solicitar plan",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Tarifa pública mensual · España",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Presencia pública e identidad propia. La gestión privada se activa por separado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Escala para una organización con varias sedes. Las condiciones finales dependen de la estructura.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Las condiciones comerciales se publicarán cuando estén definidas.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "IDENTIDAD PÚBLICA",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "No exige suscripción. La verificación de identidad y los permisos siguen su propio proceso.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Consulta disponibilidad y límites antes de activar.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Vista previa del futuro proceso de contratación. No se guardan datos de tarjeta ni se activa ningún servicio.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Ver simulación de activación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "La simulación no solicita tarjeta ni activa el plan.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Disponible cuando se publiquen las condiciones definitivas.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Crear una cuenta KOMBAX es gratuito. Una cuenta puede explorar la plataforma, vincularse a un club y construir una identidad. Ser espectador es una forma de uso, no el nombre de todas las cuentas gratuitas. Los planes corresponden a capacidades operativas de una organización.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Identidad y vínculo",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Club, Marca, Federación o miembro de un club.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "El plan activa servicios de gestión según la organización.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Puedes explorar Social, Showcase y Events según las reglas de cada espacio. Más adelante podrás solicitar la vinculación con un club o crear una identidad. La gestión operativa requiere permisos de esa organización y, cuando corresponda, un plan.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Crear una cuenta y solicitar una identidad pública no exige un plan. La gestión operativa se solicita aparte. Los importes mensuales publicados para España se muestran sin IVA.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Condición Founder existente",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Tu condición anterior se conserva según sus términos y no se sustituye por el nuevo catálogo público.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "15 días de prueba del plan elegido",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Después: {VAR}/mes + IVA, si no cancelas. La prueba comenzará solo tras confirmar el método de pago en el flujo real.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Revisas las capacidades y límites del plan.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Introduces facturación y tarjeta en el proveedor de pago.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "KOMBAX confirma la verificación y la fecha final de la prueba.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Podrás cancelar antes del primer cobro.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Esta pantalla es una simulación. La verificación de tarjeta y la renovación permanecen cerradas hasta conectar la cuenta Stripe de KOMBAX.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "value": "Los clubes aprobados para el piloto acceden por un circuito independiente, sin tarjeta y hasta el 15 de noviembre de 2026.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Acceso temporal hasta el cierre del 15 de noviembre de 2026. No solicita tarjeta ni genera un cobro.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nivel de acceso durante el piloto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "12 meses Premium desde activación oficial",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Recarga administrativa con registro de auditoría e idempotencia.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Créditos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Referencia única y motivo",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Créditos añadidos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Créditos medios usados",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Coste/interacción",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Migraciones medias",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Coste/migración",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Créditos y coste API",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Economía técnica de Assist y Migrations. El contador anterior permanece en paralelo para comparar el piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Créditos consumidos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Ahorro estimado por caché",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Aún no hay monederos con actividad.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Referencia QA inicial: Basic 500 créditos / ~1,25 € / ~80 interacciones; Premium 1.000 / ~2,50 € / ~160; Enterprise 2.000 / ~5,00 € / ~320. Estas cifras se recalibrarán con el piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Clubes y Créditos IA",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Del 1 de octubre al 15 de noviembre de 2026. La fase fundadora comienza por fecha y conserva las cuentas y los datos. La fecha del lanzamiento oficial sigue pendiente.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Aún no hay clubes piloto inscritos. Elige cada entidad por ID verificado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Inscribir clubes existentes",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "No hay clubes pendientes en esta lista.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "ACCESO PILOTO",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Solicitudes de clubes",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "El club solicita plaza al registrarse. Primero se verifica su identidad; después Administración asigna el nivel piloto sin pedir tarjeta ni crear una suscripción de pago.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Aún no hay solicitudes de piloto.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Verificación de la identidad vendedora necesaria",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Mi Showcase aún no está habilitado",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Verifica tu perfil, activa la capacidad Showcase de tu plan y vuelve aquí para solicitar la verificación como vendedor. La venta con tarjeta requiere completar Stripe y activar Commerce.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    }
+  ]
 }

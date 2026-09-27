@@ -1,10 +1,12 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, statSync, mkdirSync, copyFileSync } from 'node:fs';
+import { existsSync, statSync, mkdirSync, copyFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 
 const root=resolve(import.meta.dirname,'..');
 const android=resolve(root,'android');
+const versionCode=readFileSync(resolve(android,'app/build.gradle'),'utf8').match(/^\s*versionCode\s+(\d+)\s*$/m)?.[1];
+if(!versionCode)throw new Error('No se pudo leer versionCode de android/app/build.gradle');
 
 const run=(cmd,args,cwd=root)=>{
   console.log(`> ${cmd} ${args.join(' ')}`);
@@ -39,12 +41,11 @@ if(!existsSync(apk) || statSync(apk).size<1024){
 }
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedApk=resolve(artifacts,'KOMBAX_20144_R91_PILOT_QA_DEBUG.apk');
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R104_3_PILOT_QA_DEBUG.apk`);
 copyFileSync(apk,namedApk);
-console.log('\nOK · KOMBAX R91 build 20144 · Pilot QA Android');
+console.log(`\nOK · KOMBAX R104.3 build ${versionCode} · Pilot QA Android`);
 console.log('APK Gradle: android/app/build/outputs/apk/debug/app-debug.apk');
-console.log('APK QA: artifacts/KOMBAX_20144_R91_PILOT_QA_DEBUG.apk');
-console.log('Android R91: versionCode 20144 · versionName 2.0.0-rc.13-r91-public-guides-r100-1');
+console.log(`APK QA: ${namedApk}`);
 
 // Historical QA artifact marker retained for R52.1/R52.2 regression: KOMBAX_20101_R52_2_SOCIAL_ANDROID_POSTER_FIX_DEBUG.apk
 

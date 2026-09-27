@@ -7,7 +7,7 @@ const cfg=read('web/config.js'),sw=read('web/service-worker.js'),gradle=read('an
 ok(Number(cfg.match(/build:\s*(\d+)/)?.[1]||0)>=20143,'R90 premium-home functionality is carried into a later build');
 ok(Number(sw.match(/const BUILD_MARKER='kombax-build-(\d+)'/)?.[1]||0)>=20143,'R90 service-worker functionality is carried into a later build');
 ok(Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0)>=20143,'Android retains R90 capabilities in a later build');
-ok(/^2\.0\.0-rc\.13-r9[0-9]/.test(pkg.version),'package remains in the R90+ cumulative release line');
+ok(Number(pkg.version.match(/^2\.0\.0-rc\.13-r(\d+)-/)?.[1]||0)>=90,'package remains in the R90+ cumulative release line');
 const home=read('web/js/modules/kombax-home.js'),css=read('web/css/kombax-prepilot-r88.css');
 for(const asset of ['gateway-kombax-community.webp','hero-social.webp','hero-showcase.webp','hero-events.webp','hero-guides-card.webp','hero-consulting-card.webp'])ok(home.includes(asset),`Premium Home uses official asset ${asset}`);
 ok(/kx-prepilot-home-stage/.test(home)&&/kx-prepilot-home-card-media/.test(home)&&/kx-prepilot-resource-zone/.test(home),'Home renders premium stage, visual ecosystem cards and resource zone');
@@ -33,6 +33,6 @@ ok(Array.isArray(index.entries)&&index.entries.length>=53,'Guide runtime index k
 for(const entry of index.entries){const rel=String(entry.pdf||'').replace(/^\.\//,'');const p=path.join(root,'web',rel);assert.ok(fs.existsSync(p),`Missing guide ${rel}`);const fd=fs.openSync(p,'r');const buf=Buffer.alloc(5);fs.readSync(fd,buf,0,5,0);fs.closeSync(fd);assert.equal(buf.toString(),'%PDF-',`Invalid PDF ${rel}`);}n++;console.log(`PASS ${n}: all indexed guide PDFs exist and have PDF headers`);
 const locales=['es','en','fr','pt','it','de','th','fil'];for(const lang of locales){const s=read(`web/js/i18n/locales/${lang}/prepilot.js`);for(const key of ['homeClaim','resources','resourcesLead','downloadPdf','pdfFallback','guidesLibrary','guidesLibraryLead'])assert.ok(s.includes(`"${key}"`),`${lang} missing ${key}`);n++;console.log(`PASS ${n}: ${lang} contains all R90 resource/PDF keys`);}
 const play=read('scripts/android-play-bundle.mjs'),debug=read('scripts/android-debug-qa.mjs');
-ok(/KOMBAX_2014[3-9]_R9[0-9]_PILOT_GOOGLE_PLAY\.aab/.test(play)&&play.includes("['run','release:build']"),'Play helper preserves certified R90+ release workflow');
-ok(/KOMBAX_2014[3-9]_R9[0-9]_PILOT_QA_DEBUG\.apk/.test(debug),'Debug helper preserves R90+ QA workflow');
+ok(play.includes('PILOT_GOOGLE_PLAY.aab')&&play.includes('release-legal-gate.mjs')&&play.includes('release-netlify-r104-3.mjs')&&play.includes('bundleRelease'),'Play helper preserves legal, QA and AAB release workflow');
+ok(debug.includes('PILOT_QA_DEBUG.apk')&&debug.includes('assembleDebug'),'Debug helper preserves QA workflow');
 console.log(`KOMBAX R90 premium home/resources/PDF: ${n}/${n} PASS`);

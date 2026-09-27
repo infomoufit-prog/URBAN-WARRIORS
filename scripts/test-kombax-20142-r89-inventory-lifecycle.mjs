@@ -36,8 +36,8 @@ const androidPlay=read('scripts/android-play-bundle.mjs');
 const androidDebug=read('scripts/android-debug-qa.mjs');
 const androidGradle=read('android/app/build.gradle');
 const gitignore=read('.gitignore');
-ok(androidPlay.includes('KOMBAX_20142_R89_PILOT_GOOGLE_PLAY.aab')&&androidPlay.includes("['run','release:build']"),'R89 Google Play helper certifies release and emits current AAB name');
-ok(androidDebug.includes('KOMBAX_20142_R89_PILOT_QA_DEBUG.apk'),'R89 Android QA helper emits current APK name');
+ok(androidPlay.includes('PILOT_GOOGLE_PLAY.aab')&&androidPlay.includes('release-legal-gate.mjs')&&androidPlay.includes('release-netlify-r104-3.mjs'),'Google Play helper certifies current release and emits current AAB name');
+ok(androidDebug.includes('PILOT_QA_DEBUG.apk')&&androidDebug.includes('assembleDebug'),'Android QA helper emits current APK name');
 ok(/compileSdk\s+36/.test(androidGradle)&&/targetSdk\s+36/.test(androidGradle)&&Number(androidGradle.match(/versionCode\s+(\d+)/)?.[1]||0)>=20142,'R89 Android targets API 36 with monotonic versionCode >= 20142');
 ok(gitignore.includes('android/keystore.properties')&&gitignore.includes('*.jks')&&gitignore.includes('*.aab'),'R89 keeps signing keys and generated release bundles out of Git');
 

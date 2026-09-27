@@ -13,7 +13,7 @@ const pdf=path=>{
   assert.equal(readFileSync(file).subarray(0,4).toString(),'%PDF');
 };
 const config=read('web/config.js'),gradle=read('android/app/build.gradle');
-assert.match(config,/2\.0\.0-rc\.13-r9[2-9]-[a-z0-9-]+/);
+assert.ok(Number(config.match(/2\.0\.0-rc\.13-r(\d+)-[a-z0-9-]+/)?.[1]||0)>=92);
 assert.ok(Number(config.match(/build:\s*(\d+)/)?.[1]||0)>=20145);
 assert.ok(Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0)>=20145);
 pass('R92 resources retained in cumulative web and Android build');
