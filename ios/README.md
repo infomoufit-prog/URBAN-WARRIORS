@@ -1,6 +1,6 @@
 # KOMBAX iOS R81 - Tap to Pay on iPhone
 
-Source variant for build 20133. It wraps the canonical `https://kombax.es` UI in WKWebView and exposes `window.webkit.messageHandlers.kombaxTerminal` to the same R81 Payment Center used by Android and the web fallback.
+Source variant for build 20144. It wraps the canonical `https://kombax.es` UI in WKWebView and exposes `window.webkit.messageHandlers.kombaxTerminal` to the same R91 Payment Center used by Android and the web fallback.
 
 ## Build prerequisites
 1. macOS + current Xcode.

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-21",
+  "status": "PREPARATORY_NOT_LIVE",
+  "currency": "EUR",
+  "pricing_note": "No hay importes aprobados. price_minor permanece null hasta validación comercial expresa de KOMBAX.",
+  "services": [
+    {
+      "service_code": "club_setup_review",
+      "title": "Creación y estructura de club o asociación deportiva",
+      "scope": "Revisión del territorio, forma organizativa, documentación base, registro deportivo y puntos de derivación fiscal/jurídica.",
+      "deliverables": ["clasificación inicial", "checklist personalizado", "documentación a revisar", "organismos a consultar"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "event_preflight_review",
+      "title": "Revisión previa de evento o interclub",
+      "scope": "Revisión del expediente operativo: recinto, régimen administrativo, participantes, seguros, menores, ticketing y dependencias territoriales/federativas.",
+      "deliverables": ["matriz de requisitos", "checklist de faltantes", "riesgos de bloqueo", "plan de acciones"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "organizer_document_review",
+      "title": "Revisión documental del organizador",
+      "scope": "Ordenación y contraste de documentos, vigencias, responsables y coherencia entre permisos, pólizas, contratos y operativa.",
+      "deliverables": ["inventario documental", "inconsistencias detectadas", "documentos pendientes", "checklist de cierre"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "license_federation_case",
+      "title": "Licencias y encaje federativo",
+      "scope": "Clasificación del ámbito, modalidad, federación/organización competente y documentación necesaria para contrastar la elegibilidad.",
+      "deliverables": ["mapa de organismos", "checklist de licencia", "cuestiones a confirmar con la federación"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": false
+    },
+    {
+      "service_code": "minor_privacy_image_review",
+      "title": "Menores, protección de datos e imagen",
+      "scope": "Revisión operativa de protocolos, roles, finalidades, autorizaciones y visibilidad de datos/imágenes, con derivación especializada cuando proceda.",
+      "deliverables": ["mapa de tratamientos", "checklist de protección", "puntos de consentimiento/información", "derivaciones necesarias"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "ticketing_conditions_review",
+      "title": "Ticketing, condiciones de venta y cancelación",
+      "scope": "Revisión de la experiencia de venta, identidad del organizador, información al comprador y escenarios de cancelación/aplazamiento.",
+      "deliverables": ["checklist de checkout", "matriz de incidencias", "puntos a revisar en condiciones de venta"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "foreign_participant_review",
+      "title": "Participantes extranjeros",
+      "scope": "Clasificación inicial de entrada/estancia, actividad económica o profesional y elegibilidad deportiva; no sustituye trámite migratorio ni asesoría laboral/fiscal.",
+      "deliverables": ["clasificación del supuesto", "fuentes/organismos oficiales", "documentos a contrastar", "derivaciones necesarias"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "sponsorship_operations_review",
+      "title": "Patrocinio y operativa comercial",
+      "scope": "Revisión de contraprestaciones, uso de marca, entregables y puntos de derivación contractual/fiscal.",
+      "deliverables": ["inventario de contraprestaciones", "checklist de contrato", "riesgos de clasificación", "derivación fiscal/jurídica cuando proceda"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": true,
+      "professional_review_required": true
+    },
+    {
+      "service_code": "kombax_digitalization_setup",
+      "title": "Digitalización y configuración operativa con KOMBAX",
+      "scope": "Acompañamiento para trasladar procesos reales de club, federación, Showcase o Events a KOMBAX sin mezclar identidades ni permisos.",
+      "deliverables": ["mapa de procesos", "plan de configuración", "roles/permisos", "plan de migración operativa"],
+      "pricing_mode": "quote",
+      "price_minor": null,
+      "requires_documents": false,
+      "professional_review_required": false
+    }
+  ]
+}

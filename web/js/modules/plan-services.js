@@ -3,7 +3,7 @@ import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { esc, humanError } from '../core/utils.js';
-import { pageHeader, setMainHtml, setAppHtml, toast, subviewActions, bindSubviewActions } from '../ui/components.js';
+import { pageHeader, setMainHtml, setAppHtml, toast, subviewActions, bindSubviewActions, openDetail } from '../ui/components.js';
 import { FALLBACK_COMMERCIAL_CATALOG, COMMERCIAL_PDF } from '../core/commercial-pricing.js';
 
 const eurMinor=v=>`${(Number(v||0)/100).toLocaleString(kxLocaleTag(kxGetLocale()),{minimumFractionDigits:0,maximumFractionDigits:2})} €`;
@@ -17,6 +17,17 @@ const audienceCopy=a=>({
   brand:{title:'Marcas',body:'Escaparate comercial, venta directa, catálogo, promoción y Events según plan.',badge:'MARCA'},
   federation:{title:'Federaciones',body:'Gestión de red, Events, Ticketing puntual y programa KOMBAX Partner.',badge:'FEDERACIÓN'}
 }[a]||{title:a,body:'',badge:String(a||'').toUpperCase()});
+const WORK_OFFERS_FALLBACK=[
+  {product_code:'club_profile',audience:'club',name:'Perfil Club',kind:'identity',price_minor:0,price_published:true},
+  {product_code:'club',audience:'club',name:'KOMBAX Club',kind:'subscription',legacy_plan_code:'club',price_minor:2390,price_published:true,requestable:false},
+  {product_code:'premium',audience:'club',name:'KOMBAX Premium',kind:'subscription',legacy_plan_code:'premium',price_minor:3790,price_published:true,requestable:false},
+  {product_code:'multiclub',audience:'club',name:'KOMBAX MultiClub',kind:'subscription',price_minor:2990,starting_price:true,price_published:true},
+  {product_code:'enterprise',audience:'club',name:'KOMBAX Enterprise',kind:'subscription',legacy_plan_code:'enterprise',price_minor:null,price_published:false},
+  {product_code:'brand_profile',audience:'brand',name:'Perfil Marca',kind:'identity',price_minor:0,price_published:true},
+  {product_code:'brand_plan',audience:'brand',name:'Plan Marca',kind:'subscription',price_minor:null,price_published:false},
+  {product_code:'federation_profile',audience:'federation',name:'Perfil Federación',kind:'identity',price_minor:0,price_published:true},
+  {product_code:'federation_plan',audience:'federation',name:'Plan Federación',kind:'subscription',price_minor:null,price_published:false}
+];
 
 function planRows(plan,audience){
   const rows=[];
@@ -27,33 +38,32 @@ function planRows(plan,audience){
   rows.push(['Commerce',plan.plan_code==='club'&&plan.commerce_mode==='temporary'?'12 €/mes':modeLabel(plan.commerce_mode)]);
   rows.push(['Events',eventsLabel(plan.events_monthly_limit)]);
   rows.push(['Ticketing',modeLabel(plan.ticketing_mode)]);
-  rows.push(['Stripe Connect',t('payments.planAccordingToServices')]);
-  rows.push(['Tarjeta','Commerce · Ticketing · cobros inmediatos']);
-  if(audience==='club'||audience==='federation')rows.push(['SEPA',t('payments.planSepaRecurring')]);
   rows.push(['Destacar','Extra']);
   rows.push(['Assist',titleLevel(plan.assist_level)]);
   rows.push(['Migrations',titleLevel(plan.migrations_level)]);
   rows.push(['Platform fee',`${Number(plan.platform_fee_percent||0).toLocaleString(kxLocaleTag(kxGetLocale()))} %`]);
   return rows;
 }
-function planCard(plan,audience,current,billing='monthly',founderOpen=true,{selectMode=false}={}){
+function planCard(plan,audience,current,offer,{selectMode=false}={}){
   const active=String(current?.plan_code||'')===String(plan.plan_code);
-  const founderEligible=Boolean(current?.founder_locked)||founderOpen;
-  const standard=billing==='annual'?`${eurMinor(plan.standard_annual_minor)}/año`:`${eurMinor(plan.standard_monthly_minor)}/mes`;
-  // Founder is monthly only. Annual always uses the published standard annual price and never stacks Founder.
-  const useFounder=billing==='monthly'&&founderEligible;
-  const primary=useFounder?eurMinor(plan.founder_monthly_minor):(billing==='annual'?eurMinor(plan.standard_annual_minor):eurMinor(plan.standard_monthly_minor));
-  const primarySuffix=useFounder?'/mes Founder':billing==='annual'?'/año':'/mes';
-  const secondaryLabel=billing==='annual'?'Mensual estándar':useFounder?'Estándar':'Tarifa vigente';
-  const secondary=billing==='annual'?`${eurMinor(plan.standard_monthly_minor)}/mes`:`${eurMinor(plan.standard_monthly_minor)}/mes`;
-  const actionLabel=selectMode?`Elegir ${plan.name}`:`Solicitar ${billing==='annual'?'anual':'plan'}`;
+  const published=offer?.price_published===true&&Number.isInteger(offer?.price_minor);
+  const requestable=published&&offer?.requestable===true;
+  const primary=published?eurMinor(offer.price_minor):'Precio por definir';
+  const actionLabel=selectMode?`Elegir ${plan.name}`:'Solicitar plan';
   return `<article class="kx-price-card ${active?'current':''}" data-plan-card="${esc(plan.plan_code)}">
     <div class="kx-price-card-head"><div><small>${active?'PLAN ACTUAL':esc(commercialAudienceName(audience).toUpperCase())}</small><h3>${esc(plan.name)}</h3><p>${esc(plan.tagline)}</p></div>${active?'<span class="kx-price-current">Activo</span>':''}</div>
-    <div class="kx-price-main"><strong>${primary}</strong><span>${primarySuffix}</span></div>
-    <div class="kx-price-standard"><span>${secondaryLabel}</span><b>${secondary}</b>${billing==='annual'?'<small>−16 % sobre tarifa estándar mensual · no acumulable con Founder</small>':''}</div>
+    <div class="kx-price-main"><strong>${primary}</strong><span>${published?'/mes + IVA':''}</span></div>
+    <div class="kx-price-standard"><span>${published?'Tarifa pública mensual · España':'Condiciones comerciales pendientes'}</span><b>${published?'Sin IVA':'Consulta disponibilidad'}</b></div>
     <div class="kx-price-features">${planRows(plan,audience).map(([k,v])=>`<div><span>${esc(k)}</span><b class="${String(v).startsWith('✕')?'off':''}">${esc(v)}</b></div>`).join('')}</div>
-    ${active?'':`<button class="btn btn-primary kx-plan-request" data-plan="${esc(plan.plan_code)}">${esc(actionLabel)}</button>`}
+    ${active?'':requestable?`<button class="btn btn-primary kx-plan-request" data-plan="${esc(plan.plan_code)}">${esc(actionLabel)}</button>`:published?`<button class="btn btn-ghost kx-plan-preview" data-plan="${esc(plan.plan_code)}" type="button">Ver simulación de activación</button><small>La simulación no solicita tarjeta ni activa el plan.</small>`:'<small>Disponible cuando se publiquen las condiciones definitivas.</small>'}
   </article>`;
+}
+function additionalOfferCard(offer){
+  const free=offer.kind==='identity';
+  const priced=offer.price_published===true&&Number.isInteger(offer.price_minor);
+  const price=free?'Gratis':priced?`${offer.starting_price?'Desde ':''}${eurMinor(offer.price_minor)}/mes + IVA`:'Precio por definir';
+  const body=free?'Presencia pública e identidad propia. La gestión privada se activa por separado.':offer.product_code==='multiclub'?'Escala para una organización con varias sedes. Las condiciones finales dependen de la estructura.':'Las condiciones comerciales se publicarán cuando estén definidas.';
+  return `<article class="kx-price-card" data-product-card="${esc(offer.product_code)}"><div class="kx-price-card-head"><div><small>${free?'IDENTIDAD PÚBLICA':offer.starting_price?'ESCALA':'PLAN'}</small><h3>${esc(offer.name)}</h3><p>${esc(body)}</p></div></div><div class="kx-price-main"><strong>${price}</strong></div><small>${free?'No exige suscripción. La verificación de identidad y los permisos siguen su propio proceso.':'Consulta disponibilidad y límites antes de activar.'}</small></article>`;
 }
 function activationGrid(catalog,audience,{canRequest=false,context=null}={}){
   const c=catalog.config||{},commerce=c.commerce_temporary||{},catalogPlus=c.showcase_catalog_plus_25||{slots:25,days:30,price_minor:800},pub=c.event_publication||{},promo=c.content_promotion||{},ticketTiers=c.ticketing_activation_tiers||{};
@@ -69,7 +79,7 @@ function activationGrid(catalog,audience,{canRequest=false,context=null}={}){
       ${(audience==='club'||audience==='brand')?`<article><h3>Ampliación Showcase +25</h3><p>Los límites del plan son capacidad incluida, no un límite destructivo. Añade 25 productos activos durante 30 días y conserva referencias, reseñas e historial.</p><div class="kx-activation-options"><span><b>+${Number(catalogPlus.slots||25)} productos</b> · ${eurMinor(catalogPlus.price_minor||800)} / ${Number(catalogPlus.days||30)} días</span><span>Renovable · acumulable · no activa Commerce</span></div>${catalogPlusAllowed?`<button class="btn btn-primary" data-activation="SHOWCASE_CATALOG_PLUS_25" data-days="30">Solicitar +25 · ${eurMinor(catalogPlus.price_minor||800)}</button>`:`<small>${catalogPlan&&['enterprise','brand_enterprise'].includes(catalogPlan)?'Tu plan ya incluye catálogo ilimitado.':'Selecciona un plan compatible para contratar ampliaciones.'}</small>`}</article>`:''}
       ${audience==='club'?`<article><h3>Showcase Commerce</h3><p>Club básico: mantienes hasta 15 productos de escaparate y activas la venta directa cuando la necesitas. Premium y Enterprise ya incluyen Commerce.</p><div class="kx-activation-options"><button type="button" class="kx-activation-option" ${clubCommerceAllowed?'data-activation="SHOWCASE_COMMERCE" data-days="30"':'disabled'}><span>1 mes</span><b>${eurMinor(commercePrice)}</b><small>${clubCommerceAllowed?'Solicitar activación':canRequest?'Incluido en Premium/Enterprise o requiere Club básico':'Selecciona una organización'}</small></button></div><small>Renovable mes a mes. No aplica descuento Founder ni anual al add-on.</small></article>`:''}
       <article><h3>Publicar evento</h3><p>Publicar no es lo mismo que promocionar ni vender entradas.</p><div>${pubCards}</div><small>Se activa desde el evento concreto para que la autorización quede ligada a ese evento.</small></article>
-      <article><h3>Destacar</h3><p>Prioridad en Events/Showcase + amplificación automática en KOMBAX Social.</p><div>${promoCards}</div><small>Se contrata desde el evento o producto concreto. Frequency caps protegen el feed Social.</small></article>
+      <article><h3>Destacar</h3><p>Prioridad en Events/Showcase + amplificación automática en KOMBAX Social.</p><div>${promoCards}</div><small>Se contrata desde el evento o producto concreto. La promoción se muestra con una frecuencia equilibrada para cuidar la experiencia en Social.</small></article>
       <article><h3>Ticketing</h3><p>Activación puntual según capacidad del evento.</p><div>${ticketCards}</div><small>Incluye checkout, ticket digital, QR, lector y control de acceso. Más de ${Number(c.large_event_threshold||1000).toLocaleString(kxLocaleTag(kxGetLocale()))} entradas: Gran Evento con condiciones específicas.</small></article>
     </div>
   </section>`;
@@ -78,18 +88,19 @@ function partnerSection(catalog){const p=catalog.config?.partner_program||{};ret
 
 export function commercialPlanSummary(audience){
   const plans=FALLBACK_COMMERCIAL_CATALOG.plans.filter(p=>p.audience===audience);
-  const min=Math.min(...plans.map(p=>Number(p.founder_monthly_minor||p.standard_monthly_minor||0)).filter(Boolean));
-  return {audience,plans,from_minor:min||0,copy:audienceCopy(audience)};
+  const paid=WORK_OFFERS_FALLBACK.filter(p=>p.audience===audience&&p.kind==='subscription'&&p.price_published&&p.price_minor>0);
+  const min=paid.length?Math.min(...paid.map(p=>p.price_minor)):null;
+  return {audience,plans,from_minor:min,copy:audienceCopy(audience)};
 }
 
 export function renderCommercialDiscovery({onBack=null,onSelectPlan=null}={}){
   const audiences=['club','brand','federation'].map(commercialPlanSummary);
   const html=`<div class="kx-commercial-page kx-commercial-discovery">
     ${pageHeader('Planes y precios','Consulta las tarifas antes de crear una organización o vuelve aquí desde cualquier cuenta KOMBAX.',onBack?subviewActions({backId:'kx-commercial-discovery-back',closeId:'kx-commercial-discovery-close'}):'','KOMBAX')}
-    <section class="kx-commercial-hero kx-commercial-discovery-hero"><div><span class="page-kicker">KOMBAX · CUENTA GRATIS + PLANES POR ORGANIZACIÓN</span><h1>Primero tu cuenta. Después eliges qué quieres hacer.</h1><p>Crear una cuenta KOMBAX y continuar como Espectador es gratuito. Los planes se asocian al Club, Marca o Federación que quieras gestionar; nunca al simple registro de tu email.</p></div><a class="btn btn-ghost" href="${COMMERCIAL_PDF}" target="_blank" rel="noopener">Tabla completa de precios</a></section>
-    <section class="kx-commercial-journey" aria-label="Cómo funciona"><article><b>1</b><strong>Cuenta KOMBAX</strong><span>Registro y Espectador gratis.</span></article><article><b>2</b><strong>Identidad</strong><span>Club, Marca o Federación.</span></article><article><b>3</b><strong>Plan</strong><span>Conoces precio y capacidades antes del alta.</span></article><article><b>4</b><strong>Verificación</strong><span>La identidad y los permisos se revisan antes de activarse.</span></article></section>
-    <section class="kx-audience-grid">${audiences.map(x=>`<article class="kx-audience-card"><span>${esc(x.copy.badge)}</span><h2>${esc(x.copy.title)}</h2><p>${esc(x.copy.body)}</p><div><small>Desde</small><strong>${eurMinor(x.from_minor)}<em>/mes Founder</em></strong></div><button type="button" class="btn btn-primary" data-kx-commercial-audience="${esc(x.audience)}">Ver planes ${esc(commercialAudienceName(x.audience))}</button></article>`).join('')}</section>
-    <section class="kx-commercial-section kx-commercial-account-note"><div><small>CUENTA KOMBAX</small><h2>No tienes que pagar para registrarte</h2><p>Una cuenta sin Club ni perfil comercial funciona como Espectador. Puedes explorar Social, Showcase y Events según sus reglas; cuando quieras gestionar una organización, KOMBAX te mostrará el plan correspondiente antes de solicitarla.</p></div></section>
+    <section class="kx-commercial-hero kx-commercial-discovery-hero"><div><span class="page-kicker">KOMBAX · CUENTA GRATIS + PLANES POR ORGANIZACIÓN</span><h1>Primero tu cuenta. Después eliges qué quieres hacer.</h1><p>Crear una cuenta KOMBAX es gratuito. Una cuenta puede explorar la plataforma, vincularse a un club y construir una identidad. Ser espectador es una forma de uso, no el nombre de todas las cuentas gratuitas. Los planes corresponden a capacidades operativas de una organización.</p></div><a class="btn btn-ghost" href="${COMMERCIAL_PDF}" target="_blank" rel="noopener">Resumen de precios</a></section>
+    <section class="kx-commercial-journey" aria-label="Cómo funciona"><article><b>1</b><strong>Cuenta KOMBAX</strong><span>Registro gratuito.</span></article><article><b>2</b><strong>Identidad y vínculo</strong><span>Club, Marca, Federación o miembro de un club.</span></article><article><b>3</b><strong>Capacidades</strong><span>El plan activa servicios de gestión según la organización.</span></article><article><b>4</b><strong>Verificación</strong><span>La identidad y los permisos se revisan antes de activarse.</span></article></section>
+    <section class="kx-audience-grid">${audiences.map(x=>`<article class="kx-audience-card"><span>${esc(x.copy.badge)}</span><h2>${esc(x.copy.title)}</h2><p>${esc(x.copy.body)}</p><div><small>Perfil público</small><strong>Gratis</strong></div><div><small>Gestión</small><strong>${x.from_minor!=null?`${eurMinor(x.from_minor)}<em>/mes + IVA</em>`:'Precio por definir'}</strong></div><button type="button" class="btn btn-primary" data-kx-commercial-audience="${esc(x.audience)}">Ver planes ${esc(commercialAudienceName(x.audience))}</button></article>`).join('')}</section>
+    <section class="kx-commercial-section kx-commercial-account-note"><div><small>CUENTA KOMBAX</small><h2>No tienes que pagar para registrarte</h2><p>Puedes explorar Social, Showcase y Events según las reglas de cada espacio. Más adelante podrás solicitar la vinculación con un club o crear una identidad. La gestión operativa requiere permisos de esa organización y, cuando corresponda, un plan.</p></div></section>
   </div>`;
   setAppHtml(`<main id="main-view" class="main-view kx-commercial-standalone">${html}</main>`);
   if(onBack)bindSubviewActions(document,{backId:'kx-commercial-discovery-back',closeId:'kx-commercial-discovery-close',onBack,onClose:onBack});
@@ -104,27 +115,27 @@ export async function renderPlanServices({audience='club',subjectType=null,subje
   const resolvedSubjectId=subjectId||(audience==='club'?state.session?.club_id:null);
   let catalog,context=null,remote=true;
   try{catalog=await repos.commercial.catalog(audience);if(!catalog?.plans?.length)throw new Error('EMPTY_CATALOG');}catch{remote=false;catalog={...FALLBACK_COMMERCIAL_CATALOG,plans:FALLBACK_COMMERCIAL_CATALOG.plans.filter(p=>p.audience===audience)};}
+  const offers=await repos.commercial.offers(audience).then(data=>Array.isArray(data?.offers)?data.offers:[]).catch(()=>[]);
+  const currentOffers=offers.length?offers:WORK_OFFERS_FALLBACK.filter(offer=>offer.audience===audience);
   if(resolvedSubjectId&&remote){try{context=await repos.commercial.context(resolvedSubjectType,resolvedSubjectId);}catch{/* catalog stays readable */}}
-  let billing='monthly';
+  const billing='monthly';
   const render=()=>{
-    const plans=(catalog.plans||[]).filter(p=>p.audience===audience);
+    const plans=audience==='club'?(catalog.plans||[]).filter(p=>p.audience===audience):[];
     const selectMode=!resolvedSubjectId&&typeof onSelectPlan==='function';
     const html=`<div class="kx-commercial-page">
-      ${pageHeader('Plan y servicios',selectMode?`Conoce el precio y elige el plan de ${commercialAudienceName(audience)} antes de iniciar el alta.`:`Consulta qué incluye cada plan de ${commercialAudienceName(audience)} y solicita cambios sin perder la arquitectura actual.`,onBack?subviewActions({backId:'kx-commercial-back',closeId:'kx-commercial-close'}):'','KOMBAX')}
-      <section class="kx-commercial-hero"><div><span class="page-kicker">KOMBAX · PLANES Y SERVICIOS</span><h1>${selectMode?'Conoce el plan antes de crear la organización':'Elige capacidades, no complejidad'}</h1><p>La cuenta KOMBAX y el estado Espectador son gratuitos. Los precios mostrados son finales con IVA incluido cuando corresponde.</p></div><a class="btn btn-ghost" href="${COMMERCIAL_PDF}" target="_blank" rel="noopener">Ver tabla completa de precios</a></section>
-      ${(catalog.config?.founder_sales_open!==false||context?.founder_locked)?'<section class="kx-founder-note"><strong>Precio Founder</strong><span>Si contratas mientras está vigente, lo conservas mientras sigas siendo cliente sin interrupción. Se pierde al causar baja y volver.</span><small>Founder es mensual y no se acumula con el descuento anual.</small></section>':'<section class="kx-founder-note"><strong>Tarifa estándar</strong><span>La ventana de nuevas altas Founder está cerrada. Los clientes que ya la conservan mantienen su condición.</span></section>'}
-      <div class="kx-billing-toggle" role="group"><button class="${billing==='monthly'?'active':''}" data-billing="monthly">Mensual${catalog.config?.founder_sales_open!==false?' · Founder disponible':''}</button><button class="${billing==='annual'?'active':''}" data-billing="annual">Anual estándar · −16 %</button></div>
+      ${pageHeader('Plan y servicios',`Consulta la identidad gratuita, los planes y las capacidades de ${commercialAudienceName(audience)}.`,onBack?subviewActions({backId:'kx-commercial-back',closeId:'kx-commercial-close'}):'','KOMBAX')}
+      <section class="kx-commercial-hero"><div><span class="page-kicker">KOMBAX · PLANES Y SERVICIOS</span><h1>Identidad gratuita y servicios a tu medida</h1><p>Crear una cuenta y solicitar una identidad pública no exige un plan. La gestión operativa se solicita aparte. Los importes mensuales publicados para España se muestran sin IVA.</p></div><a class="btn btn-ghost" href="${COMMERCIAL_PDF}" target="_blank" rel="noopener">Resumen de precios</a></section>
+      ${context?.founder_locked?'<section class="kx-founder-note"><strong>Condición Founder existente</strong><span>Tu condición anterior se conserva según sus términos y no se sustituye por el nuevo catálogo público.</span></section>':''}
       ${context?.plan_code?`<div class="kx-current-plan"><span>Plan actual</span><strong>${esc(context.plan_code)}</strong><small>Fee: ${Number(context.platform_fee_percent||0).toLocaleString(kxLocaleTag(kxGetLocale()))} % · ${context.founder_locked?'Founder protegido':'Tarifa según contrato vigente'}</small></div>`:''}
-      ${selectMode?'<div class="kx-commercial-selection-note"><strong>Elegir no realiza ningún cobro.</strong><span>Guardaremos tu selección para el formulario de alta y la revisión KOMBAX. El Billing automático sigue fuera de esta fase.</span></div>':''}
-      <section class="kx-price-grid">${plans.map(p=>planCard(p,audience,context,billing,catalog.config?.founder_sales_open!==false,{selectMode})).join('')}</section>
+      ${selectMode?'<div class="kx-commercial-selection-note"><strong>Elegir no realiza ningún cobro.</strong><span>Tu elección se guardará para completar la solicitud. Te informaremos de las condiciones y del siguiente paso antes de activar el servicio.</span></div>':''}
+      <section class="kx-price-grid">${currentOffers.filter(o=>o.kind==='identity').map(additionalOfferCard).join('')}${plans.map(p=>planCard(p,audience,context,currentOffers.find(o=>o.legacy_plan_code===p.plan_code),{selectMode})).join('')}${currentOffers.filter(o=>!o.legacy_plan_code&&o.kind!=='identity').map(additionalOfferCard).join('')}</section>
       ${activationGrid(catalog,audience,{canRequest:Boolean(resolvedSubjectId&&remote),context})}
       ${audience==='federation'?partnerSection(catalog):''}
       <section class="kx-commercial-section kx-payments-subscription-note"><div class="kx-commercial-section-title"><small>${esc(t('payments.planIntegratedKicker'))}</small><h2>${esc(t('payments.planTitle'))}</h2></div><div class="kx-activation-grid"><article><h3>${esc(t('payments.planIdentityTitle'))}</h3><p>${esc(t('payments.planIdentityBody'))}</p></article><article><h3>${esc(t('payments.cardTitle'))}</h3><p>${esc(t('payments.planCardBody'))}</p></article><article><h3>${esc(t('payments.sepaTitle'))}</h3><p>${esc(t('payments.planSepaBody'))}</p></article><article><h3>${esc(t('payments.planGuideTitle'))}</h3><p>${esc(t('payments.planGuideBody'))}</p><a class="btn btn-ghost" href="./assets/docs/GUIA_KOMBAX_COBROS_TAP_TO_PAY_IPHONE_R81.pdf" target="_blank" rel="noopener">${esc(t('payments.planOpenGuide'))}</a></article></div></section>
-      <section class="kx-commercial-section kx-economic-rules"><h2>Reglas claras</h2><ul><li><b>Cuenta ≠ identidad ≠ plan.</b> Registrarte no activa una tarifa.</li><li><b>Publicar ≠ Destacar ≠ Ticketing.</b></li><li>Ticketing agrupa QR, lector y control de acceso: no se cobran como servicios separados.</li><li>Los límites Showcase son capacidad incluida. Puedes ampliar en bloques de +25 por 8 €/30 días; archivar libera un slot sin perder reputación ni historial.</li><li>Las variantes de talla, color, peso o formato no consumen productos adicionales.</li><li>Toda compra comercial personal exige 18 años.</li><li>Stripe Connect mantiene direct charges: el vendedor u organizador cobra en su cuenta conectada y KOMBAX percibe únicamente las tarifas aplicables.</li><li><b>Tarjeta y SEPA son métodos independientes.</b> Se activan desde Cobros y Stripe cuando el perfil dispone de un servicio comercial compatible.</li><li><b>Commerce y Ticketing inmediato usan tarjeta.</b> SEPA queda reservado a cuotas y cobros recurrentes o diferidos compatibles, porque su confirmación no es instantánea.</li></ul></section>
+      <section class="kx-commercial-section kx-economic-rules"><h2>Reglas claras</h2><ul><li><b>Cuenta ≠ identidad ≠ plan.</b> Registrarte no activa una tarifa.</li><li><b>Publicar ≠ Destacar ≠ Ticketing.</b></li><li>Ticketing agrupa QR, lector y control de acceso: no se cobran como servicios separados.</li><li>Los límites Showcase son capacidad incluida. Puedes ampliar en bloques de +25 por 8 €/30 días; archivar libera un espacio sin perder reputación ni historial.</li><li>Las variantes de talla, color, peso o formato no consumen productos adicionales.</li><li>Toda compra comercial personal exige 18 años.</li><li>Stripe procesa el cobro en la cuenta del vendedor u organizador. KOMBAX recibe únicamente las tarifas aplicables.</li><li><b>Tarjeta y SEPA son métodos independientes.</b> Se activan desde Cobros y Stripe cuando el perfil dispone de un servicio comercial compatible.</li><li><b>Commerce y Ticketing inmediato usan tarjeta.</b> SEPA queda reservado a cuotas y cobros recurrentes o diferidos compatibles, porque su confirmación no es instantánea.</li></ul></section>
     </div>`;
     if(onBack)setAppHtml(`<main id="main-view" class="main-view kx-commercial-standalone">${html}</main>`);else setMainHtml(html);
     if(onBack)bindSubviewActions(document,{backId:'kx-commercial-back',closeId:'kx-commercial-close',onBack,onClose:onBack});
-    document.querySelectorAll('[data-billing]').forEach(b=>b.addEventListener('click',()=>{billing=b.dataset.billing||'monthly';render();}));
     document.querySelectorAll('.kx-plan-request').forEach(b=>b.addEventListener('click',async()=>{
       if(!resolvedSubjectId&&typeof onSelectPlan==='function'){
         onSelectPlan({audience,plan_code:b.dataset.plan,billing_cycle:billing});
@@ -132,6 +143,12 @@ export async function renderPlanServices({audience='club',subjectType=null,subje
       }
       if(!resolvedSubjectId){toast('Primero debes crear o seleccionar la organización.','error');return;}
       b.disabled=true;try{await repos.commercial.requestPlan(resolvedSubjectType,resolvedSubjectId,b.dataset.plan,billing);toast('Solicitud registrada. No se ha realizado ningún cobro.');context=await repos.commercial.context(resolvedSubjectType,resolvedSubjectId).catch(()=>context);render();}catch(e){b.disabled=false;toast(humanError(e),'error');}
+    }));
+    document.querySelectorAll('.kx-plan-preview').forEach(b=>b.addEventListener('click',()=>{
+      const plan=plans.find(x=>x.plan_code===b.dataset.plan);
+      const offer=currentOffers.find(x=>x.legacy_plan_code===b.dataset.plan);
+      if(!plan||!offer)return;
+      openDetail({title:`Simulación · ${plan.name}`,subtitle:'Vista previa del futuro proceso de contratación. No se guardan datos de tarjeta ni se activa ningún servicio.',width:'680px',body:`<div class="kx-commercial-selection-note"><strong>15 días de prueba del plan elegido</strong><span>Después: ${esc(eurMinor(offer.price_minor))}/mes + IVA, si no cancelas. La prueba comenzará solo tras confirmar el método de pago en el flujo real.</span></div><ol><li>Revisas las capacidades y límites del plan.</li><li>Introduces facturación y tarjeta en el proveedor de pago.</li><li>KOMBAX confirma la verificación y la fecha final de la prueba.</li><li>Podrás cancelar antes del primer cobro.</li></ol><p>Esta pantalla es una simulación. La verificación de tarjeta y la renovación permanecen cerradas hasta conectar la cuenta Stripe de KOMBAX.</p><p>Los clubes aprobados para el piloto acceden por un circuito independiente, sin tarjeta y hasta el 15 de noviembre de 2026.</p>`});
     }));
     document.querySelectorAll('[data-activation]').forEach(b=>b.addEventListener('click',async()=>{
       if(!resolvedSubjectId||!remote){toast('Primero debes crear o seleccionar una organización con acceso comercial.','error');return;}

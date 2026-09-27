@@ -14,7 +14,7 @@ export const DIRECT_PROFILE_TYPES=Object.freeze([
   {id:'federacion',label:'Federación',icon:'federation',accent:'#F7F7F5',description:'Representa a tu federación, conecta con clubes y organiza su actividad dentro de KOMBAX.',benefits:['Perfil institucional','Clubes relacionados','Calendario y Events']},
   {id:'profesional',label:'Profesional',icon:'professional',accent:'#8F111B',description:'Presenta tu experiencia y servicios como entrenador, manager, sanitario, árbitro o promotor.',benefits:['Mi actividad','Servicios y agenda','Capacidades por especialidad']},
   {id:'marca',label:'Marca',icon:'brand',accent:'#FF3B4D',description:'Da visibilidad a tu marca, productos y colaboraciones dentro del ecosistema KOMBAX.',benefits:['Marca oficial','Showcase','Equipo de gestores']},
-  {id:'media',label:'Media / Creador',icon:'sparkles',accent:'#26D7C7',description:'Publica contenido y haz crecer tu presencia como medio o creador especializado.',benefits:['Publicar en Social','Publicar en Showcase','Identidad de medio o creador']},
+  {id:'media',label:'Media / Creador',icon:'sparkles',accent:'#26D7C7',description:'Crea publicaciones y organiza tu material visual desde Mi contenido.',benefits:['Mi contenido','Publicar en Social','Identidad de medio o creador']},
   {id:'espectador',label:'Espectador',icon:'spectator',accent:'#A7ABB4',description:'Descubre KOMBAX, sigue la actividad del sector e interactúa con la comunidad.',baseOnly:true,benefits:['Ver Social, Showcase y Events','Likes, comentarios y compartir','Sin publicación propia hasta disponer de una identidad habilitada']}
 ]);
 

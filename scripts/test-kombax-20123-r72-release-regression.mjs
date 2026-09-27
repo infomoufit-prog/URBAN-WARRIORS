@@ -40,10 +40,9 @@ const r628Show=read('supabase/migrations/20260911133000_kombax_r628_showcase_ord
 const r628Events=read('supabase/migrations/20260911133100_kombax_r628_events_ticketing_addon.sql');
 const supaConfig=read('supabase/config.toml');
 
-test('Release identity is R72 build 20133 everywhere',()=>{
-  has(config,"version: '2.0.0-rc.13-r81-tap-to-pay'");has(config,'build: 20133');
-  has(gradle,'versionCode 20133');has(gradle,"versionName '2.0.0-rc.13-r81-tap-to-pay'");
-  has(index,'v=20133');has(sw,"kombax-build-20133");
+test('Historical release functionality remains on a monotonic cumulative build',()=>{
+  const webBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0);const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+  assert.ok(webBuild>=20134);assert.equal(androidBuild,webBuild);has(index,`v=${webBuild}`);has(sw,`kombax-build-${webBuild}`);
 });
 
 test('R64.1 responsive global navigation is preserved',()=>{

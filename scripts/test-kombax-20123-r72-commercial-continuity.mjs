@@ -25,11 +25,9 @@ const founderGuard=read('supabase/migrations/20260913233235_kombax_r66_founder_m
 
 // Identity / discovery
 
-test('R72 release identity is build 20133 everywhere',()=>{
-  has(config,"version: '2.0.0-rc.13-r81-tap-to-pay'");has(config,'build: 20133');
-  has(gradle,'versionCode 20133');has(gradle,"versionName '2.0.0-rc.13-r81-tap-to-pay'");
-  has(mainActivity,'KOMBAXRevision/r81-tap-to-pay');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20133');
-  has(health,'build:20133');has(sw,'kombax-build-20133');has(index,'v=20133');
+test('Historical release functionality remains on a monotonic cumulative build',()=>{
+  const webBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0);const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+  assert.ok(webBuild>=20134);assert.equal(androidBuild,webBuild);has(mainActivity,`/${webBuild}`);has(health,`build:${webBuild}`);has(sw,`kombax-build-${webBuild}`);has(index,`v=${webBuild}`);
 });
 
 test('Global commercial discovery explains free account and organization-scoped plans',()=>{
@@ -132,7 +130,9 @@ test('R66 migrations match the two live-applied migration versions packaged for 
 test('SaaS Billing remains intentionally out of scope',()=>{
   assert.ok(!fs.existsSync(path.join(root,'supabase/functions/stripe-billing-r66')));
   not(r66,'stripe_subscription_id');not(founderGuard,'stripe_subscription_id');
-  has(plans,'Billing automático sigue fuera de esta fase.');
+  has(plans,'Elegir no realiza ningún cobro.');
+  has(plans,'Te informaremos de las condiciones y del siguiente paso antes de activar el servicio.');
+  not(plans,'Billing automático sigue fuera de esta fase.');
 });
 
 let passed=0;

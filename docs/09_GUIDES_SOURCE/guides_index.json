@@ -1,0 +1,927 @@
+{
+  "review_date": "21/09/2026",
+  "regional_layer": "Cataluña",
+  "guides": [
+    {
+      "n": 1,
+      "title": "Crear un club o asociación deportiva",
+      "subtitle": "De la idea a una entidad deportiva formalmente organizada",
+      "scope": "España - marco general; capa práctica desarrollada para Cataluña",
+      "summary": "Crear un club no es solo elegir un nombre. Hay que identificar la forma jurídica y deportiva adecuada, aprobar reglas internas, constituir los órganos de gobierno y realizar las inscripciones y trámites que correspondan. En España la regulación concreta de los clubes y registros deportivos es, en gran medida, autonómica.",
+      "legal": [
+        "La Ley 39/2022 establece el marco estatal del deporte, pero la constitución y registro ordinario de clubes se desarrolla por normativa autonómica.",
+        "En Cataluña, el Registro de Entidades Deportivas (REE) inscribe clubes y asociaciones deportivas con domicilio social en Cataluña; la inscripción comporta reconocimiento legal a efectos de la legislación deportiva catalana.",
+        "El trámite catalán publica modelos de acta de constitución y estatutos, tanto de régimen general como simplificado, y exige sede en Cataluña. No se debe reutilizar automáticamente este procedimiento en otra comunidad autónoma.",
+        "Una entidad sin ánimo de lucro puede tener obligaciones fiscales y censales aunque su finalidad no sea repartir beneficios. El tratamiento fiscal depende de la actividad y del tipo de entidad.",
+        "En Cataluña, la información oficial del REE indica que para constituir un club deportivo se necesitan como mínimo tres personas físicas con capacidad de actuar; esta regla es territorial y no debe extrapolarse automáticamente a otras comunidades autónomas."
+      ],
+      "steps": [
+        "Definir finalidad, modalidad/es deportivas y ámbito territorial.",
+        "Comprobar el registro deportivo competente en la comunidad autónoma.",
+        "Preparar acta fundacional y estatutos adecuados a la normativa territorial.",
+        "Designar el órgano de gobierno y documentar aceptación de cargos.",
+        "Inscribir la entidad en el registro deportivo correspondiente.",
+        "Solicitar NIF y revisar obligaciones censales, contables y fiscales.",
+        "Revisar afiliación federativa si se quiere participar en competiciones oficiales.",
+        "Implantar protección de datos y, si hay menores de forma habitual, medidas de protección infantil."
+      ],
+      "checklist": [
+        "Nombre y disponibilidad comprobados",
+        "Acta fundacional",
+        "Estatutos",
+        "Junta/órgano de gobierno",
+        "Domicilio social",
+        "Registro deportivo competente",
+        "NIF y situación censal",
+        "Cuenta bancaria y reglas de firma",
+        "Seguro y licencias cuando procedan",
+        "Protocolo de menores si aplica"
+      ],
+      "example": "Un grupo quiere abrir un club de Muay Thai en Girona. La guía permite preparar la estructura del club y localizar el REE catalán, pero no debe asumir qué federación o licencia concreta es obligatoria para cada actividad: eso depende de la modalidad, del tipo de competición y de la organización federativa aplicable.",
+      "consult": [
+        "La entidad tendrá actividad económica relevante o personal contratado.",
+        "Hay dudas entre club deportivo, asociación general, empresa u otra forma jurídica.",
+        "Se quiere competir oficialmente en varias disciplinas o federaciones.",
+        "La entidad operará en más de una comunidad autónoma o fuera de España."
+      ],
+      "sources": [
+        "ley_deporte",
+        "gencat_ree",
+        "gencat_tramite_club",
+        "gencat_normativa_entitats",
+        "aeat_actividad",
+        "aeat_is",
+        "aeat_partial_current"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Organizar un evento de deportes de contacto",
+      "subtitle": "Permisos, recinto, participantes, seguridad y operativa",
+      "scope": "España - marco general; capa práctica desarrollada para Cataluña",
+      "summary": "La autorización de un evento no puede resolverse con una lista universal. Cambian la comunidad autónoma, el municipio, el recinto, el aforo, la modalidad deportiva, el carácter oficial o no oficial, la presencia de menores, la venta de entradas y la participación de deportistas extranjeros.",
+      "legal": [
+        "El organizador debe identificar primero el régimen administrativo aplicable al espectáculo o actividad y al recinto. En Cataluña, Interior distingue los espectáculos/actividades extraordinarios y explica qué supuestos dependen de autorización de la Generalitat o licencia municipal.",
+        "La propia Generalitat advierte de que los espectáculos deportivos esporádicos pueden quedar exentos de tramitar licencia en ciertos supuestos, salvo que la normativa municipal disponga lo contrario; esa excepción no elimina el cumplimiento de las demás condiciones exigibles.",
+        "Las obligaciones de seguro deportivo y responsabilidad civil no deben confundirse: una cosa es la cobertura de participantes y otra la responsabilidad del organizador frente a público y terceros.",
+        "Las competiciones oficiales y los eventos incluidos en regímenes especiales de seguridad pueden tener obligaciones adicionales de acceso, entradas, seguridad y prevención de violencia.",
+        "En Cataluña, Interior publica para actividades extraordinarias requisitos supletorios que pueden abarcar responsable identificado, movilidad, vigilancia/control de acceso, autoprotección, higiene y seguridad, asistencia sanitaria, aforo, impacto acústico, responsabilidad civil y disponibilidad del espacio. La aplicabilidad concreta depende del supuesto y de la ordenanza municipal."
+      ],
+      "steps": [
+        "Clasificar el evento: oficial/no oficial, federado/no federado, profesional/aficionado, con/sin público.",
+        "Identificar comunidad autónoma y municipio.",
+        "Confirmar licencia/autorización/comunicación aplicable al recinto y actividad.",
+        "Revisar aforo, evacuación, incendios, emergencias y condiciones técnicas del recinto.",
+        "Comprobar cobertura de participantes y responsabilidad civil.",
+        "Validar licencias, categorías, pesajes, reglas y personal arbitral con la organización deportiva competente.",
+        "Definir política de menores, imagen y protección de datos.",
+        "Si hay entradas, preparar condiciones de venta, precio final y protocolo de cancelación.",
+        "Si hay extranjeros, revisar entrada, estancia/trabajo y normativa federativa.",
+        "Cerrar plan de personal, acceso, incidencias, asistencia sanitaria y documentación de cierre."
+      ],
+      "checklist": [
+        "Ficha jurídica del organizador",
+        "Contrato/cesión del recinto",
+        "Régimen municipal/autonómico verificado",
+        "Aforo y plan de emergencia",
+        "Seguros",
+        "Reglamento deportivo aplicable",
+        "Lista de participantes/licencias",
+        "Personal arbitral/técnico",
+        "Protección de menores",
+        "Ticketing y condiciones de venta",
+        "Protección de datos e imagen",
+        "Plan de seguridad y acceso",
+        "Plan sanitario según exigencias aplicables",
+        "Plan de cancelación/reembolso"
+      ],
+      "example": "Un promotor quiere hacer una velada de 700 personas en un pabellón municipal de Barcelona con menores en combates amateur y deportistas de fuera de la UE. Esa combinación exige una revisión concreta del recinto, ordenanza municipal, modalidad/federación, protección del menor y situación de cada participante extranjero; no debe resolverse con una guía genérica.",
+      "consult": [
+        "Evento con público numeroso o recinto no habitual.",
+        "Menores compitiendo.",
+        "Deportistas extranjeros.",
+        "Evento profesional o con premios/bolsas.",
+        "Venta de entradas y política compleja de devolución.",
+        "Dudas sobre si es competición oficial, interclub, exhibición o espectáculo extraordinario."
+      ],
+      "sources": [
+        "ley_deporte",
+        "gencat_eventos",
+        "gencat_seguro",
+        "violencia",
+        "rd203",
+        "lopiv",
+        "consumidores",
+        "gencat_consum",
+        "gencat_pau"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Organizar un interclub",
+      "subtitle": "Encuentro deportivo entre clubes sin convertirlo en una competición mal clasificada",
+      "scope": "España - marco general; Cataluña como primera capa autonómica",
+      "summary": "“Interclub” es una denominación de uso deportivo, no una categoría jurídica universal. Antes de organizarlo hay que determinar qué es realmente: entrenamiento conjunto, actividad federada, competición, exhibición, actividad abierta al público o espectáculo deportivo.",
+      "legal": [
+        "La etiqueta “interclub” no sustituye la clasificación jurídica o federativa de la actividad.",
+        "En Cataluña, las entidades que organizan actividades físicas o deportivas deben atender a las reglas de licencia/cobertura aplicables a participantes; la administración deportiva publica obligaciones específicas sobre licencias y seguros.",
+        "Si la actividad se abre al público o se celebra en condiciones distintas a las autorizadas para el recinto, puede entrar en el régimen de espectáculos/actividades extraordinarios y debe verificarse el supuesto concreto.",
+        "Con menores de edad hay obligaciones reforzadas de protección y protocolos cuando la entidad realiza actividades con menores de forma habitual."
+      ],
+      "steps": [
+        "Definir por escrito el formato real del interclub.",
+        "Identificar clubes organizadores y responsable jurídico principal.",
+        "Confirmar con la federación/organización deportiva si requiere autorización, licencia o comunicación.",
+        "Verificar cobertura de todos los participantes.",
+        "Fijar reglas deportivas, categorías, protecciones y criterios de parada.",
+        "Establecer personal técnico/arbitral y respuesta sanitaria adecuada al formato.",
+        "Revisar recinto, aforo y presencia de público.",
+        "Gestionar menores, autorizaciones e imagen.",
+        "Documentar incidencias y resultados si se publican."
+      ],
+      "checklist": [
+        "Responsable organizador",
+        "Formato clasificado",
+        "Participantes identificados",
+        "Licencias/coberturas verificadas",
+        "Reglas y protecciones",
+        "Recinto y aforo",
+        "Plan sanitario",
+        "Menores protegidos",
+        "Consentimientos de imagen cuando procedan",
+        "Registro de incidencias"
+      ],
+      "example": "Un gimnasio invita a tres clubes a hacer sparring técnico sin público. Otro vende 300 entradas y anuncia combates con ganadores. Aunque ambos usen la palabra “interclub”, el segundo puede activar requisitos jurídicos, administrativos y federativos muy distintos.",
+      "consult": [
+        "No está claro si el evento cuenta como competición.",
+        "Se cobrará entrada.",
+        "Habrá menores.",
+        "Participan clubes de otra comunidad o país.",
+        "Se quieren publicar resultados como récord oficial."
+      ],
+      "sources": [
+        "gencat_seguro",
+        "gencat_eventos",
+        "lopiv",
+        "ley_deporte"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Licencias deportivas: alta, renovación y gestión",
+      "subtitle": "Qué habilita una licencia y por qué depende de modalidad, ámbito y federación",
+      "scope": "España - marco estatal y cautelas autonómicas/federativas",
+      "summary": "No existe una “licencia KOMBAX” que sustituya a la licencia deportiva oficial. KOMBAX puede gestionar datos, vencimientos y documentación, pero la expedición y los efectos deportivos corresponden a la organización competente.",
+      "legal": [
+        "La Ley 39/2022 exige licencia de la federación deportiva correspondiente para participar en actividades o competiciones oficiales de ámbito estatal e internacional, con las reglas de integración previstas para federaciones autonómicas.",
+        "La licencia no tiene un precio ni requisitos únicos para todas las modalidades. Categoría, estamento, edad, reconocimiento médico, seguros y documentación pueden variar.",
+        "El CSD publica información sobre licencias y federaciones, pero el alta concreta debe verificarse ante la federación aplicable.",
+        "En Cataluña, la normativa de entidades deportivas vincula licencias de actividad física/deportivas y seguros a la organización de actividades en determinados supuestos."
+      ],
+      "steps": [
+        "Identificar modalidad, disciplina y ámbito territorial.",
+        "Determinar si la actividad es oficial y qué federación la reconoce.",
+        "Consultar requisitos vigentes de la federación antes de pedir documentación al deportista.",
+        "Separar datos de licencia, seguro, reconocimiento/aptitud y documentos personales.",
+        "Registrar fecha de alta, vigencia, estado y motivo de baja/renovación.",
+        "No marcar una licencia como “válida” solo por tener un número: debe comprobarse el emisor y vigencia."
+      ],
+      "checklist": [
+        "Federación emisora",
+        "Modalidad/disciplina",
+        "Categoría/estamento",
+        "Número de licencia",
+        "Fecha de vigencia",
+        "Seguro asociado",
+        "Requisitos médicos si existen",
+        "Documentación aportada",
+        "Estado verificado",
+        "Fecha de próxima revisión"
+      ],
+      "example": "Un competidor tiene licencia autonómica de una disciplina y quiere participar en un campeonato estatal de otra. No debe suponerse que la misma licencia sirve: hay que comprobar integración, modalidad y reglamento de la competición.",
+      "consult": [
+        "Cambio de disciplina o federación.",
+        "Competición estatal/internacional.",
+        "Licencia de menor.",
+        "Duplicidad de licencias o dudas de cobertura de seguro.",
+        "Participación de extranjero o deportista de otra federación territorial."
+      ],
+      "sources": [
+        "ley_deporte",
+        "csd_licencias",
+        "rd_seguro",
+        "gencat_seguro"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Seguros y coberturas",
+      "subtitle": "Separar seguro deportivo, accidentes y responsabilidad del organizador",
+      "scope": "España - marco general; Cataluña como capa operativa",
+      "summary": "Los seguros deben analizarse por función. La cobertura ligada a una licencia deportiva no sustituye automáticamente la responsabilidad civil del organizador, ni toda póliza privada cubre cualquier competición, público o actividad de contacto.",
+      "legal": [
+        "El Real Decreto 849/1993 fija prestaciones mínimas del seguro obligatorio para deportistas federados que participan en competiciones oficiales de ámbito estatal en los términos de la norma.",
+        "En Cataluña, la normativa deportiva publicada por la Generalitat exige que determinadas licencias incorporen coberturas de responsabilidad civil, indemnización por pérdidas anatómicas/funcionales o fallecimiento y asistencia sanitaria, y advierte de responsabilidad subsidiaria del organizador en ciertos supuestos.",
+        "La normativa de espectáculos públicos puede exigir seguro de responsabilidad civil del titular/organizador según la actividad y el territorio.",
+        "Las cuantías concretas no deben copiarse de otra comunidad ni de otro tipo de recinto: hay que comprobar la norma territorial vigente y la póliza."
+      ],
+      "steps": [
+        "Inventariar actividades reales del club/evento.",
+        "Identificar qué participantes están cubiertos por licencia y en qué ámbito.",
+        "Solicitar certificado/póliza y revisar exclusiones.",
+        "Comprobar RC del organizador y del recinto.",
+        "Verificar si hay cobertura para público, voluntariado, personal y daños al recinto.",
+        "Revisar deporte de contacto, competición, exhibición y entrenamiento: pueden tratarse de forma distinta.",
+        "Documentar procedimiento de accidente y centros de asistencia."
+      ],
+      "checklist": [
+        "Seguro/licencia participante",
+        "RC organizador",
+        "RC recinto si procede",
+        "Accidentes/ asistencia",
+        "Exclusiones",
+        "Capitales y límites revisados",
+        "Procedimiento de siniestro",
+        "Teléfono/centro de asistencia",
+        "Vigencia día del evento"
+      ],
+      "example": "Una licencia puede cubrir la asistencia sanitaria deportiva del participante, pero eso no significa automáticamente que cubra una caída de un espectador por una deficiencia del recinto. Son riesgos distintos.",
+      "consult": [
+        "Evento con público o alquiler de recinto.",
+        "Póliza excluye deportes de combate o competición.",
+        "Participantes no federados.",
+        "Actividad en otra comunidad/país.",
+        "Dudas sobre responsabilidad entre recinto, club y promotor."
+      ],
+      "sources": [
+        "rd_seguro",
+        "gencat_seguro",
+        "gencat_eventos"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Menores en actividad y competición deportiva",
+      "subtitle": "Protección, consentimiento, datos, imagen y entorno seguro",
+      "scope": "España - obligaciones estatales; revisar protocolos autonómicos y federativos",
+      "summary": "Con menores no basta una autorización genérica firmada por la familia. Las entidades que trabajan habitualmente con menores tienen obligaciones específicas de prevención y respuesta frente a la violencia y deben separar correctamente consentimiento deportivo, tratamiento de datos e imagen.",
+      "legal": [
+        "La Ley Orgánica 8/2021 obliga a las entidades que realizan habitualmente actividades deportivas o de ocio con menores a aplicar protocolos, monitorizar su cumplimiento y designar un Delegado o Delegada de protección, entre otras medidas.",
+        "La Ley 39/2022 refuerza la protección de la práctica deportiva de menores y remite expresamente a las obligaciones de la Ley Orgánica 8/2021.",
+        "La Ley Orgánica 3/2018 fija en 14 años la edad general a partir de la cual un menor puede prestar consentimiento para tratamiento de datos cuando esa sea la base jurídica, con las excepciones legales correspondientes.",
+        "La difusión de imágenes de menores exige especial cautela; la autorización de participación deportiva no debe convertirse automáticamente en autorización de publicación en redes.",
+        "Cataluña dispone de un Protocol marc de protecció d’infants i adolescents davant les violències en l’àmbit esportiu aprobado por GOV/252/2023; la segunda edición fue revisada en febrero de 2025. Debe comprobarse su aplicación junto con los protocolos de la entidad y de la organización deportiva competente."
+      ],
+      "steps": [
+        "Identificar si la entidad trabaja habitualmente con menores.",
+        "Aplicar protocolo de protección y designar Delegado/a cuando corresponda.",
+        "Separar autorización deportiva, datos e imagen.",
+        "Limitar acceso a información sensible.",
+        "Definir canales de comunicación con familias y menores.",
+        "Formar a personal y técnicos en protección.",
+        "Definir respuesta ante incidentes, lesiones y revelaciones de violencia.",
+        "Revisar reglas federativas de edad, categorías, contacto y protecciones."
+      ],
+      "checklist": [
+        "Delegado/a de protección",
+        "Protocolo vigente",
+        "Canal de comunicación",
+        "Autorización de participación",
+        "Consentimientos de datos/imágenes separados cuando proceda",
+        "Contacto de responsables legales",
+        "Información médica mínima necesaria y protegida",
+        "Reglas de categoría/edad verificadas"
+      ],
+      "example": "Una familia autoriza que su hijo participe en un interclub. Eso no permite asumir sin más que el club puede publicar su fotografía identificada en una campaña comercial; son finalidades distintas.",
+      "consult": [
+        "Evento con menores y público/streaming.",
+        "Viajes o pernoctaciones.",
+        "Combates de contacto con reglas de edad específicas.",
+        "Tratamiento de datos de salud.",
+        "Dudas sobre autorización de imagen o protección frente a violencia."
+      ],
+      "sources": [
+        "lopiv",
+        "ley_deporte",
+        "lopdgdd",
+        "csd_menores",
+        "gencat_minor_protocol",
+        "aepd_images"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Instalaciones, recintos y autorizaciones",
+      "subtitle": "Comprobar que el lugar está habilitado para la actividad real",
+      "scope": "España - régimen territorial/municipal; Cataluña como primera capa",
+      "summary": "Que un local tenga licencia para una actividad no significa que automáticamente pueda albergar cualquier evento deportivo, público o aforo. Debe comprobarse el uso autorizado, la actividad extraordinaria, el aforo y las condiciones de seguridad.",
+      "legal": [
+        "En Cataluña, Interior distingue los espectáculos y actividades extraordinarios que se celebran en establecimientos con licencia para una actividad diferente o en otros espacios abiertos al público.",
+        "El régimen de autorización/licencia depende del municipio, del tipo de espacio y del supuesto concreto; la Generalitat publica criterios generales y remite a ordenanzas municipales.",
+        "Los regímenes de seguridad aplicables a determinados espectáculos deportivos pueden añadir control de accesos, revisión del recinto, aforo y otros dispositivos.",
+        "No debe copiarse el aforo “habitual” de una sala a un montaje diferente sin validación técnica/administrativa."
+      ],
+      "steps": [
+        "Solicitar documentación del recinto.",
+        "Verificar actividad autorizada y aforo.",
+        "Confirmar si el montaje cambia salidas, gradas, ring, iluminación o circulación.",
+        "Revisar evacuación, incendios, accesibilidad y emergencias.",
+        "Determinar si necesita licencia/autorización/comunicación extraordinaria.",
+        "Coordinar seguridad, control de acceso y asistencia sanitaria según el evento.",
+        "Documentar revisión previa del montaje y apertura."
+      ],
+      "checklist": [
+        "Contrato/cesión recinto",
+        "Actividad autorizada",
+        "Aforo",
+        "Planos/montaje",
+        "Evacuación",
+        "Incendios",
+        "Accesibilidad",
+        "Seguridad",
+        "Plan sanitario",
+        "Autorización/licencia/comunicación si procede"
+      ],
+      "example": "Un gimnasio autorizado para entrenamiento diario quiere instalar gradas temporales y vender 400 entradas. El uso, aforo y montaje cambian; no debe asumirse que la licencia ordinaria del gimnasio cubre el evento.",
+      "consult": [
+        "Gradas o estructuras temporales.",
+        "Aforo elevado.",
+        "Espacio abierto.",
+        "Cambio de actividad respecto a la licencia del recinto.",
+        "Evento en municipio con ordenanza específica."
+      ],
+      "sources": [
+        "gencat_eventos",
+        "rd203",
+        "violencia"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Protección de datos, imagen y comunicaciones",
+      "subtitle": "Qué datos necesita realmente un club o evento y cómo tratarlos",
+      "scope": "España/UE - aplicación general; revisar bases jurídicas por proceso",
+      "summary": "Clubes, federaciones y organizadores manejan identidad, contacto, licencias, imágenes y, en ocasiones, información médica. No todos esos datos deben tratarse igual ni conservarse indefinidamente.",
+      "legal": [
+        "La LOPDGDD desarrolla el marco español de protección de datos y fija reglas específicas para consentimiento de menores y protección de su información en internet.",
+        "La publicación de imágenes y la gestión de datos de salud requieren especial cautela. El hecho de que un dato sea útil para organizar un evento no habilita automáticamente su uso comercial o público.",
+        "En sistemas de entradas nominativas o control de identidad sujetos a normativa específica, debe informarse del tratamiento de datos y limitarse a la finalidad aplicable.",
+        "La minimización es esencial: KOMBAX debe almacenar únicamente los datos necesarios para cada proceso y separar permisos internos de visibilidad pública.",
+        "La AEPD recuerda que la protección de datos por defecto exige minimizar cantidad, extensión del tratamiento, conservación y accesibilidad desde el diseño. KOMBAX debe reflejar esta regla en formularios, visibilidad de perfiles y publicaciones."
+      ],
+      "steps": [
+        "Inventariar tratamientos: socios, deportistas, tutores, compradores, asistentes y personal.",
+        "Definir finalidad y base jurídica de cada tratamiento.",
+        "Separar datos operativos de datos públicos.",
+        "Aplicar permisos por rol e identidad activa.",
+        "Definir conservación y borrado.",
+        "Gestionar ejercicio de derechos.",
+        "Separar consentimiento de imagen/marketing cuando proceda.",
+        "Proteger especialmente salud, menores y documentos de identidad."
+      ],
+      "checklist": [
+        "Registro de tratamientos",
+        "Información de privacidad",
+        "Permisos internos",
+        "Consentimientos separados cuando apliquen",
+        "Política de conservación",
+        "Procedimiento de derechos",
+        "Control de exportación/descarga",
+        "Protección de datos sensibles"
+      ],
+      "example": "Para crear una categoría de peso puede ser necesario registrar un peso deportivo. Publicar el historial completo de pesos en el perfil público es una finalidad distinta y no debería hacerse por defecto.",
+      "consult": [
+        "Se quiere publicar información médica, de menores o documentos.",
+        "Se comparten datos entre varios clubes/federaciones.",
+        "Se implanta reconocimiento, videovigilancia o control nominativo de entradas.",
+        "Se reciben solicitudes de acceso/borrado complejas."
+      ],
+      "sources": [
+        "lopdgdd",
+        "lopiv",
+        "rd203",
+        "aepd_default",
+        "aepd_images"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Ticketing, venta de entradas y control de acceso",
+      "subtitle": "Vender una entrada implica contrato, información y operativa de acceso",
+      "scope": "España - consumo general; requisitos adicionales según evento/recinto",
+      "summary": "El ticketing combina consumo, pagos, seguridad, protección de datos y operativa del evento. KOMBAX puede automatizar el proceso, pero el organizador sigue siendo responsable de publicar condiciones correctas y gestionar cancelaciones e incidencias.",
+      "legal": [
+        "La normativa de consumo exige información precontractual clara, incluida identidad del empresario y precio final con impuestos y gastos aplicables.",
+        "En contratación electrónica con obligación de pago, la interfaz debe dejar claro que el pedido implica pago.",
+        "La Agència Catalana del Consum recuerda que, con carácter general, las entradas para espectáculos/servicios en fecha concreta no funcionan como una compra ordinaria con devolución libre; las condiciones y supuestos de cancelación deben informarse correctamente.",
+        "Para determinados espectáculos deportivos sujetos a la Ley 19/2007 y RD 203/2010 pueden existir requisitos adicionales sobre formato, control informatizado, aforo, venta y acceso."
+      ],
+      "steps": [
+        "Identificar organizador/vendedor contractual.",
+        "Mostrar precio final antes de pagar.",
+        "Publicar fecha, recinto, localidad/categoría y condiciones.",
+        "Definir política de cancelación, aplazamiento y reembolso.",
+        "Generar identificador/QR único y evitar duplicidades.",
+        "Controlar aforo y estados de check-in.",
+        "Informar del tratamiento de datos si la entrada es nominativa.",
+        "Mantener trazabilidad de reembolsos y anulaciones."
+      ],
+      "checklist": [
+        "Organizador identificado",
+        "Precio final",
+        "Condiciones visibles",
+        "Aforo",
+        "QR único",
+        "Política de reembolso",
+        "Canal de reclamación",
+        "Privacidad",
+        "Registro de check-in",
+        "Plan de contingencia offline"
+      ],
+      "example": "“No se admiten devoluciones” no debería usarse como cláusula automática para cualquier situación. La cancelación o modificación del evento, lo prometido en la oferta y la normativa aplicable pueden generar obligaciones distintas.",
+      "consult": [
+        "Evento sometido a régimen especial de seguridad.",
+        "Entradas nominativas.",
+        "Cambio sustancial de fecha/recinto/cartel.",
+        "Reventa o intermediación.",
+        "Venta internacional."
+      ],
+      "sources": [
+        "consumidores",
+        "gencat_consum",
+        "gencat_distancia",
+        "rd203",
+        "violencia"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Federaciones y relaciones federativas",
+      "subtitle": "Entender qué controla la federación y qué sigue siendo responsabilidad del club/organizador",
+      "scope": "España - marco estatal y autonómico/federativo",
+      "summary": "Las federaciones deportivas cumplen funciones de organización y regulación de su modalidad, especialmente en competición oficial. No todas las actividades privadas están automáticamente bajo el mismo régimen federativo, y no todas las entidades que se autodenominan “federación” tienen el mismo reconocimiento jurídico.",
+      "legal": [
+        "La Ley 39/2022 regula las federaciones deportivas españolas, licencias y competiciones oficiales en el ámbito estatal.",
+        "El CSD publica la relación y normativa de federaciones españolas y modalidades reconocidas.",
+        "Las federaciones autonómicas se rigen además por la normativa territorial y sus relaciones de integración con las federaciones españolas.",
+        "En Cataluña, las federaciones deportivas catalanas y entidades deportivas se inscriben en el REE conforme a la normativa autonómica.",
+        "La AEPD señala que las federaciones deportivas que tratan datos de menores de edad están obligadas a designar una persona Delegada de Protección de Datos y comunicar la designación a la autoridad de control correspondiente."
+      ],
+      "steps": [
+        "Identificar si la organización/federación está reconocida oficialmente.",
+        "Comprobar modalidad y disciplina.",
+        "Leer reglamentos de competición, licencias, arbitraje y disciplina aplicables.",
+        "Separar evento privado de competición oficial.",
+        "Confirmar reconocimiento de resultados y récords antes de publicarlos como oficiales.",
+        "Registrar comunicaciones y autorizaciones federativas del evento."
+      ],
+      "checklist": [
+        "Federación competente",
+        "Modalidad",
+        "Reglamento vigente",
+        "Licencias",
+        "Árbitros/jueces",
+        "Autorización evento si procede",
+        "Reconocimiento de resultados",
+        "Seguro federativo",
+        "Canal de incidencias"
+      ],
+      "example": "Que un promotor use reglas “tipo federación” no convierte sus resultados en resultados federativos oficiales. El reconocimiento depende de la organización competente y de su normativa.",
+      "consult": [
+        "Dudas entre dos federaciones u organizaciones.",
+        "Evento con varias disciplinas.",
+        "Resultados que se quieren incorporar a ranking oficial.",
+        "Conflicto entre licencia autonómica y estatal."
+      ],
+      "sources": [
+        "ley_deporte",
+        "csd_ley",
+        "csd_licencias",
+        "gencat_ree",
+        "aepd_dpd_fed"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Deportistas extranjeros y participación internacional",
+      "subtitle": "Entrada, trabajo, licencia y participación deportiva son controles distintos",
+      "scope": "España - extranjería estatal + normativa deportiva/federativa",
+      "summary": "Invitar a un deportista extranjero a competir en España exige separar al menos cuatro preguntas: puede entrar en España, necesita visado, realizará una actividad laboral/profesional, y cumple las reglas deportivas de la competición. Ninguna respuesta sustituye a las demás.",
+      "legal": [
+        "La normativa de extranjería vigente se desarrolla por el Real Decreto 1155/2024 y los procedimientos del Ministerio de Inclusión; el régimen depende de nacionalidad, duración, finalidad y existencia o no de actividad laboral/profesional.",
+        "El Ministerio publica procedimientos distintos para residencia/trabajo y para supuestos exceptuados de autorización de trabajo; para estancias de hasta 90 días puede ser necesario el correspondiente visado según el supuesto y nacionalidad.",
+        "El Real Decreto 1006/1985 remite la contratación por razón de nacionalidad a la legislación vigente de extranjería y preserva las reglas deportivas específicas de participación en competiciones.",
+        "La licencia, autorización federativa o invitación deportiva no debe presentarse como sustituto automático de los requisitos migratorios o laborales."
+      ],
+      "steps": [
+        "Identificar nacionalidad y residencia del deportista.",
+        "Definir duración de estancia.",
+        "Definir si recibe bolsa, salario, premio o contraprestación contractual.",
+        "Consultar requisitos consulares/migratorios vigentes antes de viajar.",
+        "Verificar licencia y reglas federativas de elegibilidad.",
+        "Asegurar cobertura sanitaria/deportiva.",
+        "Conservar cartas de invitación y contratos coherentes con la realidad."
+      ],
+      "checklist": [
+        "Pasaporte/documento",
+        "Visado/entrada si aplica",
+        "Situación laboral si aplica",
+        "Invitación/contrato",
+        "Licencia deportiva",
+        "Seguro",
+        "Reglas de competición",
+        "Datos de viaje/contacto"
+      ],
+      "example": "Un luchador tailandés viene cuatro días para un seminario remunerado y un combate. No basta con “traerlo como invitado”: hay que revisar su régimen de entrada, la naturaleza económica de la actividad y las reglas deportivas aplicables.",
+      "consult": [
+        "Nacional de tercer país con remuneración.",
+        "Estancia superior a 90 días.",
+        "Contrato profesional.",
+        "Evento internacional/oficial.",
+        "Dudas sobre fiscalidad de pagos a no residentes."
+      ],
+      "sources": [
+        "extranjeria",
+        "inclusion_trabajo",
+        "inclusion_excepcion",
+        "deportistas_prof",
+        "ley_deporte",
+        "inclusion_sheets"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Patrocinio, marcas y colaboraciones",
+      "subtitle": "Distinguir patrocinio publicitario, colaboración y donación",
+      "scope": "España - marco contractual/fiscal general",
+      "summary": "“Patrocinio” se usa coloquialmente para operaciones distintas. Antes de emitir factura, certificado o contraprestación publicitaria hay que clasificar correctamente la relación.",
+      "legal": [
+        "La Ley General de Publicidad define el contrato de patrocinio publicitario como ayuda económica a cambio de colaboración en la publicidad del patrocinador.",
+        "La Ley 49/2002 regula los convenios de colaboración empresarial en actividades de interés general para entidades que cumplen los requisitos legales específicos; no cualquier club puede aplicar automáticamente ese régimen.",
+        "Una donación, un patrocinio publicitario, una aportación en especie y un convenio de colaboración pueden tener tratamiento jurídico/fiscal distinto.",
+        "Los derechos de imagen de deportistas y el uso de marcas/logotipos deben estar autorizados en el alcance acordado."
+      ],
+      "steps": [
+        "Definir qué aporta cada parte.",
+        "Definir qué recibe el patrocinador: logo, menciones, stands, contenido, entradas, naming, etc.",
+        "Identificar duración y territorios.",
+        "Regular uso de marcas e imagen.",
+        "Definir facturación/impuestos con asesoría fiscal cuando proceda.",
+        "Definir cancelación del evento y devolución/compensación.",
+        "Evitar prometer beneficios fiscales sin comprobar requisitos."
+      ],
+      "checklist": [
+        "Partes identificadas",
+        "Objeto",
+        "Contraprestaciones",
+        "Valor/importe",
+        "IVA/fiscalidad revisada",
+        "Uso de marca",
+        "Imagen",
+        "Duración",
+        "Cancelación",
+        "Entregables",
+        "Métricas si se prometen"
+      ],
+      "example": "Una marca entrega 5.000 € a cambio de que su logo aparezca en cartel, ring y retransmisión. Eso encaja en una lógica publicitaria distinta de una aportación sin contraprestación.",
+      "consult": [
+        "Entidad quiere emitir certificado de donación.",
+        "Patrocinio con deportistas individuales.",
+        "Pago en especie importante.",
+        "Naming rights o exclusividad de categoría.",
+        "Operación transfronteriza."
+      ],
+      "sources": [
+        "patrocinio",
+        "mecenazgo",
+        "aeat_actividad",
+        "aeat_partial_current"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Organización de combates y participantes",
+      "subtitle": "Del matchmaking a la documentación verificable",
+      "scope": "Marco deportivo general; reglas concretas dependen de disciplina y organizador competente",
+      "summary": "La organización de combates exige controlar elegibilidad, categorías, licencias, reglas, pesajes, emparejamientos, protecciones, personal técnico y resultados. KOMBAX puede organizar información, pero no debe inventar reglas de una disciplina ni sustituir al órgano competente.",
+      "legal": [
+        "Las competiciones oficiales se rigen por la federación y reglamentos aplicables. La Ley 39/2022 sitúa licencias y organización oficial en ese marco.",
+        "La cobertura deportiva y de seguro debe verificarse antes de permitir participación.",
+        "Con menores, las reglas deportivas deben ser compatibles con su desarrollo y con las obligaciones reforzadas de protección.",
+        "Los resultados deben distinguir claramente entre oficial, homologado, exhibición, interclub o registro interno para evitar presentar como oficial lo que no lo es."
+      ],
+      "steps": [
+        "Definir modalidad y reglamento.",
+        "Verificar licencia/elegibilidad.",
+        "Registrar peso/categoría con privacidad adecuada.",
+        "Comprobar experiencia y restricciones de emparejamiento según reglas aplicables.",
+        "Asignar árbitros/jueces/personal técnico competente.",
+        "Definir equipamiento y protecciones.",
+        "Registrar pesaje, incidencias y resultado.",
+        "Marcar nivel de oficialidad del resultado."
+      ],
+      "checklist": [
+        "Participante",
+        "Club",
+        "Licencia",
+        "Categoría",
+        "Peso",
+        "Experiencia",
+        "Reglamento",
+        "Árbitro/jueces",
+        "Protecciones",
+        "Seguro",
+        "Resultado/estado",
+        "Incidencias"
+      ],
+      "example": "Un resultado de sparring controlado puede ser útil como historial interno, pero no debe sumarse al récord oficial de un peleador si la organización competente no lo reconoce.",
+      "consult": [
+        "Dudas de categoría o experiencia.",
+        "Menores.",
+        "Diferencia grande de récord/peso.",
+        "Evento multideporte.",
+        "Se quiere alimentar ranking público u oficial."
+      ],
+      "sources": [
+        "ley_deporte",
+        "csd_licencias",
+        "gencat_seguro",
+        "lopiv"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Documentación y checklist del organizador",
+      "subtitle": "Un expediente único para demostrar que el evento se preparó correctamente",
+      "scope": "España - checklist transversal adaptable al territorio",
+      "summary": "La mejor defensa operativa frente a errores es mantener un expediente del evento con versiones, responsables y evidencias. El checklist debe adaptarse al tipo de evento y no convertirse en una certificación automática de legalidad.",
+      "legal": [
+        "Las obligaciones proceden de varias capas: deportiva/federativa, recinto y espectáculos, seguros, consumo, privacidad, menores, extranjería, contratación y fiscalidad.",
+        "Guardar “un PDF” no es suficiente si no se sabe quién lo aprobó, para qué fecha, qué versión estaba vigente o a qué entidad corresponde.",
+        "KOMBAX debe favorecer trazabilidad: quién subió, quién verificó, vigencia y contexto de cada documento."
+      ],
+      "steps": [
+        "Crear ficha maestra del evento.",
+        "Asignar responsables por permisos, deporte, seguridad, ticketing y participantes.",
+        "Crear carpeta/versionado de permisos y pólizas.",
+        "Cerrar lista de participantes y personal.",
+        "Verificar recinto y montaje.",
+        "Cerrar ticketing/aforo.",
+        "Realizar reunión de apertura y checklist del día.",
+        "Registrar incidencias y decisiones.",
+        "Preparar cierre económico, reembolsos y archivo."
+      ],
+      "checklist": [
+        "Identidad organizador",
+        "Recinto",
+        "Permisos/comunicaciones",
+        "Seguros",
+        "Reglamento",
+        "Participantes/licencias",
+        "Menores",
+        "Extranjeros",
+        "Personal",
+        "Plan sanitario",
+        "Seguridad/acceso",
+        "Ticketing",
+        "Privacidad",
+        "Contratos/patrocinios",
+        "Cierre económico"
+      ],
+      "example": "Una autorización municipal válida para una fecha concreta no debe reutilizarse como si cubriera automáticamente la siguiente edición del evento.",
+      "consult": [
+        "Evento complejo o multientidad.",
+        "Documentación con fechas/entidades contradictorias.",
+        "No está claro quién asume responsabilidad principal.",
+        "Faltan autorizaciones pocos días antes del evento."
+      ],
+      "sources": [
+        "gencat_eventos",
+        "ley_deporte",
+        "consumidores",
+        "lopdgdd",
+        "lopiv",
+        "rd_seguro"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Obligaciones posteriores al evento",
+      "subtitle": "Cerrar pagos, incidencias, datos, resultados y documentación",
+      "scope": "España - cierre operativo, contractual, fiscal y documental",
+      "summary": "El evento no termina con el último combate. Después quedan pagos, reembolsos, reclamaciones, siniestros, resultados, documentación de participantes, datos personales y obligaciones contables/fiscales.",
+      "legal": [
+        "La normativa de consumo exige disponer de canales para reclamaciones y cumplir lo ofrecido contractualmente; las incidencias de cancelación o modificación deben documentarse.",
+        "Las obligaciones fiscales dependen de quién organiza, cómo se cobran entradas/servicios y qué pagos se realizan. La Agencia Tributaria recuerda que una actividad económica genera obligaciones antes, durante y después de la actividad.",
+        "Los datos personales no deben conservarse indefinidamente por comodidad. Hay que aplicar los plazos definidos por cada finalidad y por obligaciones legales.",
+        "Los resultados deportivos deben publicarse con su nivel de oficialidad real y corregirse si existe resolución posterior del órgano competente."
+      ],
+      "steps": [
+        "Cerrar conciliación de entradas, pagos y reembolsos.",
+        "Emitir/archivar documentación contable correspondiente.",
+        "Gestionar reclamaciones y chargebacks.",
+        "Comunicar siniestros a aseguradoras dentro de plazo aplicable.",
+        "Cerrar resultados y actas deportivas.",
+        "Registrar incidencias y acciones correctivas.",
+        "Revisar qué datos/documentos deben conservarse y cuáles deben eliminarse.",
+        "Cerrar contratos con proveedores/patrocinadores.",
+        "Generar informe post-evento."
+      ],
+      "checklist": [
+        "Ventas conciliadas",
+        "Reembolsos",
+        "Facturas/documentos",
+        "Siniestros",
+        "Reclamaciones",
+        "Resultados",
+        "Incidencias",
+        "Datos archivados/eliminados",
+        "Contratos cerrados",
+        "Informe final"
+      ],
+      "example": "Si un evento se aplaza, la operativa posterior no se limita a cambiar una fecha en redes: puede afectar entradas, consumidores, recinto, permisos, seguros, contratos y participantes.",
+      "consult": [
+        "Cancelación o aplazamiento.",
+        "Accidente grave o reclamación.",
+        "Descuadre económico.",
+        "Chargebacks o fraude.",
+        "Conflicto sobre resultado deportivo.",
+        "Documentación fiscal o laboral compleja."
+      ],
+      "sources": [
+        "consumidores",
+        "aeat_actividad",
+        "aeat_is",
+        "lopdgdd",
+        "aeat_partial_current"
+      ]
+    }
+  ],
+  "sources": {
+    "ley_deporte": [
+      "Ley 39/2022, de 30 de diciembre, del Deporte",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2022-24430"
+    ],
+    "csd_ley": [
+      "Ley del Deporte - marco y legislación deportiva",
+      "Consejo Superior de Deportes",
+      "https://www.csd.gob.es/es/csd/legislacion-deportiva/ley-del-deporte"
+    ],
+    "csd_licencias": [
+      "Licencias deportivas y estadísticas federativas",
+      "Consejo Superior de Deportes",
+      "https://www.csd.gob.es/es/federaciones-y-asociaciones/federaciones-deportivas-espanolas/licencias"
+    ],
+    "rd_seguro": [
+      "Real Decreto 849/1993 - prestaciones mínimas del Seguro Obligatorio Deportivo",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-1993-16129"
+    ],
+    "lopiv": [
+      "Ley Orgánica 8/2021 - protección integral de infancia y adolescencia frente a la violencia",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347"
+    ],
+    "lopdgdd": [
+      "Ley Orgánica 3/2018 - protección de datos y derechos digitales",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673"
+    ],
+    "consumidores": [
+      "RDL 1/2007 - Ley General para la Defensa de los Consumidores y Usuarios",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2007-20555"
+    ],
+    "violencia": [
+      "Ley 19/2007 - violencia, racismo, xenofobia e intolerancia en el deporte",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2007-13408"
+    ],
+    "rd203": [
+      "Real Decreto 203/2010 - Reglamento de prevención de violencia en el deporte",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2010-3904"
+    ],
+    "patrocinio": [
+      "Ley 34/1988, General de Publicidad - contrato de patrocinio",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-1988-26156"
+    ],
+    "mecenazgo": [
+      "Ley 49/2002 - régimen fiscal de entidades sin fines lucrativos e incentivos al mecenazgo",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-2002-25039"
+    ],
+    "deportistas_prof": [
+      "Real Decreto 1006/1985 - relación laboral especial de deportistas profesionales",
+      "BOE",
+      "https://www.boe.es/buscar/act.php?id=BOE-A-1985-12313"
+    ],
+    "extranjeria": [
+      "Real Decreto 1155/2024 - Reglamento de extranjería",
+      "BOE",
+      "https://www.boe.es/eli/es/rd/2024/11/19/1155"
+    ],
+    "inclusion_trabajo": [
+      "Autorización inicial de residencia temporal y trabajo por cuenta ajena",
+      "Ministerio de Inclusión, Seguridad Social y Migraciones",
+      "https://www.inclusion.gob.es/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-y-trabajo-por-cuenta-ajena-hi-16-"
+    ],
+    "inclusion_excepcion": [
+      "Residencia temporal con excepción a la autorización de trabajo",
+      "Ministerio de Inclusión, Seguridad Social y Migraciones",
+      "https://www.inclusion.gob.es/es/web/migraciones/w/aa-plantilla-hoja-informativa-no-borrar-duplicado-1"
+    ],
+    "aeat_iva_deporte": [
+      "IVA - exenciones sociales, culturales y deportivas",
+      "Agencia Tributaria",
+      "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/manual-iva-2025/capitulo-03-entregas-realizadas-empresarios-profesionales/entregas-bienes-servic-realizadas-empresarios-profesionales/operaciones-exentas/exenciones-operaciones-interiores/exenciones-sociales-culturales-deportivas.html"
+    ],
+    "aeat_is": [
+      "Impuesto sobre Sociedades - entidades parcialmente exentas",
+      "Agencia Tributaria",
+      "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/folleto-actividades-economicas/4-impuesto-sobre-sociedades.html"
+    ],
+    "aeat_actividad": [
+      "Manual de actividades económicas",
+      "Agencia Tributaria",
+      "https://sede.agenciatributaria.gob.es/Sede/informacion-institucional/sobre-agencia-tributaria/Manual_de_actividades_economicas.html"
+    ],
+    "gencat_ree": [
+      "Registre d'Entitats Esportives",
+      "Generalitat de Catalunya - Esport",
+      "https://esport.gencat.cat/ca/arees_dactuacio/entitats-esportives/registre-dentitats-esportives-ree"
+    ],
+    "gencat_tramite_club": [
+      "Inscripción en el Registro de Entidades Deportivas",
+      "Tràmits Gencat",
+      "https://tramits.gencat.cat/es/tramits/tramits-temes/21441-Inscripcio-al-Registre-dEntitats-Esportives?moda=1"
+    ],
+    "gencat_normativa_entitats": [
+      "Normativa d'entitats esportives",
+      "Generalitat de Catalunya - Esport",
+      "https://esport.gencat.cat/ca/arees_dactuacio/entitats-esportives/normativa-entitats-esportives"
+    ],
+    "gencat_seguro": [
+      "Normativa deportiva - licencias y seguros en actividades deportivas",
+      "Generalitat de Catalunya - Esport",
+      "https://esport.gencat.cat/ca/SG_Esport/consell-catala-de-lesport/preguntes-frequents/normativa-esportiva/"
+    ],
+    "gencat_eventos": [
+      "Espectáculos públicos y actividades recreativas de carácter extraordinario",
+      "Generalitat de Catalunya - Interior",
+      "https://interior.gencat.cat/es/arees_dactuacio/espectacles/espectacles_i_activitats_caracter_extraordinari/"
+    ],
+    "gencat_consum": [
+      "Compra de entradas por internet",
+      "Agència Catalana del Consum",
+      "https://consum.gencat.cat/ca/detalls/noticia/Compra-entrades-per-internet"
+    ],
+    "gencat_distancia": [
+      "Compras a distancia o fuera de establecimiento",
+      "Agència Catalana del Consum",
+      "https://consum.gencat.cat/ca/els-meus-drets/modalitats-de-compra/"
+    ],
+    "csd_menores": [
+      "Protocolo de actuación contra la violencia en Centros de Alto Rendimiento",
+      "Consejo Superior de Deportes",
+      "https://www.csd.gob.es/es/igualdad-en-el-deporte/protocolo-de-actuacion-contra-la-violencia-en-los-centros-de-alto-rendimiento-del-csd"
+    ],
+    "aepd_default": [
+      "Protección de datos por defecto",
+      "Agencia Española de Protección de Datos",
+      "https://www.aepd.es/derechos-y-deberes/cumple-tus-deberes/medidas-de-cumplimiento/proteccion-de-datos-por-defecto"
+    ],
+    "aepd_dpd_fed": [
+      "Federaciones deportivas y obligación de DPD cuando tratan datos de menores",
+      "Agencia Española de Protección de Datos",
+      "https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1012-estan-obligadas-las-federaciones-deportivas-nombrar-una-persona-que-ejerza-dpd"
+    ],
+    "aepd_images": [
+      "Imágenes y vídeos en eventos con menores - criterios de información y difusión",
+      "Agencia Española de Protección de Datos",
+      "https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1004-se-pueden-tomar-imagenes-o-grabar-videos-en-eventos-escolares"
+    ],
+    "gencat_minor_protocol": [
+      "Protocol marc de protecció d'infants i adolescents davant les violències en l'àmbit esportiu - 2a edició revisada febrer 2025",
+      "Generalitat de Catalunya - Esport",
+      "https://esport.gencat.cat/web/.content/home/secretaria_general_de_lesport/Consell_Catala_Esport/normativa/acord_gov_23_protocol_proteccio_violencia.pdf"
+    ],
+    "aeat_partial_current": [
+      "Entidades parcialmente exentas - Impuesto sobre Sociedades",
+      "Agencia Tributaria",
+      "https://sede.agenciatributaria.gob.es/Sede/impuesto-sobre-sociedades/tienes-que-presentar-declaracion-impuesto-sociedades/entidades-parcialmente-exentas.html"
+    ],
+    "inclusion_sheets": [
+      "Hojas informativas de extranjería - buscador oficial",
+      "Ministerio de Inclusión, Seguridad Social y Migraciones",
+      "https://www.inclusion.gob.es/es/web/migraciones/hojas-informativas"
+    ],
+    "gencat_pau": [
+      "Preguntas frecuentes sobre el Decreto de medidas de autoprotección",
+      "Generalitat de Catalunya - Interior",
+      "https://interior.gencat.cat/es/arees_dactuacio/proteccio_civil/paus_hermes/preguntes_freq_sobre_decret_pau/"
+    ]
+  }
+}

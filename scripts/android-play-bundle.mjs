@@ -18,18 +18,23 @@ const runGradle=(args)=>{
   }else run('sh',['./gradlew',...args],android);
 };
 
-run(process.execPath,['scripts/build.mjs']);
+const npmCommand=process.platform==='win32'?'npm.cmd':'npm';
+run(npmCommand,['run','release:build']);
 run(process.execPath,['scripts/android-release-preflight.mjs']);
 runGradle(['clean','bundleRelease']);
 const aab=resolve(android,'app/build/outputs/bundle/release/app-release.aab');
 if(!existsSync(aab) || statSync(aab).size<1024){console.error(`\nERROR: no se encontró AAB válido en ${aab}`);process.exit(1);}
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedAab=resolve(artifacts,'KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_GOOGLE_PLAY.aab');
+const namedAab=resolve(artifacts,'KOMBAX_20144_R91_PILOT_GOOGLE_PLAY.aab');
 copyFileSync(aab,namedAab);
-console.log('\nOK · KOMBAX R62.8 Showcase Events Commercial Pilot QA Google Play bundle');
+console.log('\nOK · KOMBAX R91 build 20144 · Google Play bundle');
 console.log('AAB Gradle: android/app/build/outputs/bundle/release/app-release.aab');
-console.log('AAB Play: artifacts/KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_GOOGLE_PLAY.aab');
-console.log('Android R62.8: versionCode 20110 · versionName 2.0.0-rc.13-r62.8-pilot');
+console.log('AAB Play: artifacts/KOMBAX_20144_R91_PILOT_GOOGLE_PLAY.aab');
+console.log('Android R91: versionCode 20144 · versionName 2.0.0-rc.13-r91-public-guides-r100-1');
 
 // Historical QA artifact marker retained for R52.1/R52.2 regression: KOMBAX_20101_R52_2_SOCIAL_ANDROID_POSTER_FIX_GOOGLE_PLAY.aab
+
+// Historical release artifact marker retained for R60/R62.8 regression: KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_GOOGLE_PLAY.aab
+
+// Historical release marker: KOMBAX_20142_R89_PILOT_GOOGLE_PLAY.aab

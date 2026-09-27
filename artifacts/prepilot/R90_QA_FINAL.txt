@@ -1,0 +1,14 @@
+KOMBAX R90 build 20143 · Final QA
+- R90 dedicated gate: 35/35 PASS
+- npm test cumulative regression: PASS
+- npm run release:build: PASS
+- release legal gate: PASS
+- i18n direct activation: 8/8 PASS
+- runtime copy audit: 4653/4653, 0 unresolved
+- full product i18n audit: 4798 candidates, 0 unresolved
+- web = dist = Android: 556 files
+- guide catalogue: 53 indexed entries; all indexed PDFs valid
+- physical runtime PDFs: 56 in web, 56 in dist, 56 in Android assets
+- secret/signing scan: PASS
+- Supabase health: build 20143, Edge Function v37 ACTIVE
+- R90 database migrations: none required; cumulative migrations through R89 retained

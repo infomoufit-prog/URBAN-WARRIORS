@@ -1,0 +1,12 @@
+# KOMBAX R81 · Fase 0 · build 20134
+
+Empieza aquí para continuar el Plan Maestro.
+
+1. `01_CURRENT_RELEASE/PHASE0_R81_BUILD_20134_MASTER_AUDIT.md`
+2. `01_CURRENT_RELEASE/PHASE0_R81_BUILD_20134_QA_SCORECARD.md`
+3. `01_CURRENT_RELEASE/PHASE0_R81_BUILD_20134_LIVE_BACKEND.md`
+4. `01_CURRENT_RELEASE/PHASE0_R81_BUILD_20134_PENDING_MASTER_PLAN.md`
+5. `01_CURRENT_RELEASE/R81_TAP_TO_PAY_IPHONE_FINAL_REPORT.md` (histórico funcional R81 build 20133)
+6. `01_CURRENT_RELEASE/GUIA_KOMBAX_COBROS_TAP_TO_PAY_IPHONE_R81.pdf`
+
+No iniciar todavía KOMBAX Guías/Consultoría/Formación hasta autorización expresa del usuario para el bloque previo de diseño y contenidos.

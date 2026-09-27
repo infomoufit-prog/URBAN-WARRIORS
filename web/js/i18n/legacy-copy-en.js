@@ -1,4 +1,5 @@
 export const LEGACY_EN_OVERRIDES = Object.freeze({
+  "Confidentialité": "Privacy",
   "Tecnología KOMBAX": "KOMBAX Technology",
   "Crear cuenta": "Create account",
   "Selecciona cómo vas a utilizar el entorno de tu club.": "Choose how you will use your club environment.",

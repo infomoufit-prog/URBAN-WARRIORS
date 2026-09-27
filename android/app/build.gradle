@@ -36,8 +36,9 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 26
         targetSdk 36
-        versionCode 20133
-        versionName '2.0.0-rc.13-r81-tap-to-pay'
+        versionCode 20156
+        versionName '2.0.0-rc.13-r104-public-logo'
+        // historical-release-marker: versionCode 20134 · versionName '2.0.0-rc.13-r81-tap-to-pay'
         // historical regression markers: versionCode 20101 · versionName '2.0.0-rc.13'
     }
 

@@ -17,11 +17,12 @@ import { RELATION_LABEL, possibleRelations, requestNetworkConnection } from './s
 import { conversationChannelTabs, bindConversationChannelTabs } from '../ui/conversation-ui.js';
 import { t } from '../i18n/index.js';
 import { contentTranslationAttrs, prewarmUserContentTranslations } from '../i18n/user-content-translation.js';
+import { verificationVisual } from '../core/verification-visual.js';
 
 const PAGE_SIZE=20;
 const TYPE_LABEL={actualizacion:t('social.types.update'),resultado:t('social.types.result'),evento:t('social.types.event'),oportunidad:t('social.types.opportunity')};
 const PROFILE_LABEL={club:t('social.profiles.club'),miembro:t('social.profiles.member'),perfil_directo:t('social.profiles.kombaxProfile')};
-const PUBLIC_TYPE_LABEL={club:t('social.profiles.club'),miembro:t('social.profiles.member'),competidor:t('social.types.fighter'),marca:t('social.types.brand'),federacion:t('social.types.federation'),profesional:t('social.types.professional'),espectador:t('social.types.spectator')};
+const PUBLIC_TYPE_LABEL={club:t('social.profiles.club'),miembro:t('social.profiles.member'),competidor:t('social.types.fighter'),marca:t('social.types.brand'),federacion:t('social.types.federation'),profesional:t('social.types.professional'),media:'Media / Creador',espectador:t('social.types.spectator')};
 const AUDIENCE_PROFILE_TYPES=[['miembro',t('social.profiles.member')],['club',t('social.profiles.clubs')],['competidor',t('social.profiles.fighters')],['federacion',t('social.profiles.federations')],['marca',t('social.profiles.brands')],['profesional',t('social.profiles.professionals')],['espectador',t('social.profiles.spectators')]];
 const COMPLEX_AUDIENCE_MODES=new Set(['clubes_seleccionados','kombax_excepto','perfiles_seleccionados','tipos_perfil']);
 window.addEventListener('uw-kombax-social-profile-media-changed',()=>{if(document.querySelector('.kombax-social-page'))renderKombaxSocial().catch(()=>{});});
@@ -49,7 +50,7 @@ let minorConsentStatus={mine:[],approvals:[]};
 const initials=name=>String(name||'K').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()).join('');
 const isOwn=id=>ownProfiles.some(p=>p.id===id);
 const profileAvatar=p=>{const path=p?.autor_avatar_path||p?.avatar_path;const src=path?mediaUrl(path):(p?.autor_avatar_url||p?.avatar_url||'');return src?`<img src="${esc(src)}" alt="" loading="lazy" decoding="async">`:`<span>${esc(initials(p?.autor_nombre||p?.nombre_publico))}</span>`;};
-const verified=(value,type='')=>{if(!value)return '';const label=PUBLIC_TYPE_LABEL[type]||PROFILE_LABEL[type]||t('social.profiles.profile');return `<span class="kombax-verified" title="${esc(t('social.verified',{profile:label}))}" aria-label="${esc(t('social.verified',{profile:label}))}">${icon('shieldCheck',{size:14})}</span>`;};
+const verified=(value,type='')=>{const visual=verificationVisual(type,value);if(visual==='none'||visual==='member')return '';const label=PUBLIC_TYPE_LABEL[type]||PROFILE_LABEL[type]||t('social.profiles.profile');const title=esc(t('social.verified',{profile:label}));if(visual==='competitor')return `<span class="kx-competitor-verified-mini" title="${title}" aria-label="${title}">${icon('shieldCheck',{size:13})}<span>${esc(t('social.profiles.verified'))}</span></span>`;return `<span class="kombax-verified" title="${title}" aria-label="${title}">${icon('shieldCheck',{size:14})}</span>`;};
 const audienceKey=a=>`${a?.audiencia||'publica'}|${a?.target_social_id||''}|${a?.target_club_id||''}`;
 const audienceOptions=id=>audiencesByProfile.get(String(id))||[{audiencia:'publica',target_social_id:null,target_club_id:null,label:t('social.audience.publicAll'),descripcion:t('social.audience.publicDescription'),predeterminada:true}];
 const simpleAudienceOptions=id=>audienceOptions(id).filter(a=>!COMPLEX_AUDIENCE_MODES.has(a.audiencia));
@@ -138,7 +139,7 @@ function socialTopicPolicyNotice(){
 }
 
 function competitorFoundersPromo(){
-  return `<section class="kx-founders-promo competitor" aria-label="Promoción de lanzamiento para competidores"><div class="kx-founders-promo-mark">${icon('fighter',{size:28})}</div><div><span>KOMBAX SOCIAL · LANZAMIENTO</span><strong>PRIMEROS 20 · COMPETIDORES FUNDADORES</strong><p>Los primeros 20 competidores que completen la verificación KOMBAX quedarán incluidos en una <b>ventaja especial de lanzamiento</b> cuando KOMBAX active su modalidad de suscripción. Próximamente comunicaremos en qué consiste.</p><small>La plaza se determina por el orden de verificación KOMBAX.</small></div></section>`;
+  return `<section class="kx-founders-promo competitor" aria-label="Competidores fundadores"><div class="kx-founders-promo-mark">${icon('fighter',{size:28})}</div><div><span>KOMBAX SOCIAL · COMUNIDAD</span><strong>COMPETIDORES FUNDADORES</strong><p>Construye tu perfil deportivo, muestra tu trayectoria y forma parte de los primeros competidores verificados en KOMBAX.</p><small>La verificación se solicita desde tu perfil y se revisa antes de mostrar la insignia.</small></div></section>`;
 }
 
 function quotaAction(){
@@ -594,7 +595,7 @@ function renderFeedView(){
 }
 
 async function renderProfiles(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Perfiles públicos','Explora clubes, miembros y perfiles KOMBAX autorizados sin acceder a datos administrativos.',socialHeaderActions('<button type="button" class="btn btn-ghost" id="kx-social-discovery-open">Descubrir competidores y profesionales</button>'),'KOMBAX Social')}${tabBar()}<div class="kombax-social-search"><input id="kombax-profile-query" type="search" placeholder="Buscar por nombre, club o presentación"><button class="btn btn-primary" id="kombax-profile-search">Buscar</button></div><div id="kombax-profile-results"><div class="loading-card">Buscando perfiles…</div></div></div>`);bindCommon();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Perfiles públicos','Miembro muestra su comunidad y afiliación al club. Competidor es una identidad deportiva distinta, con verificación y Discovery. Media / Creador publica desde su espacio de contenido.',socialHeaderActions('<button type="button" class="btn btn-ghost" id="kx-social-discovery-open">Descubrir competidores y profesionales</button>'),'KOMBAX Social')}${tabBar()}<div class="kombax-social-search"><input id="kombax-profile-query" type="search" placeholder="Buscar por nombre, club o presentación"><button class="btn btn-primary" id="kombax-profile-search">Buscar</button></div><div id="kombax-profile-results"><div class="loading-card">Buscando perfiles…</div></div></div>`);bindCommon();
   const run=async()=>{const box=document.getElementById('kombax-profile-results'),q=document.getElementById('kombax-profile-query')?.value||'';try{const rows=await repos.kombaxSocial.directory(q,40);box.innerHTML=rows.length?`<div class="kombax-profile-grid">${rows.map(p=>`<article class="kx-profile-card" data-social-profile-open="${esc(p.id)}" tabindex="0" role="button"><div class="kombax-social-avatar large">${profileAvatar(p)}</div><div><strong>${esc(p.nombre_publico)} ${verified(p.verificado,p.perfil_tipo||p.sujeto_tipo)}</strong><small>${esc(PUBLIC_TYPE_LABEL[p.perfil_tipo]||PROFILE_LABEL[p.sujeto_tipo]||p.sujeto_tipo)}</small>${affiliationChip(p)}</div><p>${esc(p.bio||(p.perfil_tipo==='miembro'?'Miembro de la comunidad KOMBAX':'Perfil público KOMBAX'))}</p><div class="row-actions">${p.contactable&&!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-contact="${esc(p.id)}" data-social-name="${esc(p.nombre_publico)}">Contactar</button>`:''}${!isOwn(p.id)&&ownProfiles.some(x=>possibleRelations(x.perfil_tipo||x.sujeto_tipo,p.perfil_tipo||p.sujeto_tipo).length)?`<button class="btn btn-ghost btn-sm" data-social-relation="${esc(p.id)}">Añadir a mi red</button>`:''}${!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-report-profile="${esc(p.id)}">Denunciar</button>`:''}</div></article>`).join('')}</div>`:empty('Sin coincidencias','Prueba con otro término.');
     box.querySelectorAll('[data-social-profile-open]').forEach(card=>{const open=()=>openKombaxPublicProfile(card.dataset.socialProfileOpen);card.addEventListener('click',e=>{if(e.target.closest('button,a'))return;open();});card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});
     box.querySelectorAll('[data-social-affiliation-club]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(b.dataset.socialAffiliationClub)openKombaxPublicProfile(b.dataset.socialAffiliationClub);}));
@@ -698,3 +699,4 @@ export async function renderKombaxSocial(){
   if(activeView==='safety')return renderSafety();
   return loadFeed(false);
 }
+

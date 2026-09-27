@@ -1,0 +1,6 @@
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIAS_ESPANA_CATALUNA_COLECCION_INICIAL_2026.pdf
+Pages: 33
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False

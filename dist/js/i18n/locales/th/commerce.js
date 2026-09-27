@@ -1,7 +1,1 @@
-export default {
-  "title": "Commerce",
-  "cart": "ตะกร้า",
-  "checkout": "ชำระเงิน",
-  "seller": "ผู้ขาย",
-  "buyer": "ผู้ซื้อ"
-};
+export default {title:'Commerce',cart:'ตะกร้า',checkout:'ชำระเงินอย่างปลอดภัย',seller:'ผู้ขาย',buyer:'ผู้ซื้อ',product:'สินค้า',variant:'ตัวเลือก / รุ่น',quantity:'จำนวน',remove:'นำออก',clearCart:'ล้างตะกร้า',total:'รวม',buyNow:'ซื้อเลย',addToCart:'เพิ่มลงตะกร้า',addedToCart:'เพิ่มลงตะกร้าแล้ว',cartSubtitle:'การซื้อผ่าน KOMBAX Showcase',singleSellerOnly:'ตะกร้ามีสินค้าจากผู้ขายรายอื่น โปรดชำระเงินหรือล้างตะกร้านั้นก่อนซื้อจากผู้ขายรายใหม่',singleSellerNotice:'การชำระเงินแต่ละครั้งดำเนินการให้ผู้ขายรายเดียวและบัญชี Stripe ที่เชื่อมต่อของผู้ขายนั้น',checkoutNotice:'ระบบจะตรวจสอบสต็อกและเงื่อนไขอีกครั้งก่อนเปิดหน้าชำระเงินที่ปลอดภัย KOMBAX จะถือว่าคำสั่งซื้อชำระแล้วเมื่อ backend/webhook ยืนยันเท่านั้น',emptyCart:'ตะกร้าว่าง',emptyCartBody:'เพิ่มสินค้า Commerce จากผู้ขายรายเดียวกันเพื่อเตรียมการสั่งซื้อ',cartInvalidProduct:'ไม่สามารถเพิ่มสินค้านี้ลงตะกร้าได้',adultsOnly:'การซื้อเชิงพาณิชย์บน KOMBAX สำหรับผู้ที่มีอายุ 18 ปีขึ้นไปเท่านั้น',checkoutTitle:'ตรวจสอบและชำระเงิน',soldAndChargedBy:'ขายและรับชำระโดยตรงโดย',checkoutUnavailable:'ไม่สามารถเปิดหน้าชำระเงินที่ปลอดภัยได้',continuePayment:'ดำเนินการชำระเงิน',servicesNoCheckout:'บริการมืออาชีพใช้การติดต่อโดยตรงและไม่ใช้ checkout สินค้า',sellerNotReady:'ผู้ขายรายนี้ยังไม่ได้เปิดใช้งาน Seller Center และการรับชำระเงิน',finalPrice:'ราคาสุทธิ',soldBy:'จำหน่ายโดย',pickupManaged:'ผู้ขายจัดการการรับสินค้า',shippingManaged:'ผู้ขายจำหน่ายและจัดส่ง',stockSellerManaged:'ผู้ขายจัดการสต็อก',unitsAvailable:'หน่วยพร้อมจำหน่าย'};

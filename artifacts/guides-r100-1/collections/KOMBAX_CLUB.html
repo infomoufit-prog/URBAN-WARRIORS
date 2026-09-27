@@ -1,0 +1,2008 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Poner en marcha y dirigir un club</title><style>
+@page { size:A4; margin:18mm 17mm 18mm; }
+@page cover { size:A4; margin:0; }
+* { box-sizing:border-box; }
+html { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+body { margin:0; color:#23242a; background:#fff; font:9.5pt/1.58 "Segoe UI",Arial,sans-serif; }
+.cover { page:cover; width:210mm; height:297mm; position:relative; overflow:hidden; color:#fff; background:#090a0e; break-after:page; }
+.cover-photo { position:absolute; inset:0 0 auto; height:175mm; background-image:linear-gradient(180deg,rgba(5,6,9,.08),rgba(5,6,9,.38) 52%,#090a0e),var(--hero); background-size:cover; background-position:center 25%; }
+.cover:after { content:""; position:absolute; left:0; top:0; width:4mm; height:100%; background:#c51235; box-shadow:0 0 17mm #a20b2e; }
+.cover-brand { position:absolute; top:18mm; left:20mm; right:19mm; display:flex; align-items:center; gap:4mm; font-size:20pt; font-weight:800; letter-spacing:.18em; }
+.cover-brand img { width:15mm; height:15mm; object-fit:contain; }
+.cover-copy { position:absolute; top:151mm; left:20mm; right:20mm; }
+.cover-kicker { color:#ff6c86; font:700 9pt/1.2 "Bahnschrift","Segoe UI",sans-serif; letter-spacing:.25em; text-transform:uppercase; }
+.cover h1 { color:#fff; font:700 34pt/1.06 Georgia,serif; letter-spacing:-.035em; margin:7mm 0 5mm; max-width:172mm; }
+.cover-copy p { color:#d9dce3; font-size:11pt; line-height:1.5; max-width:155mm; margin:0; }
+.cover-audience { position:absolute; left:20mm; right:20mm; bottom:27mm; padding-top:5mm; border-top:1px solid #74767c; font-size:8pt; color:#d9dce3; }
+.cover-foot { position:absolute; left:20mm; right:20mm; bottom:12mm; color:#9fa5af; font-size:7pt; }
+.intro { break-after:page; padding-top:9mm; }
+.eyebrow,.chapter-label { color:#ae1232; font:700 8pt "Bahnschrift","Segoe UI",sans-serif; letter-spacing:.18em; text-transform:uppercase; }
+h1,h2,h3 { color:#25252c; break-after:avoid; page-break-after:avoid; }
+.intro h1,.chapter-title { font:700 28pt/1.12 Georgia,serif; letter-spacing:-.025em; margin:4mm 0 7mm; }
+.intro .lead { font-size:11pt; color:#535760; max-width:160mm; }
+.contents { margin-top:12mm; display:grid; grid-template-columns:1fr 1fr; gap:3mm 8mm; }
+.contents a { display:block; border-top:1px solid #dadde2; padding:3mm 0; color:#25252c; text-decoration:none; font-weight:700; }
+.contents span { display:block; color:#b20c31; font-size:8pt; letter-spacing:.1em; margin-bottom:1mm; }
+.reader-note { margin-top:13mm; border-left:3px solid #bd1135; padding:4mm 5mm; background:#f6f3f4; color:#535760; font-size:8.5pt; }
+.chapter { break-before:page; }
+.chapter-head { break-after:avoid; page-break-after:avoid; margin:0 0 9mm; padding-top:6mm; border-bottom:2px solid #bb1134; }
+.chapter-deck { font-size:10pt; color:#676b73; margin:0 0 5mm; }
+.chapter h3 { font:700 15pt/1.2 Georgia,serif; margin:8mm 0 3mm; }
+.chapter h4 { font:700 11pt/1.2 "Segoe UI",sans-serif; margin:5mm 0 2mm; }
+p { margin:0 0 3mm; }
+a { color:#a60d2d; word-break:break-word; }
+ul,ol { padding-left:6mm; margin:0 0 4mm; }
+li { margin:1mm 0; }
+table { border-collapse:collapse; width:100%; font-size:8pt; margin:3mm 0 5mm; }
+tr { break-inside:avoid; page-break-inside:avoid; }
+th { color:#fff; background:#292a31; text-align:left; padding:2.2mm; }
+td { padding:2mm; border-bottom:1px solid #dfe1e5; vertical-align:top; }
+tr:nth-child(even) td { background:#faf8f9; }
+blockquote { margin:4mm 0; border-left:3px solid #c31437; padding:3mm 4mm; background:#fff2f5; break-inside:avoid; }
+.tag { display:inline-block; padding:.3mm 1.3mm; border-radius:2px; color:#fff; background:#6a3d4b; font-size:7pt; font-weight:700; }
+.tag.legal { background:#aa0d2d; }.tag.adm { background:#245178; }.tag.fed { background:#6a42a0; }
+.tag.rec { background:#a45b09; }.tag.bp { background:#277444; }.tag.kx { background:#30333a; }.tag.prof { background:#896906; }
+.pending { background:#fff1c2; padding:0 1mm; font-weight:700; }
+.source-note { border-top:1px solid #e0e0e4; margin-top:7mm; padding-top:3mm; color:#686d76; font-size:8pt; }
+@media screen { body { max-width:210mm; margin:0 auto; box-shadow:0 0 32px #bbb; } .chapter,.intro { padding:0 17mm 20mm; } }
+</style></head><body><section class="cover" style="--hero:url('../../../web/assets/brand-heroes/hero-guides.webp')"><div class="cover-photo"></div><div class="cover-brand"><img src="../../../web/assets/brand/kombax-symbol-red.png" alt="">KOMBAX</div><div class="cover-copy"><span class="cover-kicker">Guías de conocimiento</span><h1>Poner en marcha y dirigir un club</h1><p>De la constitución al cuidado diario de las personas y los documentos.</p></div><div class="cover-audience">Para Clubes, escuelas y equipos de gestión</div><div class="cover-foot">Información general. Antes de actuar, confirma las condiciones vigentes en la fuente competente.</div></section><section class="intro"><span class="eyebrow">Tu recorrido</span><h1>Poner en marcha y dirigir un club</h1><p class="lead">De la constitución al cuidado diario de las personas y los documentos. Cada tema mantiene sus fuentes y supuestos concretos.</p><div class="contents"><a href="#chapter-1"><span>01</span>Crear un club o entidad deportiva</a><a href="#chapter-2"><span>02</span>Vida y obligaciones anuales del club</a><a href="#chapter-3"><span>03</span>Personal técnico, voluntariado y profesiones del deporte</a><a href="#chapter-4"><span>04</span>Menores y entorno seguro</a><a href="#chapter-5"><span>05</span>Datos, imagen y comunicaciones</a><a href="#chapter-6"><span>06</span>Seguros y responsabilidad</a></div><p class="reader-note"><strong>Cómo usar esta guía.</strong> Empieza por el tema que corresponda a tu decisión. «Por confirmar» indica que debes comprobar un dato en la administración, federación, recinto o aseguradora competente antes de aplicarlo a tu caso. Las fichas territoriales completan los requisitos de cada comunidad o ciudad autónoma.</p></section><section class="chapter" id="chapter-1"><header class="chapter-head"><span class="chapter-label">Tema 01</span><h2 class="chapter-title">Crear un club o entidad deportiva</h2><p class="chapter-deck">Qué forma darle a tu proyecto, qué pasos seguir para que exista legalmente y qué decisiones conviene tomar antes de firmar el acta.</p></header><h3 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h3>
+<ul>
+<li><strong>Decide primero qué quieres ser.</strong> Un club deportivo, una asociación general con actividad deportiva, un gimnasio o escuela con forma de empresa y una sección deportiva dentro de otra entidad son figuras distintas, con consecuencias distintas en impuestos, federación y responsabilidad. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+<li><strong>El registro de clubes es autonómico.</strong> La constitución y la inscripción de un club deportivo se rigen por la normativa de tu comunidad. Los requisitos (número de fundadores, escritura notarial, plazos, tasas) cambian de una a otra: están en tu ficha territorial. <strong><span class="tag adm">Requisito administrativo</span></strong></li>
+<li><strong>Sin inscripción no hay reconocimiento deportivo.</strong> En la mayoría de comunidades, la inscripción en el registro de entidades deportivas es la que permite afiliarse a una federación y participar en competición oficial. <strong><span class="tag adm">Requisito administrativo</span></strong> (confírmalo en tu ficha territorial)</li>
+<li><strong>Con actividad económica llegan obligaciones fiscales,</strong> aunque no haya ánimo de lucro. <strong><span class="tag legal">Obligación legal</span></strong> — guía «vida anual del club».</li>
+</ul>
+<h3 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h3>
+<p>Muchos clubes de contacto nacen de un grupo de entrenamiento que crece: un entrenador con alumnos fieles, un local alquilado y ganas de competir. Formalizarlo bien desde el principio evita problemas cuando llegan la primera licencia, la primera subvención, el primer menor inscrito o la primera velada.</p>
+<p>Esta guía te ayuda a elegir la forma jurídica, preparar la constitución, inscribirte y dejar listo lo necesario para empezar a operar. Lo que pasa después del alta (asambleas, cuentas, impuestos) está en la guía «vida anual del club».</p>
+<h3 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h3>
+<p>Fundadores de clubes, escuelas y asociaciones; entrenadores que quieren dar forma legal a su grupo; entidades que quieren crear una sección deportiva.</p>
+<h3 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h3>
+<p><strong>¿Qué forma jurídica encaja con lo que realmente vas a hacer?</strong> La respuesta depende de cuatro preguntas:</p>
+<ol type="1">
+<li>¿Vas a competir en competición oficial federada?</li>
+<li>¿Habrá ánimo de lucro (reparto de beneficios entre socios) o no?</li>
+<li>¿La actividad principal es enseñar y entrenar a clientes o organizar la práctica de socios?</li>
+<li>¿Existe ya una entidad (asociación, AMPA, empresa) en la que encaje como sección?</li>
+</ol>
+<h3 id="4-las-opciones-comparadas">4. Las opciones, comparadas</h3>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Figura</th>
+<th>Cuándo encaja</th>
+<th>Registro</th>
+<th>Consecuencias clave</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Club deportivo</strong></td>
+<td>Grupo de socios que practica y promueve una o varias modalidades, con vocación de competir</td>
+<td>Registro autonómico de entidades deportivas</td>
+<td>Permite afiliarse a la federación; sin ánimo de lucro; régimen fiscal de entidad parcialmente exenta salvo que cumpla la Ley 49/2002 («vida anual del club»)</td>
+</tr>
+<tr class="even">
+<td><strong>Club de régimen simplificado, elemental o “popular”</strong></td>
+<td>Algunas comunidades prevén una forma más sencilla</td>
+<td>Registro autonómico</td>
+<td>Existe solo en algunas comunidades y con nombres distintos (ficha territorial)</td>
+</tr>
+<tr class="odd">
+<td><strong>Asociación general con fines deportivos</strong></td>
+<td>Actividad deportiva sin intención de competir oficialmente, o fines mixtos (deporte, cultura, inclusión)</td>
+<td>Registro de asociaciones (autonómico)</td>
+<td>Se rige por la LO 1/2002; puede no dar acceso a la federación sin inscripción deportiva</td>
+</tr>
+<tr class="even">
+<td><strong>Sociedad mercantil o autónomo (gimnasio, escuela)</strong></td>
+<td>Negocio de enseñanza o entrenamiento a clientes</td>
+<td>Registro Mercantil / alta censal</td>
+<td>Ánimo de lucro; IVA e impuestos de empresa; puede necesitar un club vinculado para que sus deportistas compitan federados</td>
+</tr>
+<tr class="odd">
+<td><strong>Sección deportiva de otra entidad</strong></td>
+<td>Una asociación, colegio o empresa quiere tener equipo</td>
+<td>Registro autonómico, si la comunidad lo prevé</td>
+<td>Depende de la normativa autonómica (ficha territorial)</td>
+</tr>
+</tbody>
+</table>
+<p><strong><span class="tag prof">Requiere profesional</span></strong> si dudas entre club y sociedad mercantil, o si ya tienes un negocio y quieres crear un club vinculado: las consecuencias fiscales y laborales son importantes.</p>
+<h3 id="5-el-marco-que-se-aplica">5. El marco que se aplica</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué establece</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ley 39/2022 del Deporte</strong></td>
+<td>Marco estatal. La constitución de clubes se rige por la normativa de cada comunidad autónoma; el registro estatal afecta a las entidades que participan en competición oficial de ámbito estatal</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Ley deportiva y decretos de tu comunidad</strong></td>
+<td>Requisitos de constitución, tipos de club, registro, efectos de la inscripción</td>
+<td><span class="tag legal">Obligación legal</span> / <span class="tag adm">Requisito administrativo</span> — ficha territorial</td>
+</tr>
+<tr class="odd">
+<td><strong>LO 1/2002 del Derecho de Asociación</strong></td>
+<td>Régimen general de asociaciones: se constituyen por acuerdo de tres o más personas; órganos, derechos y obligaciones documentales</td>
+<td><span class="tag legal">Obligación legal</span> para asociaciones; supletoria para clubes según la normativa autonómica</td>
+</tr>
+<tr class="even">
+<td><strong>Normativa tributaria</strong></td>
+<td>NIF de la entidad, declaración censal y obligaciones fiscales («vida anual del club»)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-procedimiento-paso-a-paso">6. Procedimiento paso a paso</h3>
+<ol type="1">
+<li><strong>Definir el proyecto por escrito.</strong> Modalidades, ámbito territorial, si habrá competición oficial, si habrá menores, de qué se financiará. Media página basta. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+<li><strong>Elegir la figura</strong> (apartado 4) y comprobar en la ficha territorial qué variantes ofrece tu comunidad.</li>
+<li><strong>Comprobar la denominación.</strong> Algunos registros exigen reserva o autorización previa del nombre (ficha territorial). <strong><span class="tag adm">Requisito administrativo</span></strong></li>
+<li><strong>Reunir a los fundadores.</strong> El mínimo lo fija tu comunidad (en las comunidades revisadas va de tres a cinco personas y, en algunos casos, con escritura notarial). <strong><span class="tag adm">Requisito administrativo</span></strong></li>
+<li><strong>Redactar el acta fundacional y los estatutos.</strong> Usa los modelos oficiales del registro si existen. <strong><span class="tag adm">Requisito administrativo</span></strong> Revisa en especial: objeto social (todas las modalidades que vas a practicar), clases de socios, régimen de menores socios, órganos de gobierno, régimen económico, disolución.</li>
+<li><strong>Designar la junta directiva</strong> y documentar la aceptación de los cargos.</li>
+<li><strong>Presentar la inscripción</strong> en el registro autonómico, dentro del plazo si lo hay (ficha territorial). Conserva el justificante, la resolución y el número de registro.</li>
+<li><strong>Obtener el NIF</strong> de la entidad ante la Agencia Tributaria y revisar las obligaciones censales. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Abrir la cuenta bancaria</strong> con reglas de firma (por ejemplo, dos firmas mancomunadas para pagos importantes). <strong><span class="tag bp">Buena práctica</span></strong></li>
+<li><strong>Afiliarte a la federación</strong> de tu modalidad si vas a competir (guías «oficialidad» y «licencias»). <strong><span class="tag fed">Requisito federativo</span></strong></li>
+<li><strong>Poner en marcha lo imprescindible antes de la primera clase:</strong> seguros («seguros»), protección de datos («datos e imagen») y, si habrá menores, las obligaciones de «menores».</li>
+</ol>
+<h3 id="7-decisiones-de-estatutos-que-conviene-pensar-bien">7. Decisiones de estatutos que conviene pensar bien</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tema</th>
+<th>Por qué importa en un club de contacto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Objeto social</td>
+<td>Si solo pones “boxeo” y luego quieres federarte en kick, puede hacer falta modificarlo</td>
+</tr>
+<tr class="even">
+<td>Socios menores</td>
+<td>Cómo votan y quién les representa en la asamblea</td>
+</tr>
+<tr class="odd">
+<td>Cuotas y derramas</td>
+<td>Quién las aprueba y cómo se actualizan</td>
+</tr>
+<tr class="even">
+<td>Régimen disciplinario</td>
+<td>Conductas en sala, dopaje y violencia, con procedimiento y audiencia</td>
+</tr>
+<tr class="odd">
+<td>Cargos</td>
+<td>Duración, gratuidad (relevante para algunos beneficios fiscales, «vida anual del club») e incompatibilidades</td>
+</tr>
+<tr class="even">
+<td>Vinculación con un gimnasio o empresa</td>
+<td>Qué pertenece al club y qué al negocio: material, cuotas, deportistas</td>
+</tr>
+</tbody>
+</table>
+<h3 id="8-documentaci-n">8. Documentación</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Documento</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Acta fundacional</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="even">
+<td>Estatutos</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="odd">
+<td>Aceptación de cargos de la junta</td>
+<td><span class="tag adm">Requisito administrativo</span> (según registro)</td>
+</tr>
+<tr class="even">
+<td>Solicitud de inscripción y justificante</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="odd">
+<td>Resolución o certificado de inscripción</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="even">
+<td>NIF de la entidad</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Documento de proyecto y reglas internas</td>
+<td><span class="tag kx">Recomendación KOMBAX</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="9-errores-frecuentes">9. Errores frecuentes</h3>
+<ul>
+<li><strong>Crear un club para lo que en realidad es un negocio de un entrenador.</strong> Si los ingresos van a una persona y el club solo existe en papel, puede haber problemas fiscales y laborales.</li>
+<li><strong>Copiar los estatutos de otra comunidad.</strong> Los modelos y requisitos son autonómicos.</li>
+<li><strong>Dejar fuera modalidades del objeto social.</strong></li>
+<li><strong>No inscribirse</strong> y descubrirlo cuando la federación pide el número de registro.</li>
+<li><strong>Abrir la cuenta a nombre de un particular.</strong></li>
+<li><strong>Olvidar que la entidad existe fiscalmente</strong> desde que tiene NIF («vida anual del club»).</li>
+</ul>
+<h3 id="10-caso-pr-ctico">10. Caso práctico</h3>
+<p><em>Supongamos que</em> una entrenadora de muay thai da clase a 40 alumnos en un local que alquila como autónoma. Quiere que sus alumnos compitan federados y pedir una subvención municipal.</p>
+<ul>
+<li><strong>Opción 1:</strong> crear un club deportivo con socios (alumnos o familias), inscrito en el registro autonómico y afiliado a la federación. Ella puede seguir como autónoma y facturar sus servicios de entrenamiento al club, con un contrato claro.</li>
+<li><strong>Opción 2:</strong> mantener solo su actividad como autónoma. Sus alumnos necesitarían otro club para competir federados, y la subvención dependería de las bases (muchas exigen ser entidad inscrita).</li>
+<li><strong>Lo que no debe hacer:</strong> que el club cobre las cuotas y se las pase a ella sin contrato ni factura.</li>
+</ul>
+<p><strong><span class="tag prof">Requiere profesional</span></strong> para el encaje fiscal y laboral de la opción 1.</p>
+<h3 id="11-checklist">11. Checklist</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Proyecto por escrito y figura elegida</td>
+<td>Fundadores</td>
+<td>Documento</td>
+<td>Antes de todo</td>
+</tr>
+<tr class="even">
+<td>Requisitos de la ficha territorial comprobados</td>
+<td>Fundadores</td>
+<td>Nota con fuente y fecha</td>
+<td>Antes de redactar</td>
+</tr>
+<tr class="odd">
+<td>Denominación comprobada o reservada</td>
+<td>Fundadores</td>
+<td>Justificante</td>
+<td>Antes del acta</td>
+</tr>
+<tr class="even">
+<td>Acta y estatutos con modelos oficiales</td>
+<td>Fundadores</td>
+<td>Documentos firmados</td>
+<td>Constitución</td>
+</tr>
+<tr class="odd">
+<td>Inscripción presentada</td>
+<td>Presidencia</td>
+<td>Justificante + resolución</td>
+<td>Dentro del plazo</td>
+</tr>
+<tr class="even">
+<td>NIF y censo</td>
+<td>Tesorería</td>
+<td>NIF</td>
+<td>Tras la constitución</td>
+</tr>
+<tr class="odd">
+<td>Cuenta bancaria con reglas de firma</td>
+<td>Tesorería</td>
+<td>Contrato bancario</td>
+<td>Tras el NIF</td>
+</tr>
+<tr class="even">
+<td>Afiliación federativa</td>
+<td>Secretaría</td>
+<td>Alta en la federación</td>
+<td>Antes de la temporada</td>
+</tr>
+<tr class="odd">
+<td>Seguros, datos y menores</td>
+<td>Junta</td>
+<td>«menores», «datos e imagen», «seguros»</td>
+<td>Antes de la primera actividad</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-evidencias-que-conservar">12. Evidencias que conservar</h3>
+<p>Acta, estatutos y sus modificaciones; resolución de inscripción; NIF; actas de nombramiento de cargos; alta federativa.</p>
+<h3 id="13-qu-cambia-seg-n-el-territorio">13. Qué cambia según el territorio</h3>
+<p>Casi todo lo operativo de esta guía: figuras disponibles, número de fundadores, escritura notarial, reserva de nombre, plazos, tasas, efectos de la inscripción y modelos. Consulta la ficha territorial de tu comunidad antes de redactar nada.</p>
+<h3 id="14-si-hay-actividad-econ-mica-cobro-o-contrataci-n">14. Si hay actividad económica, cobro o contratación</h3>
+<p>Cuotas, clases, venta de material, entradas o subvenciones generan obligaciones fiscales y contables aunque no haya ánimo de lucro. Si hay personal que cobra, hay obligaciones laborales o mercantiles («personal del club»). Guía «vida anual del club».</p>
+<h3 id="15-cu-ndo-pedir-ayuda">15. Cuándo pedir ayuda</h3>
+<ul>
+<li>Dudas entre club, asociación y empresa, o un gimnasio que quiere un club vinculado.</li>
+<li>Varias modalidades con federaciones distintas.</li>
+<li>Actividad en más de una comunidad.</li>
+<li>Quieres acogerte a beneficios fiscales de entidades sin fines lucrativos.</li>
+</ul>
+<h3 id="16-fuentes-comentadas">16. Fuentes comentadas</h3>
+<ul>
+<li><strong>Ley 39/2022 del Deporte.</strong> Marco estatal; la constitución de clubes remite a la normativa autonómica. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2022-24430">BOE</a></li>
+<li><strong>LO 1/2002 del Derecho de Asociación.</strong> Constitución por tres o más personas (art. 5.1); asamblea al menos una vez al año (art. 11.3); obligaciones documentales (art. 14). <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-5852">BOE</a></li>
+<li><strong>Fichas territoriales T01–T19.</strong> Requisitos concretos de cada comunidad.</li>
+</ul>
+<h3 id="17-verificado-hasta-y-comprueba-justo-antes-de-actuar">17. Verificado hasta y comprueba justo antes de actuar</h3>
+<p><strong>Verificado hasta:</strong> 22/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong> los modelos vigentes y los requisitos del registro de tu comunidad (ficha territorial y sede electrónica), tasas y plazos.</p>
+</section><section class="chapter" id="chapter-2"><header class="chapter-head"><span class="chapter-label">Tema 02</span><h2 class="chapter-title">Vida y obligaciones anuales del club</h2><p class="chapter-deck">Lo que un club tiene que hacer cada año para seguir en regla: órganos, libros, cuentas, impuestos y renovaciones.</p></header><h3 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h3>
+<ul>
+<li><strong>La asamblea general se reúne al menos una vez al año</strong> para aprobar cuentas y presupuesto (régimen general de asociaciones; revisa tus estatutos y tu normativa autonómica). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Hay que llevar una relación actualizada de socios, contabilidad y un libro de actas.</strong> <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Un club sin ánimo de lucro no está automáticamente exento de impuestos.</strong> Normalmente es una entidad <em>parcialmente exenta</em> del Impuesto sobre Sociedades y debe revisar cada año si tiene que presentar la declaración. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Cualquier cambio de junta, estatutos o domicilio se comunica al registro deportivo.</strong> <strong><span class="tag adm">Requisito administrativo</span></strong></li>
+<li><strong>Cada temporada se renuevan cosas que caducan:</strong> licencias, seguros, certificados negativos, protocolo de menores y contratos. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+</ul>
+<h3 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h3>
+<p>Crear el club es un día; mantenerlo es cada año. Muchos clubes pequeños funcionan durante años sin asambleas formales, sin cuentas aprobadas y sin saber si tienen que presentar impuestos, hasta que piden una subvención, cambian de presidente o reciben un requerimiento. Esta guía ordena el calendario anual para que eso no pase.</p>
+<h3 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h3>
+<p>Juntas directivas, secretaría y tesorería de clubes y asociaciones deportivas sin ánimo de lucro. Si tu proyecto es una empresa (gimnasio, escuela), las obligaciones fiscales son las de cualquier empresa y <strong><span class="tag prof">Requiere profesional</span></strong>.</p>
+<h3 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h3>
+<p><strong>¿Quién se encarga de cada obligación y cuándo?</strong> Un calendario anual con responsables resuelve el 80 % de los problemas.</p>
+<h3 id="4-el-marco-que-se-aplica">4. El marco que se aplica</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué exige</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ley deportiva y decretos de tu comunidad</strong></td>
+<td>Órganos del club, comunicación de cambios al registro, libros</td>
+<td><span class="tag legal">Obligación legal</span> / <span class="tag adm">Requisito administrativo</span> — ficha territorial</td>
+</tr>
+<tr class="even">
+<td><strong>LO 1/2002 del Derecho de Asociación</strong></td>
+<td>Asamblea general como órgano supremo, reunida al menos una vez al año (art. 11.3); relación actualizada de asociados, contabilidad y libro de actas (art. 14)</td>
+<td><span class="tag legal">Obligación legal</span> (régimen general; aplicación a clubes según la normativa autonómica)</td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 27/2014 del Impuesto sobre Sociedades, art. 9.3</strong></td>
+<td>Las entidades sin fines lucrativos que no cumplen la Ley 49/2002 son parcialmente exentas: exentas las rentas de su objeto social, no las de actividades económicas</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Ley 49/2002</strong></td>
+<td>Régimen fiscal especial de entidades sin fines lucrativos que cumplen sus requisitos (no todos los clubes)</td>
+<td><span class="tag legal">Obligación legal</span> si se opta y se cumplen requisitos — <strong><span class="tag prof">Requiere profesional</span></strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 37/1992 del IVA, art. 20.Uno.13º y 20.Tres</strong></td>
+<td>Exención de IVA para determinados servicios deportivos prestados a personas físicas que practican deporte, por entidades que cumplan los requisitos de “carácter social”</td>
+<td><span class="tag legal">Obligación legal</span> — <strong><span class="tag prof">Requiere profesional</span></strong> para confirmar tu caso</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-calendario-anual-del-club">5. Calendario anual del club</h3>
+<p><em>Plantilla de trabajo KOMBAX. Ajusta los meses a tu temporada y a tu ejercicio económico.</em></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Momento</th>
+<th>Obligación</th>
+<th>Quién</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Inicio de temporada</td>
+<td>Renovar licencias y seguro del club; comprobar certificados negativos; revisar protocolo de menores y datos</td>
+<td>Secretaría + Delegado de protección</td>
+<td><span class="tag fed">Requisito federativo</span> / <span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Inicio de temporada</td>
+<td>Actualizar la relación de socios y las autorizaciones</td>
+<td>Secretaría</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Durante el año</td>
+<td>Contabilidad al día, facturas y justificantes archivados</td>
+<td>Tesorería</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Durante el año</td>
+<td>Libro de actas de cada reunión de junta y asamblea</td>
+<td>Secretaría</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Cierre del ejercicio</td>
+<td>Formular cuentas y presupuesto</td>
+<td>Junta</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Tras el cierre</td>
+<td>Asamblea ordinaria: aprobar cuentas, presupuesto y, si toca, renovar cargos</td>
+<td>Presidencia</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Tras la asamblea</td>
+<td>Comunicar al registro los cambios de junta, estatutos o domicilio, si los hay</td>
+<td>Secretaría</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="even">
+<td>Plazo del Impuesto sobre Sociedades</td>
+<td>Comprobar si hay que declarar y, si hay que hacerlo, presentar</td>
+<td>Tesorería / asesoría</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Plazos trimestrales o anuales</td>
+<td>IVA, retenciones de profesionales o trabajadores, declaraciones informativas, si proceden</td>
+<td>Tesorería / asesoría</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Final de temporada</td>
+<td>Borrado de datos que ya no hacen falta («datos e imagen»), memoria de actividades, justificación de subvenciones</td>
+<td>Secretaría</td>
+<td><span class="tag legal">Obligación legal</span> / <span class="tag kx">Recomendación KOMBAX</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-impuesto-sobre-sociedades-lo-que-debes-saber">6. Impuesto sobre Sociedades: lo que debes saber</h3>
+<p>La mayoría de clubes deportivos sin ánimo de lucro son <strong>entidades parcialmente exentas</strong> (Ley 27/2014, art. 9.3). Están exentas las rentas que proceden de su objeto social (por ejemplo, cuotas de socios) y las adquisiciones gratuitas vinculadas a su fin, pero <strong>no</strong> las rentas de actividades económicas (por ejemplo, un bar, la venta de material o, según el caso, una velada con taquilla).</p>
+<p>Según la Agencia Tributaria, estas entidades <strong>no tienen que presentar la declaración</strong> si se cumplen a la vez tres condiciones:</p>
+<ol type="1">
+<li>sus ingresos totales no superan 75.000 euros anuales;</li>
+<li>los ingresos correspondientes a rentas no exentas no superan 2.000 euros anuales;</li>
+<li>todas las rentas no exentas están sometidas a retención.</li>
+</ol>
+<p>Si no se cumple alguna, hay que declarar. <strong><span class="tag legal">Obligación legal</span></strong> Las cifras se deben confirmar cada año en la web de la Agencia Tributaria.</p>
+<p><strong>Ley 49/2002.</strong> Algunas entidades cumplen los requisitos del régimen especial de entidades sin fines lucrativos, que es más favorable. No es automático para un club deportivo, y los requisitos son exigentes. <strong><span class="tag prof">Requiere profesional</span></strong></p>
+<h3 id="7-iva-la-exenci-n-deportiva-no-es-autom-tica">7. IVA: la exención deportiva no es automática</h3>
+<p>La Ley del IVA exime determinados servicios prestados a personas físicas que practican deporte cuando los presta, entre otras, una entidad o establecimiento deportivo privado de <strong>carácter social</strong> que cumple los requisitos del artículo 20.Tres (en síntesis: sin finalidad lucrativa, cargos directivos gratuitos y sin que socios y familiares sean destinatarios con condiciones especiales). Otras operaciones del club (patrocinio, entradas, venta de material, bar) pueden estar sujetas y no exentas. <strong><span class="tag prof">Requiere profesional</span></strong> para decidir si tu club debe darse de alta en IVA y qué operaciones declara.</p>
+<h3 id="8-cambios-en-el-club">8. Cambios en el club</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cambio</th>
+<th>Qué hacer</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nueva junta o nuevo presidente</td>
+<td>Acta de asamblea, aceptación de cargos, comunicación al registro, cambio de firmas en el banco y en la federación</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="even">
+<td>Modificación de estatutos</td>
+<td>Acuerdo de asamblea con la mayoría de los estatutos e inscripción en el registro</td>
+<td><span class="tag adm">Requisito administrativo</span></td>
+</tr>
+<tr class="odd">
+<td>Nueva modalidad</td>
+<td>Revisar el objeto social y dar de alta en la federación correspondiente</td>
+<td><span class="tag fed">Requisito federativo</span></td>
+</tr>
+<tr class="even">
+<td>Cambio de domicilio</td>
+<td>Comunicarlo al registro y a la Agencia Tributaria</td>
+<td><span class="tag adm">Requisito administrativo</span> / <span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Disolución</td>
+<td>Según los estatutos y la normativa autonómica, con liquidación y destino del patrimonio</td>
+<td><span class="tag legal">Obligación legal</span> — <span class="tag prof">Requiere profesional</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="9-subvenciones">9. Subvenciones</h3>
+<p>Muchas subvenciones deportivas exigen estar inscrito en el registro autonómico, estar al corriente con Hacienda y la Seguridad Social y justificar el gasto con facturas a nombre del club. Guarda todo con esa lógica desde el primer día. <strong><span class="tag adm">Requisito administrativo</span></strong> (según las bases de cada convocatoria)</p>
+<h3 id="10-errores-frecuentes">10. Errores frecuentes</h3>
+<ul>
+<li><strong>No celebrar la asamblea</strong> y no tener cuentas aprobadas cuando hay que justificar una subvención.</li>
+<li><strong>Creer que “sin ánimo de lucro” significa “sin impuestos”.</strong></li>
+<li><strong>Mezclar el dinero del club con el del entrenador o el presidente.</strong></li>
+<li><strong>Cambiar de presidente sin comunicarlo al registro</strong>; el banco y la federación seguirán con los datos viejos.</li>
+<li><strong>Pagar al entrenador en efectivo “como voluntario”</strong> cuando en realidad es un trabajo («personal del club»).</li>
+</ul>
+<h3 id="11-caso-pr-ctico">11. Caso práctico</h3>
+<p><em>Supongamos que</em> un club de judo con 150 socios ingresa al año 60.000 euros en cuotas, 8.000 euros de un campus de verano abierto a no socios y 3.000 euros de un patrocinador local.</p>
+<ul>
+<li>Las cuotas pueden ser rentas exentas del objeto social.</li>
+<li>El campus y el patrocinio pueden ser rentas de actividades económicas no exentas: superan los 2.000 euros, así que <strong>no se cumple</strong> la segunda condición de la dispensa y el club tendría que declarar el Impuesto sobre Sociedades.</li>
+<li>Además hay que revisar el IVA del patrocinio y del campus. <strong><span class="tag prof">Requiere profesional</span></strong></li>
+</ul>
+<h3 id="12-checklist-anual">12. Checklist anual</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Asamblea ordinaria celebrada</td>
+<td>Presidencia</td>
+<td>Acta firmada</td>
+</tr>
+<tr class="even">
+<td>Cuentas y presupuesto aprobados</td>
+<td>Tesorería</td>
+<td>Documentos anexos al acta</td>
+</tr>
+<tr class="odd">
+<td>Relación de socios actualizada</td>
+<td>Secretaría</td>
+<td>Registro de socios</td>
+</tr>
+<tr class="even">
+<td>Cambios comunicados al registro</td>
+<td>Secretaría</td>
+<td>Justificante</td>
+</tr>
+<tr class="odd">
+<td>Revisión de la obligación de declarar el Impuesto sobre Sociedades</td>
+<td>Tesorería</td>
+<td>Nota o declaración presentada</td>
+</tr>
+<tr class="even">
+<td>Revisión de IVA y retenciones</td>
+<td>Tesorería / asesoría</td>
+<td>Declaraciones o nota</td>
+</tr>
+<tr class="odd">
+<td>Renovaciones de temporada (licencias, seguros, certificados, protocolo)</td>
+<td>Secretaría</td>
+<td>Listado con fechas</td>
+</tr>
+<tr class="even">
+<td>Borrado de datos de fin de temporada</td>
+<td>Secretaría</td>
+<td>Registro de borrados</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-qu-cambia-seg-n-el-territorio">13. Qué cambia según el territorio</h3>
+<p>Qué libros exige el registro, cómo se comunican los cambios, plazos y tasas, y si hay tributos o requisitos autonómicos propios. ficha territorial.</p>
+<h3 id="14-cu-ndo-pedir-ayuda">14. Cuándo pedir ayuda</h3>
+<ul>
+<li>Ingresos por actividades económicas relevantes (veladas, campus, bar, tienda).</li>
+<li>Personal que cobra.</li>
+<li>Quieres aplicar la Ley 49/2002 o la exención de IVA.</li>
+<li>Has recibido un requerimiento de Hacienda o del registro.</li>
+</ul>
+<h3 id="15-fuentes-comentadas">15. Fuentes comentadas</h3>
+<ul>
+<li><strong>LO 1/2002, arts. 11.3 y 14.</strong> <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-5852">BOE</a></li>
+<li><strong>Agencia Tributaria — Entidades parcialmente exentas.</strong> Umbrales de dispensa de declaración. <a href="https://sede.agenciatributaria.gob.es/Sede/impuesto-sobre-sociedades/tienes-que-presentar-declaracion-impuesto-sociedades/entidades-parcialmente-exentas.html">AEAT</a></li>
+<li><strong>Ley 37/1992 del IVA, art. 20.Uno.13º y 20.Tres.</strong> <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1992-28740">BOE</a></li>
+<li><strong>Ley 49/2002.</strong> <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-25039">BOE</a></li>
+</ul>
+<h3 id="16-verificado-hasta-y-comprueba-justo-antes-de-actuar">16. Verificado hasta y comprueba justo antes de actuar</h3>
+<p><strong>Verificado hasta:</strong> 22/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong> umbrales y modelos de la Agencia Tributaria del ejercicio; requisitos del registro autonómico para comunicar cambios; bases de cada subvención.</p>
+</section><section class="chapter" id="chapter-3"><header class="chapter-head"><span class="chapter-label">Tema 03</span><h2 class="chapter-title">Personal técnico, voluntariado y profesiones del deporte</h2><p class="chapter-deck">Quién puede entrenar en tu club, en qué condiciones, y dónde está la frontera entre voluntario, profesional autónomo y trabajador.</p></header><h3 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h3>
+<ul>
+<li><strong>En varias comunidades autónomas, entrenar, monitorizar o dirigir actividad deportiva es una profesión regulada:</strong> exige una titulación o cualificación concreta y, en algunas, la inscripción en un registro. <strong><span class="tag legal">Obligación legal</span></strong> donde exista — ficha territorial.</li>
+<li><strong>El voluntariado no cobra.</strong> Solo se le pueden reembolsar gastos. Si hay pago por el trabajo, no es voluntariado. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Cualquier persona con trato habitual con menores</strong>, cobre o no, debe acreditar el certificado negativo de delitos sexuales («menores»). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Cada persona que colabora con el club tiene que tener una relación definida:</strong> voluntaria, autónoma con contrato o trabajadora. Sin definir, el riesgo es del club. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+</ul>
+<h3 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h3>
+<p>Los clubes de contacto funcionan con una mezcla de personas: el entrenador principal, ayudantes, exalumnos que echan una mano, árbitros, médicos de velada, montadores. Cada una puede estar en una situación jurídica distinta. Esta guía te ayuda a clasificar cada relación y a cumplir los requisitos de titulación de tu comunidad.</p>
+<h3 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h3>
+<p>Juntas directivas, entrenadores que colaboran con clubes y organizadores de eventos.</p>
+<h3 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h3>
+<p><strong>Para cada persona: ¿qué hace, con qué titulación, y qué relación tiene con el club?</strong></p>
+<h3 id="4-las-profesiones-del-deporte-por-comunidad">4. Las profesiones del deporte por comunidad</h3>
+<p>Según el Consejo General de COLEF (fuente secundaria cualificada), han regulado el ejercicio de las profesiones del deporte, al menos, estas comunidades:</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Comunidad</th>
+<th>Norma citada</th>
+<th>Estado en esta guía</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cataluña</td>
+<td>Ley 3/2008 (y Ley 7/2015)</td>
+<td>Localizada; contenido <span class="pending">PENDIENTE DE VERIFICACIÓN</span> (T09)</td>
+</tr>
+<tr class="even">
+<td>La Rioja</td>
+<td>Ley 1/2015</td>
+<td><span class="pending">PENDIENTE DE VERIFICACIÓN</span> (T17)</td>
+</tr>
+<tr class="odd">
+<td>Extremadura</td>
+<td>Ley 15/2015</td>
+<td>Localizada en el BOE; contenido PENDIENTE (T11)</td>
+</tr>
+<tr class="even">
+<td>Andalucía</td>
+<td>Ley 5/2016</td>
+<td>Las fuentes secundarias discrepan sobre su aplicación efectiva; PENDIENTE (T01)</td>
+</tr>
+<tr class="odd">
+<td>Comunidad de Madrid</td>
+<td>Ley 6/2016 (modificada por Ley 1/2019)</td>
+<td>Localizada en el BOE; contenido PENDIENTE (T13)</td>
+</tr>
+<tr class="even">
+<td>Región de Murcia</td>
+<td>Ley 3/2018</td>
+<td>PENDIENTE (T14)</td>
+</tr>
+<tr class="odd">
+<td>Castilla y León</td>
+<td>Ley 3/2019</td>
+<td>PENDIENTE (T08)</td>
+</tr>
+<tr class="even">
+<td>Navarra</td>
+<td>Ley Foral 18/2019 (modificada)</td>
+<td>Registro de profesionales activo según el portal oficial (T15)</td>
+</tr>
+<tr class="odd">
+<td>País Vasco</td>
+<td>Ley 8/2022</td>
+<td>PENDIENTE (T16)</td>
+</tr>
+<tr class="even">
+<td>Comunitat Valenciana</td>
+<td>Ley 2/2022</td>
+<td>PENDIENTE (T10)</td>
+</tr>
+</tbody>
+</table>
+<p>En el resto de comunidades no se ha localizado una ley específica en esta revisión. Eso no significa que no existan requisitos: la federación puede exigir titulación para dirigir en competición, y el ayuntamiento o el titular del recinto pueden pedir cualificaciones. <strong><span class="tag fed">Requisito federativo</span></strong> / <strong><span class="tag rec">Recinto / municipio</span></strong></p>
+<p><strong>Qué suelen regular estas leyes:</strong> qué profesiones existen (monitor, entrenador, director deportivo, preparador físico, profesor de educación física), qué titulación da acceso a cada una, excepciones o regímenes transitorios y, en algunas, obligación de registro o de seguro de responsabilidad civil. Consulta el detalle en tu ficha territorial.</p>
+<h3 id="5-voluntario-aut-nomo-o-trabajador">5. Voluntario, autónomo o trabajador</h3>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Figura</th>
+<th>Qué la define</th>
+<th>Qué necesita el club</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Voluntario</strong></td>
+<td>Actividad libre, solidaria, sin contraprestación económica o material, solo con reembolso de gastos, dentro de un programa de la entidad</td>
+<td>Acuerdo de incorporación por escrito, seguro, certificado si hay menores</td>
+<td><span class="tag legal">Obligación legal</span> (Ley 45/2015 o ley autonómica)</td>
+</tr>
+<tr class="even">
+<td><strong>Profesional autónomo</strong></td>
+<td>Presta un servicio con organización propia y factura al club</td>
+<td>Contrato de servicios, factura, comprobación de titulación y seguro de RC si lo exige la ley autonómica</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Trabajador por cuenta ajena</strong></td>
+<td>Trabaja de forma regular, dentro de la organización y bajo la dirección del club, a cambio de salario</td>
+<td>Contrato laboral, alta en la Seguridad Social, nómina</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Deportista profesional</strong></td>
+<td>Se dedica regularmente a practicar deporte por cuenta y bajo la dirección de un club a cambio de retribución (RD 1006/1985)</td>
+<td>Relación laboral especial</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Frontera práctica:</strong> si una persona da clases fijas con horario del club, recibe una cantidad mensual y no tiene organización propia, es muy probable que la relación sea laboral aunque se le llame “voluntario” o “colaborador”. Pagar “en concepto de gastos” una cantidad fija que no responde a gastos reales es un riesgo. <strong><span class="tag prof">Requiere profesional</span></strong> para clasificar casos concretos.</p>
+<p><strong>Actuaciones aisladas:</strong> el RD 1006/1985 excluye de la relación laboral especial las actuaciones aisladas de un deportista para un organizador de espectáculos, aunque siguen teniendo carácter laboral. Es relevante para las bolsas de una velada («participantes», «deportistas extranjeros»). <strong><span class="tag prof">Requiere profesional</span></strong></p>
+<h3 id="6-voluntariado-bien-hecho">6. Voluntariado bien hecho</h3>
+<ul>
+<li><strong>Ley aplicable:</strong> la Ley 45/2015 si el programa es de ámbito estatal o supraautonómico; si no, la ley autonómica de voluntariado. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Acuerdo de incorporación por escrito</strong> con funciones, derechos, deberes y duración. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Seguro</strong> adecuado a la actividad («seguros»). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Certificado negativo</strong> si hay contacto habitual con menores («menores»). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Solo gastos reales y justificados.</strong> <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>El voluntariado no sustituye al trabajo retribuido.</strong> <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ul>
+<h3 id="7-procedimiento-para-incorporar-a-una-persona">7. Procedimiento para incorporar a una persona</h3>
+<ol type="1">
+<li>Define la función (qué hará, con quién, cuántas horas).</li>
+<li>Comprueba la titulación exigida en tu comunidad para esa función (ficha territorial) y en tu federación.</li>
+<li>Decide la relación (voluntaria, autónoma o laboral) según la realidad, no según el coste.</li>
+<li>Firma el documento correspondiente.</li>
+<li>Pide el certificado negativo si habrá trato habitual con menores.</li>
+<li>Revisa el seguro («seguros»).</li>
+<li>Registra: función, titulación, relación, certificado, seguro y fechas. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+</ol>
+<h3 id="8-errores-frecuentes">8. Errores frecuentes</h3>
+<ul>
+<li><strong>Entrenadores sin la titulación exigida</strong> en comunidades con profesión regulada.</li>
+<li><strong>“Voluntarios” con pago fijo mensual.</strong></li>
+<li><strong>Autónomos que en la práctica son trabajadores</strong> del club.</li>
+<li><strong>No pedir el certificado negativo a voluntarios.</strong></li>
+<li><strong>Árbitros y jueces pagados sin factura ni nómina</strong> en una velada.</li>
+</ul>
+<h3 id="9-caso-pr-ctico">9. Caso práctico</h3>
+<p><em>Supongamos que</em> un club de taekwondo de la Comunidad de Madrid tiene tres personas: un entrenador titulado que cobra 800 euros al mes con horario fijo, una exalumna que ayuda dos tardes y recibe 100 euros “para gasolina” y un preparador físico autónomo que factura por sesiones.</p>
+<ul>
+<li><strong>Entrenador:</strong> con horario, dirección del club y salario fijo, lo razonable es una relación laboral. Además, al estar en una comunidad con ley de profesiones del deporte, hay que comprobar que su titulación le habilita para la función.</li>
+<li><strong>Exalumna:</strong> si los 100 euros no corresponden a gastos reales, no es voluntariado. Hay que regularizar o reembolsar solo gastos justificados, con acuerdo de incorporación, seguro y certificado.</li>
+<li><strong>Preparador:</strong> autónomo con contrato y factura, con titulación comprobada.</li>
+</ul>
+<p><strong><span class="tag prof">Requiere profesional</span></strong> para la regularización.</p>
+<h3 id="10-checklist-por-persona">10. Checklist por persona</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Campo</th>
+<th>Comprobado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Función y horario</td>
+<td>☐</td>
+</tr>
+<tr class="even">
+<td>Titulación exigida en la comunidad y en la federación</td>
+<td>☐</td>
+</tr>
+<tr class="odd">
+<td>Relación jurídica y documento firmado</td>
+<td>☐</td>
+</tr>
+<tr class="even">
+<td>Certificado negativo (si hay menores)</td>
+<td>☐</td>
+</tr>
+<tr class="odd">
+<td>Seguro</td>
+<td>☐</td>
+</tr>
+<tr class="even">
+<td>Inscripción en el registro profesional (si la comunidad lo exige)</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h3 id="11-qu-cambia-seg-n-el-territorio">11. Qué cambia según el territorio</h3>
+<p>Mucho: qué profesiones están reguladas, qué titulaciones sirven, si hay registro, regímenes transitorios, seguros y la ley de voluntariado aplicable. ficha territorial.</p>
+<h3 id="12-cu-ndo-pedir-ayuda">12. Cuándo pedir ayuda</h3>
+<ul>
+<li>No sabes si tus colaboradores son voluntarios, autónomos o trabajadores.</li>
+<li>Tu entrenador principal no tiene la titulación que exige la ley de tu comunidad.</li>
+<li>Pagas bolsas o premios a deportistas.</li>
+<li>Organizas un campus o evento con personal temporal.</li>
+</ul>
+<h3 id="13-fuentes-comentadas">13. Fuentes comentadas</h3>
+<ul>
+<li><strong>Consejo COLEF — Regulaciones autonómicas del ejercicio profesional.</strong> Listado de leyes por comunidad (secundaria cualificada). <a href="https://www.consejo-colef.es/regulacion-autonomica">COLEF</a></li>
+<li><strong>Ley 45/2015 de Voluntariado.</strong> Definición sin contraprestación y con gastos reembolsables (art. 3.1), límites (art. 4), voluntariado deportivo (art. 6.1.e), acuerdo de incorporación (art. 12), menores (art. 8.4), seguro (art. 14). <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-11072">BOE</a></li>
+<li><strong>RD 1006/1985.</strong> Relación laboral especial de deportistas profesionales (art. 1). <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-12313">BOE</a></li>
+<li><strong>Ley 6/2016 (Madrid)</strong> y <strong>Ley 15/2015 (Extremadura)</strong> en el BOE: <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2017-3069">Madrid</a> · <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-5489">Extremadura</a></li>
+</ul>
+<h3 id="14-verificado-hasta-y-comprueba-justo-antes-de-actuar">14. Verificado hasta y comprueba justo antes de actuar</h3>
+<p><strong>Verificado hasta:</strong> 22/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong> la ley de profesiones de tu comunidad y su régimen transitorio (ficha territorial); los requisitos de titulación de tu federación; la ley de voluntariado aplicable.</p>
+</section><section class="chapter" id="chapter-4"><header class="chapter-head"><span class="chapter-label">Tema 04</span><h2 class="chapter-title">Menores y entorno seguro</h2><p class="chapter-deck">Qué tiene que tener en marcha un club de deportes de contacto que entrena o compite con menores, y cómo organizarlo sin convertirlo en papel mojado.</p></header><h3 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h3>
+<p>Si tu club tiene grupos de menores de forma regular, estas cuatro cosas no son opcionales:</p>
+<ol type="1">
+<li><strong>Certificado negativo del Registro Central de Delincuentes Sexuales</strong> de todas las personas que tienen trato habitual con los menores, cobren o no. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Un protocolo de actuación</strong> frente a la violencia, aplicado y revisado. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Una persona designada como Delegado o Delegada de protección</strong>, conocida por los chicos y chicas y por las familias. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Saber qué hacer si alguien detecta indicios de violencia</strong>: comunicarlo de inmediato a quien corresponde. <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ol>
+<p>Todo lo demás de esta guía sirve para que esas cuatro piezas funcionen de verdad en un gimnasio donde hay contacto físico, pesajes, vestuarios, viajes y redes sociales.</p>
+<h3 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h3>
+<p>Un club de boxeo, kick, muay thai, judo, lucha o MMA con grupos infantiles y juveniles tiene una particularidad que no tiene un club de ajedrez: el contacto físico forma parte del deporte. Se corrige una guardia tocando el brazo, se hace un pesaje, se comparte tatami y vestuario, se viaja a campeonatos. Eso no es un problema en sí mismo, pero obliga a que las reglas del club sean claras y conocidas, precisamente para que el contacto normal del deporte no se confunda con otra cosa y para que cualquier abuso se detecte pronto.</p>
+<p>Esta guía te ayuda a:</p>
+<ul>
+<li>saber si tu entidad está dentro del supuesto de “actividad habitual con menores”;</li>
+<li>poner en marcha las obligaciones legales mínimas y documentarlas;</li>
+<li>traducirlas a normas concretas de sala, pesaje, vestuario, viajes y comunicación;</li>
+<li>separar bien tres autorizaciones que se suelen mezclar: participar, tratar datos y usar la imagen;</li>
+<li>reaccionar correctamente si aparece una sospecha o una revelación.</li>
+</ul>
+<h3 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h3>
+<ul>
+<li>Juntas directivas de clubes y escuelas con deportistas menores.</li>
+<li>Entrenadores, monitores, árbitros, jueces y voluntarios que trabajan con ellos.</li>
+<li>Organizadores de eventos, interclubs y campeonatos con categorías de menores.</li>
+<li>Federaciones que quieren dar a sus clubes un marco común.</li>
+</ul>
+<h3 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h3>
+<p>La pregunta de partida es sencilla: <strong>¿tu entidad realiza actividad deportiva con menores de forma habitual?</strong></p>
+<ul>
+<li>Si tienes clases, entrenamientos o equipos con menores durante la temporada, la respuesta es sí. Las obligaciones del artículo 48 de la LOPIVI se aplican a tu entidad. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Si organizas un evento puntual donde participan menores de otros clubes, tu entidad puede no ser “habitual”, pero los clubes de esos menores sí lo son, y el evento debe ser coherente con sus protocolos. Además, las personas de tu organización que vayan a tener trato directo y continuado con ellos durante el evento plantean la cuestión del certificado (ver apartado 5.1). <strong>[Recomendación KOMBAX: tratar el evento con el mismo estándar]</strong></li>
+</ul>
+<p>La ley no da una cifra de sesiones a partir de la cual algo es “habitual”. Ante la duda, trabaja como si lo fuera: el coste es bajo y el riesgo de quedarte corto es alto. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></p>
+<h3 id="4-el-marco-que-se-aplica">4. El marco que se aplica</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué te exige o te protege</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ley Orgánica 8/2021 (LOPIVI), art. 48</strong></td>
+<td>Las entidades que realizan de forma habitual actividades deportivas o de ocio con menores deben aplicar protocolos de actuación, implantar un sistema de monitorización de su cumplimiento, designar un Delegado o Delegada de protección, evitar que la práctica sea escenario de discriminación y fomentar la participación de los propios menores</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>LOPIVI, art. 57</strong></td>
+<td>Quien accede a profesiones, oficios o actividades que implican contacto habitual con menores, retribuidas o no, debe acreditar mediante certificación negativa del Registro Central de Delincuentes Sexuales que no tiene condenas por delitos contra la libertad e indemnidad sexuales ni por trata de seres humanos</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>LOPIVI, arts. 15 y 16</strong></td>
+<td>Toda persona que advierta indicios de violencia sobre un menor debe comunicarlo de inmediato; el deber es especialmente exigible a quien, por su actividad, tiene encomendado su cuidado, enseñanza o protección</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Ley 39/2022 del Deporte, art. 7</strong></td>
+<td>La práctica deportiva de menores debe ser proporcional a su desarrollo y capacidades; las entidades deben garantizar el cumplimiento de la LOPIVI</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 45/2015 de Voluntariado, art. 8.4</strong></td>
+<td>Los voluntarios en programas con contacto habitual con menores deben aportar certificación negativa por delitos sexuales y de trata</td>
+<td><span class="tag legal">Obligación legal</span> (ley estatal; ver 5.1 sobre leyes autonómicas)</td>
+</tr>
+<tr class="even">
+<td><strong>LO 1/1982, art. 3, y LO 1/1996, art. 4</strong></td>
+<td>Reglas de consentimiento para la imagen de menores y límites que el consentimiento no salva</td>
+<td><span class="tag legal">Obligación legal</span> (ver apartado 7)</td>
+</tr>
+<tr class="odd">
+<td><strong>LOPDGDD (LO 3/2018), art. 7</strong></td>
+<td>Un menor puede consentir el tratamiento de sus datos a partir de los 14 años cuando la base jurídica sea el consentimiento</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Protocolos autonómicos y federativos</strong></td>
+<td>Varias comunidades y federaciones han aprobado protocolos marco o trámites propios (adhesión, inscripción del protocolo, modelos)</td>
+<td><span class="tag adm">Requisito administrativo</span> / <span class="tag fed">Requisito federativo</span> — ver ficha territorial de tu comunidad</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-procedimiento-paso-a-paso">5. Procedimiento paso a paso</h3>
+<h3 id="el-certificado-negativo-persona-a-persona">5.1 El certificado negativo, persona a persona</h3>
+<p><strong>Quién lo necesita.</strong> Toda persona cuya actividad en el club implique trato repetido, directo y regular con menores, no meramente ocasional: entrenadores, monitores, ayudantes, preparadores físicos, fisioterapeutas del club, árbitros y jueces que actúan de forma continuada con categorías de menores, conductores habituales de los desplazamientos, voluntarios. Cobrar o no cobrar no cambia nada. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p><strong>Cómo se obtiene.</strong> Lo expide el Ministerio de Justicia. Es gratuito y se puede solicitar por internet con Cl@ve o certificado electrónico, o de forma presencial. Las entidades cuya actividad implica contacto habitual con menores pueden obtener los certificados de su personal y candidatos con autorización expresa de cada persona, a través del servicio que habilita el Ministerio (la autorización es revocable). <strong><span class="tag adm">Requisito administrativo</span></strong></p>
+<p><strong>Personas de otra nacionalidad.</strong> Según la sede del Ministerio, para ciudadanos de la UE se recaban los antecedentes de España y de su país de nacionalidad. Para otras nacionalidades, <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong>: consulta en la sede electrónica del Ministerio de Justicia qué documentación adicional se exige antes de incorporar a esa persona.</p>
+<p><strong>Cada cuánto renovarlo.</strong> La ley exige acreditarlo para el acceso y el ejercicio. La norma estatal consultada no fija una periodicidad de renovación para clubes. <strong><span class="tag kx">Recomendación KOMBAX</span></strong>: pedirlo al incorporar a cada persona y renovarlo al inicio de cada temporada, dejando constancia de la fecha de comprobación.</p>
+<p><strong>Qué guardar.</strong> No necesitas archivar copias indefinidamente. Lo que sí necesitas es poder demostrar que comprobaste a cada persona antes de que empezara y cuándo. <strong><span class="tag kx">Recomendación KOMBAX</span></strong>: un registro con nombre, función, fecha de comprobación y fecha de la próxima renovación, con acceso restringido a la junta y al Delegado o Delegada de protección. La guía «datos e imagen» explica cómo tratar estos datos.</p>
+<blockquote>
+<p><strong>Punto de atención.</strong> La ley estatal de voluntariado se aplica a programas de ámbito estatal o supraautonómico; las comunidades autónomas tienen sus propias leyes de voluntariado. Con independencia de cuál aplique, el artículo 57 de la LOPIVI alcanza también a la actividad no retribuida.</p>
+</blockquote>
+<h3 id="el-delegado-o-delegada-de-protección">5.2 El Delegado o Delegada de protección</h3>
+<p><strong>Qué hace, según la ley.</strong> Es la persona a la que los menores pueden acudir para expresar sus inquietudes, se encarga de difundir y hacer cumplir los protocolos y de iniciar las comunicaciones pertinentes cuando se detecta una situación de violencia. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p><strong>Qué perfil necesita.</strong> En la normativa estatal consultada no hemos localizado requisitos de titulación específicos para esta figura en el ámbito deportivo. <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong>: algunas comunidades y federaciones concretan formación o perfil. Consulta la ficha territorial de tu comunidad y la normativa de tu federación.</p>
+<p><strong>Criterios prácticos para elegirla.</strong> <strong><span class="tag bp">Buena práctica</span></strong></p>
+<ul>
+<li>Que sea accesible: que los chicos y chicas la conozcan por su nombre y sepan cómo contactar con ella sin pasar por su entrenador.</li>
+<li>Que tenga autonomía suficiente para comunicar una sospecha aunque afecte a alguien de la junta o al entrenador principal.</li>
+<li>Que tenga formación en protección de la infancia y la actualice.</li>
+<li>Que su contacto esté publicado en el club (tablón, web, grupo de familias) y en el material de inicio de temporada.</li>
+</ul>
+<p>En clubes pequeños es habitual que el delegado sea alguien de la junta. Funciona si esa persona no es a la vez quien dirige todos los entrenamientos de menores: si la única vía de queja pasa por la persona de la que quizá quieras quejarte, la figura no cumple su función. <strong><span class="tag bp">Buena práctica</span></strong></p>
+<h3 id="el-protocolo-qué-debe-contener-para-que-sirva">5.3 El protocolo: qué debe contener para que sirva</h3>
+<p>La ley exige aplicar protocolos de actuación. Muchas federaciones y comunidades han publicado protocolos marco que los clubes pueden adoptar o adaptar. Si tu federación o tu comunidad tiene uno, empieza por ahí: adoptarlo te asegura coherencia con quien organiza las competiciones. <strong>[Requisito federativo / administrativo, según el caso]</strong></p>
+<p>Un protocolo útil para un club de contacto responde, como mínimo, a estas preguntas: <strong><span class="tag bp">Buena práctica</span></strong></p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Ejemplo de respuesta que funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¿Qué conductas no se aceptan, de nadie?</td>
+<td>Lista concreta: humillaciones, castigos físicos, comentarios sobre el cuerpo o el peso, mensajes privados fuera de canales del club, etc.</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se corrige la técnica cuando implica tocar?</td>
+<td>Se explica antes lo que se va a hacer, en zonas técnicas y a la vista del grupo</td>
+</tr>
+<tr class="odd">
+<td>¿Quién puede estar en el vestuario?</td>
+<td>Ningún adulto a solas con un menor; normas para los grupos mixtos y para el uso de móviles</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se hacen los pesajes?</td>
+<td>Con ropa adecuada, en espacio reservado, con dos adultos presentes y sin fotos</td>
+</tr>
+<tr class="odd">
+<td>¿Cómo se comunica el club con los menores?</td>
+<td>Por canales grupales del club, con familias informadas; nada de mensajería privada uno a uno</td>
+</tr>
+<tr class="even">
+<td>¿Qué pasa en los viajes?</td>
+<td>Autorizaciones, reparto de habitaciones, ratio de adultos, adultos de ambos sexos cuando el grupo es mixto</td>
+</tr>
+<tr class="odd">
+<td>¿Qué hace quien detecta algo?</td>
+<td>A quién se dirige, en qué plazo, qué no debe hacer (interrogar, confrontar, prometer secreto)</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se revisa el protocolo?</td>
+<td>Quién comprueba que se cumple (la “monitorización” que exige la ley), cada cuánto y cómo se deja constancia</td>
+</tr>
+</tbody>
+</table>
+<h3 id="la-monitorización-la-parte-que-casi-todos-olvidan">5.4 La monitorización: la parte que casi todos olvidan</h3>
+<p>El artículo 48 no se conforma con tener un protocolo: exige un sistema para comprobar que se cumple. <strong><span class="tag legal">Obligación legal</span></strong> La ley no dice cómo tiene que ser ese sistema. Una forma sencilla y demostrable: <strong>[Plantilla de trabajo KOMBAX]</strong></p>
+<ul>
+<li>Revisión trimestral por parte del Delegado o Delegada: certificados al día, formación del personal, incidencias recibidas, cambios de instalaciones o de horarios que afecten a vestuarios o a supervisión.</li>
+<li>Una breve acta de cada revisión, archivada.</li>
+<li>Revisión anual del protocolo con la junta, incorporando lo aprendido.</li>
+</ul>
+<h3 id="cuando-aparece-una-sospecha-o-una-revelación">5.5 Cuando aparece una sospecha o una revelación</h3>
+<p>El deber de comunicar es inmediato y alcanza a cualquier persona que advierta indicios. Para entrenadores y monitores es especialmente exigible. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p>Lo que conviene tener decidido de antemano: <strong><span class="tag bp">Buena práctica</span></strong></p>
+<ol type="1">
+<li><strong>Escuchar sin interrogar.</strong> Dejar que el menor cuente lo que quiera, sin preguntas sugestivas, sin juzgar y sin prometer que se guardará el secreto.</li>
+<li><strong>Proteger.</strong> Si hay riesgo inmediato, garantizar su seguridad y llamar al 112.</li>
+<li><strong>Comunicar.</strong> Informar al Delegado o Delegada de protección y seguir el circuito del protocolo. Según la situación, la comunicación irá a los servicios sociales, a las fuerzas y cuerpos de seguridad o a la fiscalía. <strong><span class="tag prof">Requiere profesional</span></strong> si hay dudas sobre el destinatario.</li>
+<li><strong>Anotar.</strong> Escribir lo antes posible lo que se ha oído o visto, con fecha y hora, sin interpretaciones.</li>
+<li><strong>No investigar por cuenta propia</strong> ni confrontar a la persona señalada. Eso corresponde a quien tiene competencia para hacerlo.</li>
+<li><strong>Preservar la confidencialidad</strong> y limitar la información a quien la necesita.</li>
+</ol>
+<p>El protocolo de tu federación o de tu comunidad puede fijar un circuito concreto y teléfonos de referencia. Tenlos a mano en el propio protocolo del club.</p>
+<h3 id="6-adaptar-la-pr-ctica-deportiva-al-menor">6. Adaptar la práctica deportiva al menor</h3>
+<p>La Ley del Deporte exige que la práctica de los menores sea proporcional a su desarrollo personal y a sus capacidades físicas, psíquicas y emocionales. <strong><span class="tag legal">Obligación legal</span></strong> En deportes de contacto, eso se concreta sobre todo en las normas de cada federación: categorías de edad y peso, tiempos de asalto, protecciones obligatorias, tipo de contacto permitido, reconocimientos médicos. <strong><span class="tag fed">Requisito federativo</span></strong></p>
+<p>Lo que el club controla directamente: <strong><span class="tag bp">Buena práctica</span></strong></p>
+<ul>
+<li><strong>Peso.</strong> No fomentar bajadas rápidas de peso para dar una categoría. No comentar el peso o el cuerpo delante del grupo.</li>
+<li><strong>Sparring.</strong> Emparejamientos por nivel y peso, con intensidad pactada y supervisión.</li>
+<li><strong>Golpes en la cabeza y conmociones.</strong> Retirar de la actividad ante cualquier síntoma y no volver sin valoración médica. La guía «salud y seguridad» desarrolla este punto.</li>
+<li><strong>Carga de entrenamiento.</strong> Coherente con la edad, sin que la competición condicione todo.</li>
+</ul>
+<h3 id="7-participar-tratar-datos-y-usar-la-imagen-tres-autorizaciones-distintas">7. Participar, tratar datos y usar la imagen: tres autorizaciones distintas</h3>
+<p>Este es el error más frecuente de la antigua versión de muchas hojas de inscripción: una sola firma para todo.</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Autorización</th>
+<th>Para qué sirve</th>
+<th>Quién la da</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Participación</strong></td>
+<td>Que el menor entrene, compita o viaje con el club</td>
+<td>Madre, padre o tutor legal (y, según la edad, con la opinión del propio menor)</td>
+</tr>
+<tr class="even">
+<td><strong>Datos personales</strong></td>
+<td>Tratar sus datos para gestionar la actividad (inscripción, licencia, salud imprescindible)</td>
+<td>Casi siempre la base no es el consentimiento sino la propia relación con el club; cuando sí lo sea, desde los 14 años puede consentir el propio menor. Ver guía «datos e imagen»</td>
+</tr>
+<tr class="odd">
+<td><strong>Imagen</strong></td>
+<td>Fotografiar o grabar y, sobre todo, <strong>publicar</strong></td>
+<td>Si el menor tiene madurez suficiente, él mismo; si no, su representante legal por escrito, con conocimiento previo del Ministerio Fiscal según la LO 1/1982</td>
+</tr>
+</tbody>
+</table>
+<p>Dos reglas que no admiten atajos: <strong><span class="tag legal">Obligación legal</span></strong></p>
+<ul>
+<li>Cualquier uso de la imagen o el nombre de un menor en medios que pueda perjudicar su honra o reputación, o que sea contrario a sus intereses, es una intromisión ilegítima <strong>aunque haya consentimiento</strong> del menor o de su familia (LO 1/1996, art. 4.3).</li>
+<li>Autorizar la participación no autoriza la publicación. Son finalidades distintas.</li>
+</ul>
+<p><strong><span class="tag kx">Recomendación KOMBAX</span></strong> para redes del club: publicar imágenes de grupo antes que individuales, evitar nombre completo más cara más localización, no publicar nunca pesajes, vestuarios, lesiones ni momentos de derrota que puedan exponer al menor, y retirar de inmediato cualquier imagen cuando lo pida la familia o el propio menor.</p>
+<p>En eventos, las familias pueden hacer fotos para uso personal. Publicarlas en redes abiertas ya es otra cosa y requiere el consentimiento de las personas que aparecen, según la AEPD. Es buena práctica avisarlo con carteles en el evento. <strong><span class="tag bp">Buena práctica</span></strong> (criterio AEPD)</p>
+<h3 id="8-documentaci-n-qu-es-obligatorio-y-qu-depende">8. Documentación: qué es obligatorio y qué depende</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Documento</th>
+<th>Estado</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Registro de certificados negativos comprobados (persona, función, fecha)</td>
+<td>Imprescindible para demostrar el cumplimiento</td>
+<td><span class="tag legal">Obligación legal</span> (la acreditación) + <span class="tag kx">Recomendación KOMBAX</span> (el formato)</td>
+</tr>
+<tr class="even">
+<td>Protocolo de actuación aprobado por la entidad</td>
+<td>Obligatorio</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Designación del Delegado o Delegada de protección y su difusión</td>
+<td>Obligatorio</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Actas de monitorización del protocolo</td>
+<td>Forma de demostrar el sistema de monitorización</td>
+<td><span class="tag legal">Obligación legal</span> (el sistema) + <span class="tag kx">Recomendación KOMBAX</span> (las actas)</td>
+</tr>
+<tr class="odd">
+<td>Código de conducta para personal, familias y deportistas</td>
+<td>Recomendable; algunos protocolos autonómicos o federativos lo piden</td>
+<td><span class="tag bp">Buena práctica</span> / ver ficha territorial</td>
+</tr>
+<tr class="even">
+<td>Autorizaciones de participación, datos e imagen separadas</td>
+<td>Necesarias para operar con orden</td>
+<td><span class="tag legal">Obligación legal</span> en lo relativo a imagen y datos</td>
+</tr>
+<tr class="odd">
+<td>Adhesión o inscripción del protocolo ante la administración o la federación</td>
+<td>Depende de la comunidad y la federación</td>
+<td><span class="tag adm">Requisito administrativo</span> / <span class="tag fed">Requisito federativo</span></td>
+</tr>
+<tr class="even">
+<td>Registro de formación del personal en protección</td>
+<td>Recomendable y útil como evidencia</td>
+<td><span class="tag bp">Buena práctica</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="9-qui-n-interviene">9. Quién interviene</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quién</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Junta directiva</td>
+<td>Aprueba el protocolo, designa al delegado, garantiza los certificados</td>
+</tr>
+<tr class="even">
+<td>Delegado o Delegada de protección</td>
+<td>Punto de contacto, difusión, cumplimiento y comunicaciones</td>
+</tr>
+<tr class="odd">
+<td>Personal técnico y voluntariado</td>
+<td>Cumplir el protocolo y comunicar indicios</td>
+</tr>
+<tr class="even">
+<td>Familias</td>
+<td>Conocer el protocolo y el canal; autorizar lo que corresponda</td>
+</tr>
+<tr class="odd">
+<td>Federación</td>
+<td>Protocolos, normas de categorías y, en su caso, delegados federativos</td>
+</tr>
+<tr class="even">
+<td>Comunidad autónoma</td>
+<td>Protocolos marco, trámites propios, servicios sociales</td>
+</tr>
+<tr class="odd">
+<td>Ministerio de Justicia</td>
+<td>Registro Central de Delincuentes Sexuales</td>
+</tr>
+<tr class="even">
+<td>Servicios sociales, fuerzas de seguridad, fiscalía</td>
+<td>Destinatarios de las comunicaciones según el caso</td>
+</tr>
+</tbody>
+</table>
+<h3 id="10-errores-frecuentes">10. Errores frecuentes</h3>
+<ul>
+<li><strong>“Tenemos el protocolo de la federación colgado en la web.”</strong> Sin delegado conocido, sin formación y sin revisión, no hay protocolo aplicado.</li>
+<li><strong>Pedir el certificado solo a los entrenadores con contrato.</strong> La ley no distingue entre retribuido y voluntario.</li>
+<li><strong>El delegado es el entrenador principal de todos los grupos.</strong> El canal pierde su sentido.</li>
+<li><strong>Una sola autorización para participar, fotos y datos.</strong> Mezcla finalidades y bases jurídicas distintas.</li>
+<li><strong>Fotos del pesaje para “subir el cartel”.</strong> Nunca con menores.</li>
+<li><strong>Grupos de mensajería con menores sin familias ni club dentro, o mensajes privados del entrenador.</strong> Es justo el tipo de canal que un protocolo debe evitar.</li>
+<li><strong>Ante una revelación, llamar a la familia de la persona señalada “para aclararlo”.</strong> Contamina el caso y puede poner al menor en riesgo.</li>
+</ul>
+<h3 id="11-caso-pr-ctico">11. Caso práctico</h3>
+<p><em>Supongamos que</em> un club de kick boxing de 120 socios tiene dos grupos infantiles (8–11 años) y uno juvenil (12–17). Da clases tres entrenadores: uno contratado, uno autónomo que factura al club y una exalumna de 19 años que ayuda como voluntaria los sábados. El club va a llevar a seis juveniles a un campeonato autonómico con noche de hotel.</p>
+<p><strong>Qué debe tener resuelto antes de la temporada:</strong></p>
+<ul>
+<li>Certificado negativo de los tres, incluida la voluntaria y el autónomo. La forma de relación con el club no cambia la obligación.</li>
+<li>Delegada de protección: la junta designa a la vocal que no entrena, con formación específica, y publica su contacto.</li>
+<li>Protocolo: adopta el protocolo marco de su comunidad o su federación y lo adapta con las normas de sala, pesaje y vestuario del apartado 5.3.</li>
+</ul>
+<p><strong>Qué debe preparar para el viaje:</strong></p>
+<ul>
+<li>Autorización de participación y desplazamiento de cada familia, separada de la de imagen.</li>
+<li>Reparto de habitaciones sin adultos compartiendo habitación con menores; dos adultos acompañantes como mínimo, de ambos sexos si el grupo es mixto. <strong><span class="tag bp">Buena práctica</span></strong></li>
+<li>Información médica imprescindible, custodiada por un adulto responsable y no compartida en el grupo de mensajería.</li>
+<li>Normas de uso de móviles en el hotel.</li>
+</ul>
+<p><strong>Qué no debe hacer:</strong> publicar en redes la foto del pesaje de un juvenil “para animar” o crear un grupo privado del entrenador con los seis chicos.</p>
+<h3 id="12-checklist-operativo">12. Checklist operativo</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Certificado negativo comprobado de cada persona con trato habitual</td>
+<td>Secretaría / Delegado</td>
+<td>Registro de comprobaciones</td>
+<td>Antes de empezar; cada temporada</td>
+</tr>
+<tr class="even">
+<td>Delegado o Delegada designado y difundido</td>
+<td>Junta</td>
+<td>Acta de designación; contacto publicado</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="odd">
+<td>Protocolo aprobado y adaptado a sala, pesaje, vestuario, viajes</td>
+<td>Junta + Delegado</td>
+<td>Protocolo firmado y fechado</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="even">
+<td>Personal formado en protección</td>
+<td>Delegado</td>
+<td>Registro de formación</td>
+<td>Anual</td>
+</tr>
+<tr class="odd">
+<td>Monitorización realizada</td>
+<td>Delegado</td>
+<td>Actas trimestrales</td>
+<td>Trimestral</td>
+</tr>
+<tr class="even">
+<td>Autorizaciones separadas (participación / datos / imagen)</td>
+<td>Secretaría</td>
+<td>Formularios firmados</td>
+<td>Al inscribir</td>
+</tr>
+<tr class="odd">
+<td>Canal de comunicación con menores y familias definido</td>
+<td>Junta</td>
+<td>Norma escrita</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="even">
+<td>Requisitos autonómicos y federativos comprobados</td>
+<td>Delegado</td>
+<td>Nota con fuente y fecha</td>
+<td>Inicio de temporada</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-evidencias-que-conservar">13. Evidencias que conservar</h3>
+<ul>
+<li>Registro de comprobación de certificados (sin copias innecesarias).</li>
+<li>Protocolo vigente y versiones anteriores con fecha.</li>
+<li>Designación del delegado y prueba de su difusión.</li>
+<li>Actas de monitorización y de revisión anual.</li>
+<li>Registro de formación.</li>
+<li>Autorizaciones de participación, datos e imagen.</li>
+<li>Registro confidencial de comunicaciones realizadas, con acceso muy restringido. <strong><span class="tag prof">Requiere profesional</span></strong> para decidir plazos de conservación en casos concretos.</li>
+</ul>
+<h3 id="14-qu-cambia-seg-n-el-territorio-y-la-federaci-n">14. Qué cambia según el territorio y la federación</h3>
+<p>Lo que puede cambiar de una comunidad a otra: protocolos marco propios, trámites de adhesión o de inscripción del protocolo, perfil del delegado, servicios de referencia para comunicar, leyes autonómicas de voluntariado. Lo que puede cambiar de una federación a otra: categorías, contacto permitido, protecciones, reconocimientos médicos y protocolos propios.</p>
+<p>Consulta la ficha territorial de tu comunidad. En esta edición se han localizado protocolos o normas propias, entre otras, en Andalucía (T01), Canarias (T05), Castilla y León (T08), Cataluña (T09), Comunitat Valenciana (T10), Madrid (T13, para sus instalaciones), Navarra (T15) y País Vasco (T16, ley de infancia). Cada ficha indica el estado de verificación de ese dato.</p>
+<h3 id="15-si-hay-actividad-econ-mica-cobro-o-contrataci-n">15. Si hay actividad económica, cobro o contratación</h3>
+<p>Campus de verano, clases particulares a menores, viajes con cuota o eventos con entrada no cambian las obligaciones de esta guía, pero amplían quién entra en ellas: monitores de campus, personal de hostelería contratado para un campus, empresas de transporte habituales. Si contratas un servicio que implica trato habitual con tus menores, pide al proveedor que acredite el cumplimiento del artículo 57 respecto de su personal. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></p>
+<h3 id="16-cu-ndo-pedir-ayuda">16. Cuándo pedir ayuda</h3>
+<ul>
+<li>Ha habido una revelación o una sospecha y no sabes a quién comunicarla o cómo proteger al menor mientras tanto. Aquí la prioridad es el menor: servicios sociales, 112 si hay riesgo, y <strong><span class="tag prof">Requiere profesional</span></strong>.</li>
+<li>La persona señalada es alguien con peso en el club.</li>
+<li>Organizas un campus, una concentración o un viaje internacional con menores.</li>
+<li>Tu federación y tu comunidad tienen protocolos que no encajan entre sí.</li>
+</ul>
+<p>En los tres últimos casos, KOMBAX Consultoría puede ayudarte a ordenar requisitos, documentos y responsables antes de la actividad.</p>
+<h3 id="17-fuentes-comentadas">17. Fuentes comentadas</h3>
+<ul>
+<li><strong>LOPIVI (LO 8/2021).</strong> La norma central. Los artículos 47 y 48 son los específicos del deporte y el ocio; el 57 regula el certificado; los 15 y 16, el deber de comunicar. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347">BOE</a></li>
+<li><strong>Ley 39/2022 del Deporte, art. 7.</strong> Conecta la práctica deportiva de menores con la LOPIVI. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2022-24430">BOE</a></li>
+<li><strong>Sede del Ministerio de Justicia — Certificado de Delitos de Naturaleza Sexual.</strong> Cómo pedirlo, canales, autorización a entidades, nacionales de la UE. <a href="https://sede.mjusticia.gob.es/tramites/certificado-registro-central">Sede</a></li>
+<li><strong>AEPD, FAQ sobre el certificado negativo.</strong> Confirma que alcanza a actividades retribuidas o no. <a href="https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1053-sobre-certificado-negativo-de-delitos-de-naturaleza-sexual">AEPD</a></li>
+<li><strong>Ley 45/2015 de Voluntariado, art. 8.4.</strong> Requisito para voluntarios en programas con menores. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-11072">BOE</a></li>
+<li><strong>LO 1/1982, art. 3, y LO 1/1996, art. 4.</strong> Imagen de menores. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1982-11196">LO 1/1982</a> · <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1996-1069">LO 1/1996</a></li>
+<li><strong>AEPD, imágenes en eventos con menores.</strong> Uso doméstico frente a publicación. <a href="https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1004-se-pueden-tomar-imagenes-o-grabar-videos-en-eventos-escolares">AEPD</a></li>
+</ul>
+<h3 id="18-verificado-hasta-y-comprueba-justo-antes-de-actuar">18. Verificado hasta y comprueba justo antes de actuar</h3>
+<p><strong>Verificado hasta:</strong> 22/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong></p>
+<ul>
+<li>La sede del Ministerio de Justicia: canales, autorización a entidades y requisitos para personas de otras nacionalidades.</li>
+<li>El protocolo vigente de tu federación y de tu comunidad autónoma (ficha territorial).</li>
+<li>La normativa de categorías, contacto y reconocimiento médico de tu federación para la temporada en curso.</li>
+</ul>
+</section><section class="chapter" id="chapter-5"><header class="chapter-head"><span class="chapter-label">Tema 05</span><h2 class="chapter-title">Datos, imagen y comunicaciones</h2><p class="chapter-deck">Qué datos necesita de verdad un club o un evento, con qué base los trata, cuánto tiempo los guarda y qué puede publicar.</p></header><h3 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h3>
+<ul>
+<li>Para cada cosa que haces con datos (gestionar socios, tramitar licencias, organizar un pesaje, vender entradas, enviar novedades) tienes que saber <strong>para qué</strong> y <strong>con qué base legal</strong>. No todo va por consentimiento. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Informa a las personas de forma sencilla, con una capa básica y un enlace al resto. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Los datos de salud y los de menores piden el máximo cuidado: solo lo imprescindible, con acceso restringido. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Publicar una foto es un tratamiento distinto de hacerla. Necesita su propio fundamento y, con menores, tiene límites que ningún consentimiento salva (guía «menores»). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Si alguien te pide acceder a sus datos o borrarlos, tienes un plazo para responder. Ten el procedimiento preparado. <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ul>
+<h3 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h3>
+<p>Un club de contacto maneja más datos de los que parece: DNI y domicilio de socios, teléfonos de familias, números de licencia, pesos, alturas, lesiones, reconocimientos médicos, fotos y vídeos, récords, datos bancarios, compradores de entradas. Además se comunica por grupos de mensajería, redes sociales y correo.</p>
+<p>Esta guía te ayuda a ordenar todo eso: identificar cada uso de datos, darle una base jurídica, informar correctamente, decidir quién ve qué, cuánto se guarda y qué se puede publicar.</p>
+<h3 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h3>
+<p>Juntas directivas y secretarías de clubes, federaciones, organizadores de eventos y responsables de comunicación. También es útil para quien elige una plataforma de gestión o de venta de entradas.</p>
+<h3 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h3>
+<p>Por cada uso de datos: <strong>¿lo necesito para esta finalidad, qué base lo permite y quién debe verlo?</strong> Si no puedes contestar las tres cosas, ese dato sobra o ese uso no está listo.</p>
+<h3 id="4-el-marco-que-se-aplica">4. El marco que se aplica</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué te exige</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Reglamento General de Protección de Datos (RGPD, UE 2016/679)</strong></td>
+<td>Principios (finalidad, minimización, conservación limitada), base jurídica (art. 6), categorías especiales como la salud (art. 9), información (art. 13), derechos (arts. 15–22, respuesta en el plazo del art. 12.3), encargados (art. 28), registro de actividades (art. 30), brechas (art. 33)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>LOPDGDD (LO 3/2018)</strong></td>
+<td>Desarrollo español: consentimiento de menores a partir de 14 años (art. 7), información por capas (art. 11), videovigilancia (art. 22), lista de entidades obligadas a designar Delegado de Protección de Datos (art. 34)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>LO 1/1982</strong></td>
+<td>Derecho a la propia imagen: consentimiento expreso (art. 2.2), protección de la vida privada (art. 7.5) y excepciones (art. 8.2)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>LO 1/1996, art. 4</strong></td>
+<td>Límites al uso de la imagen de menores aunque haya consentimiento (desarrollado en «menores» §7)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 34/2002 (LSSI), art. 21</strong></td>
+<td>Comunicaciones comerciales por correo electrónico o medios equivalentes</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Criterios de la AEPD</strong></td>
+<td>Preguntas frecuentes y guías de la autoridad de control</td>
+<td>Interpretación oficial</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Autoridad de control.</strong> Para un club o una federación privada, la autoridad es normalmente la Agencia Española de Protección de Datos. Cataluña, País Vasco y Andalucía tienen autoridades propias con competencia principalmente sobre el sector público de su territorio. Si tu entidad gestiona un servicio público por encargo de una administración, <strong><span class="tag prof">Requiere profesional</span></strong> para saber cuál te corresponde.</p>
+</blockquote>
+<h3 id="5-mapa-de-tratamientos-de-un-club-tipo">5. Mapa de tratamientos de un club tipo</h3>
+<p><em>Plantilla de trabajo KOMBAX. Las bases indicadas son las habituales; tu caso concreto puede ser distinto.</em></p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tratamiento</th>
+<th>Datos típicos</th>
+<th>Base jurídica habitual</th>
+<th>Quién debería verlo</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gestión de socios y cuotas</td>
+<td>Identificación, contacto, datos bancarios</td>
+<td>Relación asociativa o contractual (RGPD 6.1.b)</td>
+<td>Junta, secretaría, tesorería</td>
+<td>No es necesario pedir “consentimiento” para esto</td>
+</tr>
+<tr class="even">
+<td>Tramitación de licencias</td>
+<td>Identificación, fecha de nacimiento, datos que pida la federación</td>
+<td>Relación con el deportista y normativa federativa (6.1.b / 6.1.c según el caso)</td>
+<td>Secretaría</td>
+<td>La federación es a su vez responsable de sus propios tratamientos</td>
+</tr>
+<tr class="odd">
+<td>Categorías, pesajes y emparejamientos</td>
+<td>Peso, altura, edad, nivel, récord</td>
+<td>Relación con el deportista (6.1.b)</td>
+<td>Entrenadores, organización del evento</td>
+<td>Publicar el historial de pesos es otra finalidad</td>
+</tr>
+<tr class="even">
+<td>Aptitud y lesiones</td>
+<td>Reconocimientos médicos, lesiones, alergias</td>
+<td>Categoría especial (art. 9): requiere una excepción del art. 9.2</td>
+<td>Solo quien la necesita para actuar</td>
+<td><strong><span class="tag prof">Requiere profesional</span></strong> para definir la excepción aplicable</td>
+</tr>
+<tr class="odd">
+<td>Protección de menores</td>
+<td>Certificados negativos, comunicaciones del protocolo</td>
+<td>Obligación legal (6.1.c)</td>
+<td>Junta y Delegado de protección</td>
+<td>Acceso muy restringido («menores»)</td>
+</tr>
+<tr class="even">
+<td>Fotos y vídeos para comunicación</td>
+<td>Imagen</td>
+<td>Consentimiento, salvo excepciones legales</td>
+<td>Comunicación</td>
+<td>Ver apartado 7</td>
+</tr>
+<tr class="odd">
+<td>Boletines y promociones</td>
+<td>Correo, teléfono</td>
+<td>Consentimiento o supuestos del art. 21 LSSI</td>
+<td>Comunicación</td>
+<td>Siempre con forma sencilla de darse de baja</td>
+</tr>
+<tr class="even">
+<td>Venta de entradas</td>
+<td>Identificación, pago, correo</td>
+<td>Contrato de compra (6.1.b)</td>
+<td>Organización, plataforma de venta</td>
+<td>Guía «entradas»</td>
+</tr>
+<tr class="odd">
+<td>Videovigilancia del local</td>
+<td>Imagen</td>
+<td>Interés legítimo en la seguridad (6.1.f y art. 22 LOPDGDD)</td>
+<td>Responsable de seguridad</td>
+<td>Supresión en un mes como máximo, salvo que haya que conservarlas para acreditar hechos</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-procedimiento-paso-a-paso">6. Procedimiento paso a paso</h3>
+<ol type="1">
+<li><strong>Inventario.</strong> Lista cada tratamiento como en la tabla anterior. Te servirá de base para el registro de actividades.</li>
+<li><strong>Registro de actividades (RAT).</strong> El RGPD exime a las organizaciones de menos de 250 trabajadores, salvo que el tratamiento entrañe un riesgo, no sea ocasional o incluya categorías especiales como la salud. La gestión continuada de socios no es ocasional y muchos clubes tratan datos de salud, así que en la práctica <strong>conviene contar con que tu club debe llevarlo</strong>. <strong><span class="tag legal">Obligación legal</span></strong> en la mayoría de clubes; <strong><span class="tag prof">Requiere profesional</span></strong> si tienes dudas.</li>
+<li><strong>Información por capas.</strong> En el formulario de inscripción, una capa básica (quién es el responsable, para qué, cómo ejercer los derechos) y un enlace o documento con el resto. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Permisos internos.</strong> Cada persona del club ve lo que necesita para su función. El entrenador ve pesos y aptitud; no necesita la cuenta bancaria. <strong><span class="tag legal">Obligación legal</span></strong> (principio de minimización y seguridad)</li>
+<li><strong>Encargados.</strong> Si una plataforma, gestoría o empresa de ticketing trata datos por cuenta del club, necesitas un contrato de encargo que cumpla el art. 28 del RGPD. Las plataformas de gestión deportiva, incluida KOMBAX, suelen actuar como encargadas del tratamiento de los datos que el club introduce. Revisa el contrato de encargo de cada proveedor. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Conservación.</strong> Define cuánto tiempo guardas cada tipo de dato: mientras dure la finalidad y, después, bloqueados solo durante los plazos que exijan otras obligaciones legales (fiscales, contables, de responsabilidad). La ley no fija un plazo único para clubes, salvo casos concretos como las imágenes de videovigilancia. <strong><span class="tag prof">Requiere profesional</span></strong> para fijar tus plazos. <strong><span class="tag kx">Recomendación KOMBAX</span></strong>: escribe la tabla de conservación y aplícala al cierre de cada temporada.</li>
+<li><strong>Derechos.</strong> Ten un correo o formulario para acceso, rectificación, supresión, oposición, limitación y portabilidad. Respuesta en el plazo que marca el RGPD (un mes, prorrogable en casos complejos). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Brechas.</strong> Si se pierde un móvil con la base de datos del club, se envía un correo con todos los destinatarios a la vista o se filtran datos de salud, valora si hay riesgo y, si lo hay, notifícalo a la AEPD en un máximo de 72 horas desde que lo conozcas. Documenta siempre la brecha, aunque no la notifiques. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Delegado de Protección de Datos (DPD).</strong> Las federaciones deportivas que traten datos de menores están obligadas a designarlo y comunicarlo a la autoridad de control (LOPDGDD, art. 34). Esa lista no menciona a los clubes; un club solo estaría obligado si encaja en otro supuesto del RGPD. <strong><span class="tag prof">Requiere profesional</span></strong> si tu club trata datos a gran escala.</li>
+</ol>
+<h3 id="7-imagen-hacer-la-foto-publicarla-retransmitir">7. Imagen: hacer la foto, publicarla, retransmitir</h3>
+<p><strong>Adultos.</strong> La publicación de la imagen de una persona identificable necesita su consentimiento expreso, salvo excepciones. La más relevante en eventos es la <strong>imagen meramente accesoria</strong>: la foto general de una velada donde el público aparece de fondo (LO 1/1982, art. 8.2.c). Un primer plano de un espectador no es accesorio. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p><strong>Deportistas en competición.</strong> Que un combate sea público no significa que la imagen del deportista pueda usarse para cualquier cosa. Informar y cubrir en la inscripción la grabación y difusión del evento es la vía ordenada; el uso publicitario o comercial de su imagen merece una autorización específica. <strong><span class="tag bp">Buena práctica</span></strong>; <strong><span class="tag prof">Requiere profesional</span></strong> para acuerdos de derechos de imagen.</p>
+<p><strong>Menores.</strong> Todo lo de «menores» §7. Resumen: consentimiento del propio menor si tiene madurez suficiente o, si no, de su representante legal por escrito; nunca un uso que perjudique su honra o reputación o sea contrario a sus intereses, aunque haya consentimiento. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p><strong>Público que graba.</strong> Las familias y espectadores pueden hacer fotos para su uso personal; publicarlas en redes abiertas ya es un tratamiento que requiere el consentimiento de quienes aparecen (criterio de la AEPD). Avisarlo con carteles es buena práctica. <strong><span class="tag bp">Buena práctica</span></strong></p>
+<p><strong>Retransmisión en directo.</strong> Informa en la entrada, en la inscripción y en el propio recinto. Delimita zonas que no se graban (vestuarios, zona médica, pesaje). <strong><span class="tag bp">Buena práctica</span></strong>. Si hay menores, aplica «menores». Si se venden derechos o hay patrocinio vinculado a la retransmisión, <strong><span class="tag prof">Requiere profesional</span></strong>.</p>
+<p><strong>Vestuarios y aseos.</strong> Nunca se graba ni se fotografía. <strong><span class="tag legal">Obligación legal</span></strong> (LO 1/1982, art. 7.5: lugares o momentos de la vida privada).</p>
+<h3 id="8-comunicaciones-del-club">8. Comunicaciones del club</h3>
+<ul>
+<li><strong>Grupos de mensajería.</strong> Un grupo con 80 familias deja expuestos 80 teléfonos a todos los demás. Usa canales o listas de difusión, o herramientas que no expongan el número, y deja claro quién administra el canal. <strong><span class="tag bp">Buena práctica</span></strong></li>
+<li><strong>Correo.</strong> Envíos masivos en copia oculta o desde una herramienta de envío. Un correo con todas las direcciones visibles puede ser una brecha. <strong><span class="tag legal">Obligación legal</span></strong> (seguridad y confidencialidad)</li>
+<li><strong>Promociones y boletines.</strong> Por correo o SMS, solo con consentimiento previo o, si ya hay relación, para productos o servicios similares del propio club y con opción sencilla de baja en cada envío (LSSI, art. 21). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Menores.</strong> Comunicación del club con los menores a través de canales grupales del club, con las familias informadas («menores» §5.3). <strong><span class="tag bp">Buena práctica</span></strong></li>
+</ul>
+<h3 id="9-documentaci-n-qu-es-obligatorio-y-qu-depende">9. Documentación: qué es obligatorio y qué depende</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Documento</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Información de privacidad (capa básica y completa)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Registro de actividades de tratamiento</td>
+<td><span class="tag legal">Obligación legal</span> en la mayoría de clubes (ver §6.2)</td>
+</tr>
+<tr class="odd">
+<td>Contratos de encargo con proveedores que tratan datos</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Procedimiento de ejercicio de derechos</td>
+<td><span class="tag legal">Obligación legal</span> (responder en plazo)</td>
+</tr>
+<tr class="odd">
+<td>Registro de brechas</td>
+<td><span class="tag legal">Obligación legal</span> (documentar)</td>
+</tr>
+<tr class="even">
+<td>Autorizaciones de imagen por finalidad</td>
+<td><span class="tag legal">Obligación legal</span> cuando la base es el consentimiento</td>
+</tr>
+<tr class="odd">
+<td>Tabla de conservación y borrado</td>
+<td><span class="tag kx">Recomendación KOMBAX</span> (concreta un principio legal)</td>
+</tr>
+<tr class="even">
+<td>Matriz de permisos internos</td>
+<td><span class="tag kx">Recomendación KOMBAX</span></td>
+</tr>
+<tr class="odd">
+<td>Cartel de “zonas sin grabación” y aviso de grabación en eventos</td>
+<td><span class="tag bp">Buena práctica</span>; el cartel de videovigilancia sí es <span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Designación del DPD</td>
+<td><span class="tag legal">Obligación legal</span> para federaciones con datos de menores</td>
+</tr>
+</tbody>
+</table>
+<h3 id="10-errores-frecuentes">10. Errores frecuentes</h3>
+<ul>
+<li><strong>Pedir “consentimiento” para todo.</strong> Si el socio no puede negarse sin dejar de ser socio, el consentimiento no es la base adecuada; y si retira un consentimiento del que dependía la gestión, el club se queda sin base.</li>
+<li><strong>Guardar los reconocimientos médicos en la carpeta compartida del equipo técnico.</strong></li>
+<li><strong>Publicar el historial de pesos o récords internos en perfiles públicos.</strong> Registrar un peso para hacer la categoría es una finalidad; exponerlo públicamente es otra (ejemplo que conservamos de R90).</li>
+<li><strong>El grupo de mensajería de 150 personas con los números a la vista.</strong></li>
+<li><strong>Nadie sabe qué contestar cuando un exsocio pide borrar sus datos.</strong></li>
+<li><strong>Contratar una plataforma sin leer ni firmar el contrato de encargo.</strong></li>
+<li><strong>Cámaras de seguridad que graban el vestuario o que guardan imágenes indefinidamente.</strong></li>
+</ul>
+<h3 id="11-caso-pr-ctico">11. Caso práctico</h3>
+<p><em>Supongamos que</em> un club organiza su gala anual con 400 personas de público, 14 combates (tres de ellos entre juveniles), retransmisión por redes y un fotógrafo. Además, la plataforma de entradas pide nombre, DNI y correo a cada comprador.</p>
+<p><strong>Lo que debe resolver:</strong></p>
+<ul>
+<li><strong>Entradas:</strong> ¿necesita el DNI para esta venta? Si no hay obligación de entrada nominativa, pedirlo incumple la minimización. Si la hay, se informa del motivo. Contrato de encargo con la plataforma. (Guía «entradas»)</li>
+<li><strong>Retransmisión:</strong> aviso en la compra y carteles en el recinto; zonas sin grabación; autorización específica de los deportistas y, para los juveniles, lo previsto en «menores».</li>
+<li><strong>Fotógrafo:</strong> si trabaja para el club, es encargado del tratamiento y necesita contrato; criterios de publicación por escrito.</li>
+<li><strong>Público:</strong> planos generales sí; primeros planos de espectadores identificables, no sin consentimiento.</li>
+<li><strong>Después:</strong> plazo de conservación de los datos de compradores y de las imágenes brutas no publicadas.</li>
+</ul>
+<h3 id="12-checklist-operativo">12. Checklist operativo</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Inventario de tratamientos y RAT</td>
+<td>Secretaría</td>
+<td>RAT fechado</td>
+<td>Anual y ante cambios</td>
+</tr>
+<tr class="even">
+<td>Información por capas en todos los formularios</td>
+<td>Secretaría</td>
+<td>Formularios revisados</td>
+<td>Antes de abrir inscripciones</td>
+</tr>
+<tr class="odd">
+<td>Contratos de encargo firmados</td>
+<td>Junta</td>
+<td>Contratos archivados</td>
+<td>Antes de usar el proveedor</td>
+</tr>
+<tr class="even">
+<td>Matriz de permisos aplicada en la plataforma</td>
+<td>Secretaría</td>
+<td>Captura o listado de roles</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="odd">
+<td>Tabla de conservación aplicada</td>
+<td>Secretaría</td>
+<td>Registro de borrados</td>
+<td>Cierre de temporada</td>
+</tr>
+<tr class="even">
+<td>Procedimiento de derechos probado</td>
+<td>Secretaría</td>
+<td>Buzón y plantilla de respuesta</td>
+<td>Anual</td>
+</tr>
+<tr class="odd">
+<td>Autorizaciones de imagen por finalidad</td>
+<td>Comunicación</td>
+<td>Formularios</td>
+<td>Al inscribir</td>
+</tr>
+<tr class="even">
+<td>Canales de comunicación sin exponer datos</td>
+<td>Comunicación</td>
+<td>Configuración del canal</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="odd">
+<td>DPD designado y comunicado (federaciones con menores)</td>
+<td>Federación</td>
+<td>Comunicación a la AEPD</td>
+<td>Una vez y ante cambios</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-evidencias-que-conservar">13. Evidencias que conservar</h3>
+<p>RAT con fecha, información de privacidad en sus versiones, contratos de encargo, registro de solicitudes de derechos y respuestas, registro de brechas, autorizaciones de imagen, registro de borrados de fin de temporada.</p>
+<h3 id="14-qu-cambia-seg-n-el-territorio-y-la-federaci-n">14. Qué cambia según el territorio y la federación</h3>
+<p>La protección de datos es sobre todo estatal y europea: casi nada cambia de una comunidad a otra para un club privado, salvo la autoridad de control cuando hay sector público de por medio (ver §4). Lo que sí cambia es qué datos pide cada <strong>federación</strong> para la licencia y cómo los trata; la federación informa de sus propios tratamientos.</p>
+<h3 id="15-si-hay-actividad-econ-mica-cobro-o-contrataci-n">15. Si hay actividad económica, cobro o contratación</h3>
+<p>Venta de entradas, tienda online, cobro de cuotas por pasarela, patrocinadores que piden bases de datos: cada una añade tratamientos y proveedores. Regla práctica: <strong>nunca se ceden datos de socios o compradores a un patrocinador sin base jurídica y sin informar</strong>. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<h3 id="16-cu-ndo-pedir-ayuda">16. Cuándo pedir ayuda</h3>
+<ul>
+<li>Vas a tratar datos de salud de forma sistemática (reconocimientos, historial de lesiones).</li>
+<li>Compartes datos con varios clubes o federaciones para un circuito o ranking.</li>
+<li>Vas a instalar control de acceso biométrico, reconocimiento facial o entradas nominativas.</li>
+<li>Has sufrido una brecha y no sabes si notificarla.</li>
+<li>Un patrocinador te pide datos de socios o asistentes.</li>
+</ul>
+<p>KOMBAX Consultoría puede ayudarte a ordenar tratamientos, proveedores y documentación; la decisión jurídica final en estos casos corresponde a un profesional de protección de datos.</p>
+<h3 id="17-fuentes-comentadas">17. Fuentes comentadas</h3>
+<ul>
+<li><strong>RGPD (Reglamento UE 2016/679).</strong> La norma base. <a href="https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32016R0679">EUR-Lex</a></li>
+<li><strong>LOPDGDD (LO 3/2018).</strong> Arts. 7 (menores, 14 años), 11 (información por capas), 22 (videovigilancia: supresión en un mes máximo) y 34 (obligados a designar DPD, incluidas las federaciones deportivas con datos de menores). <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673">BOE</a></li>
+<li><strong>AEPD — Registro de actividades de tratamiento.</strong> Explica la exención y sus tres salvedades. <a href="https://www.aepd.es/preguntas-frecuentes/2-tus-obligaciones-como-responsable-del-tratamiento/7-registro-de-actividades-de-tratamiento">AEPD</a></li>
+<li><strong>AEPD — DPD en federaciones deportivas.</strong> <a href="https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1012-estan-obligadas-las-federaciones-deportivas-nombrar-una-persona-que-ejerza-dpd">AEPD</a></li>
+<li><strong>AEPD — Imágenes en eventos con menores.</strong> <a href="https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1004-se-pueden-tomar-imagenes-o-grabar-videos-en-eventos-escolares">AEPD</a></li>
+<li><strong>LO 1/1982.</strong> Arts. 2.2, 7.5 y 8.2. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1982-11196">BOE</a></li>
+<li><strong>LSSI (Ley 34/2002), art. 21.</strong> <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758">BOE</a></li>
+</ul>
+<h3 id="18-verificado-hasta-y-comprueba-justo-antes-de-actuar">18. Verificado hasta y comprueba justo antes de actuar</h3>
+<p><strong>Verificado hasta:</strong> 22/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong></p>
+<ul>
+<li>Guías y preguntas frecuentes de la AEPD sobre el tratamiento concreto (cambian con más frecuencia que la ley).</li>
+<li>El contrato de encargo vigente de cada plataforma que uses.</li>
+<li>Qué datos pide tu federación para la licencia de la temporada.</li>
+</ul>
+</section><section class="chapter" id="chapter-6"><header class="chapter-head"><span class="chapter-label">Tema 06</span><h2 class="chapter-title">Seguros y responsabilidad</h2><p class="chapter-deck">Qué riesgo cubre cada póliza, qué no cubre ninguna y cómo comprobarlo antes de firmar con un recinto o abrir las puertas de una velada.</p></header><h3 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h3>
+<ul>
+<li><strong>Un seguro no cubre “el evento”.</strong> Cubre riesgos concretos de personas concretas. Haz la lista de riesgos primero y busca la póliza después. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+<li><strong>La licencia federativa protege al deportista</strong>, dentro de su ámbito y de las condiciones de su seguro. <strong>No protege al público</strong> ni cubre tu responsabilidad como organizador. <strong><span class="tag legal">Obligación legal</span></strong> (en lo que respecta al alcance del seguro obligatorio deportivo)</li>
+<li><strong>La responsabilidad civil del organizador</strong> es lo que responde si alguien del público, un voluntario o un tercero sufre un daño por un fallo de la organización. Puede ser <strong><span class="tag legal">Obligación legal</span></strong> según la normativa autonómica de espectáculos (ficha territorial) y suele ser <strong><span class="tag rec">Recinto / municipio</span></strong> cuando cedes una instalación.</li>
+<li><strong>Lee las exclusiones.</strong> Muchas pólizas generales excluyen deportes de combate o competiciones. Las cláusulas que limitan tus derechos deben estar destacadas y aceptadas por escrito. <strong><span class="tag legal">Obligación legal</span></strong> (para la aseguradora)</li>
+<li><strong>Un siniestro se comunica a la aseguradora en siete días</strong> como máximo desde que lo conoces, salvo que la póliza dé un plazo más amplio. <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ul>
+<h3 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h3>
+<p>En los deportes de contacto el riesgo de lesión forma parte de la actividad. Por eso el aseguramiento no puede ser un trámite de última hora ni una póliza genérica “de club” que nadie ha leído. Esta guía te ayuda a:</p>
+<ul>
+<li>separar los riesgos por persona y por tipo de daño;</li>
+<li>saber qué cubre la licencia y qué tiene que cubrir el club o el organizador;</li>
+<li>revisar una póliza con preguntas concretas;</li>
+<li>preparar el procedimiento para cuando ocurra un accidente.</li>
+</ul>
+<h3 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h3>
+<p>Tesorería y juntas de clubes, organizadores de veladas, interclubs y campeonatos, federaciones y responsables de instalaciones.</p>
+<h3 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h3>
+<p><strong>Para cada persona que pisa tu actividad (deportista, técnico, voluntario, público, proveedor) y para cada tipo de daño (lesión propia, daño a otros, daño al recinto): ¿quién lo cubre, con qué póliza y hasta qué límite?</strong> Si alguna casilla queda vacía, tienes un riesgo sin cubrir.</p>
+<h3 id="4-el-marco-que-se-aplica">4. El marco que se aplica</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma o fuente</th>
+<th>Qué establece</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ley 39/2022 del Deporte, art. 23.3</strong> (modificado por la Ley 5/2025)</td>
+<td>Remite a un reglamento la cuantía de las prestaciones mínimas del seguro obligatorio deportivo, que debe actualizarse y ajustarse a la naturaleza del seguro de accidentes</td>
+<td><span class="tag legal">Obligación legal</span> — reglamento nuevo <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong> (ver §4.1)</td>
+</tr>
+<tr class="even">
+<td><strong>Real Decreto 849/1993</strong></td>
+<td>Prestaciones mínimas del Seguro Obligatorio Deportivo para deportistas federados que participan en competiciones oficiales de ámbito estatal: asistencia médico-quirúrgica y sanitaria por accidente deportivo, rehabilitación, indemnizaciones por pérdidas anatómicas o funcionales y por fallecimiento, entre otras</td>
+<td><span class="tag legal">Obligación legal</span> para la federación y su póliza</td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 50/1980 de Contrato de Seguro</strong></td>
+<td>Cláusulas limitativas destacadas y aceptadas por escrito (art. 3); comunicación del siniestro en siete días (art. 16); definición del seguro de responsabilidad civil (art. 73)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Ley 45/2015 de Voluntariado, art. 14</strong></td>
+<td>Las entidades de voluntariado (programas de ámbito estatal o supraautonómico) deben suscribir un seguro u otra garantía financiera adecuada a la actividad de sus voluntarios y responden frente a terceros por los daños que estos causen</td>
+<td><span class="tag legal">Obligación legal</span>; las leyes autonómicas de voluntariado regulan el resto de supuestos</td>
+</tr>
+<tr class="odd">
+<td><strong>Leyes autonómicas del deporte y de espectáculos públicos</strong></td>
+<td>Pueden exigir coberturas mínimas a quien organiza actividades deportivas o espectáculos, con capitales propios</td>
+<td><span class="tag legal">Obligación legal</span> / <span class="tag adm">Requisito administrativo</span> — ficha territorial de tu comunidad</td>
+</tr>
+<tr class="even">
+<td><strong>Leyes autonómicas de profesiones del deporte</strong></td>
+<td>Pueden exigir seguro de responsabilidad civil a los profesionales o a las entidades que los emplean</td>
+<td><span class="tag legal">Obligación legal</span> donde exista — <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong> por comunidad (ficha territorial y guía «personal del club»)</td>
+</tr>
+<tr class="odd">
+<td><strong>Condiciones del recinto</strong></td>
+<td>Capitales mínimos, asegurado adicional, certificado previo</td>
+<td><span class="tag rec">Recinto / municipio</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="el-seguro-obligatorio-deportivo-hoy">4.1 El seguro obligatorio deportivo, hoy</h3>
+<p>La Ley del Deporte de 2022 mantiene el seguro obligatorio deportivo y, tras su modificación por la Ley 5/2025, de 24 de julio, encarga al Gobierno un nuevo reglamento de prestaciones mínimas en un plazo de seis meses. Mientras ese reglamento no se apruebe, las prestaciones de referencia siguen siendo las del Real Decreto 849/1993. En la revisión realizada el 23/09/2026 no se ha localizado en el BOE una norma posterior que sustituya expresamente al RD 849/1993 como cuadro de prestaciones mínimas. <strong>Comprueba de nuevo el BOE antes de citar cuantías</strong>, porque la Ley 5/2025 ordenó un nuevo desarrollo reglamentario.</p>
+<p><strong>Lo importante para un club:</strong> este seguro está vinculado a la licencia y al ámbito de la competición. Es la federación la que lo contrata y la que debe informarte de qué cubre y dónde atenderse. No lo sustituye una póliza del club, ni al revés.</p>
+<h3 id="si-tu-actividad-es-autonómica">4.2 Si tu actividad es autonómica</h3>
+<p>La mayoría de clubes compiten en ámbito autonómico. Las licencias autonómicas y sus seguros se rigen por la normativa de cada comunidad y de cada federación. En Cataluña, por ejemplo, una fuente secundaria indica que la normativa deportiva exige que determinadas licencias incluyan coberturas específicas y fija obligaciones de seguro para quien organiza actividades. Está <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong> en su fuente oficial y se desarrolla en la ficha T09 Cataluña. Consulta siempre la ficha territorial de tu comunidad.</p>
+<h3 id="5-matriz-de-riesgos-y-coberturas">5. Matriz de riesgos y coberturas</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Persona</th>
+<th>Daño</th>
+<th>Cobertura que normalmente responde</th>
+<th>Comprueba</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Deportista federado en competición oficial</td>
+<td>Lesión propia</td>
+<td>Seguro vinculado a su licencia</td>
+<td>Ámbito de la licencia; que la actividad esté dentro de lo cubierto; centros concertados</td>
+</tr>
+<tr class="even">
+<td>Deportista federado en actividad no oficial (interclub, exhibición, velada privada)</td>
+<td>Lesión propia</td>
+<td>Depende: algunas licencias cubren entrenamiento y actividad organizada por clubes, otras solo competición oficial</td>
+<td><strong>Pregunta por escrito a la federación</strong></td>
+</tr>
+<tr class="odd">
+<td>Participante no federado</td>
+<td>Lesión propia</td>
+<td>Póliza de accidentes específica que contrate el organizador, si la hay</td>
+<td>Si la normativa autonómica la exige (ficha territorial)</td>
+</tr>
+<tr class="even">
+<td>Técnicos, árbitros, personal</td>
+<td>Lesión propia</td>
+<td>Seguridad Social si hay relación laboral; póliza de accidentes si no</td>
+<td>Relación jurídica de cada persona («personal del club»)</td>
+</tr>
+<tr class="odd">
+<td>Voluntarios</td>
+<td>Lesión propia</td>
+<td>Seguro o garantía que exige la ley de voluntariado aplicable</td>
+<td>Ley estatal o autonómica según el ámbito</td>
+</tr>
+<tr class="even">
+<td>Público</td>
+<td>Lesión por fallo de organización o del recinto</td>
+<td>RC del organizador y/o RC del titular del recinto</td>
+<td>Quién es responsable de qué en el contrato de cesión</td>
+</tr>
+<tr class="odd">
+<td>Terceros (vecinos, proveedores)</td>
+<td>Daños</td>
+<td>RC del organizador</td>
+<td>Límites por siniestro y por víctima</td>
+</tr>
+<tr class="even">
+<td>Recinto</td>
+<td>Daños materiales por el montaje</td>
+<td>RC del organizador (daños a bienes de terceros) o garantía del contrato</td>
+<td>Si la póliza excluye bienes cedidos o alquilados</td>
+</tr>
+<tr class="odd">
+<td>Organizador</td>
+<td>Cancelación, pérdidas</td>
+<td>Póliza de cancelación (voluntaria)</td>
+<td>Qué causas cubre</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-procedimiento-paso-a-paso">6. Procedimiento paso a paso</h3>
+<ol type="1">
+<li><strong>Inventario de actividades reales.</strong> Entrenamientos, interclubs, exhibiciones, veladas con público, campus, viajes. Cada una puede tener una cobertura distinta. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+<li><strong>Comprobar las licencias.</strong> Pide a la federación el certificado o las condiciones del seguro de la licencia: qué actividades, qué ámbito, qué centros y qué teléfono de siniestros. <strong><span class="tag fed">Requisito federativo</span></strong></li>
+<li><strong>Revisar la RC del club u organizador.</strong> Que mencione expresamente la actividad (deportes de contacto, competición, eventos con público), los límites por siniestro y por víctima, la franquicia y el ámbito geográfico. <strong><span class="tag rec">Recinto / municipio</span></strong> y, según la comunidad, <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Leer las exclusiones.</strong> Busca “deportes de combate”, “artes marciales”, “competición”, “actividades profesionales”, “menores”, “espectáculos”. Las cláusulas limitativas deben estar destacadas y firmadas por ti. Si no las has firmado, <strong><span class="tag prof">Requiere profesional</span></strong> para valorar su efecto.</li>
+<li><strong>Cruzar con el recinto.</strong> Pide al titular sus condiciones: capitales mínimos, si debes incluirle como asegurado adicional, qué cubre su propia póliza. <strong><span class="tag rec">Recinto / municipio</span></strong></li>
+<li><strong>Cubrir a voluntarios y personal.</strong> Según la relación de cada persona con el club («personal del club»). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Preparar el protocolo de siniestro.</strong> Quién llama al teléfono de la aseguradora, a qué centro se deriva, qué parte se rellena, quién lo comunica y en qué plazo. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+<li><strong>Guardar las evidencias.</strong> Certificados de póliza vigentes el día del evento, condiciones de las licencias, contrato con el recinto.</li>
+</ol>
+<h3 id="7-preguntas-para-la-aseguradora-o-tu-corredor">7. Preguntas para la aseguradora o tu corredor</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<ol type="1">
+<li>¿La póliza cubre expresamente la actividad de [modalidad] en entrenamiento, en exhibición y en competición?</li>
+<li>¿Cubre eventos con público? ¿Hasta qué aforo?</li>
+<li>¿Cuál es el límite por siniestro, por víctima y por anualidad? ¿Hay franquicia?</li>
+<li>¿Incluye daños a instalaciones cedidas o alquiladas?</li>
+<li>¿Cubre a menores como participantes y como público?</li>
+<li>¿Cubre la responsabilidad del club por actos de sus técnicos y voluntarios?</li>
+<li>¿Puedo incluir al titular del recinto como asegurado adicional? ¿Cómo se emite el certificado?</li>
+<li>¿Qué exclusiones afectan a deportes de contacto? ¿Dónde están destacadas?</li>
+<li>¿Qué plazo y qué canal tengo para comunicar un siniestro?</li>
+<li>¿Cubre actividades fuera de mi comunidad autónoma o en el extranjero?</li>
+</ol>
+<h3 id="8-preguntas-para-la-federaci-n">8. Preguntas para la federación</h3>
+<ol type="1">
+<li>¿Qué actividades cubre el seguro de la licencia: solo competición oficial, también entrenamiento, también actividades organizadas por clubes?</li>
+<li>¿Qué centros médicos están concertados y qué hace el deportista si se lesiona fuera de ellos?</li>
+<li>¿Qué parte hay que rellenar y en qué plazo?</li>
+<li>¿La licencia cubre la participación en un evento de otra federación territorial?</li>
+</ol>
+<h3 id="9-cuando-hay-un-accidente">9. Cuando hay un accidente</h3>
+<ol type="1">
+<li>Atender a la persona y activar la asistencia sanitaria del evento o el 112.</li>
+<li>Derivar a un centro concertado si la situación lo permite (seguro de licencia).</li>
+<li>Recoger los datos: quién, qué, cuándo, dónde, testigos. Sin opiniones sobre culpas.</li>
+<li>Comunicar a la aseguradora o a la federación en el plazo de la póliza, y como máximo en siete días desde que se conoce (Ley 50/1980, art. 16), salvo plazo más amplio en la póliza. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Guardar copia de la comunicación y de la respuesta.</li>
+<li>Si hay reclamación de un tercero, no reconocer responsabilidad por escrito sin hablar antes con la aseguradora. <strong><span class="tag bp">Buena práctica</span></strong>; <strong><span class="tag prof">Requiere profesional</span></strong> si la reclamación es seria.</li>
+</ol>
+<h3 id="10-errores-frecuentes">10. Errores frecuentes</h3>
+<ul>
+<li><strong>“Todos tienen licencia, estamos cubiertos.”</strong> La licencia cubre al deportista, no al público ni tu responsabilidad.</li>
+<li><strong>La póliza del club es la del local.</strong> Puede no cubrir actividades fuera del local ni eventos con público.</li>
+<li><strong>No leer las exclusiones</strong> hasta el día del siniestro.</li>
+<li><strong>Un interclub o una exhibición fuera de lo que cubre la licencia.</strong> Hay que preguntarlo antes.</li>
+<li><strong>Voluntarios sin cobertura.</strong></li>
+<li><strong>Certificado de póliza caducado el día del evento.</strong></li>
+<li><strong>Comunicar el siniestro semanas después</strong> porque “no parecía grave”.</li>
+</ul>
+<h3 id="11-caso-pr-ctico">11. Caso práctico</h3>
+<p><em>Supongamos que</em> un club alquila un pabellón municipal para una velada amateur con 300 espectadores, 12 combates de deportistas federados y 4 de participantes no federados en una exhibición, diez voluntarios y un proveedor que monta gradas supletorias.</p>
+<p><strong>Mapa de coberturas:</strong></p>
+<ul>
+<li>Federados: seguro de su licencia, si la federación confirma por escrito que cubre este tipo de evento.</li>
+<li>No federados: póliza de accidentes específica, y comprobación en la ficha territorial de si la comunidad la exige.</li>
+<li>Público: RC del club como organizador, con los capitales que pida el ayuntamiento y, en su caso, la normativa autonómica de espectáculos.</li>
+<li>Voluntarios: seguro según la ley de voluntariado aplicable.</li>
+<li>Gradas: el proveedor debe acreditar su propia RC por el montaje; el contrato debe decir quién responde de qué.</li>
+<li>Pabellón: RC con daños a bienes cedidos y, si lo pide el ayuntamiento, el ayuntamiento como asegurado adicional.</li>
+</ul>
+<p><strong>Lo que no puede faltar el día del evento:</strong> los certificados impresos o accesibles, el teléfono de siniestros de cada póliza y una persona encargada de comunicar cualquier incidente.</p>
+<h3 id="12-checklist-operativo">12. Checklist operativo</h3>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Inventario de actividades y matriz de coberturas</td>
+<td>Tesorería</td>
+<td>Matriz fechada</td>
+<td>Inicio de temporada y antes de cada evento</td>
+</tr>
+<tr class="even">
+<td>Condiciones del seguro de licencia</td>
+<td>Secretaría</td>
+<td>Documento de la federación</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="odd">
+<td>RC del club/organizador revisada (actividad, límites, exclusiones)</td>
+<td>Tesorería</td>
+<td>Póliza y certificado</td>
+<td>Antes de firmar con el recinto</td>
+</tr>
+<tr class="even">
+<td>Requisitos del recinto y del ayuntamiento</td>
+<td>Organizador</td>
+<td>Condiciones escritas</td>
+<td>T-60</td>
+</tr>
+<tr class="odd">
+<td>Cobertura de no federados</td>
+<td>Organizador</td>
+<td>Póliza específica</td>
+<td>T-30</td>
+</tr>
+<tr class="even">
+<td>Voluntarios y personal cubiertos</td>
+<td>Junta</td>
+<td>Póliza o relación laboral</td>
+<td>T-30</td>
+</tr>
+<tr class="odd">
+<td>Protocolo de siniestro</td>
+<td>Organizador</td>
+<td>Documento de una página</td>
+<td>T-7</td>
+</tr>
+<tr class="even">
+<td>Certificados vigentes el día del evento</td>
+<td>Organizador</td>
+<td>Copias en el expediente</td>
+<td>Día D</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-evidencias-que-conservar">13. Evidencias que conservar</h3>
+<p>Pólizas y certificados con fechas de vigencia; condiciones del seguro de licencia; contratos con el recinto y con proveedores; comunicaciones de siniestro y respuestas; matriz de coberturas del evento.</p>
+<h3 id="14-qu-cambia-seg-n-el-territorio-y-la-federaci-n">14. Qué cambia según el territorio y la federación</h3>
+<p>Mucho. Las comunidades autónomas pueden fijar coberturas mínimas para quien organiza actividades deportivas o espectáculos públicos, y capitales mínimos de responsabilidad civil; algunas leyes de profesiones del deporte exigen seguro a los profesionales. Cada federación define qué cubre el seguro de su licencia. Todo ello está en la ficha territorial de tu comunidad y en la normativa de tu federación.</p>
+<h3 id="15-si-hay-actividad-econ-mica-cobro-o-contrataci-n">15. Si hay actividad económica, cobro o contratación</h3>
+<p>Con venta de entradas, cobro de inscripciones, bolsas o contratos con deportistas, el perímetro de responsabilidad crece: consumidores, contratistas, deportistas profesionales. Valora con tu corredor una póliza de cancelación y revisa si la RC cubre la actividad con ánimo de lucro. <strong><span class="tag prof">Requiere profesional</span></strong></p>
+<h3 id="16-cu-ndo-pedir-ayuda">16. Cuándo pedir ayuda</h3>
+<ul>
+<li>El recinto exige capitales o cláusulas que tu aseguradora no quiere asumir para deportes de contacto.</li>
+<li>Mezclas participantes federados, no federados y de otras comunidades o países.</li>
+<li>Has tenido un siniestro grave o una reclamación.</li>
+<li>No está claro quién responde entre el club, el promotor y el titular del recinto.</li>
+</ul>
+<p>KOMBAX Consultoría puede ayudarte a cruzar las condiciones del recinto, la póliza y la licencia y a preparar las preguntas; la contratación y la interpretación de la póliza corresponden a tu corredor o aseguradora.</p>
+<h3 id="17-fuentes-comentadas">17. Fuentes comentadas</h3>
+<ul>
+<li><strong>Ley 39/2022, art. 23.3</strong>, en la redacción dada por la <strong>Ley 5/2025, de 24 de julio</strong>, que remite a desarrollo reglamentario las prestaciones mínimas del SOD. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2022-24430">BOE Ley 39/2022</a> · <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2025-15424">BOE Ley 5/2025</a></li>
+<li><strong>Real Decreto 849/1993.</strong> Prestaciones mínimas vigentes mientras no se apruebe el nuevo reglamento. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1993-16129">BOE</a></li>
+<li><strong>Consulta pública del proyecto de Reglamento del Seguro Obligatorio Deportivo (2024).</strong> Contexto de la reforma. <a href="https://www.educacionfpydeportes.gob.es/servicios-al-ciudadano/informacion-publica/consulta-publica-previa/cerrados/2024/rd-seguro-obligatorio-deportivo.html">Ministerio</a></li>
+<li><strong>Ley 50/1980 de Contrato de Seguro,</strong> arts. 3, 16 y 73. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1980-22501">BOE</a></li>
+<li><strong>Ley 45/2015 de Voluntariado,</strong> arts. 2 y 14. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-11072">BOE</a></li>
+</ul>
+<h3 id="18-verificado-hasta-y-comprueba-justo-antes-de-actuar">18. Verificado hasta y comprueba justo antes de actuar</h3>
+<p><strong>Verificado hasta:</strong> 23/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong></p>
+<ul>
+<li>Si se ha publicado en el BOE el nuevo reglamento del seguro obligatorio deportivo.</li>
+<li>Las condiciones del seguro de licencia de tu federación para la temporada.</li>
+<li>Los capitales exigidos por el recinto, el ayuntamiento y la normativa autonómica (ficha territorial).</li>
+<li>La vigencia de cada certificado de póliza en la fecha del evento.</li>
+</ul>
+</section></body></html>

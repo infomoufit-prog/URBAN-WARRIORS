@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-18T13:20:29.162Z",
-  "candidates": 4811,
-  "covered_r79": 652,
-  "covered_r78": 1250,
-  "covered_legacy_all7": 2909,
+  "generated_at": "2026-09-24T17:53:10.791Z",
+  "candidates": 4796,
+  "covered_r79": 653,
+  "covered_r78": 1235,
+  "covered_legacy_all7": 2908,
   "unresolved": 0,
   "by_file": {},
   "unresolved_rows": []

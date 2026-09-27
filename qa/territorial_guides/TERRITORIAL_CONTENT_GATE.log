@@ -1,0 +1,183 @@
+PASS territorial catalog exists
+PASS territorial search index exists
+PASS no-invention policy explicit
+PASS 19 territorial units
+PASS search selector has 19 territories
+PASS search composition distinguishes verified data
+PASS consulting CTA states boundary
+PASS AN has >=2 official source references
+PASS AN has >=2 verified differentials
+PASS AN contains case-specific verification boundary
+PASS AN consulting triggers
+PASS AN markdown exists
+PASS AN has consulting handoff
+PASS AN has official sources section
+PASS AN carries no-invention statement
+PASS AN PDF exists
+PASS AR has >=2 official source references
+PASS AR has >=2 verified differentials
+PASS AR contains case-specific verification boundary
+PASS AR consulting triggers
+PASS AR markdown exists
+PASS AR has consulting handoff
+PASS AR has official sources section
+PASS AR carries no-invention statement
+PASS AR PDF exists
+PASS AS has >=2 official source references
+PASS AS has >=2 verified differentials
+PASS AS contains case-specific verification boundary
+PASS AS consulting triggers
+PASS AS markdown exists
+PASS AS has consulting handoff
+PASS AS has official sources section
+PASS AS carries no-invention statement
+PASS AS PDF exists
+PASS IB has >=2 official source references
+PASS IB has >=2 verified differentials
+PASS IB contains case-specific verification boundary
+PASS IB consulting triggers
+PASS IB markdown exists
+PASS IB has consulting handoff
+PASS IB has official sources section
+PASS IB carries no-invention statement
+PASS IB PDF exists
+PASS CN has >=2 official source references
+PASS CN has >=2 verified differentials
+PASS CN contains case-specific verification boundary
+PASS CN consulting triggers
+PASS CN markdown exists
+PASS CN has consulting handoff
+PASS CN has official sources section
+PASS CN carries no-invention statement
+PASS CN PDF exists
+PASS CB has >=2 official source references
+PASS CB has >=2 verified differentials
+PASS CB contains case-specific verification boundary
+PASS CB consulting triggers
+PASS CB markdown exists
+PASS CB has consulting handoff
+PASS CB has official sources section
+PASS CB carries no-invention statement
+PASS CB PDF exists
+PASS CM has >=2 official source references
+PASS CM has >=2 verified differentials
+PASS CM contains case-specific verification boundary
+PASS CM consulting triggers
+PASS CM markdown exists
+PASS CM has consulting handoff
+PASS CM has official sources section
+PASS CM carries no-invention statement
+PASS CM PDF exists
+PASS CL has >=2 official source references
+PASS CL has >=2 verified differentials
+PASS CL contains case-specific verification boundary
+PASS CL consulting triggers
+PASS CL markdown exists
+PASS CL has consulting handoff
+PASS CL has official sources section
+PASS CL carries no-invention statement
+PASS CL PDF exists
+PASS CT has >=2 official source references
+PASS CT has >=2 verified differentials
+PASS CT contains case-specific verification boundary
+PASS CT consulting triggers
+PASS CT markdown exists
+PASS CT has consulting handoff
+PASS CT has official sources section
+PASS CT carries no-invention statement
+PASS CT PDF exists
+PASS VC has >=2 official source references
+PASS VC has >=2 verified differentials
+PASS VC contains case-specific verification boundary
+PASS VC consulting triggers
+PASS VC markdown exists
+PASS VC has consulting handoff
+PASS VC has official sources section
+PASS VC carries no-invention statement
+PASS VC PDF exists
+PASS EX has >=2 official source references
+PASS EX has >=2 verified differentials
+PASS EX contains case-specific verification boundary
+PASS EX consulting triggers
+PASS EX markdown exists
+PASS EX has consulting handoff
+PASS EX has official sources section
+PASS EX carries no-invention statement
+PASS EX PDF exists
+PASS GA has >=2 official source references
+PASS GA has >=2 verified differentials
+PASS GA contains case-specific verification boundary
+PASS GA consulting triggers
+PASS GA markdown exists
+PASS GA has consulting handoff
+PASS GA has official sources section
+PASS GA carries no-invention statement
+PASS GA PDF exists
+PASS MD has >=2 official source references
+PASS MD has >=2 verified differentials
+PASS MD contains case-specific verification boundary
+PASS MD consulting triggers
+PASS MD markdown exists
+PASS MD has consulting handoff
+PASS MD has official sources section
+PASS MD carries no-invention statement
+PASS MD PDF exists
+PASS MC has >=2 official source references
+PASS MC has >=2 verified differentials
+PASS MC contains case-specific verification boundary
+PASS MC consulting triggers
+PASS MC markdown exists
+PASS MC has consulting handoff
+PASS MC has official sources section
+PASS MC carries no-invention statement
+PASS MC PDF exists
+PASS NC has >=2 official source references
+PASS NC has >=2 verified differentials
+PASS NC contains case-specific verification boundary
+PASS NC consulting triggers
+PASS NC markdown exists
+PASS NC has consulting handoff
+PASS NC has official sources section
+PASS NC carries no-invention statement
+PASS NC PDF exists
+PASS PV has >=2 official source references
+PASS PV has >=2 verified differentials
+PASS PV contains case-specific verification boundary
+PASS PV consulting triggers
+PASS PV markdown exists
+PASS PV has consulting handoff
+PASS PV has official sources section
+PASS PV carries no-invention statement
+PASS PV PDF exists
+PASS RI has >=2 official source references
+PASS RI has >=2 verified differentials
+PASS RI contains case-specific verification boundary
+PASS RI consulting triggers
+PASS RI markdown exists
+PASS RI has consulting handoff
+PASS RI has official sources section
+PASS RI carries no-invention statement
+PASS RI PDF exists
+PASS CE has >=2 official source references
+PASS CE has >=2 verified differentials
+PASS CE contains case-specific verification boundary
+PASS CE consulting triggers
+PASS CE markdown exists
+PASS CE has consulting handoff
+PASS CE has official sources section
+PASS CE carries no-invention statement
+PASS CE PDF exists
+PASS ML has >=2 official source references
+PASS ML has >=2 verified differentials
+PASS ML contains case-specific verification boundary
+PASS ML consulting triggers
+PASS ML markdown exists
+PASS ML has consulting handoff
+PASS ML has official sources section
+PASS ML carries no-invention statement
+PASS ML PDF exists
+PASS territory codes are unique
+PASS territorial master PDF exists
+PASS source matrix exists
+PASS human differential matrix exists
+KOMBAX PREBLOCK TERRITORIES: 182/182 PASS

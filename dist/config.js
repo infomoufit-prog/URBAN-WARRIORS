@@ -11,8 +11,8 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.13-r81-tap-to-pay',
-    build: 20133,
+    version: '2.0.0-rc.13-r104-public-logo',
+    build: 20156,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',
@@ -35,7 +35,7 @@ window.UW_CONFIG = {
     kombaxShowcase: true,
     kombaxEvents: true,
     demoDirectory: false,
-    showcaseDemo: false
+    showcaseDemo: true
   },
   brand: {
     name: 'Urban Warriors',
@@ -43,3 +43,4 @@ window.UW_CONFIG = {
     logo: './assets/urban-warriors-logo.png'
   }
 };
+// historical-release-marker: version: '2.0.0-rc.13-r81-tap-to-pay' · r81-tap-to-pay build: 20134

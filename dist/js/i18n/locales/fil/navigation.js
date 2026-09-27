@@ -70,9 +70,10 @@ export default {
     "myStudents": "Aking mga estudyante",
     "myGroups": "Aking mga grupo",
     "myWallet": "Aking wallet",
-    "myManual": "Aking manual",
+    "myManual": "Mabilis na tulong",
     "schedules": "Mga iskedyul",
     "fees": "Mga bayarin",
     "clubProfile": "Profile ng club"
-  }
+  },
+  quickHelp:{memberIntro:"Hanapin ang feature ng iyong account at buksan ito agad. Nasa KOMBAX Resources ang kumpletong mga gabay.",clubIntro:"Hanapin ang gawain ng club, basahin ang mahahalagang hakbang, at buksan ang feature. Nasa KOMBAX Resources ang kumpletong mga gabay.",memberSubtitle:"Maiikling hakbang at direktang link para sa iyong profile",clubSubtitle:"Direktang link sa mga feature ng portal",loading:"Nilo-load ang mabilis na tulong…",guidesIntro:"Nasa KOMBAX Resources ang kumpletong mga gabay para sa iyong profile. Dadalhin ka ng mabilis na tulong sa isang feature; narito rin ang support at privacy."}
 };

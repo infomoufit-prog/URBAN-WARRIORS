@@ -1,0 +1,11 @@
+OK RC13 ANDROID PLAY 20021: applicationId estable para continuidad de actualizaciones
+OK RC13 ANDROID PLAY 20021: Android 16 / API 36 configurado para Google Play
+OK RC13 ANDROID PLAY 20021: AGP compatible con API 36 configurado
+OK RC13 ANDROID PLAY 20021: build Android RC13 conserva versionCode monótono
+OK RC13 ANDROID PLAY 20021: firma release admite configuración local o entorno sin incrustar claves
+OK RC13 ANDROID PLAY 20021: credenciales y almacenes de firma quedan excluidos
+OK RC13 ANDROID PLAY 20021: paquete incluye plantilla y preflight sin revelar secretos
+OK RC13 ANDROID PLAY 20021: manifiesto conserva transporte seguro y permiso push explícito
+OK RC13 ANDROID PLAY 20021: WebView conserva safe areas al orientar a API 36
+OK RC13 ANDROID PLAY 20021: insets físicos se convierten a píxeles CSS y evitan márgenes sobredimensionados
+RC13 BUILD 20021 ANDROID / PLAY STATIC READINESS: PASS

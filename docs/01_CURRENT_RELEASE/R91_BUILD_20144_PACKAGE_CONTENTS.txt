@@ -1,0 +1,6 @@
+KOMBAX R91 build 20144
+Manifest files: 4927
+Public guides active: 38
+Territorial guides active: 19
+Private club manual: included only under artifacts/manuals (Git-ignored; not runtime)
+Training R100 Claude: not implemented

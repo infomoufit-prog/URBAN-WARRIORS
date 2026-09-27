@@ -1,0 +1,211 @@
+{
+  "catalog_version": "2026.09.21-preblock-territories",
+  "review_date": "21/09/2026",
+  "regional_layer": "España: 17 comunidades autónomas + Ceuta + Melilla (capa diferencial separada)",
+  "guide_count": 15,
+  "guides": [
+    {
+      "n": 1,
+      "title": "Crear un club o asociación deportiva",
+      "subtitle": "De la idea a una entidad deportiva formalmente organizada",
+      "scope": "España - marco general; capa práctica desarrollada para Cataluña",
+      "consult_triggers": [
+        "La entidad tendrá actividad económica relevante o personal contratado.",
+        "Hay dudas entre club deportivo, asociación general, empresa u otra forma jurídica.",
+        "Se quiere competir oficialmente en varias disciplinas o federaciones.",
+        "La entidad operará en más de una comunidad autónoma o fuera de España."
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Organizar un evento de deportes de contacto",
+      "subtitle": "Permisos, recinto, participantes, seguridad y operativa",
+      "scope": "España - marco general; capa práctica desarrollada para Cataluña",
+      "consult_triggers": [
+        "Evento con público numeroso o recinto no habitual.",
+        "Menores compitiendo.",
+        "Deportistas extranjeros.",
+        "Evento profesional o con premios/bolsas.",
+        "Venta de entradas y política compleja de devolución.",
+        "Dudas sobre si es competición oficial, interclub, exhibición o espectáculo extraordinario."
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Organizar un interclub",
+      "subtitle": "Encuentro deportivo entre clubes sin convertirlo en una competición mal clasificada",
+      "scope": "España - marco general; Cataluña como primera capa autonómica",
+      "consult_triggers": [
+        "No está claro si el evento cuenta como competición.",
+        "Se cobrará entrada.",
+        "Habrá menores.",
+        "Participan clubes de otra comunidad o país.",
+        "Se quieren publicar resultados como récord oficial."
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Licencias deportivas: alta, renovación y gestión",
+      "subtitle": "Qué habilita una licencia y por qué depende de modalidad, ámbito y federación",
+      "scope": "España - marco estatal y cautelas autonómicas/federativas",
+      "consult_triggers": [
+        "Cambio de disciplina o federación.",
+        "Competición estatal/internacional.",
+        "Licencia de menor.",
+        "Duplicidad de licencias o dudas de cobertura de seguro.",
+        "Participación de extranjero o deportista de otra federación territorial."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Seguros y coberturas",
+      "subtitle": "Separar seguro deportivo, accidentes y responsabilidad del organizador",
+      "scope": "España - marco general; Cataluña como capa operativa",
+      "consult_triggers": [
+        "Evento con público o alquiler de recinto.",
+        "Póliza excluye deportes de combate o competición.",
+        "Participantes no federados.",
+        "Actividad en otra comunidad/país.",
+        "Dudas sobre responsabilidad entre recinto, club y promotor."
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Menores en actividad y competición deportiva",
+      "subtitle": "Protección, consentimiento, datos, imagen y entorno seguro",
+      "scope": "España - obligaciones estatales; revisar protocolos autonómicos y federativos",
+      "consult_triggers": [
+        "Evento con menores y público/streaming.",
+        "Viajes o pernoctaciones.",
+        "Combates de contacto con reglas de edad específicas.",
+        "Tratamiento de datos de salud.",
+        "Dudas sobre autorización de imagen o protección frente a violencia."
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Instalaciones, recintos y autorizaciones",
+      "subtitle": "Comprobar que el lugar está habilitado para la actividad real",
+      "scope": "España - régimen territorial/municipal; Cataluña como primera capa",
+      "consult_triggers": [
+        "Gradas o estructuras temporales.",
+        "Aforo elevado.",
+        "Espacio abierto.",
+        "Cambio de actividad respecto a la licencia del recinto.",
+        "Evento en municipio con ordenanza específica."
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Protección de datos, imagen y comunicaciones",
+      "subtitle": "Qué datos necesita realmente un club o evento y cómo tratarlos",
+      "scope": "España/UE - aplicación general; revisar bases jurídicas por proceso",
+      "consult_triggers": [
+        "Se quiere publicar información médica, de menores o documentos.",
+        "Se comparten datos entre varios clubes/federaciones.",
+        "Se implanta reconocimiento, videovigilancia o control nominativo de entradas.",
+        "Se reciben solicitudes de acceso/borrado complejas."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Ticketing, venta de entradas y control de acceso",
+      "subtitle": "Vender una entrada implica contrato, información y operativa de acceso",
+      "scope": "España - consumo general; requisitos adicionales según evento/recinto",
+      "consult_triggers": [
+        "Evento sometido a régimen especial de seguridad.",
+        "Entradas nominativas.",
+        "Cambio sustancial de fecha/recinto/cartel.",
+        "Reventa o intermediación.",
+        "Venta internacional."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Federaciones y relaciones federativas",
+      "subtitle": "Entender qué controla la federación y qué sigue siendo responsabilidad del club/organizador",
+      "scope": "España - marco estatal y autonómico/federativo",
+      "consult_triggers": [
+        "Dudas entre dos federaciones u organizaciones.",
+        "Evento con varias disciplinas.",
+        "Resultados que se quieren incorporar a ranking oficial.",
+        "Conflicto entre licencia autonómica y estatal."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Deportistas extranjeros y participación internacional",
+      "subtitle": "Entrada, trabajo, licencia y participación deportiva son controles distintos",
+      "scope": "España - extranjería estatal + normativa deportiva/federativa",
+      "consult_triggers": [
+        "Nacional de tercer país con remuneración.",
+        "Estancia superior a 90 días.",
+        "Contrato profesional.",
+        "Evento internacional/oficial.",
+        "Dudas sobre fiscalidad de pagos a no residentes."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Patrocinio, marcas y colaboraciones",
+      "subtitle": "Distinguir patrocinio publicitario, colaboración y donación",
+      "scope": "España - marco contractual/fiscal general",
+      "consult_triggers": [
+        "Entidad quiere emitir certificado de donación.",
+        "Patrocinio con deportistas individuales.",
+        "Pago en especie importante.",
+        "Naming rights o exclusividad de categoría.",
+        "Operación transfronteriza."
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Organización de combates y participantes",
+      "subtitle": "Del matchmaking a la documentación verificable",
+      "scope": "Marco deportivo general; reglas concretas dependen de disciplina y organizador competente",
+      "consult_triggers": [
+        "Dudas de categoría o experiencia.",
+        "Menores.",
+        "Diferencia grande de récord/peso.",
+        "Evento multideporte.",
+        "Se quiere alimentar ranking público u oficial."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Documentación y checklist del organizador",
+      "subtitle": "Un expediente único para demostrar que el evento se preparó correctamente",
+      "scope": "España - checklist transversal adaptable al territorio",
+      "consult_triggers": [
+        "Evento complejo o multientidad.",
+        "Documentación con fechas/entidades contradictorias.",
+        "No está claro quién asume responsabilidad principal.",
+        "Faltan autorizaciones pocos días antes del evento."
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Obligaciones posteriores al evento",
+      "subtitle": "Cerrar pagos, incidencias, datos, resultados y documentación",
+      "scope": "España - cierre operativo, contractual, fiscal y documental",
+      "consult_triggers": [
+        "Cancelación o aplazamiento.",
+        "Accidente grave o reclamación.",
+        "Descuadre económico.",
+        "Chargebacks o fraude.",
+        "Conflicto sobre resultado deportivo.",
+        "Documentación fiscal o laboral compleja."
+      ]
+    }
+  ],
+  "status": "PREPARATORY_NOT_LIVE",
+  "territorial_catalog": "artifacts/guides/territories/KOMBAX_TERRITORIAL_CATALOG_2026.json",
+  "territorial_master_pdf": "artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIOS_ESPANA_2026.pdf",
+  "territory_count": 19,
+  "territorial_policy": {
+    "no_invention": true,
+    "composition": "guía estatal/base + capa territorial diferencial",
+    "municipal_or_federative_unknowns": "marcar como verificación específica; nunca completar con una regla genérica",
+    "consulting": "ofrecer KOMBAX Consultoría cuando el caso dependa de municipio, recinto, modalidad/federación, menores, extranjeros, ticketing, actividad económica o documentación concreta"
+  }
+}

@@ -14,6 +14,7 @@ const SECURITY_EMAIL='seguridad@kombax.es';
 const CHILD_SAFETY_EMAIL='childsafety@kombax.es';
 const migrationAccept='.pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp';
 const CLUB_ORG_ASSIST_ROLES=new Set(['direccion','coordinacion','secretaria','economia']);
+const migrationDrafts=new Map();
 
 function clubOrgTenantRef(){
   const clubId=String(state.session?.club_id||'').trim();
@@ -22,6 +23,7 @@ function clubOrgTenantRef(){
 }
 function orgTenantRef(context={}){
   const explicit=String(context?.tenantRef||'').trim();if(explicit)return explicit.slice(0,160);
+  if(String(context?.profileType||'').toLowerCase()==='club')return clubOrgTenantRef();
   const profileId=String(context?.profileId||'').trim();if(profileId)return `profile:${profileId}`;
   return clubOrgTenantRef();
 }
@@ -36,13 +38,24 @@ function asNumber(v,fallback=0){const n=Number(v);return Number.isFinite(n)?n:fa
 function quotaBar(used,total){const safeTotal=Math.max(1,asNumber(total,1)),pct=Math.min(100,Math.max(0,Math.round(asNumber(used)/safeTotal*100)));return `<div class="kx-assist-quota-bar"><i style="width:${pct}%"></i></div>`}
 function assistanceQuota(dashboard){const a=dashboard?.assistance||{};return {used:asNumber(a.used),total:asNumber(a.total),remaining:asNumber(a.remaining),periodEnd:a.period_end,messagesPerConversation:asNumber(a.messages_per_conversation,10)}}
 function migrationQuota(dashboard){const m=dashboard?.migration||{};return {used:asNumber(m.used),total:asNumber(m.total),remaining:asNumber(m.remaining),documentsUsed:asNumber(m.documents_used),documentsMax:asNumber(m.documents_max),mbUsed:asNumber(m.mb_used),mbMax:asNumber(m.mb_max),validUntil:m.valid_until,messagesPerConversation:asNumber(m.messages_per_conversation,24)}}
+function creditControl(credits){
+  if(!credits)return '<span class="kx-ai-credit-unavailable">Créditos IA · saldo no disponible</span>';
+  const available=Math.max(0,asNumber(credits.available));
+  const total=Math.max(available,asNumber(credits.granted_total||credits.plan_total));
+  const used=Math.max(0,asNumber(credits.used_total));
+  const renewal=credits.renewal_at?new Date(credits.renewal_at).toLocaleDateString('es-ES',{day:'numeric',month:'long'}):'Pendiente';
+  const pct=total>0?Math.round((total-available)/total*100):0;
+  const warning=pct>=100?'Has utilizado los Créditos IA incluidos en tu plan.':pct>=90?'Te quedan pocos Créditos IA.':pct>=75?'Has utilizado la mayor parte de tus Créditos IA de este periodo.':'';
+  return `<details class="kx-ai-credit-control"><summary aria-label="Ver Créditos IA disponibles">🪙 <b>${Math.floor(available).toLocaleString('es-ES')}</b><span>créditos</span></summary><div class="kx-ai-credit-popover"><strong>Créditos IA</strong><p class="kx-ai-credit-amount">${Math.floor(available).toLocaleString('es-ES')} / ${Math.floor(total).toLocaleString('es-ES')} disponibles</p><dl><div><dt>Plan</dt><dd>${esc(String(credits.plan||'KOMBAX'))}</dd></div><div><dt>Próxima renovación</dt><dd>${esc(renewal)}</dd></div><div><dt>Uso de este periodo</dt><dd>${Math.floor(used).toLocaleString('es-ES')} créditos</dd></div></dl><p>Assist y Migrations utilizan el mismo saldo de esta organización. Las tareas sencillas consumen menos que los análisis extensos o las migraciones.</p>${warning?`<p class="kx-ai-credit-warning">${esc(warning)}</p>`:''}<details class="kx-ai-credit-help"><summary>Cómo funcionan los créditos</summary><p>Los Créditos IA permiten utilizar las herramientas inteligentes de KOMBAX. Todos tus asistentes comparten el mismo saldo. Las tareas sencillas consumen menos que los análisis extensos, documentos o migraciones complejas. El consumo se calcula automáticamente según los recursos utilizados.</p></details></div></details>`;
+}
+function aiCreditsCard(credits){return `<section class="kx-ai-credit-overview" aria-label="Créditos IA"><div><strong>Créditos IA</strong><p>Assist y Migrations comparten el saldo de esta organización.</p></div>${creditControl(credits)}</section>`}
 function assistanceQuotaCard(dashboard){const a=assistanceQuota(dashboard);return `<div class="kx-assist-quota-grid single"><article><span>KOMBAX ASSIST · GESTIÓN</span><strong>${a.remaining} / ${a.total}</strong><p>conversaciones disponibles este mes</p>${quotaBar(a.used,a.total)}<small>Hasta <b>${a.messagesPerConversation}</b> mensajes tuyos por conversación. Una conversación empieza a consumir cupo cuando envías el primer mensaje; así protegemos el uso de IA incluido en tu plan.</small></article></div>`}
 function migrationQuotaCard(dashboard){const m=migrationQuota(dashboard);return `<div class="kx-assist-quota-grid single"><article><span>KOMBAX MIGRATIONS</span><strong>${m.remaining} / ${m.total}</strong><p>migraciones disponibles</p>${quotaBar(m.used,m.total)}<small>Hasta <b>${m.messagesPerConversation}</b> mensajes tuyos por migración · ${m.documentsUsed} / ${m.documentsMax||'—'} documentos · ${m.mbUsed.toFixed(1)} / ${m.mbMax||'—'} MB.</small></article></div>`}
 function isMigrationTicket(ticket){return String(ticket?.category||'')==='MIGRATION'}
 function isManagementTicket(ticket){return String(ticket?.category||'')==='MANAGEMENT'}
 function isSupportTicket(ticket){return !isMigrationTicket(ticket)&&!isManagementTicket(ticket)}
 function isGuidedSupportTicket(ticket){return isSupportTicket(ticket)&&String(ticket?.status||'')==='GUIDED_SESSION'}
-function canMigrationContext(context={}){const type=String(context?.profileType||'').toLowerCase();if(type&&!['federacion','marca'].includes(type))return false;return Boolean(orgTenantRef(context))}
+function canMigrationContext(context={}){const type=String(context?.profileType||'').toLowerCase();if(type&&!['club','federacion','marca'].includes(type))return false;return Boolean(orgTenantRef(context))}
 function ticketRows(rows=[],{mode='all'}={}){
   const filtered=(rows||[]).filter(t=>mode==='migration'?isMigrationTicket(t):mode==='assist'?isManagementTicket(t):mode==='support'?isSupportTicket(t):true);
   if(!filtered.length){
@@ -82,8 +95,121 @@ function messageBubbles(rows=[],{migration=false,support=false}={}){
 function migrationFileRows(preview){
   const analyses=Array.isArray(preview?.files)?preview.files:[],total=asNumber(preview?.files_total),analyzed=asNumber(preview?.files_analyzed),pending=Math.max(0,total-analyzed),review=asNumber(preview?.needs_review),records=asNumber(preview?.detected_records);
   const summary=`<div class="kx-migration-summary"><span><b>${total}</b> archivos</span><span><b>${analyzed}</b> analizados</span><span><b>${pending}</b> pendientes</span><span><b>${review}</b> a revisar</span><span><b>${records}</b> registros detectados</span></div>`;
-  const rows=analyses.length?`<div class="kx-migration-analysis-list">${analyses.map(a=>`<article><div><strong>${esc(a.name||a.original_name||a.file_id||'Archivo')}</strong><p>${esc(a.summary||'Analizado')}</p></div><span class="badge ${a.needs_review?'warning':''}">${a.needs_review?'REVISAR':'ANALIZADO'}</span></article>`).join('')}</div>`:'<div class="muted">Todavía no hay archivos analizados por KOMBAX Migrations.</div>';
-  return `${summary}${rows}<div class="kx-assist-note"><strong>Confirmación obligatoria.</strong> La vista previa sirve para revisar datos, duplicados e incompletos. KOMBAX Migrations no ejecuta una importación automática desde este chat.</div>`;
+  const rows=analyses.length?`<div class="kx-migration-analysis-list">${analyses.map(a=>`<article><div><strong>${esc(a.name||a.original_name||a.file_id||'Archivo')}</strong><p>${esc(a.summary||'Pendiente de análisis')}</p></div><span class="badge ${a.needs_review?'warning':''}">${!a.summary?'PENDIENTE':a.needs_review?'REVISAR':'ANALIZADO'}</span></article>`).join('')}</div>`:'<div class="muted">Todavía no hay archivos analizados por KOMBAX Migrations.</div>';
+  return `${summary}${rows}<div class="kx-assist-note"><strong>Confirmación obligatoria.</strong> El agente identificará los datos y pedirá lo que falte. Después de tu autorización visible, los incorporará y te indicará dónde comprobarlos.</div>`;
+}
+function migrationReviewPanel(data={},catalog={}){
+  const files=Array.isArray(data?.files)?data.files:[],rows=files.flatMap(file=>(Array.isArray(file.records)?file.records:[]).map(r=>({...r,file_name:file.file_name||'Archivo'})));
+  if(!rows.length)return `<section class="kx-migration-review"><h3>Revisión e importación</h3><p>Cuando el análisis detecte filas, aparecerán aquí para corregirlas y decidir qué importar.</p></section>`;
+  const option=(items=[],selected='')=>`<option value="">Seleccionar…</option>${items.filter(x=>x?.activo!==false&&x?.activa!==false).map(x=>`<option value="${esc(x.id)}" ${String(x.id)===String(selected)?'selected':''}>${esc(x.nombre||x.name||'')}</option>`).join('')}`;
+  const groupOption=(discipline='',selected='')=>`<select data-field="group_id" data-options="${esc(JSON.stringify(Object.fromEntries(catalog.groups.map(x=>[x.id,x.disciplina_id]))))}"><option value="">Seleccionar…</option>${catalog.groups.filter(x=>x?.activo!==false).map(x=>`<option value="${esc(x.id)}" ${String(x.id)===String(selected)?'selected':''}>${esc(x.nombre||'')}</option>`).join('')}</select>`;
+  const catalogKey=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const uniqueMatch=(items,label)=>{const key=catalogKey(label);if(!key)return '';const matches=items.filter(x=>catalogKey(x.nombre||x.name)===key);return matches.length===1?String(matches[0].id):'';};
+  const cards=rows.slice(0,200).map((r,i)=>{const f=r.fields||{},kind=['student','charge','payment'].includes(r.kind)?r.kind:'student';const disciplineId=String(f.discipline_id||uniqueMatch(catalog.disciplines,f.discipline_name)||'');const eligibleGroups=catalog.groups.filter(x=>x?.activo!==false&&String(x.disciplina_id)===disciplineId);const groupId=String(f.group_id||uniqueMatch(eligibleGroups,f.group_name)||(eligibleGroups.length===1?eligibleGroups[0].id:'')||'');return `<article class="kx-migration-review-row" data-migration-row="${i}" data-source-ref="${esc(r.source_ref||'')}" data-kind="${kind}"><header><label><input type="checkbox" data-import-selected checked> Incluir fila</label><b>${kind==='student'?'Alumno':kind==='charge'?'Cargo':'Pago'}</b><small>${esc(r.file_name)} · Ref. ${esc(r.source_ref||'')}</small></header><div class="kx-migration-fields">${kind==='student'?`<label>Nombre<input data-field="name" value="${esc(f.name||'')}" autocomplete="off"></label><label>Apellidos<input data-field="surname" value="${esc(f.surname||'')}" autocomplete="off"></label><label>Fecha de nacimiento<input data-field="birth_date" type="date" value="${esc(f.birth_date||'')}"></label><label>Correo<input data-field="email" type="email" value="${esc(f.email||'')}"></label><label>Teléfono<input data-field="phone" value="${esc(f.phone||'')}"></label><label>Tutor/a<input data-field="guardian_name" value="${esc(f.guardian_name||'')}"></label><label>Disciplina<select data-field="discipline_id">${option(catalog.disciplines,disciplineId)}</select></label><label>Grupo${groupOption(disciplineId,groupId)}</label><label>Tarifa<select data-field="tariff_id">${option(catalog.tariffs,f.tariff_id)}</select></label>`:kind==='charge'?`<label>Alumno de esta migración<input data-field="student_source_ref" value="${esc(f.student_source_ref||'')}" placeholder="Referencia de la fila del alumno"></label><label>Periodo<input data-field="period" type="date" value="${esc(f.period||'')}"></label><label>Vencimiento<input data-field="due_date" type="date" value="${esc(f.due_date||'')}"></label><label>Importe<input data-field="amount" type="number" min="0" step="0.01" value="${esc(f.amount??'')}"></label><label>Concepto<input data-field="concept" value="${esc(f.concept||'')}"></label>`:`<label>Cargo de esta migración<input data-field="charge_source_ref" value="${esc(f.charge_source_ref||'')}" placeholder="Referencia de la fila del cargo"></label><label>Fecha<input data-field="date" type="date" value="${esc(f.date||'')}"></label><label>Importe<input data-field="amount" type="number" min="0.01" step="0.01" value="${esc(f.amount??'')}"></label><label>Método<select data-field="method">${['','transferencia','bizum','efectivo','tarjeta','sepa','terminal','otro'].map(x=>`<option ${x===String(f.method||'')?'selected':''} value="${x}">${x||'Seleccionar…'}</option>`).join('')}</select></label><label>Referencia<input data-field="reference" value="${esc(f.reference||'')}"></label>`}</div>${(r.issues||[]).length?`<p class="warning">${esc(r.issues.join(' · '))}</p>`:''}</article>`;}).join('');
+  return `<section class="kx-migration-review"><div><h3>Datos identificados por KOMBAX Migrations</h3><p>${rows.length} fila(s). Completa solo las preguntas pendientes; el agente preparará la importación cuando los datos esenciales estén listos.</p></div><div id="kx-migration-questions" class="kx-migration-questions" role="status" aria-live="polite"></div><div id="kx-migration-updates"></div><div id="kx-migration-result"></div><div class="kx-migration-review-list">${cards}</div><button class="btn btn-primary" id="kx-migration-import">Sí, incorporar estos datos</button><small>Hasta 200 filas por operación. Los alumnos entran como prealta, las cuotas quedan pendientes y los pagos requieren validación. No se actualizan fichas existentes.</small></section>`;
+}
+function selectedMigrationRecords(wrap){
+  return [...wrap.querySelectorAll('[data-migration-row]')].filter(card=>card.querySelector('[data-import-selected]')?.checked).map(card=>{
+    const fields={};card.querySelectorAll('[data-field]').forEach(el=>fields[el.dataset.field]=String(el.value||'').trim());
+    return {source_ref:card.dataset.sourceRef,kind:card.dataset.kind,fields,selected:true,needs_review:false};
+  });
+}
+function decorateMigrationRelations(wrap){
+  const cards=[...wrap.querySelectorAll('[data-migration-row]')];
+  const choices=(kind)=>cards.filter(card=>card.dataset.kind===kind).map(card=>({source:card.dataset.sourceRef,label:kind==='student'?`${card.querySelector('[data-field="name"]')?.value||'Alumno'} ${card.querySelector('[data-field="surname"]')?.value||''}`.trim():`${card.querySelector('[data-field="concept"]')?.value||'Cuota'} · ${card.querySelector('[data-field="amount"]')?.value||''} €`}));
+  for(const [kind,field,linkedKind] of [['charge','student_source_ref','student'],['payment','charge_source_ref','charge']]){
+    const options=choices(linkedKind);
+    cards.filter(card=>card.dataset.kind===kind).forEach(card=>{
+      const input=card.querySelector(`[data-field="${field}"]`);if(!input||input.tagName==='SELECT')return;
+      const current=String(input.value||''),select=document.createElement('select');select.dataset.field=field;
+      select.innerHTML=`<option value="">Seleccionar ${linkedKind==='student'?'alumno':'cuota'}…</option>${options.map(option=>`<option value="${esc(option.source)}" ${option.source===current?'selected':''}>${esc(option.label)}</option>`).join('')}`;
+      input.replaceWith(select);
+    });
+  }
+}
+function syncMigrationGroupOptions(wrap){
+  wrap.querySelectorAll('[data-migration-row][data-kind="student"]').forEach(card=>{
+    const discipline=card.querySelector('[data-field="discipline_id"]'),group=card.querySelector('[data-field="group_id"]');if(!discipline||!group)return;
+    const map=JSON.parse(group.dataset.options||'{}');[...group.options].forEach((option,index)=>{option.hidden=index>0&&Boolean(discipline.value)&&map[option.value]!==discipline.value;});
+  });
+}
+function captureMigrationDraft(wrap,ticketId){
+  const cards=[...wrap.querySelectorAll('[data-migration-row]')];if(!cards.length)return;
+  const draft=new Map();for(const card of cards){const fields={};card.querySelectorAll('[data-field]').forEach(input=>fields[input.dataset.field]=input.value);draft.set(card.dataset.sourceRef,{fields,selected:card.querySelector('[data-import-selected]')?.checked!==false});}
+  migrationDrafts.set(ticketId,draft);
+  try{sessionStorage.setItem(`kx:migration-draft:${ticketId}`,JSON.stringify([...draft]));}catch{}
+}
+function restoreMigrationDraft(wrap,ticketId){
+  let draft=migrationDrafts.get(ticketId);
+  if(!draft){try{const saved=JSON.parse(sessionStorage.getItem(`kx:migration-draft:${ticketId}`)||'null');if(Array.isArray(saved))draft=new Map(saved);}catch{}}
+  if(!draft)return;
+  wrap.querySelectorAll('[data-migration-row]').forEach(card=>{
+    const prior=draft.get(card.dataset.sourceRef);if(!prior)return;
+    const selected=card.querySelector('[data-import-selected]');if(selected)selected.checked=prior.selected;
+    card.querySelectorAll('[data-field]').forEach(input=>{const value=prior.fields[input.dataset.field];if(value!==undefined&&(!input.options||[...input.options].some(option=>option.value===value)))input.value=value;});
+  });
+}
+function applyMigrationFieldUpdates(wrap,updates=[]){
+  if(!Array.isArray(updates)||!updates.length)return 0;
+  const normalized=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  let applied=0;
+  for(const update of updates){
+    const card=[...wrap.querySelectorAll('[data-migration-row]')].find(row=>row.dataset.sourceRef===String(update?.source_ref||''));if(!card)continue;
+    for(const [field,value] of Object.entries(update.fields||{}).sort(([a],[b])=>Number(a==='group_name')-Number(b==='group_name'))){
+      const targetField=field==='discipline_name'?'discipline_id':field==='group_name'?'group_id':field==='tariff_name'?'tariff_id':field;
+      const input=card.querySelector(`[data-field="${targetField}"]`);if(!input||value==null)continue;
+      if(input.options){const option=[...input.options].find(option=>field.endsWith('_name')?normalized(option.textContent)===normalized(value):option.value===String(value));if(!option)continue;input.value=option.value;if(field==='discipline_name'){const group=card.querySelector('[data-field="group_id"]');if(group){group.value='';const map=JSON.parse(group.dataset.options||'{}');[...group.options].forEach((item,index)=>{item.hidden=index>0&&map[item.value]!==input.value;});}}}
+      else input.value=String(value);
+      applied++;
+    }
+  }
+  updateMigrationGuidance(wrap);
+  const status=wrap.querySelector('#kx-migration-updates');if(status&&applied)status.innerHTML=`<p class="kx-migration-ai-updates" role="status">El agente ha propuesto ${applied} dato(s) a partir de tu respuesta. Comprueba los campos resaltados antes de autorizar la incorporación.</p>`;
+  return applied;
+}
+function migrationQuestions(records=[],wrap=null){
+  const questions=[],studentRefs=new Set(records.filter(r=>r.kind==='student').map(r=>r.source_ref)),charges=new Map(records.filter(r=>r.kind==='charge').map(r=>[r.source_ref,r]));
+  for(const record of records){
+    const f=record.fields||{},label=record.kind==='student'?`${f.name||'Alumno'} ${f.surname||''}`.trim():record.kind==='charge'?`Cuota ${f.concept||''}`.trim():'Pago';
+    const ask=(condition,question)=>{if(condition)questions.push(`${label}: ${question}`);};
+    if(record.kind==='student'){
+      ask(!f.name||!f.surname,'¿cuál es su nombre y apellido completos?');
+      ask(!f.discipline_id,'¿qué disciplina o arte marcial practica?');
+      const card=[...(wrap?.querySelectorAll('[data-migration-row]')||[])].find(row=>row.dataset.sourceRef===record.source_ref),group=card?.querySelector('[data-field="group_id"]'),groupMap=JSON.parse(group?.dataset.options||'{}');
+      ask(!f.group_id||groupMap[f.group_id]!==f.discipline_id,'¿en qué grupo y horario entrena? El horario se toma del grupo elegido.');
+    }else if(record.kind==='charge'){
+      ask(!f.student_source_ref||!studentRefs.has(f.student_source_ref),'¿a qué alumno de esta migración corresponde la cuota?');
+      ask(!f.period||!f.due_date,'¿cuál es el periodo y la fecha de vencimiento?');
+      ask(!Number.isFinite(Number(f.amount))||Number(f.amount)<0||f.amount==='','¿cuál es el importe de la cuota?');
+    }else if(record.kind==='payment'){
+      ask(!f.charge_source_ref||!charges.has(f.charge_source_ref),'¿a qué cuota de esta migración corresponde el pago?');
+      ask(!Number.isFinite(Number(f.amount))||Number(f.amount)<=0,'¿cuál es el importe pagado?');
+      const charge=charges.get(f.charge_source_ref);if(charge)ask(Number(f.amount)>Number(charge.fields?.amount||0),'el pago supera el importe de la cuota; ¿qué importe es correcto?');
+      ask(!f.method,'¿cuál fue el método de pago?');
+    }
+  }
+  return questions;
+}
+function migrationFollowups(records=[]){
+  return records.filter(row=>row.kind==='student').map(row=>{
+    const f=row.fields||{},missing=[];
+    if(!f.birth_date)missing.push('fecha de nacimiento');
+    if(!f.email&&!f.phone)missing.push('correo o teléfono de contacto');
+    if(!f.tariff_id)missing.push('tarifa');
+    return missing.length?`${f.name||'Alumno'} ${f.surname||''}: ${missing.join(', ')}`.trim():'';
+  }).filter(Boolean);
+}
+function updateMigrationGuidance(wrap){
+  const records=selectedMigrationRecords(wrap),questions=migrationQuestions(records,wrap),box=wrap.querySelector('#kx-migration-questions'),button=wrap.querySelector('#kx-migration-import');
+  if(wrap.dataset.kxMigrationCanImport==='false'){
+    if(box)box.innerHTML='<strong>El agente ha identificado los datos.</strong><p>La incorporación directa está habilitada actualmente para Club. Federación y Marca pueden continuar con el análisis y solicitar revisión humana.</p>';
+    if(button)button.disabled=true;return {records,questions};
+  }
+  const followups=migrationFollowups(records);
+  const optional=followups.length?`<p>Información que podrás completar ahora o verificar después en Alumnos:</p><ul>${followups.slice(0,8).map(item=>`<li>${esc(item)}</li>`).join('')}</ul>${followups.length>8?`<p>Y ${followups.length-8} ficha(s) más.</p>`:''}`:'';
+  if(box)box.innerHTML=(questions.length?`<strong>Necesito completar ${questions.length} dato(s) antes de incorporarlos:</strong><ol>${questions.slice(0,12).map(q=>`<li>${esc(q)}</li>`).join('')}</ol>${questions.length>12?`<p>Hay ${questions.length-12} pregunta(s) más. Completa las filas marcadas antes de continuar.</p>`:''}<p>Si falta un grupo u horario, créalo en Mi Club → Grupos y vuelve a esta migración.</p>`:`<strong>${records.length?`He identificado ${records.length} registro(s). ¿Autorizas incorporarlos a tu club?`:'Selecciona los registros que quieras incorporar.'}</strong><p>Revisa las advertencias y los datos de cada ficha antes de confirmar.</p>`)+optional;
+  if(button)button.disabled=!records.length||Boolean(questions.length);
+  return {records,questions};
 }
 function assistErrorMessage(error,{support=false}={}){
   const raw=String(error?.message||error||'');
@@ -91,55 +217,95 @@ function assistErrorMessage(error,{support=false}={}){
   if(/ORG_ASSIST_ONLY|KOMBAX_MANAGEMENT_ACCESS_REQUIRED|KOMBAX_ORG_HISTORY_ONLY/i.test(raw))return 'KOMBAX Assist de gestión necesita una identidad Club, Federación o Marca autorizada.';
   if(/ASSIST_CHAT_NOT_ACTIVATED|assist_chat_not_activated/i.test(raw))return support?'El chat guiado de este caso todavía no está activo. Continúa por correo con Soporte KOMBAX; el equipo lo habilitará si es útil para el diagnóstico.':'Este caso pertenece a Soporte KOMBAX y requiere activación del chat guiado por el equipo de soporte.';
   if(/ai_not_configured|OPENAI_API_KEY_MISSING/i.test(raw))return support?'La asistencia guiada no está disponible temporalmente. El caso permanece abierto y puedes continuar por el canal humano de Soporte KOMBAX.':'La asistencia inteligente está instalada, pero la credencial de IA no está habilitada en este entorno. No se ha modificado ningún dato.';
+  if(/AI_CREDITS_EXHAUSTED|AI_CREDITS_RESERVATION_REQUIRED/i.test(raw))return 'No hay suficientes Créditos IA disponibles para reservar esta tarea. Puedes esperar la renovación o consultar con soporte.';
+  if(/assistant_usage_unavailable|ledger_write_failed|METERING_WRITE_ERROR/i.test(raw))return 'No se pudo confirmar el consumo de esta operación. No se han cobrado créditos; vuelve a intentarlo.';
+  if(/TRIAL_DEMO_ONLY|TRIAL_ENDED/i.test(raw))return /TRIAL_ENDED/i.test(raw)?'La prueba de demostración ha terminado. Verifica tu club para continuar.':'Durante la prueba solo se admiten preguntas de demostración sin datos personales.';
   if(/AI_MONTHLY_ECONOMY_GUARD|MONTHLY_ALLOWANCE_EXHAUSTED|assist_limit|allowance/i.test(raw))return support?'Este chat guiado ha alcanzado el límite de asistencia incluido. El caso permanece abierto por correo y Soporte KOMBAX decidirá el siguiente nivel de atención.':'Has utilizado las conversaciones de KOMBAX Assist incluidas en este periodo. El historial permanece disponible y el cupo se renovará en el siguiente periodo.';
   if(/AI_CASE_ECONOMY_GUARD|CASE_TURN_LIMIT/i.test(raw))return support?'Este chat guiado ha alcanzado su límite de mensajes. El caso continúa por correo y Soporte KOMBAX puede escalarlo si la situación lo requiere.':'Esta conversación ha alcanzado el número de mensajes incluido. Inicia una nueva conversación si todavía tienes cupo mensual disponible.';
   return humanError(error);
 }
 async function refreshChat(wrap,ticketId,{migration=false,support=false,tenantRefValue=''}={}){
   const ref=tenantRefValue||clubOrgTenantRef();
-  const [messages,dashboard,preview,supportStatus]=await Promise.all([
+  const [messages,dashboard,preview,supportStatus,migrationJob]=await Promise.all([
     repos.customerOps.messages(ticketId,100).catch(()=>[]),
     !support&&ref?repos.customerOps.dashboard(ref).catch(()=>null):Promise.resolve(null),
     migration?repos.customerOps.migrationPreview(ticketId).catch(()=>null):Promise.resolve(null),
-    support?repos.customerOps.supportGuidedStatus(ticketId).catch(()=>null):Promise.resolve(null)
+    support?repos.customerOps.supportGuidedStatus(ticketId).catch(()=>null):Promise.resolve(null),
+    migration?repos.customerOps.migrationJob(ticketId).catch(()=>null):Promise.resolve(null)
   ]);
   const thread=wrap.querySelector('#kx-assist-thread');if(thread){thread.innerHTML=messageBubbles(messages,{migration,support});thread.scrollTop=thread.scrollHeight;}
+  const interactionCount=messages.filter(x=>String(x.role||'').toUpperCase()==='USER').length;
+  const creditSnapshot=!support&&ref&&interactionCount>0&&interactionCount%5===0?await repos.customerOps.aiCredits(ref).catch(()=>null):null;
+  const creditSlot=wrap.querySelector('#kx-ai-credit-slot');if(creditSlot&&creditSnapshot)creditSlot.innerHTML=creditControl(creditSnapshot);
   const quota=wrap.querySelector('#kx-assist-live-quota');
   if(quota){
     const used=messages.filter(x=>String(x.role||'').toUpperCase()==='USER').length;
     if(support&&supportStatus){
       quota.textContent=`${asNumber(supportStatus.messages_remaining)} mensajes disponibles · ${supportStatus.active?'chat guiado activo':'esperando activación'}`;
-    }else if(dashboard){
-      const a=assistanceQuota(dashboard),m=migrationQuota(dashboard);
-      quota.textContent=migration?`${m.remaining}/${m.total} migraciones · ${used}/${m.messagesPerConversation} mensajes`:`${a.remaining}/${a.total} conversaciones este mes · ${used}/${a.messagesPerConversation} mensajes`;
+    }else{
+      quota.textContent=`${used} / 12 mensajes en esta conversación`;
     }
   }
-  const migrationBox=wrap.querySelector('#kx-migration-live');if(migrationBox&&preview)migrationBox.innerHTML=migrationFileRows(preview);
-  return {messages,dashboard,preview,supportStatus};
+  let migrationData=null,catalog={};
+  if(migration){[migrationData,catalog]=await Promise.all([repos.customerOps.migrationRecords(ticketId).catch(()=>null),Promise.all([repos.catalog.disciplines().catch(()=>[]),repos.groups.list().catch(()=>[]),repos.tariffs.list().catch(()=>[])]).then(([disciplines,groups,tariffs])=>({disciplines,groups,tariffs}))]);}
+  const migrationBox=wrap.querySelector('#kx-migration-live');if(migrationBox&&preview){captureMigrationDraft(wrap,ticketId);migrationBox.innerHTML=`${migrationFileRows(preview)}${migrationReviewPanel(migrationData,catalog)}`;decorateMigrationRelations(wrap);restoreMigrationDraft(wrap,ticketId);syncMigrationGroupOptions(wrap);updateMigrationGuidance(wrap);}
+  const jobBox=wrap.querySelector('#kx-ai-migration-job');if(jobBox&&migrationJob){const used=asNumber(migrationJob.credits_used),pending=asNumber(migrationJob.pending),max=asNumber(migrationJob.next_reservation_max);jobBox.innerHTML=`<strong>${asNumber(migrationJob.files)} fichas o archivos · ${asNumber(migrationJob.ready)} preparados · ${asNumber(migrationJob.needs_review)} necesitan revisión</strong><p>${used.toLocaleString('es-ES',{maximumFractionDigits:2})} Créditos IA utilizados en este trabajo${pending?` · Para el siguiente análisis se reservan hasta ${Math.ceil(max)} créditos; se liberará lo no utilizado.`:''}</p>`;}
+  return {messages,dashboard,preview,supportStatus,migrationJob};
 }
 async function sendChat(wrap,ticketId,{migration=false,support=false,specialty=DEFAULT_ASSIST_SPECIALIST,forcedMessage='',tenantRefValue='',context={}}={}){
   const textarea=wrap.querySelector('#kx-assist-input'),send=wrap.querySelector('#kx-assist-send'),status=wrap.querySelector('#kx-assist-status'),message=String(forcedMessage||textarea?.value||'').trim();if(!message)return;
-  if(textarea)textarea.value='';if(send)send.disabled=true;if(textarea)textarea.disabled=true;
+  if(wrap.dataset.kxChatSending==='1')return null;
+  wrap.dataset.kxChatSending='1';
+  const thread=wrap.querySelector('#kx-assist-thread');
+  if(thread){
+    thread.querySelector('.kx-assist-welcome,.kx-support-chat-empty')?.remove();
+    thread.insertAdjacentHTML('beforeend',messageBubbles([{role:'USER',content_text:message,created_at:new Date().toISOString()}],{migration,support}));
+    thread.insertAdjacentHTML('beforeend',`<div class="kx-assist-bubble assistant kx-assist-pending" role="status" aria-live="polite"><span class="kx-bubble-avatar">${support?supportMark():assistantAvatar()}</span><div><small>${support?'SOPORTE GUIADO':migration?'KOMBAX MIGRATIONS':'KOMBAX ASSIST'}</small><p>${migration?'Analizando la migración…':'Preparando respuesta…'}</p></div></div>`);
+    thread.scrollTop=thread.scrollHeight;
+  }
+  if(textarea&&!forcedMessage)textarea.value='';if(send)send.disabled=true;if(textarea)textarea.disabled=true;
   if(status)status.textContent=support?'Revisando el caso técnico…':migration?'Analizando el siguiente paso de la migración…':'Revisando la gestión autorizada…';
   try{
     const out=await repos.customerOps.chat(ticketId,message,specialty);
     await refreshChat(wrap,ticketId,{migration,support,tenantRefValue});
+    if(migration&&Array.isArray(out?.field_updates)){applyMigrationFieldUpdates(wrap,out.field_updates);captureMigrationDraft(wrap,ticketId);}
     if(!support&&!migration&&out?.action?.type==='stripe_connect_onboarding'){
       const subject=stripeConnectSubject(context);
       if(subject)confirmDialog('Configurar cobros y domiciliaciones',t('payments.assistStripeSafety'),async()=>{const onboarding=await repos.payments.connectOnboarding(subject.type,subject.id);if(!onboarding?.url)throw new Error('No se pudo abrir la configuración segura.');location.assign(onboarding.url);},{confirmText:'Abrir Stripe'});
       else toast('Selecciona una organización gestionable para iniciar el alta segura de Stripe.','error');
     }
-    if(status)status.textContent=support?`Respuesta de soporte guiado preparada${out?.turns_remaining!=null?` · ${out.turns_remaining} mensaje(s) disponibles`:''}. Si el caso requiere intervención directa, Soporte KOMBAX gestionará internamente la escalada.`:migration?'Análisis actualizado. Puedes continuar o añadir más documentos.':`Respuesta preparada${out?.turns_remaining!=null?` · ${out.turns_remaining} mensaje(s) disponibles en esta conversación`:''}.`;
+    if(status)status.textContent=support?`Respuesta de soporte guiado preparada${out?.turns_remaining!=null?` · ${out.turns_remaining} mensaje(s) disponibles`:''}. Si el caso requiere intervención directa, Soporte KOMBAX gestionará internamente la escalada.`:migration?'Análisis actualizado. Completa las preguntas pendientes y autoriza la incorporación cuando todo esté listo.':`Respuesta preparada${out?.turns_remaining!=null?` · ${out.turns_remaining} mensaje(s) disponibles en esta conversación`:''}.`;
+    return out;
   }catch(error){
+    if(textarea&&!forcedMessage&&!textarea.value.trim())textarea.value=message;
     if(status)status.textContent=assistErrorMessage(error,{support});toast(assistErrorMessage(error,{support}),'error');
     await refreshChat(wrap,ticketId,{migration,support,tenantRefValue}).catch(()=>{});
-  }finally{if(send)send.disabled=false;if(textarea)textarea.disabled=false;textarea?.focus();}
+    return null;
+  }finally{delete wrap.dataset.kxChatSending;if(send)send.disabled=false;if(textarea)textarea.disabled=false;textarea?.focus();}
 }
 function validateMigrationFiles(files=[]){const allowed=new Set(['application/pdf','text/csv','application/csv','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','image/jpeg','image/png','image/webp']);return files.find(f=>f.size>10*1024*1024||(!allowed.has(f.type)&&!(/\.(pdf|xlsx?|csv|jpe?g|png|webp)$/i.test(f.name))))||null}
 function bindMigrationUpload(wrap,ticketId,tenantRefValue){
   const input=wrap.querySelector('#kx-migration-files'),selection=wrap.querySelector('#kx-migration-selection'),button=wrap.querySelector('#kx-migration-upload');
   input?.addEventListener('change',()=>{const files=[...(input.files||[])],invalid=validateMigrationFiles(files);selection.textContent=invalid?`Archivo no admitido: ${invalid.name}`:files.length?`${files.length} archivo(s) listos para añadir a esta migración.`:'Puedes subir Excel, CSV, PDF, fichas escaneadas o imágenes.';button.disabled=!files.length||Boolean(invalid);});
-  button?.addEventListener('click',async()=>{button.disabled=true;const files=[...(input.files||[])];try{selection.textContent=`Subiendo 0 de ${files.length}…`;await repos.customerOps.stageMigrationFiles(ticketId,files,({done,total,file})=>{selection.textContent=`${done} de ${total} archivo(s) recibidos${file?` · ${file}`:''}`});toast(`${files.length} archivo(s) añadidos a KOMBAX Migrations`);input.value='';button.disabled=true;selection.textContent='Archivos guardados. Puedes pedir al chat que analice el siguiente lote o añadir más documentos.';await refreshChat(wrap,ticketId,{migration:true,tenantRefValue});}catch(e){button.disabled=false;selection.textContent='La carga no se completó. Los archivos confirmados antes del error permanecen vinculados a esta migración.';toast(humanError(e),'error')}});
+  button?.addEventListener('click',async()=>{
+    button.disabled=true;const files=[...(input.files||[])];
+    try{
+      selection.textContent=`Subiendo 0 de ${files.length}…`;
+      await repos.customerOps.stageMigrationFiles(ticketId,files,({done,total,file})=>{selection.textContent=`${done} de ${total} archivo(s) recibidos${file?` · ${file}`:''}`});
+      toast(`${files.length} archivo(s) añadidos a KOMBAX Migrations`);input.value='';
+      let state=await refreshChat(wrap,ticketId,{migration:true,tenantRefValue});
+      selection.textContent='Archivos guardados. Analizando automáticamente; después podrás revisar y confirmar las filas.';
+      for(let batch=0;batch<24;batch++){
+        const before=Math.max(0,asNumber(state.preview?.files_total)-asNumber(state.preview?.files_analyzed));if(!before)break;
+        const result=await sendChat(wrap,ticketId,{migration:true,tenantRefValue,forcedMessage:'Analiza los archivos pendientes. Extrae los datos sin inventarlos y señala qué debo revisar antes de incorporarlos.'});
+        state=await refreshChat(wrap,ticketId,{migration:true,tenantRefValue});
+        const after=Math.max(0,asNumber(state.preview?.files_total)-asNumber(state.preview?.files_analyzed));
+        if(!result||after>=before)break;
+      }
+      const pending=Math.max(0,asNumber(state.preview?.files_total)-asNumber(state.preview?.files_analyzed));
+      selection.textContent=pending?`${pending} archivo(s) pendientes. Pulsa «Analizar siguiente lote» para reintentar.`:'Análisis terminado. Revisa las filas y confirma la importación cuando estén correctas.';
+    }catch(e){button.disabled=false;selection.textContent='La carga no se completó. Los archivos confirmados antes del error permanecen vinculados a esta migración.';toast(humanError(e),'error')}
+  });
 }
 
 async function downloadMigrationGuide(context={}){
@@ -153,7 +319,7 @@ export async function openMigrationGuide(context={}){
     const access=await repos.customerOps.guideAccess(ref);if(access?.allowed!==true)throw new Error('KOMBAX_ORG_GUIDE_ONLY');
     const {wrap}=openDetail({title:t('migrations.guideCopy.title'),subtitle:t('migrations.guideCopy.subtitle'),width:'980px',body:`<div class="kx-customer-ops kx-migration-guide">
       <section class="kx-guide-brand">
-        <div class="kx-guide-brand-logo"><img src="./assets/brand/kombax-symbol-red.png" alt="KOMBAX"><div><span>KOMBAX MIGRATIONS</span><strong>Tus datos entran en KOMBAX. Tu histórico no se pierde.</strong><p>Guía práctica para trasladar alumnos, federados, grupos, matrículas, cuotas, pagos, licencias y documentos con revisión antes de confirmar.</p></div></div>
+        <div class="kx-guide-brand-logo"><img src="./assets/brand/kombax-symbol-red.png" alt="KOMBAX"><div><span>KOMBAX MIGRATIONS</span><strong>Tus datos entran en KOMBAX. Tu histórico no se pierde.</strong><p>Guía práctica para incorporar alumnos, cuotas y pagos al Club con autorización final. Federaciones y Marcas pueden analizar sus documentos y solicitar revisión humana.</p></div></div>
         <button class="btn btn-primary" id="kx-download-migration-guide">${t('migrations.guideCopy.download')}</button>
       </section>
       <section class="kx-guide-benefits">
@@ -174,7 +340,7 @@ export async function openMigrationGuide(context={}){
         <div><strong>Menor de 16</strong><p>El menor conserva su ficha; el padre, madre o tutor obtiene una relación autorizada de acceso.</p></div>
         <div><strong>Multiclub</strong><p>Una cuenta global puede tener varias membresías sin mezclar cuotas, asistencia, documentos ni permisos.</p></div>
       </div></section>
-      <section class="kx-guide-section"><div class="section-title"><div><span>ASISTENCIA</span><h3>Tres líneas distintas dentro de KOMBAX</h3></div></div><div class="kx-guide-split"><article><strong>KOMBAX Migrations</strong><p>Canal directo de Club, Federación y Marca para transferir datos: conversación + archivos + análisis por lotes + vista previa.</p></article><article><strong>KOMBAX Assist</strong><p>Copiloto de gestión para Club, Federación y Marca. Analiza el contexto autorizado en modo de solo lectura y ayuda a decidir el siguiente paso.</p></article><article><strong>Soporte KOMBAX</strong><p>Canal técnico y formal de la plataforma. Mantiene el sistema de casos: primero correo, después chat guiado si ayuda al diagnóstico y, cuando KOMBAX lo considera necesario, escalada a asistencia humana directa.</p></article></div></section>
+      <section class="kx-guide-section"><div class="section-title"><div><span>ASISTENCIA</span><h3>Tres líneas distintas dentro de KOMBAX</h3></div></div><div class="kx-guide-split"><article><strong>KOMBAX Migrations</strong><p>Canal de Club, Federación y Marca para analizar archivos. La incorporación directa está disponible en Club para alumnos, cuotas y pagos tras autorización final; los demás perfiles usan revisión humana.</p></article><article><strong>KOMBAX Assist</strong><p>Copiloto de gestión para Club, Federación y Marca. Analiza el contexto autorizado en modo de solo lectura y ayuda a decidir el siguiente paso.</p></article><article><strong>Soporte KOMBAX</strong><p>Canal técnico y formal de la plataforma. Mantiene el sistema de casos: primero correo, después chat guiado si ayuda al diagnóstico y, cuando KOMBAX lo considera necesario, escalada a asistencia humana directa.</p></article></div></section>
       <section class="kx-guide-section"><div class="section-title"><div><span>PRIVACIDAD Y CONTROL</span><h3>Puedes borrar conversaciones e historial</h3></div></div><div class="kx-assist-note"><strong>Eliminar conversación:</strong> borra mensajes, análisis, metadatos y archivos de Storage asociados al caso. <strong>Borrar historial:</strong> limpia todos los casos visibles del módulo y contexto actual. La contabilidad mínima de uso permanece: borrar contenido no restaura cupos.</div></section>
       <section class="kx-guide-section"><div class="section-title"><div><span>DUDAS FRECUENTES</span><h3>Antes de empezar</h3></div></div><div class="kx-guide-faq">
         <details><summary>¿Tengo que limpiar el Excel antes de subirlo?</summary><p>No necesariamente. Explica de dónde procede y qué significa cada hoja; KOMBAX Migrations puede ayudarte a detectar formatos distintos, vacíos y relaciones.</p></details>
@@ -207,6 +373,7 @@ function requestClearHistory(mode,context={},afterDelete=null){
 
 export async function openKombaxAssist(ticketId=null,context={},specialty=DEFAULT_ASSIST_SPECIALIST){
   const ref=orgTenantRef(context);if(!ref){toast('KOMBAX Assist de gestión está disponible para Club, Federación y Marca con permisos autorizados.','error');return;}
+  const credits=await repos.customerOps.aiCredits(ref).catch(()=>null);
   let tickets=[];try{tickets=await repos.customerOps.tickets(ref,100)}catch{}
   let specialist=assistSpecialist(specialty);
   if(!ticketId){const subject=`KOMBAX Assist · ${specialist.label}`;const out=await createTicket('MANAGEMENT',subject,'assist',context);ticketId=out.ticket_id;tickets=[...tickets,{ticket_id:ticketId,category:'MANAGEMENT',subject_redacted:subject}];}
@@ -217,7 +384,7 @@ export async function openKombaxAssist(ticketId=null,context={},specialty=DEFAUL
   if(!isManagementTicket(current)){toast('No se pudo reconocer el tipo de conversación.','error');return;}
   specialist=specialistFromSubject(current.subject_redacted||`· ${specialist.label}`);
   const showMigrations=canMigrationContext(context);
-  setMainHtml(`<div class="kx-ai-chat-layer kx-assist-management-chat">${pageHeader('KOMBAX Assist','Asistencia inteligente de gestión · modo de solo lectura durante el piloto.',subviewActions({backId:'kx-assist-back',closeId:'kx-assist-close',backLabel:'Volver'}),'Conversaciones')}${conversationChannelTabs('assist',{showMigrations})}<section class="kx-ai-chat-head"><div class="kx-ai-chat-identity">${assistantAvatar()}<div><span>KOMBAX ASSIST</span><h2>Copiloto de gestión</h2><p>Club · Federación · Marca</p></div></div><div class="kx-assist-context"><span>CONVERSACIÓN ${esc(ticketId)}</span><b id="kx-assist-live-quota">Cargando cupo…</b></div></section><div class="kx-assist-chat" data-ticket="${esc(ticketId)}"><div id="kx-assist-thread" class="kx-assist-thread kx-assist-thread-page"><div class="loading-card">Cargando conversación…</div></div><div class="kx-assist-quick-prompts" aria-label="Consultas rápidas"><button type="button" data-kx-assist-prompt="Resume lo más importante de la gestión que debería revisar ahora.">Resumen de gestión</button><button type="button" data-kx-assist-prompt="¿Qué pendientes detectas y qué debería revisar primero?">Detectar pendientes</button><button type="button" data-kx-assist-prompt="Explícame las cifras disponibles de forma sencilla y accionable.">Entender cifras</button></div><div id="kx-assist-status" class="kx-assist-status">KOMBAX Assist puede analizar el contexto autorizado. No modifica datos durante el piloto.</div><div class="kx-assist-composer kx-assist-composer-sticky"><textarea id="kx-assist-input" rows="2" maxlength="4000" placeholder="Pregunta sobre la gestión de tu organización…"></textarea><button class="btn btn-primary" id="kx-assist-send">${t('assist.thread.send')}</button></div><div class="kx-ai-support-separation"><div><strong>¿Es un tema técnico, de cuenta, privacidad, seguridad o legal?</strong><p>Eso no lo resuelve el agente de gestión. Utiliza Ayuda y soporte para atención técnica y trazabilidad. KOMBAX decide si activa chat guiado o asistencia humana directa.</p></div><button class="btn btn-ghost btn-sm" id="kx-open-support-from-assist">Ayuda y soporte</button><button class="btn btn-ghost btn-sm" id="kx-delete-current-ticket">${t('migrations.thread.delete')}</button></div></div></div>`);
+  setMainHtml(`<div class="kx-ai-chat-layer kx-assist-management-chat">${pageHeader('KOMBAX Assist','Asistencia inteligente de gestión · modo de solo lectura durante el piloto.',subviewActions({backId:'kx-assist-back',closeId:'kx-assist-close',backLabel:'Volver'}),'Conversaciones')}${conversationChannelTabs('assist',{showMigrations})}<section class="kx-ai-chat-head"><div class="kx-ai-chat-identity">${assistantAvatar()}<div><span>KOMBAX ASSIST</span><h2>Copiloto de gestión</h2><p>Club · Federación · Marca</p></div></div><div id="kx-ai-credit-slot" class="kx-ai-credit-slot">${creditControl(credits)}</div><div class="kx-assist-context"><span>CONVERSACIÓN ${esc(ticketId)}</span><b id="kx-assist-live-quota">0 / 12 mensajes en esta conversación</b></div></section><div class="kx-assist-chat" data-ticket="${esc(ticketId)}"><div id="kx-assist-thread" class="kx-assist-thread kx-assist-thread-page"><div class="loading-card">Cargando conversación…</div></div><div class="kx-assist-quick-prompts" aria-label="Consultas rápidas"><button type="button" data-kx-assist-prompt="Resume lo más importante de la gestión que debería revisar ahora.">Resumen de gestión</button><button type="button" data-kx-assist-prompt="¿Qué pendientes detectas y qué debería revisar primero?">Detectar pendientes</button><button type="button" data-kx-assist-prompt="Explícame las cifras disponibles de forma sencilla y accionable.">Entender cifras</button></div><div id="kx-assist-status" class="kx-assist-status">KOMBAX Assist puede analizar el contexto autorizado. No modifica datos durante el piloto.</div><div class="kx-assist-composer kx-assist-composer-sticky"><textarea id="kx-assist-input" rows="2" maxlength="4000" placeholder="Pregunta sobre la gestión de tu organización…"></textarea><button class="btn btn-primary" id="kx-assist-send">${t('assist.thread.send')}</button></div><div class="kx-ai-support-separation"><div><strong>¿Es un tema técnico, de cuenta, privacidad, seguridad o legal?</strong><p>Eso no lo resuelve el agente de gestión. Utiliza Ayuda y soporte para atención técnica y trazabilidad. KOMBAX decide si activa chat guiado o asistencia humana directa.</p></div><button class="btn btn-ghost btn-sm" id="kx-open-support-from-assist">Ayuda y soporte</button><button class="btn btn-ghost btn-sm" id="kx-delete-current-ticket">${t('migrations.thread.delete')}</button></div></div></div>`);
   const root=document.querySelector('main')||document;
   const specialistHeading=root.querySelector('.kx-assist-management-chat .kx-ai-chat-identity');
   if(specialistHeading){
@@ -229,7 +396,8 @@ export async function openKombaxAssist(ticketId=null,context={},specialty=DEFAUL
   const specialtyBadge=root.querySelector('.kx-assist-management-chat .kx-assist-context');
   if(specialtyBadge){const badge=document.createElement('small');badge.textContent=`Especialidad activa: ${specialist.label}`;specialtyBadge.append(badge);}
   const recommended=root.querySelector('.kx-assist-management-chat [data-kx-assist-prompt]');
-  if(recommended){recommended.dataset.kxAssistPrompt=specialist.prompt;recommended.textContent=`Consulta recomendada · ${specialist.label}`;}
+  if(credits?.trial){const quick=root.querySelector('.kx-assist-quick-prompts');if(quick)quick.innerHTML=['Resume las funciones principales de KOMBAX para un club de demostración.','¿Cómo puedo organizar grupos y horarios en KOMBAX?','Explícame cómo funcionan las cuotas de demostración.'].map(x=>`<button type="button" data-kx-assist-prompt="${esc(x)}">${esc(x)}</button>`).join('');const input=root.querySelector('#kx-assist-input'),send=root.querySelector('#kx-assist-send');if(input){input.readOnly=true;input.placeholder='Durante la prueba usa las consultas de demostración de arriba.';}if(send)send.disabled=true;}
+  else if(recommended){recommended.dataset.kxAssistPrompt=specialist.prompt;recommended.textContent=`Consulta recomendada · ${specialist.label}`;}
   bindConversationChannelTabs(root,{context,onSocial:context.onSocial,onShowcase:context.onShowcase,onAssist:()=>{},onMigrations:showMigrations?()=>openKombaxMigrations(null,context):null});
   await refreshChat(root,ticketId,{migration:false,support:false,tenantRefValue:ref});
   root.querySelector('#kx-assist-send')?.addEventListener('click',()=>sendChat(root,ticketId,{migration:false,support:false,specialty:specialist.id,tenantRefValue:ref,context}));
@@ -242,16 +410,54 @@ export async function openKombaxAssist(ticketId=null,context={},specialty=DEFAUL
 
 export async function openKombaxMigrations(ticketId=null,context={}){
   const ref=orgTenantRef(context);if(!ref||!canMigrationContext(context)){toast('KOMBAX Migrations está disponible para Club, Federación y Marca.','error');return;}
+  const credits=await repos.customerOps.aiCredits(ref).catch(()=>null);
   try{const access=await repos.customerOps.guideAccess(ref);if(access?.allowed!==true){toast('KOMBAX Migrations requiere una organización autorizada.','error');return;}}catch{toast('No se pudo validar el acceso a Migrations.','error');return;}
   if(!ticketId){const out=await createTicket('MIGRATION','Migración de datos','migration',context);ticketId=out.ticket_id;}
   else{const tickets=await repos.customerOps.tickets(ref,100);if(!tickets.some(t=>String(t.ticket_id)===String(ticketId)&&isMigrationTicket(t))){toast('No se pudo validar esta migración dentro de la organización actual.','error');return;}}
-  setMainHtml(`<div class="kx-ai-chat-layer kx-migrations-chat-page">${pageHeader('KOMBAX Migrations','Migración asistida · documentos, análisis, revisión y confirmación.',subviewActions({backId:'kx-migration-back',closeId:'kx-migration-close',backLabel:'Volver'}),'Conversaciones')}${conversationChannelTabs('migrations',{showMigrations:true})}<section class="kx-ai-chat-head migrations"><div class="kx-ai-chat-identity">${assistantAvatar()}<div><span>KOMBAX MIGRATIONS</span><h2>Asistente de migración</h2><p>Tus datos entran en KOMBAX. Tu histórico no se pierde.</p></div></div><div class="kx-assist-context"><span>MIGRACIÓN ${esc(ticketId)}</span><b id="kx-assist-live-quota">Cargando cupo…</b></div></section><div class="kx-assist-chat kx-migrations-chat" data-ticket="${esc(ticketId)}"><section class="kx-migration-direct-upload"><div><strong>Añadir documentos</strong><p>Excel, CSV, PDF, fichas escaneadas o imágenes. Puedes añadirlos ahora o durante la conversación.</p></div><label class="kx-upload-zone"><strong>Seleccionar archivos</strong><small>PDF, XLSX, XLS, CSV, JPG, JPEG, PNG o WEBP · máximo 10 MB por archivo</small><input id="kx-migration-files" type="file" multiple accept="${migrationAccept}"></label><div id="kx-migration-selection" class="muted">Puedes empezar escribiendo o subir documentos directamente.</div><div class="row-actions"><button class="btn btn-primary" id="kx-migration-upload" disabled>Subir a esta migración</button></div></section><div id="kx-migration-live"><div class="loading-card">Cargando estado de la migración…</div></div><div id="kx-assist-thread" class="kx-assist-thread kx-assist-thread-page"><div class="loading-card">Cargando conversación…</div></div><div id="kx-assist-status" class="kx-assist-status">Conversa, añade archivos y analiza por lotes. Nada se importa automáticamente.</div><div class="kx-assist-composer kx-assist-composer-sticky"><textarea id="kx-assist-input" rows="2" maxlength="4000" placeholder="Ej.: Tengo un Excel de alumnos y varias fichas PDF. ¿Cómo empezamos?"></textarea><button class="btn btn-primary" id="kx-assist-send">${t('assist.thread.send')}</button></div><div class="row-actions kx-migration-chat-actions"><button class="btn btn-ghost" id="kx-assist-analyze">${t('migrations.thread.analyzeNext')}</button><button class="btn btn-ghost" id="kx-assist-human">${t('migrations.thread.humanReview')}</button><button class="btn btn-ghost" id="kx-open-guide">${t('migrations.home.guide')}</button><button class="btn btn-ghost" id="kx-delete-current-ticket">${t('migrations.thread.delete')}</button></div><div class="kx-migration-steps"><span>${t('migrations.steps.received')}</span><span>${t('migrations.steps.analysis')}</span><span>${t('migrations.steps.review')}</span><span>${t('migrations.steps.preview')}</span><span>${t('migrations.steps.confirmation')}</span></div></div></div>`);
+  setMainHtml(`<div class="kx-ai-chat-layer kx-migrations-chat-page">${pageHeader('KOMBAX Migrations','Migración asistida · documentos, análisis, revisión y confirmación.',subviewActions({backId:'kx-migration-back',closeId:'kx-migration-close',backLabel:'Volver'}),'Conversaciones')}${conversationChannelTabs('migrations',{showMigrations:true})}<section class="kx-ai-chat-head migrations"><div class="kx-ai-chat-identity">${assistantAvatar()}<div><span>KOMBAX MIGRATIONS</span><h2>Asistente de migración</h2><p>Tus datos entran en KOMBAX. Tu histórico no se pierde.</p></div></div><div id="kx-ai-credit-slot" class="kx-ai-credit-slot">${creditControl(credits)}</div><div class="kx-assist-context"><span>MIGRACIÓN ${esc(ticketId)}</span><b id="kx-assist-live-quota">0 / 12 mensajes en esta conversación</b></div></section><div class="kx-assist-chat kx-migrations-chat" data-ticket="${esc(ticketId)}"><section class="kx-migration-direct-upload"><div><strong>Añadir documentos</strong><p>Excel, CSV, PDF, fichas escaneadas o imágenes. Puedes añadirlos ahora o durante la conversación.</p></div><label class="kx-upload-zone"><strong>Seleccionar archivos</strong><small>PDF, XLSX, XLS, CSV, JPG, JPEG, PNG o WEBP · máximo 10 MB por archivo</small><input id="kx-migration-files" type="file" multiple accept="${migrationAccept}"></label><div id="kx-migration-selection" class="muted">Puedes empezar escribiendo o subir documentos directamente.</div><div class="row-actions"><button class="btn btn-primary" id="kx-migration-upload" disabled>Subir a esta migración</button></div></section><section id="kx-ai-migration-job" class="kx-ai-migration-job" aria-live="polite"></section><div id="kx-migration-live"><div class="loading-card">Cargando estado de la migración…</div></div><div id="kx-assist-thread" class="kx-assist-thread kx-assist-thread-page"><div class="loading-card">Cargando conversación…</div></div><div id="kx-assist-status" class="kx-assist-status">Sube tus archivos. El agente identifica los datos, pregunta lo pendiente y solicita tu autorización antes de incorporarlos.</div><div class="kx-assist-composer kx-assist-composer-sticky"><textarea id="kx-assist-input" rows="2" maxlength="4000" placeholder="Ej.: Tengo un Excel de alumnos y varias fichas PDF. ¿Cómo empezamos?"></textarea><button class="btn btn-primary" id="kx-assist-send">${t('assist.thread.send')}</button></div><div class="row-actions kx-migration-chat-actions"><button class="btn btn-ghost" id="kx-assist-analyze">${t('migrations.thread.analyzeNext')}</button><button class="btn btn-ghost" id="kx-assist-human">${t('migrations.thread.humanReview')}</button><button class="btn btn-ghost" id="kx-open-guide">${t('migrations.home.guide')}</button><button class="btn btn-ghost" id="kx-delete-current-ticket">${t('migrations.thread.delete')}</button></div><div class="kx-migration-steps"><span>${t('migrations.steps.received')}</span><span>${t('migrations.steps.analysis')}</span><span>${t('migrations.steps.review')}</span><span>${t('migrations.steps.preview')}</span><span>${t('migrations.steps.confirmation')}</span></div></div></div>`);
   const root=document.querySelector('main')||document;
+  if(credits?.trial){const upload=root.querySelector('.kx-migration-direct-upload');if(upload)upload.innerHTML='<div><strong>Prueba con datos de demostración</strong><p>La carga de fichas y documentos reales se habilita al verificar el club. No incluyas datos personales de alumnos ni menores en esta prueba.</p></div>';const input=root.querySelector('#kx-assist-input'),send=root.querySelector('#kx-assist-send');if(input){input.readOnly=true;input.placeholder='Utiliza la consulta de demostración.';}if(send)send.disabled=true;root.querySelector('#kx-assist-analyze')?.remove();root.querySelector('#kx-migration-live')?.insertAdjacentHTML('beforebegin','<button type="button" class="btn btn-ghost" id="kx-trial-migration-prompt">¿Cómo reviso una migración de ejemplo antes de confirmar?</button>');}
   bindConversationChannelTabs(root,{context,onSocial:context.onSocial,onShowcase:context.onShowcase,onAssist:()=>renderKombaxAssistHome(context),onMigrations:()=>{}});
+  const migrationWrap=root.querySelector('.kx-assist-chat');
+  root.dataset.kxMigrationCanImport=ref.startsWith('club:')?'true':'false';
+  migrationWrap.dataset.kxMigrationCanImport=ref.startsWith('club:')?'true':'false';
   bindMigrationUpload(root,ticketId,ref);await refreshChat(root,ticketId,{migration:true,tenantRefValue:ref});
+  migrationWrap?.addEventListener('click',e=>{
+    const destination=e.target.closest('[data-kx-import-check]');
+    if(destination){location.hash=destination.dataset.kxImportCheck==='students'?'#members':'#finance';return;}
+    const button=e.target.closest('#kx-migration-import');if(!button)return;
+    const {records,questions}=updateMigrationGuidance(migrationWrap);
+    if(!records.length){toast('Selecciona al menos un registro.','error');return;}
+    if(questions.length){toast('Completa primero los datos que pregunta KOMBAX Migrations.','error');migrationWrap.querySelector('#kx-migration-questions')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+    const counts=records.reduce((sum,row)=>(sum[row.kind]=(sum[row.kind]||0)+1,sum),{});
+    const detail=`¿Autorizas a KOMBAX Migrations a incorporar ${counts.student||0} alumnos como prealta, ${counts.charge||0} cuotas pendientes y ${counts.payment||0} pagos pendientes de validación en este club? Los duplicados se omitirán. Revisa después las fichas y los cobros.`;
+    confirmDialog('Autorizar incorporación de datos',detail,async()=>{
+      button.disabled=true;
+      try{
+        const result=await repos.customerOps.migrationImport(ticketId,crypto.randomUUID(),records);
+        if(result?.ok!==true)throw new Error('No se confirmó la importación.');
+        await refreshChat(root,ticketId,{migration:true,tenantRefValue:ref});
+        const summary=`Incorporación terminada: ${result.students||0} alumnos, ${result.charges||0} cuotas y ${result.payments_pending_review||0} pagos pendientes de validación. ${result.skipped_duplicates||0} duplicado(s) omitido(s). Ve a Alumnos y Finanzas para comprobarlos.`;
+        const resultBox=migrationWrap.querySelector('#kx-migration-result');
+        if(resultBox)resultBox.innerHTML=`<div class="kx-migration-import-result" role="status"><strong>${esc(summary)}</strong><div class="row-actions"><button type="button" class="btn btn-ghost btn-sm" data-kx-import-check="students">Ver alumnos</button><button type="button" class="btn btn-ghost btn-sm" data-kx-import-check="finance">Ver cuotas y pagos</button></div></div>`;
+        const thread=migrationWrap.querySelector('#kx-assist-thread');
+        if(thread){thread.insertAdjacentHTML('beforeend',messageBubbles([{role:'ASSISTANT',content_text:summary,created_at:new Date().toISOString()}],{migration:true}));thread.scrollTop=thread.scrollHeight;}
+        const refreshedButton=migrationWrap.querySelector('#kx-migration-import');if(refreshedButton)refreshedButton.disabled=true;
+        migrationDrafts.delete(ticketId);try{sessionStorage.removeItem(`kx:migration-draft:${ticketId}`);}catch{}
+        toast('Datos incorporados. Revisa las fichas y los cobros.');
+      }catch(error){toast(humanError(error),'error');updateMigrationGuidance(migrationWrap);}
+    },{confirmText:'Sí, incorporar'});
+  });
+  migrationWrap?.addEventListener('change',e=>{
+    const discipline=e.target.closest('[data-field="discipline_id"]');
+    if(discipline){const card=discipline.closest('[data-migration-row]'),group=card?.querySelector('[data-field="group_id"]');if(group){group.value='';const map=JSON.parse(group.dataset.options||'{}');[...group.options].forEach((option,index)=>{option.hidden=index>0&&map[option.value]!==discipline.value;});}}
+    updateMigrationGuidance(migrationWrap);captureMigrationDraft(migrationWrap,ticketId);
+  });
+  migrationWrap?.addEventListener('input',e=>{if(e.target.closest('[data-field]')){updateMigrationGuidance(migrationWrap);captureMigrationDraft(migrationWrap,ticketId);}});
   root.querySelector('#kx-assist-send')?.addEventListener('click',()=>sendChat(root,ticketId,{migration:true,tenantRefValue:ref}));
   root.querySelector('#kx-assist-input')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat(root,ticketId,{migration:true,tenantRefValue:ref});}});
   root.querySelector('#kx-assist-analyze')?.addEventListener('click',()=>sendChat(root,ticketId,{migration:true,tenantRefValue:ref,forcedMessage:'Analiza el siguiente lote de archivos pendientes. Identifica registros, campos, posibles duplicados, incompletos y cualquier dato que necesite mi revisión antes de migrar.'}));
+  root.querySelector('#kx-trial-migration-prompt')?.addEventListener('click',()=>sendChat(root,ticketId,{migration:true,tenantRefValue:ref,forcedMessage:'¿Cómo reviso una migración de ejemplo antes de confirmar?'}));
   root.querySelector('#kx-assist-human')?.addEventListener('click',async()=>{try{await repos.customerOps.requestHuman(ticketId);toast('Migración enviada a revisión humana');}catch(e){toast(humanError(e),'error')}});
   root.querySelector('#kx-open-guide')?.addEventListener('click',()=>openMigrationGuide(context));
   bindSubviewActions(root,{backId:'kx-migration-back',closeId:'kx-migration-close',onBack:()=>context.onBack?context.onBack():renderKombaxMigrationsHome(context),onClose:()=>{location.hash='#dashboard';}});
@@ -326,9 +532,10 @@ export async function renderKombaxAssistHome(context={}){
   const ref=orgTenantRef(context);if(!ref){setMainHtml(`${pageHeader('KOMBAX Assist','Asistencia inteligente de gestión para Club, Federación y Marca.','','KOMBAX Assist')}<div class="empty-card"><strong>Selecciona una organización gestionable</strong><p>Assist necesita el contexto y permisos de un Club, Federación o Marca. Para problemas de la plataforma utiliza <a href="mailto:${SUPPORT_EMAIL}">Soporte KOMBAX</a>.</p></div>`);return;}
   try{
     const data=await organizationData(context);if(!data.allowed)throw new Error('KOMBAX_MANAGEMENT_ACCESS_REQUIRED');const rows=data.rows.filter(isManagementTicket),dashboard=data.dashboard,showMigrations=data.migrationAllowed;
-    setMainHtml(`<div class="kx-assist-page kx-assist-management-home">${pageHeader(t('assist.title'),t('assist.home.subtitle'),subviewActions({backId:'kx-assist-home-back',closeId:'kx-assist-home-close',backLabel:'Volver'}),'KOMBAX Assist')}${conversationChannelTabs('assist',{showMigrations})}<section class="kx-ai-product-hero"><img src="./assets/assist/hero-assist.webp" alt="KOMBAX Assist, asistente virtual de gestión" decoding="async"><div class="kx-ai-product-hero-copy"><span>${t('assist.home.heroKicker')}</span><h2>${t('assist.home.heroTitle')}</h2><p>${t('assist.home.heroBody')}</p><button class="btn btn-primary" id="kx-open-assist" ${assistanceQuota(dashboard).remaining<=0?'disabled':''}>${t('assist.home.newConversation')}</button></div></section>${assistanceQuotaCard(dashboard)}<section class="kx-assist-capabilities"><article><span>CLUB</span><strong>Alumnos, grupos, cuotas y eventos</strong><p>Resume situación, detecta pendientes y explica la información disponible.</p></article><article><span>FEDERACIÓN</span><strong>Clubes, federados y licencias</strong><p>Ayuda a priorizar revisiones y entender el estado administrativo.</p></article><article><span>MARCA</span><strong>Showcase y consultas</strong><p>Resume catálogo, actividad y oportunidades visibles para la identidad gestionada.</p></article></section><section class="card"><div class="section-title"><div><span>${t('assist.home.conversations')}</span><h3>${t('assist.home.continue')}</h3></div>${rows.length?`<button class="btn btn-ghost btn-sm" id="kx-clear-assist">${t('assist.home.clearHistory')}</button>`:''}</div><div class="kx-ticket-list">${ticketRows(rows,{mode:'assist'})}</div></section><section class="kx-ai-support-separation"><div><strong>${t('assist.home.notSupport')}</strong><p>Problemas técnicos, cuenta, facturación de KOMBAX, privacidad, seguridad, protección de menores y cuestiones legales pasan a Ayuda y soporte. La atención comienza por correo y KOMBAX gestiona cualquier escalada posterior.</p></div><button class="btn btn-ghost" id="kx-open-formal-support">${t('assist.home.openSupport')}</button></section></div>`);
-    const root=document.querySelector('main')||document;bindConversationChannelTabs(root,{context,onSocial:context.onSocial,onShowcase:context.onShowcase,onAssist:()=>{},onMigrations:showMigrations?()=>renderKombaxMigrationsHome(context):null});bindCenter(root,context);root.querySelector('#kx-open-formal-support')?.addEventListener('click',()=>renderKombaxSupportHome(context));bindSubviewActions(root,{backId:'kx-assist-home-back',closeId:'kx-assist-home-close',onBack:()=>context.onBack?context.onBack():goBackOrFallback('#dashboard'),onClose:()=>{location.hash='#dashboard';}});
-    const specialistsHtml=ASSIST_SPECIALISTS.map(item=>`<article class="kx-assist-specialist"><span>${esc(item.label).toUpperCase()}</span><strong>${esc(item.title)}</strong><p>${esc(item.description)}</p><button type="button" class="btn btn-ghost btn-sm" data-kx-assist-specialist="${esc(item.id)}" ${assistanceQuota(dashboard).remaining<=0?'disabled':''}>${t('assist.specialties.open')}</button></article>`).join('');
+    const credits=await repos.customerOps.aiCredits(ref).catch(()=>null);
+    setMainHtml(`<div class="kx-assist-page kx-assist-management-home">${pageHeader(t('assist.title'),t('assist.home.subtitle'),subviewActions({backId:'kx-assist-home-back',closeId:'kx-assist-home-close',backLabel:'Volver'}),'KOMBAX Assist')}${conversationChannelTabs('assist',{showMigrations})}<section class="kx-ai-product-hero"><img src="./assets/assist/hero-assist.webp" alt="KOMBAX Assist, asistente virtual de gestión" decoding="async"><div class="kx-ai-product-hero-copy"><span>${t('assist.home.heroKicker')}</span><h2>${t('assist.home.heroTitle')}</h2><p>${t('assist.home.heroBody')}</p><button class="btn btn-primary" id="kx-open-assist" ${(credits?asNumber(credits.available)<=0:assistanceQuota(dashboard).remaining<=0)?'disabled':''}>${t('assist.home.newConversation')}</button></div></section><section class="kx-assist-capabilities"><article><span>CLUB</span><strong>Alumnos, grupos, cuotas y eventos</strong><p>Resume situación, detecta pendientes y explica la información disponible.</p></article><article><span>FEDERACIÓN</span><strong>Clubes, federados y licencias</strong><p>Ayuda a priorizar revisiones y entender el estado administrativo.</p></article><article><span>MARCA</span><strong>Showcase y consultas</strong><p>Resume catálogo, actividad y oportunidades visibles para la identidad gestionada.</p></article></section><section class="card"><div class="section-title"><div><span>${t('assist.home.conversations')}</span><h3>${t('assist.home.continue')}</h3></div>${rows.length?`<button class="btn btn-ghost btn-sm" id="kx-clear-assist">${t('assist.home.clearHistory')}</button>`:''}</div><div class="kx-ticket-list">${ticketRows(rows,{mode:'assist'})}</div></section><section class="kx-ai-support-separation"><div><strong>${t('assist.home.notSupport')}</strong><p>Problemas técnicos, cuenta, facturación de KOMBAX, privacidad, seguridad, protección de menores y cuestiones legales pasan a Ayuda y soporte. La atención comienza por correo y KOMBAX gestiona cualquier escalada posterior.</p></div><button class="btn btn-ghost" id="kx-open-formal-support">${t('assist.home.openSupport')}</button></section></div>`);
+    const root=document.querySelector('main')||document;root.querySelector('.kx-ai-product-hero')?.insertAdjacentHTML('beforebegin',aiCreditsCard(credits));bindConversationChannelTabs(root,{context,onSocial:context.onSocial,onShowcase:context.onShowcase,onAssist:()=>{},onMigrations:showMigrations?()=>renderKombaxMigrationsHome(context):null});bindCenter(root,context);root.querySelector('#kx-open-formal-support')?.addEventListener('click',()=>renderKombaxSupportHome(context));bindSubviewActions(root,{backId:'kx-assist-home-back',closeId:'kx-assist-home-close',onBack:()=>context.onBack?context.onBack():goBackOrFallback('#dashboard'),onClose:()=>{location.hash='#dashboard';}});
+    const specialistsHtml=ASSIST_SPECIALISTS.map(item=>`<article class="kx-assist-specialist"><span>${esc(item.label).toUpperCase()}</span><strong>${esc(item.title)}</strong><p>${esc(item.description)}</p><button type="button" class="btn btn-ghost btn-sm" data-kx-assist-specialist="${esc(item.id)}" ${(credits?asNumber(credits.available)<=0:assistanceQuota(dashboard).remaining<=0)?'disabled':''}>${t('assist.specialties.open')}</button></article>`).join('');
     const capabilitySection=root.querySelector('.kx-assist-capabilities');
     capabilitySection?.insertAdjacentHTML('beforebegin',`<section class="kx-assist-specialists-wrap"><div class="section-title"><div><span>${t('assist.specialties.count')}</span><h3>${t('assist.specialties.title')}</h3></div></div><div class="kx-assist-specialists">${specialistsHtml}</div></section>`);
     root.querySelectorAll('[data-kx-assist-specialist]').forEach(button=>button.addEventListener('click',()=>openKombaxAssist(null,context,button.dataset.kxAssistSpecialist).catch(error=>toast(assistErrorMessage(error),'error'))));
@@ -338,11 +545,12 @@ export async function renderKombaxMigrationsHome(context={}){
   setMainHtml(`<div class="loading-card">${t('common.states.loading')} KOMBAX Migrations…</div>`);
   const ref=orgTenantRef(context);if(!ref||!canMigrationContext(context)){setMainHtml(`${pageHeader('KOMBAX Migrations')}<div class="empty-card"><strong>Disponible para Club, Federación y Marca</strong><p>KOMBAX Migrations adapta la importación al contexto autorizado de Club, Federación o Marca.</p></div>`);return;}
   try{
-    const [rows,dashboard,access]=await Promise.all([repos.customerOps.tickets(ref,50),repos.customerOps.dashboard(ref),repos.customerOps.guideAccess(ref)]);if(access?.allowed!==true)throw new Error('KOMBAX_MIGRATION_ACCESS_REQUIRED');
-    setMainHtml(`<div class="kx-assist-page kx-migrations-page">${pageHeader(t('migrations.title'),t('migrations.home.subtitle'),subviewActions({backId:'kx-migrations-home-back',closeId:'kx-migrations-home-close',backLabel:'Volver'}),'KOMBAX Migrations')}${conversationChannelTabs('migrations',{showMigrations:true})}<section class="kx-ai-product-hero migrations"><img src="./assets/assist/hero-migrations.webp" alt="KOMBAX Migrations, migración asistida" decoding="async"><div class="kx-ai-product-hero-copy"><span>${t('migrations.home.heroKicker')}</span><h2>${t('migrations.home.heroTitle')}</h2><p>${t('migrations.home.heroBody')}</p><div class="row-actions"><button class="btn btn-primary" id="kx-page-migration-start" ${migrationQuota(dashboard).remaining<=0?'disabled':''}>${t('migrations.home.start')}</button><button class="btn btn-ghost" id="kx-page-migration-guide">${t('migrations.home.guide')}</button></div></div></section>${migrationQuotaCard(dashboard)}<section class="card"><div class="section-title"><div><span>${t('migrations.home.my')}</span><h3>${t('migrations.home.continue')}</h3></div>${rows.some(isMigrationTicket)?`<button class="btn btn-ghost btn-sm" id="kx-clear-migrations">${t('migrations.home.clearHistory')}</button>`:''}</div><div class="kx-ticket-list">${ticketRows(rows,{mode:'migration'})}</div></section><div class="kx-assist-economy-copy"><strong>Mismo caso, varias cargas.</strong><p>Puedes añadir más documentos a la misma migración y reutilizar el análisis ya realizado dentro de los límites del plan.</p><strong>Sin importación automática.</strong><p>Los posibles duplicados, datos incompletos y conflictos se revisan antes de la <b>Confirmación obligatoria</b> final.</p></div></div>`);
-    const root=document.querySelector('main')||document;bindConversationChannelTabs(root,{context,onSocial:context.onSocial,onShowcase:context.onShowcase,onAssist:()=>renderKombaxAssistHome(context),onMigrations:()=>{}});root.querySelector('#kx-page-migration-start')?.addEventListener('click',()=>openKombaxMigrations(null,context).catch(e=>toast(assistErrorMessage(e),'error')));root.querySelector('#kx-page-migration-guide')?.addEventListener('click',()=>openMigrationGuide(context));bindCenter(root,context);bindSubviewActions(root,{backId:'kx-migrations-home-back',closeId:'kx-migrations-home-close',onBack:()=>context.onBack?context.onBack():goBackOrFallback('#dashboard'),onClose:()=>{location.hash='#dashboard';}});
+    const [rows,dashboard,access,credits]=await Promise.all([repos.customerOps.tickets(ref,50),repos.customerOps.dashboard(ref),repos.customerOps.guideAccess(ref),repos.customerOps.aiCredits(ref).catch(()=>null)]);if(access?.allowed!==true)throw new Error('KOMBAX_MIGRATION_ACCESS_REQUIRED');
+    setMainHtml(`<div class="kx-assist-page kx-migrations-page">${pageHeader(t('migrations.title'),t('migrations.home.subtitle'),subviewActions({backId:'kx-migrations-home-back',closeId:'kx-migrations-home-close',backLabel:'Volver'}),'KOMBAX Migrations')}${conversationChannelTabs('migrations',{showMigrations:true})}<section class="kx-ai-product-hero migrations"><img src="./assets/assist/hero-migrations.webp" alt="KOMBAX Migrations, migración asistida" decoding="async"><div class="kx-ai-product-hero-copy"><span>${t('migrations.home.heroKicker')}</span><h2>${t('migrations.home.heroTitle')}</h2><p>${t('migrations.home.heroBody')}</p><div class="row-actions"><button class="btn btn-primary" id="kx-page-migration-start" ${(credits?asNumber(credits.available)<=0:migrationQuota(dashboard).remaining<=0)?'disabled':''}>${t('migrations.home.start')}</button><button class="btn btn-ghost" id="kx-page-migration-guide">${t('migrations.home.guide')}</button></div></div></section><section class="card"><div class="section-title"><div><span>${t('migrations.home.my')}</span><h3>${t('migrations.home.continue')}</h3></div>${rows.some(isMigrationTicket)?`<button class="btn btn-ghost btn-sm" id="kx-clear-migrations">${t('migrations.home.clearHistory')}</button>`:''}</div><div class="kx-ticket-list">${ticketRows(rows,{mode:'migration'})}</div></section><div class="kx-assist-economy-copy"><strong>Mismo caso, varias cargas.</strong><p>Puedes añadir más documentos a la misma migración y reutilizar el análisis ya realizado dentro de los límites del plan.</p><strong>Sin importación automática.</strong><p>Los posibles duplicados, datos incompletos y conflictos se revisan antes de la <b>Confirmación obligatoria</b> final.</p></div></div>`);
+    const root=document.querySelector('main')||document;root.querySelector('.kx-ai-product-hero')?.insertAdjacentHTML('beforebegin',aiCreditsCard(credits));bindConversationChannelTabs(root,{context,onSocial:context.onSocial,onShowcase:context.onShowcase,onAssist:()=>renderKombaxAssistHome(context),onMigrations:()=>{}});root.querySelector('#kx-page-migration-start')?.addEventListener('click',()=>openKombaxMigrations(null,context).catch(e=>toast(assistErrorMessage(e),'error')));root.querySelector('#kx-page-migration-guide')?.addEventListener('click',()=>openMigrationGuide(context));bindCenter(root,context);bindSubviewActions(root,{backId:'kx-migrations-home-back',closeId:'kx-migrations-home-close',onBack:()=>context.onBack?context.onBack():goBackOrFallback('#dashboard'),onClose:()=>{location.hash='#dashboard';}});
   }catch(e){setMainHtml(`${pageHeader('KOMBAX Migrations')}<div class="empty-card"><strong>No se pudo cargar KOMBAX Migrations</strong><p>${esc(assistErrorMessage(e))}</p></div>`)}
 }
 export function migrationAssistBanner({title='¿Ya tienes tus datos en otro sistema?',body='KOMBAX Migrations te permite conversar y subir Excel, CSV, PDF e imágenes, con análisis por lotes, vista previa y confirmación antes de importar.',context={}}={}){const ref=orgTenantRef(context);if(!ref||!canMigrationContext(context))return '';return `<section class="kx-migration-banner"><div><span>KOMBAX MIGRATIONS</span><strong>${esc(title)}</strong><p>${esc(body)}</p></div><button type="button" class="btn btn-primary" data-kx-migration-assist>Abrir migración</button></section>`}
 export function managementAssistBanner({title='KOMBAX Assist',body='Tu copiloto de gestión: analiza el contexto autorizado y te ayuda a priorizar sin modificar datos durante el piloto.',context={}}={}){if(!orgTenantRef(context))return '';return `<section class="kx-management-assist-banner"><img src="./assets/assist/assistant-avatar.webp" alt="" loading="lazy"><div><span>KOMBAX ASSIST</span><strong>${esc(title)}</strong><p>${esc(body)}</p></div><button type="button" class="btn btn-primary" data-kx-management-assist>Abrir Assist</button></section>`}
 export function bindMigrationAssist(root=document,context={}){root.querySelectorAll('[data-kx-migration-assist]').forEach(button=>button.addEventListener('click',()=>openKombaxMigrations(null,context).catch(e=>toast(assistErrorMessage(e),'error'))));root.querySelectorAll('[data-kx-management-assist]').forEach(button=>button.addEventListener('click',()=>renderKombaxAssistHome(context)));}
+

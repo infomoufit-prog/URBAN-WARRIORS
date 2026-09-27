@@ -1,0 +1,37 @@
+import { repos } from '../core/repositories.js';
+import { esc, money, dateFmt, humanError } from '../core/utils.js';
+import { openDetail, metric, empty, setError } from '../ui/components.js';
+import { t } from '../i18n/index.js';
+
+const yesNo=(v,a,b)=>v?`<span class="badge ok">${esc(a)}</span>`:`<span class="badge neutral">${esc(b)}</span>`;
+const arr=v=>Array.isArray(v)?v:[];
+const amount=(minor,currency='EUR')=>money(Number(minor||0)/100,currency||'EUR');
+const accordion=(title,body,{open=false,count=null}={})=>`<details class="kx-finance-accordion" ${open?'open':''}><summary><span>${esc(title)}</span>${count===null?'':`<b>${Number(count||0)}</b>`}</summary><div class="kx-finance-accordion-body">${body}</div></details>`;
+const ledger=(rows,{amountKey='amount_minor',currencyKey='currency',title=x=>x.category||x.source||x.status||'',meta=x=>[x.payment_method,x.occurred_at?dateFmt(x.occurred_at):'',x.status].filter(Boolean).join(' · ')}={})=>rows.length?`<div class="kx-finance-history">${rows.map(x=>`<article><strong>${esc(title(x))}</strong><span>${amount(x?.[amountKey],x?.[currencyKey]||'EUR')}</span><small>${esc(meta(x))}</small></article>`).join('')}</div>`:empty(t('prepilot.history'));
+
+export async function openFinanceContext({subjectType,subjectId,title=t('prepilot.financeContext')}={}){
+  let limit=10,inventoryOffset=0,inventoryMoves=[];let currentModal=null;
+  const draw=async({appendInventory=false}={})=>{
+    try{
+      const [raw,inventoryPage]=await Promise.all([
+        repos.financeContext.get(subjectType,subjectId,limit),
+        ['club','showcase_provider'].includes(subjectType)?repos.financeContext.inventory(subjectType,subjectId,{limit:10,offset:appendInventory?inventoryOffset:0}).catch(()=>null):Promise.resolve(null)
+      ]);
+      const data=Array.isArray(raw)?raw[0]:raw;const s=data?.summary||{},m=data?.methods||{},tx=arr(data?.transactions),orders=arr(data?.orders),tickets=arr(data?.ticketing),debt=arr(data?.debt),receipts=arr(data?.receipts);
+      if(inventoryPage){if(!appendInventory)inventoryMoves=[];inventoryMoves.push(...arr(inventoryPage.movements));inventoryOffset=Number(inventoryPage.next_offset||inventoryMoves.length);}
+      const methods=`<div class="kx-method-grid"><div>${esc(t('prepilot.cardOnline'))}${yesNo(m.card_online,t('prepilot.connected'),t('prepilot.notConnected'))}</div><div>${esc(t('prepilot.sepa'))}${yesNo(m.sepa,t('prepilot.connected'),t('prepilot.notConnected'))}</div><div>${esc(t('prepilot.tapAndroid'))}${yesNo(m.tap_to_pay_android,t('prepilot.connected'),t('prepilot.notConnected'))}</div><div>${esc(t('prepilot.tapIos'))}${yesNo(m.tap_to_pay_ios_source_ready,t('prepilot.connected'),t('prepilot.notConnected'))}</div><div>${esc(t('prepilot.qrFallback'))}${yesNo(m.web_qr_checkout,t('prepilot.connected'),t('prepilot.notConnected'))}</div></div>`;
+      const receiptRows=receipts.length?`<div class="kx-finance-history">${receipts.map(x=>`<article><strong>${esc(x.numero||x.concepto||'')}</strong><span>${money(Number(x.importe||0),'EUR')}</span><small>${esc([x.metodo,x.fecha_pago?dateFmt(x.fecha_pago):'',x.socio_nombre].filter(Boolean).join(' · '))}</small></article>`).join('')}</div>`:empty(t('prepilot.receipts'));
+      const debtRows=debt.length?`<div class="kx-finance-history">${debt.map(x=>`<article><strong>${esc(x.concepto||'')}</strong><span>${money(Number(x.importe||0),'EUR')}</span><small>${esc([x.estado,x.vencimiento?dateFmt(x.vencimiento):'',x.metodo_pago].filter(Boolean).join(' · '))}</small></article>`).join('')}</div>`:empty(t('prepilot.debt'));
+      const orderRows=orders.length?`<div class="kx-finance-history">${orders.map(x=>`<article><strong>${esc(x.order_number||x.seller_name||'')}</strong><span>${amount(x.amount_total_minor,x.currency)}</span><small>${esc([x.status,x.created_at?dateFmt(x.created_at):''].filter(Boolean).join(' · '))}</small></article>`).join('')}</div>`:empty(t('prepilot.orders'));
+      const ticketRows=tickets.length?`<div class="kx-finance-history">${tickets.map(x=>`<article><strong>${esc(x.order_number||x.seller_name||'')}</strong><span>${amount(x.checkout_total_minor??x.amount_total_minor,x.currency)}</span><small>${esc([`${Number(x.quantity||0)} uds.`,x.status,x.paid_at?dateFmt(x.paid_at):''].filter(Boolean).join(' · '))}</small></article>`).join('')}</div>`:empty(t('prepilot.ticketing'));
+      const inv=inventoryPage||null,iv=inv?.summary||{};const inventoryBody=inv?`<div class="metrics"><div class="metric"><span>Unidades</span><strong>${Number(iv.units||0)}</strong></div><div class="metric"><span>Valor a coste</span><strong>${amount(iv.inventory_cost_minor)}</strong></div><div class="metric"><span>${esc(t('r89.potentialSale'))}</span><strong>${amount(iv.potential_sale_minor)}</strong></div><div class="metric"><span>Margen realizado</span><strong>${amount(iv.realized_margin_minor)}</strong></div></div>${inventoryMoves.length?`<div class="kx-finance-history">${inventoryMoves.map(x=>`<article><strong>${esc(x.item_name||x.movement_type||'Stock')}</strong><span>${Number(x.quantity_delta||0)>0?'+':''}${Number(x.quantity_delta||0)} uds.</span><small>${esc(x.movement_type||'')}${x.gross_margin_minor!=null?` · margen ${amount(x.gross_margin_minor)}`:x.gross_margin!=null?` · margen ${money(Number(x.gross_margin||0))}`:''}</small></article>`).join('')}</div>`:empty('Sin movimientos de inventario')}${inv.has_more?`<button class="btn btn-ghost" id="finance-inventory-more">${esc(t('r89.load10Moves'))}</button>`:''}`:empty(t('r89.inventoryUnavailable'),'Esta identidad no utiliza el motor de stock de Club o Showcase.');
+      const reportInfo=`<div class="alert"><strong>${esc(t('prepilot.reports'))}</strong><span>${esc(t('prepilot.financeLead'))}</span></div>`;
+      const canMore=[tx,receipts,debt,orders,tickets].some(x=>x.length>=limit)&&limit<500;
+      const body=`<div class="kx-finance-context"><div class="metrics">${metric(t('prepilot.gross'),amount(s.gross_minor))}${metric(t('prepilot.refunds'),amount(s.refunded_minor))}${metric(t('prepilot.orders'),Number(s.order_count||0))}${metric(t('prepilot.ticketing'),Number(s.ticket_order_count||0))}</div><div class="kx-finance-accordions">${accordion(t('prepilot.summary'),methods,{open:true})}${accordion(t('prepilot.payments'),ledger(tx),{count:tx.length})}${accordion(t('prepilot.receipts'),receiptRows,{count:receipts.length})}${accordion(t('prepilot.history'),ledger(tx),{count:tx.length})}${accordion('Stock y materiales',inventoryBody,{count:inventoryMoves.length})}${accordion(t('prepilot.reports'),reportInfo)}${accordion(t('prepilot.debt'),debtRows,{count:debt.length})}${accordion(t('prepilot.orders'),orderRows,{count:orders.length})}${accordion(t('prepilot.sales'),orderRows,{count:orders.length})}${accordion(t('prepilot.ticketing'),ticketRows,{count:tickets.length})}</div>${canMore?`<div class="load-more-wrap"><button class="btn btn-ghost" id="finance-more">${esc(t('r89.load10Sections'))}</button></div>`:''}</div>`;
+      currentModal?.close?.();currentModal=openDetail({title,subtitle:t('prepilot.financeLead'),body,width:'1040px'});
+      currentModal.wrap.querySelector('#finance-more')?.addEventListener('click',async()=>{limit=Math.min(500,limit+10);await draw();});
+      currentModal.wrap.querySelector('#finance-inventory-more')?.addEventListener('click',async()=>draw({appendInventory:true}));
+    }catch(error){setError(error);throw new Error(humanError(error)||'FINANCE_CONTEXT_ERROR');}
+  };
+  return draw();
+}

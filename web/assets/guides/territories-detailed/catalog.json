@@ -1,0 +1,302 @@
+{
+  "review_date": "21/09/2026",
+  "territories": [
+    {
+      "code": "AN",
+      "name": "Andalucía",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/AN_andalucia_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_AN_ANDALUCIA.pdf",
+      "territorial_sources": [
+        "andalucia_reg",
+        "andalucia_club",
+        "andalucia_minor"
+      ],
+      "consulting_triggers": [
+        "Evento con menores, público o deportistas extranjeros.",
+        "Dudas sobre modalidad/federación o carácter oficial.",
+        "Necesidad de revisar expediente de club, protocolo de menores o documentación del recinto."
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Aragón",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/AR_aragon_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_AR_ARAGON.pdf",
+      "territorial_sources": [
+        "aragon_law",
+        "aragon_reg"
+      ],
+      "consulting_triggers": [
+        "Club con varias modalidades o actividad fuera de Aragón.",
+        "Evento con público, menores o ticketing.",
+        "Duda sobre si la actividad es competición oficial, exhibición o entrenamiento."
+      ]
+    },
+    {
+      "code": "AS",
+      "name": "Principado de Asturias",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/AS_principado-de-asturias_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_AS_PRINCIPADO_DE_ASTURIAS.pdf",
+      "territorial_sources": [
+        "asturias_law",
+        "asturias_reg",
+        "asturias_protocol"
+      ],
+      "consulting_triggers": [
+        "Elegir entre equipo deportivo y club básico.",
+        "Evento con menores o necesidad de protocolo.",
+        "Velada con público o uso de recinto con condiciones especiales."
+      ]
+    },
+    {
+      "code": "IB",
+      "name": "Illes Balears",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/IB_illes-balears_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_IB_ILLES_BALEARS.pdf",
+      "territorial_sources": [
+        "balears_law",
+        "balears_general",
+        "balears_special",
+        "balears_proc"
+      ],
+      "consulting_triggers": [
+        "Elegir régimen general o especial.",
+        "Evento en instalación pública o con público/ticketing.",
+        "Dudas sobre federación, licencias o actividad no federada."
+      ]
+    },
+    {
+      "code": "CN",
+      "name": "Canarias",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/CN_canarias_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_CN_CANARIAS.pdf",
+      "territorial_sources": [
+        "canarias_law",
+        "canarias_reg"
+      ],
+      "consulting_triggers": [
+        "Preparación de expediente electrónico del club.",
+        "Evento entre islas o con participantes de distintos territorios.",
+        "Velada con público, ticketing o menores."
+      ]
+    },
+    {
+      "code": "CB",
+      "name": "Cantabria",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/CB_cantabria_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_CB_CANTABRIA.pdf",
+      "territorial_sources": [
+        "cantabria_law",
+        "cantabria_clubs"
+      ],
+      "consulting_triggers": [
+        "Elegir entre club elemental o básico.",
+        "Preparar constitución notarial de club básico.",
+        "Evento con público o dudas sobre oficialidad/federación."
+      ]
+    },
+    {
+      "code": "CM",
+      "name": "Castilla-La Mancha",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/CM_castilla-la-mancha_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_CM_CASTILLA_LA_MANCHA.pdf",
+      "territorial_sources": [
+        "clm_law",
+        "clm_clubs",
+        "clm_reg"
+      ],
+      "consulting_triggers": [
+        "Constituir el club y preparar estatutos.",
+        "Evento con público o menores.",
+        "Actividad que se quiere presentar como oficial o computable en récord."
+      ]
+    },
+    {
+      "code": "CL",
+      "name": "Castilla y León",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/CL_castilla-y-leon_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_CL_CASTILLA_Y_LEON.pdf",
+      "territorial_sources": [
+        "cyl_law",
+        "cyl_reg"
+      ],
+      "consulting_triggers": [
+        "Alta registral y adaptación de estatutos.",
+        "Competición oficial o evento con varios clubes.",
+        "Uso de instalación municipal y condiciones de público/ticketing."
+      ]
+    },
+    {
+      "code": "CT",
+      "name": "Cataluña",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/CT_cataluna_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_CT_CATALUNA.pdf",
+      "territorial_sources": [
+        "cat_law",
+        "cat_reg",
+        "cat_club",
+        "cat_events",
+        "cat_minor"
+      ],
+      "consulting_triggers": [
+        "Evento con público, menores o recinto no habitual.",
+        "Dudas sobre licencia/cobertura de participantes.",
+        "Constitución de club o actuación en varias comunidades."
+      ]
+    },
+    {
+      "code": "VC",
+      "name": "Comunitat Valenciana",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/VC_comunitat-valenciana_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_VC_COMUNITAT_VALENCIANA.pdf",
+      "territorial_sources": [
+        "val_law",
+        "val_reg"
+      ],
+      "consulting_triggers": [
+        "Elegir club federado, grupo recreativo o sección.",
+        "Evento mixto federado/no federado.",
+        "Velada con público, menores o venta de entradas."
+      ]
+    },
+    {
+      "code": "EX",
+      "name": "Extremadura",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/EX_extremadura_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_EX_EXTREMADURA.pdf",
+      "territorial_sources": [
+        "ext_law",
+        "ext_reg"
+      ],
+      "consulting_triggers": [
+        "Elegir tipo de entidad.",
+        "Actividad con escolares/menores.",
+        "Evento con público o que pretende ser competición oficial."
+      ]
+    },
+    {
+      "code": "GA",
+      "name": "Galicia",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/GA_galicia_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_GA_GALICIA.pdf",
+      "territorial_sources": [
+        "gal_law",
+        "gal_reg",
+        "gal_proc"
+      ],
+      "consulting_triggers": [
+        "Protocolos de menores.",
+        "Participación oficial y registro del club.",
+        "Evento con público, menores o deportistas de fuera de Galicia."
+      ]
+    },
+    {
+      "code": "MD",
+      "name": "Comunidad de Madrid",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/MD_comunidad-de-madrid_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_MD_COMUNIDAD_DE_MADRID.pdf",
+      "territorial_sources": [
+        "mad_law",
+        "mad_reg"
+      ],
+      "consulting_triggers": [
+        "Elegir club elemental o básico.",
+        "Preparar alta dentro del plazo registral.",
+        "Velada con público, menores o ticketing."
+      ]
+    },
+    {
+      "code": "MC",
+      "name": "Región de Murcia",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/MC_region-de-murcia_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_MC_REGION_DE_MURCIA.pdf",
+      "territorial_sources": [
+        "mur_law",
+        "mur_reg"
+      ],
+      "consulting_triggers": [
+        "Constituir y registrar club.",
+        "Integración federativa regional.",
+        "Evento con público, menores o dudas sobre permisos del recinto."
+      ]
+    },
+    {
+      "code": "NC",
+      "name": "Comunidad Foral de Navarra",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/NC_comunidad-foral-de-navarra_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_NC_COMUNIDAD_FORAL_DE_NAVARRA.pdf",
+      "territorial_sources": [
+        "nav_law",
+        "nav_reg",
+        "nav_prof"
+      ],
+      "consulting_triggers": [
+        "Revisión de titulaciones/profesionales.",
+        "Constitución de club.",
+        "Evento con personal técnico, menores o participantes externos."
+      ]
+    },
+    {
+      "code": "PV",
+      "name": "País Vasco / Euskadi",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/PV_pais-vasco-euskadi_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_PV_PAIS_VASCO_EUSKADI.pdf",
+      "territorial_sources": [
+        "pv_law",
+        "pv_reg"
+      ],
+      "consulting_triggers": [
+        "Elección de modelo de gobierno del club.",
+        "Evento en varios territorios históricos.",
+        "Velada con público, menores o dudas federativas."
+      ]
+    },
+    {
+      "code": "RI",
+      "name": "La Rioja",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/RI_la-rioja_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_RI_LA_RIOJA.pdf",
+      "territorial_sources": [
+        "rio_law",
+        "rio_reg"
+      ],
+      "consulting_triggers": [
+        "Constitución e inscripción de club.",
+        "Evento con ayudas públicas o convenio.",
+        "Velada con público, menores o ticketing."
+      ]
+    },
+    {
+      "code": "CE",
+      "name": "Ceuta",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/CE_ceuta_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_CE_CEUTA.pdf",
+      "territorial_sources": [
+        "ceuta_reg",
+        "ceuta_club"
+      ],
+      "consulting_triggers": [
+        "Elegir club elemental o básico.",
+        "Afiliación para competición oficial.",
+        "Evento con público o necesidad de licencia de actividad/recinto."
+      ]
+    },
+    {
+      "code": "ML",
+      "name": "Melilla",
+      "markdown": "docs/11_GUIDES_TERRITORIES_DETAILED/ML_melilla_DETALLADO.md",
+      "pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_DETALLADA_ML_MELILLA.pdf",
+      "territorial_sources": [
+        "mel_reg",
+        "mel_bome"
+      ],
+      "consulting_triggers": [
+        "Constitución y alta del club.",
+        "Participación en competición oficial.",
+        "Evento con público, menores o necesidad de revisar autorizaciones locales."
+      ]
+    }
+  ],
+  "principle": "No inventar. Diferenciar marco estatal, autonómico, municipal/federativo y verificación específica.",
+  "master_pdf": "artifacts/guides/territories-detailed/KOMBAX_GUIAS_TERRITORIOS_ESPANA_DOSSIER_PROFESIONAL_DETALLADO_2026.pdf"
+}

@@ -23,7 +23,7 @@ export default {
   "guide": "Payments and SEPA guide",
   "assist": "Ask KOMBAX Assist",
   "guideHint": "Integrated manual for Clubs, Federations, Brands and Event organizers.",
-  "direct": "Direct Charges: the payment belongs to the connected account of the identity selling or providing the service.",
+  "direct": "Payments are processed in the account of the business selling the product or service.",
   "security": "KOMBAX does not store the full IBAN or ask for banking credentials in chat.",
   "mandates": "Active mandates",
   "immediateNote": "Showcase and Ticketing use cards to confirm purchases or tickets immediately. SEPA does not confirm instant operations.",

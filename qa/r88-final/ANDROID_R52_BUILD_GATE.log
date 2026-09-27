@@ -1,0 +1,14 @@
+PASS debug script exposed
+PASS Play AAB script exposed
+PASS Windows wrapper uses cmd.exe
+PASS Unix wrapper uses sh
+PASS debug requires real APK artifact
+PASS debug names a revisioned KOMBAX artifact
+PASS Play requires signing preflight
+PASS Play builds and names a revisioned AAB
+PASS baseline Android versionCode preserved
+PASS baseline Android versionName preserved
+PASS debug cache detection avoids generated BuildConfig
+PASS baseline Android user agent preserved
+PASS build keeps web/dist/Android parity
+R52.1 Android build 13/13 PASS

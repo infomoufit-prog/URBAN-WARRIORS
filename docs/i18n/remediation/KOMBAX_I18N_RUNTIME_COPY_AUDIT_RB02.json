@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-18T13:20:29.959Z",
+  "generated_at": "2026-09-24T17:53:16.577Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/adaptive-poller.js",
@@ -37,6 +37,7 @@
     "web/js/modules/community.js",
     "web/js/modules/competition-preparation.js",
     "web/js/modules/competitor-hub.js",
+    "web/js/modules/consulting.js",
     "web/js/modules/customer-operations.js",
     "web/js/modules/dashboard-catalog.js",
     "web/js/modules/documents.js",
@@ -45,15 +46,18 @@
     "web/js/modules/federation-hub.js",
     "web/js/modules/federation-licenses.js",
     "web/js/modules/fighter-discovery.js",
+    "web/js/modules/finance-context.js",
     "web/js/modules/finance-premium-bootstrap.js",
     "web/js/modules/finance-premium.js",
     "web/js/modules/finance.js",
     "web/js/modules/gateway.js",
     "web/js/modules/groups-members.js",
+    "web/js/modules/guides.js",
     "web/js/modules/help-legal.js",
     "web/js/modules/kombax-discovery.js",
     "web/js/modules/kombax-event-visuals.js",
     "web/js/modules/kombax-events.js",
+    "web/js/modules/kombax-home.js",
     "web/js/modules/kombax-social.js",
     "web/js/modules/lifecycle.js",
     "web/js/modules/managed-profile-hub.js",
@@ -63,10 +67,13 @@
     "web/js/modules/platform-admin.js",
     "web/js/modules/platform-legal.js",
     "web/js/modules/portal.js",
+    "web/js/modules/private-training.js",
     "web/js/modules/professional-finance.js",
     "web/js/modules/professional-hub.js",
     "web/js/modules/professional-operations.js",
     "web/js/modules/public-profile.js",
+    "web/js/modules/resource-center.js",
+    "web/js/modules/showcase-cart.js",
     "web/js/modules/showcase.js",
     "web/js/modules/social-network.js",
     "web/js/modules/social-post-management.js",
@@ -84,11 +91,11 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4663,
-  "covered": 4663,
+  "phrases": 4650,
+  "covered": 4650,
   "unresolved": 0,
   "coverage": 100,
-  "skipped": 365,
+  "skipped": 367,
   "files": {
     "web/js/app.js": {
       "total": 117,
@@ -283,8 +290,8 @@
       "coverage": 100
     },
     "web/js/modules/comms-material.js": {
-      "total": 89,
-      "covered": 89,
+      "total": 88,
+      "covered": 88,
       "skipped": 11,
       "coverage": 100
     },
@@ -301,6 +308,12 @@
       "coverage": 100
     },
     "web/js/modules/competitor-hub.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/consulting.js": {
       "total": 0,
       "covered": 0,
       "skipped": 0,
@@ -331,9 +344,9 @@
       "coverage": 100
     },
     "web/js/modules/events.js": {
-      "total": 79,
-      "covered": 79,
-      "skipped": 15,
+      "total": 80,
+      "covered": 80,
+      "skipped": 17,
       "coverage": 100
     },
     "web/js/modules/federation-hub.js": {
@@ -352,6 +365,12 @@
       "total": 32,
       "covered": 32,
       "skipped": 4,
+      "coverage": 100
+    },
+    "web/js/modules/finance-context.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
       "coverage": 100
     },
     "web/js/modules/finance-premium-bootstrap.js": {
@@ -373,26 +392,32 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 172,
-      "covered": 172,
+      "total": 174,
+      "covered": 174,
       "skipped": 5,
       "coverage": 100
     },
     "web/js/modules/groups-members.js": {
-      "total": 157,
-      "covered": 157,
+      "total": 158,
+      "covered": 158,
       "skipped": 11,
       "coverage": 100
     },
+    "web/js/modules/guides.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/help-legal.js": {
-      "total": 329,
-      "covered": 329,
+      "total": 324,
+      "covered": 324,
       "skipped": 2,
       "coverage": 100
     },
     "web/js/modules/kombax-discovery.js": {
-      "total": 66,
-      "covered": 66,
+      "total": 65,
+      "covered": 65,
       "skipped": 10,
       "coverage": 100
     },
@@ -403,20 +428,26 @@
       "coverage": 100
     },
     "web/js/modules/kombax-events.js": {
-      "total": 810,
-      "covered": 810,
+      "total": 816,
+      "covered": 816,
       "skipped": 49,
       "coverage": 100
     },
+    "web/js/modules/kombax-home.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/kombax-social.js": {
-      "total": 257,
-      "covered": 257,
+      "total": 254,
+      "covered": 254,
       "skipped": 6,
       "coverage": 100
     },
     "web/js/modules/lifecycle.js": {
-      "total": 14,
-      "covered": 14,
+      "total": 12,
+      "covered": 12,
       "skipped": 2,
       "coverage": 100
     },
@@ -462,6 +493,12 @@
       "skipped": 10,
       "coverage": 100
     },
+    "web/js/modules/private-training.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/professional-finance.js": {
       "total": 29,
       "covered": 29,
@@ -486,9 +523,21 @@
       "skipped": 9,
       "coverage": 100
     },
+    "web/js/modules/resource-center.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/showcase-cart.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/showcase.js": {
-      "total": 349,
-      "covered": 349,
+      "total": 338,
+      "covered": 338,
       "skipped": 11,
       "coverage": 100
     },

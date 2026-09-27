@@ -55,6 +55,27 @@ export async function optimizeImage(file,{maxEdge=MAX_IMAGE_EDGE,maxBytes=MAX_IM
   }finally{decoded.close();}
 }
 
+// Financial PDFs accept PNG and JPEG. Keep logos in one of those formats.
+export async function prepareBrandLogo(file){
+  const prepared=await optimizeImage(file,{maxEdge:1024,maxBytes:MAX_IMAGE_OUTPUT_BYTES});
+  if(['image/png','image/jpeg'].includes(prepared.file.type))return prepared;
+  const decoded=await loadImage(prepared.file);
+  try{
+    const canvas=document.createElement('canvas');canvas.width=decoded.width;canvas.height=decoded.height;
+    const context=canvas.getContext('2d',{alpha:true});
+    if(!context)throw new Error('Este dispositivo no puede preparar el logo para los informes.');
+    context.drawImage(decoded.source,0,0);
+    let blob=await toBlob(canvas,'image/png');
+    if(!blob||blob.size>MAX_IMAGE_OUTPUT_BYTES){
+      context.globalCompositeOperation='destination-over';context.fillStyle='#ffffff';context.fillRect(0,0,canvas.width,canvas.height);
+      blob=await toBlob(canvas,'image/jpeg',0.86);
+    }
+    if(!blob||blob.size>MAX_IMAGE_OUTPUT_BYTES)throw new Error('El logo supera 5 MB. Selecciona una versión más ligera.');
+    const converted=new File([blob],imageName(file.name,blob.type),{type:blob.type,lastModified:Date.now()});
+    return {...prepared,file:converted,mime:converted.type,sizeBytes:converted.size};
+  }finally{decoded.close();}
+}
+
 export function formatMediaBytes(bytes){
   const value=Number(bytes||0);if(value<1024)return `${value} B`;if(value<1024*1024)return `${(value/1024).toFixed(0)} KB`;return `${(value/1024/1024).toFixed(1)} MB`;
 }

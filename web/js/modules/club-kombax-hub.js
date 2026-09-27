@@ -11,6 +11,7 @@ import { migrationAssistBanner } from './competition-preparation.js';
 import { openMigrationPreparation, openMigrationGuide } from './customer-operations.js';
 import { openClubBrandCollaborationSettings } from './brand-business.js';
 import { contentTranslationAttrs } from '../i18n/user-content-translation.js';
+import { t } from '../i18n/index.js';
 
 const PERMISSIONS=[
   ['social.act_as_club','Publicar y actuar como Club'],['profile.public.manage','Editar perfil público'],['showcase.manage','Gestionar Showcase'],['relations.manage','Gestionar Mi red'],['contacts.manage','Gestionar contactos']
@@ -48,6 +49,8 @@ export async function renderClubKombaxHub(){
       ${card('kombax-events','KOMBAX Events','Crea y gestiona eventos públicos. Premium incluye hasta 2 publicaciones al mes; Ticketing se activa aparte.','calendar','Gestionar eventos')}
       ${card('relations','Mi red','Federaciones, competidores, marcas y profesionales conectados de forma privada y confirmada.','network','Gestionar')}
       ${card('plans-services','Plan y servicios','Consulta tu plan KOMBAX, límites, fees y servicios puntuales disponibles.','creditCard','Ver planes')}
+      ${card('guides',t('prepilot.guides'),t('prepilot.guidesLead'),'fileText',t('prepilot.open'))}
+      ${card('consulting',t('prepilot.consulting'),t('prepilot.consultingLead'),'sparkles',t('prepilot.open'))}
       ${card('migration-guide','Guía de migración','Tutorial para trasladar alumnos, grupos, cuotas, licencias y documentos desde Excel, CSV, PDF o imágenes, con revisión antes de importar.','fileText','Abrir guía')}
       ${card('federations','Federaciones y licencias','Gestiona múltiples Federaciones, federados, licencias, vencimientos y documentación administrativa de forma privada.','shieldCheck','Gestionar')}
       ${card('brand-collaboration','Colaboraciones y patrocinios','Decide expresamente si las Marcas pueden localizar al Club y enviar propuestas comerciales.','sparkles','Configurar')}
@@ -70,6 +73,8 @@ export async function renderClubKombaxHub(){
     else if(a==='kombax-events')go('kombax-events');
     else if(a==='relations'){sessionStorage.setItem('kombax_social_view','relations');go('social');}
     else if(a==='plans-services')go('plans-services');
+    else if(a==='guides')go('guides');
+    else if(a==='consulting')go('consulting');
     else if(a==='migration-guide')openMigrationGuide();
     else if(a==='federations')renderClubFederationAdmin(state.session.club_id,{onBack:renderClubKombaxHub});
     else if(a==='brand-collaboration')openClubBrandCollaborationSettings(state.session.club_id);

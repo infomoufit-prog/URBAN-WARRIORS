@@ -22,12 +22,12 @@ const m260=await txt('supabase/migrations/260_kombax_showcase_club_autoprovision
 const m261=await txt('supabase/migrations/261_kombax_events_multiclub_authorized_connections.sql');
 const m263=await txt('supabase/migrations/263_kombax_events_multiclub_fk_indexes_r74.sql');
 
-ok(/r81-tap-to-pay/.test(config)&&/build: 20133/.test(config),'R75 queda formalizada como build 20133');
-ok(/kombax-build-20133/.test(sw),'service worker usa build 20133');
-ok(/versionCode 20133/.test(gradle)&&/r81-tap-to-pay/.test(gradle),'Android identifica R75 build 20133');
-ok(/build:20133/.test(health),'health source identifica build 20133');
-ok(/KOMBAXRevision\/r81-tap-to-pay/.test(mainActivity)&&/KOMBAXApp\/2\.0\.0-rc\.13\/20133/.test(mainActivity),'WebView Android identifica R75 build 20133');
-
+const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0),androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+ok(currentBuild>=20134,'release acumulativa no retrocede del baseline R81');
+ok(androidBuild===currentBuild,'Android y Web comparten build');
+ok(sw.includes(`kombax-build-${currentBuild}`),'service worker usa el build actual');
+ok(health.includes(`build:${currentBuild}`),'health source identifica el build actual');
+ok(mainActivity.includes(`/${currentBuild}`),'WebView Android identifica el build actual');
 ok(await exists('supabase/migrations/260_kombax_showcase_club_autoprovision.sql'),'migración 260 Showcase autoprovision existe');
 ok(await exists('supabase/migrations/261_kombax_events_multiclub_authorized_connections.sql'),'migración 261 Events multiclub existe');
 ok(await exists('supabase/migrations/263_kombax_events_multiclub_fk_indexes_r74.sql'),'migración 263 hardening de índices existe');

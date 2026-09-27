@@ -28,6 +28,7 @@ const sha256 = async (input: string | ArrayBuffer | Uint8Array) => {
 };
 const batches = <T>(items: T[], size: number) =>
   Array.from({ length: Math.ceil(items.length / size) }, (_, index) => items.slice(index * size, (index + 1) * size));
+const pause = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 Deno.serve(async (req: Request) => {
   if (req.method !== "GET") return json(405, { ok: false, error: "method_not_allowed" });
@@ -80,7 +81,11 @@ Deno.serve(async (req: Request) => {
       const results = await Promise.all(group.map(async (artifact: any) => {
         const path = String(artifact.path || "");
         const expected = String(artifact.sha256 || "");
-        const download = await supabase.storage.from(BUCKET).download(path);
+        let download = await supabase.storage.from(BUCKET).download(path);
+        for (let attempt = 1; (download.error || !download.data) && attempt < 3; attempt += 1) {
+          await pause(250 * attempt);
+          download = await supabase.storage.from(BUCKET).download(path);
+        }
         if (download.error || !download.data) return { path, ok: false, error: download.error?.message || "missing" };
         const bytes = new Uint8Array(await download.data.arrayBuffer());
         const actual = await sha256(bytes);

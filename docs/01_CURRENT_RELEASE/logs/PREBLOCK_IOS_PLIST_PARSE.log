@@ -1,0 +1,3 @@
+PASS ios/KombaxIOS/Info.plist
+PASS ios/KombaxIOS/KombaxIOS.entitlements
+TOTAL 2

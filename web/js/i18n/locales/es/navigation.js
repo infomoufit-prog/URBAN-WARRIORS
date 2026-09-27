@@ -3,5 +3,6 @@ export default {
   sections:{home:'Inicio',clubManagement:'Gestión del club',clubEvents:'Eventos del club',economy:'Economía',communications:'Comunicaciones',federationLicenses:'Federaciones y licencias',administration:'Administración',teamPermissions:'Equipo y permisos',assistance:'Asistencia',clubSettings:'Configuración del club',myAccount:'Mi cuenta'},
   products:{myClub:'Mi Club',exploreEvents:'Explorar Eventos',myEvents:'Mis Eventos',exploreShowcase:'Explorar Showcase',myShowcase:'Mi Showcase'},
   notifications:{kombax:'Notificaciones KOMBAX',club:'Notificaciones del Club',messages:'Mensajes KOMBAX'},
-  contextual:{today:'Hoy',myStudents:'Mis alumnos',myGroups:'Mis grupos',myWallet:'Mi cartera',myManual:'Mi manual',schedules:'Horarios',fees:'Cuotas',clubProfile:'Perfil del club'}
+  contextual:{today:'Hoy',myStudents:'Mis alumnos',myGroups:'Mis grupos',myWallet:'Mi cartera',myManual:'Ayuda rápida',schedules:'Horarios',fees:'Cuotas',clubProfile:'Perfil del club'},
+  quickHelp:{memberIntro:"Encuentra una función de tu cuenta y entra directamente. Las guías completas están en Recursos KOMBAX.",clubIntro:"Busca una tarea del club, consulta sus pasos esenciales y abre la función. Las guías completas están en Recursos KOMBAX.",memberSubtitle:"Accesos y pasos breves para las funciones de tu perfil",clubSubtitle:"Acceso directo a las funciones del portal",loading:"Cargando ayuda rápida…",guidesIntro:"Las guías completas de tu perfil están en Recursos KOMBAX. Esta ayuda rápida te lleva a una función concreta; aquí también tienes soporte y privacidad."}
 };

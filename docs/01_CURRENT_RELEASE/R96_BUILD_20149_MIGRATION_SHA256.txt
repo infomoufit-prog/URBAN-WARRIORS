@@ -1,0 +1,9 @@
+# KOMBAX R96 build 20149 - SHA256
+# Relative path | SHA256
+web/js/modules/customer-operations.js | 7f6457ee21b840e031493f2b29326e188f81424e1a1fbf5a1c7f2b6d4a0d6e40
+web/js/core/repositories.js | 815ec3097d33b0d96cad09ee3ec4fe190f031a222fd98cfae3b39ed31163f18e
+web/css/kombax-premium.css | 27c5f1305c523386cbd5eb2aa47b9b0a65784c80e2a113531bd5e40cc3ffc4cf
+supabase/functions/kombax-assist-r38/index.ts | 098c456186cc4c7b5129febf934243d462de00713649fe33c3e2346929d90528
+supabase/functions/kombax-assist-r38/deno.json | 14c25e1d80b68b4babfa25dc122d5a03ce4e5d956a788008ace0ccd037338ba1
+supabase/migrations/20260925133000_kombax_migration_batch_import_r96.sql | 378b936eac9cb579139914ca37f2ddadb04b8e0ed5ff6a795088eb1d48b23e99
+docs/01_CURRENT_RELEASE/R96_BUILD_20149_MIGRATION_IMPORT.md | 97ab6718c796c608f9fcbff7479cd0e885e9f207a85a24f116b4410e4c43509c

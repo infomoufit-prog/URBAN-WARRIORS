@@ -39,11 +39,15 @@ if(!existsSync(apk) || statSync(apk).size<1024){
 }
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedApk=resolve(artifacts,'KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_DEBUG.apk');
+const namedApk=resolve(artifacts,'KOMBAX_20144_R91_PILOT_QA_DEBUG.apk');
 copyFileSync(apk,namedApk);
-console.log('\nOK · KOMBAX R62.8 Showcase Events Commercial Pilot QA Android');
+console.log('\nOK · KOMBAX R91 build 20144 · Pilot QA Android');
 console.log('APK Gradle: android/app/build/outputs/apk/debug/app-debug.apk');
-console.log('APK QA: artifacts/KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_DEBUG.apk');
-console.log('Android R62.8: versionCode 20110 · versionName 2.0.0-rc.13-r62.8-pilot');
+console.log('APK QA: artifacts/KOMBAX_20144_R91_PILOT_QA_DEBUG.apk');
+console.log('Android R91: versionCode 20144 · versionName 2.0.0-rc.13-r91-public-guides-r100-1');
 
 // Historical QA artifact marker retained for R52.1/R52.2 regression: KOMBAX_20101_R52_2_SOCIAL_ANDROID_POSTER_FIX_DEBUG.apk
+
+// Historical release artifact marker retained for R60/R62.8 regression: KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_DEBUG.apk
+
+// Historical release marker: KOMBAX_20142_R89_PILOT_QA_DEBUG.apk

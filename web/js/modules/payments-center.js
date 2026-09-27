@@ -40,12 +40,13 @@ function deviceNote(){
 
 const methodCard=(kind,status,{available=true,body='',note=''})=>{
   const enabled=kind==='card'?status?.card_enabled!==false:kind==='sepa'?status?.sepa_enabled===true:status?.tap_to_pay_enabled===true;
-  const cap=kind==='sepa'?status?.sepa_capability_status:status?.card_capability_status;
+  const cap=kind==='sepa'?status?.sepa_capability_status:kind==='tap'?(status?.terminal_ready===true?'active':'pending'):status?.card_capability_status;
   const title=kind==='card'?t('payments.cardTitle'):kind==='sepa'?t('payments.sepaTitle'):t('payments.tapTitle');
   const icon=kind==='card'?'💳':kind==='sepa'?'🏦':'📱';
   const meta=kind==='sepa'?pill(`${t('payments.mandates')}: ${Number(status?.active_mandates||0)}`,Number(status?.active_mandates||0)>0):kind==='tap'?pill(status?.terminal_location_configured?t('payments.tapLocationReady'):t('payments.tapLocationPending'),status?.terminal_location_configured===true):'';
   const action=kind==='tap'&&enabled?`<button type="button" class="btn btn-primary btn-sm" data-kx-terminal-open ${available?'':'disabled'}>${esc(t('payments.tapCharge'))}</button>`:'';
-  return `<article class="kx-payment-method ${kind} ${enabled?'is-enabled':''}"><div class="kx-payment-method-icon" aria-hidden="true">${icon}</div><div class="kx-payment-method-copy"><span>${esc(enabled?t('payments.enabled'):t('payments.disabled'))}</span><h3>${esc(title)}</h3><p>${esc(body)}</p>${note?`<small>${esc(note)}</small>`:''}<div class="kx-payment-method-meta">${pill(capability(cap),active(cap))}${meta}</div>${action}</div><button type="button" class="btn ${enabled?'btn-ghost':'btn-primary'}" data-kx-payment-toggle="${kind}" ${available?'':'disabled'}>${esc(enabled?t('payments.disable'):t('payments.enable'))}</button></article>`;
+  const displayState=enabled?(active(cap)?t('payments.enabled'):t('payments.capabilityPending')):t('payments.disabled');
+  return `<article class="kx-payment-method ${kind} ${enabled?'is-enabled':''}"><div class="kx-payment-method-icon" aria-hidden="true">${icon}</div><div class="kx-payment-method-copy"><span>${esc(displayState)}</span><h3>${esc(title)}</h3><p>${esc(body)}</p>${note?`<small>${esc(note)}</small>`:''}<div class="kx-payment-method-meta">${pill(capability(cap),active(cap))}${meta}</div>${action}</div><button type="button" class="btn ${enabled?'btn-ghost':'btn-primary'}" data-kx-payment-toggle="${kind}" ${available?'':'disabled'}>${esc(enabled?t('payments.disable'):t('payments.enable'))}</button></article>`;
 };
 
 export function paymentCenterSummaryHtml(status={},options={}){

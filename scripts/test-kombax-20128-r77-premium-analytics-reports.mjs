@@ -11,7 +11,7 @@ const showcase=read('web/js/modules/showcase.js'),events=read('web/js/modules/ko
 const m265=read('supabase/migrations/265_kombax_analytics_reports_r77.sql'),m266=read('supabase/migrations/266_kombax_report_payload_completeness_r77.sql'),m267=read('supabase/migrations/267_kombax_analytics_exact_range_r77.sql'),m268=read('supabase/migrations/268_kombax_report_exact_range_r77.sql'),edge=read('supabase/functions/kombax-report-r77/index.ts');
 
 test('R77 analytics/reporting contract remains present in cumulative releases',()=>{has(m265,'app_kombax_showcase_analytics_r77');has(m265,'app_kombax_event_analytics_r77');has(edge,'kombax-reports');has(analytics,'kx-r77');});
-test('R77 analytics stylesheet is loaded by the actual app shell',()=>has(index,'./css/kombax-analytics-r77.css?v=20133'));
+test('R77 analytics stylesheet is loaded by the actual app shell',()=>assert.match(index,/\.\/css\/kombax-analytics-r77\.css\?v=20\d{3}/));
 test('Public Showcase product media is square and image-safe',()=>{has(appCss,'.showcase-item-visual{height:auto;aspect-ratio:1/1');has(appCss,'.showcase-item-visual>img{display:block;width:100%;height:100%;object-fit:contain');});
 test('Private Showcase product cards have a 1:1 thumbnail and performance block',()=>{has(css,'.kx-showcase-product-thumb');has(css,'aspect-ratio:1/1');has(showcase,'kx-showcase-product-performance');has(showcase,'kx-showcase-product-thumb');});
 test('Mi Showcase exposes the premium navigation areas without replacing existing seller tools',()=>{for(const id of ['summary','products','orders','stock','analytics','reports','finance','commerce','settings'])has(showcase,`data-showcase-nav="${id}"`);has(showcase,'kx-showcase-private-nav');has(showcase,'kx-seller-tools');});

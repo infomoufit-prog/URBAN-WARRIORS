@@ -14,7 +14,7 @@ const codeFragment=/(?:\.includes\(|=>|===|!==|\?\.|&&|\|\||\.dataset\b|filters\
 const technicalKey=/^[a-z][a-z0-9_-]*(?:\.[a-z0-9_-]+){1,}$/i;
 const urlish=/^(?:https?:|mailto:|tel:|\/|\.\/|\.\.\/|[.#][a-z0-9_-]+)/i;
 const classish=/^[a-z0-9_-]+(?:\s+[a-z0-9_-]+){0,4}$/i;
-const demoFixtureExact=new Set(['Cartel oficial · Noche de Impacto','Entradas, recinto y horarios','Álbum oficial · momentos del evento']);
+const demoFixtureExact=new Set(['Cartel oficial · Noche de Impacto','Entradas, recinto y horarios','Álbum oficial · momentos del evento','Confidentialité']);
 function norm(v){return String(v??'').replace(/\u00a0/g,' ').replace(/\s+/g,' ').trim();}
 function probe(v){return String(v).replace(/^(?:\{VAR\}\)\}\s*)+/,'').replace(/\{VAR\}/g,'2');}
 function skip(v){return v.startsWith("'+icon(")||!v||v.length<2||v.length>1200||likelyTechnical.test(v)||userFixture.test(v)||demoFixtureExact.has(v)||codeFragment.test(v)||technicalKey.test(v)||urlish.test(v)||/^\'+icon\(/.test(v)||/^kx-[a-z0-9-]+$/i.test(v)||/^id="kx-[^"]+"$/i.test(v)||/^[^\s]+@[^\s]+$/.test(v)||/^String\(/.test(v)||/^\$?\{/.test(v)||(/^\w+(?:\s+\w+){0,2}$/.test(v)&&classish.test(v)&&!spanish.test(v));}

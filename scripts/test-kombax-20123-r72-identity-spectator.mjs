@@ -19,10 +19,12 @@ const sw=read('web/service-worker.js');
 const health=read('supabase/functions/health/index.ts');
 const marketingEs=read('web/js/i18n/locales/es/marketing.js');
 
-test('R72 identity is build 20133 across Web Android SW and health',()=>{
-  has(config,"version: '2.0.0-rc.13-r81-tap-to-pay'");has(config,'build: 20133');
-  has(gradle,'versionCode 20133');has(gradle,"versionName '2.0.0-rc.13-r81-tap-to-pay'");
-  has(sw,'kombax-build-20133');has(health,'build:20133');
+test('Historical release functionality remains on a monotonic cumulative build',()=>{
+  const webBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0);
+  const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+  assert.ok(webBuild>=20134,'web build must stay at or above the certified R81 baseline');
+  assert.equal(androidBuild,webBuild,'Android and Web build identifiers must match');
+  has(sw,`kombax-build-${webBuild}`);has(health,`build:${webBuild}`);
 });
 
 test('Public gateway offers a profile-free spectator path',()=>{
@@ -105,9 +107,9 @@ test('R64.4 pricing is untouched by the discovery release',()=>{
   for(const frag of ["plan_code:'club'","founder_monthly_minor:2900","standard_monthly_minor:3600","showcase_model_limit:15","plan_code:'premium'","founder_monthly_minor:4700","standard_monthly_minor:5900","showcase_model_limit:25","plan_code:'enterprise'","founder_monthly_minor:7900","standard_monthly_minor:9900","plan_code:'brand_start'","founder_monthly_minor:3900","standard_monthly_minor:4900","content_promotion:{7:300,15:500,30:800","commerce_temporary:{30:{price_minor:1200,renewable:true}"])has(pricing,frag);
 });
 
-test('Founder monthly-only guard and Billing-out-of-scope message remain visible',()=>{
+test('Founder monthly-only guard and clear no-charge message remain visible',()=>{
   has(plans,"const useFounder=billing==='monthly'&&founderEligible");
-  has(plans,'Billing automático sigue fuera de esta fase.');
+  has(plans,'Elegir no realiza ningún cobro.');
 });
 
 let passed=0;

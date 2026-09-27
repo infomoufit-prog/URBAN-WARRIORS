@@ -70,9 +70,10 @@ export default {
     "myStudents": "Os meus alunos",
     "myGroups": "Os meus grupos",
     "myWallet": "A minha carteira",
-    "myManual": "O meu manual",
+    "myManual": "Ajuda rápida",
     "schedules": "Horários",
     "fees": "Quotas",
     "clubProfile": "Perfil do clube"
-  }
+  },
+  quickHelp:{memberIntro:"Encontre uma função da sua conta e abra-a diretamente. Os guias completos estão em Recursos KOMBAX.",clubIntro:"Encontre uma tarefa do clube, consulte os passos essenciais e abra a função. Os guias completos estão em Recursos KOMBAX.",memberSubtitle:"Passos breves e acessos diretos para o seu perfil",clubSubtitle:"Acesso direto às funções do portal",loading:"A carregar a ajuda rápida…",guidesIntro:"Os guias completos do seu perfil estão em Recursos KOMBAX. A ajuda rápida leva a uma função específica; o apoio e a privacidade também estão aqui."}
 };

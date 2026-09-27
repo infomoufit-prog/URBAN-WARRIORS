@@ -1,13 +1,13 @@
 import { getLocale, normalizeLocale } from './index.js';
 const MANIFESTS=Object.freeze({
-  es:'./manifest.webmanifest?v=20133-r81-tap-to-pay',
-  en:'./manifest-en.webmanifest?v=20133-r81-tap-to-pay',
-  fr:'./manifest-fr.webmanifest?v=20133-r81-tap-to-pay',
-  pt:'./manifest-pt.webmanifest?v=20133-r81-tap-to-pay',
-  it:'./manifest-it.webmanifest?v=20133-r81-tap-to-pay',
-  de:'./manifest-de.webmanifest?v=20133-r81-tap-to-pay',
-  th:'./manifest-th.webmanifest?v=20133-r81-tap-to-pay',
-  fil:'./manifest-fil.webmanifest?v=20133-r81-tap-to-pay'
+  es:'./manifest.webmanifest?v=20150-r89-inventory-lifecycle',
+  en:'./manifest-en.webmanifest?v=20150-r89-inventory-lifecycle',
+  fr:'./manifest-fr.webmanifest?v=20150-r89-inventory-lifecycle',
+  pt:'./manifest-pt.webmanifest?v=20150-r89-inventory-lifecycle',
+  it:'./manifest-it.webmanifest?v=20150-r89-inventory-lifecycle',
+  de:'./manifest-de.webmanifest?v=20150-r89-inventory-lifecycle',
+  th:'./manifest-th.webmanifest?v=20150-r89-inventory-lifecycle',
+  fil:'./manifest-fil.webmanifest?v=20150-r89-inventory-lifecycle'
 });
 export function manifestForLocale(locale=getLocale()){return MANIFESTS[normalizeLocale(locale)]||MANIFESTS.es;}
 export function applyManifestLocale(){

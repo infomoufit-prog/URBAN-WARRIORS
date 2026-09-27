@@ -12,7 +12,7 @@ const modalStack=[];
 const SUBVIEW_HEADER_SELECTORS=[
   '.gateway-directory-top','.kx-managed-top','.kx-fed-top','.kx-global-module-top',
   '.kx-admin-console-top','.kx-prep-hero','.kx-professional-finance-top','.kx-showcase-detail-top',
-  '.kx-event-subview-top','.kx-fullscreen-subview-head'
+  '.kx-event-subview-top','.kx-fullscreen-subview-head','.page-head'
 ];
 function activeModalLayer(){return document.getElementById('modal-layer');}
 function suspendActiveModal(){
@@ -31,6 +31,24 @@ export function popModal(){
 }
 export function enhanceSubviewExitControls(root=document){
   if(!root?.querySelectorAll)return;
+  if(root.id==='main-view'||root.querySelector('#main-view')){
+    const main=root.id==='main-view'?root:root.querySelector('#main-view');
+    const header=main?.querySelector('.page-head');
+    if(main&&state.route==='workspace'&&!header&&!main.querySelector('.kx-auto-view-nav')){
+      const nav=document.createElement('div');nav.className='kx-auto-view-nav';
+      nav.innerHTML=`<button type="button" class="btn btn-ghost kx-subview-back" aria-label="Volver">${icon('chevronLeft',{size:16})} Volver</button><button type="button" class="icon-btn kx-subview-close" aria-label="Cerrar" title="Cerrar">${icon('close',{size:18})}</button>`;
+      nav.querySelector('.kx-subview-back').addEventListener('click',()=>goBackOrFallback('#dashboard'));
+      nav.querySelector('.kx-subview-close').addEventListener('click',()=>{location.hash='#dashboard';});main.prepend(nav);
+    }
+    if(header&&!header.querySelector('.kx-subview-back,[aria-label="Volver"],button[id$="-back"]')){
+      const actions=header.querySelector('.page-actions')||header;
+      const back=document.createElement('button');back.type='button';back.className='btn btn-ghost kx-auto-page-back kx-subview-back';back.setAttribute('aria-label','Volver');back.innerHTML=`${icon('chevronLeft',{size:16})}<span>Volver</span>`;
+      back.addEventListener('click',()=>goBackOrFallback('#dashboard'));
+      actions.prepend(back);
+      const close=document.createElement('button');close.type='button';close.className='icon-btn kx-auto-page-close kx-subview-close';close.setAttribute('aria-label','Cerrar');close.setAttribute('title','Cerrar');close.innerHTML=icon('close',{size:18});
+      close.addEventListener('click',()=>{location.hash='#dashboard';});actions.appendChild(close);
+    }
+  }
   const headers=new Set();
   for(const selector of SUBVIEW_HEADER_SELECTORS)root.querySelectorAll(selector).forEach(node=>headers.add(node));
   root.querySelectorAll('[data-kx-subview-head]').forEach(node=>headers.add(node));
@@ -59,6 +77,13 @@ export function setMainHtml(html){
   const el=document.getElementById('main-view');if(!el)return;
   el.classList.remove('view-enter');el.innerHTML=localizeHtmlString(html);
   requestAnimationFrame(()=>{el.classList.add('view-enter');enhanceSubviewExitControls(el);});
+}
+
+// Private routes must keep the global shell/sidebar mounted. Public/gateway routes
+// may still render directly into #app when no #main-view exists.
+export function setPrivateViewHtml(html){
+  if(document.getElementById('main-view'))return setMainHtml(html);
+  return setAppHtml(html);
 }
 
 export function alertHtml(){
@@ -124,6 +149,8 @@ export function shell(navItems,active,mobileItems=[]){
   const logo=safeClubLogo(s?.club);const cover=safeOptionalImage(s?.club?.portada_url);const primary=safeColor(s?.club?.color_primario,'#ffffff');const secondary=safeColor(s?.club?.color_secundario,'#050608');const shellBrand=String(KOMBAX_BRAND.symbolWhite||KOMBAX_BRAND.symbol||'./assets/brand/kombax-symbol-white.png');
   const clubCount=new Set((s?.memberships||[]).map(x=>x.club_id).filter(Boolean)).size;
   const activeInClub=clubItems.some(item=>item.id===active)||active==='notifications';let clubOpen=activeInClub;try{const saved=localStorage.getItem('uw2_club_nav_open');if(!activeInClub&&(saved==='1'||saved==='0'))clubOpen=saved==='1';}catch{}
+  let resourcesOpen=['resources','guides','consulting'].includes(active);try{const saved=localStorage.getItem('uw2_resources_nav_open');if(!resourcesOpen&&(saved==='1'||saved==='0'))resourcesOpen=saved==='1';}catch{}
+  let resourceSection='usage';try{resourceSection=sessionStorage.getItem('kx_resource_section')||'usage';}catch{}
   const supportBanner=s?.support_mode?`<div class="kx-support-mode-banner"><div>${icon('shieldCheck',{size:18})}<span><strong>${esc(t('common.app.supportMode'))}</strong><small>${esc(s?.support_name||s?.club?.nombre||'Entidad')} · ${esc(s?.support_reason||t('common.app.supportAccess'))}</small></span></div><button class="btn btn-ghost btn-sm" id="support-mode-exit" type="button">${esc(t('common.app.exitSupport'))}</button></div>`:'';
   return `<div class="app-shell ${esc(theme.className)}" data-club-theme="${esc(theme.id)}" style="--club-primary:${esc(primary)};--club-secondary:${esc(secondary)};--kx-shell-image:url('${esc(shellBrand)}');--uw-logo-image:${logo?`url('${esc(logo)}')`:'none'};--uw-cover-image:${cover?`url('${esc(cover)}')`:'none'}">
     <button type="button" class="icon-btn global-menu-toggle menu-toggle" id="menu-btn" aria-label="${esc(t('common.accessibility.openMenu'))}" aria-controls="sidebar" aria-expanded="false"><span class="menu-icon-open">${icon('menu')}</span><span class="menu-icon-close">${icon('close')}</span><span class="menu-toggle-dot" aria-hidden="true"></span></button>
@@ -132,6 +159,15 @@ export function shell(navItems,active,mobileItems=[]){
       <nav class="nav-list" aria-label="${esc(t('common.accessibility.mainNavigation'))}">
         <div class="nav-section nav-section-global">KOMBAX</div>
         <div class="nav-global">${globalHtml}</div>
+        <details class="kx-sidebar-resources" id="kx-resources-nav" data-product-nav="resources" ${resourcesOpen?'open':''}>
+          <summary><span class="kx-resources-icon">${icon('sparkles',{size:18})}</span><span class="kx-resources-label"><b>${esc(t('prepilot.resources'))}</b><small>${esc(t('prepilot.rcResourcesSub'))}</small></span><span class="kx-resources-chevron">${icon('chevronRight',{size:17})}</span></summary>
+          <div class="kx-sidebar-resources-panel">
+            <button type="button" data-nav="resources" data-resource-target="usage" class="${active==='resources'&&resourceSection==='usage'?'active':''}"><span>${icon('fileText',{size:16})}</span>${esc(t('prepilot.rcLearn'))}</button>
+            <button type="button" data-nav="resources" data-resource-target="knowledge" class="${active==='resources'&&resourceSection==='knowledge'?'active':''}"><span>${icon('folder',{size:16})}</span>${esc(t('prepilot.rcKnowledge'))}</button>
+            <button type="button" data-nav="resources" data-resource-target="territories" class="${active==='resources'&&resourceSection==='territories'?'active':''}"><span>${icon('mapPin',{size:16})}</span>${esc(t('prepilot.rcTerritories'))}</button>
+            <button type="button" data-nav="resources" data-resource-target="consulting" class="${active==='resources'&&resourceSection==='consulting'?'active':''}"><span>${icon('sparkles',{size:16})}</span>${esc(t('prepilot.consulting'))}</button>
+          </div>
+        </details>
         <details class="club-nav-accordion ${clubOpen?'is-open':''}" id="club-nav-accordion" ${clubOpen?'open':''}>
           <summary><span class="club-nav-icon">${icon('dojo',{size:20})}</span><span class="club-nav-copy"><b>${esc(t('navigation.products.myClub'))}</b><small>${esc(s?.club?.nombre||t('common.app.activeClub'))}</small></span><span class="club-nav-chevron">${icon('chevronRight',{size:17})}</span></summary>
           <div class="club-nav-panel">${clubHtml}</div>

@@ -1,7 +1,1 @@
-export default {
-  "title": "Commerce",
-  "cart": "Cart",
-  "checkout": "Pay",
-  "seller": "Seller",
-  "buyer": "Buyer"
-};
+export default {title:'Commerce',cart:'Cart',checkout:'Secure checkout',seller:'Seller',buyer:'Buyer',product:'Product',variant:'Variant / option',quantity:'Quantity',remove:'Remove',clearCart:'Clear cart',total:'Total',buyNow:'Buy now',addToCart:'Add to cart',addedToCart:'Added to cart',cartSubtitle:'Your KOMBAX Showcase purchase',singleSellerOnly:'Your cart contains products from another seller. Complete or clear that cart before buying from a different seller.',singleSellerNotice:'Each payment is processed for one seller and that seller’s connected Stripe account.',checkoutNotice:'Stock and conditions are validated again before secure checkout opens. KOMBAX does not mark an order as paid until the backend/webhook confirms it.',emptyCart:'Your cart is empty',emptyCartBody:'Add Commerce products from the same seller to prepare a purchase.',cartInvalidProduct:'This product cannot be added to the cart.',adultsOnly:'Commercial purchases on KOMBAX are available only to people aged 18 or over.',checkoutTitle:'Review and pay',soldAndChargedBy:'Sold and charged directly by',checkoutUnavailable:'Secure checkout could not be opened.',continuePayment:'Continue to payment',servicesNoCheckout:'Professional services use direct contact and not the product checkout.',sellerNotReady:'This seller does not yet have an active Seller Center and payments.',finalPrice:'Final price',soldBy:'Sold by',pickupManaged:'Pickup managed by the seller',shippingManaged:'Sold and shipped by the seller',stockSellerManaged:'Stock managed by the seller',unitsAvailable:'unit(s) available'};

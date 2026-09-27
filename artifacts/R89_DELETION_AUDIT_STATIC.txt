@@ -1,0 +1,29 @@
+R89 destructive/lifecycle static audit
+module | direct/remove refs | lifecycle/archive refs
+admin.js | 7 | 2
+brand-business.js | 0 | 2
+club-profile.js | 0 | 5
+comms-material.js | 2 | 46
+community.js | 1 | 0
+customer-operations.js | 1 | 22
+dashboard-catalog.js | 0 | 1
+documents.js | 2 | 29
+events.js | 2 | 34
+federation-licenses.js | 0 | 1
+finance-premium.js | 0 | 44
+finance.js | 1 | 0
+gateway.js | 0 | 3
+groups-members.js | 3 | 16
+help-legal.js | 0 | 18
+kombax-events.js | 18 | 31
+kombax-social.js | 3 | 20
+lifecycle.js | 1 | 70
+plan-services.js | 0 | 1
+platform-admin.js | 2 | 1
+portal.js | 1 | 5
+public-profile.js | 3 | 4
+showcase.js | 0 | 17
+sports-profile.js | 1 | 0
+support-privacy.js | 1 | 0
+training.js | 1 | 2
+work-scopes.js | 0 | 2

@@ -1,0 +1,234 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Venta de entradas y control de acceso</title><style>
+@page{size:A4;margin:19mm 16mm 18mm 16mm}
+@page cover{size:A4;margin:0}
+*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{margin:0;font-family:Arial,"Helvetica Neue",sans-serif;color:#17181c;font-size:9.5pt;line-height:1.55;background:#fff}
+a{color:#980019;text-decoration:none;word-break:break-word}p{margin:0 0 2.6mm}strong{font-weight:700}hr{border:0;border-top:1px solid #ddd;margin:6mm 0}
+ul,ol{margin:0 0 3mm;padding-left:6mm}li{margin:.8mm 0}table{border-collapse:collapse;width:100%;font-size:8.1pt;margin:3mm 0 5mm;page-break-inside:auto}tr{page-break-inside:avoid}th{background:#101116;color:#fff;text-align:left;padding:2mm}td{border-bottom:1px solid #dedede;padding:1.7mm 2mm;vertical-align:top}tr:nth-child(even) td{background:#fafafa}blockquote{margin:3mm 0;padding:2.8mm 4mm;border-left:3px solid #d00626;background:#fff3f5;page-break-inside:avoid}code{font-family:Consolas,monospace;font-size:8pt;background:#f4f4f4;padding:0 .6mm}pre{background:#f4f4f4;padding:3mm;white-space:pre-wrap}
+h1,h2,h3,h4{font-family:Arial,"Helvetica Neue",sans-serif;page-break-after:avoid;color:#101116}h1{font-size:24pt;line-height:1.04;text-transform:uppercase;border-bottom:3px solid #d00626;padding-bottom:2.5mm;margin:0 0 6mm}h2{font-size:16pt;line-height:1.15;border-left:4px solid #d00626;padding-left:3mm;margin:8mm 0 3mm}h3{font-size:12pt;color:#850014;margin:5mm 0 2mm}h4{font-size:10pt;margin:4mm 0 1.5mm}.cover{page:cover;position:relative;width:210mm;height:297mm;background:#06070a;color:#fff;overflow:hidden;break-after:page}.cover-bg{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(6,7,10,.18),rgba(6,7,10,.45) 40%,rgba(6,7,10,.95) 78%,#06070a 100%),url('file:///mnt/data/kombax_r91_work/project/web/assets/brand-heroes/hero-guides.webp');background-size:cover;background-position:center}.cover-red{position:absolute;left:0;top:0;width:5mm;height:297mm;background:#d00626;box-shadow:0 0 24px rgba(255,0,48,.7)}.cover-top{position:absolute;left:16mm;right:15mm;top:15mm;display:flex;align-items:center;gap:4mm}.cover-top img{width:16mm;height:16mm;object-fit:contain}.brand{font-weight:800;font-size:17pt;letter-spacing:.2em}.brand small{display:block;font-size:6pt;letter-spacing:.3em;color:#c7c7c7;margin-top:1.3mm}.edition{margin-left:auto;text-align:right;font-weight:700;font-size:7pt;line-height:1.45;letter-spacing:.15em;text-transform:uppercase;color:#f1f1f1}.cover-main{position:absolute;left:16mm;right:15mm;top:142mm}.kicker{display:inline-block;background:#d00626;padding:1.6mm 3mm;font-weight:800;font-size:7pt;letter-spacing:.18em;text-transform:uppercase}.code{font-size:51pt;font-weight:900;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.85);margin:5mm 0 2mm}.title{font-size:31pt;line-height:1.02;font-weight:900;text-transform:uppercase;max-width:174mm}.subtitle{margin-top:5mm;padding-left:4mm;border-left:2px solid #d00626;font-size:10pt;line-height:1.45;color:#e3e3e3;max-width:165mm}.cover-meta{position:absolute;left:16mm;right:15mm;bottom:28mm;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:3mm}.cover-meta div{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);padding:3mm}.cover-meta b{display:block;color:#ff5d73;font-size:6pt;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1mm}.cover-meta span{font-size:7.6pt;line-height:1.35}.cover-foot{position:absolute;left:16mm;right:15mm;bottom:10mm;padding-top:3mm;border-top:1px solid rgba(255,255,255,.2);font-size:6.2pt;line-height:1.45;color:#a9a9a9}.toc{break-after:page}.toc .eyebrow{color:#d00626;font-size:7pt;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.toc h1{margin-top:2mm}.toc ol{list-style:none;padding:0}.toc li{padding:1.6mm 0;border-bottom:1px solid #e8e8e8}.toc a{color:#17181c;font-weight:700}.toc .note{margin-top:5mm;padding:3mm;border-left:3px solid #d00626;background:#f6f6f6;color:#5c5c5c;font-size:7.6pt}.tag{display:inline-block;border-radius:2px;padding:.3mm 1.4mm;font-size:6.6pt;font-weight:700;white-space:nowrap}.legal{background:#c9001b;color:#fff}.adm{background:#1f4e79;color:#fff}.fed{background:#6f42c1;color:#fff}.rec{background:#b35c00;color:#fff}.bp{background:#2e7d32;color:#fff}.kx{background:#16171b;color:#fff}.prof{background:#8a6d00;color:#fff}.pending{background:#fff3cd;color:#704500;font-weight:700;padding:0 1mm}.product-strip{margin:0 0 6mm;padding:3mm 4mm;background:#101116;color:#fff;border-left:4px solid #d00626}.product-strip strong{color:#ff6077}.manual-price{font-size:20pt;font-weight:900;color:#d00626}.manual-badge{display:inline-block;background:#d00626;color:#fff;padding:1mm 2mm;font-weight:800;font-size:7pt;text-transform:uppercase;letter-spacing:.12em}
+</style></head><body><section class="cover"><div class="cover-bg"></div><div class="cover-red"></div>
+      <div class="cover-top"><img src="file:///mnt/data/kombax_r91_work/project/web/assets/brand/kombax-symbol-red.png"><div class="brand">KOMBAX<small>FROM HYPE TO HISTORY</small></div><div class="edition">Guías profesionales<br>Edición R100.1</div></div>
+      <div class="cover-main"><div class="kicker">KOMBAX GUÍAS</div><div class="code">C6</div><div class="title">Venta de entradas y control de acceso</div><div class="subtitle">Vender una entrada es firmar un contrato con cada comprador. Qué tienes que informar, qué puedes cobrar y qué pasa si el evento cambia.</div></div>
+      <div class="cover-meta"><div><b>Para quién</b><span>Organizadores, clubes y plataformas de venta</span></div><div><b>Revisión</b><span>22/09/2026</span></div><div><b>Edición</b><span>R100.1 · KOMBAX</span></div></div>
+      <div class="cover-foot">Información general y herramientas de trabajo. Comprueba siempre la fuente oficial vigente antes de actuar. KOMBAX no sustituye asesoramiento jurídico, fiscal, laboral, asegurador o administrativo individualizado.</div>
+    </section><section class="toc"><div class="eyebrow">KOMBAX · índice operativo</div><h1>Venta de entradas y control de acceso</h1><ol><li><a href="#antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</a></li><li><a href="#1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</a></li><li><a href="#2-la-decisi-n-que-tienes-que-tomar">2. La decisión que tienes que tomar</a></li><li><a href="#3-el-marco-que-se-aplica">3. El marco que se aplica</a></li><li><a href="#4-condiciones-de-venta-contenido-m-nimo">4. Condiciones de venta: contenido mínimo</a></li><li><a href="#5-qu-pasa-si-el-evento-cambia">5. Qué pasa si el evento cambia</a></li><li><a href="#6-control-de-acceso-y-aforo">6. Control de acceso y aforo</a></li><li><a href="#7-datos-de-compradores">7. Datos de compradores</a></li><li><a href="#8-impuestos">8. Impuestos</a></li><li><a href="#9-errores-frecuentes">9. Errores frecuentes</a></li><li><a href="#10-caso-pr-ctico">10. Caso práctico</a></li><li><a href="#11-checklist">11. Checklist</a></li><li><a href="#12-qu-cambia-seg-n-el-territorio">12. Qué cambia según el territorio</a></li><li><a href="#13-cu-ndo-pedir-ayuda">13. Cuándo pedir ayuda</a></li><li><a href="#14-fuentes-comentadas">14. Fuentes comentadas</a></li><li><a href="#15-verificado-hasta-y-comprueba-justo-antes-de-actuar">15. Verificado hasta y comprueba justo antes de actuar</a></li></ol><div class="note">Las etiquetas distinguen obligación legal, requisito administrativo o federativo, condición del recinto, buena práctica y recomendación KOMBAX. Si un dato aparece pendiente, no lo conviertas en requisito hasta verificarlo en la fuente competente.</div></section><h2 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h2>
+<ul>
+<li><strong>Antes de pagar, el comprador debe saber quién organiza, qué compra, cuándo y dónde, y el precio total con impuestos.</strong> <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>En la compra online, el botón final debe dejar claro que implica pagar</strong> (por ejemplo, “pedido con obligación de pago”). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Las entradas para una fecha concreta no tienen derecho de desistimiento de 14 días</strong>: es una excepción legal para servicios de ocio con fecha. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Si cancelas o cambias el evento de forma sustancial, el comprador puede exigir la devolución.</strong> “No se admiten devoluciones” no te protege de eso. <strong><span class="tag legal">Obligación legal</span></strong> — <strong><span class="tag prof">Requiere profesional</span></strong> en casos dudosos</li>
+<li><strong>Pide solo los datos necesarios</strong> para vender y controlar el acceso (B2). <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ul>
+<h2 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h2>
+<p>Te ayuda a vender entradas con condiciones claras, cumplir la normativa de consumo, controlar el aforo y el acceso, y saber qué hacer si algo cambia.</p>
+<h2 id="2-la-decisi-n-que-tienes-que-tomar">2. La decisión que tienes que tomar</h2>
+<p><strong>¿Quién vende (tú o una plataforma), con qué condiciones, con qué datos y qué haces si el evento cambia?</strong></p>
+<h2 id="3-el-marco-que-se-aplica">3. El marco que se aplica</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué establece</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>TRLGDCU (RDL 1/2007), art. 60</strong></td>
+<td>Información precontractual: identidad y dirección del empresario, características, precio total con impuestos</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>TRLGDCU, art. 98.2</strong></td>
+<td>En contratos a distancia, el consumidor debe confirmar de forma expresa que el pedido implica obligación de pago</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>TRLGDCU, art. 103.l</strong></td>
+<td>No hay derecho de desistimiento en servicios de esparcimiento con fecha o periodo de ejecución específicos</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Normativa autonómica de consumo</strong></td>
+<td>Hojas de reclamaciones, información en taquilla, reglas propias</td>
+<td><span class="tag legal">Obligación legal</span> — ficha T</td>
+</tr>
+<tr class="odd">
+<td><strong>Normativa autonómica de espectáculos</strong></td>
+<td>Aforo, condiciones de acceso, derecho de admisión, horarios</td>
+<td><span class="tag legal">Obligación legal</span> — ficha T</td>
+</tr>
+<tr class="even">
+<td><strong>LOPDGDD y RGPD</strong></td>
+<td>Datos de compradores, información por capas, comunicaciones comerciales (LSSI, art. 21)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 19/2007 y RD 203/2010</strong></td>
+<td>Requisitos específicos de venta y acceso solo para competiciones oficiales de ámbito estatal incluidas en su ámbito</td>
+<td><span class="tag legal">Obligación legal</span> en ese ámbito</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-condiciones-de-venta-contenido-m-nimo">4. Condiciones de venta: contenido mínimo</h2>
+<p><em>Plantilla de trabajo KOMBAX (no es un modelo oficial)</em></p>
+<ol type="1">
+<li>Organizador: nombre, NIF y dirección de contacto.</li>
+<li>Evento: nombre, fecha, hora de apertura y de inicio, recinto y dirección.</li>
+<li>Precio total con impuestos y gastos de gestión, si los hay.</li>
+<li>Tipo de localidad o zona.</li>
+<li>Edad mínima o condiciones para menores, si las hay.</li>
+<li>Política de cancelación, aplazamiento y cambios de cartel: qué se devuelve, cómo y en qué plazo.</li>
+<li>Aviso de que no hay derecho de desistimiento por tratarse de un servicio de ocio con fecha.</li>
+<li>Condiciones de acceso: documentación, objetos prohibidos, derecho de admisión conforme a la normativa autonómica.</li>
+<li>Aviso de grabación y retransmisión (B2).</li>
+<li>Información básica de protección de datos y enlace a la completa.</li>
+<li>Canal de reclamaciones.</li>
+</ol>
+<h2 id="5-qu-pasa-si-el-evento-cambia">5. Qué pasa si el evento cambia</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situación</th>
+<th>Qué hacer</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cancelación</td>
+<td>Devolver el importe de la entrada por el canal de compra, en un plazo razonable y anunciado</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Aplazamiento</td>
+<td>Ofrecer la nueva fecha y la devolución a quien no pueda o no quiera ir</td>
+<td><span class="tag legal">Obligación legal</span> / <span class="tag prof">Requiere profesional</span> según las condiciones</td>
+</tr>
+<tr class="odd">
+<td>Cambio de recinto</td>
+<td>Igual que el aplazamiento si el cambio es relevante</td>
+<td><span class="tag prof">Requiere profesional</span></td>
+</tr>
+<tr class="even">
+<td>Cambio de cartel (se cae un combate)</td>
+<td>Depende de lo que se prometió: si el combate principal era el reclamo, puede ser un cambio sustancial</td>
+<td><span class="tag prof">Requiere profesional</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong><span class="tag kx">Recomendación KOMBAX</span>:</strong> redacta las condiciones de cambio de cartel antes de vender, explicando que los combates pueden variar por lesión o peso y qué se considera cambio sustancial.</p>
+<h2 id="6-control-de-acceso-y-aforo">6. Control de acceso y aforo</h2>
+<ul>
+<li>Un identificador único por entrada (QR o código) y registro de validación para evitar duplicados. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></li>
+<li>Contador de aforo en tiempo real, sin superar el aforo autorizado. <strong><span class="tag legal">Obligación legal</span></strong> (el aforo)</li>
+<li>Plan de contingencia sin conexión (lista descargada, lector que funcione sin red). <strong><span class="tag bp">Buena práctica</span></strong></li>
+<li>Accesos separados para deportistas, prensa, staff y público. <strong><span class="tag bp">Buena práctica</span></strong></li>
+<li>Personal de control de accesos según exija la normativa autonómica. <strong><span class="tag legal">Obligación legal</span></strong> — ficha T</li>
+</ul>
+<h2 id="7-datos-de-compradores">7. Datos de compradores</h2>
+<ul>
+<li>Nombre y correo para enviar la entrada; el DNI solo si hay una razón concreta (entrada nominativa exigida por norma o por el recinto) y explicándolo. <strong><span class="tag legal">Obligación legal</span></strong> (minimización)</li>
+<li>Contrato de encargo con la plataforma de venta (B2). <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Nada de promociones sin consentimiento o sin encaje en la LSSI. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Borrar los datos que ya no hagan falta tras el cierre (D2).</li>
+</ul>
+<h2 id="8-impuestos">8. Impuestos</h2>
+<p>La venta de entradas es normalmente una actividad económica (A2): puede estar sujeta a IVA y computar en el Impuesto sobre Sociedades del club. El tipo de IVA y las posibles exenciones dependen del tipo de espectáculo y de la entidad. <strong><span class="tag prof">Requiere profesional</span></strong></p>
+<h2 id="9-errores-frecuentes">9. Errores frecuentes</h2>
+<ul>
+<li><strong>Mostrar el precio sin gastos</strong> y añadirlos al final.</li>
+<li><strong>“No se admiten devoluciones” como cláusula para todo.</strong></li>
+<li><strong>Vender más entradas que el aforo autorizado.</strong></li>
+<li><strong>Pedir el DNI a todos “por si acaso”.</strong></li>
+<li><strong>Usar la lista de compradores para promociones</strong> sin base.</li>
+<li><strong>No tener hojas de reclamaciones</strong> en taquilla cuando la comunidad lo exige.</li>
+</ul>
+<h2 id="10-caso-pr-ctico">10. Caso práctico</h2>
+<p><em>Supongamos que</em> una velada anuncia como estelar el combate entre dos campeones autonómicos. Tres días antes, uno se lesiona y se sustituye por otro deportista menos conocido. Muchos compradores piden la devolución.</p>
+<ul>
+<li><strong>Qué revisar:</strong> qué decían las condiciones sobre los cambios de cartel y cómo se promocionó el evento.</li>
+<li><strong>Opciones:</strong> ofrecer la devolución a quien la pida o un descuento, y documentar la decisión.</li>
+<li><strong>Prevención:</strong> una cláusula clara de cambios de cartel desde el primer día.</li>
+</ul>
+<p><strong><span class="tag prof">Requiere profesional</span></strong> si hay reclamaciones formales.</p>
+<h2 id="11-checklist">11. Checklist</h2>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Condiciones de venta completas</td>
+<td>Organizador</td>
+<td>Texto publicado</td>
+<td>Antes de vender</td>
+</tr>
+<tr class="even">
+<td>Contrato de encargo con la plataforma</td>
+<td>Organizador</td>
+<td>Contrato</td>
+<td>Antes de vender</td>
+</tr>
+<tr class="odd">
+<td>Aforo autorizado y cupo de venta</td>
+<td>Organizador</td>
+<td>Documento del recinto</td>
+<td>Antes de vender</td>
+</tr>
+<tr class="even">
+<td>Hojas de reclamaciones y carteles</td>
+<td>Organizador</td>
+<td>Fotos</td>
+<td>Día D</td>
+</tr>
+<tr class="odd">
+<td>Sistema de validación y plan sin conexión</td>
+<td>Organizador</td>
+<td>Prueba</td>
+<td>T-1</td>
+</tr>
+<tr class="even">
+<td>Conciliación de ventas y devoluciones</td>
+<td>Tesorería</td>
+<td>Informe</td>
+<td>T+7 (D2)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-qu-cambia-seg-n-el-territorio">12. Qué cambia según el territorio</h2>
+<p>Hojas de reclamaciones, información obligatoria en taquilla, derecho de admisión, personal de acceso y aforos. Ficha T.</p>
+<h2 id="13-cu-ndo-pedir-ayuda">13. Cuándo pedir ayuda</h2>
+<p>Cancelaciones o aplazamientos, cambios del combate estelar, reventa o intermediarios, venta internacional o entradas nominativas.</p>
+<h2 id="14-fuentes-comentadas">14. Fuentes comentadas</h2>
+<ul>
+<li><strong>TRLGDCU (RDL 1/2007), arts. 60, 98 y 103.l.</strong> <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2007-20555">BOE</a></li>
+<li><strong>LSSI, art. 21.</strong> <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758">BOE</a></li>
+<li><strong>Ley 19/2007</strong> (ámbito: ver C1). <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2007-13408">BOE</a></li>
+</ul>
+<h2 id="15-verificado-hasta-y-comprueba-justo-antes-de-actuar">15. Verificado hasta y comprueba justo antes de actuar</h2>
+<p><strong>Verificado hasta:</strong> 22/09/2026. <strong>Comprueba:</strong> la normativa autonómica de consumo y espectáculos (ficha T) y las condiciones de tu plataforma de venta.</p>
+<hr />
+<p><em>KOMBAX Guías · C6 · Verificado hasta 22/09/2026 · Información general; no sustituye asesoramiento profesional individualizado.</em></p>
+</body></html>

@@ -1,0 +1,160 @@
+===== KOMBAX_GUIAS_TERRITORIOS_ESPANA_2026.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIOS_ESPANA_2026.pdf
+Pages: 21
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_AN_ANDALUCIA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_AN_ANDALUCIA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_AR_ARAGON.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_AR_ARAGON.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_AS_PRINCIPADO_DE_ASTURIAS.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_AS_PRINCIPADO_DE_ASTURIAS.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_CB_CANTABRIA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_CB_CANTABRIA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_CE_CEUTA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_CE_CEUTA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_CL_CASTILLA_Y_LEON.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_CL_CASTILLA_Y_LEON.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_CM_CASTILLA_LA_MANCHA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_CM_CASTILLA_LA_MANCHA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_CN_CANARIAS.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_CN_CANARIAS.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_CT_CATALUNA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_CT_CATALUNA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_EX_EXTREMADURA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_EX_EXTREMADURA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_GA_GALICIA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_GA_GALICIA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_IB_ILLES_BALEARS.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_IB_ILLES_BALEARS.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_MC_REGION_DE_MURCIA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_MC_REGION_DE_MURCIA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_MD_COMUNIDAD_DE_MADRID.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_MD_COMUNIDAD_DE_MADRID.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_ML_MELILLA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_ML_MELILLA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_NC_COMUNIDAD_FORAL_DE_NAVARRA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_NC_COMUNIDAD_FORAL_DE_NAVARRA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_PV_PAIS_VASCO_EUSKADI.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_PV_PAIS_VASCO_EUSKADI.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_RI_LA_RIOJA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_RI_LA_RIOJA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIAS_TERRITORIO_VC_COMUNITAT_VALENCIANA.pdf =====
+PDF: /mnt/data/kombax_preblock_territories/artifacts/guides/territories/KOMBAX_GUIAS_TERRITORIO_VC_COMUNITAT_VALENCIANA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+

@@ -1,93 +1,95 @@
-# KOMBAX R81 · build 20133
+# KOMBAX R104 · build 20156 · Logo público del club
 
-## EMPIEZA AQUÍ
+Esta entrega acumulativa conserva R102 y versiones anteriores. Assist y Migrations
+utilizan el mismo monedero por entidad, con consumo basado en el uso oficial de la
+API, precisión de milésimas, reserva por ejecución y panel Owner de costes. La
+interfaz de los agentes muestra únicamente Créditos IA. El piloto y el primer
+mes pagado mantienen sus créditos específicos.
 
-Este paquete es la **base acumulativa completa y ordenada de KOMBAX R81 build 20133**. Sustituye a R80 build 20132 como única base válida para continuar desarrollo, generar APK/AAB, preparar iOS, subir a GitHub y desplegar el frontend en Netlify.
+Consulta [la auditoría, implementación y límites de QA R103](docs/releases/R103_AI_CREDITS_CLOSURE.md).
 
-R81 conserva íntegramente R79/R80 —incluidos vídeo fullscreen, internacionalización, Stripe Connect, tarjeta y SEPA— y añade **Cobro presencial / Tap to Pay** como tercer método del KOMBAX Payments Center.
+## Historial anterior
 
-### Qué activa R81
+# KOMBAX R102 · build 20154 · Insignias por verificación y pago
 
-- **Tarjeta online** mediante Stripe Connect.
-- **Domiciliación bancaria SEPA** para flujos recurrentes/diferidos compatibles.
-- **Tap to Pay en Android** mediante Stripe Terminal SDK nativo.
-- **Tap to Pay on iPhone** mediante la nueva base iOS nativa, pendiente únicamente de firma/entitlement Apple para distribución real.
-- **Fallback web para iPhone/Safari/PWA** mediante Stripe Checkout + QR/enlace de pago seguro mientras no exista app iOS distribuida.
-- Una sola cuenta Stripe Connect por identidad comercial.
-- Aplicación transversal a **Club, Federación, Marca/Showcase y Organizador de eventos** según permisos/servicio.
-- Direct Charges: el dinero se procesa en la cuenta conectada de la identidad comercial; KOMBAX no custodia el importe.
-- Conciliación por webhook para processing/succeeded/failed/refunded/disputed.
-- 8 idiomas: ES, EN, FR, PT, IT, DE, TH y FIL.
+Esta es la entrega acumulativa R102. Incluye las fuentes web, Android, iOS,
+base de datos, documentación y pruebas de las versiones anteriores. Media / Creador
+dispone de Mi contenido; Miembro y Competidor conservan identidades Social
+diferenciadas; Competidor verificado puede abrir Mi Showcase y solicitar su
+verificación como vendedor cuando su plan incluye Showcase. Las cuentas gratuitas no muestran insignia oficial, salvo Competidor verificado.
+Club, Marca y Federación la muestran tras confirmar el pago de su suscripción. Consulta
+[el informe R102](docs/releases/R102_VERIFIED_BADGES.md),
+[el informe R101](docs/releases/R101_PROFILE_SPACES.md) y
+[el informe R100](docs/releases/R100_ACCOUNT_IDENTITY_POLICY.md).
+
+El historial que sigue describe entregas anteriores y se conserva como referencia.
+
+# KOMBAX R92 · build 20145 · Centro KOMBAX
+
+## R92 · Biblioteca y guías de uso
+
+- Las 19 guías temáticas públicas se presentan como tres volúmenes completos: club, federaciones/licencias/interclubs y eventos. Los 18 temas originales se conservan dentro de los volúmenes; la antigua guía de lectura se integra en la orientación de la nueva biblioteca.
+- Las 19 fichas territoriales se consultan desde un selector, sin ocupar 19 tarjetas en la pantalla inicial.
+- Nueve guías de uso explican tareas de Club, Federación, Marca, Competidor, Profesional, Espectador, Alumno/Miembro, Familia y Media/Creador. Cada una dispone de lectura web y PDF generados desde el mismo contenido editable.
+- Recursos KOMBAX reúne uso, conocimiento, territorios y Consultoría en una sola ventana de acordeones. Los perfiles directos también tienen acceso al centro.
+- KOMBAX Social recibe un icono cuadrado con halo LED en la barra lateral.
+- El manual premium privado de gestión de clubes permanece fuera de los assets públicos.
+- Esta entrega actualiza la interfaz y las fuentes empaquetadas. No incluye una migración de base de datos ni realiza despliegues remotos.
+
+## R91 · Biblioteca pública R100.1
+
+- 38 guías públicas profesionales R100.1 integradas en KOMBAX Guías.
+- Las 19 guías territoriales sustituyen la duplicación territorial anterior en la interfaz pública.
+- El Manual KOMBAX de Gestión de Clubes queda preparado como producto privado: incluido en Premium y precio individual de referencia de 6 €.
+- El PDF completo del manual NO se publica en `web`, `dist` ni Android hasta activar control de acceso comercial.
+- No se implementa en R91 ningún dossier de alumnado, formador, banco de preguntas, LMS ni capa formativa de Claude R100.
+
+## Base acumulativa vigente
+
+Este paquete es la **base acumulativa completa de KOMBAX R92 build 20145** y sustituye a R91/R90/R89/R88/R81 y a cualquier ZIP anterior como fuente de continuidad.
+
+Versión runtime:
+
+- Web/PWA: `2.0.0-rc.13-r92-resource-center`
+- Android `versionCode`: `20145`
+- Android `versionName`: `2.0.0-rc.13-r92-resource-center`
+- Android `compileSdk`: `36`
+- Android `targetSdk`: `36`
+- Supabase health en el paquete: build `20145`
+
+R91 conserva íntegramente R89 y añade una entrada post-login premium basada en assets oficiales de KOMBAX, accesos persistentes a KOMBAX Guías y KOMBAX Consultoría, portadas premium para ambos recursos y apertura/descarga robusta de PDFs también desde Android WebView mediante puente nativo y FileProvider.
 
 ## Estructura principal
 
-| Carpeta / archivo | Qué contiene | Uso habitual |
-|---|---|---|
-| `web/` | Fuente del frontend/PWA: vistas, módulos, i18n, CSS premium y assets. | Desarrollo frontend |
-| `dist/` | Build web generado para Netlify. Debe coincidir con `web/` tras `node scripts/build.mjs`. | Despliegue |
-| `android/` | Proyecto Android, puente WebView y Stripe Terminal Tap to Pay. | APK/AAB |
-| `ios/` | Variante iOS: SwiftUI/WKWebView, puente KOMBAX y Stripe Terminal Tap to Pay on iPhone. | Xcode/TestFlight/App Store |
-| `supabase/` | Migraciones SQL, Edge Functions y configuración backend. | Backend |
-| `scripts/` | Build, QA, auditoría, i18n, preflight y utilidades de release. | Validación |
-| `docs/` | Documentación actual e histórica, guías, QA, legal y manifests. | Consulta/handoff |
-| `qa/` | Evidencias QA históricas/estructuradas. | QA |
-| `maintenance/` | Material de mantenimiento y handoff acumulado. | Operación |
-| `load/` | Recursos de pruebas de carga. | QA de carga |
-| `artifacts/` | Artefactos históricos preservados por trazabilidad. | Archivo |
-| `package.json` | Scripts NPM de test/build/certificación. | Desarrollo |
-| `netlify.toml` | Configuración activa de build, publish, redirects y headers de Netlify. | Despliegue |
-| `PAYMENTS_R61_ENV.example` | Plantilla de referencia; no contiene secretos reales. | Configuración |
+| Ruta | Uso |
+|---|---|
+| `web/` | Fuente frontend/PWA |
+| `dist/` | Build generado para Netlify |
+| `android/` | Proyecto Android para APK/AAB |
+| `ios/` | Fuente iOS |
+| `supabase/` | Migraciones y Edge Functions |
+| `scripts/` | QA, build, Android y release gates |
+| `docs/` | Handoff, QA, manifests e historial |
+| `artifacts/` | Material documental e histórico |
+| `netlify.toml` | Build/headers/redirects de Netlify |
+| `package.json` | Comandos de validación y release |
 
-## Documentación R81
+## Supabase y migraciones
 
-Empieza por `docs/00_INDEX_R81.md`.
+R91 no necesita una nueva migración de base de datos: reutiliza la arquitectura live ya cerrada en R89. El directorio `supabase/migrations/` conserva el historial acumulativo completo. La cadena final de la fase anterior incluye R83→R89:
 
-Los documentos de release están en `docs/01_CURRENT_RELEASE/`:
+- `20260921154230_kombax_r83_showcase_cart_checkout.sql`
+- `20260921161213_kombax_r84_finance_multientity_context.sql`
+- `20260921161247_kombax_r85_consulting_workflow.sql`
+- `20260921161329_kombax_r86_private_training_foundation.sql`
+- `20260921192549_kombax_r87_active_cart_stock_reconciliation.sql`
+- `20260921193108_kombax_r88_training_access_fk_hardening.sql`
+- `20260921193615_kombax_r87_event_finance_subject_context.sql`
+- `20260921212710_kombax_r89_inventory_lifecycle_events_sidebar.sql`
 
-- `R81_TAP_TO_PAY_IPHONE_FINAL_REPORT.md`
-- `R81_TAP_TO_PAY_IPHONE_QA_SCORECARD.md`
-- `R81_LIVE_SUPABASE_STATE.md`
-- `R81_DEPLOYMENT_HANDOFF_GITHUB_NETLIFY_ANDROID_IOS.md`
-- `GUIA_KOMBAX_COBROS_TAP_TO_PAY_IPHONE_R81.pdf`
-- `R81_BUILD_20133_MANIFEST_SHA256.txt` (se genera en el cierre del paquete)
+No vuelvas a ejecutar manualmente migraciones que ya figuren aplicadas en el proyecto Supabase. Para un entorno nuevo utiliza el flujo normal de migraciones del proyecto.
 
-La guía también está integrada en la plataforma:
-
-`web/assets/docs/GUIA_KOMBAX_COBROS_TAP_TO_PAY_IPHONE_R81.pdf`
-
-## Frontend y experiencia premium
-
-En el Payments Center el usuario ve tres métodos independientes:
-
-1. **Cobros con tarjeta**
-2. **Domiciliación bancaria SEPA**
-3. **Cobro presencial · Tap to Pay**
-
-El flujo presencial detecta el entorno:
-
-- App Android compatible → Tap to Pay Android.
-- Futura app iOS compatible → Tap to Pay on iPhone.
-- Safari/PWA/web → QR + enlace Stripe Checkout.
-
-No se envía la URL del pago a servicios QR externos: el QR se genera dentro de la integración KOMBAX.
-
-## Backend live de esta release
-
-La migración R81 Terminal/Tap to Pay ya fue aplicada al Supabase de KOMBAX y están desplegadas las funciones necesarias. Consulta `docs/01_CURRENT_RELEASE/R81_LIVE_SUPABASE_STATE.md` para el estado certificado.
-
-La migración reproducible incluida en el ZIP es:
-
-`supabase/migrations/270_kombax_terminal_tap_to_pay_r81.sql`
-
-No vuelvas a ejecutarla manualmente contra un entorno donde ya figure aplicada; usa el flujo normal de migraciones del proyecto.
-
-## Comandos de validación
-
-Instalación, si es necesaria:
-
-```bash
-pnpm install
-```
+## Certificación local
 
 Regresión acumulativa completa:
 
@@ -95,79 +97,114 @@ Regresión acumulativa completa:
 npm test
 ```
 
-Test contractual R81:
+Build de release completo:
 
 ```bash
-node scripts/test-kombax-20133-r81-tap-to-pay.mjs
+npm run release:build
 ```
 
-Build determinista Web / dist / Android:
+El build reconstruye `dist/` y sincroniza los assets Android. El gate final exige paridad entre `web`, `dist` y `android/app/src/main/assets/www`.
 
-```bash
-node scripts/build.mjs
-```
+## Home premium y recursos KOMBAX
 
-Preflight Android:
+La primera pantalla autenticada utiliza assets oficiales de `web/assets/brand-heroes/` con tratamiento premium/neón para Social, Showcase, Events y Mi espacio. KOMBAX Guías y KOMBAX Consultoría permanecen accesibles desde:
 
-```bash
-npm run android:preflight
-```
+- la portada post-login;
+- el bloque permanente **Recursos KOMBAX** de la sidebar;
+- el hub de Mi Club cuando corresponde.
 
-## Generar APK / AAB
+No sustituyen a las cuatro funciones principales ni saturan el menú de producto.
 
-Abre `android/` en Android Studio. La firma de release es local: `android/keystore.properties` **no se distribuye** en este paquete por seguridad. Una vez restaurada la configuración de firma en tu ordenador, sincroniza Gradle y genera APK/AAB firmado.
+## Guías PDF
 
-Stripe Terminal Android usa la rama 5.8.1 en esta release. Tap to Pay real requiere dispositivo físico compatible, Android 13+, NFC, hardware-backed keystore compatible y entorno seguro sin opciones de desarrollador/debug en producción.
+El runtime incluye el catálogo completo de guías y PDFs. En navegador/PWA cada ficha ofrece **Abrir PDF** y **Descargar PDF**. En Android, la WebView delega en el puente nativo:
 
-## iPhone / iOS
+- `openBundledPdf(...)`: copia de forma segura la guía a caché privada y la abre con el visor PDF del dispositivo mediante `FileProvider`;
+- `saveBundledPdf(...)`: usa el selector nativo para guardar una copia.
 
-Hasta que la app iOS esté publicada, los usuarios de iPhone pueden utilizar KOMBAX en Safari/PWA y cobrar presencialmente mediante **QR/enlace de pago**.
-
-Para convertir el propio iPhone del negocio en terminal NFC se necesita la app nativa. El código fuente está en `ios/` y requiere:
-
-- macOS + Xcode;
-- Apple Developer;
-- entitlement **Tap to Pay on iPhone** aprobado por Apple;
-- firma y provisioning propios;
-- resolución del paquete Stripe Terminal.
-
-No se incluyen certificados, `.p12`, perfiles de provisioning ni secretos.
-
-## Netlify
-
-`netlify.toml` está preparado para publicar `dist/`. Antes de desplegar:
-
-```bash
-npm test
-node scripts/build.mjs
-```
-
-Después sube el repositorio/ZIP al proyecto Netlify correcto de KOMBAX. Esta entrega no cambia credenciales ni enlaza un proyecto Netlify distinto automáticamente.
+El `FileProvider` solo expone la carpeta de caché `shared-pdf/`.
 
 ## GitHub
 
-El paquete está preparado para convertirse en la nueva base del repositorio. No subas:
+El contenido de este paquete puede utilizarse como nueva raíz del repositorio KOMBAX.
 
-- `.env` reales;
-- `android/keystore.properties`;
-- JKS/keystores;
-- certificados Apple;
-- `.p12`;
-- provisioning profiles;
-- claves Stripe secretas.
+Antes del push:
 
-La `.gitignore` y los controles de release mantienen estos elementos fuera de la entrega.
+```bash
+npm test
+npm run release:build
+```
+
+No subas claves privadas ni firma local. `.gitignore` excluye `.env`, `android/keystore.properties`, `*.jks`, `*.keystore`, `*.apk`, `*.aab` y artefactos locales de firma.
+
+## Netlify
+
+`netlify.toml` ejecuta:
+
+```toml
+[build]
+command = "npm run release:build"
+publish = "dist"
+```
+
+Por tanto, el repositorio puede desplegarse en Netlify usando el build acumulativo R91. No se incluyen credenciales del proyecto Netlify.
+
+## Android Studio · APK de pruebas
+
+Abre `android/` en Android Studio o ejecuta:
+
+```bash
+npm run android:debug:qa
+```
+
+Cuando Gradle esté disponible, el helper genera:
+
+`artifacts/KOMBAX_20144_R91_PILOT_QA_DEBUG.apk`
+
+## Google Play · AAB
+
+Para Google Play usa AAB:
+
+1. Copia `android/keystore.properties.example` como `android/keystore.properties`.
+2. Completa ruta y credenciales de tu clave de subida local.
+3. Mantén el JKS fuera del repositorio.
+4. Ejecuta:
+
+```bash
+npm run android:preflight
+npm run android:aab:play
+```
+
+El helper AAB ejecuta primero `release:build`, exige el preflight y después `bundleRelease`.
+
+El AAB queda en:
+
+- `android/app/build/outputs/bundle/release/app-release.aab`
+- `artifacts/KOMBAX_20144_R91_PILOT_GOOGLE_PLAY.aab`
+
+## Firma
+
+La firma no forma parte del ZIP acumulativo. El paquete contiene `android/keystore.properties.example`, pero no JKS/keystore real, contraseñas, certificados Apple, `.p12` ni perfiles de provisioning.
+
+## Estado Android de esta certificación
+
+Los gates estáticos Android, versionado, assets, Firebase, puente PDF y FileProvider pasan. En este entorno puede no ser posible descargar Gradle 8.11.1 desde `services.gradle.org`; la compilación/firma definitiva debe ejecutarse en el ordenador local con Android Studio/Gradle y la clave de subida.
+
+Antes de subir a Play confirma que `npm run android:preflight` termina 5/5 y `bundleRelease` finaliza correctamente.
+
+## Documentación de release
+
+Empieza por:
+
+- `docs/01_CURRENT_RELEASE/R91_BUILD_20144_PUBLIC_GUIDES_R100_1_REPORT.md`
+- `docs/01_CURRENT_RELEASE/R91_BUILD_20144_MANIFEST_SHA256.txt`
+- `docs/01_CURRENT_RELEASE/R92_BUILD_20145_RESOURCE_CENTER_REPORT.md`
+- `docs/01_CURRENT_RELEASE/R92_BUILD_20145_MANIFEST_SHA256.txt`
+
+La documentación R89 y anterior se conserva como historial y evidencia, no como base vigente.
 
 ## Regla de continuidad
 
-**R81 build 20133 pasa a ser la única base acumulativa válida.**
+**R92 build 20145 es la base acumulativa válida para cualquier cambio posterior.**
 
-Para cualquier fase posterior:
-
-1. partir de este paquete completo;
-2. no reconstruir desde R80/R79;
-3. mantener toda la funcionalidad acumulada;
-4. ejecutar `npm test`;
-5. ejecutar build determinista;
-6. auditar secretos/firma;
-7. crear un ZIP acumulativo nuevo con manifest y SHA-256.
+Para cada nueva entrega: partir de este paquete, mantener todo lo acumulado, incrementar versionado si cambia runtime, ejecutar regresión/release build, verificar Supabase/Netlify/Android, excluir secretos/firma y generar ZIP + manifest + CRC + SHA-256 nuevos.

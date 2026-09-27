@@ -3,7 +3,7 @@ import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { repos } from '../core/repositories.js';
 import { financeMoney, normalizeProfessionalFinance, chargeCanReceivePayment, chargeCanCancel } from '../core/finance-adapter.js';
 import { esc } from '../core/utils.js';
-import { setAppHtml, setError, toast, confirmDialog } from '../ui/components.js';
+import { setAppHtml, setPrivateViewHtml, setError, toast, confirmDialog } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { contentTranslationAttrs, prewarmUserContentTranslations } from '../i18n/user-content-translation.js';
 
@@ -22,14 +22,14 @@ function expenseRows(rows=[]){return rows.length?`<div class="kx-prof-fin-list">
 function noticeRows(rows=[]){return rows.length?`<div class="kx-prof-fin-notices">${rows.map(n=>`<article><span>${icon('bell',{size:18})}</span><div><strong>${esc(n.titulo||'Aviso financiero')}</strong><p>${esc(n.cuerpo||'')}</p></div></article>`).join('')}</div>`:`<div class="kx-prof-fin-ok">${icon('check',{size:18})}<span>Sin cargos vencidos pendientes de revisión.</span></div>`}
 
 export async function renderProfessionalFinance(profileId,{onBack}={}){
- setAppHtml('<main class="kx-prof-fin"><div class="loading-card">Cargando Finanzas Profesionales…</div></main>');
+ setPrivateViewHtml('<main class="kx-prof-fin"><div class="loading-card">Cargando Finanzas Profesionales…</div></main>');
  try{
   const [raw,workspace,hub]=await Promise.all([repos.kombaxProfiles.professionalFinance(profileId),repos.kombaxProfiles.professionalWorkspace(profileId),repos.kombaxProfiles.workspace(profileId)]);
   const notifications=await repos.kombaxProfiles.professionalFinanceNotifications(profileId).catch(()=>[]);
   const data=normalizeProfessionalFinance(raw,notifications);const caps=new Set(raw?.capabilities||[]);const canManage=caps.has('professional.finance.manage');
   if(data.flags.fake_club===true||data.flags.fakeClub===true)throw new Error('Aislamiento financiero inválido: se detectó un Club ficticio.');
   const clients=workspace?.clients||[],services=data.services||[],assignments=workspace?.assignments||[];
-  setAppHtml(`<main class="kx-prof-fin" data-professional-profile-id="${esc(profileId)}">
+  setPrivateViewHtml(`<main class="kx-prof-fin" data-professional-profile-id="${esc(profileId)}">
    <header class="kx-managed-top"><button class="gateway-icon-button" id="prof-fin-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button><div class="kx-managed-title"><span>MI ACTIVIDAD</span><strong>Finanzas Profesionales</strong></div><div class="kx-managed-status">${esc(hub?.profile?.nombre_publico||'Profesional')}</div></header>
    <section class="kx-prof-fin-hero"><div><span>ADMINISTRACIÓN PROFESIONAL</span><h1>Tu actividad económica, separada del Club</h1><p>Registra servicios, cargos, pagos recibidos y gastos de tu actividad. KOMBAX no procesa dinero, no actúa como pasarela de pago y no genera facturas fiscales automáticas.</p></div><div class="kx-prof-fin-scope"><b>Subject</b><code>${esc(profileId)}</code><small>Sin club_id ficticio</small></div></section>
    <section class="kx-prof-fin-kpis">${kpi('Generado',data.kpis.generated,'cargos no anulados')}${kpi('Cobrado',data.kpis.collected,'pagos registrados')}${kpi('Pendiente',data.kpis.pending,'saldo administrativo')}${kpi('Gastos',data.kpis.expenses,'gastos registrados')}${kpi('Neto',data.kpis.net,'cobrado − gastos')}</section>

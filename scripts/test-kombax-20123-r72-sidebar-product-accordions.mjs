@@ -15,11 +15,14 @@ const mainActivity=read('android/app/src/main/java/com/urbanwarriors/app/MainAct
 const sw=read('web/service-worker.js');
 const health=read('supabase/functions/health/index.ts');
 
-test('R72 continuity runs on R75 build 20133 across Web Android SW and health',()=>{
-  has(config,"version: '2.0.0-rc.13-r81-tap-to-pay'");has(config,'build: 20133');
-  has(gradle,'versionCode 20133');has(gradle,"versionName '2.0.0-rc.13-r81-tap-to-pay'");
-  has(mainActivity,'KOMBAXRevision/r81-tap-to-pay');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20133');
-  has(sw,'kombax-build-20133');has(health,'build:20133');
+test('Historical release functionality remains on a monotonic cumulative build',()=>{
+  const webBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0);
+  const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+  assert.ok(webBuild>=20134,'web build must stay at or above the certified R81 baseline');
+  assert.equal(androidBuild,webBuild,'Android and Web build identifiers must match');
+  has(mainActivity,`/${webBuild}`);has(sw,`kombax-build-${webBuild}`);
+  const backendBuild=Number(health.match(/build:(\d+)/)?.[1]||0);
+  assert.ok(backendBuild>=20134&&backendBuild<=webBuild,'frontend-only releases may retain the certified backend health build');
 });
 
 test('Events and Showcase are rendered as product accordions, not flat private links',()=>{

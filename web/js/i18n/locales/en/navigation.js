@@ -70,9 +70,10 @@ export default {
     "myStudents": "My students",
     "myGroups": "My groups",
     "myWallet": "My wallet",
-    "myManual": "My manual",
+    "myManual": "Quick help",
     "schedules": "Schedules",
     "fees": "Fees",
     "clubProfile": "Club profile"
-  }
+  },
+  quickHelp:{memberIntro:"Find an account feature and open it directly. Full guides are in KOMBAX Resources.",clubIntro:"Find a club task, review its key steps and open the feature. Full guides are in KOMBAX Resources.",memberSubtitle:"Short steps and direct links for your profile",clubSubtitle:"Direct links to portal features",loading:"Loading quick help…",guidesIntro:"Full guides for your profile are in KOMBAX Resources. Quick help takes you to a specific feature; support and privacy are also here."}
 };

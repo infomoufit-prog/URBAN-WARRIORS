@@ -23,7 +23,7 @@ export default {
   "guide": "Guide paiements et SEPA",
   "assist": "Demander à KOMBAX Assist",
   "guideHint": "Manuel intégré pour Clubs, Fédérations, Marques et Organisateurs.",
-  "direct": "Direct Charges : le paiement appartient au compte connecté de l’identité qui vend ou fournit le service.",
+  "direct": "Le paiement est traité sur le compte de l’entité qui vend le produit ou fournit le service.",
   "security": "KOMBAX ne conserve pas l’IBAN complet et ne demande jamais vos identifiants bancaires dans le chat.",
   "mandates": "Mandats actifs",
   "immediateNote": "Showcase et Ticketing utilisent la carte pour confirmer immédiatement l’achat ou le billet. Le SEPA est différé.",

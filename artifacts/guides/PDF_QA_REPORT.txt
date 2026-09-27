@@ -1,0 +1,128 @@
+===== KOMBAX_GUIAS_ESPANA_CATALUNA_COLECCION_INICIAL_2026.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIAS_ESPANA_CATALUNA_COLECCION_INICIAL_2026.pdf
+Pages: 33
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_01_CREAR_UN_CLUB_O_ASOCIACION_DEPORTIVA.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_01_CREAR_UN_CLUB_O_ASOCIACION_DEPORTIVA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_02_ORGANIZAR_UN_EVENTO_DE_DEPORTES_DE_CONTACTO.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_02_ORGANIZAR_UN_EVENTO_DE_DEPORTES_DE_CONTACTO.pdf
+Pages: 4
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_03_ORGANIZAR_UN_INTERCLUB.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_03_ORGANIZAR_UN_INTERCLUB.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_04_LICENCIAS_DEPORTIVAS_ALTA_RENOVACION_Y_GESTION.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_04_LICENCIAS_DEPORTIVAS_ALTA_RENOVACION_Y_GESTION.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_05_SEGUROS_Y_COBERTURAS.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_05_SEGUROS_Y_COBERTURAS.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_06_MENORES_EN_ACTIVIDAD_Y_COMPETICION_DEPORTIVA.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_06_MENORES_EN_ACTIVIDAD_Y_COMPETICION_DEPORTIVA.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_07_INSTALACIONES_RECINTOS_Y_AUTORIZACIONES.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_07_INSTALACIONES_RECINTOS_Y_AUTORIZACIONES.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_08_PROTECCION_DE_DATOS_IMAGEN_Y_COMUNICACIONES.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_08_PROTECCION_DE_DATOS_IMAGEN_Y_COMUNICACIONES.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_09_TICKETING_VENTA_DE_ENTRADAS_Y_CONTROL_DE_ACCESO.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_09_TICKETING_VENTA_DE_ENTRADAS_Y_CONTROL_DE_ACCESO.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_10_FEDERACIONES_Y_RELACIONES_FEDERATIVAS.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_10_FEDERACIONES_Y_RELACIONES_FEDERATIVAS.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_11_DEPORTISTAS_EXTRANJEROS_Y_PARTICIPACION_INTERNACIONAL.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_11_DEPORTISTAS_EXTRANJEROS_Y_PARTICIPACION_INTERNACIONAL.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_12_PATROCINIO_MARCAS_Y_COLABORACIONES.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_12_PATROCINIO_MARCAS_Y_COLABORACIONES.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_13_ORGANIZACION_DE_COMBATES_Y_PARTICIPANTES.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_13_ORGANIZACION_DE_COMBATES_Y_PARTICIPANTES.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_14_DOCUMENTACION_Y_CHECKLIST_DEL_ORGANIZADOR.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_14_DOCUMENTACION_Y_CHECKLIST_DEL_ORGANIZADOR.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+
+===== KOMBAX_GUIA_15_OBLIGACIONES_POSTERIORES_AL_EVENTO.pdf =====
+PDF: /mnt/data/kombax_design_content_block/artifacts/guides/KOMBAX_GUIA_15_OBLIGACIONES_POSTERIORES_AL_EVENTO.pdf
+Pages: 3
+Encrypted: False
+Openable (PyMuPDF): True
+Likely scanned: False
+XFA present: False
+

@@ -1,0 +1,69 @@
+/* R93: finish existing KOMBAX patterns without replacing their visual identity. */
+.gateway-footer{flex-wrap:wrap;row-gap:10px}
+.gateway-footer-legal{display:flex;align-items:center;gap:14px;margin-left:auto;letter-spacing:0;text-transform:none}
+.gateway-footer-legal a{color:#b6c0cd;font-size:11px;font-weight:600;text-decoration:none}
+.gateway-footer-legal a:hover,.gateway-footer-legal a:focus-visible{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.gateway-footer-legal a:focus-visible{outline:2px solid #71d9f4;outline-offset:3px}
+
+.fv2-payments-details{margin:16px 0;border:1px solid #35414e;border-radius:18px;background:#0c1118;overflow:hidden}
+.fv2-payments-details>summary{cursor:pointer;list-style:none;padding:16px 20px;color:#eef3f8;font-weight:700;font-size:14px}
+.fv2-payments-details>summary::-webkit-details-marker{display:none}
+.fv2-payments-details>summary:after{content:'⌄';float:right;color:#8bd4e8}
+.fv2-payments-details[open]>summary:after{transform:rotate(180deg)}
+.fv2-payments-details>summary:focus-visible{outline:2px solid #71d9f4;outline-offset:-3px}
+.fv2-payments-details .kx-payments-center{margin:0;border:0;border-top:1px solid #35414e;border-radius:0;box-shadow:none}
+.kx-payment-method-copy>span{font-size:11px;letter-spacing:.08em}
+.kx-payment-method-copy p{font-size:12px}
+.kx-payment-method-copy>small,.kx-payment-safety p{font-size:11px}
+.kx-payment-safety strong{font-size:12px}
+
+.kombax-showcase-page.is-private .kx-brand-hero{min-height:220px;margin-bottom:18px}
+.kombax-showcase-page.is-private .kx-brand-hero-copy{min-height:220px;padding:20px 30px;width:min(68%,800px)}
+.kombax-showcase-page.is-private .kx-brand-hero h1{font-size:clamp(27px,3.5vw,38px)}
+.kombax-showcase-page.is-private .kx-brand-hero p{font-size:13px}
+.kombax-showcase-page.is-private .kx-brand-hero-features{display:none}
+.kombax-showcase-page.is-private .showcase-provider-limit{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:110px;padding:8px 12px;border:1px solid #343036;border-radius:12px;background:#141116;text-align:center}
+.kombax-showcase-page.is-private .showcase-provider-limit strong{color:#f6e3bf;font-size:15px;line-height:1.1}
+.kombax-showcase-page.is-private .showcase-provider-limit span,.kombax-showcase-page.is-private .showcase-provider-limit small{display:block;color:#b7a997;font-size:10px;line-height:1.2}
+
+.kx-center-card-type{font-size:11px}
+.kx-center-card p{font-size:14px;line-height:1.5}
+.kx-center-card small,.kx-center-section-copy small{font-size:12px}
+.kx-center-intro,.kx-usage-intro,.kx-usage-reader-head p,.kx-usage-chapter>div{font-size:14px}
+.kx-collection-card ul{font-size:13px}
+.kx-resource-actions .btn{min-height:44px;font-size:13px}
+.kx-center-search-label{font-size:12px}
+.kx-center-search-label input,.kx-center-search-label select{min-height:44px;font-size:14px}
+.kx-member-more[open]>summary{display:none}
+.kx-member-more-grid{display:flex;flex-wrap:wrap;gap:6px}
+.kx-member-more{min-width:0}
+.kx-member-more>summary:focus-visible{outline:2px solid #71d9f4;outline-offset:2px}
+
+@media(max-width:600px){
+  .gateway-footer{justify-content:center;gap:7px}
+  .gateway-footer-legal{justify-content:center;flex-basis:100%;margin:3px 0 0}
+  .gateway-footer-legal a{font-size:12px}
+  .gateway-brand-stage .gateway-footer{margin-top:12px}
+  .kombax-showcase-page.is-private .kx-brand-hero{min-height:200px}
+  .kombax-showcase-page.is-private .kx-brand-hero-copy{min-height:200px;width:100%;padding:20px}
+  .kombax-showcase-page.is-private .kx-brand-hero-lockup{margin-bottom:6px}
+  .kombax-showcase-page.is-private .kx-brand-hero p{display:none}
+  .kx-payment-method-copy p{font-size:13px}
+  .kx-payment-method-copy>small,.kx-payment-safety p{font-size:12px}
+  .kx-center-section-body{padding:16px}
+  .kx-center-card{padding:18px}
+  .kx-center-card p{font-size:14px}
+  .kx-center-card small{font-size:12px}
+  .kx-resource-actions .btn{min-height:44px}
+  [data-member-row] td:last-child .row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  [data-member-row] td:last-child .row-actions>.btn{min-width:0;min-height:42px;white-space:normal}
+  .kx-member-more{grid-column:1/-1}
+  .kx-member-more>summary{list-style:none;cursor:pointer;min-height:42px;display:flex;align-items:center;justify-content:center;padding:7px 12px;border:1px solid #384250;border-radius:10px;background:#161c25;color:#e5ebf3;font-size:13px;font-weight:700}
+  .kx-member-more>summary::-webkit-details-marker{display:none}
+  .kx-member-more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:7px}
+  .kx-member-more-grid>.btn{min-width:0;min-height:42px;white-space:normal}
+  body:has([data-member-row]) .page-head .page-actions{width:100%}
+  body:has([data-member-row]) .page-head .page-actions .row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%}
+  body:has([data-member-row]) .page-head .page-actions .row-actions .btn{min-width:0;min-height:44px;white-space:normal}
+  body:has([data-member-row]) .page-head .page-actions .row-actions .btn:first-child{grid-column:1/-1}
+}

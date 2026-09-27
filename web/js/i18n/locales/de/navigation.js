@@ -70,9 +70,10 @@ export default {
     "myStudents": "Meine Schüler",
     "myGroups": "Meine Gruppen",
     "myWallet": "Meine Geldbörse",
-    "myManual": "Mein Handbuch",
+    "myManual": "Schnellhilfe",
     "schedules": "Zeitpläne",
     "fees": "Beiträge",
     "clubProfile": "Clubprofil"
-  }
+  },
+  quickHelp:{memberIntro:"Finde eine Kontofunktion und öffne sie direkt. Die vollständigen Anleitungen stehen unter KOMBAX Ressourcen.",clubIntro:"Finde eine Vereinsaufgabe, lies die wichtigsten Schritte und öffne die Funktion. Die vollständigen Anleitungen stehen unter KOMBAX Ressourcen.",memberSubtitle:"Kurze Schritte und direkte Links für dein Profil",clubSubtitle:"Direkte Links zu den Portalfunktionen",loading:"Schnellhilfe wird geladen…",guidesIntro:"Die vollständigen Anleitungen für dein Profil stehen unter KOMBAX Ressourcen. Die Schnellhilfe führt zu einer bestimmten Funktion; Support und Datenschutz findest du ebenfalls hier."}
 };

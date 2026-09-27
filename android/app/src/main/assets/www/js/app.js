@@ -19,7 +19,7 @@ import { renderEvents } from './modules/events.js';
 import { renderHelpLegal } from './modules/help-legal.js';
 import { KOMBAX_BRAND, platformFeatures, hasExplicitClubSelection, selectedClubSlug, selectedClubPreview, selectClubSlug, clearSelectedClub, themeDefinition } from './core/platform.js';
 import { renderLifecycle } from './modules/lifecycle.js';
-import { renderKombaxGateway, renderClubDirectory, renderDirectProfiles, renderDirectProfileHub, renderIdentityPresentation } from './modules/gateway.js';
+import { renderKombaxGateway, renderClubDirectory, renderDirectProfiles, renderDirectProfileHub, renderGlobalHome, renderIdentityPresentation } from './modules/gateway.js';
 import { renderKombaxSocial, renderKombaxConversations } from './modules/kombax-social.js';
 import { renderShowcase, renderMyShowcase } from './modules/showcase.js';
 import { renderKombaxEvents, renderMyEventsCenter, renderPublicKombaxEventLanding } from './modules/kombax-events.js';
@@ -35,6 +35,11 @@ import { showPlatformLegalGate } from './modules/platform-legal.js';
 import { renderClubFederationAdmin, renderSelfLicenses } from './modules/federation-licenses.js';
 import { renderKombaxAssistHome, renderKombaxMigrationsHome, renderKombaxSupportHome } from './modules/customer-operations.js';
 import { renderPlanServices } from './modules/plan-services.js';
+import { renderKombaxHome } from './modules/kombax-home.js';
+import { renderGuides } from './modules/guides.js';
+import { renderConsulting } from './modules/consulting.js';
+import { renderResourceCenter } from './modules/resource-center.js';
+import { renderPrivateTraining } from './modules/private-training.js';
 import { t, getLocale, setLocale } from './i18n/index.js';
 import { languageSelectorHtml, bindLanguageSelectors } from './i18n/ui.js';
 import { installLegacyRuntimeLocalization } from './i18n/legacy-runtime.js';
@@ -51,7 +56,7 @@ const canUseOrgAssist=(session=state.session)=>Boolean(session?.club_id&&ORG_ASS
 const canManagePrivateShowcase=(session=state.session)=>Boolean(session?.club_id&&PRIVATE_SHOWCASE_ROLES.has(String(session?.rol||'')));
 const canManagePrivateEvents=(session=state.session)=>Boolean(session?.club_id&&has(session,'eventManage'));
 const routes={
-  dashboard:()=>isPortal()?renderPortalDashboard():renderDashboard(),catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
+  dashboard:()=>renderKombaxHome({onNavigate:id=>navigate(id)}),workspace:()=>isPortal()?renderPortalDashboard():renderDashboard(),resources:()=>renderResourceCenter({section:sessionStorage.getItem('kx_resource_section')||'usage'}),guides:renderGuides,consulting:renderConsulting,training:renderPrivateTraining,catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
   sessions:renderSessions,attendance:renderAttendance,progress:renderProgress,finance:renderFinance,reminders:renderReminders,communications:renderCommunications,
   tracking:renderTracking,material:renderMaterial,documents:renderDocuments,notifications:renderNotifications,users:renderUsers,settings:renderSettings,requests:renderPortalRequests,install:renderInstall,profile:()=>isPortal()?renderPortalProfile():(['direccion','coordinacion'].includes(state.session?.rol)?renderClubKombaxHub():renderProfile), 'personal-profile':renderProfile,'platform-admin':renderPlatformAdmin,scopes:renderWorkScopes,community:renderCommunity,social:renderKombaxSocial,conversations:renderKombaxConversations,showcase:renderShowcase,'my-showcase':renderMyShowcase,'kombax-events':renderKombaxEvents,'my-events':renderMyEventsCenter,events:renderEvents,archive:renderLifecycle,assist:renderKombaxAssistHome,migrations:renderKombaxMigrationsHome,'plans-services':()=>renderPlanServices({audience:'club',subjectType:'club',subjectId:state.session?.club_id}),support:renderKombaxSupportHome,help:renderHelpLegal,
   'federation-admin':()=>renderClubFederationAdmin(state.session?.club_id,{onBack:()=>navigate('dashboard')}),
@@ -188,9 +193,11 @@ async function enterOwnerSupportMode({context,data,name}={}){
 window.addEventListener('uw-owner-support-enter',event=>enterOwnerSupportMode(event.detail).catch(setError));
 
 async function navigate(id,{replace=false}={}){
-  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));allowed.add('conversations');allowed.add('support');if(['direccion','coordinacion'].includes(state.session?.rol))allowed.add('personal-profile');if(!allowed.has(id))id='dashboard';state.route=id;
+  if(id==='guides'||id==='consulting'){try{sessionStorage.setItem('kx_resource_section',id==='guides'?'knowledge':'consulting')}catch{}id='resources';}
+  if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));['conversations','support','workspace','resources','guides','consulting','training'].forEach(x=>allowed.add(x));if(['direccion','coordinacion'].includes(state.session?.rol))allowed.add('personal-profile');if(!allowed.has(id))id='dashboard';if(state.route&&state.route!==id)closeModal();state.route=id;
   if(replace)history.replaceState({route:id},'',`#${id}`);else if(location.hash!==`#${id}`)history.pushState({route:id},'',`#${id}`);
-  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
+  const resourceSection=(()=>{try{return sessionStorage.getItem('kx_resource_section')||'usage'}catch{return 'usage'}})();
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id&&(!b.dataset.resourceTarget||b.dataset.resourceTarget===resourceSection)));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
 }
 function openClubSwitcher(){
   const memberships=state.session?.memberships||[],clubs=[...new Map(memberships.filter(x=>x.club?.slug).map(x=>[x.club_id,x.club])).values()];
@@ -202,7 +209,7 @@ function bindShellNavigation(){
   const shell=document.querySelector('.app-shell'),sidebar=document.getElementById('sidebar'),menuButton=document.getElementById('menu-btn'),scrim=document.getElementById('sidebar-scrim'),clubNav=document.getElementById('club-nav-accordion');
   const productNavs=[...document.querySelectorAll('[data-product-nav]')];
   const setSidebarOpen=open=>{const next=Boolean(open);sidebar?.classList.toggle('open',next);shell?.classList.toggle('sidebar-open',next);menuButton?.setAttribute('aria-expanded',String(next));menuButton?.setAttribute('aria-label',next?'Cerrar menú':'Abrir menú');scrim?.classList.toggle('open',next);};
-  document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{navigate(b.dataset.nav);setSidebarOpen(false)}));
+  document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.resourceTarget){try{sessionStorage.setItem('kx_resource_section',b.dataset.resourceTarget)}catch{}}navigate(b.dataset.nav);setSidebarOpen(false)}));
   menuButton?.addEventListener('click',()=>setSidebarOpen(!sidebar?.classList.contains('open')));
   document.getElementById('mobile-more')?.addEventListener('click',()=>{if(clubNav)clubNav.open=true;setSidebarOpen(true)});
   clubNav?.addEventListener('toggle',()=>{try{localStorage.setItem('uw2_club_nav_open',clubNav.open?'1':'0')}catch{}});
@@ -217,14 +224,15 @@ function bindShellNavigation(){
 }
 function renderShell(){
   if(state.session?.preferred_locale)setLocale(state.session.preferred_locale,{persist:true});
-  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();bindLanguageSelectors(document,{persistAccount:locale=>backend.setPreferredLocale(locale)});hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
+  const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));['workspace','resources','guides','consulting','training'].forEach(x=>allowed.add(x));const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();bindLanguageSelectors(document,{persistAccount:locale=>backend.setPreferredLocale(locale)});hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
 }
 
 function renderGatewayRoot(){
   renderKombaxGateway({onClubDirectory:()=>renderClubDirectory({onBack:renderGatewayRoot,onSelect:club=>{selectClubSlug(club.slug,club);renderClubLogin();},onAdminAccess:()=>renderPlatformAdminAccess({onCancel:renderGatewayRoot,onSuccess:renderPlatformAdminConsole})}),onDirectProfiles:()=>renderDirectProfiles({onBack:renderGatewayRoot})});
 }
 
-function renderClubSessionOrLegal(){
+function renderClubSessionOrLegal({startAtHome=false}={}){
+  if(startAtHome)history.replaceState(null,'',`${location.pathname}${location.search}#dashboard`);
   if(state.session?.platform_legal_required===true){
     showPlatformLegalGate({onAccepted:renderShell,onExit:()=>renderLogin()});
     return;
@@ -246,7 +254,7 @@ function renderClubLogin(prefillEmail=''){
   const form=document.getElementById('login-form'),btn=document.getElementById('login-submit'),box=document.getElementById('login-error'),password=document.getElementById('login-password'),toggle=document.getElementById('password-toggle');
   bindLanguageSelectors(document);
   toggle?.addEventListener('click',()=>{const visible=password.type==='text';password.type=visible?'password':'text';toggle.setAttribute('aria-label',visible?'Mostrar contraseña':'Ocultar contraseña');toggle.innerHTML=icon(visible?'eye':'eyeOff',{size:18});password.focus();});
-  form.addEventListener('submit',async e=>{e.preventDefault();e.stopPropagation();if(!form.reportValidity())return;btn.disabled=true;btn.textContent=t('auth.login.validating');box.hidden=true;try{const fd=new FormData(form);await backend.signIn(fd.get('email'),fd.get('password'));renderClubSessionOrLegal();}catch(error){box.hidden=false;box.textContent=humanError(error);btn.disabled=false;btn.innerHTML=`${esc(t('auth.login.enter'))} ${icon('chevronRight',{size:17})}`;}});
+  form.addEventListener('submit',async e=>{e.preventDefault();e.stopPropagation();if(!form.reportValidity())return;btn.disabled=true;btn.textContent=t('auth.login.validating');box.hidden=true;try{const fd=new FormData(form);await backend.signIn(fd.get('email'),fd.get('password'));renderClubSessionOrLegal({startAtHome:true});}catch(error){box.hidden=false;box.textContent=humanError(error);btn.disabled=false;btn.innerHTML=`${esc(t('auth.login.enter'))} ${icon('chevronRight',{size:17})}`;}});
   document.getElementById('register-btn')?.addEventListener('click',openRegistrationChoice);document.getElementById('invite-btn')?.addEventListener('click',()=>openInvitationChoice());document.getElementById('public-install')?.addEventListener('click',openPublicInstall);
   document.getElementById('forgot-password-btn')?.addEventListener('click',()=>openPasswordRecovery({prefillEmail:document.getElementById('login-email')?.value||prefillEmail,onComplete:email=>renderClubLogin(email)}));
   document.getElementById('back-to-kombax')?.addEventListener('click',()=>{clearSelectedClub();renderGatewayRoot();});
@@ -276,7 +284,7 @@ async function openRegistration(type,invite=null){
       if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de privacidad.');
       if(!tutor){const years=ageYears(v.adulto_fecha_nacimiento);if(years==null)throw new Error('Indica una fecha de nacimiento válida.');if(years<16)throw new Error('El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor de 16, utiliza el alta mediante tutor o contacta con el club.');}
       const legal_acceptances=[{tipo:'condiciones_uso',version:byType.condiciones_uso?.version||'2.0.0',aceptado:true},{tipo:'privacidad',version:byType.privacidad?.version||'2.0.0',aceptado:true},{tipo:'derechos_imagen',version:byType.derechos_imagen?.version||'2.0.0',aceptado:v.image_rights===true}];
-      const r=await backend.registerAccount({...v,tipo_cuenta:type,legal_acceptances,invite_code:invite?.code||null,club_slug:invite?.club_slug||selectedClubSlug()});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderClubSessionOrLegal();}
+      const r=await backend.registerAccount({...v,tipo_cuenta:type,legal_acceptances,invite_code:invite?.code||null,club_slug:invite?.club_slug||selectedClubSlug()});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderClubSessionOrLegal({startAtHome:true});}
     }});
     modal.wrap.querySelector('.modal-head>div')?.insertAdjacentHTML('afterbegin',`<div class="registration-platform-mark"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""><span>Tecnología KOMBAX</span></div>`);
     const grid=modal.form.querySelector('.form-grid');const legalBox=document.createElement('div');legalBox.className='registration-legal-links field full';legalBox.innerHTML=`<strong>Lee antes de aceptar</strong><div class="row-actions">${['condiciones_uso','privacidad','comunidad','derechos_imagen'].filter(k=>byType[k]).map(k=>`<button type="button" class="btn btn-ghost btn-sm legal-preview" data-type="${esc(k)}">${esc(({condiciones_uso:'Condiciones de uso',privacidad:'Privacidad',comunidad:'Comunidad del Club',derechos_imagen:'Derechos de imagen'})[k])}</button>`).join('')}</div><small>La autorización de imagen es opcional y puede retirarse posteriormente.</small>`;grid.appendChild(legalBox);legalBox.querySelectorAll('.legal-preview').forEach(b=>b.addEventListener('click',()=>showPublicLegal(byType[b.dataset.type])));
@@ -416,7 +424,7 @@ async function boot(){
     const hasTransactionalEntry=Boolean(paymentsEntry||paymentEntry||validConnect);
     if(marketingIdentity&&!hasTransactionalEntry&&(!session||session?.scope==='kombax')){
       renderIdentityPresentation(marketingIdentity,{onBack:session?.scope==='kombax'?()=>renderDirectProfileHub({onBack:renderGatewayRoot}):renderGatewayRoot});
-    }else if(session?.scope==='kombax')renderDirectProfileHub({onBack:renderGatewayRoot});else if(session)renderClubSessionOrLegal();else renderLogin();
+    }else if(session?.scope==='kombax')renderGlobalHome({onBack:renderGatewayRoot});else if(session)renderClubSessionOrLegal({startAtHome:!hasTransactionalEntry});else renderLogin();
     if(connectNotice||paymentNotice){history.replaceState({},'',`${location.pathname}${location.hash||''}`);setTimeout(()=>toast(connectNotice||paymentNotice,paymentEntry==='cancelled'?'error':'ok'),80);}
   }catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));

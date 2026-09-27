@@ -56,7 +56,7 @@ ok(/max_output_tokens/.test(edge),'salida está acotada por política');
 ok(/responseText\(response\)/.test(edge)&&/part\?\.type==='output_text'/.test(edge),'parser soporta salida REST anidada de Responses API');
 ok(/model=String\(ctx\?\.model_alias/.test(edge),'facturación usa alias de política y no un identificador devuelto inesperado');
 ok(/files_processed/.test(edge)&&/file_analyses/.test(edge),'migración devuelve y guarda análisis por lote');
-ok(/KOMBAX Migrations — Asistente de migración/.test(edge),'runtime identifica Migrations como canal visible independiente');
+ok(/KOMBAX Migrations - Asistente de migración/.test(edge),'runtime identifica Migrations como canal visible independiente');
 ok(/NUNCA importas datos automáticamente/.test(edge),'prompt de migración prohíbe importación automática');
 ok(/assist:renderKombaxAssistHome/.test(app)&&/assist:'(?:KOMBAX Assist|Asistencia virtual)'/.test(app),'KOMBAX Assist mantiene ruta visible propia aunque R39 simplifique su etiqueta');
 ok(/migrations:renderKombaxMigrationsHome/.test(app)&&/migrations:'KOMBAX Migrations'/.test(app),'KOMBAX Migrations tiene ruta visible independiente');

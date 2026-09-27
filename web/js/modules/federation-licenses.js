@@ -3,7 +3,7 @@ import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { esc } from '../core/utils.js';
-import { setAppHtml, setMainHtml, openForm, openDetail, toast, setError, confirmDialog } from '../ui/components.js';
+import { setAppHtml, setMainHtml, setPrivateViewHtml, openForm, openDetail, toast, setError, confirmDialog } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { migrationAssistBanner, openMigrationPreparation } from './customer-operations.js';
 
@@ -15,7 +15,7 @@ const caps=(rows=[])=>new Set((rows||[]).map(x=>x.clave||x.capacidad_clave).filt
 const badge=(status)=>`<span class="kx-fed-state ${STATUS_TONE[status]||''}">${esc(STATUS_LABEL[status]||status||'—')}</span>`;
 
 function shell(title,subtitle,body,onBack){
-  setAppHtml(`<main class="kx-federation-admin"><header class="kx-fed-top"><button class="gateway-icon-button" id="kx-fed-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button><div><span>KOMBAX · ADMINISTRACIÓN FEDERATIVA</span><strong>${esc(title)}</strong><small>${esc(subtitle)}</small></div></header>${body}</main>`);
+  setPrivateViewHtml(`<main class="kx-federation-admin"><header class="kx-fed-top"><button class="gateway-icon-button" id="kx-fed-back" type="button" aria-label="Volver">${icon('chevronLeft',{size:22})}</button><div><span>KOMBAX · ADMINISTRACIÓN FEDERATIVA</span><strong>${esc(title)}</strong><small>${esc(subtitle)}</small></div></header>${body}</main>`);
   document.getElementById('kx-fed-back')?.addEventListener('click',onBack);
 }
 function clubShell(title,subtitle,body,onBack){

@@ -1,0 +1,14 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13 i18n:validate
+> node scripts/i18n-validate.mjs
+
+i18n validation: 1466 master keys · 953 active refs · 8 locales
+es: 100% (1466/1466)
+en: 100% (1466/1466)
+fr: 100% (1466/1466)
+pt: 100% (1466/1466)
+it: 100% (1466/1466)
+de: 100% (1466/1466)
+th: 100% (1466/1466)
+fil: 100% (1466/1466)
+PASS: all 8 enabled locales are strict; 0 warning group(s). No UI es-ES hardcodes.

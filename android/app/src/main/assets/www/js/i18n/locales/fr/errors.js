@@ -1,4 +1,5 @@
 export default {
+  "genericTitle": 'Une erreur s’est produite',
   "generic": "L’opération n’a pas pu être effectuée.",
   "network": "Connexion impossible. Vérifiez votre connexion et réessayez.",
   "sessionExpired": "Votre session a expiré. Reconnectez-vous.",

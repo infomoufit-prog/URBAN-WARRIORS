@@ -4,7 +4,7 @@ import { getLocale } from '../i18n/index.js';
 // Compatibilidad estática 20.044: app_kombax_mis_perfiles_v072 · app_kombax_perfil_mutate_v072. R28 enruta perfil/mutación por v196.
 import { state } from './state.js';
 import { isoDate, monthStart } from './utils.js';
-import { optimizeImage, prepareVideo } from './media.js';
+import { optimizeImage, prepareBrandLogo, prepareVideo } from './media.js';
 import { cached, cacheValue, peekCache, invalidateCache } from './query-cache.js';
 import { tenantKey } from './platform.js';
 
@@ -38,7 +38,7 @@ const PUBLIC_IMAGE_TYPES=new Set(['image/jpeg','image/png','image/webp','image/g
 async function uploadPublicImage(kind,file){
   if(!file||!file.size)return '';
   if(!PUBLIC_IMAGE_TYPES.has(file.type))throw new Error('Formato no admitido. Usa JPG, PNG, WEBP o GIF.');
-  const prepared=file.type==='image/gif'?{file}:await optimizeImage(file);
+  const prepared=kind.endsWith('-logo')?await prepareBrandLogo(file):file.type==='image/gif'?{file}:await optimizeImage(file);
   if(prepared.file.size>5*1024*1024)throw new Error('La imagen optimizada supera el límite de 5 MB.');
   const ext=({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif' })[prepared.file.type]||'img';
   const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
@@ -453,6 +453,7 @@ export const repos={
     archive:(socio_id,motivo='',fecha_baja=isoDate())=>mutation('alumno.archivar',{socio_id,motivo,fecha_baja}),
     inviteAccess:(socio_id,email='')=>backend.writeRpc('app_kombax_alumno_invitar_r58',{p_club_id:session()?.club_id,p_socio_id:socio_id,p_email:String(email||'').trim().toLowerCase()||null}),
     claims:()=>backend.readRpc('app_kombax_membership_claims_club_r59',{p_club_id:session()?.club_id}),
+    interests:()=>backend.readRpc('app_kombax_club_interest_list_r98',{p_club_id:session()?.club_id}),
     resolveClaim:(claim_id,approve)=>backend.writeRpc('app_kombax_membership_claim_resolve_r59',{p_claim_id:claim_id,p_aprobar:approve===true}),
     delete:(socio_id)=>mutation('alumno.eliminar',{socio_id}), async forceDelete(socio_id){const out=await mutation('alumno.eliminar_forzado',{socio_id});await Promise.all([(out?.document_paths||[]).map(p=>backend.remove('member-documents',p).catch(()=>{})),(out?.payment_paths||[]).map(p=>backend.remove('justificantes-pago',p).catch(()=>{}))].flat());return out;}
   },
@@ -491,6 +492,29 @@ export const repos={
     pause:(cuota_id,motivo,hasta)=>mutation('cuota.pausar_avisos',{cuota_id,motivo,hasta:hasta||null}), resume:(cuota_id)=>mutation('cuota.reactivar_avisos',{cuota_id}),
     annulReceipt:(recibo_id,motivo)=>mutation('recibo.anular',{recibo_id,motivo})
   },
+  financeContext:{
+    get:(subject_type,subject_id,limit=200)=>backend.globalReadRpc('app_kombax_finance_context_r84',{p_subject_type:subject_type,p_subject_id:subject_id,p_limit:Math.min(500,Math.max(20,Number(limit)||200))}),
+    inventory:(subject_type,subject_id,{limit=10,offset=0}={})=>backend.globalReadRpc('app_kombax_inventory_finance_r89',{p_subject_type:subject_type,p_subject_id:subject_id,p_limit:Math.min(50,Math.max(1,Number(limit)||10)),p_offset:Math.max(0,Number(offset)||0)})
+  },
+  consulting:{
+    mine:()=>backend.globalReadRpc('app_kombax_consulting_mine_r85',{}),
+    mutate:(operation,payload={})=>backend.globalWriteRpc('app_kombax_consulting_mutate_r85',{p_operation:operation,p_payload:payload}),
+    create:(payload={})=>backend.globalWriteRpc('app_kombax_consulting_mutate_r85',{p_operation:'request.create',p_payload:payload}),
+    acceptQuote:(request_id)=>backend.globalWriteRpc('app_kombax_consulting_mutate_r85',{p_operation:'request.accept_quote',p_payload:{request_id}}),
+    async uploadDocument(request_id,file){
+      if(!file||!file.size)throw new Error('Selecciona un documento.');
+      if(file.size>10*1024*1024)throw new Error('El documento supera 10 MB.');
+      const allowed=new Set(['application/pdf','image/jpeg','image/png','image/webp']);if(!allowed.has(file.type))throw new Error('Formato no admitido.');
+      const uid=session()?.id;if(!uid)throw new Error('AUTH_REQUIRED');
+      const ext=(file.name.split('.').pop()||'bin').replace(/[^a-z0-9]/gi,'').toLowerCase();const path=`${uid}/${request_id}/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}.${ext}`;
+      await backend.upload('kombax-consulting-docs',path,file,false);
+      try{return await backend.globalWriteRpc('app_kombax_consulting_mutate_r85',{p_operation:'document.add',p_payload:{request_id,storage_path:path,original_name:file.name,mime_type:file.type,size_bytes:file.size}})}
+      catch(error){await backend.remove('kombax-consulting-docs',path).catch(()=>{});throw error;}
+    }
+  },
+  privateTraining:{
+    status:(subject_type,subject_id)=>backend.globalReadRpc('app_kombax_training_status_r86',{p_subject_type:subject_type,p_subject_id:subject_id})
+  },
   payments:{
     connectStatus:(subject_type,subject_id)=>backend.invokeFunction('stripe-connect',{action:'status',subject_type,subject_id},25000),
     connectOnboarding:(subject_type,subject_id)=>backend.invokeFunction('stripe-connect',{action:'onboarding',subject_type,subject_id},35000),
@@ -508,6 +532,7 @@ export const repos={
     terminalWebFallback:(payload={})=>backend.invokeFunction('stripe-terminal',{action:'web_fallback',...payload,request_id:payload.request_id||crypto.randomUUID()},35000),
     terminalSales:(subject_type,subject_id,limit=50)=>backend.globalReadRpc('app_stripe_terminal_sales_r81',{p_subject_type:subject_type,p_subject_id:subject_id,p_limit:Math.min(200,Math.max(1,Number(limit)||50))}),
     checkout:(kind,reference_id,quantity=1)=>backend.invokeFunction('stripe-checkout',{kind,reference_id,quantity,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
+    checkoutCart:(items)=>backend.invokeFunction('stripe-checkout',{kind:'showcase_cart',items:(Array.isArray(items)?items:[]).map(x=>({product_id:x.product_id,quantity:Number(x.quantity||1),variant:x.variant||null})),user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
     refund:(payload={})=>backend.invokeFunction('stripe-refund',{action:'single',...payload,user_locale:payload.user_locale||getLocale(),request_id:payload.request_id||crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},45000),
     refundEventBatch:(event_id,reason='')=>backend.invokeFunction('stripe-refund',{action:'event_batch',event_id,reason,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},90000),
     accountFinance:(scope,subject_id)=>backend.invokeFunction('stripe-account-finance',{scope,subject_id},35000),
@@ -577,7 +602,10 @@ export const repos={
     async cleanupOld(antes_de,incluir_publicadas=false){const out=await mutation('publicacion.limpiar_antiguas',{antes_de,incluir_publicadas:incluir_publicadas===true});await removePublicImages(out?.image_urls||[]);return out;}
   },
   material:{
-    list:(limit=150)=>read('material_catalogo',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=orden,nombre&limit=${Math.min(300,Math.max(30,Number(limit)||150))}`), variants:(limit=500)=>read('material_variantes',`select=*&${filterClub()}&order=material_id,talla,color&limit=${Math.min(1000,Math.max(100,Number(limit)||500))}`), orders:(limit=100)=>read('material_pedidos',`select=*&${filterClub()}&order=creado_en.desc&limit=${Math.min(400,Math.max(20,Number(limit)||100))}`),
+    list:(limit=150)=>read('material_catalogo',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=orden,nombre&limit=${Math.min(300,Math.max(30,Number(limit)||150))}`), variants:(limit=500)=>read('material_variantes',`select=*&${filterClub()}&order=material_id,talla,color&limit=${Math.min(1000,Math.max(100,Number(limit)||500))}`), orders:(limit=10)=>read('material_pedidos',`select=*&${filterClub()}&order=creado_en.desc&limit=${Math.min(400,Math.max(10,Number(limit)||10))}`),
+    inventory:(limit=200)=>backend.readRpc('app_kombax_material_inventory_r89',{p_club_id:session()?.club_id,p_limit:Math.min(300,Math.max(10,Number(limit)||200))}),
+    movements:(material_id=null,{limit=10,offset=0}={})=>backend.readRpc('app_kombax_material_stock_movements_r89',{p_club_id:session()?.club_id,p_material_id:material_id||null,p_limit:Math.min(50,Math.max(1,Number(limit)||10)),p_offset:Math.max(0,Number(offset)||0)}),
+    inventoryMutate:(operation,payload={})=>backend.writeRpc('app_kombax_material_inventory_mutate_r89',{p_operation:operation,p_payload:{...payload,club_id:session()?.club_id},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
     uploadImage:(file)=>uploadPublicImage('material',file), removeImage:(url)=>removePublicImage(url),
     save:(p)=>mutation('material.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,categoria:p.categoria||'',descripcion:p.descripcion||'',imagen_url:p.imagen_url||'',precio:Number(p.precio||0),stock:Number(p.stock||0),obligatorio:p.obligatorio===true,referencia:p.referencia||'',activo:p.activo!==false}),
     saveVariant:(p)=>mutation('material.variante.guardar',{id:p.id||null,material_id:p.material_id,talla:p.talla||'',color:p.color||'',referencia:p.referencia||'',stock:Number(p.stock||0),activa:p.activa!==false}),
@@ -630,10 +658,11 @@ export const repos={
   lifecycle:{
     maintenance:()=>backend.writeRpc('app_ciclo_mantenimiento_v133',{p_club_id:session()?.club_id}),
     async list({tipo='',estado='',desde='',hasta='',limit=150}={}){await this.maintenance().catch(()=>null);return backend.readRpc('app_ciclo_listar_v038',{p_club_id:session()?.club_id,p_tipo:tipo||null,p_estado:estado||null,p_desde:desde||null,p_hasta:hasta||null,p_limit:Math.min(300,Math.max(20,Number(limit)||150))});},
+    async listPage({tipo='',estado='',desde='',hasta='',limit=10,offset=0}={}){await this.maintenance().catch(()=>null);return backend.readRpc('app_ciclo_listar_page_r89',{p_club_id:session()?.club_id,p_tipo:tipo||null,p_estado:estado||null,p_desde:desde||null,p_hasta:hasta||null,p_limit:Math.min(50,Math.max(1,Number(limit)||10)),p_offset:Math.max(0,Number(offset)||0)});},
     action:(tipo,ids,accion,motivo='')=>backend.writeRpc('app_ciclo_accion_v038',{p_club_id:session()?.club_id,p_recurso_tipo:tipo,p_ids:ids,p_accion:accion,p_motivo:motivo||null}),
-    previewDelete:(tipo,id)=>backend.readRpc('app_ciclo_eliminar_preview_v133',{p_club_id:session()?.club_id,p_recurso_tipo:tipo,p_recurso_id:id}),
+    previewDelete:(tipo,id)=>backend.readRpc('app_ciclo_eliminar_preview_r89',{p_club_id:session()?.club_id,p_recurso_tipo:tipo,p_recurso_id:id}),
     async deleteForever(tipo,id,confirmacion=''){
-      const out=await backend.writeRpc('app_ciclo_eliminar_definitivo_v133',{p_club_id:session()?.club_id,p_recurso_tipo:tipo,p_recurso_id:id,p_confirmacion:confirmacion});
+      const out=await backend.writeRpc('app_ciclo_eliminar_definitivo_r89',{p_club_id:session()?.club_id,p_recurso_tipo:tipo,p_recurso_id:id,p_confirmacion:confirmacion});
       for(const item of Array.isArray(out?.storage_objects)?out.storage_objects:[]){if(item?.bucket&&item?.path)await backend.remove(item.bucket,item.path).catch(()=>{});}
       await removePublicImages(Array.isArray(out?.public_image_urls)?out.public_image_urls:[]);
       invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);
@@ -927,6 +956,10 @@ export const repos={
   },
   events:{
     list:(limit=100)=>read('eventos_competicion',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=fecha.desc,hora_inicio.asc,id.desc&limit=${Math.min(300,Math.max(20,Number(limit)||100))}`),
+    listPage:({state='activo',offset=0,limit=10}={})=>read('eventos_competicion',`select=*&${filterClub()}&ciclo_estado=eq.${enc(state)}&order=fecha.desc,hora_inicio.asc,id.desc&offset=${Math.max(0,Number(offset)||0)}&limit=${Math.min(51,Math.max(1,Number(limit)||10)+1)}`),
+    listState:(state='activo',limit=10)=>read('eventos_competicion',`select=*&${filterClub()}&ciclo_estado=eq.${enc(state)}&order=fecha.desc,hora_inicio.asc,id.desc&limit=${Math.min(300,Math.max(10,Number(limit)||10))}`),
+    communications:(evento_id,{limit=10,offset=0}={})=>backend.readRpc('app_evento_comunicaciones_r89',{p_evento_id:evento_id,p_limit:Math.min(50,Math.max(1,Number(limit)||10)),p_offset:Math.max(0,Number(offset)||0)}),
+    linkCommunication:(evento_id,comunicacion_id)=>backend.writeRpc('app_evento_comunicacion_vincular_r89',{p_evento_id:evento_id,p_comunicacion_id:comunicacion_id}),
     participants:(evento_id)=>backend.readRpc('app_evento_participantes_visibles_v033',{p_club_id:session()?.club_id,p_evento_id:evento_id}),
     fights:(evento_id)=>backend.readRpc('app_evento_combates_visibles_v033',{p_club_id:session()?.club_id,p_evento_id:evento_id}),
     save:(p)=>mutation('evento.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,descripcion:p.descripcion||'',fecha:p.fecha,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,lugar:p.lugar||'',organizador:p.organizador||'',fecha_limite_inscripcion:p.fecha_limite_inscripcion||null,estado:p.estado||'borrador',edad_min:p.edad_min===''||p.edad_min==null?null:Number(p.edad_min),edad_max:p.edad_max===''||p.edad_max==null?null:Number(p.edad_max),peso_min:p.peso_min===''||p.peso_min==null?null:Number(p.peso_min),peso_max:p.peso_max===''||p.peso_max==null?null:Number(p.peso_max),categoria_texto:p.categoria_texto||'',grado_minimo_texto:p.grado_minimo_texto||'',documentacion_requerida:p.documentacion_requerida||'',autorizacion_requerida:p.autorizacion_requerida===true,cuota_inscripcion:p.cuota_inscripcion===''||p.cuota_inscripcion==null?null:Number(p.cuota_inscripcion),observaciones_requisitos:p.observaciones_requisitos||''}),
@@ -1193,6 +1226,8 @@ export const repos={
     finance:(provider_id)=>backend.globalReadRpc('app_kombax_showcase_finance_r65',{p_provider_id:provider_id}),
     stockMovements:(provider_id,product_id=null,limit=150)=>backend.globalReadRpc('app_kombax_showcase_stock_movements_r65',{p_provider_id:provider_id,p_product_id:product_id,p_limit:limit}),
     stockAdjust:(product_id,new_stock,note='')=>backend.globalWriteRpc('app_kombax_showcase_stock_adjust_r65',{p_product_id:product_id,p_new_stock:Number(new_stock),p_note:note||null,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
+    inventoryCost:(provider_id,limit=200)=>backend.globalReadRpc('app_kombax_showcase_inventory_cost_r89',{p_provider_id:provider_id,p_limit:Math.min(300,Math.max(10,Number(limit)||200))}),
+    inventoryMutate:(operation,payload={})=>backend.globalWriteRpc('app_kombax_showcase_inventory_mutate_r89',{p_operation:operation,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
     communications:(provider_id,limit=100)=>backend.globalReadRpc('app_kombax_commerce_communications_r65',{p_scope:'showcase',p_subject_id:provider_id,p_limit:limit}),
     businessIntelligence:(provider_id,days=30)=>backend.globalReadRpc('app_kombax_showcase_bi_r65',{p_provider_id:provider_id,p_days:days}),
     analytics:(provider_id,days=30)=>backend.globalReadRpc('app_kombax_showcase_analytics_r77',{p_provider_id:provider_id,p_days:Math.min(365,Math.max(1,Number(days)||30))}),
@@ -1265,6 +1300,7 @@ export const repos={
     supportGuidedStatus:(ticket_id)=>backend.globalReadRpc('app_kombax_support_guided_status_r60',{p_ticket_id:ticket_id}),
     allowance:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_assistance_allowance_v213',{p_tenant_ref:tenant_ref}),
     dashboard:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_assist_dashboard_v227',{p_tenant_ref:tenant_ref}),
+    aiCredits:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_ai_credits_r97',{p_tenant_ref:tenant_ref}),
     guideAccess:(tenant_ref=null)=>backend.globalReadRpc('app_kombax_org_guide_access_r60',{p_tenant_ref:tenant_ref}),
     downloadGuide:(tenant_ref=null)=>backend.downloadFunction('migration-guide-r60',{tenant_ref,user_locale:getLocale()},30000),
     deleteHistory:({ticket_id=null,mode=null,tenant_ref=null}={})=>backend.invokeFunction('kombax-history-delete-r60',{ticket_id,mode,tenant_ref},45000),
@@ -1273,6 +1309,9 @@ export const repos={
     requestHuman:(ticket_id)=>backend.globalWriteRpc('app_kombax_customer_ops_mutate_v233',{p_operation:'ticket.human_review',p_payload:{ticket_id}}),
     migrationFiles:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_files_v228',{p_ticket_id:ticket_id}),
     migrationPreview:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_preview_v228',{p_ticket_id:ticket_id}),
+    migrationJob:(ticket_id)=>backend.globalReadRpc('app_kombax_ai_migration_job_r103',{p_ticket_id:ticket_id}),
+    migrationRecords:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_records_v271',{p_ticket_id:ticket_id}),
+    migrationImport:(ticket_id,request_id,records)=>backend.globalWriteRpc('app_kombax_migration_import_v271',{p_ticket_id:ticket_id,p_request_id:request_id,p_records:records}),
     chat:(ticket_id,message,specialty='management',client_request_id=(crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`))=>backend.invokeFunction('kombax-assist-r38',{ticket_id,message,specialty,client_request_id,user_locale:getLocale()},70000),
     async stageMigrationFiles(ticket_id,files=[],onProgress=null){
       const uid=session()?.id;if(!uid)throw new Error('AUTH_REQUIRED');
@@ -1306,6 +1345,13 @@ export const repos={
     setModerator:(perfil_id,rol='moderador',activo=true)=>kombaxGlobalMutation('app_kombax_platform_mutate_v055','kombax.platform.moderator.set',{perfil_id,rol,activo:activo===true}),
     setVerifier:(perfil_id,activo=true,motivo='')=>backend.globalWriteRpc('app_kombax_verificador_set_v117',{p_perfil_id:perfil_id,p_activo:activo===true,p_motivo:String(motivo||'').trim()}),
     pilotReadiness:()=>backend.globalReadRpc('app_kombax_pilot_readiness_status_v117',{}),
+    pilotMetrics:()=>backend.globalReadRpc('app_kombax_pilot_metrics_r97',{}),
+    aiMetrics:()=>backend.globalReadRpc('app_kombax_ai_admin_metrics_r103',{}),
+    pilotRequests:()=>backend.globalReadRpc('app_kombax_pilot_requests_r99',{}),
+    pilotAssign:(club_id,plan_code,notes='')=>backend.globalWriteRpc('app_kombax_pilot_assign_r99',{p_club_id:club_id,p_plan_code:plan_code,p_notes:notes}),
+    pilotEnroll:(subject_type,subject_id,notes='')=>backend.globalWriteRpc('app_kombax_pilot_enroll_r97',{p_subject_type:subject_type,p_subject_id:subject_id,p_notes:notes}),
+    founderBenefit:(subject_type,subject_id,program,start_at)=>backend.globalWriteRpc('app_kombax_founder_benefit_r97',{p_subject_type:subject_type,p_subject_id:subject_id,p_program:program,p_start_at:start_at}),
+    aiCreditGrant:(tenant_ref,amount,type,key,expires_at=null)=>backend.globalWriteRpc('app_kombax_ai_grant_r97',{p_tenant_ref:tenant_ref,p_amount:amount,p_type:type,p_key:key,p_expires:expires_at}),
     setPilotReadiness:(control,verified,evidence)=>backend.globalWriteRpc('app_kombax_pilot_readiness_set_v117',{p_control:control,p_verificado:verified===true,p_evidencia:String(evidence||'').trim()}),
     clientIncidents:(limit=100)=>backend.globalReadRpc('app_kombax_client_incidents_v117',{p_limit:Math.min(500,Math.max(1,Number(limit)||100))}),
     entities:(query='',limit=100)=>backend.globalReadRpc('app_kombax_platform_entities_v114',{p_query:String(query||'').trim(),p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
@@ -1333,6 +1379,7 @@ export const repos={
   },
   commercial:{
     catalog:(audience=null)=>backend.globalReadRpc('app_kombax_commercial_catalog_r64',{p_audience:audience||null}),
+    offers:(audience=null)=>backend.globalReadRpc('app_kombax_offer_catalog_r98',{p_audience:audience||null,p_country:'ES'}),
     context:(subject_type,subject_id)=>backend.globalReadRpc('app_kombax_commercial_context_r64',{p_subject_type:subject_type,p_subject_id:subject_id}),
     requestPlan:(subject_type,subject_id,plan_code,billing_cycle='monthly')=>backend.globalWriteRpc('app_kombax_commercial_plan_request_r64',{p_subject_type:subject_type,p_subject_id:subject_id,p_plan_code:plan_code,p_billing_cycle:billing_cycle,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
     requestActivation:(subject_type,subject_id,entitlement_code,{scope_id=null,days=null}={})=>backend.globalWriteRpc('app_kombax_commercial_activation_request_r64',{p_subject_type:subject_type,p_subject_id:subject_id,p_entitlement_code:entitlement_code,p_scope_id:scope_id,p_days:days,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),

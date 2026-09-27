@@ -1,0 +1,1159 @@
+{
+  "version": "2026.09.21-territorial-search-v1",
+  "review_date": "21/09/2026",
+  "selectors": [
+    {
+      "id": "guide",
+      "label": "Tema",
+      "required": true,
+      "values": [
+        {
+          "id": 1,
+          "label": "Crear un club o asociación deportiva"
+        },
+        {
+          "id": 2,
+          "label": "Organizar un evento de deportes de contacto"
+        },
+        {
+          "id": 3,
+          "label": "Organizar un interclub"
+        },
+        {
+          "id": 4,
+          "label": "Licencias deportivas: alta, renovación y gestión"
+        },
+        {
+          "id": 5,
+          "label": "Seguros y coberturas"
+        },
+        {
+          "id": 6,
+          "label": "Menores en actividad y competición deportiva"
+        },
+        {
+          "id": 7,
+          "label": "Instalaciones, recintos y autorizaciones"
+        },
+        {
+          "id": 8,
+          "label": "Protección de datos, imagen y comunicaciones"
+        },
+        {
+          "id": 9,
+          "label": "Ticketing, venta de entradas y control de acceso"
+        },
+        {
+          "id": 10,
+          "label": "Federaciones y relaciones federativas"
+        },
+        {
+          "id": 11,
+          "label": "Deportistas extranjeros y participación internacional"
+        },
+        {
+          "id": 12,
+          "label": "Patrocinio, marcas y colaboraciones"
+        },
+        {
+          "id": 13,
+          "label": "Organización de combates y participantes"
+        },
+        {
+          "id": 14,
+          "label": "Documentación y checklist del organizador"
+        },
+        {
+          "id": 15,
+          "label": "Obligaciones posteriores al evento"
+        }
+      ]
+    },
+    {
+      "id": "territory",
+      "label": "Comunidad / territorio",
+      "required": true,
+      "values": [
+        {
+          "code": "AN",
+          "label": "Andalucía",
+          "aliases": [
+            "andalucia",
+            "andalucía"
+          ]
+        },
+        {
+          "code": "AR",
+          "label": "Aragón",
+          "aliases": [
+            "aragon",
+            "aragón"
+          ]
+        },
+        {
+          "code": "AS",
+          "label": "Principado de Asturias",
+          "aliases": [
+            "asturias",
+            "principado de asturias"
+          ]
+        },
+        {
+          "code": "IB",
+          "label": "Illes Balears",
+          "aliases": [
+            "illes balears",
+            "islas baleares",
+            "baleares",
+            "balears"
+          ]
+        },
+        {
+          "code": "CN",
+          "label": "Canarias",
+          "aliases": [
+            "canarias",
+            "islas canarias"
+          ]
+        },
+        {
+          "code": "CB",
+          "label": "Cantabria",
+          "aliases": [
+            "cantabria"
+          ]
+        },
+        {
+          "code": "CM",
+          "label": "Castilla-La Mancha",
+          "aliases": [
+            "castilla-la mancha",
+            "castilla la mancha"
+          ]
+        },
+        {
+          "code": "CL",
+          "label": "Castilla y León",
+          "aliases": [
+            "castilla y leon",
+            "castilla y león"
+          ]
+        },
+        {
+          "code": "CT",
+          "label": "Cataluña",
+          "aliases": [
+            "cataluna",
+            "cataluña",
+            "catalunya"
+          ]
+        },
+        {
+          "code": "VC",
+          "label": "Comunitat Valenciana",
+          "aliases": [
+            "comunitat valenciana",
+            "comunidad valenciana",
+            "valencia"
+          ]
+        },
+        {
+          "code": "EX",
+          "label": "Extremadura",
+          "aliases": [
+            "extremadura"
+          ]
+        },
+        {
+          "code": "GA",
+          "label": "Galicia",
+          "aliases": [
+            "galicia",
+            "galiza"
+          ]
+        },
+        {
+          "code": "MD",
+          "label": "Comunidad de Madrid",
+          "aliases": [
+            "madrid",
+            "comunidad de madrid"
+          ]
+        },
+        {
+          "code": "MC",
+          "label": "Región de Murcia",
+          "aliases": [
+            "murcia",
+            "region de murcia",
+            "región de murcia"
+          ]
+        },
+        {
+          "code": "NC",
+          "label": "Comunidad Foral de Navarra",
+          "aliases": [
+            "navarra",
+            "comunidad foral de navarra"
+          ]
+        },
+        {
+          "code": "PV",
+          "label": "País Vasco / Euskadi",
+          "aliases": [
+            "pais vasco",
+            "país vasco",
+            "euskadi"
+          ]
+        },
+        {
+          "code": "RI",
+          "label": "La Rioja",
+          "aliases": [
+            "la rioja",
+            "rioja"
+          ]
+        },
+        {
+          "code": "CE",
+          "label": "Ceuta",
+          "aliases": [
+            "ceuta",
+            "ciudad autonoma de ceuta",
+            "ciudad autónoma de ceuta"
+          ]
+        },
+        {
+          "code": "ML",
+          "label": "Melilla",
+          "aliases": [
+            "melilla",
+            "ciudad autonoma de melilla",
+            "ciudad autónoma de melilla"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "municipality",
+      "label": "Municipio",
+      "required": false,
+      "behavior": "solo se usa cuando puede cambiar permisos de recinto, actividad, aforo, horarios, ruido, seguridad u otros requisitos locales"
+    },
+    {
+      "id": "modality",
+      "label": "Modalidad / disciplina",
+      "required": false,
+      "behavior": "activar cuando federación, licencia, reglamento técnico o seguro dependan de la modalidad"
+    },
+    {
+      "id": "case_flags",
+      "label": "Características del caso",
+      "required": false,
+      "values": [
+        "menores",
+        "publico",
+        "ticketing",
+        "deportistas_extranjeros",
+        "premios_o_bolsas",
+        "recinto_no_habitual",
+        "actividad_economica",
+        "competicion_oficial"
+      ]
+    }
+  ],
+  "composition_rule": "Mostrar primero marco estatal/base; después diferenciales verified del territorio; después bloques case como advertencia/consulta, nunca como obligación universal.",
+  "consulting_cta": {
+    "visible_when": [
+      "municipality",
+      "modality",
+      "menores",
+      "deportistas_extranjeros",
+      "recinto_no_habitual",
+      "conflicto_normativo",
+      "documentacion_especifica"
+    ],
+    "title": "¿Necesitas aplicarlo a tu caso concreto?",
+    "body": "KOMBAX Consultoría puede revisar territorio, modalidad, recinto, documentación y organismos competentes. La guía general no sustituye asesoramiento profesional específico.",
+    "action": "Solicitar revisión del caso"
+  },
+  "territories": [
+    {
+      "code": "AN",
+      "name": "Andalucía",
+      "slug": "andalucia",
+      "aliases": [
+        "andalucia",
+        "andalucía"
+      ],
+      "summary": "Andalucía cuenta con Registro Andaluz de Entidades Deportivas y regulación propia de clubes. Además dispone de un protocolo marco autonómico específico para entidades que realizan actividad deportiva con menores.",
+      "differentials": [
+        {
+          "area": "Entidades y registro",
+          "status": "verified",
+          "text": "El RAED inscribe las entidades deportivas con domicilio en Andalucía. Los clubes son asociaciones sin ánimo de lucro y la normativa andaluza distingue, entre otros extremos, clubes orientados a deporte de competición y de ocio."
+        },
+        {
+          "area": "Constitución de club",
+          "status": "verified",
+          "text": "El procedimiento oficial exige solicitud, acta fundacional y acuerdo de aprobación de estatutos conforme a la Ley andaluza y al Decreto 41/2022. La guía no fija un número de fundadores porque el trámite debe leerse con la versión vigente del decreto y los modelos oficiales."
+        },
+        {
+          "area": "Menores",
+          "status": "verified",
+          "text": "El Protocolo Marco aprobado por Orden de 18/11/2024 se aplica a entidades que realizan actividad deportiva con menores; la Junta publica adhesión, designación de delegado/a del menor, análisis de riesgos, código de conducta y canal de denuncia."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Antes de anunciar una velada como competición, exhibición o interclub hay que verificar federación/modalidad, recinto, ayuntamiento y régimen de espectáculos o actividad. No se traslada al usuario una regla única no verificada."
+        }
+      ],
+      "consulting_triggers": [
+        "Evento con menores, público o deportistas extranjeros.",
+        "Dudas sobre modalidad/federación o carácter oficial.",
+        "Necesidad de revisar expediente de club, protocolo de menores o documentación del recinto."
+      ],
+      "source_keys": [
+        "andalucia_reg",
+        "andalucia_club",
+        "andalucia_minor"
+      ],
+      "source_count": 3,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "AR",
+      "name": "Aragón",
+      "slug": "aragon",
+      "aliases": [
+        "aragon",
+        "aragón"
+      ],
+      "summary": "Aragón regula la actividad física y el deporte mediante la Ley 16/2018 y dispone de Registro General de Entidades Deportivas.",
+      "differentials": [
+        {
+          "area": "Constitución de club",
+          "status": "verified",
+          "text": "La Ley 16/2018 establece que la constitución de un club deportivo requiere el acuerdo de tres o más personas físicas o jurídicas legalmente constituidas, con acta fundacional y estatutos."
+        },
+        {
+          "area": "Reconocimiento deportivo",
+          "status": "verified",
+          "text": "El reconocimiento del club a efectos deportivos se acredita mediante la inscripción en el Registro de Entidades Deportivas de Aragón."
+        },
+        {
+          "area": "Tramitación registral",
+          "status": "verified",
+          "text": "El portal autonómico permite inscripción, comunicación de modificaciones y solicitud de certificados/copias."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "La ley deportiva no convierte por sí sola cualquier velada en actividad autorizada: deben cruzarse recinto, municipio, modalidad/federación, seguros y, si procede, normativa de espectáculos."
+        }
+      ],
+      "consulting_triggers": [
+        "Club con varias modalidades o actividad fuera de Aragón.",
+        "Evento con público, menores o ticketing.",
+        "Duda sobre si la actividad es competición oficial, exhibición o entrenamiento."
+      ],
+      "source_keys": [
+        "aragon_law",
+        "aragon_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "AS",
+      "name": "Principado de Asturias",
+      "slug": "principado-de-asturias",
+      "aliases": [
+        "asturias",
+        "principado de asturias"
+      ],
+      "summary": "Asturias diferencia equipos deportivos y clubes básicos y publica requisitos registrales específicos y protocolos de protección.",
+      "differentials": [
+        {
+          "area": "Tipos de entidad",
+          "status": "verified",
+          "text": "El portal oficial distingue equipos deportivos y clubes deportivos básicos, además de otras formas. Los equipos son una fórmula diferenciada de los clubes básicos."
+        },
+        {
+          "area": "Club básico",
+          "status": "verified",
+          "text": "La información oficial del Registro indica acta fundacional suscrita por un mínimo de cinco personas mayores de edad y escritura pública para el club básico."
+        },
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El portal informa de un plazo máximo administrativo de tres meses y silencio positivo para el Registro de Entidades Deportivas."
+        },
+        {
+          "area": "Protección",
+          "status": "verified",
+          "text": "Deporte Asturiano publica protocolos específicos frente a violencia contra menores y frente a violencia sexual contra las mujeres en el deporte."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "La clasificación del evento, seguros, recinto y requisitos federativos deben revisarse para el supuesto concreto."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir entre equipo deportivo y club básico.",
+        "Evento con menores o necesidad de protocolo.",
+        "Velada con público o uso de recinto con condiciones especiales."
+      ],
+      "source_keys": [
+        "asturias_law",
+        "asturias_reg",
+        "asturias_protocol"
+      ],
+      "source_count": 3,
+      "verified_items": 4,
+      "case_specific_items": 1
+    },
+    {
+      "code": "IB",
+      "name": "Illes Balears",
+      "slug": "illes-balears",
+      "aliases": [
+        "illes balears",
+        "islas baleares",
+        "baleares",
+        "balears"
+      ],
+      "summary": "Illes Balears tiene una ley deportiva de 2023 y mantiene vías diferenciadas para clubes de régimen general y especial.",
+      "differentials": [
+        {
+          "area": "Régimen general",
+          "status": "verified",
+          "text": "El procedimiento oficial de régimen general exige acta suscrita por un mínimo de cinco personas físicas o jurídicas y estatutos; la solicitud se presenta dentro de los tres meses desde la autorización de la denominación."
+        },
+        {
+          "area": "Régimen especial",
+          "status": "verified",
+          "text": "La vía de régimen especial/simplificado publicada por el Registro exige un mínimo de tres personas físicas y estatutos conforme a la normativa aplicable."
+        },
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "La sede electrónica publica el procedimiento y referencia el Decreto 33/2014 del Registro de Entidades Deportivas."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "No se presume que el régimen de club resuelva permisos de una velada: deben verificarse isla/municipio, recinto, espectáculo/actividad, seguros y federación/modalidad."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir régimen general o especial.",
+        "Evento en instalación pública o con público/ticketing.",
+        "Dudas sobre federación, licencias o actividad no federada."
+      ],
+      "source_keys": [
+        "balears_law",
+        "balears_general",
+        "balears_special",
+        "balears_proc"
+      ],
+      "source_count": 4,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "CN",
+      "name": "Canarias",
+      "slug": "canarias",
+      "aliases": [
+        "canarias",
+        "islas canarias"
+      ],
+      "summary": "Canarias regula el deporte por la Ley 1/2019 y su Registro de Entidades Deportivas funciona con procedimientos electrónicos.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El Registro autonómico inscribe entidades deportivas con sede en Canarias y referencia la Ley 1/2019."
+        },
+        {
+          "area": "Tramitación electrónica",
+          "status": "verified",
+          "text": "El portal oficial indica que los procedimientos del Registro se tramitan exclusivamente de forma telemática para las personas jurídicas."
+        },
+        {
+          "area": "Operaciones registrales",
+          "status": "verified",
+          "text": "Se publican trámites de inscripción, cuentas, reglamentos federativos, libros, cargos, estatutos, certificados y cancelación."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Una entidad inscrita no obtiene por ello autorización automática para cualquier evento. Deben revisarse cabildo/ayuntamiento cuando corresponda, recinto, modalidad, seguros y régimen de espectáculo/actividad."
+        }
+      ],
+      "consulting_triggers": [
+        "Preparación de expediente electrónico del club.",
+        "Evento entre islas o con participantes de distintos territorios.",
+        "Velada con público, ticketing o menores."
+      ],
+      "source_keys": [
+        "canarias_law",
+        "canarias_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "CB",
+      "name": "Cantabria",
+      "slug": "cantabria",
+      "aliases": [
+        "cantabria"
+      ],
+      "summary": "Cantabria diferencia clubes elementales y básicos y vincula el reconocimiento jurídico-deportivo de los clubes a la inscripción registral.",
+      "differentials": [
+        {
+          "area": "Tipos de club",
+          "status": "verified",
+          "text": "La normativa publicada distingue clubes deportivos elementales y básicos, además de otras figuras."
+        },
+        {
+          "area": "Club básico",
+          "status": "verified",
+          "text": "La regulación publicada para clubes básicos exige acta fundacional otorgada ante notario por al menos cinco personas físicas y estatutos provisionales."
+        },
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "La inscripción en el Registro de Entidades Deportivas es requisito para reconocimiento legal/oficial del club y adquisición de personalidad jurídica como tal según la regulación publicada."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para eventos se debe verificar además recinto, ayuntamiento, federación/modalidad, seguros y normativa de espectáculos o actividad aplicable."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir entre club elemental o básico.",
+        "Preparar constitución notarial de club básico.",
+        "Evento con público o dudas sobre oficialidad/federación."
+      ],
+      "source_keys": [
+        "cantabria_law",
+        "cantabria_clubs"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "CM",
+      "name": "Castilla-La Mancha",
+      "slug": "castilla-la-mancha",
+      "aliases": [
+        "castilla-la mancha",
+        "castilla la mancha"
+      ],
+      "summary": "Castilla-La Mancha dispone de Ley 5/2015 y Registro de Entidades Deportivas propio; publica de forma expresa el mínimo de promotores para clubes.",
+      "differentials": [
+        {
+          "area": "Club deportivo",
+          "status": "verified",
+          "text": "El portal oficial define los clubes como asociaciones privadas sin ánimo de lucro con personalidad jurídica propia y domicilio en un municipio de Castilla-La Mancha."
+        },
+        {
+          "area": "Fundadores",
+          "status": "verified",
+          "text": "La constitución se formaliza mediante acta fundacional y el portal oficial fija un mínimo de cinco personas fundadoras."
+        },
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "La inscripción en el Registro autonómico es necesaria para el reconocimiento a efectos de la Ley 5/2015."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "La inscripción del club no sustituye autorizaciones de recinto, municipio ni reglas de la federación/modalidad. En deportes de contacto debe verificarse especialmente la clasificación de la actividad y las coberturas."
+        }
+      ],
+      "consulting_triggers": [
+        "Constituir el club y preparar estatutos.",
+        "Evento con público o menores.",
+        "Actividad que se quiere presentar como oficial o computable en récord."
+      ],
+      "source_keys": [
+        "clm_law",
+        "clm_clubs",
+        "clm_reg"
+      ],
+      "source_count": 3,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "CL",
+      "name": "Castilla y León",
+      "slug": "castilla-y-leon",
+      "aliases": [
+        "castilla y leon",
+        "castilla y león"
+      ],
+      "summary": "Castilla y León regula la actividad físico-deportiva por Ley 3/2019 y mantiene un Registro autonómico de entidades.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El Registro inscribe federaciones, clubes, secciones y sociedades anónimas deportivas con domicilio en Castilla y León."
+        },
+        {
+          "area": "Efectos",
+          "status": "verified",
+          "text": "La sede oficial indica que la inscripción es gratuita y requisito para optar a ayudas públicas y participar en competiciones deportivas oficiales."
+        },
+        {
+          "area": "Actualizaciones",
+          "status": "verified",
+          "text": "El trámite contempla también modificaciones estatutarias, domicilio, composición directiva y disolución."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para una velada o interclub se deben añadir las comprobaciones del municipio/recinto, federación o modalidad, seguros y protección de menores cuando proceda."
+        }
+      ],
+      "consulting_triggers": [
+        "Alta registral y adaptación de estatutos.",
+        "Competición oficial o evento con varios clubes.",
+        "Uso de instalación municipal y condiciones de público/ticketing."
+      ],
+      "source_keys": [
+        "cyl_law",
+        "cyl_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "CT",
+      "name": "Cataluña",
+      "slug": "cataluna",
+      "aliases": [
+        "cataluna",
+        "cataluña",
+        "catalunya"
+      ],
+      "summary": "Cataluña dispone de Registro de Entidades Deportivas, normativa deportiva propia, régimen específico de actividades extraordinarias y protocolo autonómico de protección de menores.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El REE inscribe clubes y asociaciones deportivas con domicilio social en Cataluña y publica modelos y trámites de constitución/estatutos."
+        },
+        {
+          "area": "Constitución",
+          "status": "verified",
+          "text": "La información oficial del REE utilizada por KOMBAX indica un mínimo de tres personas físicas con capacidad de obrar para constituir un club deportivo; debe verificarse el modelo vigente antes de presentar."
+        },
+        {
+          "area": "Eventos extraordinarios",
+          "status": "verified",
+          "text": "Interior de la Generalitat publica un régimen específico para espectáculos y actividades recreativas extraordinarias, cuya autorización/licencia depende del supuesto y puede involucrar Generalitat o municipio."
+        },
+        {
+          "area": "Menores",
+          "status": "verified",
+          "text": "Existe protocolo marco autonómico de protección de infancia y adolescencia frente a violencias en el ámbito deportivo, con edición revisada en 2025."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Aunque exista información autonómica, debe validarse ordenanza municipal, condiciones del recinto, modalidad/federación, aforo, seguros y asistencia."
+        }
+      ],
+      "consulting_triggers": [
+        "Evento con público, menores o recinto no habitual.",
+        "Dudas sobre licencia/cobertura de participantes.",
+        "Constitución de club o actuación en varias comunidades."
+      ],
+      "source_keys": [
+        "cat_law",
+        "cat_reg",
+        "cat_club",
+        "cat_events",
+        "cat_minor"
+      ],
+      "source_count": 5,
+      "verified_items": 4,
+      "case_specific_items": 1
+    },
+    {
+      "code": "VC",
+      "name": "Comunitat Valenciana",
+      "slug": "comunitat-valenciana",
+      "aliases": [
+        "comunitat valenciana",
+        "comunidad valenciana",
+        "valencia"
+      ],
+      "summary": "La Comunitat Valenciana diferencia expresamente entre club deportivo, grupo de recreación deportiva y secciones de otras entidades.",
+      "differentials": [
+        {
+          "area": "Marco vigente",
+          "status": "verified",
+          "text": "La Ley 2/2011 está consolidada con modificaciones publicadas hasta 2026 y debe consultarse en su versión vigente."
+        },
+        {
+          "area": "Club deportivo",
+          "status": "verified",
+          "text": "El trámite autonómico define el club deportivo como asociación sin ánimo de lucro orientada a promoción/práctica de modalidades y participación en el ámbito federado."
+        },
+        {
+          "area": "Recreación deportiva",
+          "status": "verified",
+          "text": "El mismo trámite distingue el grupo de recreación deportiva para práctica de actividad física o deporte al margen del ámbito federado, además de secciones en entidades no deportivas."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "La elección de entidad no determina por sí sola si un evento es federado, recreativo o espectáculo. Debe revisarse la actividad concreta, recinto, municipio, seguros y federación/modalidad."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir club federado, grupo recreativo o sección.",
+        "Evento mixto federado/no federado.",
+        "Velada con público, menores o venta de entradas."
+      ],
+      "source_keys": [
+        "val_law",
+        "val_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "EX",
+      "name": "Extremadura",
+      "slug": "extremadura",
+      "aliases": [
+        "extremadura"
+      ],
+      "summary": "Extremadura cuenta con Ley del Deporte y Registro General de Entidades Deportivas con varias categorías de entidades.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El Registro General de Entidades Deportivas tramita inscripción, modificación, certificación y cancelación."
+        },
+        {
+          "area": "Tipos",
+          "status": "verified",
+          "text": "El portal oficial incluye clubes deportivos, sociedades anónimas deportivas, entidades de actividad físico-deportiva, agrupaciones deportivas escolares y federaciones."
+        },
+        {
+          "area": "Efecto deportivo",
+          "status": "verified",
+          "text": "La sede autonómica indica que el registro otorga plenos derechos deportivos a las entidades extremeñas en los términos de su normativa."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para un evento deben verificarse de forma adicional municipio/recinto, federación o modalidad, seguro y eventual régimen de espectáculo/actividad."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir tipo de entidad.",
+        "Actividad con escolares/menores.",
+        "Evento con público o que pretende ser competición oficial."
+      ],
+      "source_keys": [
+        "ext_law",
+        "ext_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "GA",
+      "name": "Galicia",
+      "slug": "galicia",
+      "aliases": [
+        "galicia",
+        "galiza"
+      ],
+      "summary": "Galicia dispone de Ley 3/2012 y Registro propio; destaca que el Registro ofrece un trámite específico para inscribir el protocolo de protección de niños, niñas y adolescentes frente a la violencia en el deporte.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "La inscripción de entidades deportivas determina su reconocimiento legal y es requisito para participar en competiciones oficiales y para determinadas ayudas/asesoramiento autonómico."
+        },
+        {
+          "area": "Tipos",
+          "status": "verified",
+          "text": "El procedimiento incluye clubes, agrupaciones deportivas escolares, secciones, federaciones y permite también determinadas entidades mercantiles en los términos publicados."
+        },
+        {
+          "area": "Protección de menores",
+          "status": "verified",
+          "text": "Deporte Galego publica un trámite específico de inscripción del protocolo de protección de NNA frente a la violencia en el deporte."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para una velada deben añadirse comprobaciones de concello/recinto, modalidad/federación, seguros, público y protección de menores."
+        }
+      ],
+      "consulting_triggers": [
+        "Protocolos de menores.",
+        "Participación oficial y registro del club.",
+        "Evento con público, menores o deportistas de fuera de Galicia."
+      ],
+      "source_keys": [
+        "gal_law",
+        "gal_reg",
+        "gal_proc"
+      ],
+      "source_count": 3,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "MD",
+      "name": "Comunidad de Madrid",
+      "slug": "comunidad-de-madrid",
+      "aliases": [
+        "madrid",
+        "comunidad de madrid"
+      ],
+      "summary": "Madrid mantiene Registro de Entidades Deportivas y distingue, entre otras figuras, clubes elementales y básicos.",
+      "differentials": [
+        {
+          "area": "Tipos de entidad",
+          "status": "verified",
+          "text": "El registro autonómico contempla clubes deportivos elementales y básicos, agrupaciones, secciones, federaciones y otras figuras publicadas."
+        },
+        {
+          "area": "Plazo de solicitud",
+          "status": "verified",
+          "text": "La sede oficial indica que la solicitud de inscripción debe presentarse en el plazo de 15 días desde el acta fundacional o documento similar."
+        },
+        {
+          "area": "Tasa y resolución",
+          "status": "verified",
+          "text": "El trámite exige tasa; publica un plazo máximo de resolución de dos meses y efecto estimatorio del silencio para los supuestos indicados, salvo particularidades como federaciones."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para un evento se debe revisar además el ayuntamiento, el recinto, la modalidad/federación, seguros, aforo y régimen de espectáculo/actividad que corresponda."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir club elemental o básico.",
+        "Preparar alta dentro del plazo registral.",
+        "Velada con público, menores o ticketing."
+      ],
+      "source_keys": [
+        "mad_law",
+        "mad_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "MC",
+      "name": "Región de Murcia",
+      "slug": "region-de-murcia",
+      "aliases": [
+        "murcia",
+        "region de murcia",
+        "región de murcia"
+      ],
+      "summary": "Murcia tiene Ley 8/2015 y un procedimiento registral específico para constitución de clubes, con modelos oficiales y efectos definidos.",
+      "differentials": [
+        {
+          "area": "Registro y efectos",
+          "status": "verified",
+          "text": "La inscripción es necesaria para el reconocimiento oficial deportivo, acceso a derechos/beneficios autonómicos y solicitud de integración en la federación regional correspondiente."
+        },
+        {
+          "area": "Documentación",
+          "status": "verified",
+          "text": "La sede exige acta fundacional y estatutos conforme a modelos oficiales, además de la documentación de identidad/representación aplicable."
+        },
+        {
+          "area": "Tasa y resolución",
+          "status": "verified",
+          "text": "El procedimiento publica tasa general de inscripción, plazo de resolución de seis meses y silencio negativo."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "El alta de club no sustituye permisos de recinto/municipio ni reglas federativas. Deben revisarse también seguros, asistencia y protección de menores."
+        }
+      ],
+      "consulting_triggers": [
+        "Constituir y registrar club.",
+        "Integración federativa regional.",
+        "Evento con público, menores o dudas sobre permisos del recinto."
+      ],
+      "source_keys": [
+        "mur_law",
+        "mur_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "NC",
+      "name": "Comunidad Foral de Navarra",
+      "slug": "comunidad-foral-de-navarra",
+      "aliases": [
+        "navarra",
+        "comunidad foral de navarra"
+      ],
+      "summary": "Navarra combina un Registro del Deporte renovado con una sección específica de profesionales y requisitos profesionales propios.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El Registro del Deporte incluye sección de entidades deportivas y sección de profesionales."
+        },
+        {
+          "area": "Clubes",
+          "status": "verified",
+          "text": "La normativa foral de entidades deportivas establece acta fundacional y estatutos; la regulación histórica vigente utilizada por el Registro fija un mínimo de tres promotores para el club deportivo."
+        },
+        {
+          "area": "Profesiones del deporte",
+          "status": "verified",
+          "text": "La inscripción es obligatoria para ejercer en Navarra determinadas profesiones reguladas: educación física, monitor/a, entrenador/a, dirección deportiva y preparación física, con las excepciones publicadas."
+        },
+        {
+          "area": "Actualización 2025",
+          "status": "verified",
+          "text": "El portal oficial indica que las cualificaciones exigibles y el nuevo registro profesional operan en el marco de la Ley Foral 18/2019 y normativa de desarrollo de 2024-2025."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "En eventos debe verificarse además recinto/municipio, federación/modalidad, seguros y si el personal que interviene está sujeto a requisitos profesionales navarros."
+        }
+      ],
+      "consulting_triggers": [
+        "Revisión de titulaciones/profesionales.",
+        "Constitución de club.",
+        "Evento con personal técnico, menores o participantes externos."
+      ],
+      "source_keys": [
+        "nav_law",
+        "nav_reg",
+        "nav_prof"
+      ],
+      "source_count": 3,
+      "verified_items": 4,
+      "case_specific_items": 1
+    },
+    {
+      "code": "PV",
+      "name": "País Vasco / Euskadi",
+      "slug": "pais-vasco-euskadi",
+      "aliases": [
+        "pais vasco",
+        "país vasco",
+        "euskadi"
+      ],
+      "summary": "Euskadi cuenta con Ley deportiva de 2023 y un Registro de Entidades Deportivas de tramitación electrónica.",
+      "differentials": [
+        {
+          "area": "Constitución de club",
+          "status": "verified",
+          "text": "El portal oficial establece acta fundacional por un mínimo de tres personas físicas o jurídicas con capacidad de obrar, con voluntad asociativa sin ánimo de lucro y fines deportivos."
+        },
+        {
+          "area": "Tramitación",
+          "status": "verified",
+          "text": "Los trámites del Registro de Entidades Deportivas se realizan electrónicamente; el portal publica modelos para junta directiva u órgano unipersonal."
+        },
+        {
+          "area": "Marco vigente",
+          "status": "verified",
+          "text": "La Ley 2/2023 sustituyó el marco autonómico anterior y es la referencia general actual de actividad física y deporte."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Se debe verificar además territorio histórico/municipio cuando corresponda, recinto, modalidad/federación, seguros y condiciones de público/menores."
+        }
+      ],
+      "consulting_triggers": [
+        "Elección de modelo de gobierno del club.",
+        "Evento en varios territorios históricos.",
+        "Velada con público, menores o dudas federativas."
+      ],
+      "source_keys": [
+        "pv_law",
+        "pv_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "RI",
+      "name": "La Rioja",
+      "slug": "la-rioja",
+      "aliases": [
+        "la rioja",
+        "rioja"
+      ],
+      "summary": "La Rioja regula el ejercicio físico y el deporte mediante Ley 1/2015 y mantiene un Registro General de Entidades Deportivas.",
+      "differentials": [
+        {
+          "area": "Club deportivo",
+          "status": "verified",
+          "text": "El trámite define el club como asociación privada sin ánimo de lucro con personalidad jurídica y capacidad de obrar, formada por personas físicas, orientada a ejercicio físico, práctica/promoción deportiva y competición."
+        },
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "La inscripción se exige a clubes con domicilio social en La Rioja y es requisito previo para determinadas subvenciones, ayudas, reconocimientos y convenios con la Comunidad Autónoma."
+        },
+        {
+          "area": "Tramitación",
+          "status": "verified",
+          "text": "El procedimiento admite gestión electrónica con certificado y está vinculado al Registro General de Entidades Deportivas."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para eventos deben verificarse ayuntamiento/recinto, modalidad/federación, seguros y régimen de actividad/espectáculo aplicable."
+        }
+      ],
+      "consulting_triggers": [
+        "Constitución e inscripción de club.",
+        "Evento con ayudas públicas o convenio.",
+        "Velada con público, menores o ticketing."
+      ],
+      "source_keys": [
+        "rio_law",
+        "rio_reg"
+      ],
+      "source_count": 2,
+      "verified_items": 3,
+      "case_specific_items": 1
+    },
+    {
+      "code": "CE",
+      "name": "Ceuta",
+      "slug": "ceuta",
+      "aliases": [
+        "ceuta",
+        "ciudad autonoma de ceuta",
+        "ciudad autónoma de ceuta"
+      ],
+      "summary": "Ceuta dispone de reglamentos propios de asociaciones deportivas y de su Registro General de Asociaciones Deportivas.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "El RGAD inscribe federaciones, clubes y entidades deportivas con sede en Ceuta; la inscripción es requisito para reconocimiento y para determinadas ayudas/convenios de la Ciudad."
+        },
+        {
+          "area": "Tipos de club",
+          "status": "verified",
+          "text": "La regulación local distingue clubes deportivos elementales y básicos."
+        },
+        {
+          "area": "Competición oficial",
+          "status": "verified",
+          "text": "La normativa local publicada indica que para participar en actividades y competiciones oficiales los clubes deben afiliarse a la federación ceutí correspondiente."
+        },
+        {
+          "area": "Plazo registral",
+          "status": "verified",
+          "text": "El reglamento del Registro publicado establece presentación de solicitud/documentos dentro de los 15 días desde el acta fundacional y prevé estimación por silencio a los tres meses para los supuestos indicados, con excepción de federaciones."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Debe verificarse adicionalmente recinto, actividad/licencia local, federación, seguros y condiciones de público/menores."
+        }
+      ],
+      "consulting_triggers": [
+        "Elegir club elemental o básico.",
+        "Afiliación para competición oficial.",
+        "Evento con público o necesidad de licencia de actividad/recinto."
+      ],
+      "source_keys": [
+        "ceuta_reg",
+        "ceuta_club"
+      ],
+      "source_count": 2,
+      "verified_items": 4,
+      "case_specific_items": 1
+    },
+    {
+      "code": "ML",
+      "name": "Melilla",
+      "slug": "melilla",
+      "aliases": [
+        "melilla",
+        "ciudad autonoma de melilla",
+        "ciudad autónoma de melilla"
+      ],
+      "summary": "Melilla mantiene un Registro de entidades, clubes y asociaciones deportivas y reglamentos propios publicados por la Ciudad Autónoma.",
+      "differentials": [
+        {
+          "area": "Registro",
+          "status": "verified",
+          "text": "La Sede de Melilla publica un trámite específico para registrar entidades, clubes y asociaciones deportivas, gestionado por la Dirección General de Deportes."
+        },
+        {
+          "area": "Documentación",
+          "status": "verified",
+          "text": "El procedimiento publicado exige solicitud según modelo, acta de constitución, estatutos y DNI de integrantes, además de representación cuando proceda."
+        },
+        {
+          "area": "Normativa local",
+          "status": "verified",
+          "text": "El BOME Extraordinario 20 de 25/06/1999 recoge el Reglamento del Registro, el de Federaciones Deportivas y el de Asociaciones Deportivas de la Ciudad Autónoma."
+        },
+        {
+          "area": "Competición oficial",
+          "status": "verified",
+          "text": "La regulación publicada para clubes elementales establece inscripción registral y afiliación a la federación deportiva correspondiente para participar en competición oficial."
+        },
+        {
+          "area": "Eventos e interclubs",
+          "status": "case",
+          "text": "Para organizar eventos deben verificarse además instalación, autorizaciones/condiciones locales, federación/modalidad, seguros, público y menores."
+        }
+      ],
+      "consulting_triggers": [
+        "Constitución y alta del club.",
+        "Participación en competición oficial.",
+        "Evento con público, menores o necesidad de revisar autorizaciones locales."
+      ],
+      "source_keys": [
+        "mel_reg",
+        "mel_bome"
+      ],
+      "source_count": 2,
+      "verified_items": 4,
+      "case_specific_items": 1
+    }
+  ]
+}

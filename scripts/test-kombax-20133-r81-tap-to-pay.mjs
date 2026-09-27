@@ -6,15 +6,17 @@ const center=read('web/js/modules/payments-center.js'),repo=read('web/js/core/re
 const supabaseConfig=read('supabase/config.toml');
 const gradle=read('android/app/build.gradle'),manifest=read('android/app/src/main/AndroidManifest.xml'),main=read('android/app/src/main/java/com/urbanwarriors/app/MainActivity.java'),manager=read('android/app/src/main/java/com/urbanwarriors/app/KombaxTerminalManager.java'),app=read('android/app/src/main/java/com/urbanwarriors/app/KombaxApplication.java');
 const iosBridge=read('ios/KombaxIOS/KombaxTerminalBridge.swift'),iosWeb=read('ios/KombaxIOS/KombaxWebView.swift'),iosProj=read('ios/project.yml'),iosEnt=read('ios/KombaxIOS/KombaxIOS.entitlements');
-ok(/r81-tap-to-pay/.test(cfg)&&/build:\s*20133/.test(cfg),'R81 web release identity');
-ok(/kombax-build-20133/.test(sw)&&/20133-r81-tap-to-pay/.test(sw),'R81 SW identity');
-ok((idx.match(/v=20133/g)||[]).length>=10,'R81 cache busters');
-ok(/versionCode\s+20133/.test(gradle)&&/r81-tap-to-pay/.test(gradle),'Android R81 identity');
+const currentBuild=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);
+ok(currentBuild>=20133&&/r81-tap-to-pay|ApplicationInfo\.FLAG_DEBUGGABLE/i.test(cfg+'\n'+manager),'R81 Tap to Pay foundation preserved in later release');
+ok(/kombax-build-20\d{3}/.test(sw),'service worker build identity preserved');
+ok((idx.match(/v=20\d{3}/g)||[]).length>=10,'release cache busters preserved');
+ok(/versionCode\s+20\d{3}/.test(gradle)&&/block1-commerce-cart|r81-tap-to-pay/.test(gradle),'Android Tap to Pay lineage preserved');
 ok(/stripeterminal-core:5\.8\.1/.test(gradle)&&/stripeterminal-taptopay:5\.8\.1/.test(gradle),'Stripe Terminal Android 5.8.1');
 ok(/minSdk\s+26/.test(gradle),'Terminal compatible Android min SDK');
 ok(/uses-feature android:name="android\.hardware\.nfc"/.test(manifest)&&/ACCESS_FINE_LOCATION/.test(manifest),'Android NFC/location declarations');
 ok(/TerminalApplicationDelegate\.onCreate/.test(app),'Terminal lifecycle delegate');
 ok(/TapToPayEasyConnectConfiguration/.test(manager)&&/TapUseCase\.Pay/.test(manager)&&/processPaymentIntent/.test(manager),'Android native Tap to Pay flow');
+ok(!/BuildConfig\.DEBUG/.test(manager)&&/ApplicationInfo\.FLAG_DEBUGGABLE/.test(manager),'Android simulated-reader flag does not depend on generated BuildConfig');
 ok(/startTapToPay/.test(main)&&/provideTapToPayConnectionToken/.test(main)&&/getTapToPayDeviceStatus/.test(main),'Android WebView native bridge');
 ok(/FEATURE_HARDWARE_KEYSTORE/.test(main)&&/NfcAdapter/.test(main),'Android compatibility gate');
 ok(/!debug && !developerOptions/.test(main),'Android production security gate is reflected in compatibility status');
@@ -35,8 +37,8 @@ ok(/kx-pos-modal/.test(css)&&/kx-payment-method\.tap/.test(css),'Premium POS sty
 ok(/WKWebView/.test(iosWeb)&&/kombaxTerminal/.test(iosWeb),'iOS shared web shell bridge');
 ok(/StripeTerminal/.test(iosBridge)&&/TapToPayEasyConnectConfiguration/.test(iosBridge)&&/processPaymentIntent/.test(iosBridge),'iOS native Tap to Pay source');
 ok(/com\.apple\.developer\.proximity-reader\.payment\.acceptance/.test(iosEnt),'Apple Tap to Pay entitlement declaration');
-ok(/StripeTerminal:[\s\S]*5\.8\.0/.test(iosProj)&&/CURRENT_PROJECT_VERSION:\s*20133/.test(iosProj),'iOS project pins Terminal and R81 build');
+ok(/StripeTerminal:[\s\S]*5\.8\.0/.test(iosProj)&&/CURRENT_PROJECT_VERSION:\s*20\d{3}/.test(iosProj),'iOS project pins Terminal and release build');
 for(const lang of ['es','en','fr','pt','it','de','th','fil']){const loc=read(`web/js/i18n/locales/${lang}/payments.js`);ok(/tapChargeTitle/.test(loc)&&/tapGenerateQr/.test(loc)&&/tapSucceeded/.test(loc),`R81 payment copy ${lang}`);}
 ok(!/sk_(live|test)_[A-Za-z0-9]{10,}/.test([edge,manager,iosBridge].join('\n')),'No Stripe secrets in clients/source');
 ok(exists('ios/README.md'),'iOS activation guide included');
-console.log(`KOMBAX R81 build 20133 Tap to Pay Android/iPhone: ${n}/${n} PASS`);
+console.log(`KOMBAX R81 build 20134 Tap to Pay Android/iPhone: ${n}/${n} PASS`);

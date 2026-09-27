@@ -1,0 +1,191 @@
+{
+  "brand": "KOMBAX",
+  "collections": [
+    {
+      "id": "club",
+      "title": "Poner en marcha y dirigir un club",
+      "subtitle": "De la constitución al cuidado diario de las personas y los documentos.",
+      "audience": "Clubes, escuelas y equipos de gestión",
+      "pdf": "./assets/guides/collections/KOMBAX_CLUB.pdf",
+      "source_topics": [
+        "r1001-a1",
+        "r1001-a2",
+        "r1001-a5",
+        "r1001-b1",
+        "r1001-b2",
+        "r1001-b3"
+      ],
+      "chapters": [
+        "Crear un club o entidad deportiva",
+        "Vida y obligaciones anuales del club",
+        "Personal técnico, voluntariado y profesiones del deporte",
+        "Menores y entorno seguro",
+        "Datos, imagen y comunicaciones",
+        "Seguros y responsabilidad"
+      ]
+    },
+    {
+      "id": "federacion",
+      "title": "Federaciones, licencias e interclubs",
+      "subtitle": "Oficialidad, participación y encuentros entre clubes en una sola guía.",
+      "audience": "Clubes, federaciones, participantes y organizadores",
+      "pdf": "./assets/guides/collections/KOMBAX_FEDERACION.pdf",
+      "source_topics": [
+        "r1001-a3",
+        "r1001-a4",
+        "r1001-c2",
+        "r1001-c4",
+        "r1001-c7"
+      ],
+      "chapters": [
+        "Federaciones y oficialidad",
+        "Licencias deportivas",
+        "El interclub",
+        "Combates y participantes",
+        "Deportistas extranjeros"
+      ]
+    },
+    {
+      "id": "eventos",
+      "title": "Organizar un evento de principio a fin",
+      "subtitle": "Preparación, seguridad, público, colaboradores y cierre del evento.",
+      "audience": "Clubes, promotores y equipos de organización",
+      "pdf": "./assets/guides/collections/KOMBAX_EVENTOS.pdf",
+      "source_topics": [
+        "r1001-c1",
+        "r1001-c3",
+        "r1001-c5",
+        "r1001-c6",
+        "r1001-c8",
+        "r1001-d1",
+        "r1001-d2"
+      ],
+      "chapters": [
+        "Clasificar y planificar un evento de deportes de contacto",
+        "Recinto y autorizaciones",
+        "Salud y seguridad del deportista en el evento",
+        "Venta de entradas y control de acceso",
+        "Patrocinio y colaboraciones",
+        "Expediente del organizador",
+        "Después del evento"
+      ]
+    }
+  ],
+  "territories": [
+    {
+      "id": "r1001-t01",
+      "title": "Ficha territorial — Andalucía",
+      "territory": "Andalucía",
+      "pdf": "./assets/guides/public-r100-1/T01_ANDALUCIA.pdf"
+    },
+    {
+      "id": "r1001-t02",
+      "title": "Ficha territorial — Aragón",
+      "territory": "Aragón",
+      "pdf": "./assets/guides/public-r100-1/T02_ARAGON.pdf"
+    },
+    {
+      "id": "r1001-t03",
+      "title": "Ficha territorial — Principado de Asturias",
+      "territory": "Asturias",
+      "pdf": "./assets/guides/public-r100-1/T03_ASTURIAS.pdf"
+    },
+    {
+      "id": "r1001-t04",
+      "title": "Ficha territorial — Illes Balears",
+      "territory": "Illes Balears",
+      "pdf": "./assets/guides/public-r100-1/T04_ILLES_BALEARS.pdf"
+    },
+    {
+      "id": "r1001-t05",
+      "title": "Ficha territorial — Canarias",
+      "territory": "Canarias",
+      "pdf": "./assets/guides/public-r100-1/T05_CANARIAS.pdf"
+    },
+    {
+      "id": "r1001-t06",
+      "title": "Ficha territorial — Cantabria",
+      "territory": "Cantabria",
+      "pdf": "./assets/guides/public-r100-1/T06_CANTABRIA.pdf"
+    },
+    {
+      "id": "r1001-t07",
+      "title": "Ficha territorial — Castilla-La Mancha",
+      "territory": "Castilla-La Mancha",
+      "pdf": "./assets/guides/public-r100-1/T07_CASTILLA_LA_MANCHA.pdf"
+    },
+    {
+      "id": "r1001-t08",
+      "title": "Ficha territorial — Castilla y León",
+      "territory": "Castilla y León",
+      "pdf": "./assets/guides/public-r100-1/T08_CASTILLA_Y_LEON.pdf"
+    },
+    {
+      "id": "r1001-t09",
+      "title": "Ficha territorial — Cataluña",
+      "territory": "Cataluña",
+      "pdf": "./assets/guides/public-r100-1/T09_CATALUNA.pdf"
+    },
+    {
+      "id": "r1001-t10",
+      "title": "Ficha territorial — Comunitat Valenciana",
+      "territory": "Comunitat Valenciana",
+      "pdf": "./assets/guides/public-r100-1/T10_COMUNITAT_VALENCIANA.pdf"
+    },
+    {
+      "id": "r1001-t11",
+      "title": "Ficha territorial — Extremadura",
+      "territory": "Extremadura",
+      "pdf": "./assets/guides/public-r100-1/T11_EXTREMADURA.pdf"
+    },
+    {
+      "id": "r1001-t12",
+      "title": "Ficha territorial — Galicia",
+      "territory": "Galicia",
+      "pdf": "./assets/guides/public-r100-1/T12_GALICIA.pdf"
+    },
+    {
+      "id": "r1001-t13",
+      "title": "Ficha territorial — Comunidad de Madrid",
+      "territory": "Madrid",
+      "pdf": "./assets/guides/public-r100-1/T13_MADRID.pdf"
+    },
+    {
+      "id": "r1001-t14",
+      "title": "Ficha territorial — Región de Murcia",
+      "territory": "Murcia",
+      "pdf": "./assets/guides/public-r100-1/T14_MURCIA.pdf"
+    },
+    {
+      "id": "r1001-t15",
+      "title": "Ficha territorial — Comunidad Foral de Navarra",
+      "territory": "Navarra",
+      "pdf": "./assets/guides/public-r100-1/T15_NAVARRA.pdf"
+    },
+    {
+      "id": "r1001-t16",
+      "title": "Ficha territorial — País Vasco / Euskadi",
+      "territory": "País Vasco",
+      "pdf": "./assets/guides/public-r100-1/T16_PAIS_VASCO.pdf"
+    },
+    {
+      "id": "r1001-t17",
+      "title": "Ficha territorial — La Rioja",
+      "territory": "La Rioja",
+      "pdf": "./assets/guides/public-r100-1/T17_LA_RIOJA.pdf"
+    },
+    {
+      "id": "r1001-t18",
+      "title": "Ficha territorial — Ceuta",
+      "territory": "Ceuta",
+      "pdf": "./assets/guides/public-r100-1/T18_CEUTA.pdf"
+    },
+    {
+      "id": "r1001-t19",
+      "title": "Ficha territorial — Melilla",
+      "territory": "Melilla",
+      "pdf": "./assets/guides/public-r100-1/T19_MELILLA.pdf"
+    }
+  ],
+  "reader_help": "Elige el tema de tu decisión y contrasta los datos que dependan de tu territorio, federación, recinto o aseguradora."
+}

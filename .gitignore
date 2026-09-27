@@ -21,3 +21,6 @@ LOCAL_RELEASE_SIGNING/*.jks
 LOCAL_RELEASE_SIGNING/*.keystore
 LOCAL_RELEASE_SIGNING/*.p12
 LOCAL_RELEASE_SIGNING/*.pfx
+
+# KOMBAX private editorial products (owner package only; never publish in Git/web assets)
+artifacts/manuals/

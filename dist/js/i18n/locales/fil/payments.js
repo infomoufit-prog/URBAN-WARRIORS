@@ -23,7 +23,7 @@ export default {
   "guide": "Gabay sa payments at SEPA",
   "assist": "Humingi ng tulong sa KOMBAX Assist",
   "guideHint": "Integrated guide para sa Club, Federation, Brand at Event organizer.",
-  "direct": "Direct Charges: ang bayad ay pag-aari ng connected account ng identity na nagbebenta o nagbibigay ng serbisyo.",
+  "direct": "Pinoproseso ang bayad sa account ng negosyong nagbebenta ng produkto o nagbibigay ng serbisyo.",
   "security": "Hindi iniimbak ng KOMBAX ang buong IBAN at hindi humihingi ng banking credentials sa chat.",
   "mandates": "Active mandates",
   "immediateNote": "Card ang gamit ng Showcase at Ticketing para sa agarang confirmation. Hindi instant ang SEPA.",

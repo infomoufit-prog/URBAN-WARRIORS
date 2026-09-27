@@ -9,6 +9,7 @@ import { summarizeFinance, groupFinance } from '../core/finance-math.js';
 import { migrationAssistBanner, openMigrationPreparation } from './customer-operations.js';
 import { contentTranslationAttrs, prewarmUserContentTranslations } from '../i18n/user-content-translation.js';
 import { paymentCenterSummaryHtml, bindPaymentCenter, openPaymentCenter } from './payments-center.js';
+import { openFinanceContext } from './finance-context.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 const opts=(rows,label)=>rows.map(r=>({value:r.id,label:label(r)}));
@@ -114,7 +115,7 @@ export async function renderFinance(){
     const pendingValidation=payments.filter(p=>p.estado_validacion==='pendiente');
     const validated=payments.filter(p=>p.estado_validacion==='validado');
     const collected=validated.reduce((sum,p)=>sum+Number(p.importe||0),0);
-    const actions=`${canTariff?'<button class="btn btn-ghost" id="new-tariff">Nueva tarifa</button>':''}${canGenerate?'<button class="btn btn-primary" id="generate-fees">Generar cuotas</button>':''}`;
+    const actions=`${!portal?`<button class="btn btn-ghost" id="finance-context-r84">${esc(t('prepilot.financeContext'))}</button>`:''}${canTariff?'<button class="btn btn-ghost" id="new-tariff">Nueva tarifa</button>':''}${canGenerate?'<button class="btn btn-primary" id="generate-fees">Generar cuotas</button>':''}`;
     const tariffRows=tariffs.map(t=>`<tr><td><strong ${contentTranslationAttrs({contentId:t.id,contentType:'club_tariff',fieldName:'name',sourceLocale:t.source_locale||t.idioma||'',visibility:'tenant'})}>${esc(t.nombre)}</strong><br><small ${contentTranslationAttrs({contentId:t.id,contentType:'club_tariff',fieldName:'description',sourceLocale:t.source_locale||t.idioma||'',visibility:'tenant'})}>${esc(t.descripcion||'')}</small></td><td>${money(t.importe)}</td><td>${money(t.matricula)}</td><td>${esc(t.periodicidad)}</td><td>${badge(t.activa?'Activa':'Inactiva',t.activa?'ok':'neutral')}</td><td>${canTariff?`<div class="row-actions"><button class="btn btn-ghost btn-sm edit-tariff" data-id="${esc(t.id)}">Editar</button><button class="btn btn-danger btn-sm delete-tariff" data-id="${esc(t.id)}">Eliminar</button></div>`:''}</td></tr>`);
     const matchesFeeFilter=f=>portal||(
       (!financeFilters.year||String(f.periodo||'').slice(0,4)===String(financeFilters.year))&&
@@ -169,6 +170,7 @@ export async function renderFinance(){
     }
 
     if(!portal)bindPaymentCenter(document.querySelector('#main-view'),{subjectType:'club',subjectId:state.session.club_id,onRefresh:renderFinance,assistContext:{clubId:state.session.club_id,onBack:renderFinance}});
+    document.getElementById('finance-context-r84')?.addEventListener('click',()=>openFinanceContext({subjectType:'club',subjectId:state.session.club_id}));
 
     const financeLoaded=Math.max(fees.length,payments.length,receipts.length,account.length,detail.length);
     if(financeLoaded>=financeLimit&&financeLimit<500){const more=document.createElement('div');more.className='load-more-wrap';more.innerHTML='<button class="btn btn-ghost" id="load-more-finance">Cargar más histórico financiero</button>';document.getElementById('main-view')?.appendChild(more);document.getElementById('load-more-finance')?.addEventListener('click',()=>{financeLimit=Math.min(500,financeLimit+100);renderFinance();});}

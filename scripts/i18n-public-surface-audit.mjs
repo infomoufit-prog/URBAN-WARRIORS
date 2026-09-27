@@ -9,7 +9,7 @@ const spanish=/[áéíóúüñ¿¡]|(?:Condiciones|Privacidad|Eliminar|Segurida
 const unresolved=[];let audited=0;
 for(const file of files){
   const html=fs.readFileSync(path.join(root,file),'utf8');
-  assert.match(html,/public-page\.js\?v=2013[2-9]-i18n-rb02/,`${file} must load current public-page i18n`);
+  assert.match(html,/public-page\.js\?v=20\d{3}-i18n-rb02/,`${file} must load current public-page i18n`);
   const values=[];let m;const re=/>\s*([^<>]{2,700}?)\s*</g;
   while((m=re.exec(html))){const v=m[1].replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();if(v&&!v.includes('{{')&&!/^\W*$/.test(v))values.push(v);}
   for(const v of new Set(values)){if(!spanish.test(v))continue;if(/^[^\s]+@kombax\.es$/i.test(v))continue;audited++;if(localizeSystemText(v,'en')===v)unresolved.push({file,value:v});}

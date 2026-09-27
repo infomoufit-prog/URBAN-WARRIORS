@@ -12,8 +12,8 @@ const config=read('web/config.js');
 const sw=read('web/service-worker.js');
 const gradle=read('android/app/build.gradle');
 
-test('R76 formalizado como build 20133',()=>{has(config,"r81-tap-to-pay");has(config,'build: 20133');has(sw,'kombax-build-20133');has(gradle,'versionCode 20133')});
-test('index carga realmente la hoja Social Discovery',()=>has(index,'./css/kombax-social.css?v=20133'));
+test('R76 permanece en la release acumulativa',()=>{const b=Number(config.match(/build:\s*(\d+)/)?.[1]||0),a=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);if(b<20134||a!==b)throw new Error('Release no monotónica');has(sw,`kombax-build-${b}`)});
+test('index carga realmente la hoja Social Discovery',()=>{if(!/\.\/css\/kombax-social\.css\?v=20\d{3}/.test(index))throw new Error('Falta CSS Social versionado')});
 test('Discovery recibe una capa visual dedicada, no el modal genérico',()=>{has(mod,"wrap.classList.add('kx-discovery-layer')");has(css,'.kx-discovery-layer{');has(css,'.kx-discovery-modal{')});
 test('workspace elimina la superficie gris plana',()=>{has(css,'radial-gradient(circle at 13% 8%,rgba(241,58,55,.17)');has(css,'linear-gradient(155deg,#0c1015 0%,#07090c 48%,#050608 100%)')});
 test('filtros tienen superficie premium y foco Social',()=>{has(css,'.kx-discovery-filters{');has(css,'border-color:rgba(241,58,55,.55)');has(css,'background:linear-gradient(135deg,#ff7a35,#f13a37)')});

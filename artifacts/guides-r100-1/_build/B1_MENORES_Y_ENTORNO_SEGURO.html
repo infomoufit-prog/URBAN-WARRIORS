@@ -1,0 +1,482 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Menores y entorno seguro</title><style>
+@page{size:A4;margin:19mm 16mm 18mm 16mm}
+@page cover{size:A4;margin:0}
+*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{margin:0;font-family:Arial,"Helvetica Neue",sans-serif;color:#17181c;font-size:9.5pt;line-height:1.55;background:#fff}
+a{color:#980019;text-decoration:none;word-break:break-word}p{margin:0 0 2.6mm}strong{font-weight:700}hr{border:0;border-top:1px solid #ddd;margin:6mm 0}
+ul,ol{margin:0 0 3mm;padding-left:6mm}li{margin:.8mm 0}table{border-collapse:collapse;width:100%;font-size:8.1pt;margin:3mm 0 5mm;page-break-inside:auto}tr{page-break-inside:avoid}th{background:#101116;color:#fff;text-align:left;padding:2mm}td{border-bottom:1px solid #dedede;padding:1.7mm 2mm;vertical-align:top}tr:nth-child(even) td{background:#fafafa}blockquote{margin:3mm 0;padding:2.8mm 4mm;border-left:3px solid #d00626;background:#fff3f5;page-break-inside:avoid}code{font-family:Consolas,monospace;font-size:8pt;background:#f4f4f4;padding:0 .6mm}pre{background:#f4f4f4;padding:3mm;white-space:pre-wrap}
+h1,h2,h3,h4{font-family:Arial,"Helvetica Neue",sans-serif;page-break-after:avoid;color:#101116}h1{font-size:24pt;line-height:1.04;text-transform:uppercase;border-bottom:3px solid #d00626;padding-bottom:2.5mm;margin:0 0 6mm}h2{font-size:16pt;line-height:1.15;border-left:4px solid #d00626;padding-left:3mm;margin:8mm 0 3mm}h3{font-size:12pt;color:#850014;margin:5mm 0 2mm}h4{font-size:10pt;margin:4mm 0 1.5mm}.cover{page:cover;position:relative;width:210mm;height:297mm;background:#06070a;color:#fff;overflow:hidden;break-after:page}.cover-bg{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(6,7,10,.18),rgba(6,7,10,.45) 40%,rgba(6,7,10,.95) 78%,#06070a 100%),url('file:///mnt/data/kombax_r91_work/project/web/assets/brand-heroes/hero-guides.webp');background-size:cover;background-position:center}.cover-red{position:absolute;left:0;top:0;width:5mm;height:297mm;background:#d00626;box-shadow:0 0 24px rgba(255,0,48,.7)}.cover-top{position:absolute;left:16mm;right:15mm;top:15mm;display:flex;align-items:center;gap:4mm}.cover-top img{width:16mm;height:16mm;object-fit:contain}.brand{font-weight:800;font-size:17pt;letter-spacing:.2em}.brand small{display:block;font-size:6pt;letter-spacing:.3em;color:#c7c7c7;margin-top:1.3mm}.edition{margin-left:auto;text-align:right;font-weight:700;font-size:7pt;line-height:1.45;letter-spacing:.15em;text-transform:uppercase;color:#f1f1f1}.cover-main{position:absolute;left:16mm;right:15mm;top:142mm}.kicker{display:inline-block;background:#d00626;padding:1.6mm 3mm;font-weight:800;font-size:7pt;letter-spacing:.18em;text-transform:uppercase}.code{font-size:51pt;font-weight:900;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.85);margin:5mm 0 2mm}.title{font-size:31pt;line-height:1.02;font-weight:900;text-transform:uppercase;max-width:174mm}.subtitle{margin-top:5mm;padding-left:4mm;border-left:2px solid #d00626;font-size:10pt;line-height:1.45;color:#e3e3e3;max-width:165mm}.cover-meta{position:absolute;left:16mm;right:15mm;bottom:28mm;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:3mm}.cover-meta div{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);padding:3mm}.cover-meta b{display:block;color:#ff5d73;font-size:6pt;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1mm}.cover-meta span{font-size:7.6pt;line-height:1.35}.cover-foot{position:absolute;left:16mm;right:15mm;bottom:10mm;padding-top:3mm;border-top:1px solid rgba(255,255,255,.2);font-size:6.2pt;line-height:1.45;color:#a9a9a9}.toc{break-after:page}.toc .eyebrow{color:#d00626;font-size:7pt;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.toc h1{margin-top:2mm}.toc ol{list-style:none;padding:0}.toc li{padding:1.6mm 0;border-bottom:1px solid #e8e8e8}.toc a{color:#17181c;font-weight:700}.toc .note{margin-top:5mm;padding:3mm;border-left:3px solid #d00626;background:#f6f6f6;color:#5c5c5c;font-size:7.6pt}.tag{display:inline-block;border-radius:2px;padding:.3mm 1.4mm;font-size:6.6pt;font-weight:700;white-space:nowrap}.legal{background:#c9001b;color:#fff}.adm{background:#1f4e79;color:#fff}.fed{background:#6f42c1;color:#fff}.rec{background:#b35c00;color:#fff}.bp{background:#2e7d32;color:#fff}.kx{background:#16171b;color:#fff}.prof{background:#8a6d00;color:#fff}.pending{background:#fff3cd;color:#704500;font-weight:700;padding:0 1mm}.product-strip{margin:0 0 6mm;padding:3mm 4mm;background:#101116;color:#fff;border-left:4px solid #d00626}.product-strip strong{color:#ff6077}.manual-price{font-size:20pt;font-weight:900;color:#d00626}.manual-badge{display:inline-block;background:#d00626;color:#fff;padding:1mm 2mm;font-weight:800;font-size:7pt;text-transform:uppercase;letter-spacing:.12em}
+</style></head><body><section class="cover"><div class="cover-bg"></div><div class="cover-red"></div>
+      <div class="cover-top"><img src="file:///mnt/data/kombax_r91_work/project/web/assets/brand/kombax-symbol-red.png"><div class="brand">KOMBAX<small>FROM HYPE TO HISTORY</small></div><div class="edition">Guías profesionales<br>Edición R100.1</div></div>
+      <div class="cover-main"><div class="kicker">KOMBAX GUÍAS</div><div class="code">B1</div><div class="title">Menores y entorno seguro</div><div class="subtitle">Qué tiene que tener en marcha un club de deportes de contacto que entrena o compite con menores, y cómo organizarlo sin convertirlo en papel mojado.</div></div>
+      <div class="cover-meta"><div><b>Para quién</b><span>Clubes, escuelas, federaciones y organizadores con deportistas menores de 18 años</span></div><div><b>Revisión</b><span>22/09/2026</span></div><div><b>Edición</b><span>R100.1 · KOMBAX</span></div></div>
+      <div class="cover-foot">Información general y herramientas de trabajo. Comprueba siempre la fuente oficial vigente antes de actuar. KOMBAX no sustituye asesoramiento jurídico, fiscal, laboral, asegurador o administrativo individualizado.</div>
+    </section><section class="toc"><div class="eyebrow">KOMBAX · índice operativo</div><h1>Menores y entorno seguro</h1><ol><li><a href="#antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</a></li><li><a href="#1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</a></li><li><a href="#2-a-qui-n-va-dirigida">2. A quién va dirigida</a></li><li><a href="#3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</a></li><li><a href="#4-el-marco-que-se-aplica">4. El marco que se aplica</a></li><li><a href="#5-procedimiento-paso-a-paso">5. Procedimiento paso a paso</a></li><li><a href="#6-adaptar-la-pr-ctica-deportiva-al-menor">6. Adaptar la práctica deportiva al menor</a></li><li><a href="#7-participar-tratar-datos-y-usar-la-imagen-tres-autorizaciones-distintas">7. Participar, tratar datos y usar la imagen: tres autorizaciones distintas</a></li><li><a href="#8-documentaci-n-qu-es-obligatorio-y-qu-depende">8. Documentación: qué es obligatorio y qué depende</a></li><li><a href="#9-qui-n-interviene">9. Quién interviene</a></li><li><a href="#10-errores-frecuentes">10. Errores frecuentes</a></li><li><a href="#11-caso-pr-ctico">11. Caso práctico</a></li><li><a href="#12-checklist-operativo">12. Checklist operativo</a></li><li><a href="#13-evidencias-que-conservar">13. Evidencias que conservar</a></li><li><a href="#14-qu-cambia-seg-n-el-territorio-y-la-federaci-n">14. Qué cambia según el territorio y la federación</a></li><li><a href="#15-si-hay-actividad-econ-mica-cobro-o-contrataci-n">15. Si hay actividad económica, cobro o contratación</a></li><li><a href="#16-cu-ndo-pedir-ayuda">16. Cuándo pedir ayuda</a></li><li><a href="#17-fuentes-comentadas">17. Fuentes comentadas</a></li><li><a href="#18-verificado-hasta-y-comprueba-justo-antes-de-actuar">18. Verificado hasta y comprueba justo antes de actuar</a></li></ol><div class="note">Las etiquetas distinguen obligación legal, requisito administrativo o federativo, condición del recinto, buena práctica y recomendación KOMBAX. Si un dato aparece pendiente, no lo conviertas en requisito hasta verificarlo en la fuente competente.</div></section><h2 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h2>
+<p>Si tu club tiene grupos de menores de forma regular, estas cuatro cosas no son opcionales:</p>
+<ol type="1">
+<li><strong>Certificado negativo del Registro Central de Delincuentes Sexuales</strong> de todas las personas que tienen trato habitual con los menores, cobren o no. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Un protocolo de actuación</strong> frente a la violencia, aplicado y revisado. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Una persona designada como Delegado o Delegada de protección</strong>, conocida por los chicos y chicas y por las familias. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Saber qué hacer si alguien detecta indicios de violencia</strong>: comunicarlo de inmediato a quien corresponde. <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ol>
+<p>Todo lo demás de esta guía sirve para que esas cuatro piezas funcionen de verdad en un gimnasio donde hay contacto físico, pesajes, vestuarios, viajes y redes sociales.</p>
+<h2 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h2>
+<p>Un club de boxeo, kick, muay thai, judo, lucha o MMA con grupos infantiles y juveniles tiene una particularidad que no tiene un club de ajedrez: el contacto físico forma parte del deporte. Se corrige una guardia tocando el brazo, se hace un pesaje, se comparte tatami y vestuario, se viaja a campeonatos. Eso no es un problema en sí mismo, pero obliga a que las reglas del club sean claras y conocidas, precisamente para que el contacto normal del deporte no se confunda con otra cosa y para que cualquier abuso se detecte pronto.</p>
+<p>Esta guía te ayuda a:</p>
+<ul>
+<li>saber si tu entidad está dentro del supuesto de “actividad habitual con menores”;</li>
+<li>poner en marcha las obligaciones legales mínimas y documentarlas;</li>
+<li>traducirlas a normas concretas de sala, pesaje, vestuario, viajes y comunicación;</li>
+<li>separar bien tres autorizaciones que se suelen mezclar: participar, tratar datos y usar la imagen;</li>
+<li>reaccionar correctamente si aparece una sospecha o una revelación.</li>
+</ul>
+<h2 id="2-a-qui-n-va-dirigida">2. A quién va dirigida</h2>
+<ul>
+<li>Juntas directivas de clubes y escuelas con deportistas menores.</li>
+<li>Entrenadores, monitores, árbitros, jueces y voluntarios que trabajan con ellos.</li>
+<li>Organizadores de eventos, interclubs y campeonatos con categorías de menores.</li>
+<li>Federaciones que quieren dar a sus clubes un marco común.</li>
+</ul>
+<h2 id="3-la-decisi-n-que-tienes-que-tomar">3. La decisión que tienes que tomar</h2>
+<p>La pregunta de partida es sencilla: <strong>¿tu entidad realiza actividad deportiva con menores de forma habitual?</strong></p>
+<ul>
+<li>Si tienes clases, entrenamientos o equipos con menores durante la temporada, la respuesta es sí. Las obligaciones del artículo 48 de la LOPIVI se aplican a tu entidad. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li>Si organizas un evento puntual donde participan menores de otros clubes, tu entidad puede no ser “habitual”, pero los clubes de esos menores sí lo son, y el evento debe ser coherente con sus protocolos. Además, las personas de tu organización que vayan a tener trato directo y continuado con ellos durante el evento plantean la cuestión del certificado (ver apartado 5.1). <strong>[Recomendación KOMBAX: tratar el evento con el mismo estándar]</strong></li>
+</ul>
+<p>La ley no da una cifra de sesiones a partir de la cual algo es “habitual”. Ante la duda, trabaja como si lo fuera: el coste es bajo y el riesgo de quedarte corto es alto. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></p>
+<h2 id="4-el-marco-que-se-aplica">4. El marco que se aplica</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué te exige o te protege</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ley Orgánica 8/2021 (LOPIVI), art. 48</strong></td>
+<td>Las entidades que realizan de forma habitual actividades deportivas o de ocio con menores deben aplicar protocolos de actuación, implantar un sistema de monitorización de su cumplimiento, designar un Delegado o Delegada de protección, evitar que la práctica sea escenario de discriminación y fomentar la participación de los propios menores</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>LOPIVI, art. 57</strong></td>
+<td>Quien accede a profesiones, oficios o actividades que implican contacto habitual con menores, retribuidas o no, debe acreditar mediante certificación negativa del Registro Central de Delincuentes Sexuales que no tiene condenas por delitos contra la libertad e indemnidad sexuales ni por trata de seres humanos</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>LOPIVI, arts. 15 y 16</strong></td>
+<td>Toda persona que advierta indicios de violencia sobre un menor debe comunicarlo de inmediato; el deber es especialmente exigible a quien, por su actividad, tiene encomendado su cuidado, enseñanza o protección</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Ley 39/2022 del Deporte, art. 7</strong></td>
+<td>La práctica deportiva de menores debe ser proporcional a su desarrollo y capacidades; las entidades deben garantizar el cumplimiento de la LOPIVI</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Ley 45/2015 de Voluntariado, art. 8.4</strong></td>
+<td>Los voluntarios en programas con contacto habitual con menores deben aportar certificación negativa por delitos sexuales y de trata</td>
+<td><span class="tag legal">Obligación legal</span> (ley estatal; ver 5.1 sobre leyes autonómicas)</td>
+</tr>
+<tr class="even">
+<td><strong>LO 1/1982, art. 3, y LO 1/1996, art. 4</strong></td>
+<td>Reglas de consentimiento para la imagen de menores y límites que el consentimiento no salva</td>
+<td><span class="tag legal">Obligación legal</span> (ver apartado 7)</td>
+</tr>
+<tr class="odd">
+<td><strong>LOPDGDD (LO 3/2018), art. 7</strong></td>
+<td>Un menor puede consentir el tratamiento de sus datos a partir de los 14 años cuando la base jurídica sea el consentimiento</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td><strong>Protocolos autonómicos y federativos</strong></td>
+<td>Varias comunidades y federaciones han aprobado protocolos marco o trámites propios (adhesión, inscripción del protocolo, modelos)</td>
+<td><span class="tag adm">Requisito administrativo</span> / <span class="tag fed">Requisito federativo</span> — ver ficha T de tu comunidad</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-procedimiento-paso-a-paso">5. Procedimiento paso a paso</h2>
+<h3 id="el-certificado-negativo-persona-a-persona">5.1 El certificado negativo, persona a persona</h3>
+<p><strong>Quién lo necesita.</strong> Toda persona cuya actividad en el club implique trato repetido, directo y regular con menores, no meramente ocasional: entrenadores, monitores, ayudantes, preparadores físicos, fisioterapeutas del club, árbitros y jueces que actúan de forma continuada con categorías de menores, conductores habituales de los desplazamientos, voluntarios. Cobrar o no cobrar no cambia nada. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p><strong>Cómo se obtiene.</strong> Lo expide el Ministerio de Justicia. Es gratuito y se puede solicitar por internet con Cl@ve o certificado electrónico, o de forma presencial. Las entidades cuya actividad implica contacto habitual con menores pueden obtener los certificados de su personal y candidatos con autorización expresa de cada persona, a través del servicio que habilita el Ministerio (la autorización es revocable). <strong><span class="tag adm">Requisito administrativo</span></strong></p>
+<p><strong>Personas de otra nacionalidad.</strong> Según la sede del Ministerio, para ciudadanos de la UE se recaban los antecedentes de España y de su país de nacionalidad. Para otras nacionalidades, <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong>: consulta en la sede electrónica del Ministerio de Justicia qué documentación adicional se exige antes de incorporar a esa persona.</p>
+<p><strong>Cada cuánto renovarlo.</strong> La ley exige acreditarlo para el acceso y el ejercicio. La norma estatal consultada no fija una periodicidad de renovación para clubes. <strong><span class="tag kx">Recomendación KOMBAX</span></strong>: pedirlo al incorporar a cada persona y renovarlo al inicio de cada temporada, dejando constancia de la fecha de comprobación.</p>
+<p><strong>Qué guardar.</strong> No necesitas archivar copias indefinidamente. Lo que sí necesitas es poder demostrar que comprobaste a cada persona antes de que empezara y cuándo. <strong><span class="tag kx">Recomendación KOMBAX</span></strong>: un registro con nombre, función, fecha de comprobación y fecha de la próxima renovación, con acceso restringido a la junta y al Delegado o Delegada de protección. La guía B2 explica cómo tratar estos datos.</p>
+<blockquote>
+<p><strong>Punto de atención.</strong> La ley estatal de voluntariado se aplica a programas de ámbito estatal o supraautonómico; las comunidades autónomas tienen sus propias leyes de voluntariado. Con independencia de cuál aplique, el artículo 57 de la LOPIVI alcanza también a la actividad no retribuida.</p>
+</blockquote>
+<h3 id="el-delegado-o-delegada-de-protección">5.2 El Delegado o Delegada de protección</h3>
+<p><strong>Qué hace, según la ley.</strong> Es la persona a la que los menores pueden acudir para expresar sus inquietudes, se encarga de difundir y hacer cumplir los protocolos y de iniciar las comunicaciones pertinentes cuando se detecta una situación de violencia. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p><strong>Qué perfil necesita.</strong> En la normativa estatal consultada no hemos localizado requisitos de titulación específicos para esta figura en el ámbito deportivo. <strong><span class="pending">PENDIENTE DE VERIFICACIÓN</span></strong>: algunas comunidades y federaciones concretan formación o perfil. Consulta la ficha T de tu comunidad y la normativa de tu federación.</p>
+<p><strong>Criterios prácticos para elegirla.</strong> <strong><span class="tag bp">Buena práctica</span></strong></p>
+<ul>
+<li>Que sea accesible: que los chicos y chicas la conozcan por su nombre y sepan cómo contactar con ella sin pasar por su entrenador.</li>
+<li>Que tenga autonomía suficiente para comunicar una sospecha aunque afecte a alguien de la junta o al entrenador principal.</li>
+<li>Que tenga formación en protección de la infancia y la actualice.</li>
+<li>Que su contacto esté publicado en el club (tablón, web, grupo de familias) y en el material de inicio de temporada.</li>
+</ul>
+<p>En clubes pequeños es habitual que el delegado sea alguien de la junta. Funciona si esa persona no es a la vez quien dirige todos los entrenamientos de menores: si la única vía de queja pasa por la persona de la que quizá quieras quejarte, la figura no cumple su función. <strong><span class="tag bp">Buena práctica</span></strong></p>
+<h3 id="el-protocolo-qué-debe-contener-para-que-sirva">5.3 El protocolo: qué debe contener para que sirva</h3>
+<p>La ley exige aplicar protocolos de actuación. Muchas federaciones y comunidades han publicado protocolos marco que los clubes pueden adoptar o adaptar. Si tu federación o tu comunidad tiene uno, empieza por ahí: adoptarlo te asegura coherencia con quien organiza las competiciones. <strong>[Requisito federativo / administrativo, según el caso]</strong></p>
+<p>Un protocolo útil para un club de contacto responde, como mínimo, a estas preguntas: <strong><span class="tag bp">Buena práctica</span></strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Ejemplo de respuesta que funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¿Qué conductas no se aceptan, de nadie?</td>
+<td>Lista concreta: humillaciones, castigos físicos, comentarios sobre el cuerpo o el peso, mensajes privados fuera de canales del club, etc.</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se corrige la técnica cuando implica tocar?</td>
+<td>Se explica antes lo que se va a hacer, en zonas técnicas y a la vista del grupo</td>
+</tr>
+<tr class="odd">
+<td>¿Quién puede estar en el vestuario?</td>
+<td>Ningún adulto a solas con un menor; normas para los grupos mixtos y para el uso de móviles</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se hacen los pesajes?</td>
+<td>Con ropa adecuada, en espacio reservado, con dos adultos presentes y sin fotos</td>
+</tr>
+<tr class="odd">
+<td>¿Cómo se comunica el club con los menores?</td>
+<td>Por canales grupales del club, con familias informadas; nada de mensajería privada uno a uno</td>
+</tr>
+<tr class="even">
+<td>¿Qué pasa en los viajes?</td>
+<td>Autorizaciones, reparto de habitaciones, ratio de adultos, adultos de ambos sexos cuando el grupo es mixto</td>
+</tr>
+<tr class="odd">
+<td>¿Qué hace quien detecta algo?</td>
+<td>A quién se dirige, en qué plazo, qué no debe hacer (interrogar, confrontar, prometer secreto)</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se revisa el protocolo?</td>
+<td>Quién comprueba que se cumple (la “monitorización” que exige la ley), cada cuánto y cómo se deja constancia</td>
+</tr>
+</tbody>
+</table>
+<h3 id="la-monitorización-la-parte-que-casi-todos-olvidan">5.4 La monitorización: la parte que casi todos olvidan</h3>
+<p>El artículo 48 no se conforma con tener un protocolo: exige un sistema para comprobar que se cumple. <strong><span class="tag legal">Obligación legal</span></strong> La ley no dice cómo tiene que ser ese sistema. Una forma sencilla y demostrable: <strong>[Plantilla de trabajo KOMBAX]</strong></p>
+<ul>
+<li>Revisión trimestral por parte del Delegado o Delegada: certificados al día, formación del personal, incidencias recibidas, cambios de instalaciones o de horarios que afecten a vestuarios o a supervisión.</li>
+<li>Una breve acta de cada revisión, archivada.</li>
+<li>Revisión anual del protocolo con la junta, incorporando lo aprendido.</li>
+</ul>
+<h3 id="cuando-aparece-una-sospecha-o-una-revelación">5.5 Cuando aparece una sospecha o una revelación</h3>
+<p>El deber de comunicar es inmediato y alcanza a cualquier persona que advierta indicios. Para entrenadores y monitores es especialmente exigible. <strong><span class="tag legal">Obligación legal</span></strong></p>
+<p>Lo que conviene tener decidido de antemano: <strong><span class="tag bp">Buena práctica</span></strong></p>
+<ol type="1">
+<li><strong>Escuchar sin interrogar.</strong> Dejar que el menor cuente lo que quiera, sin preguntas sugestivas, sin juzgar y sin prometer que se guardará el secreto.</li>
+<li><strong>Proteger.</strong> Si hay riesgo inmediato, garantizar su seguridad y llamar al 112.</li>
+<li><strong>Comunicar.</strong> Informar al Delegado o Delegada de protección y seguir el circuito del protocolo. Según la situación, la comunicación irá a los servicios sociales, a las fuerzas y cuerpos de seguridad o a la fiscalía. <strong><span class="tag prof">Requiere profesional</span></strong> si hay dudas sobre el destinatario.</li>
+<li><strong>Anotar.</strong> Escribir lo antes posible lo que se ha oído o visto, con fecha y hora, sin interpretaciones.</li>
+<li><strong>No investigar por cuenta propia</strong> ni confrontar a la persona señalada. Eso corresponde a quien tiene competencia para hacerlo.</li>
+<li><strong>Preservar la confidencialidad</strong> y limitar la información a quien la necesita.</li>
+</ol>
+<p>El protocolo de tu federación o de tu comunidad puede fijar un circuito concreto y teléfonos de referencia. Tenlos a mano en el propio protocolo del club.</p>
+<h2 id="6-adaptar-la-pr-ctica-deportiva-al-menor">6. Adaptar la práctica deportiva al menor</h2>
+<p>La Ley del Deporte exige que la práctica de los menores sea proporcional a su desarrollo personal y a sus capacidades físicas, psíquicas y emocionales. <strong><span class="tag legal">Obligación legal</span></strong> En deportes de contacto, eso se concreta sobre todo en las normas de cada federación: categorías de edad y peso, tiempos de asalto, protecciones obligatorias, tipo de contacto permitido, reconocimientos médicos. <strong><span class="tag fed">Requisito federativo</span></strong></p>
+<p>Lo que el club controla directamente: <strong><span class="tag bp">Buena práctica</span></strong></p>
+<ul>
+<li><strong>Peso.</strong> No fomentar bajadas rápidas de peso para dar una categoría. No comentar el peso o el cuerpo delante del grupo.</li>
+<li><strong>Sparring.</strong> Emparejamientos por nivel y peso, con intensidad pactada y supervisión.</li>
+<li><strong>Golpes en la cabeza y conmociones.</strong> Retirar de la actividad ante cualquier síntoma y no volver sin valoración médica. La guía C5 desarrolla este punto.</li>
+<li><strong>Carga de entrenamiento.</strong> Coherente con la edad, sin que la competición condicione todo.</li>
+</ul>
+<h2 id="7-participar-tratar-datos-y-usar-la-imagen-tres-autorizaciones-distintas">7. Participar, tratar datos y usar la imagen: tres autorizaciones distintas</h2>
+<p>Este es el error más frecuente de la antigua versión de muchas hojas de inscripción: una sola firma para todo.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Autorización</th>
+<th>Para qué sirve</th>
+<th>Quién la da</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Participación</strong></td>
+<td>Que el menor entrene, compita o viaje con el club</td>
+<td>Madre, padre o tutor legal (y, según la edad, con la opinión del propio menor)</td>
+</tr>
+<tr class="even">
+<td><strong>Datos personales</strong></td>
+<td>Tratar sus datos para gestionar la actividad (inscripción, licencia, salud imprescindible)</td>
+<td>Casi siempre la base no es el consentimiento sino la propia relación con el club; cuando sí lo sea, desde los 14 años puede consentir el propio menor. Ver guía B2</td>
+</tr>
+<tr class="odd">
+<td><strong>Imagen</strong></td>
+<td>Fotografiar o grabar y, sobre todo, <strong>publicar</strong></td>
+<td>Si el menor tiene madurez suficiente, él mismo; si no, su representante legal por escrito, con conocimiento previo del Ministerio Fiscal según la LO 1/1982</td>
+</tr>
+</tbody>
+</table>
+<p>Dos reglas que no admiten atajos: <strong><span class="tag legal">Obligación legal</span></strong></p>
+<ul>
+<li>Cualquier uso de la imagen o el nombre de un menor en medios que pueda perjudicar su honra o reputación, o que sea contrario a sus intereses, es una intromisión ilegítima <strong>aunque haya consentimiento</strong> del menor o de su familia (LO 1/1996, art. 4.3).</li>
+<li>Autorizar la participación no autoriza la publicación. Son finalidades distintas.</li>
+</ul>
+<p><strong><span class="tag kx">Recomendación KOMBAX</span></strong> para redes del club: publicar imágenes de grupo antes que individuales, evitar nombre completo más cara más localización, no publicar nunca pesajes, vestuarios, lesiones ni momentos de derrota que puedan exponer al menor, y retirar de inmediato cualquier imagen cuando lo pida la familia o el propio menor.</p>
+<p>En eventos, las familias pueden hacer fotos para uso personal. Publicarlas en redes abiertas ya es otra cosa y requiere el consentimiento de las personas que aparecen, según la AEPD. Es buena práctica avisarlo con carteles en el evento. <strong><span class="tag bp">Buena práctica</span></strong> (criterio AEPD)</p>
+<h2 id="8-documentaci-n-qu-es-obligatorio-y-qu-depende">8. Documentación: qué es obligatorio y qué depende</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Documento</th>
+<th>Estado</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Registro de certificados negativos comprobados (persona, función, fecha)</td>
+<td>Imprescindible para demostrar el cumplimiento</td>
+<td><span class="tag legal">Obligación legal</span> (la acreditación) + <span class="tag kx">Recomendación KOMBAX</span> (el formato)</td>
+</tr>
+<tr class="even">
+<td>Protocolo de actuación aprobado por la entidad</td>
+<td>Obligatorio</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="odd">
+<td>Designación del Delegado o Delegada de protección y su difusión</td>
+<td>Obligatorio</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+<tr class="even">
+<td>Actas de monitorización del protocolo</td>
+<td>Forma de demostrar el sistema de monitorización</td>
+<td><span class="tag legal">Obligación legal</span> (el sistema) + <span class="tag kx">Recomendación KOMBAX</span> (las actas)</td>
+</tr>
+<tr class="odd">
+<td>Código de conducta para personal, familias y deportistas</td>
+<td>Recomendable; algunos protocolos autonómicos o federativos lo piden</td>
+<td><span class="tag bp">Buena práctica</span> / ver ficha T</td>
+</tr>
+<tr class="even">
+<td>Autorizaciones de participación, datos e imagen separadas</td>
+<td>Necesarias para operar con orden</td>
+<td><span class="tag legal">Obligación legal</span> en lo relativo a imagen y datos</td>
+</tr>
+<tr class="odd">
+<td>Adhesión o inscripción del protocolo ante la administración o la federación</td>
+<td>Depende de la comunidad y la federación</td>
+<td><span class="tag adm">Requisito administrativo</span> / <span class="tag fed">Requisito federativo</span></td>
+</tr>
+<tr class="even">
+<td>Registro de formación del personal en protección</td>
+<td>Recomendable y útil como evidencia</td>
+<td><span class="tag bp">Buena práctica</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-qui-n-interviene">9. Quién interviene</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quién</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Junta directiva</td>
+<td>Aprueba el protocolo, designa al delegado, garantiza los certificados</td>
+</tr>
+<tr class="even">
+<td>Delegado o Delegada de protección</td>
+<td>Punto de contacto, difusión, cumplimiento y comunicaciones</td>
+</tr>
+<tr class="odd">
+<td>Personal técnico y voluntariado</td>
+<td>Cumplir el protocolo y comunicar indicios</td>
+</tr>
+<tr class="even">
+<td>Familias</td>
+<td>Conocer el protocolo y el canal; autorizar lo que corresponda</td>
+</tr>
+<tr class="odd">
+<td>Federación</td>
+<td>Protocolos, normas de categorías y, en su caso, delegados federativos</td>
+</tr>
+<tr class="even">
+<td>Comunidad autónoma</td>
+<td>Protocolos marco, trámites propios, servicios sociales</td>
+</tr>
+<tr class="odd">
+<td>Ministerio de Justicia</td>
+<td>Registro Central de Delincuentes Sexuales</td>
+</tr>
+<tr class="even">
+<td>Servicios sociales, fuerzas de seguridad, fiscalía</td>
+<td>Destinatarios de las comunicaciones según el caso</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-errores-frecuentes">10. Errores frecuentes</h2>
+<ul>
+<li><strong>“Tenemos el protocolo de la federación colgado en la web.”</strong> Sin delegado conocido, sin formación y sin revisión, no hay protocolo aplicado.</li>
+<li><strong>Pedir el certificado solo a los entrenadores con contrato.</strong> La ley no distingue entre retribuido y voluntario.</li>
+<li><strong>El delegado es el entrenador principal de todos los grupos.</strong> El canal pierde su sentido.</li>
+<li><strong>Una sola autorización para participar, fotos y datos.</strong> Mezcla finalidades y bases jurídicas distintas.</li>
+<li><strong>Fotos del pesaje para “subir el cartel”.</strong> Nunca con menores.</li>
+<li><strong>Grupos de mensajería con menores sin familias ni club dentro, o mensajes privados del entrenador.</strong> Es justo el tipo de canal que un protocolo debe evitar.</li>
+<li><strong>Ante una revelación, llamar a la familia de la persona señalada “para aclararlo”.</strong> Contamina el caso y puede poner al menor en riesgo.</li>
+</ul>
+<h2 id="11-caso-pr-ctico">11. Caso práctico</h2>
+<p><em>Supongamos que</em> un club de kick boxing de 120 socios tiene dos grupos infantiles (8–11 años) y uno juvenil (12–17). Da clases tres entrenadores: uno contratado, uno autónomo que factura al club y una exalumna de 19 años que ayuda como voluntaria los sábados. El club va a llevar a seis juveniles a un campeonato autonómico con noche de hotel.</p>
+<p><strong>Qué debe tener resuelto antes de la temporada:</strong></p>
+<ul>
+<li>Certificado negativo de los tres, incluida la voluntaria y el autónomo. La forma de relación con el club no cambia la obligación.</li>
+<li>Delegada de protección: la junta designa a la vocal que no entrena, con formación específica, y publica su contacto.</li>
+<li>Protocolo: adopta el protocolo marco de su comunidad o su federación y lo adapta con las normas de sala, pesaje y vestuario del apartado 5.3.</li>
+</ul>
+<p><strong>Qué debe preparar para el viaje:</strong></p>
+<ul>
+<li>Autorización de participación y desplazamiento de cada familia, separada de la de imagen.</li>
+<li>Reparto de habitaciones sin adultos compartiendo habitación con menores; dos adultos acompañantes como mínimo, de ambos sexos si el grupo es mixto. <strong><span class="tag bp">Buena práctica</span></strong></li>
+<li>Información médica imprescindible, custodiada por un adulto responsable y no compartida en el grupo de mensajería.</li>
+<li>Normas de uso de móviles en el hotel.</li>
+</ul>
+<p><strong>Qué no debe hacer:</strong> publicar en redes la foto del pesaje de un juvenil “para animar” o crear un grupo privado del entrenador con los seis chicos.</p>
+<h2 id="12-checklist-operativo">12. Checklist operativo</h2>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Certificado negativo comprobado de cada persona con trato habitual</td>
+<td>Secretaría / Delegado</td>
+<td>Registro de comprobaciones</td>
+<td>Antes de empezar; cada temporada</td>
+</tr>
+<tr class="even">
+<td>Delegado o Delegada designado y difundido</td>
+<td>Junta</td>
+<td>Acta de designación; contacto publicado</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="odd">
+<td>Protocolo aprobado y adaptado a sala, pesaje, vestuario, viajes</td>
+<td>Junta + Delegado</td>
+<td>Protocolo firmado y fechado</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="even">
+<td>Personal formado en protección</td>
+<td>Delegado</td>
+<td>Registro de formación</td>
+<td>Anual</td>
+</tr>
+<tr class="odd">
+<td>Monitorización realizada</td>
+<td>Delegado</td>
+<td>Actas trimestrales</td>
+<td>Trimestral</td>
+</tr>
+<tr class="even">
+<td>Autorizaciones separadas (participación / datos / imagen)</td>
+<td>Secretaría</td>
+<td>Formularios firmados</td>
+<td>Al inscribir</td>
+</tr>
+<tr class="odd">
+<td>Canal de comunicación con menores y familias definido</td>
+<td>Junta</td>
+<td>Norma escrita</td>
+<td>Inicio de temporada</td>
+</tr>
+<tr class="even">
+<td>Requisitos autonómicos y federativos comprobados</td>
+<td>Delegado</td>
+<td>Nota con fuente y fecha</td>
+<td>Inicio de temporada</td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-evidencias-que-conservar">13. Evidencias que conservar</h2>
+<ul>
+<li>Registro de comprobación de certificados (sin copias innecesarias).</li>
+<li>Protocolo vigente y versiones anteriores con fecha.</li>
+<li>Designación del delegado y prueba de su difusión.</li>
+<li>Actas de monitorización y de revisión anual.</li>
+<li>Registro de formación.</li>
+<li>Autorizaciones de participación, datos e imagen.</li>
+<li>Registro confidencial de comunicaciones realizadas, con acceso muy restringido. <strong><span class="tag prof">Requiere profesional</span></strong> para decidir plazos de conservación en casos concretos.</li>
+</ul>
+<h2 id="14-qu-cambia-seg-n-el-territorio-y-la-federaci-n">14. Qué cambia según el territorio y la federación</h2>
+<p>Lo que puede cambiar de una comunidad a otra: protocolos marco propios, trámites de adhesión o de inscripción del protocolo, perfil del delegado, servicios de referencia para comunicar, leyes autonómicas de voluntariado. Lo que puede cambiar de una federación a otra: categorías, contacto permitido, protecciones, reconocimientos médicos y protocolos propios.</p>
+<p>Consulta la ficha T de tu comunidad. En esta edición se han localizado protocolos o normas propias, entre otras, en Andalucía (T01), Canarias (T05), Castilla y León (T08), Cataluña (T09), Comunitat Valenciana (T10), Madrid (T13, para sus instalaciones), Navarra (T15) y País Vasco (T16, ley de infancia). Cada ficha indica el estado de verificación de ese dato.</p>
+<h2 id="15-si-hay-actividad-econ-mica-cobro-o-contrataci-n">15. Si hay actividad económica, cobro o contratación</h2>
+<p>Campus de verano, clases particulares a menores, viajes con cuota o eventos con entrada no cambian las obligaciones de esta guía, pero amplían quién entra en ellas: monitores de campus, personal de hostelería contratado para un campus, empresas de transporte habituales. Si contratas un servicio que implica trato habitual con tus menores, pide al proveedor que acredite el cumplimiento del artículo 57 respecto de su personal. <strong><span class="tag kx">Recomendación KOMBAX</span></strong></p>
+<h2 id="16-cu-ndo-pedir-ayuda">16. Cuándo pedir ayuda</h2>
+<ul>
+<li>Ha habido una revelación o una sospecha y no sabes a quién comunicarla o cómo proteger al menor mientras tanto. Aquí la prioridad es el menor: servicios sociales, 112 si hay riesgo, y <strong><span class="tag prof">Requiere profesional</span></strong>.</li>
+<li>La persona señalada es alguien con peso en el club.</li>
+<li>Organizas un campus, una concentración o un viaje internacional con menores.</li>
+<li>Tu federación y tu comunidad tienen protocolos que no encajan entre sí.</li>
+</ul>
+<p>En los tres últimos casos, KOMBAX Consultoría puede ayudarte a ordenar requisitos, documentos y responsables antes de la actividad.</p>
+<h2 id="17-fuentes-comentadas">17. Fuentes comentadas</h2>
+<ul>
+<li><strong>LOPIVI (LO 8/2021).</strong> La norma central. Los artículos 47 y 48 son los específicos del deporte y el ocio; el 57 regula el certificado; los 15 y 16, el deber de comunicar. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347">BOE</a></li>
+<li><strong>Ley 39/2022 del Deporte, art. 7.</strong> Conecta la práctica deportiva de menores con la LOPIVI. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2022-24430">BOE</a></li>
+<li><strong>Sede del Ministerio de Justicia — Certificado de Delitos de Naturaleza Sexual.</strong> Cómo pedirlo, canales, autorización a entidades, nacionales de la UE. <a href="https://sede.mjusticia.gob.es/tramites/certificado-registro-central">Sede</a></li>
+<li><strong>AEPD, FAQ sobre el certificado negativo.</strong> Confirma que alcanza a actividades retribuidas o no. <a href="https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1053-sobre-certificado-negativo-de-delitos-de-naturaleza-sexual">AEPD</a></li>
+<li><strong>Ley 45/2015 de Voluntariado, art. 8.4.</strong> Requisito para voluntarios en programas con menores. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-11072">BOE</a></li>
+<li><strong>LO 1/1982, art. 3, y LO 1/1996, art. 4.</strong> Imagen de menores. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1982-11196">LO 1/1982</a> · <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1996-1069">LO 1/1996</a></li>
+<li><strong>AEPD, imágenes en eventos con menores.</strong> Uso doméstico frente a publicación. <a href="https://www.aepd.es/preguntas-frecuentes/10-menores-y-educacion/FAQ-1004-se-pueden-tomar-imagenes-o-grabar-videos-en-eventos-escolares">AEPD</a></li>
+</ul>
+<h2 id="18-verificado-hasta-y-comprueba-justo-antes-de-actuar">18. Verificado hasta y comprueba justo antes de actuar</h2>
+<p><strong>Verificado hasta:</strong> 22/09/2026.</p>
+<p><strong>Comprueba justo antes de actuar:</strong></p>
+<ul>
+<li>La sede del Ministerio de Justicia: canales, autorización a entidades y requisitos para personas de otras nacionalidades.</li>
+<li>El protocolo vigente de tu federación y de tu comunidad autónoma (ficha T).</li>
+<li>La normativa de categorías, contacto y reconocimiento médico de tu federación para la temporada en curso.</li>
+</ul>
+<hr />
+<p><em>KOMBAX Guías · B1 · Verificado hasta 22/09/2026 · Información general; no sustituye asesoramiento profesional individualizado.</em></p>
+</body></html>

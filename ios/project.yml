@@ -17,7 +17,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: es.kombax.app
         MARKETING_VERSION: 2.0.0
-        CURRENT_PROJECT_VERSION: 20133
+        CURRENT_PROJECT_VERSION: 20144
         SWIFT_VERSION: 6.0
         CODE_SIGN_ENTITLEMENTS: KombaxIOS/KombaxIOS.entitlements
     info:

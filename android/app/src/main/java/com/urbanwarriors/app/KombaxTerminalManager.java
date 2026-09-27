@@ -1,6 +1,7 @@
 package com.urbanwarriors.app;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ public final class KombaxTerminalManager implements TerminalListener, TapToPayRe
 
     private static final String TAG = "KombaxTerminal";
     private final Context appContext;
-    private EventSink sink;
+    private final EventSink sink;
     private volatile String connectionToken = "";
     private volatile ConnectionTokenCallback pendingTokenCallback;
     private String saleId = "";
@@ -107,7 +108,7 @@ public final class KombaxTerminalManager implements TerminalListener, TapToPayRe
 
     private void connectAndProcess() {
         try {
-            boolean simulated = false;
+            boolean simulated = (appContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
             EasyConnectConfiguration config = new EasyConnectConfiguration.TapToPayEasyConnectConfiguration(
                 new DiscoveryConfiguration.TapToPayDiscoveryConfiguration(simulated),
                 new ConnectionConfiguration.TapToPayConnectionConfiguration(

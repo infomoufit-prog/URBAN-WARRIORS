@@ -43,7 +43,7 @@ test('Current release stays cumulative beyond R79 build 20130',()=>{const m=conf
 test('Service worker release stays cumulative beyond R79',()=>{const m=sw.match(/kombax-build-(\d+)/);assert.ok(m&&Number(m[1])>=20130);});
 test('Android release stays cumulative beyond R79',()=>{const m=gradle.match(/versionCode\s+(\d+)/);assert.ok(m&&Number(m[1])>=20130);has(mainActivity,'KOMBAXApp/2.0.0-rc.13/');});
 test('Health release stays cumulative beyond R79',()=>{const m=health.match(/build:(\d+)/);assert.ok(m&&Number(m[1])>=20130);});
-test('App shell cache-busters do not regress to build 20129',()=>{not(index,'v=20129');assert.ok(/v=2013\d/.test(index));});
+test('App shell cache-busters do not regress to build 20129',()=>{not(index,'v=20129');assert.ok(/v=20\d{3}/.test(index));});
 test('R79 inventory includes Finance, Admin, legal/support and residual Events copy',()=>{for(const token of ['FINANZAS','PRIVACIDAD','Solicitud','Cartel oficial'])assert.ok(texts.some(x=>x.includes(token)),`Missing ${token}`);});
 test('R79 includes long-form copy as well as actions',()=>{assert.ok(texts.some(x=>x.length>250));assert.ok(texts.some(x=>x==='Activar'));});
 let passed=0;for(const [name,fn] of tests){try{fn();console.log(`✓ ${name}`);passed++;}catch(e){console.error(`✗ ${name}`);console.error(e.message);}}

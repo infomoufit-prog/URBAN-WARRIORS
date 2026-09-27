@@ -1,0 +1,708 @@
+{
+  "intro": "Empieza por la guía de tu perfil y sigue los capítulos en el orden que te resulte útil. Cada apartado explica qué vas a conseguir, los pasos dentro de KOMBAX, un ejemplo habitual y una comprobación final. La aplicación muestra opciones según la identidad seleccionada, el rol, los permisos y los servicios activos. Si no ves una opción, comprueba el contexto y consulta con la persona que administra la entidad antes de repetir la operación.",
+  "guides": [
+    {
+      "id": "club",
+      "title": "Usar KOMBAX para gestionar un club",
+      "audience": "Dirección, coordinación y equipo del club",
+      "lead": "Aprende a organizar personas, clases, cobros, comunicación, eventos y equipo desde Mi Club. Cada capítulo parte de una tarea real y termina con una comprobación para trabajar con seguridad.",
+      "chapters": [
+        {
+          "title": "Entrar y elegir el contexto correcto",
+          "steps": [
+            "Accede con tu cuenta y selecciona el club que vas a gestionar. Si perteneces a varios, usa «Cambiar club» antes de editar datos.",
+            "Abre «Mi Club» en la barra lateral. El menú muestra solo las secciones permitidas para tu rol.",
+            "Comprueba tu perfil personal y el perfil público del club antes de publicar en nombre de la entidad.",
+            "Si vas a alternar entre clubes, vuelve al selector y verifica el nombre que figura en la cabecera antes de continuar.",
+            "Abre el inicio de gestión para localizar avisos y tareas pendientes; después entra en la sección concreta, no en un perfil público.",
+            "Cuando una opción falte, revisa si has entrado como Dirección, Coordinación, Monitor, Economía u otro miembro del equipo."
+          ],
+          "note": "La identidad personal, la zona privada del club y su perfil público cumplen funciones distintas.",
+          "purpose": "Antes de empezar una tarea, identifica desde qué club y con qué permisos trabajas. Así evitas que una ficha, cobro o publicación termine asociada a otra entidad.",
+          "example": "Una coordinadora gestiona dos sedes. Antes de dar de alta a un alumno, selecciona el club correspondiente y comprueba que el nombre aparece en la barra lateral.",
+          "check": "El club y el rol visibles coinciden con la tarea que vas a realizar."
+        },
+        {
+          "title": "Organizar personas e inscripciones",
+          "steps": [
+            "En «Mi Club», entra en «Alumnos» para revisar altas, fichas y estado de las personas vinculadas.",
+            "Usa «Solicitudes» para tramitar altas e inscripciones y comprobar en qué actividad queda inscrita cada persona.",
+            "Revisa las autorizaciones y los datos de contacto antes de utilizar una ficha en operaciones del club.",
+            "Abre la solicitud y comprueba identidad, actividad solicitada, edad, contacto y, si procede, tutor responsable. No apruebes un expediente incompleto.",
+            "Cuando aceptes una plaza, revisa la ficha resultante y su vinculación al grupo. Comprueba si la invitación de acceso está pendiente o completada.",
+            "Usa los filtros o el buscador para detectar si la persona ya existe antes de crear una segunda ficha."
+          ],
+          "note": "El acceso a datos de menores y familias depende del rol y de las autorizaciones aplicables.",
+          "purpose": "El alta de una persona atraviesa solicitud, revisión y ficha. Mantener esas etapas claras evita duplicados y accesos equivocados.",
+          "example": "Una familia solicita plaza para un menor. El club comprueba los datos del tutor, asigna el grupo y revisa qué autorizaciones faltan antes de confirmar la incorporación.",
+          "check": "La persona aparece una sola vez, en el grupo correcto y con su estado de acceso reconocible."
+        },
+        {
+          "title": "Preparar clases, grupos y asistencia",
+          "steps": [
+            "Configura el catálogo de actividades y crea los grupos que utilizará el equipo.",
+            "Programa las sesiones y comprueba calendario, grupo, monitor y participantes.",
+            "Tras la sesión, registra asistencia y seguimiento; revisa progreso con los permisos de tu rol.",
+            "Antes de programar, verifica disciplina, nivel, aforo, horario y responsable del grupo para que la inscripción tenga un destino claro.",
+            "Si cambia una sesión, actualiza el calendario y comunica el cambio a las personas afectadas antes de registrar asistencia.",
+            "Al terminar, contrasta presentes y ausentes, registra incidencias con el nivel de detalle necesario y deja el seguimiento para el rol autorizado."
+          ],
+          "note": "El monitor ve un menú más centrado en sus alumnos, grupos y jornada.",
+          "purpose": "El catálogo define qué ofrece el club; grupos y sesiones convierten esa oferta en una agenda operativa. La asistencia cierra el ciclo de cada clase.",
+          "example": "El grupo de iniciación cambia de sala el jueves. Coordinación actualiza la sesión, avisa al grupo y el monitor registra la asistencia en la nueva ubicación.",
+          "check": "La sesión muestra hora, grupo y responsable correctos; la asistencia queda guardada sin personas duplicadas."
+        },
+        {
+          "title": "Controlar economía y avisos",
+          "steps": [
+            "En «Finanzas» revisa cuotas, cargos, pagos y los datos financieros visibles para tu rol.",
+            "Usa «Avisos de cobro» para localizar cobros pendientes y comprueba el estado antes de comunicarlo a una familia.",
+            "Guarda justificantes y revisa los informes disponibles antes del cierre de mes o temporada.",
+            "Antes de emitir un cargo, comprueba concepto, período, destinatario e importe. Una cuota del mes anterior no debe confundirse con la actual.",
+            "Distingue un pago pendiente de uno confirmado. Si el método está aún en configuración o verificación, no lo presentes como operativo.",
+            "Filtra la deuda y abre el movimiento concreto antes de enviar un aviso; registra la respuesta o conciliación según las herramientas disponibles."
+          ],
+          "note": "El rol Economía tiene un acceso más limitado que Dirección o Coordinación.",
+          "purpose": "Finanzas reúne lo que se ha cargado, lo que se ha cobrado y lo que sigue pendiente. Revisa primero el resumen y después el detalle que explica cada cifra.",
+          "example": "Al cerrar el mes, Economía detecta tres cuotas pendientes. Abre cada cargo, comprueba si existe pago reciente y solo entonces prepara el recordatorio correspondiente.",
+          "check": "Las cifras del resumen coinciden con los movimientos revisados y cada aviso se refiere al cargo correcto."
+        },
+        {
+          "title": "Comunicar y mantener documentos",
+          "steps": [
+            "Prepara comunicaciones para la audiencia correcta y revisa su contenido antes de enviarlas.",
+            "Usa Comunidad para la conversación interna y KOMBAX Social para la actividad pública habilitada.",
+            "Guarda material y documentos en la sección correspondiente, con nombres reconocibles y permisos apropiados.",
+            "Define primero quién debe recibir el aviso: equipo, grupo, familias, alumnado o público general. Relee el texto con esa audiencia en mente.",
+            "Adjunta documentos y material desde su sección y comprueba título, versión y permisos antes de compartir un enlace.",
+            "Tras publicar o enviar, revisa la vista final y las respuestas. Si necesitas corregir algo, hazlo en el canal donde se difundió."
+          ],
+          "note": "Una publicación pública no sustituye una comunicación privada del club.",
+          "purpose": "Las comunicaciones privadas, la comunidad del club y las publicaciones públicas tienen audiencias diferentes. Elegir bien el canal protege el contexto de cada mensaje.",
+          "example": "Un cambio de horario se comunica al grupo afectado. Un logro deportivo puede publicarse en Social solo si el club tiene permiso y la imagen está autorizada.",
+          "check": "El mensaje aparece en el canal correcto, con destinatarios y adjuntos revisados."
+        },
+        {
+          "title": "Federación y licencias",
+          "steps": [
+            "Abre «Federaciones y licencias» dentro de Mi Club para revisar la relación federativa y sus trámites.",
+            "Consulta el estado de cada licencia antes de inscribir a alguien en una actividad que la requiera.",
+            "Distingue las licencias del club de «Mis licencias personales» de tu cuenta.",
+            "Identifica la federación, modalidad y temporada de cada relación antes de revisar licencias.",
+            "Contrasta titular, vigencia y estado cuando una actividad exija licencia; si hay dudas, consulta la federación antes de inscribir.",
+            "Mantén separadas las licencias vinculadas al club y las licencias personales de tu cuenta."
+          ],
+          "note": "Una afiliación no concede a la federación acceso automático a alumnos, finanzas o documentos privados.",
+          "purpose": "La relación federativa y las licencias ayudan a comprobar requisitos de participación. No sustituyen la gestión privada del club ni los trámites de cada persona.",
+          "example": "Antes de apuntar a una competidora a un campeonato, el club revisa su licencia y comprueba que la modalidad y el período son los exigidos por el organizador.",
+          "check": "La participación se tramita con el estado de licencia comprobado y documentado."
+        },
+        {
+          "title": "Gestionar Events, Showcase y Social",
+          "steps": [
+            "En KOMBAX Events explora eventos públicos; si tu rol permite gestión, entra también en «Mis Eventos».",
+            "En Showcase distingue el escaparate público de «Mi Showcase» cuando ese centro privado esté habilitado.",
+            "En KOMBAX Social revisa el perfil que representa la publicación y el público al que va dirigida.",
+            "En Events, distingue la cartelera pública de «Mis Eventos». Crea y revisa la ficha antes de entrar en el centro operativo del evento.",
+            "En Showcase, revisa fotografía, descripción, disponibilidad y condiciones de cada producto antes de mostrarlo al público.",
+            "En Social, confirma qué identidad firma la publicación y comprueba la vista pública y las respuestas después de publicarla."
+          ],
+          "note": "Los botones de gestión aparecen según las capacidades del club y los permisos de la persona.",
+          "purpose": "Events, Showcase y Social sirven para publicar y relacionarse con la comunidad, pero cada producto tiene un recorrido propio de gestión y permisos.",
+          "example": "El club anuncia un interclub: prepara el evento y su cartel; si necesita entradas, revisa la activación de Ticketing. Después comparte la ficha publicada desde Social.",
+          "check": "Cada pieza está publicada en el producto correcto y los enlaces llevan a la ficha específica."
+        },
+        {
+          "title": "Equipo, permisos y configuración",
+          "steps": [
+            "En «Equipo» invita o revisa usuarios y asigna solo las funciones que necesitan.",
+            "Usa «Ámbitos y privacidad» para revisar el alcance de cada tarea cuando esté disponible.",
+            "En «Configuración» comprueba los datos del club; en el perfil público ajusta cómo se presenta en KOMBAX.",
+            "Invita a la persona con su correo correcto y asigna el rol de acuerdo con sus tareas reales. Comprueba si la invitación fue aceptada.",
+            "Revisa los ámbitos y permisos al cambiar funciones o cuando alguien deja el equipo; retira accesos que ya no correspondan.",
+            "Comprueba datos de contacto, ubicación, imagen y presentación pública del club tras cada cambio importante."
+          ],
+          "note": "Los permisos para actuar públicamente en nombre del club se controlan por separado.",
+          "purpose": "El equipo debe disponer del acceso suficiente para trabajar, sin abrir áreas que no necesita. Configuración mantiene los datos comunes de la entidad.",
+          "example": "Una nueva monitora necesita ver sus grupos y registrar asistencia, pero no gestionar cobros. Dirección le concede las funciones de jornada y comprueba su acceso.",
+          "check": "La persona puede realizar su tarea y no ve controles de administración ajenos a su función."
+        },
+        {
+          "title": "Asistencia, migración y ayuda",
+          "steps": [
+            "Abre KOMBAX Assist para consultas de gestión cuando esté disponible para tu rol.",
+            "Usa KOMBAX Migrations para preparar la incorporación de datos existentes y revisar cada paso antes de confirmar.",
+            "Si necesitas conocimiento normativo, abre Recursos KOMBAX; si el caso requiere revisión individual, entra en Consultoría.",
+            "Antes de importar, prepara una copia de los datos originales, comprueba columnas y realiza una revisión de muestra.",
+            "Usa la guía de uso para seguir un recorrido de pantalla; consulta las guías de conocimiento para entender el contexto del sector.",
+            "Cuando un caso tenga consecuencias particulares para el club, plantea la consulta con los datos necesarios y sin exponer información sensible innecesaria."
+          ],
+          "note": "No copies datos sensibles de otros sistemas sin comprobar el destino y el permiso.",
+          "purpose": "Assist, Migrations, Guías y Consultoría resuelven necesidades distintas: orientación dentro de la aplicación, incorporación de datos, aprendizaje y revisión individual.",
+          "example": "El club pasa de una hoja de cálculo a KOMBAX. Revisa varias fichas de muestra, detecta duplicados y valida el resultado antes de trabajar con el conjunto.",
+          "check": "Los datos importados se reconocen en el club correcto y cualquier incidencia queda identificada antes de continuar."
+        },
+        {
+          "title": "Cerrar la jornada y la temporada",
+          "steps": [
+            "Revisa notificaciones, inscripciones, asistencia y recordatorios pendientes.",
+            "Comprueba que las licencias, documentos y responsables de actividades están al día.",
+            "Antes de cambiar de club o cerrar sesión, confirma que la última operación quedó guardada y que el contexto es el correcto.",
+            "Al terminar el día, repasa tareas pendientes, sesiones celebradas, avisos sin leer y respuestas que esperan al club.",
+            "Antes del cierre mensual, compara movimientos financieros, asistencia, licencias y documentos con los responsables de cada área.",
+            "Al cambiar de temporada, revisa grupos, tarifas, responsables, permisos y calendario antes de reutilizar configuraciones."
+          ],
+          "note": "Utiliza el manual premium de gestión de clubes para el marco organizativo más amplio; esta guía explica el uso del software.",
+          "purpose": "Un cierre breve y constante evita que solicitudes, cuotas o mensajes queden sin seguimiento. Al final de temporada conviene revisar también los datos que seguirán vigentes.",
+          "example": "Los viernes, Dirección revisa altas pendientes y cobros; Coordinación comprueba sesiones y licencias. Cada responsable deja resuelta o asignada su siguiente acción.",
+          "check": "No quedan operaciones sin responsable y los datos del nuevo período se han revisado antes de publicarlos."
+        }
+      ]
+    },
+    {
+      "id": "federacion",
+      "title": "Usar KOMBAX como federación",
+      "audience": "Equipo federativo",
+      "lead": "Gestiona afiliaciones, federados, licencias y actividad federativa desde la identidad correcta. Sigue cada expediente desde su solicitud hasta un estado claro.",
+      "chapters": [
+        {
+          "title": "Entrar en Mi Federación",
+          "steps": [
+            "Accede a tu cuenta y selecciona la identidad de Federación.",
+            "Comprueba el nombre público y las personas gestoras antes de actuar en nombre de la entidad.",
+            "Abre el entorno «Mi Federación» y verifica las capacidades mostradas.",
+            "Si gestionas varias entidades, comprueba la federación activa y el estado de tu acceso antes de abrir un expediente."
+          ],
+          "note": "La identidad de Federación es independiente de cualquier club.",
+          "purpose": "La identidad federativa permite trabajar para la entidad, con funciones distintas de una cuenta personal o de un club.",
+          "example": "Una gestora cambia de su cuenta personal a Mi Federación para responder una solicitud recibida por la entidad.",
+          "check": "La cabecera y el perfil público muestran la federación correcta."
+        },
+        {
+          "title": "Clubes y federados",
+          "steps": [
+            "En «Administración federativa» consulta clubes afiliados o relacionados.",
+            "Revisa la relación y su estado antes de tramitar una solicitud.",
+            "Usa «Mis federados» para las personas y operaciones que tu equipo tenga autorizadas.",
+            "Filtra por estado y revisa fecha, responsable y documentación antes de aceptar o devolver una petición."
+          ],
+          "note": "La relación con un club no abre su zona privada de alumnos, finanzas, asistencia ni documentos.",
+          "purpose": "La relación con clubes y federados se consulta desde el ámbito federativo autorizado; cada solicitud debe quedar asociada a la entidad correcta.",
+          "example": "Un club solicita afiliación. El equipo comprueba sus datos y deja constancia de lo que falta antes de resolver.",
+          "check": "La relación muestra un estado comprensible y el club sabe cuál es el siguiente paso."
+        },
+        {
+          "title": "Licencias",
+          "steps": [
+            "Abre «Licencias» para revisar los estados y tareas federativas disponibles.",
+            "Comprueba la persona, modalidad, período y estado antes de emitir o modificar una licencia.",
+            "Distingue esta gestión de «Mis licencias personales», que pertenece a la cuenta individual.",
+            "Cuando falte información, devuelve la tarea al canal federativo correspondiente y evita marcarla como completada."
+          ],
+          "note": "Las condiciones deportivas y administrativas deben consultarse en la norma federativa vigente.",
+          "purpose": "Una licencia tiene titular, modalidad, período y estado. Leer esos cuatro datos evita confundir una solicitud con una habilitación vigente.",
+          "example": "Una licencia figura pendiente de revisión: la federación consulta el expediente y solicita el dato que falta antes de emitirla.",
+          "check": "El estado visible coincide con la tramitación real y con la temporada pertinente."
+        },
+        {
+          "title": "Equipo, calendario y comunicación",
+          "steps": [
+            "Revisa «Equipo de Federación» y concede funciones a las personas responsables.",
+            "Utiliza Calendario y Events cuando esas capacidades estén activas.",
+            "Prepara comunicaciones para la audiencia federativa correcta y conserva el expediente correspondiente.",
+            "Antes de anunciar una competición, comprueba fecha, destinatarios, organizador y permisos de publicación."
+          ],
+          "note": "Los módulos visibles dependen de capacidades y permisos.",
+          "purpose": "Equipo, calendario y comunicación coordinan el trabajo de distintas personas sin mezclar sus responsabilidades.",
+          "example": "La federación crea un aviso para clubes afiliados y lo revisa antes de compartir el evento público.",
+          "check": "El mensaje llega a la audiencia prevista y el equipo conserva una referencia del trámite."
+        },
+        {
+          "title": "Servicios, cobros y asistencia",
+          "steps": [
+            "En «Plan y servicios» revisa lo contratado y lo disponible para la Federación.",
+            "Si los cobros están habilitados, entra en su centro y comprueba el estado de pagos o domiciliaciones.",
+            "Usa KOMBAX Assist o la guía de migración para preparar tareas de incorporación; entra en Consultoría para un caso individual.",
+            "Si una función aparece pendiente, identifica si falta una solicitud, configuración o verificación antes de comunicar su disponibilidad."
+          ],
+          "note": "Una solicitud de Consultoría y una operación federativa son procesos distintos.",
+          "purpose": "Plan y servicios muestra capacidades disponibles; cobros y soporte requieren comprobar qué está activo para la federación.",
+          "example": "Una persona del equipo quiere activar un servicio: revisa el plan, deja preparada la solicitud y espera el estado confirmado.",
+          "check": "La acción realizada y su estado siguiente son visibles para el equipo."
+        }
+      ]
+    },
+    {
+      "id": "marca",
+      "title": "Usar KOMBAX como marca",
+      "audience": "Marca y equipo comercial",
+      "lead": "Presenta la marca, prepara el catálogo y da seguimiento a campañas y colaboraciones. Distingue la propuesta comercial de una venta o acuerdo confirmado.",
+      "chapters": [
+        {
+          "title": "Preparar Mi Marca",
+          "steps": [
+            "Accede a la identidad de Marca y revisa su perfil público.",
+            "Comprueba logo, descripción, equipo gestor y permisos antes de publicar.",
+            "Abre «Business Hub» para ver las operaciones disponibles.",
+            "Revisa la vista pública tras guardar cambios de logo, presentación o contacto; corrige lo que un visitante no entendería."
+          ],
+          "note": "La identidad de Marca se administra separada de las cuentas personales del equipo.",
+          "purpose": "La presencia comercial comienza por una identidad de marca clara y por definir quién puede actuar en su nombre.",
+          "example": "Una marca prepara su ficha antes de contactar con un club y confirma que la propuesta y el responsable están claros.",
+          "check": "El perfil explica qué ofrece la marca y quién gestiona las respuestas."
+        },
+        {
+          "title": "Catálogo y Showcase",
+          "steps": [
+            "Prepara productos o propuestas con imágenes, condiciones y persona responsable.",
+            "Revisa el escaparate público en KOMBAX Showcase antes de compartirlo.",
+            "Comprueba que cada consulta comercial llegue al contexto correcto.",
+            "Antes de publicar, comprueba título, imágenes, descripción, variantes, disponibilidad y condiciones que realmente correspondan."
+          ],
+          "note": "La visibilidad de Showcase depende de la capacidad y del estado del perfil.",
+          "purpose": "Showcase convierte cada producto en una ficha que otra persona debe poder comprender sin pedir aclaraciones básicas.",
+          "example": "La marca incorpora protecciones de entrenamiento y revisa talla, fotografía y estado antes de abrir su escaparate.",
+          "check": "La ficha pública refleja el producto real y conduce al contacto o compra habilitada."
+        },
+        {
+          "title": "Campañas, colaboraciones y patrocinios",
+          "steps": [
+            "En Business Hub abre Campañas para organizar objetivos y materiales.",
+            "Usa Colaboraciones para seguir las propuestas y sus participantes.",
+            "En Patrocinios documenta las condiciones acordadas y revisa las oportunidades disponibles.",
+            "Registra el próximo paso de cada propuesta y revisa el estado antes de presentar una colaboración como cerrada."
+          ],
+          "note": "Verifica los derechos de imagen y las condiciones comerciales antes de publicar material.",
+          "purpose": "Campañas y patrocinios necesitan un objetivo, interlocutor y acuerdo reconocibles para que el equipo pueda seguirlos.",
+          "example": "Una marca propone apoyar una velada. Documenta a quién contactó, qué ofrece y qué queda por confirmar.",
+          "check": "Cada oportunidad tiene estado y persona responsable."
+        },
+        {
+          "title": "Eventos y comunidad",
+          "steps": [
+            "Consulta Events para encontrar actividades relevantes para la marca.",
+            "Usa KOMBAX Social para comunicar desde la identidad correcta cuando tenga permiso de publicación.",
+            "Revisa las relaciones de la marca con clubes, profesionales y competidores antes de presentar una propuesta.",
+            "Comprueba qué permisos de imagen y publicación acompañan una colaboración antes de compartir contenido del evento."
+          ],
+          "note": "Una relación visible no equivale a una autorización para utilizar datos privados.",
+          "purpose": "Events y Social sirven para encontrar y comunicar oportunidades desde la identidad comercial correcta.",
+          "example": "La marca presenta un producto en un evento y enlaza su ficha concreta desde una publicación autorizada.",
+          "check": "La publicación identifica a la marca y lleva al destino previsto."
+        },
+        {
+          "title": "Equipo, métricas y cobros",
+          "steps": [
+            "En «Equipo de Marca» asigna funciones concretas a cada persona gestora.",
+            "Consulta Estadísticas para evaluar actividad de campañas y catálogo.",
+            "Si tu plan habilita cobros, revisa el centro de pagos; usa Plan y servicios para comprobar capacidades.",
+            "Al comparar campañas, usa el mismo período y distingue interés de venta confirmada."
+          ],
+          "note": "Las funciones comerciales dependen del plan y de las capacidades activas.",
+          "purpose": "Equipo y estadísticas ayudan a revisar resultados; cobros solo se utilizan cuando el servicio y su configuración están operativos.",
+          "example": "La responsable compara visitas de dos campañas y revisa si las consultas recibieron respuesta.",
+          "check": "Los datos consultados corresponden al período y la identidad correctos."
+        }
+      ]
+    },
+    {
+      "id": "competidor",
+      "title": "Usar KOMBAX como competidor",
+      "audience": "Deportistas y competidores",
+      "lead": "Construye tu identidad deportiva, comprueba licencias y responde oportunidades con toda la información. Mantén bajo control representación, disponibilidad y privacidad.",
+      "chapters": [
+        {
+          "title": "Crear y cuidar la identidad deportiva",
+          "steps": [
+            "Entra en «Mi Competidor» y revisa tu perfil público y tus disciplinas.",
+            "Actualiza imágenes, presentación y datos deportivos que puedes compartir.",
+            "Comprueba la vista pública antes de enviar tu perfil a otra persona.",
+            "Revisa después de cada cambio cómo ve la ficha alguien que no pertenece a tu club."
+          ],
+          "note": "Competidor es una identidad propia; no se convierte en Perfil Profesional por competir profesionalmente.",
+          "purpose": "Tu perfil deportivo presenta trayectoria y disponibilidad; conviene separar lo público de los datos personales de contacto.",
+          "example": "Una competidora actualiza disciplina y fotografía antes de compartir su perfil con un promotor.",
+          "check": "La ficha pública es fiel a su actividad y no muestra datos que quería reservar."
+        },
+        {
+          "title": "Licencias y disponibilidad",
+          "steps": [
+            "Abre «Mis licencias» para consultar tus registros vinculados.",
+            "En Disponibilidad y Discovery indica cuándo y dónde buscas oportunidades.",
+            "Comprueba que cualquier licencia aplicable esté vigente antes de comprometer una participación.",
+            "Actualiza fechas y zona de disponibilidad cuando cambie tu agenda; revisa el estado de licencia antes de responder."
+          ],
+          "note": "La guía de uso muestra dónde consultar; la validez deportiva se confirma con la federación competente.",
+          "purpose": "Licencias y disponibilidad responden preguntas distintas: si estás habilitado y si puedes aceptar una oportunidad.",
+          "example": "Un combate coincide con un viaje: el competidor ajusta disponibilidad antes de que le lleguen nuevas propuestas.",
+          "check": "Las oportunidades visibles encajan con agenda y requisitos."
+        },
+        {
+          "title": "Competiciones y oportunidades",
+          "steps": [
+            "En «Mis competiciones» prepara la información de tu participación.",
+            "Consulta «Oportunidades de combate» y revisa las condiciones antes de responder.",
+            "Sigue la Fight Card y los detalles de cada evento desde Events cuando aparezcan para ti.",
+            "Guarda o consulta la ficha del evento y espera la confirmación visible antes de anunciar tu participación."
+          ],
+          "note": "Una oportunidad o invitación no confirma por sí sola la participación definitiva.",
+          "purpose": "Cada oportunidad debe leerse completa: fecha, modalidad, organizador, condiciones y pasos para confirmar.",
+          "example": "Recibes una invitación para una velada y compruebas reglas y horario antes de aceptar.",
+          "check": "La participación muestra un estado confirmado y coincide con la Fight Card."
+        },
+        {
+          "title": "Representación y colaboraciones",
+          "steps": [
+            "Revisa solicitudes de Manager y acepta solo el alcance de representación que corresponda.",
+            "Consulta colaboraciones con marcas desde tu entorno.",
+            "Comprueba periódicamente permisos delegados y relaciones activas.",
+            "Si termina una colaboración, revisa la relación activa y solicita retirar el acceso que ya no corresponda."
+          ],
+          "note": "La representación debe ser explícita y revocable.",
+          "purpose": "La representación delega tareas concretas. Conviene conocer el alcance y revisar quién puede actuar por ti.",
+          "example": "Una manager ayuda a responder oportunidades, pero el competidor revisa qué permisos le otorgó.",
+          "check": "Las relaciones activas coinciden con los acuerdos vigentes."
+        },
+        {
+          "title": "Social y privacidad",
+          "steps": [
+            "Usa KOMBAX Social para compartir actividad desde la identidad adecuada.",
+            "Revisa quién puede ver tus publicaciones y datos de contacto.",
+            "Abre Privacidad y soporte cuando necesites revisar el alcance de tus datos.",
+            "Antes de publicar imágenes de terceros o datos de un evento, comprueba autorización y estado de la información."
+          ],
+          "note": "Los datos privados de otro perfil no se heredan por estar relacionado con él.",
+          "purpose": "Social amplifica tu actividad deportiva; la privacidad determina qué parte de tu información acompaña a esa visibilidad.",
+          "example": "Compartes el cartel de una pelea confirmada y enlazas la ficha oficial del evento.",
+          "check": "La publicación y el perfil muestran solo información que decidiste hacer pública."
+        }
+      ]
+    },
+    {
+      "id": "profesional",
+      "title": "Usar KOMBAX como profesional",
+      "audience": "Entrenadores, managers, sanitarios, árbitros y organizadores",
+      "lead": "Organiza servicios, agenda, relaciones y cobros desde Mi actividad. La guía explica qué cambia según tu especialidad y tus permisos.",
+      "chapters": [
+        {
+          "title": "Configurar Mi actividad",
+          "steps": [
+            "Selecciona la identidad Profesional y comprueba la especialidad principal y las secundarias.",
+            "Completa la presentación pública, servicios y disponibilidad que correspondan.",
+            "Revisa las capacidades visibles: una especialidad no concede automáticamente todas las herramientas.",
+            "Presenta servicios y credenciales con alcance preciso; revisa la vista pública antes de aceptar encargos."
+          ],
+          "note": "El Perfil Profesional está separado del Perfil Competidor.",
+          "purpose": "Mi actividad reúne las herramientas de trabajo profesional según especialidad, permisos y servicios activos.",
+          "example": "Un entrenador configura su actividad y comprueba que la oferta visible corresponde a las sesiones que puede impartir.",
+          "check": "La identidad y sus capacidades visibles coinciden con el trabajo real."
+        },
+        {
+          "title": "Operaciones y agenda",
+          "steps": [
+            "Abre «Operaciones profesionales» para las relaciones, clientes, agenda o credenciales habilitadas.",
+            "Registra cada servicio o asignación en el contexto correcto.",
+            "Comprueba las notificaciones y el estado de la relación antes de actuar para otra persona.",
+            "Antes de actuar sobre un cliente o entidad, abre la relación y verifica vigencia, tarea y próxima cita."
+          ],
+          "note": "El alcance de datos depende de la especialidad y de autorizaciones expresas.",
+          "purpose": "La agenda y las relaciones profesionales requieren contexto: para quién trabajas, qué servicio prestas y qué está confirmado.",
+          "example": "Una profesional recibe una asignación nueva y revisa fecha y entidad antes de reservar tiempo.",
+          "check": "La agenda muestra solo compromisos confirmados o claramente pendientes."
+        },
+        {
+          "title": "Entrenador y manager",
+          "steps": [
+            "Como entrenador, organiza clientes y sesiones cuando la capacidad esté disponible.",
+            "Como manager, revisa solicitudes de representación y el alcance aceptado por cada competidor.",
+            "Antes de modificar un dato del representado, confirma que tu autorización sigue activa.",
+            "Registra acuerdos y cambios en la relación adecuada para no atribuir una tarea a otro representado."
+          ],
+          "note": "El manager no obtiene acceso general a la cuenta ni a toda la información privada del competidor.",
+          "purpose": "Entrenador y manager usan herramientas distintas: seguimiento de clientes frente a representación autorizada.",
+          "example": "Una manager recibe dos propuestas para deportistas distintos y responde desde cada relación.",
+          "check": "Cada decisión queda asociada al deportista y permiso correctos."
+        },
+        {
+          "title": "Sanitario, árbitro y promotor",
+          "steps": [
+            "Como sanitario, revisa credenciales y asignaciones; la identidad no abre expedientes clínicos.",
+            "Como árbitro o juez, consulta funciones por asignación de Events.",
+            "Como promotor u organizador, usa Events y el centro de cobros solo si las capacidades correspondientes están habilitadas.",
+            "No uses una asignación como prueba de acceso a información clínica o administrativa que no esté disponible para tu rol."
+          ],
+          "note": "Una credencial profesional y una asignación para un evento son cosas distintas.",
+          "purpose": "Las especialidades reguladas y las asignaciones de evento exigen comprobar credenciales y alcance de trabajo.",
+          "example": "Una árbitra consulta su asignación de una velada y confirma horario y función con el organizador.",
+          "check": "La tarea de evento muestra la función correcta y sus límites."
+        },
+        {
+          "title": "Licencias y finanzas",
+          "steps": [
+            "Consulta «Mis licencias» y, si procede, «Licencias autorizadas» para el ámbito que puedes ver.",
+            "En Finanzas Profesionales registra o revisa cargos, pagos y gastos disponibles.",
+            "Comprueba informes y cobros dentro de Mi actividad, sin mezclarlos con la economía privada de un club.",
+            "Revisa concepto, período, cliente y estado antes de registrar un cobro o interpretar un informe."
+          ],
+          "note": "Algunas secciones financieras dependen del plan o las capacidades.",
+          "purpose": "Las finanzas profesionales deben leerse en su propio ámbito, separadas de las cuentas de clubes o eventos ajenos.",
+          "example": "Un entrenador compara sesiones prestadas con cargos pendientes antes de cerrar el mes.",
+          "check": "Los movimientos corresponden a su actividad y los estados están conciliados."
+        },
+        {
+          "title": "Discovery, marcas y privacidad",
+          "steps": [
+            "Actualiza disponibilidad para que las oportunidades sean pertinentes.",
+            "Revisa propuestas de marcas antes de aceptar una colaboración.",
+            "En Privacidad y soporte controla la información pública y solicita ayuda cuando un permiso no corresponda.",
+            "Antes de aceptar una oferta, comprueba identidad de la otra parte, condiciones y visibilidad de tus datos."
+          ],
+          "note": "La existencia de una relación no amplía automáticamente los permisos.",
+          "purpose": "Discovery y las propuestas comerciales funcionan mejor cuando disponibilidad y perfil están actualizados.",
+          "example": "Una marca propone una colaboración a una profesional, que revisa alcance y permisos antes de responder.",
+          "check": "La relación muestra un estado claro y la información compartida es la necesaria."
+        }
+      ]
+    },
+    {
+      "id": "espectador",
+      "title": "Usar KOMBAX como espectador",
+      "audience": "Personas que exploran la comunidad",
+      "lead": "Descubre Social, Showcase y Events y organiza tus intereses. Aprende a comprobar cada ficha antes de actuar y a dar el paso a otra identidad cuando lo necesites.",
+      "chapters": [
+        {
+          "title": "Empezar con tu cuenta",
+          "steps": [
+            "Crea o abre tu cuenta KOMBAX y entra en la experiencia de Espectador.",
+            "Explora perfiles y decide si más adelante necesitas una identidad especializada.",
+            "Revisa tu perfil personal y las preferencias de privacidad.",
+            "Completa solo la información personal que quieras utilizar y revisa las preferencias antes de interactuar."
+          ],
+          "note": "No necesitas crear un club ni otro perfil para empezar a explorar.",
+          "purpose": "La cuenta de espectador es una puerta de entrada para descubrir KOMBAX y organizar tus intereses.",
+          "example": "Entras para seguir eventos de tu ciudad sin crear una identidad de club.",
+          "check": "Puedes explorar desde tu cuenta y reconoces qué datos son públicos."
+        },
+        {
+          "title": "Social, Showcase y Events",
+          "steps": [
+            "En KOMBAX Social descubre perfiles y contenido; utiliza las interacciones habilitadas.",
+            "En Showcase guarda intereses y solicita información cuando proceda.",
+            "En Events consulta agenda, cartelera, seminarios y detalles públicos.",
+            "Abre la ficha concreta antes de seguir un enlace, preguntar por un producto o comprar entradas."
+          ],
+          "note": "Comprar o publicar puede exigir condiciones de edad, cuenta o capacidad.",
+          "purpose": "Los tres espacios públicos responden a intereses diferentes: conversación, productos y eventos.",
+          "example": "Descubres una velada en Events, consultas al organizador y vuelves después al contenido compartido en Social.",
+          "check": "La información consultada procede de la ficha y el enlace específicos."
+        },
+        {
+          "title": "Guardados, intereses y avisos",
+          "steps": [
+            "Utiliza Guardados para volver a contenido relevante.",
+            "Configura intereses en Events y revisa notificaciones.",
+            "Comprueba siempre los detalles actuales de un evento antes de desplazarte o comprar.",
+            "Cuando cambie un interés, actualízalo y limpia guardados que ya no necesites."
+          ],
+          "note": "Una notificación no reemplaza la información actual del organizador.",
+          "purpose": "Guardados y avisos te ayudan a volver a lo importante, sin sustituir una comprobación final de fecha o disponibilidad.",
+          "example": "Guardas un seminario, recibes un aviso y revisas de nuevo la hora antes de desplazarte.",
+          "check": "Tus intereses y notificaciones reflejan lo que quieres seguir."
+        },
+        {
+          "title": "Límites y siguiente paso",
+          "steps": [
+            "La experiencia de Espectador es privada y de consumo por defecto.",
+            "Si quieres publicar o administrar una entidad, revisa qué perfil corresponde a esa actividad.",
+            "Usa Privacidad y soporte para revisar tu información o pedir ayuda.",
+            "Consulta la guía del nuevo perfil antes de solicitarlo y comprueba qué permisos necesitarás."
+          ],
+          "note": "Las capacidades se muestran según la identidad y el estado de la cuenta.",
+          "purpose": "Si más adelante quieres actuar como deportista, marca o entidad, elige la identidad que representa esa actividad.",
+          "example": "Una espectadora empieza a competir y crea su identidad deportiva sin perder la cuenta personal.",
+          "check": "La nueva actividad se gestiona desde la identidad adecuada."
+        }
+      ]
+    },
+    {
+      "id": "alumno",
+      "title": "Usar KOMBAX como alumno o miembro",
+      "audience": "Alumnos y miembros de un club",
+      "lead": "Consulta tu club, horarios, solicitudes, cuotas y comunicaciones. Aprende a reconocer estados pendientes y a pedir correcciones por el canal adecuado.",
+      "chapters": [
+        {
+          "title": "Entrar en tu club",
+          "steps": [
+            "Accede a la cuenta vinculada a tu club y comprueba que aparece el contexto correcto.",
+            "Abre tu perfil para revisar los datos personales visibles.",
+            "Si perteneces a más de un club, confirma cuál está seleccionado antes de enviar una solicitud.",
+            "Si el acceso aún está pendiente, revisa la invitación y pide al club que confirme tu vinculación."
+          ],
+          "note": "Tu espacio de alumno y los perfiles públicos de KOMBAX son ámbitos distintos.",
+          "purpose": "Tu espacio personal reúne información de la relación con el club; el club seleccionado determina qué horarios y avisos ves.",
+          "example": "Un alumno entra por primera vez y comprueba que aparece el grupo al que fue admitido.",
+          "check": "Tu club, grupo y datos básicos son los esperados."
+        },
+        {
+          "title": "Horarios y grupos",
+          "steps": [
+            "Consulta «Horarios» para ver las sesiones que corresponden a tu inscripción.",
+            "Revisa grupo, día, hora y posibles cambios comunicados por el club.",
+            "Si algo no coincide, utiliza el canal de solicitudes o comunicación del club.",
+            "Antes de asistir, revisa la sesión más próxima y la ubicación si el club utiliza varias salas."
+          ],
+          "note": "El equipo del club gestiona los cambios de grupo y la asistencia.",
+          "purpose": "Horarios muestra la actividad programada para ti; cambios y cancelaciones deben contrastarse con avisos del club.",
+          "example": "La clase del lunes cambia de horario y el alumno revisa el aviso antes de salir.",
+          "check": "Sabes cuándo y dónde es la próxima sesión."
+        },
+        {
+          "title": "Solicitudes y cuotas",
+          "steps": [
+            "Abre «Solicitudes» para enviar o seguir una petición disponible.",
+            "Consulta cuotas y su estado en tu espacio personal.",
+            "Conserva el justificante o la respuesta del club cuando completes un trámite.",
+            "Después de enviar una solicitud, vuelve a su estado y espera respuesta antes de actuar como si estuviera aceptada."
+          ],
+          "note": "No modifiques un pago desde un mensaje externo sin verificarlo en KOMBAX o con el club.",
+          "purpose": "Solicitudes y cuotas tienen estados distintos; leerlos evita suponer que una petición o pago quedó resuelto.",
+          "example": "Pides un cambio de grupo y compruebas si el club lo aprobó antes de asistir al nuevo horario.",
+          "check": "La solicitud y la cuota muestran su estado actual y conservas el justificante necesario."
+        },
+        {
+          "title": "Comunicaciones y perfil",
+          "steps": [
+            "Revisa avisos y comunicaciones del club de forma periódica.",
+            "Mantén actualizados tus datos de contacto permitidos.",
+            "Si necesitas corregir una inscripción o autorización, contacta al equipo responsable.",
+            "Si un dato no puede editarse desde tu cuenta, solicita al club su corrección por el canal correspondiente."
+          ],
+          "note": "Las acciones disponibles cambian según edad, rol y permisos.",
+          "purpose": "Las comunicaciones del club contienen cambios prácticos para tu actividad; tu perfil permite mantener el contacto al día.",
+          "example": "Cambias de teléfono y revisas cómo actualizarlo o a quién comunicarlo.",
+          "check": "El club dispone de una vía de contacto correcta y no quedan avisos importantes sin leer."
+        }
+      ]
+    },
+    {
+      "id": "familia",
+      "title": "Usar KOMBAX como familia",
+      "audience": "Madres, padres y personas responsables",
+      "lead": "Acompaña la actividad de menores vinculados: horarios, autorizaciones, cuotas y comunicación privada con el club.",
+      "chapters": [
+        {
+          "title": "Comprobar el vínculo",
+          "steps": [
+            "Entra con tu cuenta y revisa los menores vinculados a tu familia.",
+            "Confirma que estás en el club y la persona correctos antes de responder una solicitud.",
+            "Si falta un vínculo, solicita al club que revise la inscripción.",
+            "Si gestionas a más de un menor, confirma nombre y club antes de abrir cuotas o autorizaciones."
+          ],
+          "note": "El vínculo familiar determina qué información y acciones puedes ver.",
+          "purpose": "El vínculo familiar delimita la información que puedes consultar y los trámites que puedes completar para una persona menor.",
+          "example": "Una madre consulta dos hijos y selecciona la ficha correcta antes de aceptar una autorización.",
+          "check": "El menor y el club visibles coinciden con el trámite."
+        },
+        {
+          "title": "Horarios y asistencia",
+          "steps": [
+            "Consulta horarios y grupos de la persona vinculada.",
+            "Revisa los avisos sobre cambios de sesión o actividad.",
+            "Contacta al club si detectas una discrepancia en asistencia o calendario.",
+            "Si una ausencia no coincide con lo ocurrido, comunica fecha y sesión para que el equipo la revise."
+          ],
+          "note": "La asistencia la registra el equipo autorizado del club.",
+          "purpose": "Horarios y asistencia permiten acompañar la actividad sin alterar el registro que lleva el club.",
+          "example": "La familia detecta que una clase cancelada aparece como ausencia y envía la referencia concreta al club.",
+          "check": "Sabes cuál es la próxima sesión y cómo pedir una corrección."
+        },
+        {
+          "title": "Solicitudes, autorizaciones y cuotas",
+          "steps": [
+            "Abre Solicitudes para ver trámites pendientes y respuestas.",
+            "Lee con atención las autorizaciones antes de completarlas.",
+            "Consulta cuotas y justificantes en el espacio de familia.",
+            "Comprueba finalidad, persona afectada, vigencia y estado antes de completar un trámite."
+          ],
+          "note": "Las autorizaciones sobre menores deben quedar asociadas a la persona responsable correcta.",
+          "purpose": "Una autorización debe leerse antes de aceptarse; solicitudes y cuotas tienen seguimiento propio.",
+          "example": "El club solicita autorización de imagen para un evento y la familia revisa el alcance antes de decidir.",
+          "check": "La decisión registrada corresponde al menor y documento correctos."
+        },
+        {
+          "title": "Comunicación y privacidad",
+          "steps": [
+            "Utiliza los canales del club para comunicar cambios de contacto o necesidades relevantes.",
+            "Evita compartir datos de menores mediante publicaciones públicas.",
+            "Abre ayuda y privacidad si necesitas corregir información o entender un permiso.",
+            "Revisa quién recibirá tu mensaje y evita adjuntar información sensible si no es necesaria para resolver el caso."
+          ],
+          "note": "KOMBAX Social y la comunidad privada del club tienen audiencias diferentes.",
+          "purpose": "La comunicación sobre menores debe mantenerse en canales privados apropiados y con el mínimo dato necesario.",
+          "example": "La familia comunica un cambio de contacto al club mediante el canal privado.",
+          "check": "La persona responsable confirma que recibió la información pertinente."
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "title": "Usar KOMBAX como media o creador",
+      "audience": "Medios y creadores de contenido",
+      "lead": "Prepara tu identidad de creador, encuentra oportunidades y publica con los permisos adecuados. Cada colaboración debe quedar confirmada antes de anunciarse.",
+      "chapters": [
+        {
+          "title": "Crear la identidad",
+          "steps": [
+            "Desde el acceso global, elige Media / Creador y completa la presentación solicitada.",
+            "Comprueba nombre, descripción, imágenes y persona gestora.",
+            "Revisa el estado del perfil antes de presentarlo como identidad activa.",
+            "Prepara una muestra de trabajo y revisa qué información aparecerá de forma pública."
+          ],
+          "note": "El acceso global muestra este tipo de identidad; sus herramientas concretas dependen del estado y las capacidades.",
+          "purpose": "La identidad de Media/Creador debe explicar tu actividad y estado antes de presentarte ante organizadores.",
+          "example": "Una fotógrafa completa su perfil y comprueba que su especialidad y contacto profesional se entienden.",
+          "check": "La ficha es clara y su estado permite saber qué capacidades están disponibles."
+        },
+        {
+          "title": "Explorar oportunidades",
+          "steps": [
+            "Consulta KOMBAX Events para identificar eventos y organizadores.",
+            "Usa KOMBAX Social para descubrir perfiles y contenidos públicos.",
+            "Antes de proponer una colaboración, revisa las condiciones del organizador y los permisos de publicación.",
+            "Antes de desplazarte o anunciar cobertura, espera confirmación del organizador y consulta las condiciones de acceso."
+          ],
+          "note": "Ver un evento público no concede acceso a sus materiales privados.",
+          "purpose": "Explorar eventos y perfiles ayuda a encontrar oportunidades, pero no equivale a una acreditación.",
+          "example": "Un creador encuentra una velada y contacta con su organizador para solicitar cobertura.",
+          "check": "La autorización y los detalles del evento están confirmados."
+        },
+        {
+          "title": "Publicar y colaborar",
+          "steps": [
+            "Publica solo desde la identidad y la capacidad que la aplicación muestre como habilitadas.",
+            "Confirma derechos de imagen y autorización de las personas que aparezcan en el material.",
+            "Conserva los acuerdos con clubes, marcas u organizadores en el contexto correspondiente.",
+            "Guarda la referencia del permiso y revisa texto, imágenes y destinatarios antes de publicar."
+          ],
+          "note": "No se documentan funciones de producción que aún no aparezcan como operativas en la cuenta.",
+          "purpose": "Publicar material exige comprobar derechos de uso, identidad que firma y acuerdo con las personas implicadas.",
+          "example": "La fotógrafa comparte un álbum autorizado y enlaza la ficha oficial del evento.",
+          "check": "El contenido publicado corresponde al acuerdo y a la audiencia prevista."
+        },
+        {
+          "title": "Equipo y soporte",
+          "steps": [
+            "Revisa las personas gestoras y los permisos asociados a la identidad.",
+            "Comprueba notificaciones y respuestas antes de dar una colaboración por confirmada.",
+            "Solicita soporte si falta una capacidad que crees que debería estar disponible.",
+            "Al incorporar colaboradores, asigna solo las tareas necesarias y revisa los accesos al terminar el proyecto."
+          ],
+          "note": "Tipo de identidad, plan y permisos son dimensiones diferentes.",
+          "purpose": "Equipo y soporte aclaran quién puede gestionar la identidad y cómo resolver una capacidad ausente.",
+          "example": "Un editor ayuda a preparar contenido, mientras la persona gestora conserva la revisión final.",
+          "check": "Cada integrante ve únicamente las funciones de su responsabilidad."
+        }
+      ]
+    }
+  ]
+}

@@ -323,11 +323,12 @@ export const backend={
       await client.signOut();
     }finally{state.session=null;state.setCapabilities([]);try{sessionStorage.removeItem('uw2_platform_admin_session')}catch{}}
   },
-  async registerGlobalAccount({email,password,nombre='',apellidos='',terms=false,privacy=false}){
+  async registerGlobalAccount({email,password,nombre='',apellidos='',terms=false,privacy=false,accountType=''}){
     state.clearError();
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
-    const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global',preferred_locale:getLocale()});
+    const selectedType=['club','competidor','marca','federacion','profesional','media'].includes(accountType)?accountType:'';
+    const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
     if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
     let session=await globalIdentityFromAuth(auth.user);
     const legal=await recordPlatformLegalAcceptance();session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};

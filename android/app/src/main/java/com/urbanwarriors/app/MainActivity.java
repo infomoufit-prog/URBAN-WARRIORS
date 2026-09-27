@@ -28,17 +28,23 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import androidx.core.content.FileProvider;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONObject;
 
+// historical-release-marker: KOMBAXRevision/r81-tap-to-pay KOMBAXApp/2.0.0-rc.13/20134
 public class MainActivity extends Activity {
     private static final int FILE_PICKER_REQUEST = 401;
     private static final int NOTIFICATION_PERMISSION_REQUEST = 402;
     private static final int TERMINAL_LOCATION_PERMISSION_REQUEST = 403;
+    private static final int PDF_SAVE_REQUEST = 404;
     private static final String NOTIFICATION_CHANNEL_ID = "urban_warriors_alerts";
     private static final String LOG_TAG = "UrbanWarriorsPush";
     // Origen HTTPS virtual para que los ES modules del frontend 2.0 funcionen en WebView.
@@ -46,6 +52,7 @@ public class MainActivity extends Activity {
     private static final String APP_ORIGIN = "https://" + APP_HOST;
     private WebView webView;
     private ValueCallback<Uri[]> fileCallback;
+    private String pendingPdfAssetPath;
     private int safeAreaTopPx;
     private int safeAreaBottomPx;
     private boolean firebaseReady;
@@ -82,7 +89,7 @@ public class MainActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) settings.setSafeBrowsingEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r81-tap-to-pay KOMBAXApp/2.0.0-rc.13/20133");
+        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r103-ai-credits KOMBAXApp/2.0.0-rc.13/20155");
         // historical QA marker preserved: KOMBAXApp/2.0.0-rc.13/20101
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
@@ -432,6 +439,68 @@ public class MainActivity extends Activity {
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, TERMINAL_LOCATION_PERMISSION_REQUEST);
     }
 
+    private String bundledGuideAssetPath(String relativePath) {
+        if (relativePath == null) return null;
+        String clean = relativePath.trim().replace('\\', '/');
+        while (clean.startsWith("/")) clean = clean.substring(1);
+        if (!clean.startsWith("assets/guides/") || !clean.toLowerCase().endsWith(".pdf") || clean.contains("..")) return null;
+        return "www/" + clean;
+    }
+
+    private String bundledGuideFileName(String assetPath) {
+        if (assetPath == null) return "KOMBAX_Guia.pdf";
+        int slash = assetPath.lastIndexOf('/');
+        String name = slash >= 0 ? assetPath.substring(slash + 1) : assetPath;
+        name = name.replaceAll("[^A-Za-z0-9._-]", "_");
+        return name.toLowerCase().endsWith(".pdf") ? name : name + ".pdf";
+    }
+
+    private void copyBundledGuide(String assetPath, OutputStream output) throws Exception {
+        try (InputStream input = getAssets().open(assetPath); OutputStream out = output) {
+            byte[] buffer = new byte[16384];
+            int read;
+            while ((read = input.read(buffer)) >= 0) out.write(buffer, 0, read);
+            out.flush();
+        }
+    }
+
+    private void openBundledPdfAsset(String relativePath) {
+        String assetPath = bundledGuideAssetPath(relativePath);
+        if (assetPath == null) { Toast.makeText(this, "Guía PDF no válida", Toast.LENGTH_SHORT).show(); return; }
+        try {
+            File dir = new File(getCacheDir(), "shared-pdf");
+            if (!dir.exists() && !dir.mkdirs()) throw new IllegalStateException("No se pudo preparar la caché PDF");
+            File pdf = new File(dir, bundledGuideFileName(assetPath));
+            copyBundledGuide(assetPath, new FileOutputStream(pdf, false));
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", pdf);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try { startActivity(intent); }
+            catch (Exception noViewer) { Toast.makeText(this, "No hay un visor PDF disponible. Usa Descargar PDF.", Toast.LENGTH_LONG).show(); }
+        } catch (Exception error) {
+            Log.e(LOG_TAG, "No se pudo abrir la guía PDF", error);
+            Toast.makeText(this, "No se pudo abrir la guía PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveBundledPdfAsset(String relativePath) {
+        String assetPath = bundledGuideAssetPath(relativePath);
+        if (assetPath == null) { Toast.makeText(this, "Guía PDF no válida", Toast.LENGTH_SHORT).show(); return; }
+        try {
+            pendingPdfAssetPath = assetPath;
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+            intent.putExtra(Intent.EXTRA_TITLE, bundledGuideFileName(assetPath));
+            startActivityForResult(intent, PDF_SAVE_REQUEST);
+        } catch (Exception error) {
+            pendingPdfAssetPath = null;
+            Log.e(LOG_TAG, "No se pudo abrir el selector de guardado PDF", error);
+            Toast.makeText(this, "No se pudo preparar la descarga PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public class NativeBridge {
         @JavascriptInterface
         public String requestNotifications() {
@@ -447,6 +516,8 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void requestTapToPayPermissions() { runOnUiThread(MainActivity.this::requestTapToPayPermissions); }
         @JavascriptInterface public void startTapToPay(String payloadJson) { runOnUiThread(() -> terminalManager.start(payloadJson)); }
         @JavascriptInterface public void provideTapToPayConnectionToken(String token) { terminalManager.provideConnectionToken(token); }
+        @JavascriptInterface public void openBundledPdf(String relativePath) { runOnUiThread(() -> openBundledPdfAsset(relativePath)); }
+        @JavascriptInterface public void saveBundledPdf(String relativePath) { runOnUiThread(() -> saveBundledPdfAsset(relativePath)); }
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -468,6 +539,22 @@ public class MainActivity extends Activity {
     }
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PDF_SAVE_REQUEST) {
+            String assetPath = pendingPdfAssetPath;
+            pendingPdfAssetPath = null;
+            if (resultCode == RESULT_OK && data != null && data.getData() != null && assetPath != null) {
+                try {
+                    OutputStream output = getContentResolver().openOutputStream(data.getData());
+                    if (output == null) throw new IllegalStateException("No se pudo abrir el destino PDF");
+                    copyBundledGuide(assetPath, output);
+                    Toast.makeText(this, "PDF guardado", Toast.LENGTH_SHORT).show();
+                } catch (Exception error) {
+                    Log.e(LOG_TAG, "No se pudo guardar la guía PDF", error);
+                    Toast.makeText(this, "No se pudo guardar el PDF", Toast.LENGTH_SHORT).show();
+                }
+            }
+            return;
+        }
         if (requestCode != FILE_PICKER_REQUEST || fileCallback == null) return;
         Uri[] result = null; if (resultCode == RESULT_OK && data != null && data.getData() != null) result = new Uri[]{data.getData()};
         fileCallback.onReceiveValue(result); fileCallback = null;

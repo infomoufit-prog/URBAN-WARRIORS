@@ -1,0 +1,5 @@
+KOMBAX PREBLOCK TERRITORIAL MANIFEST VERIFY
+pre_manifest_rows=4355
+pre_manifest_ok=4355
+pre_manifest_status=PASS
+final_manifest_note=final manifest covers this verification log and every package file except the manifest itself

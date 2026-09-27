@@ -1,0 +1,70 @@
+PASS approved source locked: kombax-training-hero-source.png
+PASS approved source locked: kombax-training-card-source.png
+PASS approved source locked: kombax-consulting-hero-source.png
+PASS approved source locked: kombax-guides-hero-source.png
+PASS approved source locked: kombax-guides-card-source.png
+PASS approved source locked: kombax-consulting-card-source.png
+PASS guides hero asset
+PASS guides tablet asset
+PASS guides card asset
+PASS consulting hero asset
+PASS consulting tablet asset
+PASS consulting card asset
+PASS training hero asset
+PASS training tablet asset
+PASS training card asset
+PASS 15 guide Markdown sources
+PASS 01_crear_un_club_o_asociacion_deportiva.md consulting trigger
+PASS 01_crear_un_club_o_asociacion_deportiva.md official sources
+PASS 01_crear_un_club_o_asociacion_deportiva.md limits
+PASS 02_organizar_un_evento_de_deportes_de_contacto.md consulting trigger
+PASS 02_organizar_un_evento_de_deportes_de_contacto.md official sources
+PASS 02_organizar_un_evento_de_deportes_de_contacto.md limits
+PASS 03_organizar_un_interclub.md consulting trigger
+PASS 03_organizar_un_interclub.md official sources
+PASS 03_organizar_un_interclub.md limits
+PASS 04_licencias_deportivas_alta_renovacion_y_gestion.md consulting trigger
+PASS 04_licencias_deportivas_alta_renovacion_y_gestion.md official sources
+PASS 04_licencias_deportivas_alta_renovacion_y_gestion.md limits
+PASS 05_seguros_y_coberturas.md consulting trigger
+PASS 05_seguros_y_coberturas.md official sources
+PASS 05_seguros_y_coberturas.md limits
+PASS 06_menores_en_actividad_y_competicion_deportiva.md consulting trigger
+PASS 06_menores_en_actividad_y_competicion_deportiva.md official sources
+PASS 06_menores_en_actividad_y_competicion_deportiva.md limits
+PASS 07_instalaciones_recintos_y_autorizaciones.md consulting trigger
+PASS 07_instalaciones_recintos_y_autorizaciones.md official sources
+PASS 07_instalaciones_recintos_y_autorizaciones.md limits
+PASS 08_proteccion_de_datos_imagen_y_comunicaciones.md consulting trigger
+PASS 08_proteccion_de_datos_imagen_y_comunicaciones.md official sources
+PASS 08_proteccion_de_datos_imagen_y_comunicaciones.md limits
+PASS 09_ticketing_venta_de_entradas_y_control_de_acceso.md consulting trigger
+PASS 09_ticketing_venta_de_entradas_y_control_de_acceso.md official sources
+PASS 09_ticketing_venta_de_entradas_y_control_de_acceso.md limits
+PASS 10_federaciones_y_relaciones_federativas.md consulting trigger
+PASS 10_federaciones_y_relaciones_federativas.md official sources
+PASS 10_federaciones_y_relaciones_federativas.md limits
+PASS 11_deportistas_extranjeros_y_participacion_internacional.md consulting trigger
+PASS 11_deportistas_extranjeros_y_participacion_internacional.md official sources
+PASS 11_deportistas_extranjeros_y_participacion_internacional.md limits
+PASS 12_patrocinio_marcas_y_colaboraciones.md consulting trigger
+PASS 12_patrocinio_marcas_y_colaboraciones.md official sources
+PASS 12_patrocinio_marcas_y_colaboraciones.md limits
+PASS 13_organizacion_de_combates_y_participantes.md consulting trigger
+PASS 13_organizacion_de_combates_y_participantes.md official sources
+PASS 13_organizacion_de_combates_y_participantes.md limits
+PASS 14_documentacion_y_checklist_del_organizador.md consulting trigger
+PASS 14_documentacion_y_checklist_del_organizador.md official sources
+PASS 14_documentacion_y_checklist_del_organizador.md limits
+PASS 15_obligaciones_posteriores_al_evento.md consulting trigger
+PASS 15_obligaciones_posteriores_al_evento.md official sources
+PASS 15_obligaciones_posteriores_al_evento.md limits
+PASS 15 individual PDFs + 1 master
+PASS structured guide index has 15 guides
+PASS first regional layer explicitly Cataluña
+PASS consulting catalog is not live
+PASS consulting seed contains no invented prices
+PASS research verification log
+PASS private training architecture
+PASS master plan preserved
+KOMBAX PREBLOCK DESIGN + CONTENT: 69/69 PASS

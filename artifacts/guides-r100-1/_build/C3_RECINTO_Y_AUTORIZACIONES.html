@@ -1,0 +1,184 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Recinto y autorizaciones</title><style>
+@page{size:A4;margin:19mm 16mm 18mm 16mm}
+@page cover{size:A4;margin:0}
+*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{margin:0;font-family:Arial,"Helvetica Neue",sans-serif;color:#17181c;font-size:9.5pt;line-height:1.55;background:#fff}
+a{color:#980019;text-decoration:none;word-break:break-word}p{margin:0 0 2.6mm}strong{font-weight:700}hr{border:0;border-top:1px solid #ddd;margin:6mm 0}
+ul,ol{margin:0 0 3mm;padding-left:6mm}li{margin:.8mm 0}table{border-collapse:collapse;width:100%;font-size:8.1pt;margin:3mm 0 5mm;page-break-inside:auto}tr{page-break-inside:avoid}th{background:#101116;color:#fff;text-align:left;padding:2mm}td{border-bottom:1px solid #dedede;padding:1.7mm 2mm;vertical-align:top}tr:nth-child(even) td{background:#fafafa}blockquote{margin:3mm 0;padding:2.8mm 4mm;border-left:3px solid #d00626;background:#fff3f5;page-break-inside:avoid}code{font-family:Consolas,monospace;font-size:8pt;background:#f4f4f4;padding:0 .6mm}pre{background:#f4f4f4;padding:3mm;white-space:pre-wrap}
+h1,h2,h3,h4{font-family:Arial,"Helvetica Neue",sans-serif;page-break-after:avoid;color:#101116}h1{font-size:24pt;line-height:1.04;text-transform:uppercase;border-bottom:3px solid #d00626;padding-bottom:2.5mm;margin:0 0 6mm}h2{font-size:16pt;line-height:1.15;border-left:4px solid #d00626;padding-left:3mm;margin:8mm 0 3mm}h3{font-size:12pt;color:#850014;margin:5mm 0 2mm}h4{font-size:10pt;margin:4mm 0 1.5mm}.cover{page:cover;position:relative;width:210mm;height:297mm;background:#06070a;color:#fff;overflow:hidden;break-after:page}.cover-bg{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(6,7,10,.18),rgba(6,7,10,.45) 40%,rgba(6,7,10,.95) 78%,#06070a 100%),url('file:///mnt/data/kombax_r91_work/project/web/assets/brand-heroes/hero-guides.webp');background-size:cover;background-position:center}.cover-red{position:absolute;left:0;top:0;width:5mm;height:297mm;background:#d00626;box-shadow:0 0 24px rgba(255,0,48,.7)}.cover-top{position:absolute;left:16mm;right:15mm;top:15mm;display:flex;align-items:center;gap:4mm}.cover-top img{width:16mm;height:16mm;object-fit:contain}.brand{font-weight:800;font-size:17pt;letter-spacing:.2em}.brand small{display:block;font-size:6pt;letter-spacing:.3em;color:#c7c7c7;margin-top:1.3mm}.edition{margin-left:auto;text-align:right;font-weight:700;font-size:7pt;line-height:1.45;letter-spacing:.15em;text-transform:uppercase;color:#f1f1f1}.cover-main{position:absolute;left:16mm;right:15mm;top:142mm}.kicker{display:inline-block;background:#d00626;padding:1.6mm 3mm;font-weight:800;font-size:7pt;letter-spacing:.18em;text-transform:uppercase}.code{font-size:51pt;font-weight:900;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.85);margin:5mm 0 2mm}.title{font-size:31pt;line-height:1.02;font-weight:900;text-transform:uppercase;max-width:174mm}.subtitle{margin-top:5mm;padding-left:4mm;border-left:2px solid #d00626;font-size:10pt;line-height:1.45;color:#e3e3e3;max-width:165mm}.cover-meta{position:absolute;left:16mm;right:15mm;bottom:28mm;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:3mm}.cover-meta div{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);padding:3mm}.cover-meta b{display:block;color:#ff5d73;font-size:6pt;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1mm}.cover-meta span{font-size:7.6pt;line-height:1.35}.cover-foot{position:absolute;left:16mm;right:15mm;bottom:10mm;padding-top:3mm;border-top:1px solid rgba(255,255,255,.2);font-size:6.2pt;line-height:1.45;color:#a9a9a9}.toc{break-after:page}.toc .eyebrow{color:#d00626;font-size:7pt;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.toc h1{margin-top:2mm}.toc ol{list-style:none;padding:0}.toc li{padding:1.6mm 0;border-bottom:1px solid #e8e8e8}.toc a{color:#17181c;font-weight:700}.toc .note{margin-top:5mm;padding:3mm;border-left:3px solid #d00626;background:#f6f6f6;color:#5c5c5c;font-size:7.6pt}.tag{display:inline-block;border-radius:2px;padding:.3mm 1.4mm;font-size:6.6pt;font-weight:700;white-space:nowrap}.legal{background:#c9001b;color:#fff}.adm{background:#1f4e79;color:#fff}.fed{background:#6f42c1;color:#fff}.rec{background:#b35c00;color:#fff}.bp{background:#2e7d32;color:#fff}.kx{background:#16171b;color:#fff}.prof{background:#8a6d00;color:#fff}.pending{background:#fff3cd;color:#704500;font-weight:700;padding:0 1mm}.product-strip{margin:0 0 6mm;padding:3mm 4mm;background:#101116;color:#fff;border-left:4px solid #d00626}.product-strip strong{color:#ff6077}.manual-price{font-size:20pt;font-weight:900;color:#d00626}.manual-badge{display:inline-block;background:#d00626;color:#fff;padding:1mm 2mm;font-weight:800;font-size:7pt;text-transform:uppercase;letter-spacing:.12em}
+</style></head><body><section class="cover"><div class="cover-bg"></div><div class="cover-red"></div>
+      <div class="cover-top"><img src="file:///mnt/data/kombax_r91_work/project/web/assets/brand/kombax-symbol-red.png"><div class="brand">KOMBAX<small>FROM HYPE TO HISTORY</small></div><div class="edition">Guías profesionales<br>Edición R100.1</div></div>
+      <div class="cover-main"><div class="kicker">KOMBAX GUÍAS</div><div class="code">C3</div><div class="title">Recinto y autorizaciones</div><div class="subtitle">Que el pabellón esté alquilado no significa que el espectáculo esté autorizado. Qué pedir, a quién y con cuánto tiempo.</div></div>
+      <div class="cover-meta"><div><b>Para quién</b><span>Organizadores, clubes y titulares de instalaciones</span></div><div><b>Revisión</b><span>23/09/2026</span></div><div><b>Edición</b><span>R100.1 · KOMBAX</span></div></div>
+      <div class="cover-foot">Información general y herramientas de trabajo. Comprueba siempre la fuente oficial vigente antes de actuar. KOMBAX no sustituye asesoramiento jurídico, fiscal, laboral, asegurador o administrativo individualizado.</div>
+    </section><section class="toc"><div class="eyebrow">KOMBAX · índice operativo</div><h1>Recinto y autorizaciones</h1><ol><li><a href="#antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</a></li><li><a href="#1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</a></li><li><a href="#2-la-decisi-n-que-tienes-que-tomar">2. La decisión que tienes que tomar</a></li><li><a href="#3-el-marco-que-se-aplica">3. El marco que se aplica</a></li><li><a href="#4-preguntas-para-el-titular-del-recinto">4. Preguntas para el titular del recinto</a></li><li><a href="#5-preguntas-para-el-ayuntamiento">5. Preguntas para el ayuntamiento</a></li><li><a href="#6-procedimiento">6. Procedimiento</a></li><li><a href="#7-errores-frecuentes">7. Errores frecuentes</a></li><li><a href="#8-caso-pr-ctico">8. Caso práctico</a></li><li><a href="#9-checklist">9. Checklist</a></li><li><a href="#10-qu-cambia-seg-n-el-territorio">10. Qué cambia según el territorio</a></li><li><a href="#11-cu-ndo-pedir-ayuda">11. Cuándo pedir ayuda</a></li><li><a href="#12-fuentes-comentadas">12. Fuentes comentadas</a></li><li><a href="#13-verificado-hasta-y-comprueba-justo-antes-de-actuar">13. Verificado hasta y comprueba justo antes de actuar</a></li></ol><div class="note">Las etiquetas distinguen obligación legal, requisito administrativo o federativo, condición del recinto, buena práctica y recomendación KOMBAX. Si un dato aparece pendiente, no lo conviertas en requisito hasta verificarlo en la fuente competente.</div></section><h2 id="antes-de-empezar-versi-n-r-pida">Antes de empezar (versión rápida)</h2>
+<ul>
+<li><strong>Cesión no es autorización.</strong> El contrato con el titular del recinto te da el espacio; el ayuntamiento y la comunidad deciden si ese espectáculo puede celebrarse allí. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>Cada recinto tiene una actividad y un aforo autorizados.</strong> Un gimnasio con licencia para entrenar no está automáticamente autorizado para 400 espectadores en gradas. <strong><span class="tag legal">Obligación legal</span></strong></li>
+<li><strong>La normativa de espectáculos públicos es autonómica</strong>, y el título que necesitas (licencia, autorización o comunicación previa) depende de tu comunidad y de tu municipio. <strong><span class="tag legal">Obligación legal</span></strong> — ficha T.</li>
+<li><strong>El plan de autoprotección</strong> es obligatorio a partir de ciertos aforos, y tu comunidad puede bajar esos umbrales. <strong><span class="tag legal">Obligación legal</span></strong></li>
+</ul>
+<h2 id="1-qu-resuelve-esta-gu-a">1. Qué resuelve esta guía</h2>
+<p>Te ayuda a comprobar que el lugar está habilitado para la actividad real que vas a hacer, a saber qué preguntar al titular y al ayuntamiento y a documentarlo.</p>
+<h2 id="2-la-decisi-n-que-tienes-que-tomar">2. La decisión que tienes que tomar</h2>
+<p><strong>¿El recinto está autorizado para este uso, con este montaje y este aforo, o necesito un título habilitante específico para el evento?</strong></p>
+<h2 id="3-el-marco-que-se-aplica">3. El marco que se aplica</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Qué establece</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ley autonómica de espectáculos públicos y actividades recreativas</strong> (y su reglamento)</td>
+<td>Régimen de licencias, autorizaciones y comunicaciones; espectáculos en establecimientos no habilitados para ese uso o de carácter extraordinario; condiciones de seguridad; seguro de RC; horarios</td>
+<td><span class="tag legal">Obligación legal</span> — ficha T</td>
+</tr>
+<tr class="even">
+<td><strong>Ordenanzas municipales</strong></td>
+<td>Actividades, uso de instalaciones municipales, tasas, plazos</td>
+<td><span class="tag rec">Recinto / municipio</span></td>
+</tr>
+<tr class="odd">
+<td><strong>RD 524/2023, Norma Básica de Protección Civil</strong></td>
+<td>Derogó el RD 393/2007 con efectos de 11/07/2023. Por tanto, los antiguos umbrales del RD 393/2007 no deben presentarse como obligación estatal vigente</td>
+<td><span class="tag legal">Obligación legal</span> como marco estatal de protección civil</td>
+</tr>
+<tr class="even">
+<td><strong>Normativa autonómica, municipal y condiciones del recinto</strong></td>
+<td>Determinan, para el caso concreto, las exigencias de autoprotección, emergencia, aforo, evacuación, montaje y documentación que deba presentar el titular u organizador</td>
+<td><span class="tag legal">Obligación legal</span> / <span class="tag rec">Recinto / municipio</span> según el caso</td>
+</tr>
+<tr class="odd">
+<td><strong>LOPDGDD, art. 22</strong></td>
+<td>Si hay videovigilancia: supresión de imágenes en un mes como máximo, salvo necesidad de acreditar hechos (B2)</td>
+<td><span class="tag legal">Obligación legal</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-preguntas-para-el-titular-del-recinto">4. Preguntas para el titular del recinto</h2>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<ol type="1">
+<li>¿Qué actividad tiene autorizada el recinto y con qué aforo máximo?</li>
+<li>¿El aforo cambia con gradas supletorias, ring o jaula en el centro, o sillas en pista?</li>
+<li>¿Tiene plan de autoprotección? ¿Cubre este tipo de evento o hay que hacer uno específico?</li>
+<li>¿Qué condiciones de seguro exige (capitales, asegurado adicional)?</li>
+<li>¿Quién se encarga de la seguridad, la limpieza, la apertura y el cierre?</li>
+<li>¿Qué pasa si el evento se cancela? ¿Hay fianza?</li>
+<li>¿Hay restricciones de horario, ruido, venta de bebidas o publicidad?</li>
+<li>¿Qué accesos y salidas de emergencia hay y cómo se señalizan?</li>
+</ol>
+<h2 id="5-preguntas-para-el-ayuntamiento">5. Preguntas para el ayuntamiento</h2>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<ol type="1">
+<li>¿Qué régimen aplica a este espectáculo en este recinto: licencia, autorización extraordinaria o comunicación previa?</li>
+<li>¿Con cuántos días de antelación hay que presentarlo y qué documentación piden?</li>
+<li>¿Exigen plan de autoprotección, de seguridad o sanitario con este aforo?</li>
+<li>¿Qué seguro de responsabilidad civil y con qué capital?</li>
+<li>¿Hay tasas?</li>
+<li>¿Intervienen la policía local o protección civil?</li>
+</ol>
+<h2 id="6-procedimiento">6. Procedimiento</h2>
+<ol type="1">
+<li>Pide al titular la documentación del recinto (actividad, aforo, plan de autoprotección).</li>
+<li>Diseña el montaje (ring o jaula, gradas, accesos, zona médica, zona de pesaje, vestuarios) y comprueba si cambia salidas, circulación o aforo.</li>
+<li>Pregunta al ayuntamiento el régimen aplicable y el plazo.</li>
+<li>Encarga el plan de autoprotección o de seguridad si lo exigen, a personal técnico competente. <strong><span class="tag prof">Requiere profesional</span></strong></li>
+<li>Presenta la solicitud o la comunicación con la antelación exigida.</li>
+<li>Coordina seguridad, control de acceso y asistencia sanitaria (C5).</li>
+<li>Haz una revisión del montaje antes de abrir y documéntala con fecha y firma.</li>
+</ol>
+<h2 id="7-errores-frecuentes">7. Errores frecuentes</h2>
+<ul>
+<li><strong>Tomar el aforo “habitual” del pabellón</strong> como si valiera para cualquier montaje.</li>
+<li><strong>Instalar gradas temporales</strong> sin certificado de montaje del proveedor.</li>
+<li><strong>Presentar la solicitud municipal una semana antes.</strong></li>
+<li><strong>Ocupar salidas de emergencia</strong> con el material de la retransmisión.</li>
+<li><strong>Reutilizar la autorización de la edición anterior.</strong></li>
+</ul>
+<h2 id="8-caso-pr-ctico">8. Caso práctico</h2>
+<p><em>Supongamos que</em> un gimnasio autorizado para entrenamiento quiere instalar gradas temporales y vender 400 entradas para una velada. La actividad autorizada y el aforo cambian. Necesita: consultar al ayuntamiento el régimen del espectáculo, un certificado de montaje de las gradas, la revisión de evacuación, un seguro de RC que cubra el evento, asistencia sanitaria y control de acceso. No debe asumir que la licencia del gimnasio cubre el evento.</p>
+<h2 id="9-checklist">9. Checklist</h2>
+<p><em>Plantilla de trabajo KOMBAX</em></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Punto</th>
+<th>Quién</th>
+<th>Evidencia</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Actividad y aforo autorizados del recinto</td>
+<td>Organizador</td>
+<td>Documento del titular</td>
+<td>T-90</td>
+</tr>
+<tr class="even">
+<td>Plano del montaje</td>
+<td>Organizador</td>
+<td>Plano</td>
+<td>T-60</td>
+</tr>
+<tr class="odd">
+<td>Régimen municipal/autonómico confirmado</td>
+<td>Organizador</td>
+<td>Respuesta escrita o normativa</td>
+<td>T-90</td>
+</tr>
+<tr class="even">
+<td>Solicitud o comunicación presentada</td>
+<td>Organizador</td>
+<td>Justificante</td>
+<td>Según plazo</td>
+</tr>
+<tr class="odd">
+<td>Plan de autoprotección/seguridad, si procede</td>
+<td>Técnico competente</td>
+<td>Plan</td>
+<td>T-14</td>
+</tr>
+<tr class="even">
+<td>Seguros exigidos</td>
+<td>Tesorería</td>
+<td>Certificados</td>
+<td>T-7</td>
+</tr>
+<tr class="odd">
+<td>Revisión del montaje antes de abrir</td>
+<td>Responsable del evento</td>
+<td>Acta firmada</td>
+<td>Día D</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-qu-cambia-seg-n-el-territorio">10. Qué cambia según el territorio</h2>
+<p>Todo el régimen de espectáculos: la ley aplicable, el título habilitante, los plazos, los umbrales de autoprotección y los seguros mínimos. Ficha T.</p>
+<h2 id="11-cu-ndo-pedir-ayuda">11. Cuándo pedir ayuda</h2>
+<p>Gradas o estructuras temporales, aire libre, aforos altos, cambio de uso de un local, ordenanzas específicas o plazos muy justos.</p>
+<h2 id="12-fuentes-comentadas">12. Fuentes comentadas</h2>
+<ul>
+<li><strong>RD 524/2023, Norma Básica de Protección Civil.</strong> Su disposición derogatoria dejó sin efecto el RD 393/2007 desde el 11/07/2023. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2023-14679">BOE</a></li>
+<li><strong>RD 393/2007 (derogado).</strong> Úsalo solo como referencia histórica; sus antiguos umbrales no se presentan en esta guía como requisito estatal vigente. <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2007-6237">BOE</a></li>
+<li><strong>Leyes autonómicas de espectáculos públicos:</strong> fichas T01–T19.</li>
+</ul>
+<h2 id="13-verificado-hasta-y-comprueba-justo-antes-de-actuar">13. Verificado hasta y comprueba justo antes de actuar</h2>
+<p><strong>Verificado hasta:</strong> 23/09/2026. <strong>Comprueba:</strong> la normativa y los plazos del ayuntamiento, la ficha T y si ha entrado en vigor la nueva norma básica de autoprotección.</p>
+<hr />
+<p><em>KOMBAX Guías · C3 · Verificado hasta 23/09/2026 · Información general; no sustituye asesoramiento profesional individualizado.</em></p>
+</body></html>

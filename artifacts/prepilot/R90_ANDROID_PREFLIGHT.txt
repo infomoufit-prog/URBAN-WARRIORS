@@ -1,0 +1,8 @@
+KOMBAX R90 build 20143 · Android preflight
+OK · applicationId com.urbanwarriors.app
+OK · versionCode 20143
+OK · embedded web assets present
+OK · Firebase configuration present
+PENDING BY DESIGN · local signing (android/keystore.properties + external JKS)
+Result: 4/5 until the owner supplies local signing credentials.
+Gradle assembleDebug attempt: wrapper stopped before compilation because services.gradle.org could not be resolved (UnknownHostException). No compile error was reached.

@@ -39,7 +39,7 @@ export async function openClubPublicProfile(clubId=state.session?.club_id){
     const p=await repos.clubPublic.one(clubId);
     if(!p){toast('El perfil público del club todavía no está disponible.','error');return null;}
     const actions=`<button class="btn btn-ghost" id="club-public-album">${icon('image',{size:15})} Álbum</button>${p.editable&&p.logo_url?'<button class="btn btn-ghost" id="club-public-logo-frame">Ajustar logo</button>':''}${p.editable&&p.portada_url?'<button class="btn btn-ghost" id="club-public-cover-frame">Ajustar portada</button>':''}${p.editable?`<button class="btn btn-primary" id="club-public-edit">${icon('edit',{size:15})} Editar perfil público</button>`:''}`;
-    const modal=openDetail({title:p.nombre_publico,subtitle:'Perfil público del club · separado de los datos administrativos',body:body(p),actions,width:'900px',className:'club-public-modal'});
+    const modal=openDetail({title:p.nombre_publico,subtitle:'Perfil público del club · el logo y la portada se comparten con la identidad del club',body:body(p),actions,width:'900px',className:'club-public-modal'});
     modal.wrap.querySelector('#club-public-edit')?.addEventListener('click',()=>editClubPublicProfile(p));
     modal.wrap.querySelector('#club-public-logo-frame')?.addEventListener('click',()=>openMediaFramingEditor({title:'Ajustar logo público',subtitle:'Muestra el logo completo o define su encuadre.',src:safeHttpsUrl(p.logo_url),initial:p.logo_presentation,preset:'product',onSave:async presentation=>{await repos.mediaFraming.set('club_public_logo',p.club_id,presentation);p.logo_presentation=presentation;closeModal();setTimeout(()=>openClubPublicProfile(p.club_id),120);}}));
     modal.wrap.querySelector('#club-public-cover-frame')?.addEventListener('click',()=>openMediaFramingEditor({title:'Ajustar portada pública',subtitle:'Elige exactamente qué zona queda visible en la cabecera.',src:safeHttpsUrl(p.portada_url),initial:p.portada_presentation,preset:'banner',onSave:async presentation=>{await repos.mediaFraming.set('club_public_cover',p.club_id,presentation);p.portada_presentation=presentation;closeModal();setTimeout(()=>openClubPublicProfile(p.club_id),120);}}));
@@ -73,7 +73,7 @@ export function editClubPublicProfile(profile){
     {name:'ciudad',label:'Ciudad',maxLength:120},{name:'provincia',label:'Provincia / región',maxLength:120},{name:'pais',label:'País',maxLength:120,value:p.pais||'España'},
     {name:'logros',label:'Logros destacados',type:'textarea',rows:4,full:true,maxLength:2500},{name:'contacto_publico',label:'Contacto público voluntario',full:true,maxLength:240,help:'No se rellena desde los datos administrativos.'},
     {name:'web_publica',label:'Web pública (URL HTTPS)'},{name:'instagram',label:'Instagram (URL HTTPS)'},{name:'tiktok',label:'TikTok (URL HTTPS)'},{name:'youtube',label:'YouTube (URL HTTPS)'},
-    {name:'logo',label:'Logo del perfil público',type:'file',accept:'image/jpeg,image/png,image/webp,image/gif',help:'Opcional · máximo 5 MB.'},{name:'quitar_logo',label:'Quitar logo público actual',type:'checkbox',value:false},
+    {name:'logo',label:'Logo oficial del club',type:'file',accept:'image/jpeg,image/png,image/webp,image/gif',help:'Máximo 5 MB. Se usa también en Social, tickets vinculados al club, informes y nuevos recibos.'},{name:'quitar_logo',label:'Quitar logo actual',type:'checkbox',value:false},
     {name:'portada',label:'Portada del perfil público',type:'file',accept:'image/jpeg,image/png,image/webp,image/gif',help:'Opcional · máximo 5 MB. Después de guardar podrás usar “Ajustar banner” para mover la foto y seleccionar la zona visible.'},{name:'quitar_portada',label:'Quitar portada pública actual',type:'checkbox',value:false}
   ],submitText:'Guardar perfil público',onSubmit:async v=>{
     const oldLogo=p.logo_url||'',oldCover=p.portada_url||'';let logo=v.quitar_logo?'':oldLogo,cover=v.quitar_portada?'':oldCover;let uploadedLogo='',uploadedCover='';
@@ -83,8 +83,8 @@ export function editClubPublicProfile(profile){
       const saved=await repos.clubPublic.save({...v,logo_url:logo,portada_url:cover});
       const contentId=saved?.club_id||saved?.id||p.club_id||p.id||clubId;
       if(contentId){void prewarmUserContentTranslations([{contentId,contentType:'club_editorial',fieldName:'motto',text:v.lema,visibility:'public'},{contentId,contentType:'club_editorial',fieldName:'description',text:v.descripcion,visibility:'public'},{contentId,contentType:'club_editorial',fieldName:'history',text:v.historia,visibility:'public'},{contentId,contentType:'club_editorial',fieldName:'achievements',text:v.logros,visibility:'public'}]);}
-      if(oldLogo&&oldLogo!==logo)await repos.clubPublic.removeImage(oldLogo).catch(()=>{});
-      if(oldCover&&oldCover!==cover)await repos.clubPublic.removeImage(oldCover).catch(()=>{});
+      // Older image URLs may be referenced by issued receipts or branding history.
+      if(state.session?.club&&state.session.club_id===contentId){state.session.club.logo_url=logo||null;state.session.club.portada_url=cover||null;localStorage.setItem('uw2_app_session',JSON.stringify(state.session));}
       toast('Perfil público del club actualizado');
       setTimeout(()=>openClubPublicProfile(),280);
     }catch(error){

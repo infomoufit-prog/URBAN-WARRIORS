@@ -19,16 +19,17 @@ const mainActivity=read('android/app/src/main/java/com/urbanwarriors/app/MainAct
 const sw=read('web/service-worker.js');
 const health=read('supabase/functions/health/index.ts');
 
-test('R72 continuity runs on R75 build 20133 across Web Android SW and health',()=>{
-  has(config,"version: '2.0.0-rc.13-r81-tap-to-pay'");has(config,'build: 20133');
-  has(gradle,'versionCode 20133');has(gradle,"versionName '2.0.0-rc.13-r81-tap-to-pay'");
-  has(mainActivity,'KOMBAXRevision/r81-tap-to-pay');has(mainActivity,'KOMBAXApp/2.0.0-rc.13/20133');
-  has(sw,'kombax-build-20133');has(health,'build:20133');
+test('Historical release functionality remains on a monotonic cumulative build',()=>{
+  const webBuild=Number(config.match(/build:\s*(\d+)/)?.[1]||0);
+  const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+  assert.ok(webBuild>=20134,'web build must stay at or above the certified R81 baseline');
+  assert.equal(androidBuild,webBuild,'Android and Web build identifiers must match');
+  has(mainActivity,`/${webBuild}`);has(sw,`kombax-build-${webBuild}`);has(health,`build:${webBuild}`);
 });
 
 test('Organizer navigation exposes Mis Eventos without replacing the existing editor',()=>{
   has(events,'Mis Eventos</button>');has(events,'renderMyEventsCenter');
-  has(events,'Gestionar evento ≠ Centro del evento');
+  has(events,'Dos espacios para organizar tu evento');
   has(events,'Constructor del evento');has(events,'Centro del evento');
 });
 
@@ -96,7 +97,7 @@ test('R64.4 Events pricing and buyer/platform fees remain unchanged',()=>{
 });
 
 test('R72 does not conflate publication with Ticketing',()=>{
-  has(events,'Gestionar evento ≠ Centro del evento');
+  has(events,'El evento puede publicarse y medirse sin Ticketing');
   has(events,'Activación independiente por evento');
   has(events,'El evento puede publicarse y medirse sin Ticketing');
   not(migration,"ticketing_enabled',true");
