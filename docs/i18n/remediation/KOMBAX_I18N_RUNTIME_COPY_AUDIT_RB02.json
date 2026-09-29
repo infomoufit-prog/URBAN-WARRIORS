@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T22:11:07.416Z",
+  "generated_at": "2026-09-29T06:30:06.734Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-profile-policy.js",
@@ -34,6 +34,7 @@
     "web/js/modules/brand-business.js",
     "web/js/modules/brand-hub.js",
     "web/js/modules/club-kombax-hub.js",
+    "web/js/modules/club-poster.js",
     "web/js/modules/club-profile.js",
     "web/js/modules/comms-material.js",
     "web/js/modules/community.js",
@@ -49,6 +50,7 @@
     "web/js/modules/federation-licenses.js",
     "web/js/modules/fighter-discovery.js",
     "web/js/modules/finance-context.js",
+    "web/js/modules/finance-guide.js",
     "web/js/modules/finance-premium-bootstrap.js",
     "web/js/modules/finance-premium.js",
     "web/js/modules/finance.js",
@@ -94,11 +96,11 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4827,
-  "covered": 4646,
-  "unresolved": 181,
-  "coverage": 96.25,
-  "skipped": 383,
+  "phrases": 4913,
+  "covered": 4663,
+  "unresolved": 250,
+  "coverage": 94.91,
+  "skipped": 382,
   "files": {
     "web/js/app.js": {
       "total": 117,
@@ -127,7 +129,7 @@
     "web/js/core/backend.js": {
       "total": 41,
       "covered": 41,
-      "skipped": 6,
+      "skipped": 5,
       "coverage": 100
     },
     "web/js/core/capability-resolver.js": {
@@ -215,10 +217,10 @@
       "coverage": 100
     },
     "web/js/core/repositories.js": {
-      "total": 42,
+      "total": 43,
       "covered": 42,
       "skipped": 73,
-      "coverage": 100
+      "coverage": 97.67
     },
     "web/js/core/security-go-live-20084.js": {
       "total": 7,
@@ -245,10 +247,10 @@
       "coverage": 100
     },
     "web/js/core/utils.js": {
-      "total": 37,
-      "covered": 37,
+      "total": 44,
+      "covered": 41,
       "skipped": 0,
-      "coverage": 100
+      "coverage": 93.18
     },
     "web/js/core/verification-visual.js": {
       "total": 1,
@@ -269,10 +271,10 @@
       "coverage": 100
     },
     "web/js/modules/admin.js": {
-      "total": 160,
+      "total": 162,
       "covered": 159,
       "skipped": 6,
-      "coverage": 99.38
+      "coverage": 98.15
     },
     "web/js/modules/auth-recovery.js": {
       "total": 18,
@@ -297,6 +299,12 @@
       "covered": 46,
       "skipped": 0,
       "coverage": 100
+    },
+    "web/js/modules/club-poster.js": {
+      "total": 3,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 0
     },
     "web/js/modules/club-profile.js": {
       "total": 57,
@@ -388,6 +396,12 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/modules/finance-guide.js": {
+      "total": 7,
+      "covered": 2,
+      "skipped": 0,
+      "coverage": 28.57
+    },
     "web/js/modules/finance-premium-bootstrap.js": {
       "total": 3,
       "covered": 3,
@@ -407,10 +421,10 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 197,
-      "covered": 164,
+      "total": 200,
+      "covered": 167,
       "skipped": 6,
-      "coverage": 83.25
+      "coverage": 83.5
     },
     "web/js/modules/groups-members.js": {
       "total": 159,
@@ -419,16 +433,16 @@
       "coverage": 99.37
     },
     "web/js/modules/guides.js": {
-      "total": 0,
+      "total": 1,
       "covered": 0,
       "skipped": 0,
-      "coverage": 100
+      "coverage": 0
     },
     "web/js/modules/help-legal.js": {
-      "total": 324,
-      "covered": 324,
+      "total": 326,
+      "covered": 325,
       "skipped": 2,
-      "coverage": 100
+      "coverage": 99.69
     },
     "web/js/modules/kombax-discovery.js": {
       "total": 65,
@@ -497,10 +511,10 @@
       "coverage": 100
     },
     "web/js/modules/platform-admin.js": {
-      "total": 293,
-      "covered": 269,
+      "total": 350,
+      "covered": 277,
       "skipped": 14,
-      "coverage": 91.81
+      "coverage": 79.14
     },
     "web/js/modules/platform-legal.js": {
       "total": 9,
@@ -557,10 +571,10 @@
       "coverage": 100
     },
     "web/js/modules/showcase.js": {
-      "total": 340,
-      "covered": 337,
+      "total": 343,
+      "covered": 336,
       "skipped": 11,
-      "coverage": 99.12
+      "coverage": 97.96
     },
     "web/js/modules/social-network.js": {
       "total": 0,
@@ -659,8 +673,44 @@
       "value": "El logo supera 5 MB. Selecciona una versión más ligera."
     },
     {
+      "file": "web/js/core/repositories.js",
+      "value": "La sesión Owner ha caducado."
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa."
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos."
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Selecciona al menos una forma de entrega para tus productos."
+    },
+    {
       "file": "web/js/modules/admin.js",
       "value": "Cambiar logo en perfil público"
+    },
+    {
+      "file": "web/js/modules/admin.js",
+      "value": "{VAR})} Ver cartel"
+    },
+    {
+      "file": "web/js/modules/admin.js",
+      "value": "Imprimir A4"
+    },
+    {
+      "file": "web/js/modules/club-poster.js",
+      "value": "Se ha abierto el cartel para que puedas guardarlo."
+    },
+    {
+      "file": "web/js/modules/club-poster.js",
+      "value": "Permite ventanas emergentes para imprimir el cartel."
+    },
+    {
+      "file": "web/js/modules/club-poster.js",
+      "value": "Cartel KOMBAX para clubes"
     },
     {
       "file": "web/js/modules/club-profile.js",
@@ -923,6 +973,26 @@
       "value": "Ver cuotas y pagos"
     },
     {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Se ha abierto la guía para que puedas guardarla."
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Guía completa de Finanzas"
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Ver en KOMBAX Guías"
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Revisa perfil público, logo, alumnos, permisos y estado de Stripe."
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "2 · Crear y cobrar"
+    },
+    {
       "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor."
     },
@@ -1057,6 +1127,14 @@
     {
       "file": "web/js/modules/groups-members.js",
       "value": "Revisa si existe su ficha y utiliza “Invitar alumno por email” si corresponde. Este mensaje todavía no confirma la membresía."
+    },
+    {
+      "file": "web/js/modules/guides.js",
+      "value": "Guía de Finanzas"
+    },
+    {
+      "file": "web/js/modules/help-legal.js",
+      "value": "Imprimir A4"
     },
     {
       "file": "web/js/modules/kombax-social.js",
@@ -1272,11 +1350,107 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Ej. Solicitud vendedor Moufit"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Describe qué debe revisar, ordenar o preparar…"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Prepara las respuestas que requieren revisión"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analista de solo lectura para adopción, fricción, calidad, riesgos y seguimiento del piloto."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Resume el estado del piloto"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Detecta anomalías y bloqueos"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Crear informe diario del piloto"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Crear informe semanal del piloto"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Crear informe de incidencias"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Análisis completado."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza este documento para el seguimiento del piloto, clasifica los hallazgos y prepara los próximos pasos."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza este documento entrante, ordénalo, identifica la acción requerida y prepara una recomendación segura."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Sube un máximo de 10 documentos por lote."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nuevo trabajo de operaciones"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nuevo análisis del piloto"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Guardar conversación"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Pon un nombre claro para localizar después este análisis."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nombre de la conversación"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación guardada"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación recuperada"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación archivada"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": "Acceso temporal hasta el cierre del 15 de noviembre de 2026. No solicita tarjeta ni genera un cobro."
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "value": "Nivel de acceso durante el piloto"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Distribución de alumnos activos por club"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Buscar por nombre, club o referencia"
     },
     {
       "file": "web/js/modules/platform-admin.js",
@@ -1340,6 +1514,86 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación preparada"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Escribe una instrucción o utiliza una acción rápida."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "No se pudo completar esta consulta. Puedes volver a intentarlo."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "{VAR} · {VAR} mensajes · {VAR}"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversaciones y análisis"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "+ Análisis del piloto"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "No hay conversaciones guardadas todavía."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Clasifica cada entrada y envíala al agente adecuado. Máximo 10 MB por archivo y 3 documentos por análisis."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "{VAR} documento(s)"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Título o referencia"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Los documentos entrantes quedarán clasificados aquí."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "GPT-6 Luna · autonomía controlada"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Instrucción para {VAR}"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Rápida · uso diario"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Acceso exclusivo Owner"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Autonomía operativa con control"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Los agentes analizan, priorizan, preparan acciones y mantienen trazabilidad. Pagos, menores, credenciales, privilegios, eliminaciones y decisiones irreversibles conservan las validaciones humanas y del backend."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Los borradores usan datos agregados. Una publicación PDF exige revisión Owner."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Todavía no hay informes generados con datos del piloto."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Informe creado como borrador para revisión Owner."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": "Clubes y Créditos IA"
     },
     {
@@ -1367,8 +1621,40 @@
       "value": "El club solicita plaza al registrarse. Primero se verifica su identidad; después Administración asigna el nivel piloto sin pedir tarjeta ni crear una suscripción de pago."
     },
     {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Distribución por club"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Página"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "de {VAR} · {VAR} perfiles"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "SESIÓN OWNER"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Administración KOMBAX activa"
+    },
+    {
       "file": "web/js/modules/showcase.js",
       "value": "Verificación de la identidad vendedora necesaria"
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Verificación del club pendiente"
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Opcional. Si lo dejas vacío, se genera automáticamente a partir del nombre."
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "JPG, PNG, WEBP o foto HEIC/HEIF/AVIF del móvil. KOMBAX optimiza la imagen antes de publicarla."
     },
     {
       "file": "web/js/modules/showcase.js",
@@ -1377,6 +1663,10 @@
     {
       "file": "web/js/modules/showcase.js",
       "value": "Verifica tu perfil, activa la capacidad Showcase de tu plan y vuelve aquí para solicitar la verificación como vendedor. La venta con tarjeta requiere completar Stripe y activar Commerce."
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Puedes crear fichas desde «Añadir producto» en Mi Showcase. Para activar pagos, primero debe revisarse la identidad real del club."
     }
   ]
 }

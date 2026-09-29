@@ -1,28 +1,98 @@
 {
-  "generated_at": "2026-09-27T22:11:00.364Z",
-  "candidates": 4968,
+  "generated_at": "2026-09-29T21:30:03.717Z",
+  "candidates": 5077,
   "covered_r79": 652,
-  "covered_r78": 1238,
-  "covered_legacy_all7": 2885,
-  "unresolved": 193,
+  "covered_r78": 1242,
+  "covered_legacy_all7": 2928,
+  "unresolved": 255,
   "by_file": {
+    "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 67,
-    "web/js/modules/gateway.js": 35,
+    "web/js/modules/gateway.js": 32,
     "web/js/modules/plan-services.js": 32,
-    "web/js/modules/platform-admin.js": 26,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 11,
-    "web/js/modules/showcase.js": 3,
-    "web/js/modules/admin.js": 2,
+    "web/js/modules/showcase.js": 7,
+    "web/js/modules/finance-guide.js": 5,
+    "web/js/core/utils.js": 4,
+    "web/js/modules/admin.js": 4,
+    "web/js/modules/club-poster.js": 3,
     "web/js/modules/club-profile.js": 2,
     "web/js/core/media.js": 1,
+    "web/js/core/repositories.js": 1,
     "web/js/modules/groups-members.js": 1,
+    "web/js/modules/guides.js": 1,
+    "web/js/modules/help-legal.js": 1,
     "web/js/modules/kombax-social.js": 1
   },
   "unresolved_rows": [
     {
       "file": "web/js/core/media.js",
       "value": "El logo supera 5 MB. Selecciona una versión más ligera.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "La sesión Owner ha caducado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Acepta las dos declaraciones de vendedor antes de enviar la solicitud.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "value": "Selecciona al menos una forma de entrega para tus productos.",
       "missing": [
         "en",
         "fr",
@@ -50,6 +120,65 @@
       "file": "web/js/modules/admin.js",
       "value": "Configura el logo en el perfil público del club. Se utilizará en Social, tickets vinculados, informes y nuevos recibos.",
       "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/admin.js",
+      "value": "Imprimir",
+      "missing": [
+        "pt"
+      ]
+    },
+    {
+      "file": "web/js/modules/admin.js",
+      "value": "Imprimir A4",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/club-poster.js",
+      "value": "Se ha abierto el cartel para que puedas guardarlo.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/club-poster.js",
+      "value": "Permite ventanas emergentes para imprimir el cartel.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/club-poster.js",
+      "value": "Cartel KOMBAX para clubes",
+      "missing": [
+        "en",
         "fr",
         "pt",
         "it",
@@ -951,6 +1080,71 @@
       ]
     },
     {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Se ha abierto la guía para que puedas guardarla.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Guía completa de Finanzas",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Ver en KOMBAX Guías",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "Revisa perfil público, logo, alumnos, permisos y estado de Stripe.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/finance-guide.js",
+      "value": "2 · Crear y cobrar",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
       "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor.",
       "missing": [
@@ -1262,45 +1456,6 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Solicito participar en el piloto de clubes (1 de octubre a 15 de noviembre de 2026)",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Sin tarjeta ni cobro durante el piloto. La plaza y el nivel de acceso requieren aprobación de KOMBAX. Deja el plan opcional en «Solo perfil público gratuito».",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Para solicitar el piloto, deja el plan opcional en «Solo perfil público gratuito». Administración asignará el nivel piloto.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene asignado su tipo de perfil.",
       "missing": [
         "en",
@@ -1406,6 +1561,32 @@
     {
       "file": "web/js/modules/groups-members.js",
       "value": "Revisa si existe su ficha y utiliza “Invitar alumno por email” si corresponde. Este mensaje todavía no confirma la membresía.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/guides.js",
+      "value": "Guía de Finanzas",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/help-legal.js",
+      "value": "Imprimir A4",
       "missing": [
         "en",
         "fr",
@@ -2144,6 +2325,304 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Ej. Solicitud vendedor Moufit",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Describe qué debe revisar, ordenar o preparar…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Prepara las respuestas que requieren revisión",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analista de solo lectura para adopción, fricción, calidad, riesgos y seguimiento del piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Resume el estado del piloto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Detecta anomalías y bloqueos",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Crear informe diario del piloto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Crear informe semanal del piloto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Crear informe de incidencias",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Análisis completado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza esta solicitud, comprueba los requisitos y recomienda el siguiente paso seguro.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza este documento para el seguimiento del piloto, clasifica los hallazgos y prepara los próximos pasos.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza este documento entrante, ordénalo, identifica la acción requerida y prepara una recomendación segura.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Sube un máximo de 10 documentos por lote.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nuevo trabajo de operaciones",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nuevo análisis del piloto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Guardar conversación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Pon un nombre claro para localizar después este análisis.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Nombre de la conversación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación guardada",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación recuperada",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversación archivada",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": "Acceso temporal hasta el cierre del 15 de noviembre de 2026. No solicita tarjeta ni genera un cobro.",
       "missing": [
         "en",
@@ -2160,6 +2639,56 @@
       "value": "Nivel de acceso durante el piloto",
       "missing": [
         "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza esta solicitud de vendedor y recomienda si está lista, requiere información o debe escalarse.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Distribución de alumnos activos por club",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Buscar por nombre, club o referencia",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Analiza esta solicitud de perfil, comprueba requisitos y recomienda el siguiente estado seguro.",
+      "missing": [
         "fr",
         "pt",
         "it",
@@ -2365,7 +2894,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Clubes y Créditos IA",
+      "value": "Conversación preparada",
       "missing": [
         "en",
         "fr",
@@ -2378,19 +2907,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Del 1 de octubre al 15 de noviembre de 2026. La fase fundadora comienza por fecha y conserva las cuentas y los datos. La fecha del lanzamiento oficial sigue pendiente.",
-      "missing": [
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Aún no hay clubes piloto inscritos. Elige cada entidad por ID verificado.",
+      "value": "Escribe una instrucción o utiliza una acción rápida.",
       "missing": [
         "en",
         "fr",
@@ -2403,7 +2920,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Inscribir clubes existentes",
+      "value": "No se pudo completar esta consulta. Puedes volver a intentarlo.",
       "missing": [
         "en",
         "fr",
@@ -2412,6 +2929,215 @@
         "de",
         "th",
         "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Conversaciones y análisis",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "+ Análisis del piloto",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "No hay conversaciones guardadas todavía.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Clasifica cada entrada y envíala al agente adecuado. Máximo 10 MB por archivo y 3 documentos por análisis.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Título o referencia",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Los documentos entrantes quedarán clasificados aquí.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "GPT-6 Luna · autonomía controlada",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Instrucción para {VAR}",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Rápida · uso diario",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Acceso exclusivo Owner",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Autonomía operativa con control",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Los agentes analizan, priorizan, preparan acciones y mantienen trazabilidad. Pagos, menores, credenciales, privilegios, eliminaciones y decisiones irreversibles conservan las validaciones humanas y del backend.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Los borradores usan datos agregados. Una publicación PDF exige revisión Owner.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Todavía no hay informes generados con datos del piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Informe creado como borrador para revisión Owner.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Clubes piloto",
+      "missing": [
+        "pt"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Eventos públicos",
+      "missing": [
+        "pt"
       ]
     },
     {
@@ -2428,7 +3154,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "ACCESO PILOTO",
+      "value": "Distribución por club",
       "missing": [
         "en",
         "fr",
@@ -2441,7 +3167,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Solicitudes de clubes",
+      "value": "Página",
       "missing": [
         "en",
         "fr",
@@ -2454,7 +3180,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "El club solicita plaza al registrarse. Primero se verifica su identidad; después Administración asigna el nivel piloto sin pedir tarjeta ni crear una suscripción de pago.",
+      "value": "de {VAR} · {VAR} perfiles",
       "missing": [
         "en",
         "fr",
@@ -2467,8 +3193,22 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Aún no hay solicitudes de piloto.",
+      "value": "SESIÓN OWNER",
       "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Administración KOMBAX activa",
+      "missing": [
+        "en",
         "fr",
         "pt",
         "it",
@@ -2480,6 +3220,45 @@
     {
       "file": "web/js/modules/showcase.js",
       "value": "Verificación de la identidad vendedora necesaria",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Verificación del club pendiente",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Opcional. Si lo dejas vacío, se genera automáticamente a partir del nombre.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "JPG, PNG, WEBP o foto HEIC/HEIF/AVIF del móvil. KOMBAX optimiza la imagen antes de publicarla.",
       "missing": [
         "en",
         "fr",
@@ -2506,6 +3285,19 @@
     {
       "file": "web/js/modules/showcase.js",
       "value": "Verifica tu perfil, activa la capacidad Showcase de tu plan y vuelve aquí para solicitar la verificación como vendedor. La venta con tarjeta requiere completar Stripe y activar Commerce.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/showcase.js",
+      "value": "Puedes crear fichas desde «Añadir producto» en Mi Showcase. Para activar pagos, primero debe revisarse la identidad real del club.",
       "missing": [
         "en",
         "fr",

@@ -14,6 +14,7 @@ import { localizeLegacyDynamic } from './legacy-dynamic-patterns.js';
 import { PUBLIC_LEGAL_TRANSLATIONS } from './public-legal-translations.js';
 import { R78_SYSTEM_SOURCE } from './r78-system-source.js';
 import { r79Exact, r79Dynamic, hydrateR79SystemCopy, warmR79SystemCopyCatalogs } from './r79-system-runtime.js';
+import { localizeR110PilotText } from './r110-pilot-copy.js';
 
 const SKIP_SELECTOR = [
   '[data-user-content]','[data-i18n-user-content]','[data-kx-user-content]','[contenteditable="true"]',
@@ -142,6 +143,7 @@ export function localizeSystemText(value,locale=getLocale()){
   const raw=String(value??'');if(!raw||locale==='es')return raw;
   const leading=raw.match(/^\s*/)?.[0]||'',trailing=raw.match(/\s*$/)?.[0]||'';
   const source=normalize(raw);if(!source)return raw;
+  const r110PilotValue=localizeR110PilotText(source,locale);if(r110PilotValue)return `${leading}${r110PilotValue}${trailing}`;
   const r79ExactValue=r79Exact(source,locale);if(r79ExactValue)return `${leading}${r79ExactValue}${trailing}`;
   const r79DynamicValue=r79Dynamic(source,locale);if(r79DynamicValue)return `${leading}${r79DynamicValue}${trailing}`;
   const r78=readR78Cached(locale);const r78Exact=r78.exact.get(source);if(r78Exact)return `${leading}${r78Exact}${trailing}`;

@@ -171,6 +171,7 @@ export function renderKombaxGateway({onClubDirectory,onDirectProfiles}){
           <span class="gateway-path-arrow">${icon('arrowUpRight',{size:22})}</span>
         </button>
       </div>
+      <div id="gateway-pilot-entry" class="gateway-pilot-entry" hidden></div>
       <div class="gateway-commercial-entry"><button class="btn btn-ghost" id="gateway-pricing" type="button">${t('marketing.gateway.home.pricing')}</button><small>${t('marketing.gateway.home.pricingHint')}</small></div>
       <footer class="gateway-footer" aria-label="CONNECT · COMPETE · GROW"><span>CONNECT</span><i></i><span>COMPETE</span><i></i><span>GROW</span><b>Built for combat sports</b><nav class="gateway-footer-legal" aria-label="Legal">${[["./privacy.html",GATEWAY_LEGAL_LABELS[kxGetLocale()]?.[0]||GATEWAY_LEGAL_LABELS.es[0]],["./terms.html",GATEWAY_LEGAL_LABELS[kxGetLocale()]?.[1]||GATEWAY_LEGAL_LABELS.es[1]],[`mailto:${SUPPORT_EMAIL}`,GATEWAY_LEGAL_LABELS[kxGetLocale()]?.[2]||GATEWAY_LEGAL_LABELS.es[2]]].map(([href,label])=>`<a href="${esc(href)}" ${href.startsWith('mailto:')?'':'target="_blank" rel="noopener noreferrer"'}>${esc(label)}</a>`).join('')}</nav></footer>
     </section>
@@ -180,6 +181,7 @@ export function renderKombaxGateway({onClubDirectory,onDirectProfiles}){
   document.getElementById('gateway-direct')?.addEventListener('click',onDirectProfiles);
   document.getElementById('gateway-spectator')?.addEventListener('click',()=>renderIdentityPresentation('espectador',{onBack:()=>renderKombaxGateway({onClubDirectory,onDirectProfiles})}));
   document.getElementById('gateway-pricing')?.addEventListener('click',()=>renderCommercialDiscovery({onBack:()=>renderKombaxGateway({onClubDirectory,onDirectProfiles}),onSelectPlan:selection=>startCommercialOnboarding(selection,{onBack:()=>renderKombaxGateway({onClubDirectory,onDirectProfiles})})}));
+  hydratePilotClubEntry({onBack:()=>renderKombaxGateway({onClubDirectory,onDirectProfiles})}).catch(()=>{});
 }
 
 async function searchClubs(query=''){
@@ -250,6 +252,56 @@ export async function renderClubDirectory({onBack,onSelect,onAdminAccess,mode='m
 }
 
 function globalAuthenticated(){return state.session?.scope==='kombax'&&Boolean(state.session?.id);}
+
+async function hydratePilotClubEntry({onBack}={}){
+  const host=document.getElementById('gateway-pilot-entry');if(!host)return;
+  let pilot;try{pilot=await repos.pilot.window();}catch{return;}
+  if(!pilot?.open||Number(pilot?.slots_remaining||0)<=0){host.hidden=true;host.innerHTML='';return;}
+  host.hidden=false;
+  host.innerHTML=`<button type="button" class="gateway-path kx-pilot-club-path" id="gateway-pilot-club"><span class="gateway-path-icon">${featureIcon('club',{size:54})}</span><span class="gateway-path-copy"><em>VENTANA TEMPORAL · ${metricPilotSlots(pilot)}</em><strong>Alta como Club Piloto</strong><small>Acceso por invitación. Sin documentación de verificación: el Club se activa como Premium para el piloto y continúa después como Club fundador.</small></span><span class="gateway-path-arrow">${icon('arrowUpRight',{size:22})}</span></button>`;
+  host.querySelector('#gateway-pilot-club')?.addEventListener('click',()=>openPilotClubActivation({onBack}));
+}
+
+function metricPilotSlots(pilot){const remaining=Math.max(0,Number(pilot?.slots_remaining||0));return `${remaining} ${remaining===1?'plaza disponible':'plazas disponibles'}`;}
+
+function pilotAuthChoice({onBack}={}){
+  sessionStorage.setItem('kombax_pending_pilot_club','1');
+  const {wrap}=openDetail({title:'Alta Club Piloto',subtitle:'Acceso temporal reservado a los cuatro clubes invitados.',width:'640px',body:'<div class="gateway-auth-explain"><strong>El código piloto sustituye la revisión documental inicial</strong><p>Crea o utiliza tu cuenta KOMBAX de Club. Tras confirmar el correo, completarás los datos básicos del Club y el sistema lo activará directamente como Club Piloto Premium.</p></div>',actions:'<button class="btn btn-primary" id="kx-pilot-login">Ya tengo cuenta</button><button class="btn btn-ghost" id="kx-pilot-register">Crear cuenta Club</button>'});
+  wrap.querySelector('#kx-pilot-login')?.addEventListener('click',()=>openGlobalAuth({onBack,pendingType:'club',mode:'login',onAuthenticated:()=>openPilotClubActivation({onBack})}));
+  wrap.querySelector('#kx-pilot-register')?.addEventListener('click',()=>openGlobalAuth({onBack,pendingType:'club',mode:'register',onAuthenticated:()=>openPilotClubActivation({onBack})}));
+}
+
+async function openPilotClubActivation({onBack}={}){
+  let pilot;try{pilot=await repos.pilot.window();}catch(error){setError(error);return;}
+  if(!pilot?.open||Number(pilot?.slots_remaining||0)<=0){sessionStorage.removeItem('kombax_pending_pilot_club');toast('La ventana de alta Club Piloto está cerrada o ya no quedan plazas.','warning');return;}
+  if(!globalAuthenticated()){pilotAuthChoice({onBack});return;}
+  if(state.session?.platform_legal_required===true){sessionStorage.setItem('kombax_pending_pilot_club','1');toast('Revisa primero las Condiciones y la Política de Privacidad de KOMBAX.','warning');renderDirectProfileHub({onBack,pendingType:'club'});return;}
+  openForm({
+    title:'Alta Club Piloto',subtitle:'Activación directa por invitación · Premium piloto · sin documentación de verificación.',width:'820px',
+    fields:[
+      {name:'pilot_code',label:'Código de acceso piloto',required:true,full:true,help:'Código de un solo uso facilitado por KOMBAX al Club invitado.'},
+      {name:'nombre_publico',label:'Nombre del Club',required:true,full:true},
+      {name:'lema',label:'Lema público'},
+      {name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true},
+      {name:'ubicacion',label:'Ubicación pública',required:true},{name:'ciudad',label:'Ciudad'},
+      {name:'provincia',label:'Provincia / región'},{name:'pais',label:'País',value:'España'},
+      {name:'disciplinas',label:'Disciplinas',required:true,full:true,help:'Separadas por comas; máximo 12.'},
+      {name:'telefono',label:'Teléfono de contacto del Club',required:true},
+      {name:'web_publica',label:'Web pública HTTPS',type:'url',full:true},{name:'instagram',label:'Instagram público',full:true},
+      {name:'declaration',label:'Confirmo que estoy autorizado para dar de alta este Club en el programa piloto KOMBAX',type:'checkbox',required:true,value:false,full:true}
+    ],
+    submitText:'Activar Club Piloto',
+    onSubmit:async v=>{
+      if(!v.declaration)throw new Error('Debes confirmar que estás autorizado para registrar el Club.');
+      const disciplinas=String(v.disciplinas||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);if(!disciplinas.length)throw new Error('Indica al menos una disciplina.');
+      const result=await repos.pilot.activateClub({...v,disciplinas,declaration:true});
+      sessionStorage.removeItem('kombax_pending_pilot_club');sessionStorage.removeItem('kombax_pending_profile_type');
+      await backend.restore().catch(()=>null);closeModal();toast('Club Piloto activado. Premium piloto y vinculación de miembros disponibles.');
+      await renderDirectProfileHub({onBack});
+      return result;
+    }
+  });
+}
 
 function openGlobalAuth({onBack,pendingType='',mode='login',onAuthenticated=null}={}){
   if(mode==='register'){
@@ -389,13 +441,13 @@ function applicationFields(type,profile=null,application=null){
     {name:'email_oficial',label:'Email oficial · privado',type:'email',required:true,value:verify.email_oficial||''},{name:'telefono',label:'Teléfono oficial · privado',required:true,value:verify.telefono||''},{name:'direccion',label:'Dirección administrativa o zona de actividad · privada',value:verify.direccion||'',full:true,help:'Puede ser la dirección del centro o una referencia de zona. La ubicación pública ya identifica la población.'},
     {name:'responsable',label:'Responsable del club',required:true,value:verify.responsable||''},{name:'rol_responsable',label:'Cargo / relación con el club',required:true,value:verify.rol_responsable||''},
     {name:'plan_codigo',label:'Plan opcional',type:'select',value:verify.plan_codigo||selectedCommercialPlan('club').plan_code||'',options:[{value:'',label:'Solo perfil público gratuito'},...commercialPlanOptions('club')],full:true,help:'Puedes solicitar el perfil público sin contratar la gestión privada. La verificación del Club no realiza ningún cobro.'},
-    {name:'billing_cycle',label:'Modalidad si eliges un plan',type:'select',value:verify.billing_cycle||selectedCommercialPlan('club').billing_cycle||'monthly',options:[{value:'monthly',label:'Mensual'},{value:'annual',label:'Anual'}],full:true},
-    {name:'pilot_requested',label:'Solicito participar en el piloto de clubes (1 de octubre a 15 de noviembre de 2026)',type:'checkbox',value:verify.pilot_requested===true,full:true,help:'Sin tarjeta ni cobro durante el piloto. La plaza y el nivel de acceso requieren aprobación de KOMBAX. Deja el plan opcional en «Solo perfil público gratuito».'}
+    {name:'billing_cycle',label:'Modalidad si eliges un plan',type:'select',value:verify.billing_cycle||selectedCommercialPlan('club').billing_cycle||'monthly',options:[{value:'monthly',label:'Mensual'},{value:'annual',label:'Anual'}],full:true}
   );
   if(type==='club')fields.push({name:'tipo_acreditacion',label:'Tipo de acreditación',type:'select',required:true,value:'Documento del club / centro',options:[{value:'Licencia / acreditación federativa',label:'Licencia / acreditación federativa'},{value:'Registro de club o asociación',label:'Registro de club o asociación'},{value:'Documento fiscal o legal',label:'Documento fiscal o legal'},{value:'Documento del club / centro',label:'Documento del club / centro'},{value:'Otro documento acreditativo',label:'Otro documento acreditativo'}],full:true});
+  const mediaVerification=type==='media';
   fields.push(
-    {name:'evidencia',label:type==='club'?'Cómo podemos comprobar que el club existe y que puedes representarlo':'Cómo podemos verificar esta identidad',type:'textarea',rows:4,maxLength:1200,required:true,full:true,value:verify.evidencia||'',help:type==='club'?'Indica web, red social oficial, federación, registro, centro deportivo u otra referencia contrastable. Estos datos son privados.':'Describe fuentes verificables. KOMBAX no publica estos datos.'},
-    {name:'documento',label:type==='club'?'Documento acreditativo privado':'Documento acreditativo',type:'file',accept:'.pdf,image/jpeg,image/png,image/webp',required:!application,full:true,help:type==='club'?'Necesario para enviar una solicitud nueva. Puede ser una licencia, registro, documento del centro u otra acreditación razonable; no tiene que ser documentación empresarial compleja. PDF/JPG/PNG/WEBP, máximo 15 MB.':'Es obligatorio disponer de al menos un documento antes del envío. PDF/JPG/PNG/WEBP, máximo 15 MB; almacenamiento privado.'},
+    {name:'evidencia',label:type==='club'?'Cómo podemos comprobar que el club existe y que puedes representarlo':mediaVerification?'Portfolio / referencias / actividad verificable':'Cómo podemos verificar esta identidad',type:'textarea',rows:4,maxLength:1200,required:true,full:true,value:verify.evidencia||'',help:type==='club'?'Indica web, red social oficial, federación, registro, centro deportivo u otra referencia contrastable. Estos datos son privados.':mediaVerification?'Indica portfolio, web, perfiles públicos, trabajos, acreditaciones o referencias suficientes para revisar tu actividad. Estos datos no se publican automáticamente.':'Describe fuentes verificables. KOMBAX no publica estos datos.'},
+    {name:'documento',label:type==='club'?'Documento acreditativo privado':mediaVerification?'Documento adicional · opcional':'Documento acreditativo',type:'file',accept:'.pdf,image/jpeg,image/png,image/webp',required:!mediaVerification&&!application,full:true,help:type==='club'?'Necesario para enviar una solicitud nueva. Puede ser una licencia, registro, documento del centro u otra acreditación razonable; no tiene que ser documentación empresarial compleja. PDF/JPG/PNG/WEBP, máximo 15 MB.':mediaVerification?'Opcional. Úsalo si ayuda a acreditar tu actividad; KOMBAX puede solicitar información adicional durante la revisión. PDF/JPG/PNG/WEBP, máximo 15 MB.':'Es obligatorio disponer de al menos un documento antes del envío. PDF/JPG/PNG/WEBP, máximo 15 MB; almacenamiento privado.'},
     {name:'declaration',label:'Declaro que la información es correcta y que estoy autorizado para representar esta identidad',type:'checkbox',value:application?.declaracion_aceptada===true,required:true,full:true}
   );
   return fields;
@@ -409,10 +461,9 @@ async function saveAndSubmitApplication(type,{profile=null,application=null,onBa
     width:'900px',fields:applicationFields(type,profile,application),submitText:'Guardar y enviar',
     onSubmit:async v=>{
       if(!v.declaration)throw new Error('Debes confirmar la declaración de identidad y representación.');
-      if(type==='club'&&v.pilot_requested&&v.plan_codigo)throw new Error('Para solicitar el piloto, deja el plan opcional en «Solo perfil público gratuito». Administración asignará el nivel piloto.');
       const list=String(v.disciplinas||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
       const datos_publicos={ubicacion:v.ubicacion||'',ciudad:v.ciudad||'',provincia:v.provincia||'',disciplinas:list,categoria:v.categoria||'',club_declarado:v.club_declarado||'',territorio:v.territorio||'',pais:v.pais||'',web_publica:v.web_publica||'',lema:v.lema||'',descripcion:v.descripcion||'',instagram:v.instagram||'',tiktok:v.tiktok||'',youtube:v.youtube||'',especialidad_principal:v.especialidad_principal||profile?.profesional_especialidad_principal||'',especialidades_secundarias:String(v.especialidades_secundarias||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,4)};
-      const datos_verificacion={responsable:v.responsable||'',rol_responsable:v.rol_responsable||'',evidencia:v.evidencia||'',forma_entidad:v.forma_entidad||'',nombre_legal:v.nombre_legal||'',fecha_nacimiento:v.fecha_nacimiento||'',email:v.email||'',razon_social:v.razon_social||'',tax_id:v.tax_id||'',cif:v.cif||'',email_corporativo:v.email_corporativo||'',email_oficial:v.email_oficial||'',telefono:v.telefono||'',direccion:v.direccion||'',registro_entidad:v.registro_entidad||'',plan_codigo:commercialAudienceForType(type)?(type==='club'&&v.pilot_requested?'':(v.plan_codigo||selectedCommercialPlan(type).plan_code||'')):'',billing_cycle:commercialAudienceForType(type)?(v.billing_cycle||selectedCommercialPlan(type).billing_cycle||'monthly'):'',pilot_requested:type==='club'&&v.pilot_requested===true};
+      const datos_verificacion={responsable:v.responsable||'',rol_responsable:v.rol_responsable||'',evidencia:v.evidencia||'',forma_entidad:v.forma_entidad||'',nombre_legal:v.nombre_legal||'',fecha_nacimiento:v.fecha_nacimiento||'',email:v.email||'',razon_social:v.razon_social||'',tax_id:v.tax_id||'',cif:v.cif||'',email_corporativo:v.email_corporativo||'',email_oficial:v.email_oficial||'',telefono:v.telefono||'',direccion:v.direccion||'',registro_entidad:v.registro_entidad||'',plan_codigo:commercialAudienceForType(type)?(v.plan_codigo||selectedCommercialPlan(type).plan_code||''):'',billing_cycle:commercialAudienceForType(type)?(v.billing_cycle||selectedCommercialPlan(type).billing_cycle||'monthly'):''};
       const saved=await repos.kombaxProfiles.saveApplication({solicitud_id:application?.id||null,tipo:type,perfil_directo_id:profile?.id||null,nombre_publico:v.nombre_publico,datos_publicos,datos_verificacion,declaracion_aceptada:true});
       const row=saved?.data||saved;const id=row?.id||application?.id;if(!id)throw new Error('No se pudo verificar el identificador de la solicitud guardada.');
       if(v.documento)await repos.kombaxProfiles.uploadVerificationDocument(id,type==='club'?(v.tipo_acreditacion||'Documento acreditativo'):'acreditacion',v.documento);
@@ -427,7 +478,7 @@ function profileEditor(type,{profile=null,onBack,memberProfiles=[]}={}){
   if(!profile&&!requireProfileChoice(type))return;
   openForm({
     title:profile?'Editar perfil KOMBAX':`Preparar solicitud ${TYPE_LABEL[type]||type}`,
-    subtitle:type==='competidor'?'Puedes evolucionar tu Miembro actual sin perder publicaciones ni Mi red. La insignia exige revisión y activación del servicio.':type==='espectador'?'Identidad privada de consumo 16+. No publica ni requiere verificación profesional.':type==='profesional'?'Actividad profesional 18+. La especialidad define elegibilidad; la verificación habilita capacidades sensibles.':type==='media'?'Canal, medio o creador de contenido. La verificación habilita únicamente Social, Showcase y su identidad pública.':'Primero preparas la identidad. La verificación y el servicio se activan por separado.',
+    subtitle:type==='competidor'?'Tu cuenta personal puede solicitar Competidor de forma autónoma. No necesitas un Club; si ya eres Miembro puedes conservar publicaciones y Mi red. La condición Competidor exige revisión.':type==='espectador'?'Identidad privada de consumo 16+. No publica ni requiere verificación profesional.':type==='profesional'?'Actividad profesional 18+. La especialidad define elegibilidad; la verificación habilita capacidades sensibles.':type==='media'?'Canal, medio o creador de contenido. La verificación habilita únicamente Social, Showcase y su identidad pública.':'Primero preparas la identidad. La verificación y el servicio se activan por separado.',
     width:'840px',initial:profile||{},fields:profileFields(type,profile||{},memberProfiles),submitText:'Guardar borrador',
     onSubmit:async v=>{
       const disciplinas=String(v.disciplinas||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
@@ -586,6 +637,8 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     if(newlyCreated&&commercialAudienceForType(newlyCreated.tipo)&&selectedCommercialPlan(newlyCreated.tipo).plan_code){
       sessionStorage.removeItem('kombax_new_profile_id');
       setTimeout(()=>saveAndSubmitApplication(newlyCreated.tipo,{profile:newlyCreated,onBack}),420);
+    }else if(sessionStorage.getItem('kombax_pending_pilot_club')==='1'){
+      setTimeout(()=>openPilotClubActivation({onBack}),260);
     }else if(pendingType&&directTypes.some(t=>t.id===pendingType&&!t.disabled&&!t.baseOnly)&&['competidor','marca','federacion','profesional','media'].includes(pendingType)){
       profileEditor(pendingType,{onBack,memberProfiles});
     }else if(pendingType==='club'&&!applications.some(a=>a.tipo==='club'&&['submitted','under_review','needs_information'].includes(a.estado))){

@@ -176,8 +176,15 @@ async function uploadKombaxShowcaseImage(brandId,file){
   if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
   if(!brandId)throw new Error('Selecciona el espacio de Showcase.');
   if(!file?.size)throw new Error('Selecciona una imagen.');
-  if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Showcase admite JPG, PNG o WEBP.');
-  const prepared=await optimizeImage(file,{maxEdge:1920,maxBytes:5*1024*1024});
+  const mimeByExtension={jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',heic:'image/heic',heif:'image/heif',avif:'image/avif'};
+  const declaredMime=String(file.type||'').toLowerCase();
+  const extensionMime=mimeByExtension[String(file.name||'').split('.').pop()?.toLowerCase()]||'';
+  const sourceMime=declaredMime==='image/jpg'?'image/jpeg':(!declaredMime||declaredMime==='application/octet-stream'?extensionMime:declaredMime);
+  const accepted=['image/jpeg','image/png','image/webp','image/heic','image/heif','image/avif'];
+  if(!accepted.includes(sourceMime))throw new Error('Showcase admite fotos JPG, PNG, WEBP, HEIC, HEIF o AVIF.');
+  const source=sourceMime===file.type?file:new File([file],file.name||'foto',{type:sourceMime,lastModified:file.lastModified||Date.now()});
+  const prepared=await optimizeImage(source,{maxEdge:1920,maxBytes:5*1024*1024,forceReencode:!['image/jpeg','image/png','image/webp'].includes(sourceMime)});
+  if(!['image/jpeg','image/png','image/webp'].includes(prepared.file.type))throw new Error('No se pudo convertir la foto a un formato compatible con Showcase.');
   const ext=prepared.file.type==='image/png'?'png':prepared.file.type==='image/webp'?'webp':'jpg';
   const token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
   const path=`${session().id}/showcase/${brandId}/${Date.now()}-${token}.${ext}`;
@@ -1330,6 +1337,11 @@ export const repos={
       return staged;
     }
   },
+  pilot:{
+    window:()=>backend.publicRpc('app_kombax_pilot_registration_window_r110',{}),
+    activateClub:(payload)=>backend.globalWriteRpc('app_kombax_pilot_club_activate_r110',{p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
+  },
+
   platformAdmin:{
     context:()=>backend.globalReadRpc('app_kombax_platform_context_v055',{}),
     dashboard:()=>backend.globalReadRpc('app_kombax_platform_dashboard_v072',{}),
@@ -1347,8 +1359,27 @@ export const repos={
     pilotReadiness:()=>backend.globalReadRpc('app_kombax_pilot_readiness_status_v117',{}),
     pilotMetrics:()=>backend.globalReadRpc('app_kombax_pilot_metrics_r97',{}),
     aiMetrics:()=>backend.globalReadRpc('app_kombax_ai_admin_metrics_r103',{}),
+    ownerAgents:()=>backend.globalReadRpc('app_kombax_owner_agents_dashboard_r105',{}),
+    ownerAgentConversations:()=>backend.globalReadRpc('app_kombax_owner_agent_conversations_r107',{}),
+    ownerAgentConversation:(operation,{agent=null,conversation_id=null,title=null}={})=>backend.globalWriteRpc('app_kombax_owner_agent_conversation_mutate_r107',{p_operation:operation,p_agent:agent,p_conversation_id:conversation_id,p_title:title}),
+    ownerAgentChat:(agent,message,{reasoning_effort='low',context_type=null,context_id=null,conversation_id=null,document_ids=[]}={})=>backend.invokeFunction('kombax-owner-agents-r105',{agent,message:String(message||'').trim(),reasoning_effort:reasoning_effort==='medium'?'medium':'low',context_type,context_id,conversation_id,document_ids:[...new Set((Array.isArray(document_ids)?document_ids:[]).map(String).filter(Boolean))].slice(0,3),client_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},65000),
+    async ownerAgentDocumentUpload(file,category='other',title=''){
+      if(!file||!file.size)throw new Error('Selecciona un documento.');
+      if(file.size>10*1024*1024)throw new Error('El documento supera 10 MB.');
+      const allowed={pdf:'application/pdf',txt:'text/plain',csv:'text/csv',tsv:'text/tab-separated-values',xls:'application/vnd.ms-excel',xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',doc:'application/msword',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',ppt:'application/vnd.ms-powerpoint',pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp'};
+      const ext=String(file.name||'').split('.').pop()?.toLowerCase()||'',mime=allowed[ext];
+      if(!mime)throw new Error('Formato no admitido. Usa PDF, Excel, CSV, Word, PowerPoint, TXT, JPG, PNG o WEBP.');
+      const uid=String(session()?.id||'');if(!uid)throw new Error('La sesión Owner ha caducado.');
+      const safeName=String(file.name||`documento.${ext}`).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-120);
+      const path=`${uid}/owner-inbox/${Date.now()}-${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}-${safeName}`;
+      const uploadFile=file.type===mime?file:new File([file],file.name,{type:mime,lastModified:file.lastModified});
+      await backend.upload('kombax-owner-inbox',path,uploadFile,false);
+      try{return await backend.globalWriteRpc('app_kombax_owner_document_register_r106',{p_storage_path:path,p_original_name:String(file.name||safeName).slice(0,255),p_mime_type:mime,p_size_bytes:file.size,p_category:['request','verification','showcase','pilot','incident','finance','other'].includes(category)?category:'other',p_title:String(title||'').trim().slice(0,180)||null});}
+      catch(error){await backend.remove('kombax-owner-inbox',path).catch(()=>{});throw error;}
+    },
     pilotRequests:()=>backend.globalReadRpc('app_kombax_pilot_requests_r99',{}),
     pilotAssign:(club_id,plan_code,notes='')=>backend.globalWriteRpc('app_kombax_pilot_assign_r99',{p_club_id:club_id,p_plan_code:plan_code,p_notes:notes}),
+    pilotInviteCreate:(label,email='')=>backend.globalWriteRpc('app_kombax_pilot_invite_create_r110',{p_label:String(label||'').trim(),p_email:String(email||'').trim()||null}),
     pilotEnroll:(subject_type,subject_id,notes='')=>backend.globalWriteRpc('app_kombax_pilot_enroll_r97',{p_subject_type:subject_type,p_subject_id:subject_id,p_notes:notes}),
     founderBenefit:(subject_type,subject_id,program,start_at)=>backend.globalWriteRpc('app_kombax_founder_benefit_r97',{p_subject_type:subject_type,p_subject_id:subject_id,p_program:program,p_start_at:start_at}),
     aiCreditGrant:(tenant_ref,amount,type,key,expires_at=null)=>backend.globalWriteRpc('app_kombax_ai_grant_r97',{p_tenant_ref:tenant_ref,p_amount:amount,p_type:type,p_key:key,p_expires:expires_at}),

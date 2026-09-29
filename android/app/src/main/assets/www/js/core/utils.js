@@ -65,6 +65,10 @@ function applicationFieldsMessage(raw){
 function humanErrorSpanish(error) {
   if(error?.code==='AUTH_EXPIRED')return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
   const raw=technicalError(error).trim();
+  if(/KOMBAX_BASE_VERIFICATION_REQUIRED/i.test(raw))return 'Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.';
+  if(/SELLER_APPLICATION_DATA_INCOMPLETE/i.test(raw))return 'Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos.';
+  if(/SELLER_DECLARATIONS_REQUIRED/i.test(raw))return 'Acepta las dos declaraciones de vendedor antes de enviar la solicitud.';
+  if(/SELLER_SHIPPING_MODE_REQUIRED/i.test(raw))return 'Selecciona al menos una forma de entrega para tus productos.';
   if(/invalid\s*refresh\s*token|refresh\s*token\s*(?:not\s*found|invalid|expired)|refresh_token_not_found|jwt.*expired|token.*expired/i.test(raw))return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
   if(/failed to fetch|networkerror|network request failed|load failed|internet|timeout|tiempo de espera|aborterror/i.test(raw))return 'No se pudo conectar. Comprueba tu conexión a Internet e inténtalo de nuevo.';
   if(/rate.?limit|too many|frequent|429/i.test(raw))return 'Has realizado demasiados intentos. Espera un momento y vuelve a intentarlo.';
@@ -79,6 +83,9 @@ function humanErrorSpanish(error) {
   if(/FINANCE_CHARGE_DUPLICATE/i.test(raw))return 'Ya existe un cargo prácticamente idéntico creado hace unos instantes. Revisa la lista antes de repetirlo.';
   if(/FINANCE_PAYMENT_CHARGE_CLOSED/i.test(raw))return 'Esta cuota está anulada o exenta y no admite nuevos pagos ni validaciones.';
   if(/KOMBAX_VERIFICATION_DOCUMENT_REQUIRED/i.test(raw))return 'Adjunta un documento acreditativo antes de enviar la solicitud.';
+  if(/KOMBAX_SOCIAL_COMPETITOR_VERIFIED_AGE_REQUIRED/i.test(raw))return 'Verifica tu condición de competidor y la edad requerida para activar Social como Competidor.';
+  if(/KOMBAX_SOCIAL_PROFESSIONAL_AGE_REQUIRED/i.test(raw))return 'Tu perfil Profesional debe estar verificado y acreditar 18 años o más para activar Social.';
+  if(/KOMBAX_DIRECT_PROFILE_VERIFIED_REQUIRED/i.test(raw))return 'Verifica esta identidad antes de activar su publicación en Social.';
   const applicationFields=applicationFieldsMessage(raw);if(applicationFields)return applicationFields;
   if(/KOMBAX_DECLARATION_REQUIRED/i.test(raw))return 'Debes confirmar la declaración de identidad y representación.';
   if(/KOMBAX_APPLICATION_LOCKED_FOR_REVIEW/i.test(raw))return 'La solicitud ya está en revisión y no se puede modificar.';

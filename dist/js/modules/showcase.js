@@ -95,6 +95,14 @@ async function openSellerCenter(brand){
     const modal=openDetail({title:'Centro de vendedor',subtitle:`${brand.nombre} · activación, verificación, Stripe y derechos comerciales`,body,width:'980px',className:'kx-seller-center-modal'});
     modal.wrap.querySelector('#seller-application-edit')?.addEventListener('click',()=>openForm({title:'Alta de vendedor KOMBAX Showcase',subtitle:'Reutilizamos la identidad KOMBAX ya verificada. Confirma únicamente los datos comerciales necesarios para vender.',fields:[
       {name:'legal_name',label:'Razón social / nombre legal',required:true,value:app.legal_name||base.legal_name||brand.nombre},{name:'tax_id',label:'NIF / CIF / VAT',required:true,value:app.tax_id||base.tax_id||''},{name:'country',label:'País (código ISO)',required:true,value:app.country||'ES',maxLength:2},{name:'registered_address',label:'Domicilio legal / administrativo',required:true,full:true,value:app.registered_address||base.registered_address||''},{name:'support_email',label:'Email de atención al comprador',type:'email',required:true,value:app.support_email||base.support_email||''},{name:'support_phone',label:'Teléfono de atención',required:true,value:app.support_phone||base.support_phone||''},{name:'returns_contact',label:'Contacto para devoluciones (opcional)',value:app.returns_contact||''},{name:'seller_shipping',label:'Realiza envíos',type:'checkbox',value:(app.shipping_modes||[]).includes('seller_shipping'),full:true},{name:'seller_pickup',label:'Permite recogida',type:'checkbox',value:(app.shipping_modes||[]).includes('seller_pickup'),full:true},{name:'digital',label:'Entrega digital (si aplica)',type:'checkbox',value:(app.shipping_modes||[]).includes('digital'),full:true},{name:'compliance_statement',label:'Declaro que los productos y mi actividad cumplen la normativa aplicable',type:'checkbox',required:true,value:app.compliance_statement===true,full:true},{name:'marketplace_statement',label:'Declaro que actúo como vendedor independiente y soy responsable del producto, entrega, garantía y devoluciones',type:'checkbox',required:true,value:app.marketplace_statement===true,full:true}],submitText:'Enviar solicitud',onSubmit:async v=>{const shipping_modes=['seller_shipping','seller_pickup','digital'].filter(k=>v[k]===true);await repos.marketplace.sellerApplication(brand.id,'submit',{...v,shipping_modes});toast('Solicitud de vendedor enviada');modal.close();await openSellerCenter(brand);}}));
+    if(!checks.identity_verified){
+      const applicationButton=modal.wrap.querySelector('#seller-application-edit');
+      if(applicationButton){
+        applicationButton.disabled=true;
+        applicationButton.textContent='Verificación del club pendiente';
+        applicationButton.insertAdjacentHTML('afterend','<p class="muted">Puedes crear fichas desde «Añadir producto» en Mi Showcase. Para activar pagos, primero debe revisarse la identidad real del club.</p>');
+      }
+    }
     modal.wrap.querySelectorAll('[data-seller-policy]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{await repos.marketplace.acceptSellerPolicy(brand.id,btn.dataset.sellerPolicy,btn.dataset.policyVersion);toast('Documento aceptado');modal.close();await openSellerCenter(brand);}catch(error){btn.disabled=false;setError(error);}}));
     modal.wrap.querySelector('#seller-commerce-plan')?.addEventListener('click',()=>{modal.close();const descriptor=showcaseCommercialDescriptor(brand,data);openShowcaseCommercialPlans(brand,descriptor);});
     bindPaymentCenter(modal.wrap,{subjectType:'showcase_provider',subjectId:brand.id,onRefresh:async()=>{modal.close();await openSellerCenter(brand);},assistContext:{profileId:data?.provider?.subject_id||brand?.perfil_directo_id||null,profileType:brand?.sujeto_tipo||null}});
@@ -341,20 +349,20 @@ function itemEditor(brand,item=null,{commerceAllowed=true,sellerAccountActive=tr
   const professional=isProfessionalProvider(brand),initialKind=professional?'professional_service':(item?.listing_kind||'product');
   const commonFields=[
     {name:'nombre',label:initialKind==='professional_service'?'Nombre del servicio':'Nombre',required:true,full:true},
-    {name:'slug',label:'Identificador',required:true,value:item?.slug||'',help:'Minúsculas, números y guiones.'},
+    {name:'slug',label:'Identificador',value:item?.slug||'',help:'Opcional. Si lo dejas vacío, se genera automáticamente a partir del nombre.'},
     {name:'listing_kind',label:'Tipo de ficha',type:'select',value:initialKind,options:professional?[{value:'professional_service',label:'Servicio profesional · contacto'}]:[{value:'product',label:'Producto · marketplace'},{value:'professional_service',label:'Servicio profesional · contacto'}],help:professional?'Los perfiles profesionales publican servicios sin checkout de producto.':'Los productos pueden activar compra directa; los servicios se publican para contacto.'},
     {name:'categoria_id',label:'Categoría',type:'select',options:categories.map(c=>({value:c.id,label:c.nombre})),value:item?.categoria_id||''},
     {name:'product_type',label:initialKind==='professional_service'?'Tipo de servicio':'Tipo de producto',value:item?.product_type||'',maxLength:80,help:'Clasificación interna para catálogo y estadísticas.'},
     {name:'resumen',label:'Resumen',type:'textarea',rows:3,maxLength:320,full:true},
     {name:'descripcion',label:'Descripción completa',type:'textarea',rows:6,maxLength:3000,full:true},
-    {name:'imagen_archivo',label:'Subir imagen principal',type:'file',accept:'image/jpeg,image/png,image/webp',full:true,help:'JPG, PNG o WEBP. KOMBAX optimiza la imagen antes de publicarla.'},
+    {name:'imagen_archivo',label:'Subir imagen principal',type:'file',accept:'image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif',full:true,help:'JPG, PNG, WEBP o foto HEIC/HEIF/AVIF del móvil. KOMBAX optimiza la imagen antes de publicarla.'},
     {name:'imagen_url',label:'O usar imagen principal HTTPS',type:'url',full:true},
     {name:'quitar_imagen',label:'Eliminar imagen principal actual',type:'checkbox',value:false,full:true,help:'Si eliminas o sustituyes una imagen subida a KOMBAX, su archivo anterior también se limpia del almacenamiento.'},
-    {name:'galeria_archivo_1',label:'Subir imagen adicional 1',type:'file',accept:'image/jpeg,image/png,image/webp'},
+    {name:'galeria_archivo_1',label:'Subir imagen adicional 1',type:'file',accept:'image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif'},
     {name:'galeria_1',label:'O URL adicional 1 HTTPS',type:'url',value:gallery[0]||''},
-    {name:'galeria_archivo_2',label:'Subir imagen adicional 2',type:'file',accept:'image/jpeg,image/png,image/webp'},
+    {name:'galeria_archivo_2',label:'Subir imagen adicional 2',type:'file',accept:'image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif'},
     {name:'galeria_2',label:'O URL adicional 2 HTTPS',type:'url',value:gallery[1]||''},
-    {name:'galeria_archivo_3',label:'Subir imagen adicional 3',type:'file',accept:'image/jpeg,image/png,image/webp'},
+    {name:'galeria_archivo_3',label:'Subir imagen adicional 3',type:'file',accept:'image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif'},
     {name:'galeria_3',label:'O URL adicional 3 HTTPS',type:'url',value:gallery[2]||''},
     {name:'precio_orientativo',label:'Precio orientativo opcional',type:'number',min:0,step:'0.01'},
   ];
@@ -379,7 +387,7 @@ function itemEditor(brand,item=null,{commerceAllowed=true,sellerAccountActive=tr
     {name:'safety_status',label:'Estado de seguridad',type:'select',value:item?.safety_status||'allowed',options:[{value:'allowed',label:'Permitido'},{value:'restricted',label:'Restringido'},{value:'requires_review',label:'Requiere revisión'}]}
   ];
   const tailFields=[
-    {name:'cta_tipo',label:'Acción principal',type:'select',value:professional?'contact':(item?.cta_tipo||'info'),options:professional?[{value:'contact',label:'Contactar'}]:Object.entries(CTA_LABELS).map(([value,label])=>({value,label}))},
+    {name:'cta_tipo',label:'Acción principal',type:'select',value:professional?'contact':(item?.cta_tipo||'info'),options:professional?[{value:'contact',label:t(CTA_KEYS.contact)}]:Object.entries(CTA_KEYS).map(([value,key])=>({value,label:t(key)}))},
     {name:'cta_label',label:'Texto personalizado de la acción',maxLength:80,value:item?.cta_label||'',help:'Opcional. Si queda vacío se usa el texto estándar.'},
     {name:'visitar_url',label:'Tienda o web (HTTPS)',type:'url',full:true},
     {name:'donde_encontrar_url',label:'Dónde encontrar (HTTPS)',type:'url',full:true},

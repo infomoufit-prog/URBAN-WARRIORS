@@ -50,7 +50,9 @@ public final class KombaxTerminalManager implements TerminalListener, TapToPayRe
         this.sink = sink;
     }
 
-    private final ConnectionTokenProvider tokenProvider = callback -> {
+    private final ConnectionTokenProvider tokenProvider = this::requestConnectionToken;
+
+    private void requestConnectionToken(ConnectionTokenCallback callback) {
         String token = connectionToken;
         connectionToken = "";
         if (token != null && token.startsWith("pst_")) {
@@ -67,7 +69,7 @@ public final class KombaxTerminalManager implements TerminalListener, TapToPayRe
         } catch (Exception error) {
             Log.e(TAG, "Could not request a refreshed connection token", error);
         }
-    };
+    }
 
     public synchronized void provideConnectionToken(String token) {
         ConnectionTokenCallback callback = pendingTokenCallback;

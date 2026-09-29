@@ -1,0 +1,53 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const r=p=>fs.readFileSync(p,'utf8');
+let pass=0;const test=(name,fn)=>{try{fn();pass++;console.log(`PASS ${String(pass).padStart(2,'0')} · ${name}`);}catch(e){console.error(`FAIL · ${name}\n${e.message}`);process.exitCode=1;}};
+const mig=r('supabase/migrations/297_kombax_pilot_club_activation_owner_r110.sql');
+const gate=r('web/js/modules/gateway.js');
+const owner=r('web/js/modules/platform-admin.js');
+const repos=r('web/js/core/repositories.js');
+const cfg=r('web/config.js');
+const sw=r('web/service-worker.js');
+const gradle=r('android/app/build.gradle');
+const main=r('android/app/src/main/java/com/urbanwarriors/app/MainActivity.java');
+const health=r('supabase/functions/health/index.ts');
+const normalClub=r('supabase/migrations/098_kombax_club_verification_20053.sql');
+const badge=r('supabase/migrations/274_kombax_paid_organization_badges_r102.sql');
+
+test('R110 web identity is build 20163',()=>assert.ok(cfg.includes("version: '2.0.0-rc.13-r110-pilot-club-activation'")&&cfg.includes('build: 20163')));
+test('R110 Android identity is build 20163',()=>assert.ok(gradle.includes('versionCode 20163')&&gradle.includes("versionName '2.0.0-rc.13-r110-pilot-club-activation'")));
+test('R110 PWA marker matches 20163',()=>assert.ok(sw.includes('kombax-build-20163')&&sw.includes('20163-r110-pilot-club-activation')));
+test('R110 Android UA matches release',()=>assert.ok(main.includes('r110-pilot-club-activation')&&main.includes('/20163')));
+test('R110 health build matches release',()=>assert.ok(health.includes('build:20163')&&health.includes("'x-kombax-build':'20163'")));
+
+test('pilot registration window is explicitly temporary',()=>assert.ok(mig.includes("'pilot_registration_open_at'")&&mig.includes("'pilot_registration_close_at'")&&mig.includes('2026-11-16T00:00:00+01:00')));
+test('operational measurement starts Monday 5 October',()=>assert.ok(mig.includes('2026-10-05T00:00:00+02:00')));
+test('pilot is hard-capped at four clubs',()=>assert.ok(mig.includes("'pilot_club_slots','4'")&&mig.includes('greatest(0,least(4')));
+test('one-time pilot codes are stored only as SHA-256 hashes',()=>assert.ok(mig.includes('code_hash text not null unique')&&mig.includes("extensions.digest(v_code,'sha256')")&&!mig.includes('pilot_code text not null')));
+test('pending invite codes reserve capacity',()=>assert.ok(mig.includes('v_enrolled+v_pending>=coalesce(v_slots,4)')&&mig.includes("status='pending' and expires_at>now()")));
+test('pilot invites can be bound to an email',()=>assert.ok(mig.includes('intended_email')&&mig.includes('KOMBAX_PILOT_INVITE_EMAIL_MISMATCH')));
+test('pilot activation requires confirmed email and Auth',()=>assert.ok(mig.includes('KOMBAX_EMAIL_VERIFICATION_REQUIRED')&&mig.includes("if v_uid is null then raise exception 'AUTH_REQUIRED'")));
+test('pilot activation requires Club account type',()=>assert.ok(mig.includes('KOMBAX_PILOT_CLUB_ACCOUNT_REQUIRED')));
+test('pilot route collects basic operational data, not verification documents',()=>assert.ok(mig.includes('KOMBAX_CLUB_DISCIPLINES_REQUIRED')&&mig.includes('KOMBAX_CLUB_PHONE_REQUIRED')&&gate.includes('sin documentación de verificación')));
+test('pilot activation is recorded as verified by program',()=>assert.ok(mig.includes("'pilot-activation-r110'")&&mig.includes("'verified',5,true")&&mig.includes("'verification_source','pilot_program_r110'")));
+test('pilot activation reuses certified Club provisioning core',()=>assert.ok(mig.includes('app_kombax_create_club_core_v097')));
+test('pilot Club receives Premium PILOT_ACCESS automatically',()=>assert.ok(mig.includes("'PILOT_ACCESS','premium'")&&mig.includes("'pilot_activation_r110'")));
+test('pilot Club is founder eligible and persistent',()=>assert.ok(mig.includes('founder_eligible boolean not null default true')&&mig.includes("'club_persists_after_pilot',true")));
+test('pilot close does not delete or deactivate Club',()=>assert.ok(!/delete\s+from\s+public\.clubes|update\s+public\.clubes\s+set\s+activo\s*=\s*false/i.test(mig)));
+test('existing regular Club verification architecture remains present',()=>assert.ok(normalClub.includes('app_kombax_club_payload_validate_v098')&&normalClub.includes('app_kombax_application_validate_v072')));
+test('R102 paid badge semantics remain untouched by R110',()=>assert.ok(badge.includes('Pilot benefits, trial subscriptions')&&badge.includes('do not claim payment or a verification badge')&&!mig.includes('app_kombax_badge_tipo_v069')));
+
+test('Gateway exposes temporary Alta como Club Piloto entry',()=>assert.ok(gate.includes('gateway-pilot-entry')&&gate.includes('Alta como Club Piloto')));
+test('Gateway pilot form has one-time code',()=>assert.ok(gate.includes("name:'pilot_code'")&&gate.includes('Código de acceso piloto')));
+test('Gateway pilot form does not request CIF/document/evidence fields',()=>{const start=gate.indexOf('async function openPilotClubActivation');const end=gate.indexOf('function openGlobalAuth',start);const section=gate.slice(start,end);assert.ok(!/name:'(?:cif|documento|evidencia|tax_id)'/.test(section));});
+test('normal Club form no longer carries legacy pilot_requested field',()=>assert.ok(!gate.includes("name:'pilot_requested'")));
+test('pilot repository exposes status and activation RPCs',()=>assert.ok(repos.includes("app_kombax_pilot_registration_window_r110")&&repos.includes("app_kombax_pilot_club_activate_r110")));
+test('Owner can generate one-time pilot invitations',()=>assert.ok(owner.includes('Generar acceso Club Piloto')&&owner.includes('pilotInviteCreate')));
+test('Owner shows reserved accesses and disables oversubscription',()=>assert.ok(owner.includes('slots_reserved')&&owner.includes('inviteCapacity<=0')));
+test('Owner tracks member linkage and guardians',()=>assert.ok(owner.includes('members_linked')&&owner.includes('members_with_guardian')&&owner.includes('member_claims_pending')));
+test('Owner tracks operational pilot adoption',()=>assert.ok(owner.includes('training_sessions')&&owner.includes('attendance_records')&&owner.includes('social_posts')&&owner.includes('public_events')));
+test('Owner exposes founder-benefit handoff without inventing one universal program',()=>assert.ok(owner.includes('Beneficio fundador')&&owner.includes('PILOT_FOUNDER_6M')&&owner.includes('URBAN_WARRIORS_12M')));
+test('R110 tables and privileged functions are not exposed to anon by default',()=>assert.ok(mig.includes('revoke all on kombax_commercial.pilot_club_invites_r110 from public,anon,authenticated')&&mig.includes('revoke all on function public.app_kombax_pilot_club_activate_r110(jsonb,uuid) from public,anon,service_role')));
+
+if(process.exitCode)process.exit(process.exitCode);
+console.log(`R110 PILOT CLUB ACTIVATION QA · ${pass}/${pass} PASS`);

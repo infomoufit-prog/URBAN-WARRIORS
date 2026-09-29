@@ -3,11 +3,11 @@ import { pageHeader, setMainHtml, setError, toast } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { t } from '../i18n/index.js';
 
-const INDEX_URL='./assets/guides/runtime-index.json?v=20150';
+const INDEX_URL='./assets/guides/runtime-index.json?v=20163';
 const HERO_URL='./assets/brand-heroes/hero-guides.webp';
 let cache=null;
 async function loadIndex(){if(cache)return cache;const r=await fetch(INDEX_URL,{cache:'no-cache'});if(!r.ok)throw new Error(`GUIDES_INDEX_${r.status}`);cache=await r.json();return cache;}
-const kindLabel=k=>k==='public'?t('prepilot.publicGuide'):k==='territorial'?t('prepilot.territorialGuides'):k==='base'?t('prepilot.baseGuides'):t('prepilot.detailedTerritorial');
+const kindLabel=k=>k==='finance'?'Guía de Finanzas':k==='public'?t('prepilot.publicGuide'):k==='territorial'?t('prepilot.territorialGuides'):k==='base'?t('prepilot.baseGuides'):t('prepilot.detailedTerritorial');
 const resolvedPdf=(value)=>new URL(String(value||''),document.baseURI).href;
 const pdfAssetPath=(value)=>{try{const u=new URL(String(value||''),document.baseURI);const marker='/assets/guides/';const i=u.pathname.indexOf(marker);return i>=0?decodeURIComponent(u.pathname.slice(i+1)):'';}catch{return '';}};
 function nativePdf(action,value){const path=pdfAssetPath(value);if(!path||!window.UrbanWarriorsNative)return false;const fn=action==='save'?window.UrbanWarriorsNative.saveBundledPdf:window.UrbanWarriorsNative.openBundledPdf;if(typeof fn!=='function')return false;try{fn.call(window.UrbanWarriorsNative,path);return true;}catch{return false;}}
@@ -21,7 +21,7 @@ export async function renderGuides(){
   setMainHtml(`<div class="loading-card">${esc(t('common.states.loading'))}</div>`);
   try{
     const data=await loadIndex();
-    const entries=(data.entries||[]).filter(x=>x.active!==false);
+    const entries=[...(data.finance_guide?[data.finance_guide]:[]),...(data.entries||[])].filter(x=>x.active!==false);
     const territories=[...new Set(entries.map(x=>x.territory).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
     const manual=data.manual_product||null;
     const masterActions=data.show_master!==false&&data.master_pdf?`<div class="kx-resource-hero-actions"><button class="btn btn-primary" type="button" id="kx-guides-master-open">${esc(t('prepilot.openPdf'))}</button><button class="btn btn-ghost" type="button" id="kx-guides-master-download">${esc(t('prepilot.downloadPdf'))}</button></div>`:'';

@@ -327,7 +327,7 @@ export const backend={
     state.clearError();
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
-    const selectedType=['club','competidor','marca','federacion','profesional','media'].includes(accountType)?accountType:'';
+    const selectedType=['club','marca','federacion','profesional','media'].includes(accountType)?accountType:''; // Competidor se fija al crear/solicitar el perfil, no en Auth signup.
     const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
     if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
     let session=await globalIdentityFromAuth(auth.user);

@@ -44,7 +44,7 @@ ok('critical UI copy is directly localized in each non-Spanish locale',()=>{
 });
 const legacyBase=Object.keys(LEGACY.fr).sort();
 ok('six newly activated locales have complete direct legacy-copy maps',()=>{
-  assert.equal(legacyBase.length,2580);
+  assert.ok(legacyBase.length>=2580,`legacy coverage regressed below activation baseline: ${legacyBase.length}`);
   for(const l of NEW){const map=LEGACY[l];const keys=Object.keys(map).sort();assert.deepEqual(keys,legacyBase,`${l}: legacy key drift`);let empty=0,ph=0,same=0;for(const source of keys){const dst=String(map[source]??'');if(!dst.trim())empty++;if(source.trim()===dst.trim())same++;if(JSON.stringify(placeholders(source))!==JSON.stringify(placeholders(dst)))ph++;}assert.equal(empty,0,`${l}: empty legacy translation`);assert.equal(ph,0,`${l}: legacy placeholder drift`);assert.ok(same/keys.length<0.10,`${l}: suspicious untranslated legacy copy ${same}/${keys.length}`);report.legacy[l]={phrases:keys.length,empty,placeholder_mismatches:ph,identical_to_spanish:same};}
 });
 ok('public legal pages have 133 direct translations in each activated non-Spanish locale',()=>{
@@ -71,4 +71,4 @@ ok('Thai finance PDF has direct Unicode support with safe network fallback',()=>
 ok('user-authored content boundaries remain protected from runtime translation',()=>{const s=fs.readFileSync(path.join(root,'web/js/i18n/legacy-runtime.js'),'utf8');for(const token of ['data-user-content','kx-social-post-text','kx-comment p','kx-seller-response','kx-public-event-copy'])assert.match(s,new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')))});
 
 const out=path.join(root,'docs/i18n/activation/KOMBAX_I18N_ALL8_ACTIVATION_GATE.json');fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(report,null,2)+'\n');
-console.log(`\nALL-8 ACTIVATION GATE: PASS · ${masterKeys.length} direct catalog keys × 8 · 2580 legacy phrases × 6 · 133 legal strings × 7 non-ES locales`);
+console.log(`\nALL-8 ACTIVATION GATE: PASS · ${masterKeys.length} direct catalog keys × 8 · ${legacyBase.length} legacy phrases × 6 · 133 legal strings × 7 non-ES locales`);

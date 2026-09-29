@@ -1,0 +1,4 @@
+b3bdd4cf2363668da59b782f419f276ff15e22caf322a3a3db0572d2e49d0a61  supabase/migrations/296_kombax_prepilot_identity_permissions_r109.sql
+becffb7183496c18457d9e8d5c11bfd415ad3011e56e0ad486970dc742b87774  scripts/test-kombax-20162-r109-prepilot-identity.mjs
+4d8a9903c7869dd5f96a2f3f7bfe4a9c9e346634391e445708fca2f2752ea029  web/js/core/backend.js
+39b69231d59692024a42f50b1b9591aa4c4685efe1bf97ed1c4f81f78787713e  web/js/modules/gateway.js

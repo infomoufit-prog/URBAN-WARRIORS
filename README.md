@@ -1,3 +1,27 @@
+# KOMBAX R110 · build 20163 · Alta temporal Club Piloto y seguimiento Owner
+
+Esta entrega acumulativa parte de R109 y añade la vía excepcional **Alta como Club Piloto** para un máximo de 4 clubes autorizados. La vía piloto no modifica ni sustituye la arquitectura oficial de verificación: durante la ventana temporal, un código de acceso de un solo uso permite crear y validar un Club KOMBAX real sin solicitar CIF, documentos ni evidencias al usuario. El Club recibe el beneficio `PILOT_ACCESS` con capacidades Premium, queda marcado como fundador elegible y conserva el mismo `club_id`, miembros, historial y datos después del cierre del piloto.
+
+La ventana de registro piloto permanece abierta hasta el final del **15/11/2026** y el seguimiento operativo se mide desde el **05/10/2026**. Tras el cierre se retira únicamente la puerta especial de alta; los Clubes no se desactivan ni requieren una segunda verificación. Los beneficios fundadores posteriores se asignan según el programa correspondiente, sin inventar un único beneficio universal.
+
+Owner incorpora generación de accesos de un solo uso, control duro de 4 plazas y métricas por Club/agregadas de miembros, vinculaciones/tutores, invitaciones, solicitudes de vinculación, preinscripciones, sesiones, asistencias, Social, Events, migraciones, Assist, créditos y coste API. La integración reutiliza los flujos R58/R59 de membresía y tutoría.
+
+Supabase incluye la migración aditiva `297_kombax_pilot_club_activation_owner_r110.sql`; Web/PWA y Android usan build `20163`. La migración R110 está aplicada en el proyecto Supabase activo.
+
+> Estado de cierre: **PASS CON VALIDACIÓN ANDROID EXTERNA PENDIENTE**. QA R110 32/32, gates de identidad/membresía/discovery/i18n verdes y build web/dist/Android-assets sincronizado. La compilación Gradle real no puede ejecutarse en este entorno porque Gradle 8.11.1 no está cacheado y no hay acceso a `services.gradle.org`.
+
+## Historial acumulativo
+
+# KOMBAX R109 · build 20162 · Cierre pre-piloto de identidad y permisos
+
+Esta entrega acumulativa parte de R108 y aplica el último ajuste de identidad/perfiles previo al piloto real: Competidor autónomo verificado sin dependencia obligatoria de Club, publicación Social de Competidor/Profesional desacoplada de membresía, onboarding de Competidor desde cuenta personal y verificación proporcional de Media/Creador. Mantiene R100-R108, Miembro ligado a membresía, Promotor/Organizador como especialidad Profesional y la separación identidad/capability/plan/Stripe.
+
+Supabase incluye la migración aditiva `296_kombax_prepilot_identity_permissions_r109.sql`; Web/PWA y Android usan build `20162`. Los informes técnicos R109 están en `informes-tecnicos/`.
+
+> Estado de cierre: **PASS CON OBSERVACIÓN**. Los cambios R109 y sus regresiones específicas están verdes; permanecen deudas QA/i18n heredadas de R108 y un hueco histórico R28 en los archivos locales de migración, documentados sin inventar ni duplicar migraciones.
+
+## Historial acumulativo
+
 # KOMBAX R104 · build 20156 · Logo público del club
 
 Esta entrega acumulativa conserva R102 y versiones anteriores. Assist y Migrations

@@ -23,7 +23,7 @@ async function loadImage(file){
 
 const toBlob=(canvas,type,quality)=>new Promise(resolve=>canvas.toBlob(resolve,type,quality));
 
-export async function optimizeImage(file,{maxEdge=MAX_IMAGE_EDGE,maxBytes=MAX_IMAGE_OUTPUT_BYTES}={}){
+export async function optimizeImage(file,{maxEdge=MAX_IMAGE_EDGE,maxBytes=MAX_IMAGE_OUTPUT_BYTES,forceReencode=false}={}){
   if(!file||!file.size)throw new Error('Selecciona una imagen.');
   if(!String(file.type||'').startsWith('image/'))throw new Error('El archivo seleccionado no es una imagen.');
   if(file.size>MAX_IMAGE_INPUT_BYTES)throw new Error('La imagen original supera 35 MB. Selecciona una versión más ligera.');
@@ -33,7 +33,7 @@ export async function optimizeImage(file,{maxEdge=MAX_IMAGE_EDGE,maxBytes=MAX_IM
     const scale=Math.min(1,maxEdge/Math.max(decoded.width,decoded.height));
     const width=Math.max(1,Math.round(decoded.width*scale));
     const height=Math.max(1,Math.round(decoded.height*scale));
-    if(scale===1&&file.size<=1200*1024&&file.size<=maxBytes){
+    if(!forceReencode&&scale===1&&file.size<=1200*1024&&file.size<=maxBytes){
       return {file,width,height,mime:file.type,sizeBytes:file.size,originalBytes:file.size,optimized:false};
     }
     const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;

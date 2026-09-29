@@ -27,3 +27,6 @@ verify_jwt = true
 
 [functions.kombax-content-translate]
 verify_jwt = true
+
+[functions.kombax-owner-agents-r105]
+verify_jwt = true

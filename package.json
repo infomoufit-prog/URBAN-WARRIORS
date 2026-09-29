@@ -1,12 +1,15 @@
 {
   "name": "urban-warriors-2.0.0-rc13",
-  "version": "2.0.0-rc.13-r104-public-logo",
+  "version": "2.0.0-rc.13-r110-pilot-club-activation",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "pretest": "node scripts/test-kombax-20069-global-admin-moderation.mjs && node scripts/test-kombax-20070-pilot-readiness.mjs && node scripts/test-kombax-20071-security-privacy-hardening.mjs && node scripts/test-kombax-20072-legal-child-safety-ops.mjs && node scripts/test-kombax-20072-verifier-storage.mjs && node scripts/test-kombax-20077-backup-export-gateway.mjs && node scripts/test-disaster-recovery-20072.mjs && node scripts/test-kombax-20077-backup-ops.mjs && node scripts/test-health-20072.mjs && node scripts/test-auth-email-templates-20072.mjs && node scripts/test-auth-email-templates-20073.mjs && node scripts/test-kombax-20073-email-ux-polish.mjs && node scripts/test-kombax-20072-platform-legal.mjs && node scripts/test-kombax-20074-team-email-invitations.mjs && node scripts/test-kombax-20075-student-email-invitations.mjs && node scripts/test-kombax-20076-banner-positioning.mjs && node scripts/test-kombax-20077-data-lifecycle.mjs && node scripts/test-kombax-20077-owner-password-critical-otp.mjs && node scripts/test-kombax-20077-owner-support.mjs && node scripts/test-kombax-i18n-b04.mjs",
     "android:preflight": "node scripts/android-release-preflight.mjs",
+    "test:20158:r105": "node scripts/test-kombax-20158-r105-owner-agents.mjs",
+    "test:20159:r106": "node scripts/test-kombax-20159-r106-owner-document-inbox.mjs",
+    "test:20161:r108": "node scripts/test-kombax-20161-r108-finance-guide-poster.mjs",
     "test:assistance-allowances": "node scripts/test-kombax-20101-assistance-allowances-v213.mjs",
     "test": "node scripts/test-kombax-20145-r92-resource-center.mjs && node scripts/test-kombax-20143-r90-premium-home-resources.mjs && node scripts/test-kombax-20142-r89-inventory-lifecycle.mjs && node scripts/test-kombax-20141-r88-prepilot.mjs && node scripts/test-kombax-preblock-territories-detailed.mjs && node scripts/test-kombax-preblock-territories.mjs && node scripts/test-kombax-preblock-design-content.mjs && node scripts/test-kombax-20134-phase0-audit-freeze.mjs && node scripts/test-kombax-20133-r81-tap-to-pay.mjs && node scripts/test-kombax-20132-r80-payments-visibility-hotfix.mjs && node scripts/test-kombax-20131-r80-stripe-sepa-payments.mjs && node scripts/i18n-r79-full-product-audit.mjs --strict && node scripts/test-kombax-20130-r79-i18n-phases-6-10.mjs && node scripts/i18n-universal-content-gate.mjs && node scripts/i18n-en-quality-gate.mjs && node scripts/i18n-all8-activation-gate.mjs && node scripts/i18n-runtime-copy-audit.mjs --all --strict && node scripts/i18n-public-surface-audit.mjs && node scripts/i18n-system-channel-audit.mjs && node scripts/test-kombax-i18n-remediation-rb02.mjs && node scripts/i18n-hardcode-audit.mjs && node scripts/i18n-validate.mjs && node scripts/test-kombax-i18n-remediation-rb01.mjs && node scripts/test-kombax-i18n-b02.mjs && node scripts/test-kombax-i18n-b03.mjs && node scripts/test-kombax-20129-r78-i18n-phases-1-5.mjs && node scripts/test-kombax-20128-r77-premium-analytics-reports.mjs && node scripts/test-kombax-20127-r76-social-discovery-premium.mjs && node scripts/test-kombax-20126-r75-showcase-context-separation.mjs && node scripts/test-kombax-20125-r74-i18n-showcase-events-multiclub.mjs && node scripts/test-kombax-20101-r36-event-links-fighter-discovery.mjs && node scripts/test-kombax-20124-r73-reputation-community-completion.mjs && node scripts/test-kombax-20123-r72-release-regression.mjs && node scripts/test-kombax-20123-r72-commercial-continuity.mjs && node scripts/test-kombax-20123-r72-identity-spectator.mjs && node scripts/test-kombax-20123-r72-showcase-seller-center.mjs && node scripts/test-kombax-20123-r72-events-operations-center.mjs && node scripts/test-kombax-20123-r72-sidebar-product-accordions.mjs && node scripts/test-kombax-20123-r72-reputation-catalog.mjs",
     "build": "npm test && node scripts/build.mjs",
@@ -144,7 +147,9 @@
     "test:20132:r80-hotfix": "node scripts/test-kombax-20132-r80-payments-visibility-hotfix.mjs",
     "test:20133:r81": "node scripts/test-kombax-20133-r81-tap-to-pay.mjs",
     "test:20134:phase0": "node scripts/test-kombax-20134-phase0-audit-freeze.mjs",
-    "test:preblock:territories-detailed": "node scripts/test-kombax-preblock-territories-detailed.mjs"
+    "test:preblock:territories-detailed": "node scripts/test-kombax-preblock-territories-detailed.mjs",
+    "test:20162:r109": "node scripts/test-kombax-20162-r109-prepilot-identity.mjs",
+    "test:20163:r110": "node scripts/test-kombax-20163-r110-pilot-club-activation.mjs"
   },
   "engines": {
     "node": ">=20"

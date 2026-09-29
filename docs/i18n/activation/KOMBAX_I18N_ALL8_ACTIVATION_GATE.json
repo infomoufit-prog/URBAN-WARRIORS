@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T22:11:05.666Z",
+  "generated_at": "2026-09-29T21:30:03.967Z",
   "status": "PASS",
   "enabled_locales": [
     "es",
@@ -63,37 +63,37 @@
   },
   "legacy": {
     "fr": {
-      "phrases": 2580,
+      "phrases": 2587,
       "empty": 0,
       "placeholder_mismatches": 0,
       "identical_to_spanish": 9
     },
     "pt": {
-      "phrases": 2580,
+      "phrases": 2587,
       "empty": 0,
       "placeholder_mismatches": 0,
       "identical_to_spanish": 144
     },
     "it": {
-      "phrases": 2580,
+      "phrases": 2587,
       "empty": 0,
       "placeholder_mismatches": 0,
       "identical_to_spanish": 12
     },
     "de": {
-      "phrases": 2580,
+      "phrases": 2587,
       "empty": 0,
       "placeholder_mismatches": 0,
       "identical_to_spanish": 6
     },
     "th": {
-      "phrases": 2580,
+      "phrases": 2587,
       "empty": 0,
       "placeholder_mismatches": 0,
       "identical_to_spanish": 6
     },
     "fil": {
-      "phrases": 2580,
+      "phrases": 2587,
       "empty": 0,
       "placeholder_mismatches": 0,
       "identical_to_spanish": 7

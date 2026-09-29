@@ -11,8 +11,8 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.13-r104-public-logo',
-    build: 20156,
+    version: '2.0.0-rc.13-r110-pilot-club-activation',
+    build: 20163,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',
@@ -44,3 +44,5 @@ window.UW_CONFIG = {
   }
 };
 // historical-release-marker: version: '2.0.0-rc.13-r81-tap-to-pay' · r81-tap-to-pay build: 20134
+
+// historical-release-marker: version: '2.0.0-rc.13-r108-finance-guide-poster' · build: 20161

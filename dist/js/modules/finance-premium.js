@@ -8,6 +8,7 @@ import { esc,money,dateFmt,isoDate } from '../core/utils.js';
 import { pageHeader,card,table,empty,badge,openForm,openDetail,closeModal,toast,setError,setMainHtml } from '../ui/components.js';
 import { openReceipt } from './finance.js';
 import { paymentCenterSummaryHtml, bindPaymentCenter, openPaymentCenter } from './payments-center.js';
+import { mountFinanceGuide } from './finance-guide.js';
 
 const cid=()=>state.session?.club_id, enc=v=>encodeURIComponent(String(v??'')), PAGE=20, EXPLORER_PAGE=20;
 const labelCat=x=>({cuota:'Cuota',matricula:'Matrícula',licencia:'Licencia',material:'Material',competicion:'Competición',evento:'Evento',desplazamiento:'Desplazamiento',otro:'Otro'}[x]||x||'Otro');
@@ -188,6 +189,8 @@ export async function renderFinancePremium(){
     if(tab==='receipts')content=`${explorerToolbar(X)}${card('Recibos',receipts(X?.rows||[])+explorerPager(X))}`;
     if(tab==='reports')content=`${integrityPanel(I)}${explorerToolbar(X)}${reportsPanel(F,H,R)}${explorerPager(X)}`;
     setMainHtml(`${pageHeader('Finanzas Premium','Dashboard interactivo, automatización y trazabilidad. KOMBAX registra y valida; los cobros con tarjeta se procesan directamente en la cuenta Stripe del club.',actions,'Economía')}${tabs()}${D.pending_validation?`<div class="alert alert-warning" style="margin:0 0 14px"><strong>Requiere acción</strong><span>${D.pending_validation} pagos por validar.</span></div>`:''}${content}`);
+
+    mountFinanceGuide({premium:true});
 
     for(const [id,k] of [['f-year','year'],['f-month','month'],['f-socio','socio'],['f-grupo','grupo'],['f-disc','disciplina'],['f-cat','categoria'],['f-state','estado'],['f-rule','regla'],['f-method','metodo'],['f-age','aging']])document.getElementById(id)?.addEventListener('change',e=>{filters[k]=e.target.value;offset=0;renderFinancePremium()});
     document.getElementById('f-clear')?.addEventListener('click',()=>{resetFinanceFilters();renderFinancePremium()});

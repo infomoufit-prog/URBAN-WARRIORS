@@ -977,5 +977,19 @@
       "case_specific": true,
       "active": true
     }
-  ]
+  ],
+  "finance_guide": {
+    "id": "r108-finance-club",
+    "code": "FINANZAS",
+    "kind": "finance",
+    "active": true,
+    "edition": "R108",
+    "title": "Guía completa de Finanzas para clubes",
+    "subtitle": "Cargos, cuotas, automatizaciones, avisos, cobros con tarjeta, recibos e informes explicados paso a paso.",
+    "scope": "Clubes, equipo de gestión, miembros y familias",
+    "territory": "",
+    "pdf": "./assets/guides/finance/KOMBAX_GUIA_FINANZAS_CLUB.pdf",
+    "case_specific": false,
+    "consult_triggers": []
+  }
 }

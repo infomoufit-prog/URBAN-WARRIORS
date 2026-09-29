@@ -41,9 +41,9 @@ if(!existsSync(apk) || statSync(apk).size<1024){
 }
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R104_3_PILOT_QA_DEBUG.apk`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R104_4_PILOT_QA_DEBUG.apk`);
 copyFileSync(apk,namedApk);
-console.log(`\nOK · KOMBAX R104.3 build ${versionCode} · Pilot QA Android`);
+console.log(`\nOK · KOMBAX R104.4 build ${versionCode} · Pilot QA Android`);
 console.log('APK Gradle: android/app/build/outputs/apk/debug/app-debug.apk');
 console.log(`APK QA: ${namedApk}`);
 

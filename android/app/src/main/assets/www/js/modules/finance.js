@@ -10,6 +10,7 @@ import { migrationAssistBanner, openMigrationPreparation } from './customer-oper
 import { contentTranslationAttrs, prewarmUserContentTranslations } from '../i18n/user-content-translation.js';
 import { paymentCenterSummaryHtml, bindPaymentCenter, openPaymentCenter } from './payments-center.js';
 import { openFinanceContext } from './finance-context.js';
+import { mountFinanceGuide } from './finance-guide.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 const opts=(rows,label)=>rows.map(r=>({value:r.id,label:label(r)}));
@@ -169,6 +170,7 @@ export async function renderFinance(){
         ${card('Recibos',receiptRows.length?table(['Número','Alumno','Concepto','Origen','Pago','Periodo','Importe','Estado','Acciones'],receiptRows):empty('Sin recibos'))}`);
     }
 
+    mountFinanceGuide({premium:!portal});
     if(!portal)bindPaymentCenter(document.querySelector('#main-view'),{subjectType:'club',subjectId:state.session.club_id,onRefresh:renderFinance,assistContext:{clubId:state.session.club_id,onBack:renderFinance}});
     document.getElementById('finance-context-r84')?.addEventListener('click',()=>openFinanceContext({subjectType:'club',subjectId:state.session.club_id}));
 
@@ -212,6 +214,7 @@ export async function renderReminders(){
     setMainHtml(`${pageHeader('Avisos de cobro','Configuración y trazabilidad',can?'<button class="btn btn-primary" id="edit-reminders">Configurar</button> <button class="btn btn-ghost" id="process-reminders">Procesar hoy</button>':'')}
       ${card('Configuración',`<p><strong>Días:</strong> ${esc((current.dias_aviso||[]).join(', ')||'1, 4, 8, 11, 14')}</p><p><strong>Hora:</strong> ${esc(current.hora_envio||'10:00')}</p><p><strong>Vencida desde día:</strong> ${esc(current.marcar_vencida_dia||15)}</p>${badge(current.activo!==false?'Activo':'Inactivo',current.activo!==false?'ok':'neutral')}`)}
       ${card('Historial',rows.length?table(['Fecha','Aviso','Canal','Estado','Detalle'],rows):empty('Sin avisos procesados'))}`);
+    mountFinanceGuide({premium:true});
     document.getElementById('edit-reminders')?.addEventListener('click',()=>openForm({title:'Configurar avisos',fields:[{name:'dias',label:'Días del mes',value:(current.dias_aviso||[1,4,8,11,14]).join(','),help:'Ejemplo: 1,4,8,11,14'},{name:'hora_envio',label:'Hora de envío',type:'time',value:String(current.hora_envio||'10:00').slice(0,5)},{name:'marcar_vencida_dia',label:'Marcar vencida desde',type:'number',min:1,max:28,value:current.marcar_vencida_dia||15},{name:'zona_horaria',label:'Zona horaria',value:current.zona_horaria||'Europe/Madrid'},{name:'canal_app',label:'Canal app',type:'checkbox',value:current.canal_app!==false},{name:'canal_push',label:'Canal push',type:'checkbox',value:current.canal_push!==false},{name:'canal_email',label:'Canal email',type:'checkbox',value:current.canal_email===true},{name:'agrupar_por_familia',label:'Agrupar por familia',type:'checkbox',value:current.agrupar_por_familia!==false},{name:'activo',label:'Avisos activos',type:'checkbox',value:current.activo!==false}],onSubmit:async v=>{const dias=String(v.dias).split(',').map(x=>Number(x.trim())).filter(x=>x>=1&&x<=28);if(dias.length!==5||new Set(dias).size!==5)throw new Error('Debes indicar exactamente cinco días distintos entre 1 y 28.');await repos.reminders.save({...v,dias_aviso:dias});toast('Configuración guardada');await renderReminders();}}));
     document.getElementById('process-reminders')?.addEventListener('click',()=>openForm({title:'Procesar avisos',fields:[{name:'fecha',label:'Fecha',type:'date',required:true,value:isoDate()}],submitText:'Procesar',onSubmit:async v=>{const r=await repos.reminders.process(v.fecha);toast(`Proceso completado${r?.generados!=null?`: ${r.generados} avisos`:''}`);await renderReminders();}}));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Avisos de cobro')} ${empty('No se pudieron cargar los avisos',humanError(e))}`)}
