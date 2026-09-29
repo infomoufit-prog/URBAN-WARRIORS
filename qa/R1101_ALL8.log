@@ -1,0 +1,14 @@
+✓ all eight supported locales are publicly enabled
+✓ all eight direct catalogs match the current master and preserve the 1077-key activation baseline
+✓ critical UI copy is directly localized in each non-Spanish locale
+✓ six newly activated locales have complete direct legacy-copy maps
+✓ public legal pages have 133 direct translations in each activated non-Spanish locale
+✓ public legal HTML resolves directly in every active non-Spanish locale
+✓ global client errors localize in all eight locales
+✓ PWA manifests exist for every enabled locale
+✓ all six Supabase Auth templates branch explicitly for all eight locales
+✓ legacy runtime uses direct locale maps for FR/PT/IT/DE/TH/FIL without English auto fallback
+✓ Thai finance PDF has direct Unicode support with safe network fallback
+✓ user-authored content boundaries remain protected from runtime translation
+
+ALL-8 ACTIVATION GATE: PASS · 1706 direct catalog keys × 8 · 2587 legacy phrases × 6 · 133 legal strings × 7 non-ES locales

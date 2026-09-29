@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T06:30:06.734Z",
+  "generated_at": "2026-09-29T22:10:29.985Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-profile-policy.js",
@@ -96,10 +96,10 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4913,
-  "covered": 4663,
-  "unresolved": 250,
-  "coverage": 94.91,
+  "phrases": 4939,
+  "covered": 4697,
+  "unresolved": 242,
+  "coverage": 95.1,
   "skipped": 382,
   "files": {
     "web/js/app.js": {
@@ -421,10 +421,10 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 200,
-      "covered": 167,
+      "total": 214,
+      "covered": 184,
       "skipped": 6,
-      "coverage": 83.5
+      "coverage": 85.98
     },
     "web/js/modules/groups-members.js": {
       "total": 159,
@@ -511,10 +511,10 @@
       "coverage": 100
     },
     "web/js/modules/platform-admin.js": {
-      "total": 350,
-      "covered": 277,
+      "total": 362,
+      "covered": 294,
       "skipped": 14,
-      "coverage": 79.14
+      "coverage": 81.22
     },
     "web/js/modules/platform-legal.js": {
       "total": 9,
@@ -1082,18 +1082,6 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Solicito participar en el piloto de clubes (1 de octubre a 15 de noviembre de 2026)"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Sin tarjeta ni cobro durante el piloto. La plaza y el nivel de acceso requieren aprobación de KOMBAX. Deja el plan opcional en «Solo perfil público gratuito»."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Para solicitar el piloto, deja el plan opcional en «Solo perfil público gratuito». Administración asignará el nivel piloto."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene asignado su tipo de perfil."
     },
     {
@@ -1594,31 +1582,11 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Clubes y Créditos IA"
+      "value": "{VAR} acceso(s) reservado(s)"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "{VAR} créditos disponibles · {VAR} usados · {VAR} Assist · {VAR} Migrations · {VAR} alumnos importados"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Aún no hay clubes piloto inscritos. Elige cada entidad por ID verificado."
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Inscribir clubes existentes"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "ACCESO PILOTO"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Solicitudes de clubes"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "El club solicita plaza al registrarse. Primero se verifica su identidad; después Administración asigna el nivel piloto sin pedir tarjeta ni crear una suscripción de pago."
+      "value": "{VAR} miembros activos · {VAR} vinculados ({VAR}) · {VAR} con tutor"
     },
     {
       "file": "web/js/modules/platform-admin.js",

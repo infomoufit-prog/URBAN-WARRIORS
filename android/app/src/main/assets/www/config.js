@@ -11,8 +11,8 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.13-r110-pilot-club-activation',
-    build: 20163,
+    version: '2.0.0-rc.13-r1101-pilot-release',
+    build: 20164,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',

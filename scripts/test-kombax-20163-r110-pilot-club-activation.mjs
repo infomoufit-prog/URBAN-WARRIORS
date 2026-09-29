@@ -14,11 +14,14 @@ const health=r('supabase/functions/health/index.ts');
 const normalClub=r('supabase/migrations/098_kombax_club_verification_20053.sql');
 const badge=r('supabase/migrations/274_kombax_paid_organization_badges_r102.sql');
 
-test('R110 web identity is build 20163',()=>assert.ok(cfg.includes("version: '2.0.0-rc.13-r110-pilot-club-activation'")&&cfg.includes('build: 20163')));
-test('R110 Android identity is build 20163',()=>assert.ok(gradle.includes('versionCode 20163')&&gradle.includes("versionName '2.0.0-rc.13-r110-pilot-club-activation'")));
-test('R110 PWA marker matches 20163',()=>assert.ok(sw.includes('kombax-build-20163')&&sw.includes('20163-r110-pilot-club-activation')));
-test('R110 Android UA matches release',()=>assert.ok(main.includes('r110-pilot-club-activation')&&main.includes('/20163')));
-test('R110 health build matches release',()=>assert.ok(health.includes('build:20163')&&health.includes("'x-kombax-build':'20163'")));
+const webBuild=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);
+const androidBuild=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
+const healthBuild=Number(health.match(/build:(\d+)/)?.[1]||0);
+test('R110 web identity is preserved in build 20163 or later',()=>assert.ok(webBuild>=20163&&/version:\s*'2\.0\.0-rc\.13-r110(?:1)?-[^']+'/.test(cfg)));
+test('R110 Android identity is preserved in build 20163 or later',()=>assert.ok(androidBuild>=20163&&/versionName '2\.0\.0-rc\.13-r110(?:1)?-[^']+'/.test(gradle)));
+test('R110 PWA marker remains cumulative',()=>assert.ok(new RegExp(`kombax-build-${webBuild}`).test(sw)&&sw.includes(String(webBuild))));
+test('R110 Android UA matches current cumulative release',()=>assert.ok(main.includes(`/`+androidBuild)&&main.includes('KOMBAXRevision/r110')));
+test('R110 health build matches current release',()=>assert.ok(healthBuild===webBuild&&health.includes(`'x-kombax-build':'${webBuild}'`)));
 
 test('pilot registration window is explicitly temporary',()=>assert.ok(mig.includes("'pilot_registration_open_at'")&&mig.includes("'pilot_registration_close_at'")&&mig.includes('2026-11-16T00:00:00+01:00')));
 test('operational measurement starts Monday 5 October',()=>assert.ok(mig.includes('2026-10-05T00:00:00+02:00')));

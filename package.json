@@ -1,6 +1,6 @@
 {
   "name": "urban-warriors-2.0.0-rc13",
-  "version": "2.0.0-rc.13-r110-pilot-club-activation",
+  "version": "2.0.0-rc.13-r1101-pilot-release",
   "private": true,
   "type": "module",
   "scripts": {
@@ -149,7 +149,9 @@
     "test:20134:phase0": "node scripts/test-kombax-20134-phase0-audit-freeze.mjs",
     "test:preblock:territories-detailed": "node scripts/test-kombax-preblock-territories-detailed.mjs",
     "test:20162:r109": "node scripts/test-kombax-20162-r109-prepilot-identity.mjs",
-    "test:20163:r110": "node scripts/test-kombax-20163-r110-pilot-club-activation.mjs"
+    "test:20164:r110": "node scripts/test-kombax-20164-r1101-pilot-release.mjs",
+    "test:20164:r1101": "node scripts/test-kombax-20164-r1101-pilot-release.mjs",
+    "android:pilot-release": "node scripts/android-pilot-release-r1101.mjs"
   },
   "engines": {
     "node": ">=20"

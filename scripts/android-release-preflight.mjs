@@ -18,6 +18,9 @@ add(versionCode>=20021,'Versionado de actualización',`versionCode ${versionCode
 add(new RegExp(`build: ${versionCode}\\b`).test(webConfig)&&activity.includes(`KOMBAXApp/2.0.0-rc.13/${versionCode}`),
   'Misma versión en web y Android','config.js y User-Agent');
 add(await exists(resolve(android,'app/src/main/assets/www/index.html')),'Aplicación web embebida','assets/www presente');
+const gradlewPath=resolve(android,process.platform==='win32'?'gradlew.bat':'gradlew');
+const gradlewExecutable=process.platform==='win32'?await exists(gradlewPath):await (async()=>{try{await access(gradlewPath,constants.X_OK);return true}catch{return false}})();
+add(gradlewExecutable,'Gradle wrapper ejecutable',process.platform==='win32'?'gradlew.bat presente':'android/gradlew con permiso de ejecución');
 
 const javaPath=process.env.JAVA_HOME?resolve(process.env.JAVA_HOME,'bin',process.platform==='win32'?'java.exe':'java'):'java';
 const java=spawnSync(javaPath,['-version'],{encoding:'utf8'});

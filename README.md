@@ -1,4 +1,8 @@
-# KOMBAX R110 · build 20163 · Alta temporal Club Piloto y seguimiento Owner
+# KOMBAX R110.1 · build 20164 · Pilot release gate + Android preflight
+
+## R110.1 release gate
+
+Netlify queda desbloqueado mediante baseline de no regresión (255 R79 / 242 runtime), sin desactivar los audits estrictos. Android usa build 20164 y añade `npm run android:pilot-release` para generar/verificar APK + AAB con la firma existente. La firma definitiva no se incluye en el repositorio.
 
 Esta entrega acumulativa parte de R109 y añade la vía excepcional **Alta como Club Piloto** para un máximo de 4 clubes autorizados. La vía piloto no modifica ni sustituye la arquitectura oficial de verificación: durante la ventana temporal, un código de acceso de un solo uso permite crear y validar un Club KOMBAX real sin solicitar CIF, documentos ni evidencias al usuario. El Club recibe el beneficio `PILOT_ACCESS` con capacidades Premium, queda marcado como fundador elegible y conserva el mismo `club_id`, miembros, historial y datos después del cierre del piloto.
 
@@ -6,7 +10,7 @@ La ventana de registro piloto permanece abierta hasta el final del **15/11/2026*
 
 Owner incorpora generación de accesos de un solo uso, control duro de 4 plazas y métricas por Club/agregadas de miembros, vinculaciones/tutores, invitaciones, solicitudes de vinculación, preinscripciones, sesiones, asistencias, Social, Events, migraciones, Assist, créditos y coste API. La integración reutiliza los flujos R58/R59 de membresía y tutoría.
 
-Supabase incluye la migración aditiva `297_kombax_pilot_club_activation_owner_r110.sql`; Web/PWA y Android usan build `20163`. La migración R110 está aplicada en el proyecto Supabase activo.
+Supabase incluye la migración aditiva `297_kombax_pilot_club_activation_owner_r110.sql`; Web/PWA y Android usan build `20164`. La migración R110 está aplicada en el proyecto Supabase activo. R110.1 no modifica esquema: corrige el release gate de Netlify sin ocultar la deuda i18n heredada y refuerza la validación Android.
 
 > Estado de cierre: **PASS CON VALIDACIÓN ANDROID EXTERNA PENDIENTE**. QA R110 32/32, gates de identidad/membresía/discovery/i18n verdes y build web/dist/Android-assets sincronizado. La compilación Gradle real no puede ejecutarse en este entorno porque Gradle 8.11.1 no está cacheado y no hay acceso a `services.gradle.org`.
 

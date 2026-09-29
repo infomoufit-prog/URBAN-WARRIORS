@@ -36,8 +36,8 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 26
         targetSdk 36
-        versionCode 20163
-        versionName '2.0.0-rc.13-r110-pilot-club-activation'
+        versionCode 20164
+        versionName '2.0.0-rc.13-r1101-pilot-release'
         // historical-release-marker: versionCode 20161 · versionName '2.0.0-rc.13-r108-finance-guide-poster'
         // historical-release-marker: versionCode 20134 · versionName '2.0.0-rc.13-r81-tap-to-pay'
         // historical regression markers: versionCode 20101 · versionName '2.0.0-rc.13'
