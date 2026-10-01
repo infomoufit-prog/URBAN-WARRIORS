@@ -1,0 +1,5 @@
+--- a/scripts/test-kombax-20169-r116-golden-pilot-freeze.mjs
++++ b/scripts/test-kombax-20169-r116-golden-pilot-freeze.mjs
+@@ -1 +1 @@
+-test('Android target is Play-ready for October 2026',()=>{assert.ok(gradle.includes('compileSdk 36')&&gradle.includes('targetSdk 36')&&gradle.includes("applicationId 'com.urbanwarriors.app'"));assert.ok(existsSync(new URL('../android/app/google-services.json',import.meta.url)));});
++test('Android target configuration is Play-ready for October 2026',()=>{assert.ok(gradle.includes('compileSdk 36')&&gradle.includes('targetSdk 36')&&gradle.includes("applicationId 'com.urbanwarriors.app'"));assert.ok(gradle.includes("com.google.gms.google-services"),'Firebase Gradle plugin must remain configured. google-services.json is intentionally validated only by android:preflight and Android build scripts, not by the Netlify web build.');});
