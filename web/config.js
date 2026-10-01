@@ -11,8 +11,8 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.13-r116-golden-pilot-freeze',
-    build: 20169,
+    version: '2.0.0-rc.13-r117-netlify-android-ready',
+    build: 20170,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',

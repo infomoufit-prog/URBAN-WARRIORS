@@ -3,7 +3,7 @@ import { pageHeader, setMainHtml, setError, toast } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { t } from '../i18n/index.js';
 
-const INDEX_URL='./assets/guides/runtime-index.json?v=20169';
+const INDEX_URL='./assets/guides/runtime-index.json?v=20170';
 const HERO_URL='./assets/brand-heroes/hero-guides.webp';
 let cache=null;
 async function loadIndex(){if(cache)return cache;const r=await fetch(INDEX_URL,{cache:'no-cache'});if(!r.ok)throw new Error(`GUIDES_INDEX_${r.status}`);cache=await r.json();return cache;}

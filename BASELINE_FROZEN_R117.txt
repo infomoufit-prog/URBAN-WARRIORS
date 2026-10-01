@@ -1,0 +1,5 @@
+KOMBAX R117 GOLDEN PILOT NETLIFY + ANDROID READY
+Release: 2.0.0-rc.13-r117-netlify-android-ready
+Build/versionCode: 20170
+Date: 2026-10-01
+This tree is the cumulative pilot candidate derived from R116 and includes the Netlify/google-services gate correction.
