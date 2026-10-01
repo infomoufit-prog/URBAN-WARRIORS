@@ -5,8 +5,8 @@ import {resolve} from 'node:path';
 const root=resolve(import.meta.dirname,'..');
 const scripts=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8')).scripts;
 
-// Existing strict suites remain available through `npm test`. These seven
-// failures are tracked pilot P2 debt; an unexpected failure still blocks deploy.
+// Existing strict suites remain available through `npm test`. The remaining
+// I18N failures are tracked pilot P2 debt; any unexpected failure still blocks deploy.
 const R79_I18N_UNRESOLVED_BASELINE=255; // R110 audited historical debt; blocks any increase.
 const RUNTIME_COPY_UNRESOLVED_BASELINE=242; // R110 audited historical debt; blocks any increase.
 
@@ -19,8 +19,6 @@ const knownP2=new Map([
   ['scripts/i18n-runtime-copy-audit.mjs',output=>boundedUnresolved(output,RUNTIME_COPY_UNRESOLVED_BASELINE)],
   ['scripts/i18n-validate.mjs',output=>output.includes('"regional_hardcodes"')&&output.includes('web/js/modules/customer-operations.js')&&!output.includes('missing_active_keys')],
   ['scripts/test-kombax-i18n-b02.mjs',output=>output.includes("'web/js/modules/customer-operations.js'")&&output.includes('Expected values to be strictly deep-equal')],
-  ['scripts/test-kombax-20123-r72-commercial-continuity.mjs',output=>output.includes('R72 COMMERCIAL CONTINUITY: 14/18 passed')&&output.includes('Missing if(isCommercial){chooseCommercialPlan')],
-  ['scripts/test-kombax-20123-r72-identity-spectator.mjs',output=>output.includes('R72 IDENTITY + SPECTATOR: 13/15 passed')&&output.includes('Missing if(isCommercial){chooseCommercialPlan')],
 ]);
 
 function boundedUnresolved(output,max){

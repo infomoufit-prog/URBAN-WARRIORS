@@ -140,7 +140,7 @@ Deno.serve(async (request) => {
         catch(error){console.warn('preferred_locale lookup unavailable; using es fallback',error)}
       }
       let tokens:{id:string;token:string;perfil_id:string}[]=[]
-      if(ids.length){const {data:devices,error}=await supabase.from('dispositivos_push').select('id,token,perfil_id').eq('club_id',notification.club_id).eq('activo',true).in('perfil_id',ids);if(error)throw error;tokens=devices||[]}
+      if(ids.length){let deviceQuery=supabase.from('dispositivos_push').select('id,token,perfil_id').eq('activo',true).in('perfil_id',ids);if(notification.club_id)deviceQuery=deviceQuery.eq('club_id',notification.club_id);const {data:devices,error}=await deviceQuery;if(error)throw error;tokens=(devices||[]).filter((device,index,all)=>all.findIndex(candidate=>candidate.token===device.token)===index)}
       let delivered=false;const itemErrors:string[]=[]
       for(const device of tokens){try{await sendFcm(account,accessToken,device.token,notification as Json,clubNames.get(String(notification.club_id))||'KOMBAX',localeByProfile.get(String(device.perfil_id))||'es');delivered=true;sent++}catch(error){errors++;const message=error instanceof Error?error.message:String(error);itemErrors.push(message);if(/UNREGISTERED|registration-token-not-registered|not found/i.test(message))await supabase.from('dispositivos_push').update({activo:false}).eq('id',device.id)}}
       await supabase.from('notificaciones').update({push_enviado_en:delivered?new Date().toISOString():null,push_intentos:Number(notification.push_intentos||0)+1,push_error:itemErrors.length?itemErrors.join(' | ').slice(0,2000):(tokens.length?null:'no_active_push_devices')}).eq('id',notification.id)

@@ -1,8 +1,38 @@
-# KOMBAX R110.1 · build 20164 · Pilot release gate + Android preflight
+# KOMBAX R116 · build 20169 · Golden Pilot Freeze
 
-## R110.1 release gate
+R116 es la candidata congelable para el piloto 01/10/2026–15/11/2026. Parte acumulativamente de R115/R114 y preserva R113 como baseline de rollback. Cierra el onboarding de cuenta gratuita, mantiene Espectador como recorrido explícito en lugar de identidad automática, añade la tarjeta Miembro/Familiar y refuerza que Miembro/Practicante **no puede publicar en Social hasta que un club confirme una membresía activa**. Competidor puede solicitarse directamente o evolucionar desde Miembro sobre la misma cuenta, pero conserva su verificación y documentación existentes.
 
-Netlify queda desbloqueado mediante baseline de no regresión (255 R79 / 242 runtime), sin desactivar los audits estrictos. Android usa build 20164 y añade `npm run android:pilot-release` para generar/verificar APK + AAB con la firma existente. La firma definitiva no se incluye en el repositorio.
+Durante el piloto, la pantalla pública de planes conserva el catálogo comercial interno pero **oculta precios y contratación**, mostrando `No disponible hasta lanzamiento`. No se eliminan precios, Stripe ni entitlements del backend: el bloqueo es reversible y limitado a la superficie comercial pública.
+
+Owner Command Center, alertas Owner, automatización supervisada de agentes, exportación CSV e informe PDF privado se conservan acumulativamente desde R114. El routing push Owner global (`club_id = null`) queda corregido en la Edge Function local `notification-dispatch`.
+
+Versión runtime: `2.0.0-rc.13-r116-golden-pilot-freeze` · build `20169` · Android API objetivo `36`.
+
+> Estado local: **60 suites PASS · 5 P2 I18N históricos · 0 fallos nuevos · 621 archivos web=dist=Android**. Android preflight 7/8: falta exclusivamente la upload key/firma local registrada en Google Play. La compilación Gradle no pudo ejecutarse en este entorno porque Gradle necesita descargar dependencias y la red de la JVM está bloqueada; los scripts de compilación local quedan incluidos.
+
+---
+
+# KOMBAX R114 · build 20167 · Owner Command Center + Pilot Performance Patch
+
+R114 parte de la baseline congelada R113 y mantiene intacta su arquitectura funcional. Esta revisión incorpora únicamente cambios pre-piloto de riesgo controlado: carga diferida de módulos pesados fuera del arranque, corrección del routing push para avisos globales Owner, deduplicación de tokens, Owner Command Center con alertas operativas, analytics interactivo, exportación CSV agregada e informe PDF privado.
+
+La baseline R113 original se conserva fuera de este árbol de trabajo y no se sobrescribe. La migración acumulativa R114 es `300_kombax_owner_command_center_r114.sql`. Web/PWA/Android usan build `20167` y versión `2.0.0-rc.13-r114-owner-command-center-performance`.
+
+> Estado de R114: requiere QA local completo y validaciones externas explícitas antes de declarar Golden Pilot. Push real, despliegue Supabase, firma Android y servicios externos no se consideran confirmados por análisis estático.
+
+---
+
+# KOMBAX R113 · build 20166 · Profile editor save fix
+
+Hotfix frontend pre-piloto: corrige el guardado inicial de perfiles desde el editor (`tipo:type`) para que el payload alcance el RPC real. Incluye acumulativamente R111 y R112.
+
+# KOMBAX R112 · build 20165 · Identidad pública gratuita coherente
+
+R112 alinea el backend con el onboarding y el catálogo R98: una identidad directa verificada (Competidor, Marca, Federación, Profesional o Media) puede ser pública sin depender de una suscripción. Las capacidades de pago continúan bajo entitlements/plan y los badges de Marca/Federación continúan exigiendo pago confirmado.
+
+La base incluye también el hotfix R111 del guard de identidad, ya aplicado previamente en Supabase. La migración R112 `kombax_free_public_identity_capabilities_r112` está aplicada en el proyecto activo. Web/PWA/Android usan build `20166` y versión `2.0.0-rc.13-r113-profile-editor-save-fix`.
+
+Netlify usa el gate de no regresión ya establecido para la deuda i18n histórica. El release actual pasa `55 PASS`, mantiene 7 P2 conocidos y genera `web = dist = Android`. Android preflight queda 7/8: solo falta la firma local para generar APK/AAB release; la clave no se almacena en el repositorio.
 
 Esta entrega acumulativa parte de R109 y añade la vía excepcional **Alta como Club Piloto** para un máximo de 4 clubes autorizados. La vía piloto no modifica ni sustituye la arquitectura oficial de verificación: durante la ventana temporal, un código de acceso de un solo uso permite crear y validar un Club KOMBAX real sin solicitar CIF, documentos ni evidencias al usuario. El Club recibe el beneficio `PILOT_ACCESS` con capacidades Premium, queda marcado como fundador elegible y conserva el mismo `club_id`, miembros, historial y datos después del cierre del piloto.
 
@@ -10,9 +40,9 @@ La ventana de registro piloto permanece abierta hasta el final del **15/11/2026*
 
 Owner incorpora generación de accesos de un solo uso, control duro de 4 plazas y métricas por Club/agregadas de miembros, vinculaciones/tutores, invitaciones, solicitudes de vinculación, preinscripciones, sesiones, asistencias, Social, Events, migraciones, Assist, créditos y coste API. La integración reutiliza los flujos R58/R59 de membresía y tutoría.
 
-Supabase incluye la migración aditiva `297_kombax_pilot_club_activation_owner_r110.sql`; Web/PWA y Android usan build `20164`. La migración R110 está aplicada en el proyecto Supabase activo. R110.1 no modifica esquema: corrige el release gate de Netlify sin ocultar la deuda i18n heredada y refuerza la validación Android.
+Supabase conserva R110 (`297_kombax_pilot_club_activation_owner_r110.sql`), recupera R111 (`298_kombax_account_identity_guard_table_scope_fix_r111.sql`) y añade R112 (`299_kombax_free_public_identity_capabilities_r112.sql`). Web/PWA y Android usan build `20166`.
 
-> Estado de cierre: **PASS CON VALIDACIÓN ANDROID EXTERNA PENDIENTE**. QA R110 32/32, gates de identidad/membresía/discovery/i18n verdes y build web/dist/Android-assets sincronizado. La compilación Gradle real no puede ejecutarse en este entorno porque Gradle 8.11.1 no está cacheado y no hay acceso a `services.gradle.org`.
+> Estado de cierre acumulativo R113: **PASS CON FIRMA ANDROID EXTERNA PENDIENTE**. Los gates R112/R109/R102 y release están verdes; web/dist/Android-assets están sincronizados. El preflight Android solo mantiene pendiente la firma local necesaria para APK/AAB release.
 
 ## Historial acumulativo
 

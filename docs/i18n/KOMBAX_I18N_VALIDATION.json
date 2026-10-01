@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-29T22:10:30.791Z",
+  "generated_at": "2026-10-01T09:59:14.520Z",
   "master_locale": "es",
-  "master_catalog_keys": 1706,
+  "master_catalog_keys": 1756,
   "locales": {
     "es": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -13,7 +13,7 @@
       "technical_leaks": []
     },
     "en": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -22,7 +22,7 @@
       "technical_leaks": []
     },
     "fr": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -31,7 +31,7 @@
       "technical_leaks": []
     },
     "pt": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -40,7 +40,7 @@
       "technical_leaks": []
     },
     "it": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -49,7 +49,7 @@
       "technical_leaks": []
     },
     "de": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -58,7 +58,7 @@
       "technical_leaks": []
     },
     "th": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -67,7 +67,7 @@
       "technical_leaks": []
     },
     "fil": {
-      "translated_catalog_keys": 1706,
+      "translated_catalog_keys": 1756,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -84,7 +84,7 @@
     }
   ],
   "warnings": [],
-  "active_translation_references": 1146,
+  "active_translation_references": 1196,
   "missing_active_keys_by_locale": {
     "es": [],
     "en": [],

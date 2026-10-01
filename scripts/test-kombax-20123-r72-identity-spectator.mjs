@@ -27,27 +27,27 @@ test('Historical release functionality remains on a monotonic cumulative build',
   has(sw,`kombax-build-${webBuild}`);has(health,`build:${webBuild}`);
 });
 
-test('Public gateway offers a profile-free spectator path',()=>{
+test('Public gateway keeps Spectator as an explicit free-account route',()=>{
   has(gateway,'id="gateway-spectator"');has(gateway,"marketing.gateway.home.spectatorTitle");has(marketingEs,'Quiero explorar KOMBAX primero');
   has(gateway,"renderIdentityPresentation('espectador'");
-  has(gateway,'Crear cuenta gratuita / Espectador');
+  has(gateway,'id="kx-free-account">Crear cuenta gratuita');not(gateway,'Crear cuenta gratuita / Espectador');
 });
 
-test('A fresh KOMBAX account is explicitly explained as Spectator',()=>{
-  has(gateway,"marketing.gateway.auth.spectatorStartsTitle");has(marketingEs,'Tu cuenta empieza como Espectador.');
-  has(gateway,'ESPECTADOR · CUENTA GRATUITA');
-  has(gateway,'Tu cuenta ya puede explorar KOMBAX');
+test('A fresh KOMBAX account remains neutral until the user chooses a route',()=>{
+  has(gateway,"marketing.gateway.auth.spectatorStartsTitle");has(marketingEs,'Tu cuenta gratuita no asigna un perfil automáticamente.');
+  has(gateway,'CUENTA KOMBAX GRATUITA');not(gateway,'ESPECTADOR · CUENTA GRATUITA');
+  has(gateway,'Crear la cuenta no te asigna automáticamente un perfil');
   has(registry,'Ver Social, Showcase y Events');
 });
 
-test('Spectator home exposes Social Showcase and Events as primary discovery cards',()=>{
+test('Free-account discovery home exposes Social Showcase and Events',()=>{
   for(const id of ['kx-spectator-social','kx-spectator-showcase','kx-spectator-events'])has(gateway,id);
-  has(gateway,'Empieza mirando. Decide tu perfil después.');
-  has(gateway,'La gestión privada solo aparecerá cuando una identidad o membresía te conceda ese acceso.');
+  has(gateway,'Explora ahora. Completa tu perfil cuando quieras.');
+  has(gateway,'La publicación Social y la gestión privada aparecen solo cuando una identidad o membresía real las habilita.');
 });
 
 test('Spectator home does not surface organization-only Assist or Migrations',()=>{
-  const start=gateway.indexOf('spectatorAccount?`<section class="kx-spectator-home"');
+  const start=gateway.indexOf('freeUnconfiguredAccount?`<section class="kx-spectator-home"');
   const end=gateway.indexOf("${supportDirect?'':`<div class=\"kx-hub-actions",start);
   assert.ok(start>=0&&end>start,'spectator home template not found');
   const block=gateway.slice(start,end);
@@ -69,11 +69,12 @@ test('Club onboarding discovers identity before plan selection',()=>{
   has(marketingEs,'Ver planes y solicitar mi Club');
 });
 
-test('Commercial profiles still enter plan-first onboarding after presentation',()=>{
-  has(gateway,'if(isCommercial){chooseCommercialPlan');
+test('Commercial identities can start free verification without mandatory plan selection',()=>{
   has(gateway,"commercial:true");
-  has(gateway,"marketing.gateway.identity.common.comparePlans");has(marketingEs,'Comparar planes');
+  has(gateway,'if(isCommercial){if(!globalAuthenticated()');
+  has(gateway,'saveAndSubmitApplication(type');
   has(gateway,'renderPlanServices({audience:commercialAudienceForType(type)');
+  not(gateway,'if(isCommercial){chooseCommercialPlan');
 });
 
 test('Non-commercial profiles continue to their profile editor/auth flow after presentation',()=>{
@@ -107,9 +108,10 @@ test('R64.4 pricing is untouched by the discovery release',()=>{
   for(const frag of ["plan_code:'club'","founder_monthly_minor:2900","standard_monthly_minor:3600","showcase_model_limit:15","plan_code:'premium'","founder_monthly_minor:4700","standard_monthly_minor:5900","showcase_model_limit:25","plan_code:'enterprise'","founder_monthly_minor:7900","standard_monthly_minor:9900","plan_code:'brand_start'","founder_monthly_minor:3900","standard_monthly_minor:4900","content_promotion:{7:300,15:500,30:800","commerce_temporary:{30:{price_minor:1200,renewable:true}"])has(pricing,frag);
 });
 
-test('Founder monthly-only guard and clear no-charge message remain visible',()=>{
-  has(plans,"const useFounder=billing==='monthly'&&founderEligible");
-  has(plans,'Elegir no realiza ningún cobro.');
+test('Pilot pricing lock hides paid prices without deleting the catalog',()=>{
+  has(pricing,'PUBLIC_PRICING_LOCKED=true');
+  has(plans,'No disponible hasta lanzamiento');
+  has(plans,'!PUBLIC_PRICING_LOCKED');
 });
 
 let passed=0;

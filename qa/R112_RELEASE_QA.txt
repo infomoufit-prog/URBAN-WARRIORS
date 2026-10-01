@@ -1,0 +1,13 @@
+KOMBAX R112 · BUILD 20165
+========================
+R112 semantic QA: 12/12 PASS
+R112 visibility/capabilities QA: 10/10 PASS
+R112 release identity QA: 12/12 PASS
+R110.1 cumulative regression: 11/11 PASS
+Netlify release: 54 PASS · 7 known historical P2 · 0 new failures
+Legal gate: PASS
+Build: 619 files · web = dist = Android
+Supabase live rollback probe: public=true; service=false; subscription_entitlements=0; social_visible=true; paid_badge=false
+Android preflight: 7/8; pending release signing key
+Gradle compile in this environment: BLOCKED EXTERNAL · Gradle 8.11.1 distribution not cached and services.gradle.org unreachable
+Status: PASS CON OBSERVACIÓN EXTERNA

@@ -1,0 +1,78 @@
+PASS verified public identity no longer depends on paid service
+PASS subscription entitlements still require verification + active service
+PASS spectator remains outside public direct identities
+PASS social sync supports professional and media
+PASS social publishing requires explicit Social activation
+PASS organization badge still requires confirmed paid subscription
+PASS competitor identity continuity no longer checks service
+PASS competitor contact remains adult gated
+PASS verified free identity media no longer requires paid service
+PASS profile album public read no longer requires service
+PASS showcase/checkout/Stripe gates are not rewritten
+PASS backfill only promotes already verified active direct identities
+R112 free public identity QA: 12/12
+PASS R111 source recovered
+PASS verified direct identity public without service dependency
+PASS paid entitlements still require verified plus active service
+PASS direct social supports competitor brand federation professional media
+PASS social visibility no longer requires service
+PASS brand federation badge still requires paid evidence
+PASS competitor continuity no subscription requirement
+PASS album public read only needs verified public identity
+PASS media add no longer requires service but still requires verification
+PASS showcase plan gates not modified by R112
+R112 free identity visibility QA: 10/10
+✓ R112 package identity
+✓ R112 web build identity
+✓ R112 Android identity
+✓ R112 PWA cache identity
+✓ R112 Android UA identity
+✓ R112 health identity
+✓ R111 source is cumulative
+✓ R112 verified public identity is plan-independent
+✓ R112 paid entitlements remain service-gated
+✓ R112 paid org badge remains payment-gated
+✓ R112 Social supports Professional and Media
+✓ R112 free verified media no longer requires paid service
+R112 release QA: 12/12 PASS
+✓ R110.1 package lineage is preserved
+✓ R110.1 web build lineage is preserved
+✓ R110.1 Android lineage is preserved
+✓ R110.1 PWA cache lineage is preserved
+✓ R110.1 Android UA lineage is preserved
+✓ R110.1 health lineage is preserved
+✓ Netlify preserves strict audit in npm test
+✓ Netlify R79 baseline equals audited R110 debt
+✓ Netlify runtime baseline equals audited R110 debt
+✓ Release wrapper blocks increases instead of disabling audits
+✓ R110 pilot migration remains cumulative
+R110.1 pilot release gate: 11/11 PASS
+PASS R109 web lineage is preserved in build 20162 or later
+PASS R109 Android lineage is preserved in build 20162 or later
+PASS service worker marker matches the current cumulative build while preserving R109 semantics
+PASS Competidor signup creates personal account before profile lock
+PASS backend signup trigger ignores Competidor metadata
+PASS Miembro → Competidor compatibility remains
+PASS Miembro Social keeps active membership + 14+ gate
+PASS Competidor Social publish uses verified personal age 16+
+PASS Professional Social gate uses private 18+ age, not club membership
+PASS direct Competidor/Professional publish no longer depends on member identity
+PASS Competidor contact remains 18+ without Club dependency
+PASS direct Social activation exposes contextual age gates
+PASS frontend maps new Social gate errors to contextual messages
+PASS Media is accepted by canonical verification validator
+PASS Media document is optional while other current verified types retain document gate
+PASS Media verification requires proportional evidence tied to its own profile
+PASS Media draft persists R109 verification contract
+PASS Media verification UX is proportional
+PASS existing Media entitlements are preserved
+PASS Brand/Federation/Media existing direct Social behavior preserved
+PASS Club acting permissions remain unchanged
+PASS Promotor/Organizador remains a Professional specialty, not a new identity
+PASS account policy does not introduce Organizador identity
+PASS account policy does not introduce Practicante identity
+PASS R109 is incremental over canonical existing functions
+PASS R109 migration contains no destructive schema/data operations
+R109 PRE-PILOT IDENTITY: PASS 25/25
+KOMBAX R101 account profile policy: 15 scenarios OK
+R102 competitor verification visual rules: OK

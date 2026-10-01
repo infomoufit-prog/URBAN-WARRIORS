@@ -32,7 +32,7 @@ test('Historical release functionality remains on a monotonic cumulative build',
 
 test('Global commercial discovery explains free account and organization-scoped plans',()=>{
   has(plans,'export function renderCommercialDiscovery');
-  has(plans,'Crear una cuenta KOMBAX y continuar como Espectador es gratuito');
+  has(plans,'Crear una cuenta KOMBAX es gratuito.');has(plans,'Ser espectador es una forma de uso');
   for(const audience of ["'club'","'brand'","'federation'"])has(plans,audience);
   has(plans,'Cuenta KOMBAX');has(plans,'Identidad');has(plans,'Plan');has(plans,'Verificación');
 });
@@ -42,10 +42,11 @@ test('Gateway exposes pricing before and after authentication',()=>{
   has(gateway,'renderCommercialDiscovery');
 });
 
-test('Club, Brand and Federation onboarding are plan-first',()=>{
+test('Club, Brand and Federation preserve optional commercial plans after free identity onboarding',()=>{
   has(gateway,"const COMMERCIAL_TYPE_AUDIENCE=Object.freeze({club:'club',marca:'brand',federacion:'federation'})");
   has(gateway,'chooseCommercialPlan');has(gateway,'startCommercialOnboarding');
-  has(gateway,'renderIdentityPresentation(b.dataset.kxPick');has(gateway,'if(isCommercial){chooseCommercialPlan');
+  has(gateway,'renderIdentityPresentation(type');has(gateway,'if(isCommercial){if(!globalAuthenticated()');
+  not(gateway,'if(isCommercial){chooseCommercialPlan');
 });
 
 test('Commercial plan selection survives account/profile creation until verification submission',()=>{
@@ -56,10 +57,10 @@ test('Commercial plan selection survives account/profile creation until verifica
 });
 
 test('Brand and Federation verification forms carry plan and billing cycle',()=>{
-  has(gateway,"{name:'plan_codigo',label:'Plan KOMBAX solicitado'");
-  has(gateway,"{name:'billing_cycle',label:'Modalidad de facturación'");
+  has(gateway,"{name:'plan_codigo',label:'Plan opcional'");
+  has(gateway,"{name:'billing_cycle',label:'Modalidad si eliges un plan'");
   has(gateway,'plan_codigo:commercialAudienceForType(type)');has(gateway,'billing_cycle:commercialAudienceForType(type)');
-  has(gateway,'La verificación no realiza ningún cobro ni activa Billing automáticamente.');
+  has(gateway,'La verificación no realiza ningún cobro');
 });
 
 test('Admin review makes selected commercial plan visible without pretending to bill',()=>{
@@ -81,9 +82,9 @@ test('Verification creates an auditable plan request but never SaaS Billing',()=
   not(r66,'stripe_subscription_id');
 });
 
-test('Founder is monthly-only in UI and server-side activation',()=>{
-  has(plans,"const useFounder=billing==='monthly'&&founderEligible");
-  has(plans,'no acumulable con Founder');
+test('Founder server guard remains intact while pilot pricing is publicly locked',()=>{
+  has(pricing,'PUBLIC_PRICING_LOCKED=true');
+  has(plans,'No disponible hasta lanzamiento');
   has(founderGuard,"v_founder_requested:=v_cycle='monthly'");
   has(founderGuard,"v_founder:=coalesce(v_founder_open,false) and v_cycle='monthly'");
   has(founderGuard,"r.billing_cycle='monthly'");

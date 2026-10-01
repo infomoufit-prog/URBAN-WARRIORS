@@ -20,11 +20,7 @@ import { renderHelpLegal } from './modules/help-legal.js';
 import { KOMBAX_BRAND, platformFeatures, hasExplicitClubSelection, selectedClubSlug, selectedClubPreview, selectClubSlug, clearSelectedClub, themeDefinition } from './core/platform.js';
 import { renderLifecycle } from './modules/lifecycle.js';
 import { renderKombaxGateway, renderClubDirectory, renderDirectProfiles, renderDirectProfileHub, renderGlobalHome, renderIdentityPresentation } from './modules/gateway.js';
-import { renderKombaxSocial, renderKombaxConversations } from './modules/kombax-social.js';
-import { renderShowcase, renderMyShowcase } from './modules/showcase.js';
-import { renderKombaxEvents, renderMyEventsCenter, renderPublicKombaxEventLanding } from './modules/kombax-events.js';
 import { renderClubKombaxHub } from './modules/club-kombax-hub.js';
-import { renderPlatformAdmin } from './modules/platform-admin.js';
 import { renderPlatformAdminAccess, renderPlatformAdminConsole } from './modules/platform-admin-access.js';
 import { renderWorkScopes } from './modules/work-scopes.js';
 import { openPasswordRecovery } from './modules/auth-recovery.js';
@@ -33,7 +29,6 @@ import { mediaFrameStyle } from './ui/media-framing.js';
 import { installClientTelemetry } from './core/telemetry.js';
 import { showPlatformLegalGate } from './modules/platform-legal.js';
 import { renderClubFederationAdmin, renderSelfLicenses } from './modules/federation-licenses.js';
-import { renderKombaxAssistHome, renderKombaxMigrationsHome, renderKombaxSupportHome } from './modules/customer-operations.js';
 import { renderPlanServices } from './modules/plan-services.js';
 import { renderKombaxHome } from './modules/kombax-home.js';
 import { renderGuides } from './modules/guides.js';
@@ -48,6 +43,25 @@ installLegacyRuntimeLocalization();
 installUniversalContentTranslation();
 
 installClientTelemetry();
+
+// R114 · Route-level lazy loading. Keep heavy product modules out of the initial
+// authenticated startup graph while preserving the existing router contract.
+const lazyModules=new Map();
+function lazyModule(path){
+  if(!lazyModules.has(path))lazyModules.set(path,import(path).catch(error=>{lazyModules.delete(path);throw error;}));
+  return lazyModules.get(path);
+}
+const renderKombaxSocial=(...args)=>lazyModule('./modules/kombax-social.js').then(m=>m.renderKombaxSocial(...args));
+const renderKombaxConversations=(...args)=>lazyModule('./modules/kombax-social.js').then(m=>m.renderKombaxConversations(...args));
+const renderShowcase=(...args)=>lazyModule('./modules/showcase.js').then(m=>m.renderShowcase(...args));
+const renderMyShowcase=(...args)=>lazyModule('./modules/showcase.js').then(m=>m.renderMyShowcase(...args));
+const renderKombaxEvents=(...args)=>lazyModule('./modules/kombax-events.js').then(m=>m.renderKombaxEvents(...args));
+const renderMyEventsCenter=(...args)=>lazyModule('./modules/kombax-events.js').then(m=>m.renderMyEventsCenter(...args));
+const renderPublicKombaxEventLanding=(...args)=>lazyModule('./modules/kombax-events.js').then(m=>m.renderPublicKombaxEventLanding(...args));
+const renderPlatformAdmin=(...args)=>lazyModule('./modules/platform-admin.js').then(m=>m.renderPlatformAdmin(...args));
+const renderKombaxAssistHome=(...args)=>lazyModule('./modules/customer-operations.js').then(m=>m.renderKombaxAssistHome(...args));
+const renderKombaxMigrationsHome=(...args)=>lazyModule('./modules/customer-operations.js').then(m=>m.renderKombaxMigrationsHome(...args));
+const renderKombaxSupportHome=(...args)=>lazyModule('./modules/customer-operations.js').then(m=>m.renderKombaxSupportHome(...args));
 
 const isPortal=()=>['familia','alumno'].includes(state.session?.rol);
 const ORG_ASSIST_ROLES=new Set(['direccion','coordinacion','secretaria','economia']);

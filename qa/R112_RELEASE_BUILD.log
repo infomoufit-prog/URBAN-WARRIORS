@@ -1,0 +1,21 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13-r112-free-public-identity release:build
+> npm run release:legal-gate && node scripts/release-netlify-r104-3.mjs
+
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13-r112-free-public-identity release:legal-gate
+> node scripts/release-legal-gate.mjs
+
+KOMBAX release legal gate: PASS
+P2 conocido, sin ocultar: scripts/i18n-r79-full-product-audit.mjs
+P2 conocido, sin ocultar: scripts/test-kombax-20130-r79-i18n-phases-6-10.mjs
+P2 conocido, sin ocultar: scripts/i18n-runtime-copy-audit.mjs
+P2 conocido, sin ocultar: scripts/i18n-validate.mjs
+P2 conocido, sin ocultar: scripts/test-kombax-i18n-b02.mjs
+P2 conocido, sin ocultar: scripts/test-kombax-20123-r72-commercial-continuity.mjs
+P2 conocido, sin ocultar: scripts/test-kombax-20123-r72-identity-spectator.mjs
+KOMBAX Netlify pilot gate: 54 PASS, 7 P2 conocidos, 0 fallos nuevos.
+La suite estricta completa sigue disponible mediante npm test y continúa fallando hasta cerrar los P2 documentados.
+OK build 619 archivos · web = dist = Android
+
+release_build_exit=0

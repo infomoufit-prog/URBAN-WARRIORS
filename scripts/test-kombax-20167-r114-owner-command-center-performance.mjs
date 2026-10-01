@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const read=p=>readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
+const pkg=JSON.parse(read('package.json')),cfg=read('web/config.js'),sw=read('web/service-worker.js'),gradle=read('android/app/build.gradle'),app=read('web/js/app.js'),gateway=read('web/js/modules/gateway.js'),access=read('web/js/modules/platform-admin-access.js'),owner=read('web/js/modules/platform-admin.js'),repos=read('web/js/core/repositories.js'),dispatch=read('supabase/functions/notification-dispatch/index.ts'),migration=read('supabase/migrations/300_kombax_owner_command_center_r114.sql'),report=read('supabase/functions/kombax-owner-report-r114/index.ts');
+let pass=0;const test=(name,fn)=>{fn();pass++;console.log(`✓ ${name}`)};
+test('R114 features remain cumulative in R114+',()=>assert.match(pkg.version,/2\.0\.0-rc\.13-r11[456]-/));
+test('Current build identities remain aligned after R114',()=>{const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);assert.ok(build>=20167);assert.ok(sw.includes(`kombax-build-${build}`)&&gradle.includes(`versionCode ${build}`));});
+test('Heavy top-level routes are lazy from app',()=>assert.ok(app.includes("lazyModule('./modules/kombax-events.js')")&&app.includes("lazyModule('./modules/showcase.js')")&&app.includes("lazyModule('./modules/platform-admin.js')")&&!app.includes("from './modules/kombax-events.js'")));
+test('Gateway no longer pins Social/Showcase/Events in initial graph',()=>assert.ok(gateway.includes("gatewayLazy('./kombax-social.js')")&&gateway.includes("gatewayLazy('./showcase.js')")&&gateway.includes("gatewayLazy('./kombax-events.js')")&&!gateway.includes("from './kombax-events.js'")));
+test('Owner console module is lazy behind access gate',()=>assert.ok(access.includes("import('./platform-admin.js')")&&!access.includes("from './platform-admin.js'")));
+test('Global Owner push does not require club_id',()=>assert.ok(dispatch.includes('if(notification.club_id)deviceQuery=deviceQuery.eq')&&dispatch.includes('candidate.token===device.token')));
+test('Owner alerts are global and idempotent',()=>assert.ok(migration.includes('uq_notificaciones_global_perfil_clave_r114')&&migration.includes("'owner:verification:'")&&migration.includes("'owner:agent:'")));
+test('Agent automation remains attention-oriented, not autonomous',()=>assert.ok(migration.includes("new.status='failed'")&&migration.includes("new.risk_level in ('high','critical')")&&!migration.includes('execute proposed_action')));
+test('Owner analytics supports period, chart, CSV and PDF',()=>assert.ok(owner.includes('kx-owner-metrics-period')&&owner.includes('kx-owner-trend-chart')&&owner.includes('kx-owner-metrics-csv')&&owner.includes('kx-owner-metrics-pdf')));
+test('Owner report stays aggregated and private',()=>assert.ok(report.includes('app_kombax_owner_report_payload_r114')&&report.includes("storage.from('kombax-reports')")&&report.includes('Informe privado de administración')));
+test('Owner repository exposes alerts and report',()=>assert.ok(repos.includes('ownerAlerts:')&&repos.includes("ownerReport:")&&repos.includes("kombax-owner-report-r114")));
+test('R113 profile save fix remains cumulative',()=>assert.ok(gateway.includes('saveProfile({perfil_directo_id:profile?.id||null,tipo:type,nombre_publico:v.nombre_publico')));
+console.log(`R114 Owner Command Center / performance QA: ${pass}/12 PASS`);

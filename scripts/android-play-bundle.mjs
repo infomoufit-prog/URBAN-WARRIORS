@@ -31,11 +31,11 @@ if(!existsSync(aab) || statSync(aab).size<1024){console.error(`\nERROR: no se en
 if(!existsSync(apk) || statSync(apk).size<1024){console.error(`\nERROR: no se encontró APK válido en ${apk}`);process.exit(1);}
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R104_4_PILOT_GOOGLE_PLAY.aab`);
-const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R104_4_PILOT_SIGNED.apk`);
+const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R116_GOLDEN_PILOT_GOOGLE_PLAY.aab`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R116_GOLDEN_PILOT_SIGNED.apk`);
 copyFileSync(aab,namedAab);
 copyFileSync(apk,namedApk);
-console.log(`\nOK · KOMBAX R104.4 build ${versionCode} · Android release`);
+console.log(`\nOK · KOMBAX R116 Golden Pilot build ${versionCode} · Android release`);
 console.log('AAB Gradle: android/app/build/outputs/bundle/release/app-release.aab');
 console.log(`AAB Play: ${namedAab}`);
 console.log(`APK firmada: ${namedApk}`);

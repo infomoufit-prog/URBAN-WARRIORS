@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-29T22:10:30.669Z",
+  "generated_at": "2026-10-01T09:59:14.391Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
   "files_scanned": 112,
-  "system_ui_candidates": 2563,
-  "target_block_1_system_ui_candidates": 528,
+  "system_ui_candidates": 2577,
+  "target_block_1_system_ui_candidates": 537,
   "target_files": [
     "web/js/modules/gateway.js",
     "web/js/public-product-overview.js",
@@ -306,9 +306,9 @@
       "target_block_1": true
     },
     "web/js/modules/gateway.js": {
-      "system_ui": 124,
+      "system_ui": 136,
       "technical": 8,
-      "user_content": 2,
+      "user_content": 3,
       "target_block_1": true
     },
     "web/js/modules/groups-members.js": {
@@ -378,7 +378,7 @@
       "target_block_1": false
     },
     "web/js/modules/plan-services.js": {
-      "system_ui": 40,
+      "system_ui": 45,
       "technical": 1,
       "user_content": 0,
       "target_block_1": false
@@ -390,7 +390,7 @@
       "target_block_1": false
     },
     "web/js/modules/platform-admin.js": {
-      "system_ui": 117,
+      "system_ui": 114,
       "technical": 4,
       "user_content": 2,
       "target_block_1": true
@@ -848,581 +848,581 @@
     },
     {
       "file": "web/js/app.js",
-      "line": 52,
+      "line": 66,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const isPortal=()=>['familia','alumno'].includes(state.session?.rol);"
     },
     {
       "file": "web/js/app.js",
-      "line": 63,
+      "line": 77,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "'my-licenses':()=>renderSelfLicenses(null,{embedded:true,contextLabel:'MI CUENTA',onBack:()=>navigate('dashboard')})"
     },
     {
       "file": "web/js/app.js",
-      "line": 90,
+      "line": 104,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return [...new Set(ids)].map(id=>({id,label:role==='monitor'&&id==='dashboard'?t('navigation.contextual.today'):role==='monitor'&&id==='members'?t('navigation.contextual.myStudents'):role==='monitor'&&id==='groups'?t('navigation.contextual.myGroups'):role==='monitor'&&id==='finance'?t('navigation.contextual.myWallet'):"
     },
     {
       "file": "web/js/app.js",
-      "line": 121,
+      "line": 135,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(announce&&unreadItems)toast(unreadGroups===1?`Tienes ${unreadItems} aviso${unreadItems===1?'':'s'} en 1 grupo pendiente`:`Tienes ${unreadItems} avisos en ${unreadGroups} grupos pendientes`);"
     },
     {
       "file": "web/js/app.js",
-      "line": 123,
+      "line": 137,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const title=String(data.club_latest_title||'Nueva notificación');toast(`Nueva notificación: ${title}`);"
     },
     {
       "file": "web/js/app.js",
-      "line": 124,
+      "line": 138,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if('Notification' in window&&Notification.permission==='granted'&&document.hidden){try{new Notification(title,{body:String(data.club_latest_body||'Tienes una nueva notificación.'),icon:'./assets/icons/icon-192.png'})}catch{}}"
     },
     {
       "file": "web/js/app.js",
-      "line": 137,
+      "line": 151,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const body=`<div class=\"kx-header-activity\"><section><div class=\"kx-header-activity-icon\">${icon('network',{size:22})}</div><div><small>MI RED KOMBAX</small><strong>${Number(k.relation_requests||0)} solicitud${Number(k.relation_requests||0)===1?'':'es'} pendiente${Number(k.relation_requests||0)===1?'':'s'}</strong><p>S"
     },
     {
       "file": "web/js/app.js",
-      "line": 164,
+      "line": 178,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "}catch(error){console.warn('Sincronización push:',error)}"
     },
     {
       "file": "web/js/app.js",
-      "line": 188,
+      "line": 202,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "renderShell();toast(`Modo soporte · ${name||club.nombre}`);return;"
     },
     {
       "file": "web/js/app.js",
-      "line": 191,
+      "line": 205,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "renderDirectProfileHub({onBack:exitOwnerSupportMode});toast(`Modo soporte · ${state.session.support_name}`);"
     },
     {
       "file": "web/js/app.js",
-      "line": 205,
+      "line": 219,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const {wrap}=openDetail({title:'Cambiar de club',subtitle:'La identidad es la misma; datos, permisos, tema y caché cambian con el contexto.',body:`<div class=\"club-context-list\">${clubs.map(club=>`<button type=\"button\" data-club-context=\"${esc(club.slug)}\" class=\"club-context-row ${club.id===state.session.club_id?'acti"
     },
     {
       "file": "web/js/app.js",
-      "line": 211,
+      "line": 225,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const setSidebarOpen=open=>{const next=Boolean(open);sidebar?.classList.toggle('open',next);shell?.classList.toggle('sidebar-open',next);menuButton?.setAttribute('aria-expanded',String(next));menuButton?.setAttribute('aria-label',next?'Cerrar menú':'Abrir menú');scrim?.classList.toggle('open',next);};"
     },
     {
       "file": "web/js/app.js",
-      "line": 252,
+      "line": 266,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const kombaxMark=`<div class=\"kombax-cobrand\" aria-label=\"Tecnología ${esc(KOMBAX_BRAND.name)}\"><img src=\"${esc(KOMBAX_BRAND.symbol)}\" alt=\"\"><span><strong>${esc(KOMBAX_BRAND.name)}</strong><small>${esc(KOMBAX_BRAND.tagline)}</small></span></div>`;"
     },
     {
       "file": "web/js/app.js",
-      "line": 256,
+      "line": 270,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "toggle?.addEventListener('click',()=>{const visible=password.type==='text';password.type=visible?'password':'text';toggle.setAttribute('aria-label',visible?'Mostrar contraseña':'Ocultar contraseña');toggle.innerHTML=icon(visible?'eye':'eyeOff',{size:18});password.focus();});"
     },
     {
       "file": "web/js/app.js",
-      "line": 267,
+      "line": 281,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!out?.available||!out.club?.id)throw new Error('Club no disponible.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 271,
+      "line": 285,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class=\"modal\" style=\"--modal-width:760px\"><div class=\"modal-head\"><div><div class=\"registration-platform-mark\"><img src=\"${esc(KOMBAX_BRAND.symbol)}\" alt=\"\"><span>Tecnología KOMBAX</span></div><"
     },
     {
       "file": "web/js/app.js",
-      "line": 274,
+      "line": 288,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const d=document.createElement('dialog');d.className='legal-dialog';d.innerHTML=`<div class=\"legal-dialog-head\"><div><strong>${esc(({condiciones_uso:'Condiciones de uso',privacidad:'Política de privacidad',comunidad:'Normas de Comunidad del Club',derechos_imagen:'Autorización de imagen'})[doc.tipo]||doc.tipo)}</strong>"
     },
     {
       "file": "web/js/app.js",
-      "line": 277,
+      "line": 291,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const c=await publicCatalog();const tutor=type==='tutor';const byType=Object.fromEntries((c.legal||[]).map(x=>[x.tipo,x]));"
     },
     {
       "file": "web/js/app.js",
-      "line": 278,
+      "line": 292,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const modal=openForm({title:tutor?'Cuenta familiar':'Cuenta de alumno',subtitle:'Cuenta → datos → solicitud deportiva → consentimientos',width:'900px',fields:["
     },
     {
       "file": "web/js/app.js",
-      "line": 279,
+      "line": 293,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'email',label:'Email de acceso',type:'email',required:true,value:invite?.email||''},{name:'password',label:'Contraseña',type:'password',required:true},{name:'adulto_nombre',label:tutor?'Nombre del adulto':'Nombre',required:true},{name:'adulto_apellidos',label:tutor?'Apellidos del adulto':'Apellidos',required:true"
     },
     {
       "file": "web/js/app.js",
-      "line": 280,
+      "line": 294,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "...(tutor?[{name:'menor_nombre',label:'Nombre del menor',required:true},{name:'menor_apellidos',label:'Apellidos del menor',required:true},{name:'menor_fecha_nacimiento',label:'Nacimiento menor',type:'date',required:true}]:[]),"
     },
     {
       "file": "web/js/app.js",
-      "line": 282,
+      "line": 296,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'terms',label:'He leído y acepto las Condiciones de uso.',type:'checkbox',value:false,required:true,full:true},{name:'privacy',label:'He leído la Política de privacidad.',type:'checkbox',value:false,required:true,full:true},{name:'image_rights',label:tutor?'Autorizo, de forma opcional, el uso de la imagen del men"
     },
     {
       "file": "web/js/app.js",
-      "line": 283,
+      "line": 297,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "],submitText:'Crear cuenta y enviar solicitud',onSubmit:async v=>{"
     },
     {
       "file": "web/js/app.js",
-      "line": 284,
+      "line": 298,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de privacidad.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 285,
+      "line": 299,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!tutor){const years=ageYears(v.adulto_fecha_nacimiento);if(years==null)throw new Error('Indica una fecha de nacimiento válida.');if(years<16)throw new Error('El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor de 16, utiliza el alta mediante tutor o contacta con el club.');}"
     },
     {
       "file": "web/js/app.js",
-      "line": 286,
+      "line": 300,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const legal_acceptances=[{tipo:'condiciones_uso',version:byType.condiciones_uso?.version||'2.0.0',aceptado:true},{tipo:'privacidad',version:byType.privacidad?.version||'2.0.0',aceptado:true},{tipo:'derechos_imagen',version:byType.derechos_imagen?.version||'2.0.0',aceptado:v.image_rights===true}];"
     },
     {
       "file": "web/js/app.js",
-      "line": 287,
+      "line": 301,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const r=await backend.registerAccount({...v,tipo_cuenta:type,legal_acceptances,invite_code:invite?.code||null,club_slug:invite?.club_slug||selectedClubSlug()});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderClubSessionOrLegal({startAt"
     },
     {
       "file": "web/js/app.js",
-      "line": 289,
+      "line": 303,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "modal.wrap.querySelector('.modal-head>div')?.insertAdjacentHTML('afterbegin',`<div class=\"registration-platform-mark\"><img src=\"${esc(KOMBAX_BRAND.symbol)}\" alt=\"\"><span>Tecnología KOMBAX</span></div>`);"
     },
     {
       "file": "web/js/app.js",
-      "line": 290,
+      "line": 304,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const grid=modal.form.querySelector('.form-grid');const legalBox=document.createElement('div');legalBox.className='registration-legal-links field full';legalBox.innerHTML=`<strong>Lee antes de aceptar</strong><div class=\"row-actions\">${['condiciones_uso','privacidad','comunidad','derechos_imagen'].filter(k=>byType[k])."
     },
     {
       "file": "web/js/app.js",
-      "line": 295,
+      "line": 309,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(type==='alumno'||type==='alumnos'||type==='familia')return openStudentAccessCode(prefill);"
     },
     {
       "file": "web/js/app.js",
-      "line": 297,
+      "line": 311,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class=\"modal\" style=\"--modal-width:720px\"><div class=\"modal-head\"><div><h2>Tengo un código del club</h2><p>Introduce el código corto que te ha facilitado el club o que aparece junto a su QR.</p>"
     },
     {
       "file": "web/js/app.js",
-      "line": 301,
+      "line": 315,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!slug)throw new Error('Primero abre el QR o selecciona el club al que quieres acceder.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 306,
+      "line": 320,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const memberName=String(info?.nombre||'tu ficha de alumno');"
     },
     {
       "file": "web/js/app.js",
-      "line": 307,
+      "line": 321,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "openForm({title:`Activar ficha · ${clubName}`,subtitle:`${memberName} ya está registrado/a administrativamente en el club. Activa esta misma ficha sin crear otra.`,width:'760px',fields:["
     },
     {
       "file": "web/js/app.js",
-      "line": 308,
+      "line": 322,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'modo_cuenta',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta KOMBAX'},{value:'nueva',label:'No, crear mi cuenta KOMBAX'}]},"
     },
     {
       "file": "web/js/app.js",
-      "line": 309,
+      "line": 323,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'email',label:'Email de acceso',type:'email',required:true,value:email,disabled:true,help:'La invitación solo puede activarse con este correo verificado.'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 310,
+      "line": 324,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'password',label:'Contraseña',type:'password',required:true,help:'Mínimo 8 caracteres.'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 311,
+      "line": 325,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'nombre',label:'Nombre (solo cuenta nueva)',value:String(info?.nombre||'')},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 312,
+      "line": 326,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'terms',label:'He leído y acepto las Condiciones de uso de KOMBAX.',type:'checkbox',value:false,required:true,full:true},"
     },
     {
       "file": "web/js/app.js",
-      "line": 313,
+      "line": 327,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'privacy',label:'He leído la Política de Privacidad global de KOMBAX.',type:'checkbox',value:false,required:true,full:true}"
     },
     {
       "file": "web/js/app.js",
-      "line": 314,
+      "line": 328,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "],submitText:'Activar mi ficha',onSubmit:async v=>{"
     },
     {
       "file": "web/js/app.js",
-      "line": 315,
+      "line": 329,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 316,
+      "line": 330,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de Privacidad.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 322,
+      "line": 336,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!String(v.nombre||'').trim())throw new Error('Indica tu nombre para crear la cuenta.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 324,
+      "line": 338,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(created.confirmationRequired){localStorage.setItem('uw2_pending_student_membership',JSON.stringify({code,email,club_id:info?.club_id||null,socio_id:info?.socio_id||null}));toast('Cuenta creada. Confirma tu correo y al entrar KOMBAX activará esta misma ficha del club.');renderGatewayRoot();return;}"
     },
     {
       "file": "web/js/app.js",
-      "line": 325,
+      "line": 339,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "await backend.acceptStudentMembership(code);toast(`Cuenta creada y ficha de ${clubName} activada.`,'ok');"
     },
     {
       "file": "web/js/app.js",
-      "line": 332,
+      "line": 346,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "openForm({title:oneTime?'Invitación personal de alumno o familia':'Código para alumnos y familias',subtitle:oneTime?'Esta invitación es de un solo uso y está vinculada al correo indicado por el club. KOMBAX comprobará el email antes de crear la cuenta.':'Escribe el código de 4 o 5 dígitos del club. El mismo código pued"
     },
     {
       "file": "web/js/app.js",
-      "line": 333,
+      "line": 347,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'code',label:oneTime?'Código personal de invitación':'Código del club',required:true,value:rawPrefill,placeholder:oneTime?'ALU-XXXXXXXXXX':'12345',inputmode:oneTime?'text':'numeric',disabled:oneTime,help:oneTime?'Código personal · 7 días · un solo uso.':'Código general de alumnos/familias.'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 334,
+      "line": 348,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "...(oneTime?[{name:'email',label:'Correo electrónico invitado',type:'email',required:true,help:'Debe ser exactamente el correo al que el club envió la invitación.'}]:[]),"
     },
     {
       "file": "web/js/app.js",
-      "line": 335,
+      "line": 349,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'modo',label:'¿Quién se registra?',type:'select',required:true,value:'adulto',options:[{value:'adulto',label:'Alumno/a de 16 años o más'},{value:'tutor',label:'Padre, madre o tutor de un menor'}]}"
     },
     {
       "file": "web/js/app.js",
-      "line": 336,
+      "line": 350,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "],submitText:'Continuar',onSubmit:async v=>{"
     },
     {
       "file": "web/js/app.js",
-      "line": 338,
+      "line": 352,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(oneTime&&!/^ALU-[A-Z0-9]{10}$/i.test(code))throw new Error('El código personal de invitación no es válido.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 339,
+      "line": 353,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!oneTime&&!/^\\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 341,
+      "line": 355,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(oneTime){email=String(v.email||'').trim().toLowerCase();const info=await backend.validateInvitation(code,email);if(!info?.valid||String(info.tipo||'')!=='alumno')throw new Error('La invitación no es válida para este correo o ha caducado.');slug=String(info.club_slug||slug);club={slug,nombre:info.club_nombre||club.no"
     },
     {
       "file": "web/js/app.js",
-      "line": 350,
+      "line": 364,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'code',label:oneTime?'Código personal de invitación':'Código de equipo',required:true,value:rawPrefill,placeholder:oneTime?'EQP-XXXXXXXXXX':'54321',disabled:oneTime,help:oneTime?'Código de un solo uso vinculado al correo invitado.':'Código general del equipo.'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 352,
+      "line": 366,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'modo',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},"
     },
     {
       "file": "web/js/app.js",
-      "line": 353,
+      "line": 367,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'email',label:'Email',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true,help:'Mínimo 8 caracteres.'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 354,
+      "line": 368,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},"
     },
     {
       "file": "web/js/app.js",
-      "line": 355,
+      "line": 369,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'terms',label:'He leído y acepto las Condiciones de uso de KOMBAX.',type:'checkbox',value:false,required:true,full:true},"
     },
     {
       "file": "web/js/app.js",
-      "line": 356,
+      "line": 370,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'privacy',label:'He leído la Política de Privacidad global de KOMBAX.',type:'checkbox',value:false,required:true,full:true}"
     },
     {
       "file": "web/js/app.js",
-      "line": 359,
+      "line": 373,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "title:oneTime?'Invitación personal al equipo':validRequested?`Invitación al equipo · ${teamInviteRoleLabel(validRequested)}`:'Código para miembros del equipo',"
     },
     {
       "file": "web/js/app.js",
-      "line": 360,
+      "line": 374,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "subtitle:oneTime?'Esta invitación está vinculada al correo indicado por el club. KOMBAX comprobará que inicias sesión o te registras con ese mismo email antes de activar el acceso.':validRequested?`Esta invitación se ha preparado para solicitar acceso como ${teamInviteRoleLabel(validRequested)}. No concede permisos aut"
     },
     {
       "file": "web/js/app.js",
-      "line": 361,
+      "line": 375,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "width:'760px',fields,submitText:oneTime?'Aceptar invitación':'Enviar solicitud',"
     },
     {
       "file": "web/js/app.js",
-      "line": 363,
+      "line": 377,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const code=oneTime?rawPrefill:String(v.code||'').trim();if(oneTime&&!/^EQP-[A-Z0-9]{10}$/i.test(code))throw new Error('El código personal de invitación no es válido.');if(!oneTime&&!/^\\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 364,
+      "line": 378,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 365,
+      "line": 379,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de Privacidad de KOMBAX.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 367,
+      "line": 381,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(oneTime){inviteInfo=await backend.validateTeamInvitation(code,v.email);if(!inviteInfo?.valid)throw new Error('La invitación no es válida para este correo o ha caducado.');role=String(inviteInfo.rol||'').toLowerCase();slug=String(inviteInfo.club_slug||slug);}"
     },
     {
       "file": "web/js/app.js",
-      "line": 368,
+      "line": 382,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "else if(!TEAM_INVITE_ROLES.some(x=>x.value===role))throw new Error('Selecciona el rol para el que has recibido la invitación.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 371,
+      "line": 385,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(oneTime){await backend.acceptTeamInvitation(code);toast(`Invitación aceptada como ${teamInviteRoleLabel(role)}.`,'ok');}"
     },
     {
       "file": "web/js/app.js",
-      "line": 372,
+      "line": 386,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "else{await backend.requestTeamAccess(slug,code,v.email,role);toast(`Solicitud enviada para ${teamInviteRoleLabel(role)}. El club debe aprobarla.`,'ok');}"
     },
     {
       "file": "web/js/app.js",
-      "line": 375,
+      "line": 389,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');"
     },
     {
       "file": "web/js/app.js",
-      "line": 377,
+      "line": 391,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({kind:oneTime?'one_time':'generic',club_slug:slug,code,email:v.email,role}));toast(oneTime?'Cuenta creada. Confirma tu email y después accede a KOMBAX; la invitación personal se activará al validar el mismo correo.':'Cuenta c"
     },
     {
       "file": "web/js/app.js",
-      "line": 378,
+      "line": 392,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(oneTime){await backend.acceptTeamInvitation(code);toast(`Cuenta creada e invitación aceptada como ${teamInviteRoleLabel(role)}.`,'ok');}"
     },
     {
       "file": "web/js/app.js",
-      "line": 379,
+      "line": 393,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "else{await backend.requestTeamAccess(slug,code,v.email,role);toast(`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');}"
     },
     {
       "file": "web/js/app.js",
-      "line": 383,
+      "line": 397,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const grid=teamModal.form.querySelector('.form-grid');const legal=document.createElement('div');legal.className='registration-legal-links field full';legal.innerHTML='<strong>Documentos KOMBAX</strong><div class=\"row-actions\"><a class=\"btn btn-ghost btn-sm\" href=\"./terms.html\" target=\"_blank\" rel=\"noopener noreferrer\">"
     },
     {
       "file": "web/js/app.js",
-      "line": 386,
+      "line": 400,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class=\"modal\" style=\"--modal-width:680px\"><div class=\"modal-head\"><div><h2>Instalar KOMBAX</h2><p>Lleva tu portal de club contigo en el móvil.</p></div><button class=\"icon-btn\" id=\"modal-close\" "
     },
     {
       "file": "web/js/app.js",
-      "line": 402,
+      "line": 416,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const marketingProfiles=new Set(['club','marca','federacion','competidor','profesional','media','espectador']);"
     },
     {
       "file": "web/js/app.js",
-      "line": 404,
+      "line": 418,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(entryParams.get('club')){try{const slug=selectClubSlug(entryParams.get('club'));const matches=await client.rpc('app_buscar_clubes_kombax_v040',{p_query:slug,p_limit:5}).catch(()=>[]),club=(matches||[]).find(x=>x.slug===slug);if(club)selectClubSlug(slug,club);}catch(error){console.warn('Enlace de club no válido:',err"
     },
     {
       "file": "web/js/app.js",
-      "line": 416,
+      "line": 430,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "catch(error){console.warn('Stripe Connect refresh:',error);connectNotice='No se pudo renovar el enlace de Stripe. Abre de nuevo la activación desde KOMBAX.';}"
     },
     {
       "file": "web/js/app.js",
-      "line": 418,
+      "line": 432,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "try{const status=await repos.payments.connectStatus(connectType,connectId);connectNotice=status?.status==='active'?'Stripe Connect está activo y preparado para cobros.':'Stripe ha guardado la información. La verificación todavía puede estar pendiente.';}"
     },
     {
       "file": "web/js/app.js",
-      "line": 419,
+      "line": 433,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "catch(error){console.warn('Stripe Connect return:',error);connectNotice='Has vuelto de Stripe. Revisa el estado de la cuenta desde KOMBAX.';}"
     },
     {
       "file": "web/js/app.js",
-      "line": 421,
+      "line": 435,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(session&&paymentEntry==='success')paymentNotice=paymentKind==='event_ticket'?'Pago recibido. Stripe está confirmando la operación; tus entradas aparecerán en KOMBAX Events → Mis entradas.':paymentKind==='showcase_order'?'Pago recibido. Puedes seguir la preparación y el envío desde KOMBAX Showcase → Mis pedidos.':'Pa"
     },
     {
       "file": "web/js/app.js",
-      "line": 422,
+      "line": 436,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "else if(session&&paymentEntry==='cancelled')paymentNotice='Pago cancelado. No se ha confirmado la operación.';"
@@ -1933,28 +1933,28 @@
     },
     {
       "file": "web/js/core/commercial-pricing.js",
-      "line": 25,
+      "line": 28,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{plan_code:'enterprise',audience:'club',name:'KOMBAX Enterprise',tagline:'Gestiona, promociona y vende sin comisión KOMBAX',founder_monthly_minor:7900,standard_monthly_minor:9900,standard_annual_minor:99800,annual_discount_percent:16,platform_fee_percent:0,showcase_model_limit:null,events_monthly_limit:null,commerce_mo"
     },
     {
       "file": "web/js/core/commercial-pricing.js",
-      "line": 26,
+      "line": 29,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{plan_code:'brand_start',audience:'brand',name:'Brand Start',tagline:'Vende y haz crecer tu marca',founder_monthly_minor:3900,standard_monthly_minor:4900,standard_annual_minor:49400,annual_discount_percent:16,platform_fee_percent:1.5,showcase_model_limit:25,events_monthly_limit:0,commerce_mode:'included',ticketing_mode"
     },
     {
       "file": "web/js/core/commercial-pricing.js",
-      "line": 27,
+      "line": 30,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{plan_code:'brand_growth',audience:'brand',name:'Brand Growth',tagline:'Escala catálogo y promoción',founder_monthly_minor:6900,standard_monthly_minor:8900,standard_annual_minor:89700,annual_discount_percent:16,platform_fee_percent:1.5,showcase_model_limit:100,events_monthly_limit:2,commerce_mode:'included',ticketing_m"
     },
     {
       "file": "web/js/core/commercial-pricing.js",
-      "line": 28,
+      "line": 31,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{plan_code:'brand_enterprise',audience:'brand',name:'Brand Enterprise',tagline:'Commerce sin límites y sin comisión KOMBAX',founder_monthly_minor:12900,standard_monthly_minor:16100,standard_annual_minor:162300,annual_discount_percent:16,platform_fee_percent:0,showcase_model_limit:null,events_monthly_limit:null,commerce"
@@ -3627,42 +3627,42 @@
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1426,
+      "line": 1428,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "accept:(tipo,version='2.0.0',aceptado=true,socio_id=null)=>mutation('legal.aceptar',{tipo,version,aceptado,socio_id,user_agent:navigator.userAgent}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1432,
+      "line": 1434,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un archivo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1433,
+      "line": 1435,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(file.size>10*1024*1024)throw new Error('El archivo supera el límite de 10 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1442,
+      "line": 1444,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(meta.reemplaza_id){await mutation('documento.archivar',{documento_id:meta.reemplaza_id,estado:'sustituido',reemplazado_por:created.id});}"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1447,
+      "line": 1449,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "archive:(documento_id,estado='archivado',reemplazado_por=null)=>mutation('documento.archivar',{documento_id,estado,reemplazado_por}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1448,
+      "line": 1450,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(documento_id){const out=await mutation('documento.eliminar',{documento_id});if(out?.storage_path)await backend.remove('member-documents',out.storage_path).catch(()=>{});return out;},"
@@ -9766,934 +9766,1025 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 49,
+      "line": 50,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "id:'miembro_familia',label:'Miembro / Familiar',icon:'identity',accent:'#5B8CFF',"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 51,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": true,
+      "sample": "description:'Vincula tu cuenta con un club como practicante/miembro o familiar/tutor. La publicación Social como Miembro solo se habilita cuando el club confirma la membresía.',"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 52,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "benefits:['Buscar o invitar a mi club','Membresía aprobada por el club','Evolución de Miembro a Competidor']"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 54,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const ONBOARDING_PROFILE_ORDER=Object.freeze(['espectador','miembro_familia','competidor','club','federacion','marca','profesional','media']);"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 63,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "toast('Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor.','warning');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 66,
+      "line": 80,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const COMMERCIAL_TYPE_AUDIENCE=Object.freeze({club:'club',marca:'brand',federacion:'federation'});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 75,
+      "line": 89,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const identityI18nKey=type=>({club:'club',marca:'brand',federacion:'federation',competidor:'fighter',profesional:'professional',media:'media',espectador:'spectator'}[type]||type);"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 77,
+      "line": 91,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "club:{icon:'club',commercial:true},marca:{icon:'brand',commercial:true},federacion:{icon:'federation',commercial:true},competidor:{icon:'fighter',commercial:false},profesional:{icon:'professional',commercial:false},media:{icon:'sparkles',commercial:false},espectador:{icon:'spectator',commercial:false}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 95,
+      "line": 109,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const action=type==='espectador'?t('marketing.gateway.actions.continueSpectator'):profile?t('marketing.gateway.actions.continueProfile'):isCommercial?`Crear identidad ${item.label} gratuita`:t('marketing.gateway.actions.createProfile',{profile:item.label});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 100,
+      "line": 114,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-identity-intro-hero\"><div class=\"kx-identity-intro-icon\">${featureIcon(item.icon||'identity',{size:76})}</div><div><span>${esc(item.eyebrow||item.label)}</span><h1>${esc(item.headline||item.label)}</h1><p>${esc(item.lead||item.description||'')}</p><div class=\"kx-identity-intro-tags\"><b>${t('marketing"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 204,
+      "line": 152,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "toast('Accede con tu cuenta KOMBAX para solicitar la vinculación con un club.','warning');"
+      "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"kx-member-family-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class=\"gateway-directory-step\">MIEMBRO / FAMILIAR</span></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 209,
+      "line": 153,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "if(!clubId){toast('Este club todavía no admite solicitudes desde KOMBAX.','warning');return;}"
+      "sample": "<section class=\"kx-identity-intro-hero\"><div class=\"kx-identity-intro-icon\">${featureIcon('identity',{size:76})}</div><div><span>VINCULACIÓN CON CLUB</span><h1>Miembro, practicante o familiar</h1><p>Tu cuenta KOMBAX sigue siendo gratuita. Para presentarte como Miembro/Practicante debes vincularte con una ficha real y e"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 214,
+      "line": 154,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "confirmDialog('Solicitar vinculación',`Hemos encontrado una ficha de ${club.nombre} asociada a tu correo verificado. El club deberá aprobar la vinculación antes de activar tu acceso y tu publicación como miembro.`,async()=>{await repos.kombaxMemberships.requestClaim(match.socio_id);toast('Solicitud enviada al club para"
+      "sample": "<section class=\"kx-identity-intro-body\"><div class=\"kx-identity-intro-panel\"><span>QUÉ PUEDES HACER DESDE EL PRINCIPIO</span><ul><li>Explorar Social, Showcase y Events.</li><li>Comprar productos o entradas cuando las reglas de edad y checkout lo permitan.</li><li>Buscar tu club o invitarlo si todavía no aparece.</li></"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 217,
+      "line": 155,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "openForm({title:`Contactar con ${club.nombre}`,subtitle:'Tu club revisará si ya existe tu ficha. Este mensaje no crea una membresía ni publica un perfil.',fields:[{name:'mensaje',label:'Mensaje para el club',type:'textarea',rows:4,required:true,full:true,value:'Formo parte del club y quiero vincular mi cuenta KOMBAX. ¿"
+      "sample": "<div class=\"kx-identity-intro-actions\"><button class=\"btn btn-primary\" id=\"kx-member-family-link\" type=\"button\">Buscar y vincular mi club</button><button class=\"btn btn-ghost\" id=\"kx-member-family-competitor\" type=\"button\">Solicitar perfil Competidor</button><button class=\"btn btn-ghost\" id=\"kx-member-family-explore\" t"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 218,
+      "line": 160,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "}catch(error){setError(error);toast('No se pudo comprobar la vinculación. Revisa que tu correo esté confirmado.','error');}"
+      "sample": "document.getElementById('kx-member-family-competitor')?.addEventListener('click',()=>renderIdentityPresentation('competidor',{onBack:()=>renderMemberFamilyPresentation({onBack})}));"
     },
     {
       "file": "web/js/modules/gateway.js",
       "line": 234,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "<div class=\"kx-club-onboarding-cta\"><div><strong>${mode==='member'?'¿Tu club aún no aparece?':t('marketing.gateway.directory.notYet')}</strong><span>${mode==='member'?'Puedes invitarlo a KOMBAX y solicitar después tu vinculación.':t('marketing.gateway.directory.notYetBody')}</span></div><button class=\"btn btn-ghost\" id"
+      "sample": "toast('Accede con tu cuenta KOMBAX para solicitar la vinculación con un club.','warning');"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 239,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "if(!clubId){toast('Este club todavía no admite solicitudes desde KOMBAX.','warning');return;}"
     },
     {
       "file": "web/js/modules/gateway.js",
       "line": 244,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
+      "sample": "confirmDialog('Solicitar vinculación',`Hemos encontrado una ficha de ${club.nombre} asociada a tu correo verificado. El club deberá aprobar la vinculación antes de activar tu acceso y tu publicación como miembro.`,async()=>{await repos.kombaxMemberships.requestClaim(match.socio_id);toast('Solicitud enviada al club para"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 247,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "openForm({title:`Contactar con ${club.nombre}`,subtitle:'Tu club revisará si ya existe tu ficha. Este mensaje no crea una membresía ni publica un perfil.',fields:[{name:'mensaje',label:'Mensaje para el club',type:'textarea',rows:4,required:true,full:true,value:'Formo parte del club y quiero vincular mi cuenta KOMBAX. ¿"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 248,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "}catch(error){setError(error);toast('No se pudo comprobar la vinculación. Revisa que tu correo esté confirmado.','error');}"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 264,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "<div class=\"kx-club-onboarding-cta\"><div><strong>${mode==='member'?'¿Tu club aún no aparece?':t('marketing.gateway.directory.notYet')}</strong><span>${mode==='member'?'Puedes invitarlo a KOMBAX y solicitar después tu vinculación.':t('marketing.gateway.directory.notYetBody')}</span></div><button class=\"btn btn-ghost\" id"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 274,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
       "sample": "openForm({title:'Invitar a mi club',subtitle:'Prepararemos un correo para que tú mismo se lo envíes al club.',fields:[{name:'email',label:'Correo del club',type:'email',required:true},{name:'nombre',label:'Nombre del club',required:true}],submitText:'Preparar invitación',onSubmit:async values=>{const subject='Invitació"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 261,
+      "line": 291,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "host.innerHTML=`<button type=\"button\" class=\"gateway-path kx-pilot-club-path\" id=\"gateway-pilot-club\"><span class=\"gateway-path-icon\">${featureIcon('club',{size:54})}</span><span class=\"gateway-path-copy\"><em>VENTANA TEMPORAL · ${metricPilotSlots(pilot)}</em><strong>Alta como Club Piloto</strong><small>Acceso por invit"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 265,
+      "line": 295,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "function metricPilotSlots(pilot){const remaining=Math.max(0,Number(pilot?.slots_remaining||0));return `${remaining} ${remaining===1?'plaza disponible':'plazas disponibles'}`;}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 269,
+      "line": 299,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const {wrap}=openDetail({title:'Alta Club Piloto',subtitle:'Acceso temporal reservado a los cuatro clubes invitados.',width:'640px',body:'<div class=\"gateway-auth-explain\"><strong>El código piloto sustituye la revisión documental inicial</strong><p>Crea o utiliza tu cuenta KOMBAX de Club. Tras confirmar el correo, comp"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 276,
+      "line": 306,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!pilot?.open||Number(pilot?.slots_remaining||0)<=0){sessionStorage.removeItem('kombax_pending_pilot_club');toast('La ventana de alta Club Piloto está cerrada o ya no quedan plazas.','warning');return;}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 278,
+      "line": 308,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(state.session?.platform_legal_required===true){sessionStorage.setItem('kombax_pending_pilot_club','1');toast('Revisa primero las Condiciones y la Política de Privacidad de KOMBAX.','warning');renderDirectProfileHub({onBack,pendingType:'club'});return;}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 280,
+      "line": 310,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "title:'Alta Club Piloto',subtitle:'Activación directa por invitación · Premium piloto · sin documentación de verificación.',width:'820px',"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 282,
+      "line": 312,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'pilot_code',label:'Código de acceso piloto',required:true,full:true,help:'Código de un solo uso facilitado por KOMBAX al Club invitado.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 284,
+      "line": 314,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'lema',label:'Lema público'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 285,
+      "line": 315,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 286,
+      "line": 316,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'ubicacion',label:'Ubicación pública',required:true},{name:'ciudad',label:'Ciudad'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 287,
+      "line": 317,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'provincia',label:'Provincia / región'},{name:'pais',label:'País',value:'España'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 288,
+      "line": 318,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'disciplinas',label:'Disciplinas',required:true,full:true,help:'Separadas por comas; máximo 12.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 289,
+      "line": 319,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'telefono',label:'Teléfono de contacto del Club',required:true},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 290,
+      "line": 320,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'web_publica',label:'Web pública HTTPS',type:'url',full:true},{name:'instagram',label:'Instagram público',full:true},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 293,
+      "line": 323,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "submitText:'Activar Club Piloto',"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 295,
+      "line": 325,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!v.declaration)throw new Error('Debes confirmar que estás autorizado para registrar el Club.');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 299,
+      "line": 329,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "await backend.restore().catch(()=>null);closeModal();toast('Club Piloto activado. Premium piloto y vinculación de miembros disponibles.');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 369,
+      "line": 399,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'nombre_publico',label:type==='marca'?'Nombre oficial':type==='federacion'?'Nombre institucional':'Nombre público',required:true,full:true,value:profile.nombre_publico||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 370,
+      "line": 400,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'descripcion',label:'Presentación pública',type:'textarea',rows:5,maxLength:1600,full:true,value:profile.descripcion||'',help:'No incluyas teléfono, email, domicilio, fecha de nacimiento ni documentación privada.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 371,
+      "line": 401,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'ubicacion',label:'Ubicación pública',value:profile.ubicacion||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 372,
+      "line": 402,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'disciplinas',label:'Disciplinas',value:(profile.disciplinas||[]).join(', '),help:'Separadas por comas; máximo 12.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 373,
+      "line": 403,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'categoria',label:type==='competidor'?'Categoría / nivel':'Especialidad / categoría',value:profile.categoria||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 374,
+      "line": 404,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'club_declarado',label:type==='competidor'?'Club deportivo declarado':'Entidad o vínculo principal',value:profile.club_declarado||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 375,
+      "line": 405,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'web_publica',label:'Web pública HTTPS',type:'url',full:true,value:profile.web_publica||''}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 377,
+      "line": 407,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='competidor'&&memberProfiles.length)fields.splice(2,0,{name:'miembro_social_id',label:'Mi perfil de Miembro',type:'select',required:true,value:memberProfiles.find(x=>String(x.identidad_social_id||'')===String(profile.origen_identidad_social_id||''))?.id||memberProfiles[0].id,options:memberProfiles.map(x=>({va"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 378,
+      "line": 408,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='profesional'){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 379,
+      "line": 409,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "fields.splice(1,0,{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',required:!profile.id,value:'',help:'Perfil Profesional: alta autónoma 18+. Nunca se muestra públicamente.'});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 381,
+      "line": 411,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "fields.splice(3,0,{name:'especialidades_secundarias',label:'Especialidades secundarias',value:(profile.profesional_especialidades_secundarias||[]).join(', '),full:true,help:'Opcional. Usa códigos separados por comas; máximo 4 y nunca repitas la principal.'});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 384,
+      "line": 414,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "fields.splice(1,0,{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',required:!profile.id,value:'',help:'Espectador: alta autónoma 16+. El perfil permanece privado por defecto.'});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 392,
+      "line": 422,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const fields=[{name:'nombre_publico',label:type==='club'?'Nombre del club':`Nombre público de ${TYPE_LABEL[type]||type}`,required:true,full:true,value:application?.nombre_publico||profile?.nombre_publico||''}];"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 393,
+      "line": 423,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='competidor')fields.push("
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 394,
+      "line": 424,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'ubicacion',label:'Ubicación pública',value:data.ubicacion||profile?.ubicacion||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 396,
+      "line": 426,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'categoria',label:'Categoría / nivel',value:data.categoria||profile?.categoria||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 399,
+      "line": 429,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',value:verify.fecha_nacimiento||'',help:profile?.origen_identidad_social_id?'Si vienes de un Club, prevalece la edad verificada por el Club.':'Alta autónoma de Competidor: 16+.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 400,
+      "line": 430,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'email',label:'Email de verificación · privado',type:'email',required:true,value:verify.email||''}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 402,
+      "line": 432,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='marca')fields.push("
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 403,
+      "line": 433,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'categoria',label:'Categoría comercial',required:true,value:data.categoria||profile?.categoria||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 405,
+      "line": 435,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'razon_social',label:'Razón social · privada',required:true,value:verify.razon_social||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 412,
+      "line": 442,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'pais',label:'País',required:true,value:data.pais||''},{name:'territorio',label:'Territorio / ámbito',required:true,value:data.territorio||profile?.ubicacion||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 417,
+      "line": 447,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'registro_entidad',label:'Registro / número oficial · privado',required:true,value:verify.registro_entidad||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 420,
+      "line": 450,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='marca'||type==='federacion'){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 423,
+      "line": 453,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'plan_codigo',label:'Plan opcional',type:'select',value:verify.plan_codigo||selected.plan_code||'',options:[{value:'',label:'Solo identidad pública gratuita'},...commercialPlanOptions(type)],full:true,help:'Puedes solicitar la identidad pública sin plan. La verificación no realiza ningún cobro ni activa funciones"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 427,
+      "line": 457,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='profesional')fields.push("
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 428,
+      "line": 458,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'especialidad_principal',label:'Especialidad profesional',type:'select',required:true,value:data.especialidad_principal||profile?.profesional_especialidad_principal||'entrenador',options:PROFESSIONAL_SPECIALTIES.map(x=>({value:x.code,label:x.name})),full:true},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 431,
+      "line": 461,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',value:verify.fecha_nacimiento||'',help:'Debe acreditar 18+; si ya se validó en el perfil puede dejarse sin cambios.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 432,
+      "line": 462,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'email',label:'Email profesional · privado',type:'email',required:true,value:verify.email||''}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 435,
+      "line": 465,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'lema',label:'Lema público',value:data.lema||''},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true,value:data.descripcion||'',help:'Será la presentación inicial del perfil público del Club.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 436,
+      "line": 466,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'ubicacion',label:'Ubicación pública',required:true,value:data.ubicacion||''},{name:'ciudad',label:'Ciudad',value:data.ciudad||''},{name:'provincia',label:'Provincia / región',value:data.provincia||''},{name:'pais',label:'País',required:true,value:data.pais||'España'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 437,
+      "line": 467,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'disciplinas',label:'Disciplina(s)',required:true,value:Array.isArray(data.disciplinas)?data.disciplinas.join(', '):String(data.disciplinas||''),help:'Separadas por comas; máximo 12.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 438,
+      "line": 468,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'web_publica',label:'Web HTTPS',type:'url',value:data.web_publica||''},{name:'instagram',label:'Instagram público',value:data.instagram||''},{name:'tiktok',label:'TikTok público',value:data.tiktok||''},{name:'youtube',label:'YouTube público',value:data.youtube||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 439,
+      "line": 469,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'forma_entidad',label:'Tipo de club / entidad · privado',type:'select',value:verify.forma_entidad||'club_deportivo',options:[{value:'club_deportivo',label:'Club deportivo'},{value:'asociacion',label:'Asociación'},{value:'autonomo',label:'Profesional / autónomo'},{value:'gimnasio',label:'Gimnasio / centro deportiv"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 440,
+      "line": 470,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'nombre_legal',label:'Nombre legal · privado',required:true,value:verify.nombre_legal||''},{name:'cif',label:'CIF / identificación fiscal · privado',value:verify.cif||verify.tax_id||'',help:'Opcional en la verificación inicial. No todos los clubes operan con la misma forma jurídica.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 441,
+      "line": 471,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'email_oficial',label:'Email oficial · privado',type:'email',required:true,value:verify.email_oficial||''},{name:'telefono',label:'Teléfono oficial · privado',required:true,value:verify.telefono||''},{name:'direccion',label:'Dirección administrativa o zona de actividad · privada',value:verify.direccion||'',full:t"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 442,
+      "line": 472,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'responsable',label:'Responsable del club',required:true,value:verify.responsable||''},{name:'rol_responsable',label:'Cargo / relación con el club',required:true,value:verify.rol_responsable||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 443,
+      "line": 473,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'plan_codigo',label:'Plan opcional',type:'select',value:verify.plan_codigo||selectedCommercialPlan('club').plan_code||'',options:[{value:'',label:'Solo perfil público gratuito'},...commercialPlanOptions('club')],full:true,help:'Puedes solicitar el perfil público sin contratar la gestión privada. La verificación d"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 446,
+      "line": 476,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='club')fields.push({name:'tipo_acreditacion',label:'Tipo de acreditación',type:'select',required:true,value:'Documento del club / centro',options:[{value:'Licencia / acreditación federativa',label:'Licencia / acreditación federativa'},{value:'Registro de club o asociación',label:'Registro de club o asociación"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 449,
+      "line": 479,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'evidencia',label:type==='club'?'Cómo podemos comprobar que el club existe y que puedes representarlo':mediaVerification?'Portfolio / referencias / actividad verificable':'Cómo podemos verificar esta identidad',type:'textarea',rows:4,maxLength:1200,required:true,full:true,value:verify.evidencia||'',help:type==='c"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 450,
+      "line": 480,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'documento',label:type==='club'?'Documento acreditativo privado':mediaVerification?'Documento adicional · opcional':'Documento acreditativo',type:'file',accept:'.pdf,image/jpeg,image/png,image/webp',required:!mediaVerification&&!application,full:true,help:type==='club'?'Necesario para enviar una solicitud nueva. "
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 451,
+      "line": 481,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'declaration',label:'Declaro que la información es correcta y que estoy autorizado para representar esta identidad',type:'checkbox',value:application?.declaracion_aceptada===true,required:true,full:true}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 459,
+      "line": 489,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "title:application?.estado==='needs_information'?'Completar solicitud':`Solicitar perfil ${TYPE_LABEL[type]||type}`,"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 460,
+      "line": 490,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "subtitle:'La solicitud se estudia antes de conceder la identidad oficial. Pagar nunca concede la insignia automáticamente.',"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 461,
+      "line": 491,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "width:'900px',fields:applicationFields(type,profile,application),submitText:'Guardar y enviar',"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 463,
+      "line": 493,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!v.declaration)throw new Error('Debes confirmar la declaración de identidad y representación.');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 468,
+      "line": 498,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const row=saved?.data||saved;const id=row?.id||application?.id;if(!id)throw new Error('No se pudo verificar el identificador de la solicitud guardada.');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 472,
+      "line": 502,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(commercialAudienceForType(type))clearCommercialSelection(type);toast('Solicitud enviada a revisión KOMBAX');await renderDirectProfileHub({onBack});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 480,
+      "line": 510,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "title:profile?'Editar perfil KOMBAX':`Preparar solicitud ${TYPE_LABEL[type]||type}`,"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 481,
+      "line": 511,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "subtitle:type==='competidor'?'Tu cuenta personal puede solicitar Competidor de forma autónoma. No necesitas un Club; si ya eres Miembro puedes conservar publicaciones y Mi red. La condición Competidor exige revisión.':type==='espectador'?'Identidad privada de consumo 16+. No publica ni requiere verificación profesional"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 482,
+      "line": 512,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "width:'840px',initial:profile||{},fields:profileFields(type,profile||{},memberProfiles),submitText:'Guardar borrador',"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 486,
+      "line": 516,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "toast(profile?'Perfil actualizado':'Borrador de solicitud creado');const saved=result?.data||result;if(!profile&&saved?.id&&commercialAudienceForType(type)&&selectedCommercialPlan(type).plan_code)sessionStorage.setItem('kombax_new_profile_id',saved.id);"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 494,
+      "line": 524,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const photos=rows.filter(x=>x.tipo==='photo'&&x.estado!=='removed');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 495,
+      "line": 525,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const videos=rows.filter(x=>x.tipo==='video'&&x.estado!=='removed');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 496,
+      "line": 526,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const avatar=rows.find(x=>x.tipo==='avatar'&&x.estado!=='removed');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 497,
+      "line": 527,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const banner=rows.find(x=>x.tipo==='banner'&&x.estado!=='removed');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 500,
+      "line": 530,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const tile=m=>`<article class=\"kx-album-tile\">${m.tipo==='video'?`<div class=\"kx-album-video-shell\"><video ${mediaFrameAttrs(m.media_presentation,'album')} src=\"${esc(mediaUrl(m))}\" ${mediaPoster(m)?`poster=\"${esc(mediaPoster(m))}\"`:''} preload=\"metadata\" controls playsinline></video><button type=\"button\" class=\"kx-pro"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 502,
+      "line": 532,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "title:`Álbum · ${profile.nombre_publico}`,"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 503,
+      "line": 533,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "subtitle:`${photos.length}/10 fotos · ${videos.length}/3 vídeos · vídeo máximo 60 s`,"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 505,
+      "line": 535,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "body:`<div class=\"kx-album-hero\">${avatar?`<div><img ${mediaFrameAttrs(avatar.media_presentation,'avatar').replace('class=\"kx-media-frame-img\"','class=\"kx-media-frame-img kx-avatar-preview\"')} src=\"${esc(mediaUrl(avatar))}\" alt=\"\"><button class=\"btn btn-ghost btn-sm\" data-kx-media-frame=\"${esc(avatar.id)}\" data-kx-fram"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 506,
+      "line": 536,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "actions:'<button class=\"btn btn-ghost\" id=\"kx-album-close\">Cerrar</button>'"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 512,
+      "line": 542,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "title:`Subir ${type==='photo'?'foto':type==='video'?'vídeo':type}`,"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 513,
+      "line": 543,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "subtitle:type==='video'?'El vídeo se valida antes de guardar: máximo 60 segundos en MP4/HD recomendado.':'Las imágenes se optimizan antes de almacenarse.',"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 519,
+      "line": 549,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "wrap.querySelectorAll('[data-kx-direct-media-open]').forEach(button=>button.addEventListener('click',()=>{const media=rows.find(x=>String(x.id)===String(button.dataset.kxDirectMediaOpen));if(!media)return;openImmersiveMedia({src:mediaUrl(media),type:'image',alt:`Foto del perfil ${profile.nombre_publico}`});}));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 520,
+      "line": 550,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "wrap.querySelectorAll('[data-kx-direct-video-open]').forEach(button=>button.addEventListener('click',()=>{const media=rows.find(x=>String(x.id)===String(button.dataset.kxDirectVideoOpen));if(!media)return;openImmersiveMedia({src:mediaUrl(media),type:'video',poster:mediaPoster(media),alt:`Vídeo del perfil ${profile.nomb"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 521,
+      "line": 551,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "wrap.querySelectorAll('[data-kx-media-frame]').forEach(button=>button.addEventListener('click',()=>{const media=rows.find(x=>String(x.id)===String(button.dataset.kxMediaFrame));if(!media)return;const preset=button.dataset.kxFramePreset||(['photo','video'].includes(media.tipo)?'album':media.tipo);openMediaFramingEditor("
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 522,
+      "line": 552,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "wrap.querySelectorAll('[data-kx-direct-video-cover]').forEach(button=>button.addEventListener('click',()=>{const media=rows.find(x=>String(x.id)===String(button.dataset.kxDirectVideoCover));if(!media||media.tipo!=='video')return;openVideoCoverEditor({src:mediaUrl(media),initial:media.media_presentation,title:'Portada d"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 525,
+      "line": 555,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "confirmDialog('Eliminar multimedia','Dejará de mostrarse en el perfil. El registro mantiene trazabilidad.',async()=>{await repos.kombaxProfiles.removeMedia(media);toast('Multimedia eliminada');closeModal();await openAlbum(profile,{onBack});},{confirmText:'Eliminar',danger:true});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 530,
+      "line": 560,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const stateLabel=WORKFLOW_LABEL[app.estado]||app.estado;"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 531,
+      "line": 561,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const statusCopy=reviewStatusCopy(app.estado);"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 533,
+      "line": 563,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const pilotInfo=app.tipo==='club'&&app.datos_verificacion?.pilot_requested===true?'<div class=\"kx-review-status neutral\"><strong>Piloto solicitado</strong><span>La plaza y el nivel de acceso requieren confirmación de KOMBAX. No necesitas tarjeta para el piloto.</span></div>':'';"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 534,
+      "line": 564,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "return `<article class=\"kx-application-card\"><header><div><span>VERIFICACIÓN</span><strong>${esc(TYPE_LABEL[app.tipo]||app.tipo)}</strong></div><b class=\"kx-state ${esc(workflowTone(app.estado))}\">${esc(stateLabel)}</b></header><p>${esc(app.nombre_publico)}</p>${pilotInfo}${planInfo}${statusCopy?`<div class=\"kx-review-"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 539,
+      "line": 569,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const rows=await repos.accountDeletion.list().catch(()=>[]);const open=rows.filter(x=>['requested','in_review','needs_information','confirmed'].includes(x.estado));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 540,
+      "line": 570,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const modal=openDetail({title:'Eliminar cuenta KOMBAX',subtitle:'Solicitud trazable de datos y cuenta',width:'720px',body:`<div class=\"kx-deletion-center\"><div class=\"alert alert-warning\"><strong>No se borra trazabilidad legal de forma indiscriminada</strong><span>La solicitud afecta a tu cuenta y datos eliminables. Lo"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 541,
+      "line": 571,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "modal.wrap.querySelector('#kx-delete-request')?.addEventListener('click',()=>openForm({title:'Solicitar eliminación',subtitle:'Puedes indicar un motivo opcional.',fields:[{name:'motivo',label:'Motivo',type:'textarea',rows:4,full:true,maxLength:1200}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.accountD"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 542,
+      "line": 572,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "modal.wrap.querySelectorAll('[data-kx-delete-cancel]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Cancelar solicitud','La solicitud dejará de tramitarse.',async()=>{await repos.accountDeletion.cancel(b.dataset.kxDeleteCancel);toast('Solicitud cancelada');closeModal();setTimeout(openGlobalDeletionCenter,18"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 568,
+      "line": 598,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setAppHtml(`<main class=\"kombax-gateway direct-mode gateway-premium\" data-kombax-view=\"platform-legal-required\"><div class=\"gateway-ambient\" aria-hidden=\"true\"><i></i><i></i><i></i></div><section class=\"gateway-directory premium-surface\"><div class=\"gateway-directory-top\">${mark({compact:true})}<span class=\"gateway-dir"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 572,
+      "line": 602,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setAppHtml(`<main class=\"kombax-gateway direct-mode gateway-premium\" data-kombax-view=\"profile-hub\"><div class=\"gateway-ambient\" aria-hidden=\"true\"><i></i><i></i><i></i></div><section class=\"gateway-directory premium-surface\"><div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"kx-hub-back\" type=\""
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 580,
+      "line": 610,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const memberProfiles=supportDirect?[]:(socialProfiles||[]).filter(x=>x.sujeto_tipo==='miembro');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 589,
+      "line": 616,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const memberMemberships=membershipRows.filter(x=>x.modo==='alumno'&&x.estado==='activo');"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 617,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const familyMemberships=membershipRows.filter(x=>x.modo==='tutor'&&x.estado==='activo');"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 620,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const membershipCards=membershipRows.map(m=>`<article class=\"kx-profile-owned kx-member-identity\"><header><div class=\"direct-profile-icon\">${featureIcon('identity',{size:44})}</div><div><span>${m.modo==='alumno'?'MIEMBRO / PRACTICANTE':'FAMILIAR / TUTOR'}</span><strong>${esc(m.modo==='alumno'?`${m.alumno_nombre||''} ${"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 624,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"kx-hub-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<button class=\"btn btn-ghost btn-sm\" id=\"kx-hub-home\" type=\"button\">${icon('home',{size:16})} Inicio</"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 590,
+      "line": 625,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${supportDirect?`<div class=\"kx-support-mode-banner embedded\"><div>${icon('shieldCheck',{size:18})}<span><strong>MODO SOPORTE KOMBAX</strong><small>${esc(state.session?.support_name||'Perfil')} · ${esc(state.session?.support_reason||'Acceso administrativo auditado')}</small></span></div><button class=\"btn btn-ghost btn"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 591,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<header class=\"kx-hub-header\"><div><span class=\"gateway-eyebrow\">${supportDirect?'SOPORTE ADMINISTRATIVO':spectatorAccount?'ESPECTADOR · CUENTA GRATUITA':'IDENTIDAD GLOBAL'}</span><h1>${esc(supportDirect?(state.session?.support_name||'Perfil KOMBAX'):(state.session?.nombre||'Mi KOMBAX'))}</h1><p>${supportDirect?'Gestio"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 592,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "${spectatorAccount?`<section class=\"kx-spectator-home\"><div class=\"kx-spectator-home-head\"><div><span>EXPLORA KOMBAX</span><h2>Empieza mirando. Decide tu perfil después.</h2><p>Como Espectador puedes conocer la comunidad, los productos y los eventos. La gestión privada solo aparecerá cuando una identidad o membresía te"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 593,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "${supportDirect?'':`<div class=\"kx-hub-actions ${spectatorAccount?'spectator-minimal':''}\">${activeAccountPolicy.canCreate?'<button class=\"btn btn-primary\" id=\"kx-new-profile\">+ Solicitar perfil</button>':''}${spectatorAccount?'':`<button class=\"btn btn-ghost\" id=\"kx-open-social\">KOMBAX Social</button><button class=\"bt"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 595,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section class=\"kx-hub-section\"><div class=\"kx-section-title\"><div><span>PERFILES</span><h2>Mis identidades</h2></div><small>${identityCount} identidad${identityCount===1?'':'es'}</small></div>"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 596,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
-      "target_block_1": true,
-      "sample": "${identityCount?`<div class=\"kx-profile-owned-grid\">${(managedClubs||[]).map(c=>`<article class=\"kx-profile-owned kx-club-identity\"><header><div class=\"direct-profile-icon\">${featureIcon('club',{size:44})}</div><div><span>CLUB</span><strong>${esc(c.nombre_publico)}</strong><small>${esc([c.ciudad,c.provincia,c.pais].fil"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 598,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section class=\"kx-hub-section\"><div class=\"kx-section-title\"><div><span>REVISIÓN</span><h2>Solicitudes</h2></div><small>${applications.length} solicitud${applications.length===1?'':'es'}</small></div>${applications.length?`<div class=\"kx-application-grid\">${applications.map(a=>applicationCard(a,profileById.get(a.perfi"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 599,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Verificación separada del autorregistro</strong><p>Crear una cuenta o un perfil nunca concede una insignia, un club ni permisos sensibles. La revisión es explícita y trazable.</p></div></div>"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 607,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "document.getElementById('kx-global-logout')?.addEventListener('click',async()=>{await backend.signOut();toast('Sesión cerrada');renderDirectProfiles({onBack});});"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "line": 621,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "document.getElementById('kx-account-support')?.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'account',subjectId:state.session?.id,title:'Privacidad y soporte de mi cuenta',canAuthorize:true}));"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "line": 626,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "document.querySelectorAll('[data-kx-profile-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'direct_profile',subjectId:b.dataset.kxProfileSupport,title:'Privacidad y soporte del perfil',canAuthorize:true})));"
+      "sample": "<header class=\"kx-hub-header\"><div><span class=\"gateway-eyebrow\">${supportDirect?'SOPORTE ADMINISTRATIVO':freeUnconfiguredAccount?'CUENTA KOMBAX GRATUITA':memberMemberships.length?'MIEMBRO / PRACTICANTE · CUENTA GRATUITA':familyMemberships.length?'FAMILIAR / TUTOR · CUENTA GRATUITA':'IDENTIDAD GLOBAL'}</span><h1>${esc("
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 627,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "${freeUnconfiguredAccount?`<section class=\"kx-spectator-home\"><div class=\"kx-spectator-home-head\"><div><span>EXPLORA KOMBAX</span><h2>Explora ahora. Completa tu perfil cuando quieras.</h2><p>Tu cuenta gratuita puede conocer la comunidad, los productos y los eventos sin quedar etiquetada automáticamente como Espectador."
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 628,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "${supportDirect?'':`<div class=\"kx-hub-actions ${freeUnconfiguredAccount?'spectator-minimal':''}\">${activeAccountPolicy.canCreate?'<button class=\"btn btn-primary\" id=\"kx-new-profile\">+ Solicitar perfil</button>':''}${freeUnconfiguredAccount?'':`<button class=\"btn btn-ghost\" id=\"kx-open-social\">KOMBAX Social</button><bu"
     },
     {
       "file": "web/js/modules/gateway.js",
       "line": 630,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "document.querySelectorAll('[data-kx-club-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'club',subjectId:b.dataset.kxClubSupport,title:'Privacidad y soporte del club',canAuthorize:true})));"
+      "sample": "<section class=\"kx-hub-section\"><div class=\"kx-section-title\"><div><span>PERFILES Y MEMBRESÍAS</span><h2>Mi identidad KOMBAX</h2></div><small>${workspaceCount} elemento${workspaceCount===1?'':'s'}</small></div>"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 631,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": true,
+      "sample": "${workspaceCount?`<div class=\"kx-profile-owned-grid\">${membershipCards}${(managedClubs||[]).map(c=>`<article class=\"kx-profile-owned kx-club-identity\"><header><div class=\"direct-profile-icon\">${featureIcon('club',{size:44})}</div><div><span>CLUB</span><strong>${esc(c.nombre_publico)}</strong><small>${esc([c.ciudad,c.pr"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 633,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "<section class=\"kx-hub-section\"><div class=\"kx-section-title\"><div><span>REVISIÓN</span><h2>Solicitudes</h2></div><small>${applications.length} solicitud${applications.length===1?'':'es'}</small></div>${applications.length?`<div class=\"kx-application-grid\">${applications.map(a=>applicationCard(a,profileById.get(a.perfi"
     },
     {
       "file": "web/js/modules/gateway.js",
       "line": 634,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "document.querySelectorAll('[data-kx-application-withdraw]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Retirar solicitud','La solicitud dejará de revisarse. El historial no se falsifica ni se elimina.',async()=>{await repos.kombaxProfiles.withdrawApplication(b.dataset.kxApplicationWithdraw);toast('Solicit"
+      "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Verificación separada del autorregistro</strong><p>Crear una cuenta o un perfil nunca concede una insignia, un club ni permisos sensibles. La revisión es explícita y trazable.</p></div></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
       "line": 642,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "document.getElementById('kx-global-logout')?.addEventListener('click',async()=>{await backend.signOut();toast('Sesión cerrada');renderDirectProfiles({onBack});});"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 656,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "document.getElementById('kx-account-support')?.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'account',subjectId:state.session?.id,title:'Privacidad y soporte de mi cuenta',canAuthorize:true}));"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 661,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "document.querySelectorAll('[data-kx-profile-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'direct_profile',subjectId:b.dataset.kxProfileSupport,title:'Privacidad y soporte del perfil',canAuthorize:true})));"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 665,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "document.querySelectorAll('[data-kx-club-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'club',subjectId:b.dataset.kxClubSupport,title:'Privacidad y soporte del club',canAuthorize:true})));"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 671,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "document.querySelectorAll('[data-kx-application-withdraw]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Retirar solicitud','La solicitud dejará de revisarse. El historial no se falsifica ni se elimina.',async()=>{await repos.kombaxProfiles.withdrawApplication(b.dataset.kxApplicationWithdraw);toast('Solicit"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 679,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "}else if(pendingType&&directTypes.some(t=>t.id===pendingType&&!t.disabled&&!t.baseOnly)&&['competidor','marca','federacion','profesional','media'].includes(pendingType)){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 644,
+      "line": 681,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "}else if(pendingType==='club'&&!applications.some(a=>a.tipo==='club'&&['submitted','under_review','needs_information'].includes(a.estado))){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 664,
+      "line": 701,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const type=({club:'club',brand:'marca',federation:'federacion'})[selection?.audience];"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 673,
+      "line": 711,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!available.length){toast('Esta cuenta ya tiene asignado su tipo de perfil.','warning');return;}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 674,
+      "line": 712,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const {wrap}=openDetail({title:'Solicitar perfil oficial KOMBAX',subtitle:policy?.kind==='miembro'?'Como miembro puedes solicitar tu perfil de Competidor.':'Elige el tipo de cuenta que quieres crear. La identidad elegida quedará vinculada a este correo.',width:'820px',body:`<div class=\"kx-type-picker\">${available.map(t"
+      "sample": "const subtitle=policy?.kind==='miembro'?'Tu membresía ya está confirmada. Puedes solicitar Competidor sin crear otra cuenta.':'Elige cómo quieres usar KOMBAX. La cuenta es gratuita; Espectador y Miembro/Familiar son recorridos de acceso, y las identidades oficiales mantienen sus verificaciones.';"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 683,
+      "line": 713,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"direct-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class=\"gateway-directory-step\">PERFILES KOMBAX</span></div>"
+      "sample": "const {wrap}=openDetail({title:policy?.kind==='miembro'?'Evolucionar mi perfil':'Elige tu perfil KOMBAX',subtitle,width:'880px',body:`<div class=\"kx-type-picker\">${available.map(t=>`<button type=\"button\" data-kx-pick=\"${esc(t.id)}\"><span>${featureIcon(t.icon,{size:42})}</span><strong>${esc(t.label)}</strong><small>${es"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 684,
+      "line": 723,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "<header><span class=\"gateway-eyebrow\">IDENTIDAD KOMBAX</span><h1>Elige el tipo de perfil</h1><p>Empieza con una cuenta KOMBAX gratuita. Club, Marca y Federación pueden solicitar primero su identidad pública gratuita. Los planes de gestión se consultan por separado.</p><button class=\"btn btn-ghost btn-sm\" id=\"kx-direct-"
+      "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"direct-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class=\"gateway-directory-step\">CUENTA GRATUITA KOMBAX</span></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 685,
+      "line": 724,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "<div class=\"direct-profile-grid\">${directTypes.filter(t=>!t.baseOnly).map(t=>`<button class=\"direct-profile-card ${t.disabled?'is-disabled':''}\" type=\"button\" style=\"--profile-accent:${t.accent}\" data-profile-type=\"${esc(t.id)}\" ${t.disabled?'disabled':''}><div class=\"direct-profile-icon\">${featureIcon(t.icon,{size:58}"
+      "sample": "<header><span class=\"gateway-eyebrow\">IDENTIDAD KOMBAX</span><h1>¿Cómo quieres usar KOMBAX?</h1><p>Crea una única cuenta KOMBAX gratuita y elige tu recorrido. Crear la cuenta no te convierte automáticamente en Espectador ni concede una identidad oficial. Podrás explorar Social, Showcase y Events mientras completas el p"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 686,
+      "line": 725,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Un tipo de cuenta por correo</strong><p>Elige Club, Competidor, Marca, Federación, Profesional o Media. Cada cuenta conserva su tipo. Si eres Miembro de un club, puedes añadir tu perfil de Competidor. "
+      "sample": "<div class=\"direct-profile-grid\">${onboardingTypes.map(t=>`<button class=\"direct-profile-card ${t.disabled?'is-disabled':''}\" type=\"button\" style=\"--profile-accent:${t.accent}\" data-profile-type=\"${esc(t.id)}\" ${t.disabled?'disabled':''}><div class=\"direct-profile-icon\">${featureIcon(t.icon,{size:58})}</div><div class="
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 687,
+      "line": 726,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "<div class=\"kx-direct-auth-row\"><button class=\"btn btn-primary\" id=\"kx-free-spectator-account\">Crear cuenta gratuita / Espectador</button><button class=\"btn btn-ghost\" id=\"kx-existing-account\">Ya tengo cuenta KOMBAX</button></div>"
+      "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Una cuenta, una identidad principal</strong><p>Miembro/Practicante solo puede publicar en Social cuando un club confirma su membresía. Competidor puede solicitarse directamente o evolucionar desde Miem"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 727,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "<div class=\"kx-direct-auth-row\"><button class=\"btn btn-primary\" id=\"kx-free-account\">Crear cuenta gratuita</button><button class=\"btn btn-ghost\" id=\"kx-existing-account\">Ya tengo cuenta KOMBAX</button></div>"
     },
     {
       "file": "web/js/modules/groups-members.js",
@@ -15873,7 +15964,28 @@
       "line": 37,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(Number(plan.showcase_model_limit||0)>0)rows.push(['Ampliar catálogo','+25 · 8 €/30 días']);"
+      "sample": "if(Number(plan.showcase_model_limit||0)>0)rows.push(['Ampliar catálogo',PUBLIC_PRICING_LOCKED?'Disponible tras lanzamiento':'+25 · 8 €/30 días']);"
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "line": 38,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "rows.push(['Commerce',plan.plan_code==='club'&&plan.commerce_mode==='temporary'?(PUBLIC_PRICING_LOCKED?'Disponible tras lanzamiento':'12 €/mes'):modeLabel(plan.commerce_mode)]);"
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "line": 44,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "rows.push(['Platform fee',PUBLIC_PRICING_LOCKED?'No disponible hasta lanzamiento':`${Number(plan.platform_fee_percent||0).toLocaleString(kxLocaleTag(kxGetLocale()))} %`]);"
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "line": 51,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const primary=PUBLIC_PRICING_LOCKED?'No disponible hasta lanzamiento':published?eurMinor(offer.price_minor):'Precio por definir';"
     },
     {
       "file": "web/js/modules/plan-services.js",
@@ -15887,14 +15999,21 @@
       "line": 56,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<div class=\"kx-price-standard\"><span>${published?'Tarifa pública mensual · España':'Condiciones comerciales pendientes'}</span><b>${published?'Sin IVA':'Consulta disponibilidad'}</b></div>"
+      "sample": "<div class=\"kx-price-standard\"><span>${PUBLIC_PRICING_LOCKED?'Piloto KOMBAX · condiciones comerciales ocultas':published?'Tarifa pública mensual · España':'Condiciones comerciales pendientes'}</span><b>${PUBLIC_PRICING_LOCKED?'Lanzamiento':published?'Sin IVA':'Consulta disponibilidad'}</b></div>"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 58,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "${active?'':requestable?`<button class=\"btn btn-primary kx-plan-request\" data-plan=\"${esc(plan.plan_code)}\">${esc(actionLabel)}</button>`:published?`<button class=\"btn btn-ghost kx-plan-preview\" data-plan=\"${esc(plan.plan_code)}\" type=\"button\">Ver simulación de activación</button><small>La simulación no solicita tarjet"
+      "sample": "${active?'':PUBLIC_PRICING_LOCKED?'<small>No disponible hasta lanzamiento.</small>':requestable?`<button class=\"btn btn-primary kx-plan-request\" data-plan=\"${esc(plan.plan_code)}\">${esc(actionLabel)}</button>`:published?`<button class=\"btn btn-ghost kx-plan-preview\" data-plan=\"${esc(plan.plan_code)}\" type=\"button\">Ver "
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "line": 64,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const price=free?'Gratis':PUBLIC_PRICING_LOCKED?'No disponible hasta lanzamiento':priced?`${offer.starting_price?'Desde ':''}${eurMinor(offer.price_minor)}/mes + IVA`:'Precio por definir';"
     },
     {
       "file": "web/js/modules/plan-services.js",
@@ -15912,210 +16031,217 @@
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 74,
+      "line": 69,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const pubCards=[7,15,30,60].map(d=>pub[d]?`<span>${d} días · <b>${eurMinor(pub[d])}</b></span>`:'').join('');"
+      "sample": "if(PUBLIC_PRICING_LOCKED)return `<section class=\"kx-commercial-section\"><div class=\"kx-commercial-section-title\"><small>SERVICIOS PUNTUALES</small><h2>No disponible hasta lanzamiento</h2></div><div class=\"kx-activation-grid\"><article><h3>Funciones comerciales preservadas</h3><p>Showcase, Commerce, publicación de Events"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 75,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "const pubCards=[7,15,30,60].map(d=>pub[d]?`<span>${d} días · <b>${eurMinor(pub[d])}</b></span>`:'').join('');"
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "line": 76,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "const promoCards=[7,15,30].map(d=>promo[d]?`<span>${d} días · <b>${eurMinor(promo[d])}</b></span>`:'').join('');"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 79,
+      "line": 80,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "${(audience==='club'||audience==='brand')?`<article><h3>Ampliación Showcase +25</h3><p>Los límites del plan son capacidad incluida, no un límite destructivo. Añade 25 productos activos durante 30 días y conserva referencias, reseñas e historial.</p><div class=\"kx-activation-options\"><span><b>+${Number(catalogPlus.slots"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 80,
+      "line": 81,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${audience==='club'?`<article><h3>Showcase Commerce</h3><p>Club básico: mantienes hasta 15 productos de escaparate y activas la venta directa cuando la necesitas. Premium y Enterprise ya incluyen Commerce.</p><div class=\"kx-activation-options\"><button type=\"button\" class=\"kx-activation-option\" ${clubCommerceAllowed?'da"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 81,
+      "line": 82,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<article><h3>Publicar evento</h3><p>Publicar no es lo mismo que promocionar ni vender entradas.</p><div>${pubCards}</div><small>Se activa desde el evento concreto para que la autorización quede ligada a ese evento.</small></article>"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 82,
+      "line": 83,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<article><h3>Destacar</h3><p>Prioridad en Events/Showcase + amplificación automática en KOMBAX Social.</p><div>${promoCards}</div><small>Se contrata desde el evento o producto concreto. La promoción se muestra con una frecuencia equilibrada para cuidar la experiencia en Social.</small></article>"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 83,
+      "line": 84,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<article><h3>Ticketing</h3><p>Activación puntual según capacidad del evento.</p><div>${ticketCards}</div><small>Incluye checkout, ticket digital, QR, lector y control de acceso. Más de ${Number(c.large_event_threshold||1000).toLocaleString(kxLocaleTag(kxGetLocale()))} entradas: Gran Evento con condiciones específicas.<"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 87,
+      "line": 88,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "function partnerSection(catalog){const p=catalog.config?.partner_program||{};return `<section class=\"kx-commercial-section kx-partner-panel\"><div><small>KOMBAX PARTNER</small><h2>Haz crecer tu red</h2><p>Comisión sobre la base imponible de la suscripción del club referido, sin IVA ni extras.</p></div><div class=\"kx-par"
-    },
-    {
-      "file": "web/js/modules/plan-services.js",
-      "line": 99,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "${pageHeader('Planes y precios','Consulta las tarifas antes de crear una organización o vuelve aquí desde cualquier cuenta KOMBAX.',onBack?subviewActions({backId:'kx-commercial-discovery-back',closeId:'kx-commercial-discovery-close'}):'','KOMBAX')}"
+      "sample": "function partnerSection(catalog){if(PUBLIC_PRICING_LOCKED)return `<section class=\"kx-commercial-section kx-partner-panel\"><div><small>KOMBAX PARTNER</small><h2>Programa preparado para lanzamiento</h2><p>Durante el piloto no se muestran porcentajes, precios ni condiciones económicas públicas del programa Partner.</p></d"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 100,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<section class=\"kx-commercial-hero kx-commercial-discovery-hero\"><div><span class=\"page-kicker\">KOMBAX · CUENTA GRATIS + PLANES POR ORGANIZACIÓN</span><h1>Primero tu cuenta. Después eliges qué quieres hacer.</h1><p>Crear una cuenta KOMBAX es gratuito. Una cuenta puede explorar la plataforma, vincularse a un club y cons"
+      "sample": "${pageHeader('Planes y servicios',PUBLIC_PRICING_LOCKED?'Consulta las capacidades disponibles. Los precios permanecerán ocultos hasta el lanzamiento.':'Consulta las tarifas antes de crear una organización o vuelve aquí desde cualquier cuenta KOMBAX.',onBack?subviewActions({backId:'kx-commercial-discovery-back',closeId:"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 101,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<section class=\"kx-commercial-journey\" aria-label=\"Cómo funciona\"><article><b>1</b><strong>Cuenta KOMBAX</strong><span>Registro gratuito.</span></article><article><b>2</b><strong>Identidad y vínculo</strong><span>Club, Marca, Federación o miembro de un club.</span></article><article><b>3</b><strong>Capacidades</strong>"
+      "sample": "<section class=\"kx-commercial-hero kx-commercial-discovery-hero\"><div><span class=\"page-kicker\">KOMBAX · CUENTA GRATIS + PLANES POR ORGANIZACIÓN</span><h1>Primero tu cuenta. Después eliges qué quieres hacer.</h1><p>Crear una cuenta KOMBAX es gratuito. Una cuenta puede explorar la plataforma, vincularse a un club y cons"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 102,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<section class=\"kx-audience-grid\">${audiences.map(x=>`<article class=\"kx-audience-card\"><span>${esc(x.copy.badge)}</span><h2>${esc(x.copy.title)}</h2><p>${esc(x.copy.body)}</p><div><small>Perfil público</small><strong>Gratis</strong></div><div><small>Gestión</small><strong>${x.from_minor!=null?`${eurMinor(x.from_minor)"
+      "sample": "<section class=\"kx-commercial-journey\" aria-label=\"Cómo funciona\"><article><b>1</b><strong>Cuenta KOMBAX</strong><span>Registro gratuito.</span></article><article><b>2</b><strong>Identidad y vínculo</strong><span>Club, Marca, Federación o miembro de un club.</span></article><article><b>3</b><strong>Capacidades</strong>"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 103,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<section class=\"kx-commercial-section kx-commercial-account-note\"><div><small>CUENTA KOMBAX</small><h2>No tienes que pagar para registrarte</h2><p>Puedes explorar Social, Showcase y Events según las reglas de cada espacio. Más adelante podrás solicitar la vinculación con un club o crear una identidad. La gestión operat"
+      "sample": "<section class=\"kx-audience-grid\">${audiences.map(x=>`<article class=\"kx-audience-card\"><span>${esc(x.copy.badge)}</span><h2>${esc(x.copy.title)}</h2><p>${esc(x.copy.body)}</p><div><small>Perfil público</small><strong>Gratis</strong></div><div><small>Gestión</small><strong>${PUBLIC_PRICING_LOCKED?'No disponible hasta l"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 127,
+      "line": 104,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<section class=\"kx-commercial-hero\"><div><span class=\"page-kicker\">KOMBAX · PLANES Y SERVICIOS</span><h1>Identidad gratuita y servicios a tu medida</h1><p>Crear una cuenta y solicitar una identidad pública no exige un plan. La gestión operativa se solicita aparte. Los importes mensuales publicados para España se muestr"
+      "sample": "<section class=\"kx-commercial-section kx-commercial-account-note\"><div><small>CUENTA KOMBAX</small><h2>No tienes que pagar para registrarte</h2><p>Puedes explorar Social, Showcase y Events según las reglas de cada espacio. Más adelante podrás solicitar la vinculación con un club o crear una identidad. La gestión operat"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 128,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "${context?.founder_locked?'<section class=\"kx-founder-note\"><strong>Condición Founder existente</strong><span>Tu condición anterior se conserva según sus términos y no se sustituye por el nuevo catálogo público.</span></section>':''}"
+      "sample": "<section class=\"kx-commercial-hero\"><div><span class=\"page-kicker\">KOMBAX · PLANES Y SERVICIOS</span><h1>Identidad gratuita y servicios a tu medida</h1><p>${PUBLIC_PRICING_LOCKED?'Durante la fase piloto puedes consultar capacidades y límites funcionales. Los precios y la contratación pública no estarán disponibles hast"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 129,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "${context?.plan_code?`<div class=\"kx-current-plan\"><span>Plan actual</span><strong>${esc(context.plan_code)}</strong><small>Fee: ${Number(context.platform_fee_percent||0).toLocaleString(kxLocaleTag(kxGetLocale()))} % · ${context.founder_locked?'Founder protegido':'Tarifa según contrato vigente'}</small></div>`:''}"
+      "sample": "${context?.founder_locked?'<section class=\"kx-founder-note\"><strong>Condición Founder existente</strong><span>Tu condición anterior se conserva según sus términos y no se sustituye por el nuevo catálogo público.</span></section>':''}"
     },
     {
       "file": "web/js/modules/plan-services.js",
       "line": 130,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "${selectMode?'<div class=\"kx-commercial-selection-note\"><strong>Elegir no realiza ningún cobro.</strong><span>Tu elección se guardará para completar la solicitud. Te informaremos de las condiciones y del siguiente paso antes de activar el servicio.</span></div>':''}"
+      "sample": "${context?.plan_code?`<div class=\"kx-current-plan\"><span>Plan actual</span><strong>${esc(context.plan_code)}</strong><small>${PUBLIC_PRICING_LOCKED?'Condiciones económicas no visibles durante el piloto':`Fee: ${Number(context.platform_fee_percent||0).toLocaleString(kxLocaleTag(kxGetLocale()))} % · ${context.founder_loc"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 135,
+      "line": 131,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "${selectMode&&!PUBLIC_PRICING_LOCKED?'<div class=\"kx-commercial-selection-note\"><strong>Elegir no realiza ningún cobro.</strong><span>Tu elección se guardará para completar la solicitud. Te informaremos de las condiciones y del siguiente paso antes de activar el servicio.</span></div>':PUBLIC_PRICING_LOCKED?'<div class"
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
+      "line": 136,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<section class=\"kx-commercial-section kx-economic-rules\"><h2>Reglas claras</h2><ul><li><b>Cuenta ≠ identidad ≠ plan.</b> Registrarte no activa una tarifa.</li><li><b>Publicar ≠ Destacar ≠ Ticketing.</b></li><li>Ticketing agrupa QR, lector y control de acceso: no se cobran como servicios separados.</li><li>Los límites S"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 144,
+      "line": 145,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!resolvedSubjectId){toast('Primero debes crear o seleccionar la organización.','error');return;}"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 145,
+      "line": 146,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "b.disabled=true;try{await repos.commercial.requestPlan(resolvedSubjectType,resolvedSubjectId,b.dataset.plan,billing);toast('Solicitud registrada. No se ha realizado ningún cobro.');context=await repos.commercial.context(resolvedSubjectType,resolvedSubjectId).catch(()=>context);render();}catch(e){b.disabled=false;toast("
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 151,
+      "line": 152,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "openDetail({title:`Simulación · ${plan.name}`,subtitle:'Vista previa del futuro proceso de contratación. No se guardan datos de tarjeta ni se activa ningún servicio.',width:'680px',body:`<div class=\"kx-commercial-selection-note\"><strong>15 días de prueba del plan elegido</strong><span>Después: ${esc(eurMinor(offer.pric"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 154,
+      "line": 155,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!resolvedSubjectId||!remote){toast('Primero debes crear o seleccionar una organización con acceso comercial.','error');return;}"
     },
     {
       "file": "web/js/modules/plan-services.js",
-      "line": 155,
+      "line": 156,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "b.disabled=true;try{await repos.commercial.requestActivation(resolvedSubjectType,resolvedSubjectId,b.dataset.activation,{days:Number(b.dataset.days||0)||null});toast('Solicitud de activación registrada. No se ha realizado ningún cobro.');render();}catch(e){b.disabled=false;toast(humanError(e),'error');}"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 31,
+      "line": 32,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setAppHtml(`<main class=\"kx-admin-access-shell\"><section class=\"kx-admin-access-card\">${accessMark()}<div class=\"kx-admin-access-kicker\">ACCESO MAESTRO</div><h1>Administración global KOMBAX</h1><p>Acceso independiente del rol de cualquier club. La puerta permanece oculta y solo una cuenta Owner autorizada puede abrir l"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 37,
+      "line": 38,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "catch(error){errorBox.hidden=false;errorBox.textContent=humanError(error);button.disabled=false;button.innerHTML=`Abrir Consola Owner ${icon('shieldCheck',{size:17})}`;}"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 45,
+      "line": 46,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Comprobando estado de plataforma…</div>');"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 50,
+      "line": 51,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`<div class=\"kx-platform-admin\"><div class=\"page-head\"><div><span class=\"page-kicker\">MANTENIMIENTO</span><h1>Estado de KOMBAX</h1><p>Área técnica visible únicamente dentro de la Consola de Plataforma.</p></div></div><div class=\"kx-platform-stats\"><article><span>Build web</span><strong>${Number(window.UW_CO"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 56,
+      "line": 57,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(!valid){renderPlatformAdminAccess({onCancel:()=>{location.href='/';},onSuccess:renderPlatformAdminConsole,message:'La verificación de administración ha caducado.'});return;}"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 58,
+      "line": 59,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setAppHtml(`<div class=\"kx-admin-console\"><header class=\"kx-admin-console-top\">${accessMark()}<div class=\"kx-admin-console-status\"><span>ACCESO VERIFICADO</span><strong>${esc(String(level).toUpperCase())}</strong></div><button class=\"btn btn-ghost btn-sm\" id=\"kx-admin-console-exit\" type=\"button\">Cerrar administración</"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 63,
+      "line": 64,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "armIdle(async()=>{await backend.signOutPlatformAdmin().catch(()=>{});renderPlatformAdminAccess({onCancel:()=>{if(/\\/admin\\/?$/.test(location.pathname))location.href='/';else location.reload();},onSuccess:renderPlatformAdminConsole,message:'La sesión de administración se cerró por inactividad.'});});"
@@ -16437,546 +16563,525 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 176,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "if(!metrics?.ok)return `<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">MÉTRICAS Y CONSUMO</span><h3>KOMBAX Analytics</h3></div></div><p class=\"muted\">La capa de métricas está preparada; faltan datos agregados para mostrar la serie.</p></section>`;"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 178,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "return `<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">MÉTRICAS Y CONSUMO</span><h3>KOMBAX Analytics · ${metricNumber(metrics.days||90)} días</h3></div></div>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 179,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<p class=\"muted\">Métricas agregadas no identificativas para producto, capacidad, costes y venta. El histórico de detalle puede purgarse sin perder estas medidas.</p>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 180,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<div class=\"kx-platform-stats\"><article><span>Clubes activos</span><strong>${metricNumber(latest.active_clubs)}</strong></article><article><span>Cuentas</span><strong>${metricNumber(latest.accounts_total)}</strong></article><article><span>Alumnos activos</span><strong>${metricNumber(latest.active_students)}</strong></a"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 181,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "${top.length?`<div class=\"kx-owner-histogram\" role=\"img\" aria-label=\"Distribución de alumnos activos por club\"><h4>Distribución por club</h4>${top.slice(0,10).map(c=>{const value=Number(c.active_students||0),percent=Math.max(2,Math.round(value/histMax*100));return `<div><span>${esc(c.nombre||'Club')}</span><i><b style="
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 182,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<div class=\"alert\"><strong>Retención automatizada</strong><span>Notificaciones: ${metricNumber(ret.notifications_keep_days||180)} días · Invitaciones vencidas: ${metricNumber(ret.invitation_history_days||30)} días · Conversaciones borradas por ambos: ${metricNumber(ret.deleted_conversations_days||30)} días · Detalle de"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 190,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "['Contacto oficial',clean(ver.email_oficial).includes('@')&&clean(ver.telefono).length>=6,'Email y teléfono'],"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
       "line": 191,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "['Ubicación',clean(pub.ubicacion).length>=2,'Población / zona'],"
+      "sample": "if(!metrics?.ok)return `<section class=\"kx-platform-section\" id=\"kx-owner-analytics-panel\"><div class=\"section-title\"><div><span class=\"page-kicker\">MÉTRICAS Y CONSUMO</span><h3>KOMBAX Analytics</h3></div></div><p class=\"muted\">La capa de métricas está preparada; faltan datos agregados para mostrar la serie.</p></secti"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 193,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "['Evidencia contrastable',clean(ver.evidencia).length>=3,'Web, red, federación, registro u otra referencia'],"
+      "sample": "return `<section class=\"kx-platform-section kx-owner-analytics-pro\" id=\"kx-owner-analytics-panel\"><div class=\"section-title\"><div><span class=\"page-kicker\">MÉTRICAS Y CONSUMO</span><h3>KOMBAX Analytics · ${metricNumber(metrics.days||90)} días</h3></div><div class=\"kx-owner-analytics-actions\"><select id=\"kx-owner-metric"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 194,
+      "line": 195,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "['Acreditación privada',docs.some(d=>d.estado==='active'),'Al menos un documento activo']"
+      "sample": "<div class=\"kx-platform-stats\"><article><span>Clubes activos</span><strong>${metricNumber(latest.active_clubs)}</strong></article><article><span>Cuentas</span><strong>${metricNumber(latest.accounts_total)}</strong></article><article><span>Alumnos activos</span><strong>${metricNumber(latest.active_students)}</strong></a"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 203,
+      "line": 219,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const body=`<div class=\"kx-platform-club\"><div class=\"kx-admin-mode\">${icon('shieldCheck',{size:20})}<div><small>ADMINISTRACIÓN KOMBAX</small><strong>Gestionando: ${esc(c.nombre||'Club')}</strong><span>Este modo administra la plataforma. No suplanta públicamente la identidad del Club.</span></div></div>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 204,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<div class=\"kx-admin-club-stats\"><span>Identificador <strong>${esc(c.slug||'—')}</strong></span><span>Estado <strong>${c.activo?'Activo':'Inactivo'}</strong></span><span>Equipo <strong>${team.length}</strong></span></div>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 205,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section><h4>Equipo activo</h4>${team.length?`<div class=\"kx-admin-team\">${team.map(m=>`<article><div><strong>${esc(m.nombre||m.perfil_id)}</strong><small>${esc(m.coordinacion?'Coordinación':m.rol)}</small><div class=\"kx-admin-permission-tags\">${(m.permisos||[]).filter(x=>x.activo).map(x=>`<span>${esc(permissionLabel(x"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 206,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section><h4>Identidades conectadas</h4><div class=\"kx-admin-club-stats\"><span>Social <strong>${data.social_profile_id?'Disponible':'Pendiente'}</strong></span><span>Showcase <strong>${data.showcase_provider_id?'Disponible':'Pendiente'}</strong></span></div><div class=\"row-actions\">${data.social_profile_id?`<button cla"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 208,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "const modal=openDetail({title:c.nombre||'Club',subtitle:'Administración global KOMBAX',body,width:'920px',className:'kx-platform-club-modal'});"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 210,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "modal.wrap.querySelectorAll('[data-admin-team-permission]').forEach(b=>b.addEventListener('click',()=>openForm({title:'Permiso público de equipo',subtitle:'La persona seguirá actuando con su propia cuenta, pero podrá representar públicamente al Club en el área elegida.',fields:[{name:'permiso',label:'Permiso',type:'sel"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 218,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "const planByType={competidor:'competidor_premium',marca:'marca_profesional',federacion:'federacion_institucional'};"
+      "sample": "['Contacto oficial',clean(ver.email_oficial).includes('@')&&clean(ver.telefono).length>=6,'Email y teléfono'],"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 220,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const actions=`<button class=\"btn btn-primary\" id=\"kx-review-action\">Revisar / resolver</button>${app.perfil_directo_id&&['verified','limited'].includes(app.estado)?`<button class=\"btn btn-ghost\" id=\"kx-service-action\">${service?.activo?'Gestionar servicio':'Activar servicio'}</button>`:''}`;"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 221,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
-      "target_block_1": true,
-      "sample": "const commercialProfile=['marca','federacion'].includes(app.tipo);"
+      "sample": "['Ubicación',clean(pub.ubicacion).length>=2,'Población / zona'],"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 222,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const verificationNotice=app.tipo==='club'?`<div class=\"alert\"><strong>Verificar crea el Club real · ${clubStatus.complete?'verificación completa':'verificación pendiente'}</strong><span>${clubStatus.complete?'Los datos mínimos están presentes. Antes de verificar confirma manualmente identidad, representación, contacto"
+      "sample": "['Evidencia contrastable',clean(ver.evidencia).length>=3,'Web, red, federación, registro u otra referencia'],"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 224,
+      "line": 223,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const clubBody=app.tipo==='club'?`<section><h4>Identidad del Club</h4>${detailValue('Nombre comercial',app.nombre_publico)}${detailValue('Nombre legal',ver.nombre_legal)}${detailValue('Tipo de entidad',ver.forma_entidad||'No indicado')}${detailValue('CIF / identificación',ver.cif||'Opcional')}</section>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 225,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section><h4>Responsable</h4>${detailValue('Nombre',ver.responsable)}${detailValue('Cargo / relación',ver.rol_responsable)}</section>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 226,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section><h4>Contacto y ubicación</h4>${detailValue('Email oficial',ver.email_oficial)}${detailValue('Teléfono',ver.telefono)}${detailValue('Ubicación pública',pub.ubicacion)}${detailValue('Dirección / zona privada',ver.direccion||'No indicada')}</section>"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 229,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "<section><h4>Checklist previo a aprobación</h4><div class=\"kx-platform-review-list\">${clubStatus.checks.map(([label,ok,help])=>`<article><div><strong>${ok?'✓':'✕'} ${esc(label)}</strong><small>${esc(help)}</small></div><span>${ok?'OK':'Falta'}</span></article>`).join('')}</div></section>`:`<section><h4>Datos públicos</"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 230,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "const {wrap}=openDetail({title:`${TYPE_LABEL[app.tipo]||app.tipo} · ${app.nombre_publico||'Solicitud'}`,subtitle:`${app.estado} · revisión privada KOMBAX`,width:'980px',body:`<div class=\"kx-verification-detail\">${verificationNotice}${clubBody}<section><h4>Documentos privados (${docs.length})</h4>${docs.length?`<div cla"
+      "sample": "['Acreditación privada',docs.some(d=>d.estado==='active'),'Al menos un documento activo']"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 232,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "wrap.querySelector('#kx-review-action')?.addEventListener('click',()=>openForm({title:'Resolución de verificación',subtitle:'Solo Administrador KOMBAX puede conceder la identidad oficial.',fields:[{name:'estado',label:'Resolución',type:'select',required:true,value:app.estado==='submitted'?'under_review':app.estado,opti"
+      "sample": "const body=`<div class=\"kx-platform-club\"><div class=\"kx-admin-mode\">${icon('shieldCheck',{size:20})}<div><small>ADMINISTRACIÓN KOMBAX</small><strong>Gestionando: ${esc(c.nombre||'Club')}</strong><span>Este modo administra la plataforma. No suplanta públicamente la identidad del Club.</span></div></div>"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 233,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "wrap.querySelector('#kx-service-action')?.addEventListener('click',()=>openForm({title:'Servicio del perfil verificado',subtitle:'Activa capacidades sin alterar la decisión de verificación.',fields:[{name:'plan_codigo',label:'Plan',type:'select',required:true,value:service.plan_codigo||planByType[app.tipo]||'',options:"
+      "sample": "<div class=\"kx-admin-club-stats\"><span>Identificador <strong>${esc(c.slug||'—')}</strong></span><span>Estado <strong>${c.activo?'Activo':'Inactivo'}</strong></span><span>Equipo <strong>${team.length}</strong></span></div>"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 238,
+      "line": 234,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const actions=item.objetivo_tipo==='perfil'?[['ninguna','Resolver sin retirar'],['limitar','Limitar perfil'],['suspender','Suspender perfil']]:[['ninguna','Resolver sin retirar'],['ocultar','Ocultar contenido']];"
+      "sample": "<section><h4>Equipo activo</h4>${team.length?`<div class=\"kx-admin-team\">${team.map(m=>`<article><div><strong>${esc(m.nombre||m.perfil_id)}</strong><small>${esc(m.coordinacion?'Coordinación':m.rol)}</small><div class=\"kx-admin-permission-tags\">${(m.permisos||[]).filter(x=>x.activo).map(x=>`<span>${esc(permissionLabel(x"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 235,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "<section><h4>Identidades conectadas</h4><div class=\"kx-admin-club-stats\"><span>Social <strong>${data.social_profile_id?'Disponible':'Pendiente'}</strong></span><span>Showcase <strong>${data.showcase_provider_id?'Disponible':'Pendiente'}</strong></span></div><div class=\"row-actions\">${data.social_profile_id?`<button cla"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 237,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const modal=openDetail({title:c.nombre||'Club',subtitle:'Administración global KOMBAX',body,width:'920px',className:'kx-platform-club-modal'});"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 239,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "openForm({title:'Resolver denuncia',subtitle:`${item.objetivo_tipo} · ${item.motivo}`,fields:[{name:'estado',label:'Resultado',type:'select',required:true,value:'resuelta',options:[{value:'resuelta',label:'Resuelta'},{value:'descartada',label:'Descartada'}]},{name:'accion',label:'Acción',type:'select',required:true,val"
+      "sample": "modal.wrap.querySelectorAll('[data-admin-team-permission]').forEach(b=>b.addEventListener('click',()=>openForm({title:'Permiso público de equipo',subtitle:'La persona seguirá actuando con su propia cuenta, pero podrá representar públicamente al Club en el área elegida.',fields:[{name:'permiso',label:'Permiso',type:'sel"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 244,
+      "line": 247,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "title:'Crear club KOMBAX',"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 245,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "subtitle:'Alta directa del Administrador KOMBAX. El responsable debe tener una cuenta KOMBAX existente; al crear se genera el tenant y queda asignado como Dirección/Gestor.',"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 248,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "{name:'manager_email',label:'Email de la cuenta KOMBAX responsable',type:'email',required:true,full:true,help:'Debe existir previamente en KOMBAX.'},"
+      "sample": "const planByType={competidor:'competidor_premium',marca:'marca_profesional',federacion:'federacion_institucional'};"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 249,
-      "classification": "SYSTEM_UI_CANDIDATE",
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
-      "sample": "{name:'nombre_publico',label:'Nombre del club',required:true,full:true},{name:'lema',label:'Lema público'},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true},"
+      "sample": "const actions=`<button class=\"btn btn-primary\" id=\"kx-review-action\">Revisar / resolver</button>${app.perfil_directo_id&&['verified','limited'].includes(app.estado)?`<button class=\"btn btn-ghost\" id=\"kx-service-action\">${service?.activo?'Gestionar servicio':'Activar servicio'}</button>`:''}`;"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 250,
-      "classification": "SYSTEM_UI_CANDIDATE",
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
-      "sample": "{name:'ubicacion',label:'Ubicación pública',required:true},{name:'ciudad',label:'Ciudad'},{name:'provincia',label:'Provincia / región'},{name:'pais',label:'País',required:true,value:'España'},"
+      "sample": "const commercialProfile=['marca','federacion'].includes(app.tipo);"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 251,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'disciplinas',label:'Disciplinas',required:true,full:true,help:'Separadas por comas; máximo 12.'},{name:'web_publica',label:'Web HTTPS',type:'url',full:true},"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 252,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "{name:'instagram',label:'Instagram público'},{name:'tiktok',label:'TikTok público'},{name:'youtube',label:'YouTube público'},"
+      "sample": "const verificationNotice=app.tipo==='club'?`<div class=\"alert\"><strong>Verificar crea el Club real · ${clubStatus.complete?'verificación completa':'verificación pendiente'}</strong><span>${clubStatus.complete?'Los datos mínimos están presentes. Antes de verificar confirma manualmente identidad, representación, contacto"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 253,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'forma_entidad',label:'Tipo de club / entidad · privado',type:'select',value:'club_deportivo',options:[{value:'club_deportivo',label:'Club deportivo'},{value:'asociacion',label:'Asociación'},{value:'autonomo',label:'Profesional / autónomo'},{value:'gimnasio',label:'Gimnasio / centro deportivo'},{value:'escuela',l"
+      "sample": "const clubBody=app.tipo==='club'?`<section><h4>Identidad del Club</h4>${detailValue('Nombre comercial',app.nombre_publico)}${detailValue('Nombre legal',ver.nombre_legal)}${detailValue('Tipo de entidad',ver.forma_entidad||'No indicado')}${detailValue('CIF / identificación',ver.cif||'Opcional')}</section>"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 254,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'email_oficial',label:'Email oficial · privado',type:'email',required:true},{name:'telefono',label:'Teléfono oficial · privado',required:true},{name:'direccion',label:'Dirección administrativa o zona de actividad · privada',full:true},"
+      "sample": "<section><h4>Responsable</h4>${detailValue('Nombre',ver.responsable)}${detailValue('Cargo / relación',ver.rol_responsable)}</section>"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 255,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'responsable',label:'Responsable autorizado',required:true},{name:'rol_responsable',label:'Cargo',required:true},{name:'plan_codigo',label:'Plan solicitado',type:'select',required:true,value:'premium',options:[{value:'club',label:'KOMBAX Club · 29 € Founder'},{value:'premium',label:'KOMBAX Premium · 47 € Founder'"
+      "sample": "<section><h4>Contacto y ubicación</h4>${detailValue('Email oficial',ver.email_oficial)}${detailValue('Teléfono',ver.telefono)}${detailValue('Ubicación pública',pub.ubicacion)}${detailValue('Dirección / zona privada',ver.direccion||'No indicada')}</section>"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 257,
+      "line": 258,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "submitText:'Crear y activar club',"
+      "sample": "<section><h4>Checklist previo a aprobación</h4><div class=\"kx-platform-review-list\">${clubStatus.checks.map(([label,ok,help])=>`<article><div><strong>${ok?'✓':'✕'} ${esc(label)}</strong><small>${esc(help)}</small></div><span>${ok?'OK':'Falta'}</span></article>`).join('')}</div></section>`:`<section><h4>Datos públicos</"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 260,
-      "classification": "USER_CONTENT_BOUNDARY",
-      "target_block_1": true,
-      "sample": "const datos_publicos={lema:v.lema||'',descripcion:v.descripcion||'',ubicacion:v.ubicacion||'',ciudad:v.ciudad||'',provincia:v.provincia||'',pais:v.pais||'España',disciplinas,web_publica:v.web_publica||'',instagram:v.instagram||'',tiktok:v.tiktok||'',youtube:v.youtube||''};"
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "line": 269,
+      "line": 259,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "if(!rows.length)return empty('Sin perfiles','No se encontraron perfiles con ese criterio.');"
+      "sample": "const {wrap}=openDetail({title:`${TYPE_LABEL[app.tipo]||app.tipo} · ${app.nombre_publico||'Solicitud'}`,subtitle:`${app.estado} · revisión privada KOMBAX`,width:'980px',body:`<div class=\"kx-verification-detail\">${verificationNotice}${clubBody}<section><h4>Documentos privados (${docs.length})</h4>${docs.length?`<div cla"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 270,
+      "line": 261,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "return `<div class=\"kx-platform-profiles\">${rows.map(p=>`<article><button type=\"button\" class=\"kx-platform-profile-open\" data-admin-profile-open=\"${esc(p.id)}\"><div>${p.verificado?icon('shieldCheck',{size:19}):icon('user',{size:19})}<span><strong>${esc(p.nombre_publico)}</strong><small>${esc(TYPE_LABEL[p.tipo]||p.tipo)"
+      "sample": "wrap.querySelector('#kx-review-action')?.addEventListener('click',()=>openForm({title:'Resolución de verificación',subtitle:'Solo Administrador KOMBAX puede conceder la identidad oficial.',fields:[{name:'estado',label:'Resolución',type:'select',required:true,value:app.estado==='submitted'?'under_review':app.estado,opti"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 262,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "wrap.querySelector('#kx-service-action')?.addEventListener('click',()=>openForm({title:'Servicio del perfil verificado',subtitle:'Activa capacidades sin alterar la decisión de verificación.',fields:[{name:'plan_codigo',label:'Plan',type:'select',required:true,value:service.plan_codigo||planByType[app.tipo]||'',options:"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 267,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const actions=item.objetivo_tipo==='perfil'?[['ninguna','Resolver sin retirar'],['limitar','Limitar perfil'],['suspender','Suspender perfil']]:[['ninguna','Resolver sin retirar'],['ocultar','Ocultar contenido']];"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 268,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "openForm({title:'Resolver denuncia',subtitle:`${item.objetivo_tipo} · ${item.motivo}`,fields:[{name:'estado',label:'Resultado',type:'select',required:true,value:'resuelta',options:[{value:'resuelta',label:'Resuelta'},{value:'descartada',label:'Descartada'}]},{name:'accion',label:'Acción',type:'select',required:true,val"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 273,
-      "classification": "USER_CONTENT_BOUNDARY",
+      "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const initials=[...new Set(rows.map(row=>String(row.nombre_publico||'').trim().charAt(0).toUpperCase()).filter(x=>/[A-ZÁÉÍÓÚÑ]/.test(x)))].sort((a,b)=>a.localeCompare(b,'es'));"
+      "sample": "title:'Crear club KOMBAX',"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 274,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "subtitle:'Alta directa del Administrador KOMBAX. El responsable debe tener una cuenta KOMBAX existente; al crear se genera el tenant y queda asignado como Dirección/Gestor.',"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 277,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "{name:'manager_email',label:'Email de la cuenta KOMBAX responsable',type:'email',required:true,full:true,help:'Debe existir previamente en KOMBAX.'},"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 278,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const render=()=>{const filtered=letter?rows.filter(row=>String(row.nombre_publico||'').trim().toUpperCase().startsWith(letter)):rows,total=Math.max(1,Math.ceil(filtered.length/perPage));page=Math.min(page,total);pageBox.innerHTML=profileRows(filtered.slice((page-1)*perPage,page*perPage));pager.innerHTML=`<button type="
+      "sample": "{name:'nombre_publico',label:'Nombre del club',required:true,full:true},{name:'lema',label:'Lema público'},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true},"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 279,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "{name:'ubicacion',label:'Ubicación pública',required:true},{name:'ciudad',label:'Ciudad'},{name:'provincia',label:'Provincia / región'},{name:'pais',label:'País',required:true,value:'España'},"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 280,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "{name:'disciplinas',label:'Disciplinas',required:true,full:true,help:'Separadas por comas; máximo 12.'},{name:'web_publica',label:'Web HTTPS',type:'url',full:true},"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 281,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "{name:'instagram',label:'Instagram público'},{name:'tiktok',label:'TikTok público'},{name:'youtube',label:'YouTube público'},"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 282,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "{name:'forma_entidad',label:'Tipo de club / entidad · privado',type:'select',value:'club_deportivo',options:[{value:'club_deportivo',label:'Club deportivo'},{value:'asociacion',label:'Asociación'},{value:'autonomo',label:'Profesional / autónomo'},{value:'gimnasio',label:'Gimnasio / centro deportivo'},{value:'escuela',l"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 283,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "{name:'email_oficial',label:'Email oficial · privado',type:'email',required:true},{name:'telefono',label:'Teléfono oficial · privado',required:true},{name:'direccion',label:'Dirección administrativa o zona de actividad · privada',full:true},"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "line": 284,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
+      "sample": "{name:'responsable',label:'Responsable autorizado',required:true},{name:'rol_responsable',label:'Cargo',required:true},{name:'plan_codigo',label:'Plan solicitado',type:'select',required:true,value:'premium',options:[{value:'club',label:'KOMBAX Club · 29 € Founder'},{value:'premium',label:'KOMBAX Premium · 47 € Founder'"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 286,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "submitText:'Crear y activar club',"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 289,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": true,
+      "sample": "const datos_publicos={lema:v.lema||'',descripcion:v.descripcion||'',ubicacion:v.ubicacion||'',ciudad:v.ciudad||'',provincia:v.provincia||'',pais:v.pais||'España',disciplinas,web_publica:v.web_publica||'',instagram:v.instagram||'',tiktok:v.tiktok||'',youtube:v.youtube||''};"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 298,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "if(!rows.length)return empty('Sin perfiles','No se encontraron perfiles con ese criterio.');"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 299,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "return `<div class=\"kx-platform-profiles\">${rows.map(p=>`<article><button type=\"button\" class=\"kx-platform-profile-open\" data-admin-profile-open=\"${esc(p.id)}\"><div>${p.verificado?icon('shieldCheck',{size:19}):icon('user',{size:19})}<span><strong>${esc(p.nombre_publico)}</strong><small>${esc(TYPE_LABEL[p.tipo]||p.tipo)"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 302,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": true,
+      "sample": "const initials=[...new Set(rows.map(row=>String(row.nombre_publico||'').trim().charAt(0).toUpperCase()).filter(x=>/[A-ZÁÉÍÓÚÑ]/.test(x)))].sort((a,b)=>a.localeCompare(b,'es'));"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 307,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const render=()=>{const filtered=letter?rows.filter(row=>String(row.nombre_publico||'').trim().toUpperCase().startsWith(letter)):rows,total=Math.max(1,Math.ceil(filtered.length/perPage));page=Math.min(page,total);pageBox.innerHTML=profileRows(filtered.slice((page-1)*perPage,page*perPage));pager.innerHTML=`<button type="
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "line": 313,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
       "sample": "return `<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">PREPARACIÓN DE PILOTO</span><h3>${readiness?.pilot_ready?'Preparado para piloto':'Bloqueado hasta completar controles reales'}</h3></div><span>${readiness?.pilot_ready?'READY':'NO-GO'}</span></div><p class=\"muted\">Mar"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 288,
+      "line": 317,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!rows.length)return empty('Sin entidades','No hay resultados para esta búsqueda.');"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 289,
+      "line": 318,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "return `<div class=\"kx-platform-profiles\">${rows.map(x=>`<article><button type=\"button\" class=\"kx-platform-profile-open\" data-admin-entity=\"${esc(x.id)}\" data-admin-entity-type=\"${esc(x.entidad_tipo)}\"><div>${icon(x.entidad_tipo==='club'?'dojo':x.entidad_tipo==='cuenta'?'user':'idCard',{size:19})}<span><strong>${esc(x."
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 295,
+      "line": 324,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const {wrap}=openDetail({title:`MODO ADMINISTRADOR KOMBAX · ${name}`,subtitle:`${TYPE_LABEL[context.entidad_tipo]||context.entidad_tipo} · acceso temporal y auditado · expira ${dtFmt(context.expires_at)}`,width:'1050px',className:'kx-platform-club-modal',body:`<div class=\"kx-platform-club\"><div class=\"kx-admin-mode\">${"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 303,
+      "line": 332,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "wrap.querySelector('#kx-admin-entity-status')?.addEventListener('click',()=>openForm({title:'Estado administrativo del Club',subtitle:'Acción sensible, explícita y auditada.',fields:[{name:'activo',label:'Club activo',type:'checkbox',value:entity.activo===true,full:true},{name:'motivo',label:'Motivo',type:'textarea',re"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 304,
+      "line": 333,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "wrap.querySelector('#kx-admin-entity-moderation')?.addEventListener('click',()=>openForm({title:'Estado de moderación del perfil',subtitle:'No cambia la propiedad ni las contraseñas de la cuenta.',fields:[{name:'estado',label:'Estado',type:'select',required:true,value:entity.moderacion_estado||'normal',options:[{value:"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 309,
+      "line": 338,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "openForm({title:`Acceder en modo soporte KOMBAX · ${entity.nombre}`,subtitle:'No se crea membresía ni se suplanta la identidad. Indica el motivo del soporte antes de abrir el contexto temporal.',fields:[{name:'motivo',label:'Motivo del acceso',type:'textarea',required:true,minLength:10,maxLength:500,rows:4,full:true}],"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 315,
+      "line": 344,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "openForm({title:'Confirmación crítica Owner',subtitle:`Esta operación es excepcionalmente destructiva. Se ha enviado un código de 6 dígitos a ${challenge.email_masked||challenge.email}.`,fields:[{name:'otp',label:'Código de seguridad',required:true,pattern:'[0-9]{6}',help:'Solo se exige para acciones críticas; el acces"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 323,
+      "line": 352,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const button=document.createElement('button');button.type='button';button.className='kx-owner-section-toggle';button.dataset.ownerSectionToggle='';button.setAttribute('aria-expanded',String(!collapsed));button.innerHTML=`<span>${collapsed?'Abrir':'Cerrar'}</span><b aria-hidden=\"true\">⌄</b>`;"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 324,
+      "line": 353,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "heading.append(button);button.addEventListener('click',()=>{const next=!section.classList.contains('is-collapsed');section.classList.toggle('is-collapsed',next);button.setAttribute('aria-expanded',String(!next));button.querySelector('span').textContent=next?'Abrir':'Cerrar';});"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 329,
+      "line": 358,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!adminOnly()){setMainHtml(empty('Acceso restringido','Esta sección requiere autorización global KOMBAX.'));return;}"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 330,
+      "line": 359,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"kx-platform-admin\">${pageHeader('Administración KOMBAX','Consola global de clubes, identidades, verificaciones, moderación y estado de la plataforma.','','KOMBAX')}<div id=\"kx-platform-admin-body\"><div class=\"loading-card\">Cargando consola…</div></div></div>`);"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 336,
+      "line": 365,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.innerHTML=`<section class=\"kx-owner-session-bar\"><div>${icon('key',{size:22})}<span><small>SESIÓN OWNER</small><strong>Administración KOMBAX activa</strong></span></div><button type=\"button\" class=\"btn btn-ghost\" id=\"kx-owner-close-admin\">Cerrar administración</button></section><section class=\"kx-admin-mode\">${icon"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 338,
+      "line": 367,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div id=\"owner-summary\" class=\"kx-platform-stats\"><article><span>Clubes</span><strong>${Number(counts.clubs||0)}</strong></article><article><span>Cuentas</span><strong>${Number(counts.accounts||0)}</strong></article><article><span>Membresías</span><strong>${Number(counts.memberships||0)}</strong></article><article><spa"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 345,
+      "line": 375,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">CLUBES</span><h3>Clubes KOMBAX</h3></div><button class=\"btn btn-primary btn-sm\" id=\"kx-platform-create-club\">+ Crear club</button></div>${clubs.length?`<div class=\"kx-platform-clubs\">${clubs.map(c=>`<button type=\"button\" data"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 346,
+      "line": 376,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">USUARIOS Y PERFILES</span><h3>Identidades KOMBAX</h3></div></div><div class=\"kx-platform-search\"><input id=\"kx-platform-profile-query\" type=\"search\" placeholder=\"Buscar por nombre, club o referencia\"><button class=\"btn btn-gh"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 347,
+      "line": 377,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">ADMINISTRACIÓN GLOBAL</span><h3>Acceso temporal por entidad o cuenta</h3></div></div><p class=\"muted\">Busca Club, Federación, Marca, Competidor, Profesional o cuenta. Cada entrada exige motivo, caduca automáticamente y queda "
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 348,
+      "line": 378,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\" id=\"owner-verifications\"><div class=\"section-title\"><div><span class=\"page-kicker\">VERIFICACIONES</span><h3>Clubes, perfiles y entidades</h3></div></div>${pending.length?`<div class=\"kx-platform-review-list\">${pending.map(x=>`<article><div><strong>${esc(x.nombre_publico||'Solicitud'"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 353,
+      "line": 383,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">MODERACIÓN E INCIDENCIAS</span><h3>Denuncias abiertas</h3></div></div>${reports.length?`<div class=\"kx-platform-review-list\">${reports.map(x=>`<article><div><strong>${esc(x.motivo)}</strong><small>${esc(x.objetivo_tipo)} · ${"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 354,
+      "line": 384,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">PRIVACIDAD</span><h3>Solicitudes de eliminación de cuenta</h3></div></div><p class=\"muted\">Esta cola pertenece exclusivamente a Administración/Privacidad. Moderación de contenidos no puede revisar ni completar eliminaciones.<"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 356,
+      "line": 386,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-platform-section\"><div class=\"section-title\"><div><span class=\"page-kicker\">AUDITORÍA</span><h3>Actividad reciente de representación</h3></div></div>${audit.length?`<div class=\"kx-platform-audit\">${audit.map(a=>`<article><div><strong>${esc(a.accion)}</strong><small>${dtFmt(a.creado_en)} · ${esc(a.obj"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 357,
+      "line": 387,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${contract?`<section class=\"kx-platform-section kx-technical-panel\"><div class=\"section-title\"><div><span class=\"page-kicker\">ESTADO TÉCNICO</span><h3>Build ${Number(contract.build||window.UW_CONFIG?.release?.build||20077)}</h3></div></div><div class=\"kx-admin-club-stats\"><span>Identidades <strong>${contract.identity_c"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 362,
+      "line": 394,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.getElementById('kx-owner-close-admin')?.addEventListener('click',async()=>{const button=document.getElementById('kx-owner-close-admin');button.disabled=true;button.textContent='Cerrando…';try{await backend.signOutPlatformAdmin();location.href='/';}catch(error){button.disabled=false;button.textContent='Cerrar a"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 366,
+      "line": 398,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-pilot-benefit]').forEach(b=>b.addEventListener('click',()=>{const row=(pilot?.entities||[]).find(x=>String(x.subject_id)===b.dataset.pilotBenefit);if(!row)return;openForm({title:`Beneficio fundador · ${row.name}`,subtitle:`Club ${row.subject_id}. La fecha elegida inicia el periodo gratuito; "
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 367,
+      "line": 399,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-pilot-credit]').forEach(b=>b.addEventListener('click',()=>{const ref=b.dataset.pilotCredit;openForm({title:`Créditos IA · ${ref}`,subtitle:'Recarga administrativa con registro de auditoría e idempotencia.',fields:[{name:'amount',label:'Créditos',type:'number',required:true,min:1,max:100000},"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 378,
+      "line": 410,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-admin-delete-review]').forEach(b=>{const item=privacyQueue.find(x=>String(x.id)===String(b.dataset.adminDeleteReview));if(!item)return;b.addEventListener('click',()=>openForm({title:'Revisión de privacidad',subtitle:'Solo Owner/Administración de privacidad puede cambiar el estado. Confirmar "
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 379,
+      "line": 411,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-admin-delete-execute]').forEach(b=>{const item=privacyQueue.find(x=>String(x.id)===String(b.dataset.adminDeleteExecute));if(!item)return;b.addEventListener('click',()=>openForm({title:'Ejecutar eliminación de cuenta',subtitle:'Operación irreversible. Elimina contenido y archivos eliminables,"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 382,
+      "line": 414,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.querySelectorAll('[data-admin-moderator]').forEach(b=>b.addEventListener('click',()=>openForm({title:'Rol de moderación global',subtitle:'Permite moderar contenido, pero no concede acceso a documentos privados de verificación.',fields:[{name:'rol',label:'Rol',type:'select',value:'moderador',options:[{value:'modera"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 383,
+      "line": 415,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.querySelectorAll('[data-admin-verifier]').forEach(b=>b.addEventListener('click',()=>openForm({title:'Acceso a verificación privada',subtitle:'Permiso separado para consultar documentos acreditativos. Toda asignación exige un motivo auditable.',fields:[{name:'activo',label:'Acceso activo',type:'checkbox',value:true"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 386,
+      "line": 418,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const search=async()=>{const target=document.getElementById('kx-platform-profile-results'),q=document.getElementById('kx-platform-profile-query')?.value||'';target.innerHTML='<div class=\"loading-card\">Buscando perfiles…</div>';try{const rows=await repos.platformAdmin.profiles(q,100);target.innerHTML=profileDirectory(ro"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 389,
+      "line": 421,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const searchEntities=async()=>{const target=document.getElementById('kx-platform-entity-results'),q=document.getElementById('kx-platform-entity-query')?.value||'';target.innerHTML='<div class=\"loading-card\">Buscando entidades…</div>';try{const rows=await repos.platformAdmin.entities(q,100);target.innerHTML=entityRows(r"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 392,
+      "line": 424,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-readiness-control]').forEach(b=>b.addEventListener('click',()=>{const control=b.dataset.readinessControl,row=readiness?.manual?.[control]||{};openForm({title:READINESS_LABEL[control]||control,subtitle:'Atestación manual y auditada. Confirma el control solo si la evidencia existe y ha sido co"
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "line": 393,
+      "line": 425,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){box.innerHTML=empty('No se pudo cargar Administración KOMBAX',humanError(error));}"

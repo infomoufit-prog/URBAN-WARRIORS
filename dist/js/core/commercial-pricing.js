@@ -2,6 +2,9 @@
 // The database commercial catalog is authoritative when available. This file keeps the UI readable before the R64 migration is applied.
 export const COMMERCIAL_PRICING_VERSION='r72-v1';
 export const COMMERCIAL_PDF='./assets/docs/commercial/KOMBAX_PLAN_PRECIOS.pdf';
+// Pilot freeze: preserve the internal commercial catalog but do not expose paid prices
+// or paid activation amounts to pilot users until the commercial launch.
+export const PUBLIC_PRICING_LOCKED=true;
 export const FALLBACK_COMMERCIAL_CATALOG={
   version:COMMERCIAL_PRICING_VERSION,
   pricing_note:'Precios finales con IVA incluido cuando corresponda. Founder no acumulable con descuento anual.',

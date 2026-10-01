@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-29T22:10:29.171Z",
-  "candidates": 5077,
-  "covered_r79": 652,
-  "covered_r78": 1242,
-  "covered_legacy_all7": 2928,
-  "unresolved": 255,
+  "generated_at": "2026-10-01T09:59:12.439Z",
+  "candidates": 4973,
+  "covered_r79": 540,
+  "covered_r78": 1218,
+  "covered_legacy_all7": 2969,
+  "unresolved": 246,
   "by_file": {
-    "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 67,
-    "web/js/modules/gateway.js": 32,
+    "web/js/modules/platform-admin.js": 64,
     "web/js/modules/plan-services.js": 32,
+    "web/js/modules/gateway.js": 29,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 11,
     "web/js/modules/showcase.js": 7,
@@ -1456,6 +1456,13 @@
     },
     {
       "file": "web/js/modules/gateway.js",
+      "value": "FAMILIAR / TUTOR",
+      "missing": [
+        "pt"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene asignado su tipo de perfil.",
       "missing": [
         "en",
@@ -1469,28 +1476,9 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Como miembro puedes solicitar tu perfil de Competidor.",
+      "value": "Solicitar perfil Competidor",
       "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Elige el tipo de cuenta que quieres crear. La identidad elegida quedará vinculada a este correo.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
+        "pt"
       ]
     },
     {
@@ -1509,45 +1497,6 @@
     {
       "file": "web/js/modules/gateway.js",
       "value": "Perfil público gratuito · planes opcionales",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Empieza con una cuenta KOMBAX gratuita. Club, Marca y Federación pueden solicitar primero su identidad pública gratuita. Los planes de gestión se consultan por separado.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Un tipo de cuenta por correo",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Elige Club, Competidor, Marca, Federación, Profesional o Media. Cada cuenta conserva su tipo. Si eres Miembro de un club, puedes añadir tu perfil de Competidor. Los perfiles oficiales se revisan antes de mostrar su verificación.",
       "missing": [
         "en",
         "fr",
@@ -2066,6 +2015,19 @@
     },
     {
       "file": "web/js/modules/plan-services.js",
+      "value": "Crear una cuenta y solicitar una identidad pública no exige un plan. La gestión operativa se solicita aparte. Los importes mensuales publicados para España se muestran sin IVA.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/plan-services.js",
       "value": "Vista previa del futuro proceso de contratación. No se guardan datos de tarjeta ni se activa ningún servicio.",
       "missing": [
         "en",
@@ -2171,19 +2133,6 @@
     {
       "file": "web/js/modules/plan-services.js",
       "value": "Puedes explorar Social, Showcase y Events según las reglas de cada espacio. Más adelante podrás solicitar la vinculación con un club o crear una identidad. La gestión operativa requiere permisos de esa organización y, cuando corresponda, un plan.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/plan-services.js",
-      "value": "Crear una cuenta y solicitar una identidad pública no exige un plan. La gestión operativa se solicita aparte. Los importes mensuales publicados para España se muestran sin IVA.",
       "missing": [
         "en",
         "fr",
@@ -2661,7 +2610,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Distribución de alumnos activos por club",
+      "value": ",marca:",
       "missing": [
         "en",
         "fr",
@@ -2674,84 +2623,7 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Buscar por nombre, club o referencia",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Analiza esta solicitud de perfil, comprueba requisitos y recomienda el siguiente estado seguro.",
-      "missing": [
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "12 meses Premium desde activación oficial",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Recarga administrativa con registro de auditoría e idempotencia.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Créditos",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Referencia única y motivo",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "Créditos añadidos",
+      "value": ":item.estado,options:[{value:",
       "missing": [
         "en",
         "fr",
@@ -3142,8 +3014,9 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "No hay clubes pendientes en esta lista.",
+      "value": "Créditos",
       "missing": [
+        "en",
         "fr",
         "pt",
         "it",
@@ -3154,9 +3027,8 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Distribución por club",
+      "value": "No hay clubes pendientes en esta lista.",
       "missing": [
-        "en",
         "fr",
         "pt",
         "it",

@@ -5,7 +5,8 @@ import { setAppHtml, setMainHtml, empty, toast } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { KOMBAX_BRAND } from '../core/platform.js';
 import { repos } from '../core/repositories.js';
-import { renderPlatformAdmin } from './platform-admin.js';
+let platformAdminModulePromise=null;
+const renderPlatformAdmin=(...args)=>{platformAdminModulePromise ||= import('./platform-admin.js').catch(error=>{platformAdminModulePromise=null;throw error;});return platformAdminModulePromise.then(m=>m.renderPlatformAdmin(...args));};
 
 const ADMIN_IDLE_MS=15*60*1000;
 let idleTimer=null;
