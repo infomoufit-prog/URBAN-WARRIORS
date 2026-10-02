@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-01T10:28:11.118Z",
-  "candidates": 4973,
+  "generated_at": "2026-10-02T12:45:16.180Z",
+  "candidates": 5008,
   "covered_r79": 540,
-  "covered_r78": 1218,
-  "covered_legacy_all7": 2969,
-  "unresolved": 246,
+  "covered_r78": 1220,
+  "covered_legacy_all7": 3007,
+  "unresolved": 241,
   "by_file": {
     "web/js/modules/customer-operations.js": 67,
     "web/js/modules/platform-admin.js": 64,
     "web/js/modules/plan-services.js": 32,
-    "web/js/modules/gateway.js": 29,
+    "web/js/modules/gateway.js": 25,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 11,
     "web/js/modules/showcase.js": 7,
@@ -20,7 +20,6 @@
     "web/js/modules/club-profile.js": 2,
     "web/js/core/media.js": 1,
     "web/js/core/repositories.js": 1,
-    "web/js/modules/groups-members.js": 1,
     "web/js/modules/guides.js": 1,
     "web/js/modules/help-legal.js": 1,
     "web/js/modules/kombax-social.js": 1
@@ -1222,59 +1221,7 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Tu club revisará si ya existe tu ficha. Este mensaje no crea una membresía ni publica un perfil.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "Mensaje para el club",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Formo parte del club y quiero vincular mi cuenta KOMBAX. ¿Podéis revisar mi ficha o enviarme una invitación?",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Enviar al club",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Mensaje enviado. El club podrá indicarte cómo completar la vinculación.",
       "missing": [
         "en",
         "fr",
@@ -1497,19 +1444,6 @@
     {
       "file": "web/js/modules/gateway.js",
       "value": "Perfil público gratuito · planes opcionales",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "value": "Revisa si existe su ficha y utiliza “Invitar alumno por email” si corresponde. Este mensaje todavía no confirma la membresía.",
       "missing": [
         "en",
         "fr",

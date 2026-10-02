@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T10:28:12.220Z",
+  "generated_at": "2026-10-02T12:45:16.980Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-profile-policy.js",
@@ -96,11 +96,11 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4842,
-  "covered": 4609,
-  "unresolved": 233,
-  "coverage": 95.19,
-  "skipped": 384,
+  "phrases": 4876,
+  "covered": 4649,
+  "unresolved": 227,
+  "coverage": 95.34,
+  "skipped": 383,
   "files": {
     "web/js/app.js": {
       "total": 117,
@@ -421,16 +421,16 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 250,
-      "covered": 225,
+      "total": 275,
+      "covered": 254,
       "skipped": 7,
-      "coverage": 90
+      "coverage": 92.36
     },
     "web/js/modules/groups-members.js": {
-      "total": 159,
-      "covered": 158,
+      "total": 172,
+      "covered": 172,
       "skipped": 11,
-      "coverage": 99.37
+      "coverage": 100
     },
     "web/js/modules/guides.js": {
       "total": 1,
@@ -469,8 +469,8 @@
       "coverage": 100
     },
     "web/js/modules/kombax-social.js": {
-      "total": 254,
-      "covered": 253,
+      "total": 255,
+      "covered": 254,
       "skipped": 6,
       "coverage": 99.61
     },
@@ -481,10 +481,10 @@
       "coverage": 100
     },
     "web/js/modules/managed-profile-hub.js": {
-      "total": 45,
-      "covered": 34,
+      "total": 47,
+      "covered": 36,
       "skipped": 3,
-      "coverage": 75.56
+      "coverage": 76.6
     },
     "web/js/modules/media-content-center.js": {
       "total": 19,
@@ -511,10 +511,10 @@
       "coverage": 100
     },
     "web/js/modules/platform-admin.js": {
-      "total": 218,
-      "covered": 154,
+      "total": 207,
+      "covered": 144,
       "skipped": 15,
-      "coverage": 70.64
+      "coverage": 69.57
     },
     "web/js/modules/platform-legal.js": {
       "total": 9,
@@ -553,9 +553,9 @@
       "coverage": 100
     },
     "web/js/modules/public-profile.js": {
-      "total": 81,
-      "covered": 81,
-      "skipped": 9,
+      "total": 85,
+      "covered": 85,
+      "skipped": 8,
       "coverage": 100
     },
     "web/js/modules/resource-center.js": {
@@ -1010,23 +1010,7 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Tu club revisará si ya existe tu ficha. Este mensaje no crea una membresía ni publica un perfil."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "Mensaje para el club"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Formo parte del club y quiero vincular mi cuenta KOMBAX. ¿Podéis revisar mi ficha o enviarme una invitación?"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Enviar al club"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Mensaje enviado. El club podrá indicarte cómo completar la vinculación."
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -1091,10 +1075,6 @@
     {
       "file": "web/js/modules/gateway.js",
       "value": "Perfil público gratuito · planes opcionales"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "value": "Revisa si existe su ficha y utiliza “Invitar alumno por email” si corresponde. Este mensaje todavía no confirma la membresía."
     },
     {
       "file": "web/js/modules/guides.js",
@@ -1543,10 +1523,6 @@
     {
       "file": "web/js/modules/platform-admin.js",
       "value": "Informe creado como borrador para revisión Owner."
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "{VAR} acceso(s) reservado(s)"
     },
     {
       "file": "web/js/modules/platform-admin.js",

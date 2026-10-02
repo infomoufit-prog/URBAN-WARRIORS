@@ -47,6 +47,8 @@ public class MainActivity extends Activity {
     private static final int PDF_SAVE_REQUEST = 404;
     private static final String NOTIFICATION_CHANNEL_ID = "urban_warriors_alerts";
     private static final String LOG_TAG = "UrbanWarriorsPush";
+    private static final String LIFECYCLE_PREFS = "kombax_lifecycle";
+    private static final String LAST_INTERNAL_URL = "last_internal_url";
     // Origen HTTPS virtual para que los ES modules del frontend 2.0 funcionen en WebView.
     private static final String APP_HOST = "appassets.androidplatform.net";
     private static final String APP_ORIGIN = "https://" + APP_HOST;
@@ -89,7 +91,7 @@ public class MainActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) settings.setSafeBrowsingEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r117-netlify-android-ready KOMBAXApp/2.0.0-rc.13/20170");
+        settings.setUserAgentString(settings.getUserAgentString() + " KOMBAXRevision/r117-pilot-hotfix KOMBAXApp/2.0.0-rc.13/20171");
         // historical QA marker preserved: KOMBAXApp/2.0.0-rc.13/20101
 
         webView.addJavascriptInterface(new NativeBridge(), "UrbanWarriorsNative");
@@ -159,7 +161,45 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl(APP_ORIGIN + "/index.html" + entrySuffix(getIntent()));
+        boolean restored = false;
+        if (savedInstanceState != null) {
+            try { restored = webView.restoreState(savedInstanceState) != null; }
+            catch (Throwable error) { Log.w(LOG_TAG, "No se pudo restaurar el estado WebView; se usará la ruta persistida.", error); }
+        }
+        if (!restored) webView.loadUrl(initialInternalUrl(getIntent()));
+    }
+
+    private String initialInternalUrl(Intent intent) {
+        String suffix = entrySuffix(intent);
+        if (suffix != null && !suffix.isEmpty()) return APP_ORIGIN + "/index.html" + suffix;
+        String saved = getSharedPreferences(LIFECYCLE_PREFS, MODE_PRIVATE).getString(LAST_INTERNAL_URL, null);
+        if (saved != null && saved.startsWith(APP_ORIGIN + "/index.html")) return saved;
+        return APP_ORIGIN + "/index.html";
+    }
+
+    private void persistInternalUrl() {
+        if (webView == null) return;
+        try {
+            String current = webView.getUrl();
+            if (current == null) return;
+            Uri uri = Uri.parse(current);
+            if (!APP_HOST.equalsIgnoreCase(uri.getHost())) return;
+            String fragment = uri.getFragment();
+            String safe = APP_ORIGIN + "/index.html" + ((fragment != null && fragment.matches("[A-Za-z0-9_-]{1,64}")) ? "#" + fragment : "");
+            getSharedPreferences(LIFECYCLE_PREFS, MODE_PRIVATE).edit().putString(LAST_INTERNAL_URL, safe).apply();
+        } catch (Throwable error) {
+            Log.w(LOG_TAG, "No se pudo persistir la navegación interna.", error);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        persistInternalUrl();
+        if (webView != null) {
+            try { webView.saveState(outState); }
+            catch (Throwable error) { Log.w(LOG_TAG, "No se pudo guardar el estado WebView.", error); }
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private boolean initializeFirebaseSafely() {
@@ -532,6 +572,14 @@ public class MainActivity extends Activity {
             catch (Exception error) { Log.w(LOG_TAG, "No se pudo notificar el permiso de Tap to Pay.", error); }
         }
     }
+    @Override protected void onPause() {
+        persistInternalUrl();
+        super.onPause();
+    }
+    @Override protected void onStop() {
+        persistInternalUrl();
+        super.onStop();
+    }
     @Override protected void onResume() {
         super.onResume();
         if (notificationPermissionState().equals("granted")) refreshPushTokenSafely();
@@ -560,5 +608,5 @@ public class MainActivity extends Activity {
         fileCallback.onReceiveValue(result); fileCallback = null;
     }
     @Override public void onBackPressed() { if (webView != null && webView.canGoBack()) webView.goBack(); else super.onBackPressed(); }
-    @Override protected void onDestroy() { if (webView != null) { webView.loadUrl("about:blank"); webView.destroy(); } super.onDestroy(); }
+    @Override protected void onDestroy() { persistInternalUrl(); if (webView != null) { webView.stopLoading(); webView.destroy(); } super.onDestroy(); }
 }

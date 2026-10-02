@@ -1,0 +1,14 @@
+
+Urban Warriors · preflight Android RC13 build 20171
+
+OK · Identidad Android estable — com.urbanwarriors.app
+OK · Versionado de actualización — versionCode 20171
+OK · Misma versión en web y Android — config.js y User-Agent
+OK · Aplicación web embebida — assets/www presente
+OK · Gradle wrapper ejecutable — android/gradlew con permiso de ejecución
+OK · Java compatible con Gradle 8.11.1 — Java 21 · selecciona JDK 17 o 21 en Android Studio
+OK · Firebase para notificaciones push — configuración presente
+PENDIENTE · Firma local — configura android/keystore.properties o las variables UW_*
+
+Resultado: 7/8 comprobaciones preparadas.
+No generes la release definitiva hasta resolver los elementos PENDIENTE.

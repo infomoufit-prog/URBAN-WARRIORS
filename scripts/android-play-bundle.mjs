@@ -31,8 +31,8 @@ if(!existsSync(aab) || statSync(aab).size<1024){console.error(`\nERROR: no se en
 if(!existsSync(apk) || statSync(apk).size<1024){console.error(`\nERROR: no se encontró APK válido en ${apk}`);process.exit(1);}
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R117_GOLDEN_PILOT_GOOGLE_PLAY.aab`);
-const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R117_GOLDEN_PILOT_SIGNED.apk`);
+const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R117_PILOT_HOTFIX_SIGNED.apk`);
 copyFileSync(aab,namedAab);
 copyFileSync(apk,namedApk);
 console.log(`\nOK · KOMBAX R117 Golden Pilot build ${versionCode} · Android release`);
@@ -45,3 +45,5 @@ console.log(`APK firmada: ${namedApk}`);
 // Historical release artifact marker retained for R60/R62.8 regression: KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_GOOGLE_PLAY.aab
 
 // Historical release marker: KOMBAX_20142_R89_PILOT_GOOGLE_PLAY.aab
+
+// Historical R117 markers retained for regression: GOLDEN_PILOT_GOOGLE_PLAY.aab · GOLDEN_PILOT_SIGNED.apk

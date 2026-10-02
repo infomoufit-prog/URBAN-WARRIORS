@@ -41,7 +41,7 @@ if(!existsSync(apk) || statSync(apk).size<1024){
 }
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R117_GOLDEN_PILOT_QA_DEBUG.apk`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R117_PILOT_HOTFIX_QA_DEBUG.apk`);
 copyFileSync(apk,namedApk);
 console.log(`\nOK · KOMBAX R117 Golden Pilot build ${versionCode} · Pilot QA Android`);
 console.log('APK Gradle: android/app/build/outputs/apk/debug/app-debug.apk');
@@ -52,3 +52,5 @@ console.log(`APK QA: ${namedApk}`);
 // Historical release artifact marker retained for R60/R62.8 regression: KOMBAX_20110_R62_8_SHOWCASE_EVENTS_COMMERCIAL_PILOT_QA_DEBUG.apk
 
 // Historical release marker: KOMBAX_20142_R89_PILOT_QA_DEBUG.apk
+
+// Historical R117 marker retained for regression: GOLDEN_PILOT_QA_DEBUG.apk

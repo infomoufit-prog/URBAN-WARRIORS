@@ -82,6 +82,8 @@ function tabBar(){
 }
 
 function activeIdentity(){return ownProfiles.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(ownProfiles)||null;}
+const publishProfiles=()=>ownProfiles.filter(p=>p.publication_enabled!==false);
+function activePublishIdentity(){const rows=publishProfiles();return rows.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(rows)||null;}
 function identitySwitcher(){
   if(!ownProfiles.length)return '';
   const current=activeIdentity();
@@ -151,8 +153,8 @@ function quotaAction(){
 async function refreshActiveQuota(){const current=activeIdentity();activeQuota=current?await repos.kombaxSocial.quota(current.id).catch(()=>null):null;return activeQuota;}
 
 function quickComposer(){
-  const current=activeIdentity();
-  if(!current)return '';
+  const current=activePublishIdentity();
+  if(!current)return '<section class="kx-social-composer kx-social-readonly"><div class="kx-social-composer-head"><div>'+icon('shieldCheck',{size:24})+'</div><div><small>PERFIL SOCIAL ACTIVO</small><strong>Explora, comenta y construye tu red</strong></div></div><p class="muted">Tu perfil público está activo. La publicación en el feed se habilita cuando tu tipo de identidad cumple sus requisitos; para Miembro/Practicante, cuando el club confirma la membresía.</p></section>';
   return `<section class="kx-social-composer" id="kombax-social-feed-top">
     <div class="kx-social-composer-head"><div class="kombax-social-avatar">${profileAvatar(current)}</div><div><small>PUBLICAR EN KOMBAX</small><strong>${esc(identityLabel(current))}</strong></div></div>
     ${quotaAction()}
@@ -239,20 +241,21 @@ async function loadIdentityAlbum(profile){
 }
 
 async function openPublisher(){
-  if(!ownProfiles.length){toast('No tienes una identidad autorizada para publicar.','error');return;}
-  const initial=activeIdentity()||ownProfiles[0];
+  const allowed=publishProfiles();
+  if(!allowed.length){toast('Tu perfil está activo, pero todavía no tiene permiso para publicar en el feed.','error');return;}
+  const initial=allowed.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(allowed)||allowed[0];
   const initialQuota=await repos.kombaxSocial.quota(initial.id).catch(()=>null);
   if(initialQuota?.active_limit_reached){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(initial,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});return;}
   if(initialQuota?.daily_limit_reached){toast('Has alcanzado el máximo de 3 publicaciones de hoy. Podrás volver a publicar mañana.','error');return;}
   const mediaByProfile=new Map();
-  await Promise.all(ownProfiles.map(async profile=>mediaByProfile.set(profile.id,await loadIdentityAlbum(profile))));
+  await Promise.all(allowed.map(async profile=>mediaByProfile.set(profile.id,await loadIdentityAlbum(profile))));
   const audienceClubIds=new Set(),audienceExcludedClubIds=new Set(),audienceProfileIds=new Set(),audienceProfileTypes=new Set();
   const modal=openForm({
     title:'Publicar en KOMBAX Social',
     subtitle:'Elige identidad y audiencia. KOMBAX Social es exclusivo de artes marciales y deportes de contacto; el contenido fuera de temática puede ser retirado por moderación.',
     width:'860px',
     fields:[
-      {name:'autor',label:'Publicar como',type:'select',required:true,value:initial.id,options:ownProfiles.map(p=>({value:p.id,label:identityLabel(p)}))},
+      {name:'autor',label:'Publicar como',type:'select',required:true,value:initial.id,options:allowed.map(p=>({value:p.id,label:identityLabel(p)}))},
       {name:'tipo',label:'Tipo',type:'select',required:true,value:'actualizacion',options:Object.entries(TYPE_LABEL).map(([value,label])=>({value,label}))},
       {name:'comentarios_estado',label:'Comentarios',type:'select',required:true,value:'open',options:[{value:'open',label:'Abiertos'},{value:'verified_only',label:'Solo perfiles verificados'},{value:'closed',label:'Cerrados'}]},
       {name:'audiencia',label:'Audiencia',type:'select',required:true,value:audienceKey(audienceOptions(initial.id)[0]),options:audienceOptions(initial.id).map(a=>({value:audienceKey(a),label:a.label})),help:'El perfil seguirá siendo público. Esta opción solo restringe esta publicación.'},
@@ -263,7 +266,7 @@ async function openPublisher(){
     ],
     submitText:'Publicar',
     onSubmit:async v=>{
-      const profile=ownProfiles.find(x=>x.id===v.autor);if(!profile)throw new Error('La identidad seleccionada ya no está disponible.');
+      const profile=allowed.find(x=>x.id===v.autor);if(!profile)throw new Error('La identidad seleccionada ya no está disponible.');
       let socialMediaId=null,newSocialMedia=null,newClubMedia=null,newDirectMedia=null;
       const aud=parseAudience(v.audiencia);
       const restricted=aud.audiencia!=='publica';
@@ -591,7 +594,7 @@ async function loadFeed(append=false){
 }
 
 function renderFeedView(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',socialHeaderActions(ownProfiles.length?'<button type="button" class="btn btn-primary" id="kombax-social-publish">+ Publicar con multimedia</button>':''),'KOMBAX Social')}${tabBar()}${competitorFoundersPromo()}${activationPanel()}${quickComposer()}${feedCards()}</div>`);bindCommon();bindFeed();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',socialHeaderActions(publishProfiles().length?'<button type="button" class="btn btn-primary" id="kombax-social-publish">+ Publicar con multimedia</button>':''),'KOMBAX Social')}${tabBar()}${competitorFoundersPromo()}${activationPanel()}${quickComposer()}${feedCards()}</div>`);bindCommon();bindFeed();
 }
 
 async function renderProfiles(){

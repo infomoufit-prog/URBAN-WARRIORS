@@ -1,0 +1,59 @@
+KOMBAX R117 build 20171 · INSTRUCCIONES WINDOWS CMD
+===================================================
+
+A. RECOMBINAR EL ZIP SI LO HAS DESCARGADO EN 4 PARTES
+1. Pon .001, .002, .003 y .004 en la misma carpeta.
+2. Ejecuta KOMBAX_R117_20171_RECOMBINAR_4_PARTES.cmd.
+3. Comprueba que el SHA256 mostrado coincide con SHA256SUMS_R117_20171.txt.
+4. Extrae KOMBAX_R117_20171_PILOT_HOTFIX_CUMULATIVE.zip.
+
+B. VERIFICAR LA BASE EXTRAIDA
+1. Abre CMD dentro de la carpeta del proyecto.
+2. Ejecuta:
+   KOMBAX_R117_20171_VERIFY_LOCAL.cmd
+3. Resultado esperado: QA web/Netlify correcto. El preflight Android puede indicar firma pendiente si el keystore no está configurado en ese PC.
+
+C. NUEVO DEPLOY NETLIFY
+1. No cambies de carpeta/base: usa exclusivamente R117 build 20171.
+2. Si no tienes Netlify CLI:
+   npm install -g netlify-cli
+3. Si el directorio todavía no está enlazado al sitio correcto:
+   netlify login
+   netlify link
+4. Ejecuta:
+   KOMBAX_R117_20171_DEPLOY_NETLIFY.cmd
+5. El CMD ejecuta QA, reconstruye dist y pide escribir DESPLEGAR antes de publicar.
+6. Al terminar, comprueba kombax.es en ventana privada y realiza smoke test de Login, Social, Showcase y Events.
+
+D. APK DEBUG PARA PROBAR LA REPARACION ANDROID
+1. Instala/selecciona JDK 17 o 21.
+2. Ejecuta:
+   KOMBAX_R117_20171_BUILD_ANDROID_QA.cmd
+3. La primera compilación puede descargar Gradle 8.11.1 y dependencias.
+4. APK esperada:
+   artifacts\KOMBAX_20171_R117_PILOT_HOTFIX_QA_DEBUG.apk
+5. Instálala en un móvil de prueba y valida:
+   - abrir Social y entrar en una pantalla concreta;
+   - recibir/contestar una llamada y regresar;
+   - cambiar a WhatsApp/cámara y regresar;
+   - bloquear/desbloquear el móvil;
+   - minimizar 30 s, 5 min y 15 min;
+   - confirmar que sesión/ruta no vuelven innecesariamente a Inicio.
+
+E. AAB PARA GOOGLE PLAY
+1. NO canceles la release actual en revisión.
+2. Configura la MISMA clave de firma usada por KOMBAX. No metas la clave dentro del ZIP.
+3. Puedes crear android\keystore.properties a partir de android\keystore.properties.example, o usar las variables UW_* documentadas por el preflight.
+4. Ejecuta:
+   KOMBAX_R117_20171_BUILD_ANDROID_PLAY.cmd
+5. AAB esperada:
+   artifacts\KOMBAX_20171_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab
+6. En Play Console súbela como actualización del mismo canal de prueba cerrada cuando Google permita modificar/publicar una nueva release.
+7. Debe conservar:
+   package: com.urbanwarriors.app
+   versionCode: 20171
+   versionName: 2.0.0-rc.13-r117-pilot-hotfix-1
+
+F. SUPABASE
+El backend del piloto activo ya está actualizado. NO ejecutes un db push automático solo por desplegar build 20171.
+Las migraciones 302-306 quedan dentro del ZIP para reconstrucción/auditoría. Si algún día se aplican a otro proyecto, deben formar parte del historial acumulativo completo y aplicarse en orden.

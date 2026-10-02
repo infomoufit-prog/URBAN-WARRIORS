@@ -438,7 +438,7 @@ async function boot(){
     const hasTransactionalEntry=Boolean(paymentsEntry||paymentEntry||validConnect);
     if(marketingIdentity&&!hasTransactionalEntry&&(!session||session?.scope==='kombax')){
       renderIdentityPresentation(marketingIdentity,{onBack:session?.scope==='kombax'?()=>renderDirectProfileHub({onBack:renderGatewayRoot}):renderGatewayRoot});
-    }else if(session?.scope==='kombax')renderGlobalHome({onBack:renderGatewayRoot});else if(session)renderClubSessionOrLegal({startAtHome:!hasTransactionalEntry});else renderLogin();
+    }else if(session?.scope==='kombax')renderGlobalHome({onBack:renderGatewayRoot,restoreLast:!hasTransactionalEntry});else if(session)renderClubSessionOrLegal({startAtHome:false});else renderLogin();
     if(connectNotice||paymentNotice){history.replaceState({},'',`${location.pathname}${location.hash||''}`);setTimeout(()=>toast(connectNotice||paymentNotice,paymentEntry==='cancelled'?'error':'ok'),80);}
   }catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));

@@ -1,0 +1,18 @@
+KOMBAX R117 build 20171 · BACKEND PILOTO
+
+El backend del proyecto piloto activo de Supabase ya fue actualizado durante la estabilizacion del 02/10/2026.
+NO es necesario ejecutar un db push para poner en funcionamiento estos hotfixes en ese proyecto.
+
+Estado verificado:
+- Alta Club Piloto: abierta, sin codigo de invitacion.
+- Invitacion/codigo de alumno: se conserva como via opcional.
+- Solicitud de vinculacion miembro/familia + aprobacion del club: activa.
+- Miembro sin club: perfil publico + album; feed bloqueado.
+- Espectador: perfil publico basico; sin album ni feed.
+- Perfil/red separados del permiso de publicacion.
+- Publicacion de Miembro: sigue exigiendo membresia real/activa y reglas de edad.
+- Acceso privado del club: solo tras vinculacion/autorizacion.
+- Showcase/Events: sin requisito de pertenecer a club para navegar/comprar; se conservan reglas de edad y pago.
+
+Para reconstruir otro proyecto desde codigo, conservar y aplicar en orden las migraciones 302, 303, 304, 305 y 306 junto al historial completo anterior.
+Antes de usar Supabase CLI contra el proyecto piloto actual, reconciliar el historial local con las migraciones ya aplicadas.

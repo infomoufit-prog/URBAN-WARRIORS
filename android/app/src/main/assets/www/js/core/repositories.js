@@ -1030,7 +1030,8 @@ export const repos={
     active:()=>backend.globalReadRpc('app_kombax_mis_membresias_r58',{}),
     pending:()=>backend.globalReadRpc('app_kombax_membresias_pendientes_r58',{}),
     requestClaim:(socio_id)=>backend.globalWriteRpc('app_kombax_membresia_solicitar_r58',{p_socio_id:socio_id}),
-    contactClub:(club_id,mensaje)=>backend.globalWriteRpc('app_kombax_club_interest_send_r58',{p_club_id:club_id,p_mensaje:String(mensaje||'').trim()})
+    contactClub:(club_id,mensaje,request_kind='member',target_socio_id=null)=>backend.globalWriteRpc('app_kombax_club_link_request_r117',{p_club_id:club_id,p_request_kind:request_kind,p_mensaje:String(mensaje||'').trim(),p_target_socio_id:target_socio_id||null}),
+    resolveClubLink:(thread_id,approve=true,socio_id=null)=>backend.globalWriteRpc('app_kombax_club_link_resolve_r117',{p_thread_id:thread_id,p_approve:approve===true,p_socio_id:socio_id||null})
   },
   federationLicenses:{
     federationContext:(profileId)=>backend.globalReadRpc('app_kombax_federation_context_v200',{p_federation_profile_id:profileId}),
@@ -1066,9 +1067,10 @@ export const repos={
   },
   kombaxIdentity:{
     status:()=>backend.globalReadRpc('app_kombax_social_estado_v124',{p_club_id:session()?.club_id||null}),
-    myProfiles:()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),
+    myProfiles:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_r117',{p_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),'app_kombax_social_mis_perfiles_r117'),
+    memberPublicProfile:()=>backend.globalReadRpc('app_kombax_member_public_profile_r117',{}),
     team:()=>backend.globalReadRpc('app_kombax_club_team_v051',{p_club_id:session()?.club_id||null}),
-    activateMember:({acepta_normas,acepta_privacidad,acepta_seguridad_menor=false})=>kombaxIdentityMutation('kombax.identity.member.activate',{club_id:session()?.club_id||null,acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,acepta_seguridad_menor:acepta_seguridad_menor===true,user_agent:navigator.userAgent}),
+    activateMember:({fecha_nacimiento=null,acepta_normas,acepta_privacidad,acepta_seguridad_menor=false})=>kombaxIdentityMutation('kombax.identity.member.activate',{club_id:session()?.club_id||null,fecha_nacimiento:fecha_nacimiento||null,acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,acepta_seguridad_menor:acepta_seguridad_menor===true,user_agent:navigator.userAgent}),
     updateMemberProfile:(payload={})=>kombaxIdentityMutation('kombax.identity.member.profile.update',{club_id:session()?.club_id||null,bio_publica:String(payload.bio_publica||'').trim(),apodo_deportivo:String(payload.apodo_deportivo||'').trim(),disciplinas_publicas:String(payload.disciplinas_publicas||'').trim(),experiencia_anos:payload.experiencia_anos===''||payload.experiencia_anos==null?null:Number(payload.experiencia_anos),guardia:String(payload.guardia||'').trim(),tecnica_favorita:String(payload.tecnica_favorita||'').trim(),especialidad:String(payload.especialidad||'').trim(),trayectoria_declarada:String(payload.trayectoria_declarada||'').trim(),objetivos:String(payload.objetivos||'').trim()}),
     setTeamPermission:(perfil_id,permiso,activo=true)=>kombaxIdentityMutation('kombax.club.permission.set',{club_id:session()?.club_id||null,perfil_id,permiso,activo:activo===true}),
     minorSocialControls:()=>backend.globalReadRpc('app_kombax_minor_social_controls_v121',{}),
@@ -1076,7 +1078,7 @@ export const repos={
   },
   kombaxSocial:{
     status:()=>backend.globalReadRpc('app_kombax_social_estado_v124',{p_club_id:session()?.club_id||null}),
-    myProfiles:()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),
+    myProfiles:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_r117',{p_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),'app_kombax_social_mis_perfiles_r117'),
     networkProfiles:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_network_profiles_v255',{p_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),'app_kombax_social_network_profiles_v255'),
     promotions:async(limit=2)=>{try{return await backend.globalReadRpc('app_kombax_social_promotions_r64',{p_limit:Math.min(2,Math.max(1,Number(limit)||2))});}catch(error){if(!isMissingRpc(error,'app_kombax_social_promotions_r64'))console.warn('Social promotions R64:',error);return [];}},
     promotionImpression:(campaign_id)=>backend.globalWriteRpc('app_kombax_social_promotion_impression_r64',{p_campaign_id:campaign_id,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
@@ -1379,7 +1381,6 @@ export const repos={
     },
     pilotRequests:()=>backend.globalReadRpc('app_kombax_pilot_requests_r99',{}),
     pilotAssign:(club_id,plan_code,notes='')=>backend.globalWriteRpc('app_kombax_pilot_assign_r99',{p_club_id:club_id,p_plan_code:plan_code,p_notes:notes}),
-    pilotInviteCreate:(label,email='')=>backend.globalWriteRpc('app_kombax_pilot_invite_create_r110',{p_label:String(label||'').trim(),p_email:String(email||'').trim()||null}),
     pilotEnroll:(subject_type,subject_id,notes='')=>backend.globalWriteRpc('app_kombax_pilot_enroll_r97',{p_subject_type:subject_type,p_subject_id:subject_id,p_notes:notes}),
     founderBenefit:(subject_type,subject_id,program,start_at)=>backend.globalWriteRpc('app_kombax_founder_benefit_r97',{p_subject_type:subject_type,p_subject_id:subject_id,p_program:program,p_start_at:start_at}),
     aiCreditGrant:(tenant_ref,amount,type,key,expires_at=null)=>backend.globalWriteRpc('app_kombax_ai_grant_r97',{p_tenant_ref:tenant_ref,p_amount:amount,p_type:type,p_key:key,p_expires:expires_at}),

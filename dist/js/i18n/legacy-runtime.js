@@ -17,6 +17,7 @@ import { r79Exact, r79Dynamic, hydrateR79SystemCopy, warmR79SystemCopyCatalogs }
 import { localizeR110PilotText } from './r110-pilot-copy.js';
 import { localizeR115PilotText } from './r115-pilot-copy.js';
 import { localizeR116PilotText } from './r116-pilot-copy.js';
+import { localizeR117PilotHotfixText } from './r117-pilot-hotfix-copy.js';
 
 const SKIP_SELECTOR = [
   '[data-user-content]','[data-i18n-user-content]','[data-kx-user-content]','[contenteditable="true"]',
@@ -145,6 +146,7 @@ export function localizeSystemText(value,locale=getLocale()){
   const raw=String(value??'');if(!raw||locale==='es')return raw;
   const leading=raw.match(/^\s*/)?.[0]||'',trailing=raw.match(/\s*$/)?.[0]||'';
   const source=normalize(raw);if(!source)return raw;
+  const r117PilotValue=localizeR117PilotHotfixText(source,locale);if(r117PilotValue)return `${leading}${r117PilotValue}${trailing}`;
   const r116PilotValue=localizeR116PilotText(source,locale);if(r116PilotValue)return `${leading}${r116PilotValue}${trailing}`;
   const r115PilotValue=localizeR115PilotText(source,locale);if(r115PilotValue)return `${leading}${r115PilotValue}${trailing}`;
   const r110PilotValue=localizeR110PilotText(source,locale);if(r110PilotValue)return `${leading}${r110PilotValue}${trailing}`;

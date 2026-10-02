@@ -1,0 +1,44 @@
+KOMBAX R117 build 20171 FINAL QA
+UTC: 2026-10-02T12:45:13Z
+
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13-r117-pilot-hotfix-1 verify:r117-hotfix
+> node scripts/test-kombax-20168-r115-pilot-onboarding-identity-freeze.mjs && node scripts/test-kombax-20169-r116-golden-pilot-freeze.mjs && node scripts/test-kombax-r117-pilot-hotfix-profiles-open-registration.mjs && node scripts/test-kombax-20171-r117-pilot-hotfix.mjs && node scripts/build.mjs
+
+✓ R115 functionality remains on a monotonic cumulative release
+✓ Onboarding exposes eight intended routes
+✓ Free account is not labelled automatically as Spectator
+✓ Member/Family route separates public profile from Club-confirmed publishing
+✓ Club remains authority for membership claims
+✓ Member Social gate requires active approved membership
+✓ Social repositories use hardened R115 status/mutation wrappers
+✓ Standalone Competitor rule remains preserved
+✓ Verification document flows remain present
+✓ Member can evolve to Competitor without second account
+✓ Open browsing routes stay visible to free accounts
+R115 pilot onboarding / member Social gate QA: 11/11 PASS
+✓ R116 freeze lineage remains preserved in R116 or later
+✓ Paid commercial catalog is preserved but public pricing is pilot-locked
+✓ Pilot plan surfaces show no public price path or paid action when locked
+✓ Free identity remains available while paid prices are hidden
+✓ Neutral free-account onboarding and eight routes remain frozen
+✓ Member Social publishing still requires club-confirmed active membership
+✓ Competitor can remain standalone after its verification flow
+✓ Android target configuration is Play-ready for October 2026
+✓ Netlify release contract is deterministic
+✓ Play legal/public endpoints remain packaged
+✓ Pilot public legal surface does not disclose pre-launch plan amounts
+✓ Android release artifacts retain Golden Pilot naming
+R116 Golden Pilot Freeze QA: 12/12 PASS
+✓ Pilot Club registration no longer asks for an invitation code
+✓ Member/Practitioner public profile exists independently from Club membership
+✓ Member album management is separated from feed publishing
+✓ Spectator has public profile/avatar/banner but no album or feed publishing
+✓ Managed Spectator public profile is actionable
+✓ Authenticated Social reading stays independent from publishing
+✓ Web, Netlify dist and Android bundled assets are byte-identical for changed files
+R117 pilot hotfix profiles/open-registration QA: 7/7 PASS
+OK 15/15 · KOMBAX R117 build 20171 Pilot Hotfix
+OK build 622 archivos · web = dist = Android
+
+OK contrato RC13/Finance Premium: 98 operaciones frontend dentro de 103 permitidas; legado completo 90

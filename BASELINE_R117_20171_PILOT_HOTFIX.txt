@@ -1,0 +1,21 @@
+KOMBAX R117 · PILOT HOTFIX 1
+Release: 2.0.0-rc.13-r117-pilot-hotfix-1
+Build / Android versionCode: 20171
+Package: com.urbanwarriors.app
+Base: R117 build 20170 Golden Pilot
+Pilot: 01/10/2026–15/11/2026
+
+REGLAS CANÓNICAS DEL HOTFIX
+- Club Piloto: alta directa dentro de la ventana y plazas disponibles. No requiere código de invitación.
+- Los códigos/invitaciones de miembro/familia siguen existiendo como vía opcional de vinculación.
+- Miembro/Practicante sin club: perfil Elite Social público + avatar + banner + información + álbum; no publica en feed.
+- Miembro/Practicante con membresía real confirmada: conserva el mismo perfil y puede publicar si cumple reglas de edad/consentimiento.
+- Espectador: perfil público básico + avatar/banner/información; sin álbum y sin publicación en feed.
+- Red KOMBAX: la capacidad de perfil/red se separa del permiso de publicación. Las reglas de edad de chat directo se mantienen.
+- Vinculación a club: invitación/código, solicitud del usuario + aprobación del club, o autorización directa del club.
+- Acceso privado de club (ficha, cobros, asistencia, documentos, gestión) solo tras vinculación/autorización válida.
+- Showcase/Events/compra pública no depende de ser miembro de un club; se conservan edad, vendedor y reglas de pago aplicables.
+- Android: se restaura el estado de WebView y la última navegación segura tras pausa/recreación de Activity.
+
+Estado backend: hotfixes aplicados al proyecto piloto activo de Supabase el 02/10/2026.
+No ejecutar db push indiscriminado sobre el proyecto piloto actual sin reconciliar historial de migraciones.
