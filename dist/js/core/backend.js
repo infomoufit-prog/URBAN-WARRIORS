@@ -65,7 +65,7 @@ async function globalIdentityFromAuth(authUser){
   const platformLegal=await platformLegalStatus();
   return {
     scope:'kombax',id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',fecha_nacimiento:authUser.user_metadata?.fecha_nacimiento||'',preferred_locale:profile.preferred_locale||'',
     club_id:null,club:null,rol:'kombax',roles:['kombax'],directProfiles:Array.isArray(directProfiles)?directProfiles:[],applications:Array.isArray(applications)?applications:[],platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
     platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
   };
@@ -96,7 +96,7 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
   const platformLegal=await platformLegalStatus();
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',avatar_path:profile.avatar_path||'',avatar_presentation:profile.avatar_presentation||{},
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',fecha_nacimiento:authUser.user_metadata?.fecha_nacimiento||'',preferred_locale:profile.preferred_locale||'',avatar_path:profile.avatar_path||'',avatar_presentation:profile.avatar_presentation||{},
     rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,
     memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
     platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
@@ -323,12 +323,14 @@ export const backend={
       await client.signOut();
     }finally{state.session=null;state.setCapabilities([]);try{sessionStorage.removeItem('uw2_platform_admin_session')}catch{}}
   },
-  async registerGlobalAccount({email,password,nombre='',apellidos='',terms=false,privacy=false,accountType=''}){
+  async registerGlobalAccount({email,password,nombre='',apellidos='',fecha_nacimiento='',terms=false,privacy=false,accountType=''}){
     state.clearError();
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
     const selectedType=['club','marca','federacion','profesional','media'].includes(accountType)?accountType:''; // Competidor se fija al crear/solicitar el perfil, no en Auth signup.
-    const auth=await client.signUp(email,password,{nombre,apellidos,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
+    const dob=String(fecha_nacimiento||'').trim();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(dob))throw new Error('Indica tu fecha de nacimiento.');
+    const auth=await client.signUp(email,password,{nombre,apellidos,fecha_nacimiento:dob,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
     if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
     let session=await globalIdentityFromAuth(auth.user);
     const legal=await recordPlatformLegalAcceptance();session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};
@@ -359,7 +361,9 @@ export const backend={
   },
   async registerAccount(input){
     const clubSlug=input.club_slug||selectedClubSlug()||cfg.clubSlug;
-    const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,telefono:input.telefono,tipo_cuenta:input.tipo_cuenta,club_slug:clubSlug,preferred_locale:getLocale()});
+    const dob=String(input.adulto_fecha_nacimiento||'').trim();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(dob))throw new Error('Indica la fecha de nacimiento del titular de la cuenta.');
+    const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,telefono:input.telefono,fecha_nacimiento:dob,tipo_cuenta:input.tipo_cuenta,club_slug:clubSlug,preferred_locale:getLocale()});
     const payload={club_slug:clubSlug,tipo_cuenta:input.tipo_cuenta,adulto_nombre:input.adulto_nombre,adulto_apellidos:input.adulto_apellidos,telefono:input.telefono||'',fecha_nacimiento_adulto:input.adulto_fecha_nacimiento||null,menor_nombre:input.menor_nombre||null,menor_apellidos:input.menor_apellidos||null,fecha_nacimiento_menor:input.menor_fecha_nacimiento||null,disciplina_id:input.disciplina_id||null,grupo_id:input.grupo_id||null,tarifa_id:input.tarifa_id||null,invite_code:input.invite_code||null};
     const legalEntries=input.legal_acceptances||[];
     if(!auth?.access_token){localStorage.setItem('uw2_pending_registration',JSON.stringify({email:input.email,payload}));if(legalEntries.length)localStorage.setItem('uw2_pending_legal',JSON.stringify(legalEntries));return {confirmationRequired:true};}

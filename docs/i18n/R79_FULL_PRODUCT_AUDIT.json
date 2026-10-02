@@ -1,22 +1,24 @@
 {
-  "generated_at": "2026-10-02T12:45:16.180Z",
-  "candidates": 5008,
+  "generated_at": "2026-10-02T14:00:08.914Z",
+  "candidates": 5019,
   "covered_r79": 540,
   "covered_r78": 1220,
-  "covered_legacy_all7": 3007,
-  "unresolved": 241,
+  "covered_legacy_all7": 3005,
+  "unresolved": 254,
   "by_file": {
     "web/js/modules/customer-operations.js": 67,
     "web/js/modules/platform-admin.js": 64,
+    "web/js/modules/gateway.js": 32,
     "web/js/modules/plan-services.js": 32,
-    "web/js/modules/gateway.js": 25,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 11,
     "web/js/modules/showcase.js": 7,
     "web/js/modules/finance-guide.js": 5,
+    "web/js/app.js": 4,
     "web/js/core/utils.js": 4,
     "web/js/modules/admin.js": 4,
     "web/js/modules/club-poster.js": 3,
+    "web/js/core/backend.js": 2,
     "web/js/modules/club-profile.js": 2,
     "web/js/core/media.js": 1,
     "web/js/core/repositories.js": 1,
@@ -25,6 +27,84 @@
     "web/js/modules/kombax-social.js": 1
   },
   "unresolved_rows": [
+    {
+      "file": "web/js/app.js",
+      "value": "La cuenta de padre, madre o tutor debe corresponder a una persona adulta.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/app.js",
+      "value": "Fecha de nacimiento (solo cuenta nueva)",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/app.js",
+      "value": "Necesaria para verificar los requisitos de edad de la cuenta KOMBAX.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/app.js",
+      "value": "Indica una fecha de nacimiento válida. La cuenta autónoma KOMBAX está disponible a partir de los 16 años.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "value": "Indica tu fecha de nacimiento.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "value": "Indica la fecha de nacimiento del titular de la cuenta.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
     {
       "file": "web/js/core/media.js",
       "value": "El logo supera 5 MB. Selecciona una versión más ligera.",
@@ -1351,6 +1431,19 @@
     },
     {
       "file": "web/js/modules/gateway.js",
+      "value": "Se reutiliza la fecha privada indicada al crear la cuenta. Alta autónoma de Competidor: 16+.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
       "value": "Solo identidad pública gratuita",
       "missing": [
         "en",
@@ -1365,6 +1458,19 @@
     {
       "file": "web/js/modules/gateway.js",
       "value": "Puedes solicitar la identidad pública sin plan. La verificación no realiza ningún cobro ni activa funciones de pago.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Se reutiliza la fecha privada indicada al crear la cuenta. Debe acreditar 18+.",
       "missing": [
         "en",
         "fr",
@@ -1410,6 +1516,44 @@
     },
     {
       "file": "web/js/modules/gateway.js",
+      "value": "Tu membresía y tu perfil Social están activos. Al entrar accederás directamente a tu espacio de Miembro, con tu navegación habitual y los servicios del club.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Tu club ya confirmó la membresía y tu perfil público existe. Completa únicamente las validaciones de edad/consentimiento que sigan pendientes; no tienes que solicitar otro perfil.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Tu club ha confirmado esta membresía. Completa una sola vez la activación de tu perfil público de Miembro; después entrarás directamente en tu espacio.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene asignado su tipo de perfil.",
       "missing": [
         "en",
@@ -1431,6 +1575,32 @@
     {
       "file": "web/js/modules/gateway.js",
       "value": "La plaza y el nivel de acceso requieren confirmación de KOMBAX. No necesitas tarjeta para el piloto.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Preparando tu espacio de Miembro…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Comprobando tu perfil Social y la vinculación con tu club.",
       "missing": [
         "en",
         "fr",

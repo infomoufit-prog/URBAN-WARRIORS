@@ -1,6 +1,6 @@
 {
   "name": "urban-warriors-2.0.0-rc13",
-  "version": "2.0.0-rc.13-r117-pilot-hotfix-1",
+  "version": "2.0.0-rc.13-r117-pilot-hotfix-2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -166,7 +166,8 @@
     "android:play:r117": "node scripts/android-play-bundle.mjs",
     "test:r117:pilot-hotfix": "node scripts/test-kombax-r117-pilot-hotfix-profiles-open-registration.mjs",
     "test:20171:r117-hotfix": "node scripts/test-kombax-20171-r117-pilot-hotfix.mjs",
-    "verify:r117-hotfix": "node scripts/test-kombax-20168-r115-pilot-onboarding-identity-freeze.mjs && node scripts/test-kombax-20169-r116-golden-pilot-freeze.mjs && node scripts/test-kombax-r117-pilot-hotfix-profiles-open-registration.mjs && node scripts/test-kombax-20171-r117-pilot-hotfix.mjs && node scripts/build.mjs"
+    "test:20172:r117-hotfix2": "node scripts/test-kombax-20172-r117-pilot-hotfix-2.mjs",
+    "verify:r117-hotfix": "node scripts/test-kombax-20168-r115-pilot-onboarding-identity-freeze.mjs && node scripts/test-kombax-20169-r116-golden-pilot-freeze.mjs && node scripts/test-kombax-r117-pilot-hotfix-profiles-open-registration.mjs && node scripts/test-kombax-20171-r117-pilot-hotfix.mjs && node scripts/test-kombax-20172-r117-pilot-hotfix-2.mjs && node scripts/build.mjs"
   },
   "engines": {
     "node": ">=20"

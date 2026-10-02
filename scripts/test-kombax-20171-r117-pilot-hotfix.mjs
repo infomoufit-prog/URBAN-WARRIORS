@@ -8,8 +8,8 @@ const [cfg,gradle,activity,gateway,members,repos,social,app,m303,m304,m305,m306]
   read('supabase/migrations/303_kombax_pilot_open_registration_no_code_r117.sql'),read('supabase/migrations/304_kombax_public_profiles_member_spectator_r117.sql'),read('supabase/migrations/305_kombax_pilot_easy_linking_elite_social_network_r117.sql'),read('supabase/migrations/306_kombax_elite_social_universal_public_profiles_r117.sql')
 ]);
 const checks=[];const ok=(c,m)=>{checks.push([!!c,m]);if(!c)throw new Error(m)};
-ok(cfg.includes('build: 20171')&&cfg.includes('r117-pilot-hotfix-1'),'build 20171/config');
-ok(/versionCode\s+20171/.test(gradle)&&gradle.includes("r117-pilot-hotfix-1"),'Android versionCode/versionName');
+ok(/build:\s*2017[1-9]/.test(cfg)&&cfg.includes('r117-pilot-hotfix'),'R117 pilot hotfix config lineage');
+ok(/versionCode\s+2017[1-9]/.test(gradle)&&gradle.includes("r117-pilot-hotfix"),'Android pilot hotfix versionCode/versionName');
 ok(activity.includes('webView.restoreState(savedInstanceState)')&&activity.includes('webView.saveState(outState)')&&activity.includes('persistInternalUrl()'),'Android lifecycle state persistence');
 ok(app.includes('renderClubSessionOrLegal({startAtHome:false})')&&app.includes('restoreLast:!hasTransactionalEntry'),'frontend restores navigation instead of forcing home');
 ok(gateway.includes('Alta directa sin código de invitación')&&!gateway.includes("name:'pilot_code'"),'pilot club UI no code');

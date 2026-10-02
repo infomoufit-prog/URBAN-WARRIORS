@@ -1,0 +1,32 @@
+KOMBAX R117 build 20172 · PILOT HOTFIX 2
+
+1) VERIFICAR EL PROYECTO
+   KOMBAX_R117_20172_VERIFY_LOCAL.cmd
+
+2) DEPLOY WEB / NETLIFY
+   KOMBAX_R117_20172_DEPLOY_NETLIFY.cmd
+   El script ejecuta QA y exige escribir DESPLEGAR antes de publicar producción.
+
+3) APK DE QA ANDROID
+   KOMBAX_R117_20172_BUILD_ANDROID_QA.cmd
+   Esperado: artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_QA_DEBUG.apk
+
+4) AAB GOOGLE PLAY
+   Configura la misma keystore usada por KOMBAX y ejecuta:
+   KOMBAX_R117_20172_BUILD_ANDROID_PLAY.cmd
+   Esperado: artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab
+
+5) GOOGLE PLAY
+   No canceles una release actualmente en revisión solo para introducir este hotfix.
+   Cuando corresponda, sube build 20172 al mismo track cerrado, mismo package com.urbanwarriors.app y misma firma.
+
+6) BACKEND
+   El Supabase piloto YA está actualizado. No hagas supabase db push contra producción/piloto sin auditoría previa.
+
+QA REAL RECOMENDADO ANTES DE GOOGLE PLAY
+- Crear cuentas de los distintos recorridos: DOB obligatorio.
+- Miembro sin club: Elite Social + álbum, sin feed.
+- Vinculación sin código: solicitud -> aprobación club.
+- Miembro vinculado y Social autorizado: nuevo login -> entrada directa al espacio de club.
+- Espectador: sin álbum y sin publicación.
+- Android: llamada, WhatsApp, background, bloqueo/desbloqueo y retorno sin perder pantalla.

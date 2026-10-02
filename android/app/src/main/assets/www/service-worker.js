@@ -6,8 +6,8 @@
 // historical cache marker: media-r29
 // historical cache marker: media-r28
 // historical cache marker: media-r27
-const BUILD_MARKER='kombax-build-20171';
-const VERSION='kombax-2.0.0-rc13-20171-r117-pilot-hotfix-1';
+const BUILD_MARKER='kombax-build-20172';
+const VERSION='kombax-2.0.0-rc13-20172-r117-pilot-hotfix-2';
 // historical cache marker: media-r36
 // historical cache marker: media-r37
 // historical cache marker: media-r38

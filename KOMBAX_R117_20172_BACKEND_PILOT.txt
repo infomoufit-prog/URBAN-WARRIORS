@@ -1,0 +1,18 @@
+KOMBAX R117 build 20172 · BACKEND PILOTO
+Proyecto Supabase activo: poggsobhtutbuagjiydc
+Fecha: 2026-10-02
+
+El backend del piloto YA contiene los hotfixes de esta entrega, incluidos:
+- lectura Social autenticada para Espectador;
+- visibilidad de solicitudes de acceso al club;
+- alta Club Piloto abierta sin código;
+- Elite Social Miembro independiente del club;
+- Espectador sin álbum/feed;
+- red/interacción separada del permiso de publicar;
+- vinculación Miembro/Familia por código opcional o solicitud + autorización del club;
+- perfil público básico de identidades directas;
+- fecha de nacimiento privada/canónica;
+- fecha de nacimiento obligatoria para toda NUEVA cuenta KOMBAX.
+
+NO ejecutar automáticamente las migraciones 302-308 en el backend piloto actual.
+Se incluyen en el ZIP para reconstrucción, auditoría y entornos nuevos.

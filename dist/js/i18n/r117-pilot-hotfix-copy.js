@@ -1,4 +1,4 @@
-// KOMBAX R117 build 20171 Pilot Hotfix.
+// KOMBAX R117 build 20172 Pilot Hotfix.
 // New pilot copy uses English as the explicit fallback for all non-Spanish locales.
 // This prevents Spanish leakage during the pilot while native-language copy is curated.
 const EN=Object.freeze({

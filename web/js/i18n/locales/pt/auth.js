@@ -24,7 +24,7 @@ export default {
     "birthDate": "Data de nascimento",
     "adultName": "Nome do adulto",
     "adultLastName": "Apelidos do adulto",
-    "adultBirthDate": "Nascimento do adulto (opcional)",
+    "adultBirthDate": "Data de nascimento do adulto",
     "minPassword": "Mínimo de 8 caracteres."
   },
   "errors": {

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-02T12:45:17.600Z",
+  "generated_at": "2026-10-02T14:00:10.272Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
   "files_scanned": 112,
-  "system_ui_candidates": 2591,
-  "target_block_1_system_ui_candidates": 548,
+  "system_ui_candidates": 2595,
+  "target_block_1_system_ui_candidates": 551,
   "target_files": [
     "web/js/modules/gateway.js",
     "web/js/public-product-overview.js",
@@ -60,7 +60,7 @@
       "target_block_1": false
     },
     "web/js/core/backend.js": {
-      "system_ui": 38,
+      "system_ui": 39,
       "technical": 9,
       "user_content": 11,
       "target_block_1": false
@@ -306,7 +306,7 @@
       "target_block_1": true
     },
     "web/js/modules/gateway.js": {
-      "system_ui": 144,
+      "system_ui": 147,
       "technical": 8,
       "user_content": 3,
       "target_block_1": true
@@ -1019,7 +1019,7 @@
       "line": 299,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(!tutor){const years=ageYears(v.adulto_fecha_nacimiento);if(years==null)throw new Error('Indica una fecha de nacimiento válida.');if(years<16)throw new Error('El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor de 16, utiliza el alta mediante tutor o contacta con el club.');}"
+      "sample": "const years=ageYears(v.adulto_fecha_nacimiento);if(years==null)throw new Error('Indica una fecha de nacimiento válida.');if(!tutor&&years<16)throw new Error('El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor de 16, utiliza el alta mediante tutor o contacta con el club.');if(tutor&&year"
     },
     {
       "file": "web/js/app.js",
@@ -1110,7 +1110,7 @@
       "line": 325,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{name:'nombre',label:'Nombre (solo cuenta nueva)',value:String(info?.nombre||'')},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},"
+      "sample": "{name:'nombre',label:'Nombre (solo cuenta nueva)',value:String(info?.nombre||'')},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'fecha_nacimiento',label:'Fecha de nacimiento (solo cuenta nueva)',type:'date',help:'Necesaria para verificar los requisitos de edad de la cuenta KOMBAX.'},"
     },
     {
       "file": "web/js/app.js",
@@ -1152,7 +1152,7 @@
       "line": 336,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(!String(v.nombre||'').trim())throw new Error('Indica tu nombre para crear la cuenta.');"
+      "sample": "if(!String(v.nombre||'').trim())throw new Error('Indica tu nombre para crear la cuenta.');const years=ageYears(v.fecha_nacimiento);if(years==null||years<16)throw new Error('Indica una fecha de nacimiento válida. La cuenta autónoma KOMBAX está disponible a partir de los 16 años.');"
     },
     {
       "file": "web/js/app.js",
@@ -1250,7 +1250,7 @@
       "line": 368,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},"
+      "sample": "{name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'fecha_nacimiento',label:'Fecha de nacimiento (solo cuenta nueva)',type:'date',help:'Necesaria para verificar los requisitos de edad de la cuenta KOMBAX.'},"
     },
     {
       "file": "web/js/app.js",
@@ -1341,7 +1341,7 @@
       "line": 389,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');"
+      "sample": "if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');const years=ageYears(v.fecha_nacimiento);if(years==null||years<16)throw new Error('Indica una fecha de nacimiento válida. La cuenta autónoma KOMBAX está disponible a partir de los 16 años."
     },
     {
       "file": "web/js/app.js",
@@ -1842,91 +1842,98 @@
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 338,
+      "line": 340,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!client.session?.access_token)throw new AuthExpiredError('Inicia sesión para aceptar las condiciones de KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 340,
+      "line": 342,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(legal?.required!==false)throw new Error('No se pudo registrar la aceptación legal de KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 350,
+      "line": 352,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){await this.bootstrapMutate('cuenta.registrar',p.payload);localStorage.removeItem('uw2_pending_registration');}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 356,
+      "line": 358,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(pendingLegal){try{const entries=JSON.parse(pendingLegal)||[];for(const item of entries)await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});localStorage.removeItem('uw2_pending_legal');}catch(error"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 366,
+      "line": 365,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(dob))throw new Error('Indica la fecha de nacimiento del titular de la cuenta.');"
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "line": 370,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "await this.bootstrapMutate('cuenta.registrar',payload);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 368,
+      "line": 372,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "for(const item of legalEntries){await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 390,
+      "line": 394,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(requestedRole)throw new Error('La invitación por rol necesita activar la actualización de equipo 109.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 393,
+      "line": 397,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 409,
+      "line": 413,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(isTransientNetworkError(error)&&client.session?.access_token){console.warn('Sesión conservada sin conexión:',humanError(error));persistSession(saved);return saved;}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 416,
+      "line": 420,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(isTransientNetworkError(globalError)&&client.session?.access_token){console.warn('Identidad KOMBAX pendiente de red:',humanError(globalError));persistSession(saved);return saved;}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 419,
+      "line": 423,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "console.warn('No se restaura la sesión:',humanError(error));await client.signOut().catch(()=>{});persistSession(null);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 431,
+      "line": 435,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(session.club?.slug!==slug)throw new Error('No perteneces a este club o la membresía no está activa.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 441,
+      "line": 445,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "catch(error){console.warn('Preferencia de idioma no persistida en cuenta:',humanError(error));return {ok:false,local_only:true};}"
@@ -9888,7 +9895,7 @@
       "line": 179,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento',type:'date',required:true,full:true,help:'Se usa de forma privada para aplicar las reglas de edad. Si eres menor de 18 años, el chat directo y las compras sujetas a mayoría de edad seguirán bloqueados.'},"
+      "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento',type:'date',required:true,value:state.session?.fecha_nacimiento||'',full:true,help:'Se usa de forma privada para aplicar las reglas de edad. Si eres menor de 18 años, el chat directo y las compras sujetas a mayoría de edad seguirán bloqueados.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10154,7 +10161,7 @@
       "line": 439,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "fields.splice(1,0,{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',required:!profile.id,value:'',help:'Perfil Profesional: alta autónoma 18+. Nunca se muestra públicamente.'});"
+      "sample": "fields.splice(1,0,{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',required:!profile.id,value:profile.fecha_nacimiento||state.session?.fecha_nacimiento||'',help:'Perfil Profesional: alta autónoma 18+. Nunca se muestra públicamente.'});"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10168,7 +10175,7 @@
       "line": 444,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "fields.splice(1,0,{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',required:!profile.id,value:'',help:'Espectador: alta autónoma 16+. Perfil público básico, sin álbum ni publicación Social.'});"
+      "sample": "fields.splice(1,0,{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',required:!profile.id,value:profile.fecha_nacimiento||state.session?.fecha_nacimiento||'',help:'Espectador: alta autónoma 16+. Perfil público básico, sin álbum ni publicación Social.'});"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10203,7 +10210,7 @@
       "line": 459,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',value:verify.fecha_nacimiento||'',help:profile?.origen_identidad_social_id?'Si vienes de un Club, prevalece la edad verificada por el Club.':'Alta autónoma de Competidor: 16+.'},"
+      "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',value:verify.fecha_nacimiento||state.session?.fecha_nacimiento||'',help:profile?.origen_identidad_social_id?'Si vienes de un Club, prevalece la edad verificada por el Club.':'Se reutiliza la fecha privada indicada al crear la cuenta. Alta autóno"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10280,7 +10287,7 @@
       "line": 491,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',value:verify.fecha_nacimiento||'',help:'Debe acreditar 18+; si ya se validó en el perfil puede dejarse sin cambios.'},"
+      "sample": "{name:'fecha_nacimiento',label:'Fecha de nacimiento · privada',type:'date',value:verify.fecha_nacimiento||state.session?.fecha_nacimiento||'',help:'Se reutiliza la fecha privada indicada al crear la cuenta. Debe acreditar 18+.'},"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10620,224 +10627,245 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 632,
+      "line": 608,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "setAppHtml(`<main class=\"kombax-gateway direct-mode gateway-premium\" data-kombax-view=\"member-entry-resolver\"><div class=\"gateway-ambient\" aria-hidden=\"true\"><i></i><i></i><i></i></div><section class=\"gateway-directory premium-surface\"><div class=\"gateway-directory-top\">${mark({compact:true})}<span class=\"gateway-direc"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 611,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const activeMembers=(memberships||[]).filter(row=>row?.modo==='alumno'&&row?.estado==='activo'&&row?.club_slug);"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 651,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setAppHtml(`<main class=\"kombax-gateway direct-mode gateway-premium\" data-kombax-view=\"platform-legal-required\"><div class=\"gateway-ambient\" aria-hidden=\"true\"><i></i><i></i><i></i></div><section class=\"gateway-directory premium-surface\"><div class=\"gateway-directory-top\">${mark({compact:true})}<span class=\"gateway-dir"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 637,
+      "line": 656,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setAppHtml(`<main class=\"kombax-gateway direct-mode gateway-premium\" data-kombax-view=\"profile-hub\"><div class=\"gateway-ambient\" aria-hidden=\"true\"><i></i><i></i><i></i></div><section class=\"gateway-directory premium-surface\"><div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"kx-hub-back\" type=\""
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 646,
+      "line": 665,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const memberProfilesBase=supportDirect?[]:(socialProfiles||[]).filter(x=>x.sujeto_tipo==='miembro');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 653,
+      "line": 672,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const memberMemberships=membershipRows.filter(x=>x.modo==='alumno'&&x.estado==='activo');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 654,
+      "line": 673,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const familyMemberships=membershipRows.filter(x=>x.modo==='tutor'&&x.estado==='activo');"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 657,
+      "line": 676,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const membershipCards=membershipRows.map(m=>`<article class=\"kx-profile-owned kx-member-identity\"><header><div class=\"direct-profile-icon\">${featureIcon('identity',{size:44})}</div><div><span>${m.modo==='alumno'?'MIEMBRO / PRACTICANTE':'FAMILIAR / TUTOR'}</span><strong>${esc(m.modo==='alumno'?`${m.alumno_nombre||''} ${"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 658,
+      "line": 677,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const memberPublicCard=memberPublicProfile?`<article class=\"kx-profile-owned kx-member-public-identity\"><header><div class=\"direct-profile-icon\">${featureIcon('identity',{size:44})}</div><div><span>PERFIL PÚBLICO · MIEMBRO / PRACTICANTE</span><strong>${esc(memberPublicProfile.nombre_publico||state.session?.nombre||'Mi "
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 663,
+      "line": 682,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"kx-hub-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<button class=\"btn btn-ghost btn-sm\" id=\"kx-hub-home\" type=\"button\">${icon('home',{size:16})} Inicio</"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 664,
+      "line": 683,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${supportDirect?`<div class=\"kx-support-mode-banner embedded\"><div>${icon('shieldCheck',{size:18})}<span><strong>MODO SOPORTE KOMBAX</strong><small>${esc(state.session?.support_name||'Perfil')} · ${esc(state.session?.support_reason||'Acceso administrativo auditado')}</small></span></div><button class=\"btn btn-ghost btn"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 665,
+      "line": 684,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<header class=\"kx-hub-header\"><div><span class=\"gateway-eyebrow\">${supportDirect?'SOPORTE ADMINISTRATIVO':freeUnconfiguredAccount?'CUENTA KOMBAX GRATUITA':memberMemberships.length?'MIEMBRO / PRACTICANTE · CUENTA GRATUITA':familyMemberships.length?'FAMILIAR / TUTOR · CUENTA GRATUITA':'IDENTIDAD GLOBAL'}</span><h1>${esc("
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 666,
+      "line": 685,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${freeUnconfiguredAccount?`<section class=\"kx-spectator-home\"><div class=\"kx-spectator-home-head\"><div><span>EXPLORA KOMBAX</span><h2>Explora ahora. Completa tu perfil cuando quieras.</h2><p>Tu cuenta gratuita puede conocer la comunidad, los productos y los eventos sin quedar etiquetada automáticamente como Espectador."
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 667,
+      "line": 686,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "${supportDirect?'':`<div class=\"kx-hub-actions ${freeUnconfiguredAccount?'spectator-minimal':''}\">${activeAccountPolicy.canCreate?'<button class=\"btn btn-primary\" id=\"kx-new-profile\">+ Solicitar perfil</button>':''}${freeUnconfiguredAccount?'':`<button class=\"btn btn-ghost\" id=\"kx-open-social\">KOMBAX Social</button><bu"
+      "sample": "${supportDirect?'':`<div class=\"kx-hub-actions ${freeUnconfiguredAccount?'spectator-minimal':''}\">${activeAccountPolicy.canCreate?(activeAccountPolicy.kind==='miembro'?'<button class=\"btn btn-primary\" id=\"kx-new-profile\">Solicitar perfil Competidor</button>':'<button class=\"btn btn-primary\" id=\"kx-new-profile\">+ Solici"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 669,
+      "line": 688,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-hub-section\"><div class=\"kx-section-title\"><div><span>PERFILES Y MEMBRESÍAS</span><h2>Mi identidad KOMBAX</h2></div><small>${workspaceCount} elemento${workspaceCount===1?'':'s'}</small></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 670,
+      "line": 689,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "${workspaceCount?`<div class=\"kx-profile-owned-grid\">${memberPublicCard}${membershipCards}${(managedClubs||[]).map(c=>`<article class=\"kx-profile-owned kx-club-identity\"><header><div class=\"direct-profile-icon\">${featureIcon('club',{size:44})}</div><div><span>CLUB</span><strong>${esc(c.nombre_publico)}</strong><small>$"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 672,
+      "line": 691,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-hub-section\"><div class=\"kx-section-title\"><div><span>REVISIÓN</span><h2>Solicitudes</h2></div><small>${applications.length} solicitud${applications.length===1?'':'es'}</small></div>${applications.length?`<div class=\"kx-application-grid\">${applications.map(a=>applicationCard(a,profileById.get(a.perfi"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 673,
+      "line": 692,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Verificación separada del autorregistro</strong><p>Crear una cuenta o un perfil nunca concede una insignia, un club ni permisos sensibles. La revisión es explícita y trazable.</p></div></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 681,
+      "line": 700,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.getElementById('kx-global-logout')?.addEventListener('click',async()=>{await backend.signOut();toast('Sesión cerrada');renderDirectProfiles({onBack});});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 695,
+      "line": 701,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "document.getElementById('kx-new-profile')?.addEventListener('click',()=>{if(activeAccountPolicy?.kind==='miembro'){renderIdentityPresentation('competidor',{onBack:()=>renderDirectProfileHub({onBack}),memberProfiles});return;}chooseProfileType({onBack,memberProfiles,policy:activeAccountPolicy});});"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "line": 714,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.getElementById('kx-account-support')?.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'account',subjectId:state.session?.id,title:'Privacidad y soporte de mi cuenta',canAuthorize:true}));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 701,
+      "line": 720,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-profile-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'direct_profile',subjectId:b.dataset.kxProfileSupport,title:'Privacidad y soporte del perfil',canAuthorize:true})));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 705,
+      "line": 724,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-club-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'club',subjectId:b.dataset.kxClubSupport,title:'Privacidad y soporte del club',canAuthorize:true})));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 713,
+      "line": 732,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-application-withdraw]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Retirar solicitud','La solicitud dejará de revisarse. El historial no se falsifica ni se elimina.',async()=>{await repos.kombaxProfiles.withdrawApplication(b.dataset.kxApplicationWithdraw);toast('Solicit"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 723,
+      "line": 742,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "}else if(pendingType&&directTypes.some(t=>t.id===pendingType&&!t.disabled&&!t.baseOnly)&&['competidor','marca','federacion','profesional','media','espectador'].includes(pendingType)){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 725,
+      "line": 744,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "}else if(pendingType==='club'&&!applications.some(a=>a.tipo==='club'&&['submitted','under_review','needs_information'].includes(a.estado))){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 745,
+      "line": 764,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const type=({club:'club',brand:'marca',federation:'federacion'})[selection?.audience];"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 755,
+      "line": 774,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!available.length){toast('Esta cuenta ya tiene asignado su tipo de perfil.','warning');return;}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 756,
+      "line": 775,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const subtitle=policy?.kind==='miembro'?'Tu membresía ya está confirmada. Puedes solicitar Competidor sin crear otra cuenta.':'Elige cómo quieres usar KOMBAX. La cuenta es gratuita; Espectador y Miembro/Familiar son recorridos de acceso, y las identidades oficiales mantienen sus verificaciones.';"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 757,
+      "line": 776,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const {wrap}=openDetail({title:policy?.kind==='miembro'?'Evolucionar mi perfil':'Elige tu perfil KOMBAX',subtitle,width:'880px',body:`<div class=\"kx-type-picker\">${available.map(t=>`<button type=\"button\" data-kx-pick=\"${esc(t.id)}\"><span>${featureIcon(t.icon,{size:42})}</span><strong>${esc(t.label)}</strong><small>${es"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 767,
+      "line": 786,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"direct-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class=\"gateway-directory-step\">CUENTA GRATUITA KOMBAX</span></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 768,
+      "line": 787,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<header><span class=\"gateway-eyebrow\">IDENTIDAD KOMBAX</span><h1>¿Cómo quieres usar KOMBAX?</h1><p>Crea una única cuenta KOMBAX gratuita y elige tu recorrido. Crear la cuenta no te convierte automáticamente en Espectador ni concede una identidad oficial. Podrás explorar Social, Showcase y Events mientras completas el p"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 769,
+      "line": 788,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"direct-profile-grid\">${onboardingTypes.map(t=>`<button class=\"direct-profile-card ${t.disabled?'is-disabled':''}\" type=\"button\" style=\"--profile-accent:${t.accent}\" data-profile-type=\"${esc(t.id)}\" ${t.disabled?'disabled':''}><div class=\"direct-profile-icon\">${featureIcon(t.icon,{size:58})}</div><div class="
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 770,
+      "line": 789,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Una cuenta, una identidad principal</strong><p>Miembro/Practicante solo puede publicar en Social cuando un club confirma su membresía. Competidor puede solicitarse directamente o evolucionar desde Miem"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 771,
+      "line": 790,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"kx-direct-auth-row\"><button class=\"btn btn-primary\" id=\"kx-free-account\">Crear cuenta gratuita</button><button class=\"btn btn-ghost\" id=\"kx-existing-account\">Ya tengo cuenta KOMBAX</button></div>"

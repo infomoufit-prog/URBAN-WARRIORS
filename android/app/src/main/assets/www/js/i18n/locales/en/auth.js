@@ -24,7 +24,7 @@ export default {
     "birthDate": "Date of birth",
     "adultName": "Adult first name",
     "adultLastName": "Adult last name",
-    "adultBirthDate": "Adult date of birth (optional)",
+    "adultBirthDate": "Adult date of birth",
     "minPassword": "Minimum 8 characters."
   },
   "errors": {

@@ -1,0 +1,5 @@
+
+> urban-warriors-2.0.0-rc13@2.0.0-rc.13-r117-pilot-hotfix-2 test:20172:r117-hotfix2
+> node scripts/test-kombax-20172-r117-pilot-hotfix-2.mjs
+
+OK 15/15 · KOMBAX R117 build 20172 Pilot Hotfix 2

@@ -1,0 +1,15 @@
+KOMBAX R117 · PILOT HOTFIX 2
+Release: 2.0.0-rc.13-r117-pilot-hotfix-2
+Build / Android versionCode: 20172
+Package: com.urbanwarriors.app
+Date: 2026-10-02
+Base: R117 build 20171 Pilot Hotfix 1
+
+Scope:
+- Mandatory private date of birth on every NEW KOMBAX account signup, regardless of intended profile.
+- Date of birth is captured once at account creation and reused by age-gated Member/Competitor/Professional/Spectator flows.
+- Established Member: if club membership + public Social profile + age/consent publication entitlement are already active, login restores directly into the Member/club workspace instead of showing profile-request onboarding again.
+- Pending/unlinked Member keeps the public-profile/linking flow.
+- R117 20171 rules retained: open Pilot Club registration without code; optional member invitation code; member/family no-code request + club approval; Elite Social public profile independent of club; Member album without feed publication until club confirmation; Spectator no album/no feed; network separate from feed publication; Android lifecycle continuity.
+
+Backend pilot migrations applied live through birthdate_required_all_new_accounts_r117_18.
