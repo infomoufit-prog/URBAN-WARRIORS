@@ -146,7 +146,7 @@ where t.estado='abierta'
   );
 select set_config('kombax.lifecycle_gateway','',true);
 
-do $
+do $$
 begin
  if position('already_linked' in pg_get_functiondef('public.app_kombax_club_link_request_r117(uuid,text,text,uuid)'::regprocedure))=0 then
    raise exception 'R118_ASSERT_ALREADY_LINKED_GUARD_MISSING';
