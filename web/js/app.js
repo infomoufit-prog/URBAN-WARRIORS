@@ -392,10 +392,13 @@ function openTeamAccessCode(prefill='',prefillRole=''){
       }
       if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');
       const birth=validateBirthDate(v.fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años.'});
-      const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos,fecha_nacimiento:birth.value,terms:v.terms,privacy:v.privacy});
-      if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({kind:oneTime?'one_time':'generic',club_slug:slug,code,email:v.email,role}));toast(oneTime?'Cuenta creada. Confirma tu email y después accede a KOMBAX; la invitación personal se activará al validar el mismo correo.':'Cuenta creada. Confirma tu email y después accede a KOMBAX; la solicitud quedará registrada.');renderGatewayRoot();return;}
-      if(oneTime){await backend.acceptTeamInvitation(code);toast(`Cuenta creada e invitación aceptada como ${teamInviteRoleLabel(role)}.`,'ok');}
-      else{await backend.requestTeamAccess(slug,code,v.email,role);toast(`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');}
+      const pendingTeamAccess={kind:oneTime?'one_time':'generic',club_slug:slug,code,email:v.email,role};
+      const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos,fecha_nacimiento:birth.value,terms:v.terms,privacy:v.privacy,pendingTeamAccess});
+      if(created.confirmationRequired){
+        toast(oneTime?'Cuenta creada. Confirma tu email y después inicia sesión; KOMBAX completará la invitación personal con ese mismo correo.':'Cuenta creada. Confirma tu email y después inicia sesión; KOMBAX enviará entonces la solicitud al club.');
+        renderGatewayRoot();return;
+      }
+      toast(oneTime?`Cuenta creada e invitación aceptada como ${teamInviteRoleLabel(role)}.`:`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');
       await backend.signOut();renderClubLogin(v.email);
     }
   });
