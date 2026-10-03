@@ -16,7 +16,7 @@
     "certify:static": "npm test && node scripts/build.mjs",
     "fixtures:load": "node scripts/generate-kombax-load-fixture.mjs",
     "release:legal-gate": "node scripts/release-legal-gate.mjs",
-    "release:build": "npm run release:sync-build && npm run release:legal-gate && node scripts/release-netlify-r104-3.mjs",
+    "release:build": "npm run release:legal-gate && node scripts/release-netlify-r104-3.mjs",
     "test:20084": "node scripts/test-kombax-20078-public-product-overview.mjs && node scripts/test-kombax-20079-finance-premium-foundation.mjs && node scripts/test-kombax-20080-finance-premium.mjs && node scripts/test-kombax-20081-finance-reports.mjs && node scripts/test-kombax-20082-finance-qa.mjs && node scripts/test-kombax-20082-finance-regression-matrix.mjs && node scripts/test-kombax-20083-finance-final.mjs && node scripts/test-kombax-20083-context-isolation.mjs && node scripts/test-kombax-20083-release.mjs && node scripts/test-kombax-20084-context-regression.mjs && node scripts/test-kombax-20084-security-go-live.mjs && node scripts/test-kombax-20084-pilot-release.mjs && node scripts/test-kombax-20084-cumulative-release.mjs",
     "certify:20084": "npm run test:20084 && node scripts/build.mjs",
     "test:20086": "node scripts/test-kombax-20086-finance-receipts-reports-visuals.mjs",
