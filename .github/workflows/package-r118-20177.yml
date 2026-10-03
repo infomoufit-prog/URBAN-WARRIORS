@@ -19,6 +19,28 @@ jobs:
           ref: 3e4d7d97bda60a0f1503715b2659ccf029980bc7
           fetch-depth: 1
 
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Execute R118 verification gate
+        shell: bash
+        run: npm run verify:20177
+
+      - name: Check changed JavaScript syntax
+        shell: bash
+        run: |
+          node --check web/js/core/account-profile-policy.js
+          node --check web/js/core/repositories.js
+          node --check web/js/modules/gateway.js
+          node --check web/js/modules/kombax-discovery.js
+          node --check web/js/modules/platform-admin.js
+          node --check web/js/modules/professional-operations.js
+          node --check web/js/modules/public-profile.js
+          node --check web/js/core/backend.js
+          node --check web/js/app.js
+
       - name: Create cumulative archive, parts and verification helpers
         shell: bash
         run: |
