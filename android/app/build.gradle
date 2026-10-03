@@ -36,8 +36,8 @@ android {
         applicationId 'com.urbanwarriors.app'
         minSdk 26
         targetSdk 36
-        versionCode 20175
-        versionName '2.0.0-rc.13-r117-pilot-hotfix-5'
+        versionCode 20176
+        versionName '2.0.0-rc.13-r117-pilot-hotfix-6'
         // historical-release-marker: versionCode 20161 · versionName '2.0.0-rc.13-r108-finance-guide-poster'
         // historical-release-marker: versionCode 20134 · versionName '2.0.0-rc.13-r81-tap-to-pay'
         // historical regression markers: versionCode 20101 · versionName '2.0.0-rc.13'
