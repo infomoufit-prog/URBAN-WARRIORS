@@ -79,12 +79,23 @@ jobs:
 
           ls -lh "$NAME.zip" "$NAME.zip".??? "$NAME.sha256.txt" "$NAME.parts.sha256.txt" "REUNIFICAR_KOMBAX_R118_20177.cmd" "KOMBAX_R118_20177_RELEASE_MANIFEST.txt"
 
-      - name: Upload cumulative package
+      - name: Upload full cumulative ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: KOMBAX_R118_20177_CUMULATIVE
+          name: KOMBAX_R118_20177_FULL
           path: |
             KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.zip
+            KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.sha256.txt
+            KOMBAX_R118_20177_RELEASE_MANIFEST.txt
+          compression-level: 0
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload split cumulative package
+        uses: actions/upload-artifact@v4
+        with:
+          name: KOMBAX_R118_20177_PARTS
+          path: |
             KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.zip.???
             KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.sha256.txt
             KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.parts.sha256.txt
