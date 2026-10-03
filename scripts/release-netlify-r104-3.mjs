@@ -5,6 +5,17 @@ import {resolve} from 'node:path';
 const root=resolve(import.meta.dirname,'..');
 const scripts=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8')).scripts;
 
+const sync=spawnSync(process.execPath,['scripts/sync-release-build.mjs'],{
+  cwd:root,encoding:'utf8',maxBuffer:4*1024*1024,timeout:30000,
+});
+if(sync.error) throw sync.error;
+if(sync.status!==0){
+  console.error('BLOCKED release sync');
+  console.error(`${sync.stdout||''}\n${sync.stderr||''}`.slice(-5000));
+  process.exit(1);
+}
+if(sync.stdout) console.log(sync.stdout.trim());
+
 // Existing strict suites remain available through `npm test`. The remaining
 // I18N failures are tracked pilot P2 debt; any unexpected failure still blocks deploy.
 const R79_I18N_UNRESOLVED_BASELINE=255; // R110 audited historical debt; blocks any increase.
