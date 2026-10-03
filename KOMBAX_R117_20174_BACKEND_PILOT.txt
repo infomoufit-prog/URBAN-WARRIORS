@@ -1,0 +1,36 @@
+KOMBAX R117 build 20174 · ESTADO BACKEND PILOTO
+Proyecto Supabase activo: poggsobhtutbuagjiydc · eu-west-1
+
+MIGRACIONES POST-20172 CONSOLIDADAS EN ESTE ZIP
+309_kombax_member_save_optional_sport_r117.sql
+  - app_guardar_socio: disciplina/grupo opcionales; ficha básica primero.
+
+310_kombax_preenrollment_optional_sport_r117.sql
+  - app_aprobar_preinscripcion: aprobación sin disciplina/grupo.
+
+311_kombax_progressive_club_enrollment_r117.sql
+  - app_crear_preinscripcion: ya no exige membresía previa.
+  - registrar_cuenta_club: no crea miembros_club antes de aprobación.
+  - app_kombax_preinscripcion_aprobar_r59: aprobación directa para cuenta adulta/tutor autenticado; invitación sigue como alternativa.
+
+312_kombax_pilot_club_minimal_progressive_r117.sql
+  - app_kombax_pilot_club_activate_r110: Club Piloto directo y progresivo.
+  - no requiere código, aprobación, documento inicial, ubicación, disciplina o teléfono.
+
+313_kombax_member_social_profile_canonical_age_r117.sql
+  - Perfil Social de Miembro/Practicante independiente del Club.
+  - reutiliza DOB canónica privada.
+  - álbum/red sí; publicación feed no hasta membresía confirmada.
+
+314_kombax_professional_social_profile_progressive_r117.sql
+  - Profesional puede crear Perfil Social sin especialidad inicial.
+  - especialidad informada se valida; la verificación profesional conserva sus requisitos.
+
+MIGRACIONES ANTERIORES 302-308
+Se conservan íntegramente en el ZIP para reconstrucción/auditoría.
+
+IMPORTANTE
+- El backend piloto YA recibió estos cambios durante la estabilización.
+- No hacer db push indiscriminado sobre el proyecto piloto.
+- Comparar historial de migraciones antes de cualquier operación de sincronización.
+- No usar restore-drill u otros project_id antiguos.

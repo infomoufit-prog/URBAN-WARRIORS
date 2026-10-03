@@ -1,7 +1,8 @@
 {
-  "generated_at": "2026-10-02T14:00:09.690Z",
+  "generated_at": "2026-10-03T08:41:52.148Z",
   "targets": [
     "web/js/app.js",
+    "web/js/core/account-birth-date.js",
     "web/js/core/account-profile-policy.js",
     "web/js/core/adaptive-poller.js",
     "web/js/core/assist-specialists.js",
@@ -28,6 +29,7 @@
     "web/js/core/utils.js",
     "web/js/core/verification-visual.js",
     "web/js/delete-account.js",
+    "web/js/modules/account-birth-date.js",
     "web/js/modules/account-security.js",
     "web/js/modules/admin.js",
     "web/js/modules/auth-recovery.js",
@@ -96,17 +98,23 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4887,
-  "covered": 4648,
-  "unresolved": 239,
-  "coverage": 95.11,
+  "phrases": 4920,
+  "covered": 4693,
+  "unresolved": 227,
+  "coverage": 95.39,
   "skipped": 384,
   "files": {
     "web/js/app.js": {
-      "total": 122,
-      "covered": 118,
+      "total": 126,
+      "covered": 126,
       "skipped": 6,
-      "coverage": 96.72
+      "coverage": 100
+    },
+    "web/js/core/account-birth-date.js": {
+      "total": 2,
+      "covered": 2,
+      "skipped": 1,
+      "coverage": 100
     },
     "web/js/core/account-profile-policy.js": {
       "total": 1,
@@ -127,10 +135,10 @@
       "coverage": 100
     },
     "web/js/core/backend.js": {
-      "total": 43,
-      "covered": 41,
+      "total": 46,
+      "covered": 46,
       "skipped": 5,
-      "coverage": 95.35
+      "coverage": 100
     },
     "web/js/core/capability-resolver.js": {
       "total": 0,
@@ -247,10 +255,10 @@
       "coverage": 100
     },
     "web/js/core/utils.js": {
-      "total": 44,
-      "covered": 41,
+      "total": 53,
+      "covered": 50,
       "skipped": 0,
-      "coverage": 93.18
+      "coverage": 94.34
     },
     "web/js/core/verification-visual.js": {
       "total": 1,
@@ -261,6 +269,12 @@
     "web/js/delete-account.js": {
       "total": 17,
       "covered": 17,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/account-birth-date.js": {
+      "total": 6,
+      "covered": 6,
       "skipped": 0,
       "coverage": 100
     },
@@ -421,14 +435,14 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 279,
-      "covered": 252,
-      "skipped": 8,
-      "coverage": 90.32
+      "total": 282,
+      "covered": 261,
+      "skipped": 7,
+      "coverage": 92.55
     },
     "web/js/modules/groups-members.js": {
-      "total": 172,
-      "covered": 172,
+      "total": 178,
+      "covered": 178,
       "skipped": 11,
       "coverage": 100
     },
@@ -668,30 +682,6 @@
     }
   },
   "unresolved_samples": [
-    {
-      "file": "web/js/app.js",
-      "value": "La cuenta de padre, madre o tutor debe corresponder a una persona adulta."
-    },
-    {
-      "file": "web/js/app.js",
-      "value": "Fecha de nacimiento (solo cuenta nueva)"
-    },
-    {
-      "file": "web/js/app.js",
-      "value": "Necesaria para verificar los requisitos de edad de la cuenta KOMBAX."
-    },
-    {
-      "file": "web/js/app.js",
-      "value": "Indica una fecha de nacimiento válida. La cuenta autónoma KOMBAX está disponible a partir de los 16 años."
-    },
-    {
-      "file": "web/js/core/backend.js",
-      "value": "Indica tu fecha de nacimiento."
-    },
-    {
-      "file": "web/js/core/backend.js",
-      "value": "Indica la fecha de nacimiento del titular de la cuenta."
-    },
     {
       "file": "web/js/core/media.js",
       "value": "El logo supera 5 MB. Selecciona una versión más ligera."
@@ -1074,19 +1064,11 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Se reutiliza la fecha privada indicada al crear la cuenta. Alta autónoma de Competidor: 16+."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "Solo identidad pública gratuita"
     },
     {
       "file": "web/js/modules/gateway.js",
       "value": "Puedes solicitar la identidad pública sin plan. La verificación no realiza ningún cobro ni activa funciones de pago."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Se reutiliza la fecha privada indicada al crear la cuenta. Debe acreditar 18+."
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -1098,27 +1080,11 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Tu membresía y tu perfil Social están activos. Al entrar accederás directamente a tu espacio de Miembro, con tu navegación habitual y los servicios del club."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Tu club ha confirmado esta membresía. Completa una sola vez la activación de tu perfil público de Miembro; después entrarás directamente en tu espacio."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "Esta cuenta ya tiene asignado su tipo de perfil."
     },
     {
       "file": "web/js/modules/gateway.js",
       "value": "La plaza y el nivel de acceso requieren confirmación de KOMBAX. No necesitas tarjeta para el piloto."
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Preparando tu espacio de Miembro…"
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Comprobando tu perfil Social y la vinculación con tu club."
     },
     {
       "file": "web/js/modules/gateway.js",

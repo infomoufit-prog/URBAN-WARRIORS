@@ -8,7 +8,7 @@ Pilot: 01/10/2026–15/11/2026
 REGLAS CANÓNICAS DEL HOTFIX
 - Club Piloto: alta directa dentro de la ventana y plazas disponibles. No requiere código de invitación.
 - Los códigos/invitaciones de miembro/familia siguen existiendo como vía opcional de vinculación.
-- Miembro/Practicante sin club: perfil Elite Social público + avatar + banner + información + álbum; no publica en feed.
+- Miembro/Practicante sin club: perfil Perfil Social público + avatar + banner + información + álbum; no publica en feed.
 - Miembro/Practicante con membresía real confirmada: conserva el mismo perfil y puede publicar si cumple reglas de edad/consentimiento.
 - Espectador: perfil público básico + avatar/banner/información; sin álbum y sin publicación en feed.
 - Red KOMBAX: la capacidad de perfil/red se separa del permiso de publicación. Las reglas de edad de chat directo se mantienen.

@@ -24,7 +24,7 @@ export default {
     "birthDate": "Petsa ng kapanganakan",
     "adultName": "Pangalan ng adult",
     "adultLastName": "Apelyido ng adult",
-    "adultBirthDate": "Petsa ng kapanganakan ng adult",
+    "adultBirthDate": "Kapanganakan ng adult (opsyonal)",
     "minPassword": "Hindi bababa sa 8 character."
   },
   "errors": {

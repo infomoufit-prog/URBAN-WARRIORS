@@ -1,0 +1,18 @@
+R79 full product audit: 5033 candidates · 540 R79 · 1221 R78 · 3031 legacy 7/7 · 241 unresolved
+67	web/js/modules/customer-operations.js
+64	web/js/modules/platform-admin.js
+32	web/js/modules/plan-services.js
+25	web/js/modules/gateway.js
+12	web/js/modules/media-content-center.js
+11	web/js/modules/managed-profile-hub.js
+7	web/js/modules/showcase.js
+5	web/js/modules/finance-guide.js
+4	web/js/core/utils.js
+4	web/js/modules/admin.js
+3	web/js/modules/club-poster.js
+2	web/js/modules/club-profile.js
+1	web/js/core/media.js
+1	web/js/core/repositories.js
+1	web/js/modules/guides.js
+1	web/js/modules/help-legal.js
+1	web/js/modules/kombax-social.js

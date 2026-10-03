@@ -1,0 +1,21 @@
+KOMBAX R117 · PILOT HOTFIX 2 · REGISTRO/AUTH
+Release: 2.0.0-rc.13-r117-pilot-hotfix-2
+Build / Android versionCode: 20172
+Package: com.urbanwarriors.app
+Base inmediata: R117 build 20171 Pilot Hotfix 1
+Piloto: 01/10/2026–15/11/2026
+
+REGLAS CANONICAS
+- Fecha de nacimiento privada obligatoria para TODA cuenta nueva; se transmite al Auth signup en ISO YYYY-MM-DD.
+- Cuenta historica sin DOB: pedir una vez; no inventar ni inferir una fecha ambigua.
+- Club Piloto: alta directa durante ventana/plazas; sin codigo del programa piloto y sin autorizacion manual previa.
+- Los codigos/invitaciones de miembro/familia siguen como via opcional de vinculacion.
+- Miembro/Practicante sin club: Perfil Social publico + avatar + banner + info + album + red; no feed.
+- Miembro con membresia confirmada: misma identidad; feed habilitable segun edad/consentimiento.
+- Espectador: perfil publico basico + avatar/banner/info/red; sin album y sin feed.
+- Vinculacion a club habilita la capa privada: ficha, cuotas/cobros, asistencia, documentos y comunicaciones internas.
+- Showcase/Events/compra publica no dependen de una membresia de club; se mantienen edad/pago.
+- Taxonomia oficial: Club, Miembro, Competidor, Marca, Federacion, Profesional, Media, Espectador.
+- Android: continuidad WebView/ruta tras llamada, multitarea y recreacion de Activity se conserva.
+
+Backend: hotfixes aplicados al Supabase piloto activo. No hacer db push indiscriminado sin reconciliar historial.

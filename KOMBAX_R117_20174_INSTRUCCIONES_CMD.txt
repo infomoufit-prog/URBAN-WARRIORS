@@ -1,0 +1,97 @@
+KOMBAX R117 · build 20174 · PILOT HOTFIX 4 · FRICTION / PERFIL SOCIAL / REGISTRO PROGRESIVO
+Release: 2.0.0-rc.13-r117-pilot-hotfix-4
+Android versionCode: 20174
+Package: com.urbanwarriors.app
+Base empaquetada anterior: R117 build 20172 Registration Hotfix 2
+
+OBJETIVO DE ESTA ENTREGA
+- Consolidar en el código acumulativo los hotfixes de backend aplicados después de 20172.
+- Usar siempre la denominación "Perfil Social". "Elite Social" queda obsoleto como término de producto.
+- Reducir fricción: crear primero, completar después, verificar solo cuando una capacidad lo necesite.
+- Alumno: guardar ficha sin disciplina ni grupo; asignación deportiva posterior.
+- Preinscripción/vinculación: no exigir pertenecer previamente al Club.
+- Miembro/Practicante: Perfil Social + álbum + red sin Club; feed solo tras membresía confirmada.
+- Espectador: Perfil Social básico; sin álbum ni feed.
+- Club Piloto: alta directa; sin código, revisión documental o autorización manual; ubicación/disciplina/teléfono progresivos.
+- Profesional: Perfil Social antes de especialidad; la especialidad sigue validándose si se informa y sigue siendo exigible en verificación profesional.
+- Fecha de nacimiento: contrato privado/canónico conservado para cuentas nuevas e históricas.
+- Mantener Android continuity fix tras llamada/multitarea.
+
+1) VERIFICAR EN TU PC
+Ejecuta:
+  KOMBAX_R117_20174_VERIFY_LOCAL.cmd
+
+Debe pasar como mínimo:
+- R115: 11/11
+- R116: 12/12
+- R117 perfiles/alta abierta: 7/7
+- R117 build 20174 friction/Profile Social: 46/46
+- build determinista: web = dist = Android
+- release gate Netlify sin fallos nuevos
+
+El preflight Android puede advertir que falta la firma local. No incluyas nunca la clave privada dentro del ZIP.
+
+2) BACKEND SUPABASE
+El Supabase piloto activo ya contiene las migraciones funcionales 309-314 equivalentes a los hotfixes aplicados en producción/piloto.
+NO ejecutes `supabase db push` indiscriminadamente.
+Revisa primero:
+  KOMBAX_R117_20174_BACKEND_PILOT.txt
+
+3) DEPLOY WEB / NETLIFY
+Ejecuta:
+  KOMBAX_R117_20174_DEPLOY_NETLIFY.cmd
+
+El script:
+- ejecuta QA 20174;
+- ejecuta el gate de release;
+- muestra `netlify status`;
+- exige escribir DESPLEGAR;
+- publica `dist` como producción.
+
+IMPORTANTE:
+La conexión Netlify disponible durante esta preparación solo mostraba el sitio `learninglabnexo`, NO KOMBAX.
+NO publiques allí.
+En tu PC, usa `netlify link` y selecciona explícitamente el sitio real de KOMBAX/kombax.es antes de escribir DESPLEGAR.
+
+4) PRUEBA ANDROID DEBUG
+Ejecuta:
+  KOMBAX_R117_20174_BUILD_ANDROID_QA.cmd
+
+Salida esperada:
+  artifacts\KOMBAX_20174_R117_PILOT_HOTFIX_QA_DEBUG.apk
+
+Pruebas reales mínimas:
+- alta cuenta con DOB;
+- Miembro/Practicante sin Club: Perfil Social + álbum + red, sin feed;
+- Espectador: Perfil Social básico, sin álbum/feed;
+- alumno guardado sin disciplina/grupo;
+- solicitud de vinculación sin código;
+- aprobación directa de adulto/tutor cuando procede;
+- Club Piloto con solo datos mínimos;
+- Profesional con Perfil Social antes de elegir especialidad;
+- llamada, WhatsApp, background y regreso a la misma ruta;
+- Social, Showcase, Events y compras según edad.
+
+5) GENERAR AAB GOOGLE PLAY
+Configura la MISMA upload key registrada en Google Play mediante:
+- android\keystore.properties
+  o
+- UW_KEYSTORE_PATH
+- UW_KEYSTORE_PASSWORD
+- UW_KEY_ALIAS
+- UW_KEY_PASSWORD
+
+Después ejecuta:
+  KOMBAX_R117_20174_BUILD_ANDROID_PLAY.cmd
+
+Salidas esperadas:
+  artifacts\KOMBAX_20174_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab
+  artifacts\KOMBAX_20174_R117_PILOT_HOTFIX_SIGNED.apk
+
+No canceles una release que Google Play tenga en revisión. Build 20174 mantiene `com.urbanwarriors.app`.
+
+6) REGLA CANÓNICA DE FRICCIÓN
+- Crear la cuenta o ficha con los datos realmente esenciales.
+- Completar disciplina, grupo, tarifa, ubicación, teléfono, especialidad, etc. después cuando no sean necesarios para esa acción.
+- Mantener edad, consentimiento, seguridad, límites de compra y controles de duplicado.
+- No confundir Perfil Social con feed, membresía privada, verificación o Commerce.

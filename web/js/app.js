@@ -2,6 +2,7 @@ import { backend, client } from './core/backend.js';
 import { state } from './core/state.js';
 import { repos } from './core/repositories.js';
 import { humanError, esc } from './core/utils.js';
+import { validateBirthDate } from './core/account-birth-date.js';
 import { has } from './core/permissions.js';
 import { createAdaptivePoller } from './core/adaptive-poller.js';
 import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge, setKombaxNotificationBadge, setMessageBadge } from './ui/components.js';
@@ -28,6 +29,7 @@ import { TEAM_INVITE_ROLES, teamInviteRoleLabel } from './core/invitations.js';
 import { mediaFrameStyle } from './ui/media-framing.js';
 import { installClientTelemetry } from './core/telemetry.js';
 import { showPlatformLegalGate } from './modules/platform-legal.js';
+import { promptMissingAccountBirthDate } from './modules/account-birth-date.js';
 import { renderClubFederationAdmin, renderSelfLicenses } from './modules/federation-licenses.js';
 import { renderPlanServices } from './modules/plan-services.js';
 import { renderKombaxHome } from './modules/kombax-home.js';
@@ -252,6 +254,7 @@ function renderClubSessionOrLegal({startAtHome=false}={}){
     return;
   }
   renderShell();
+  if(state.session?.birth_date_required===true)setTimeout(()=>promptMissingAccountBirthDate(),240);
 }
 
 function renderLogin(prefillEmail=''){
@@ -282,21 +285,21 @@ async function publicCatalog(){
   return {club:out.club,d:Array.isArray(out.d)?out.d:[],g:Array.isArray(out.g)?out.g:[],t:Array.isArray(out.t)?out.t:[],legal:Array.isArray(out.legal)?out.legal:[]};
 }
 function openRegistrationChoice(){
-  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><div class="registration-platform-mark"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""><span>Tecnología KOMBAX</span></div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar el entorno de tu club.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Tengo 16 años o más y quiero inscribirme como alumno</strong><small>Crearé mi propia cuenta y enviaré mi solicitud deportiva al club.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>Usa el código de equipo del club. Tu solicitud quedará pendiente hasta que Gestor o Coordinación valide tu acceso y rol.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Si eres menor de 16 años no crees una cuenta de alumno independiente: tu alta se gestiona mediante el club o la cuenta de tu padre, madre o tutor.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitationChoice();else openRegistration(type)}));
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:760px"><div class="modal-head"><div><div class="registration-platform-mark"><img src="${esc(KOMBAX_BRAND.symbol)}" alt=""><span>Tecnología KOMBAX</span></div><h2>Crear cuenta</h2><p>Selecciona cómo vas a utilizar el entorno de tu club.</p></div><button class="icon-btn" id="registration-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:22px"><div class="registration-choice"><button class="choice-card" data-registration="adulto"><strong>Tengo 16 años o más y quiero inscribirme como alumno</strong><small>Crearé mi propia cuenta y solicitaré vincularme al club. La disciplina y el grupo se pueden completar después.</small></button><button class="choice-card" data-registration="tutor"><strong>Soy padre, madre o tutor</strong><small>Crearé mi cuenta y añadiré a un menor.</small></button></div><button class="choice-card" style="width:100%" data-registration="invite"><strong>Formo parte del equipo</strong><small>Usa el código de equipo del club. Tu solicitud quedará pendiente hasta que Gestor o Coordinación valide tu acceso y rol.</small></button><p class="muted" style="font-size:11px;line-height:1.5;margin:18px 0 0">Si eres menor de 16 años no crees una cuenta de alumno independiente: tu alta se gestiona mediante el club o la cuenta de tu padre, madre o tutor.</p></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#registration-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelectorAll('[data-registration]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.registration;closeModal();if(type==='invite')openInvitationChoice();else openRegistration(type)}));
 }
 function showPublicLegal(doc){
   const d=document.createElement('dialog');d.className='legal-dialog';d.innerHTML=`<div class="legal-dialog-head"><div><strong>${esc(({condiciones_uso:'Condiciones de uso',privacidad:'Política de privacidad',comunidad:'Normas de Comunidad del Club',derechos_imagen:'Autorización de imagen'})[doc.tipo]||doc.tipo)}</strong><small>Versión ${esc(doc.version||'')}</small></div><button class="icon-btn" aria-label="Cerrar">${icon('close')}</button></div><div class="legal-dialog-body">${esc(doc.cuerpo||'').replace(/\n/g,'<br>')}</div>`;document.body.appendChild(d);d.querySelector('button').addEventListener('click',()=>{d.close();d.remove()});d.addEventListener('close',()=>d.remove());d.showModal();}
 async function openRegistration(type,invite=null){
   try{
     const c=await publicCatalog();const tutor=type==='tutor';const byType=Object.fromEntries((c.legal||[]).map(x=>[x.tipo,x]));
-    const modal=openForm({title:tutor?'Cuenta familiar':'Cuenta de alumno',subtitle:'Cuenta → datos → solicitud deportiva → consentimientos',width:'900px',fields:[
-      {name:'email',label:'Email de acceso',type:'email',required:true,value:invite?.email||''},{name:'password',label:'Contraseña',type:'password',required:true},{name:'adulto_nombre',label:tutor?'Nombre del adulto':'Nombre',required:true},{name:'adulto_apellidos',label:tutor?'Apellidos del adulto':'Apellidos',required:true},{name:'adulto_fecha_nacimiento',label:tutor?'Fecha de nacimiento del adulto':'Fecha de nacimiento',type:'date',required:true},{name:'telefono',label:'Teléfono',required:true},
+    const modal=openForm({title:tutor?'Cuenta familiar':'Cuenta de alumno',subtitle:'Cuenta → datos básicos → solicitud de vinculación → consentimientos',width:'900px',fields:[
+      {name:'email',label:'Email de acceso',type:'email',required:true,value:invite?.email||''},{name:'password',label:'Contraseña',type:'password',required:true},{name:'adulto_nombre',label:tutor?'Nombre del adulto':'Nombre',required:true},{name:'adulto_apellidos',label:tutor?'Apellidos del adulto':'Apellidos',required:true},{name:'adulto_fecha_nacimiento',label:tutor?'Fecha de nacimiento del adulto':'Fecha de nacimiento',type:'date',required:true,help:'Dato privado utilizado para aplicar las reglas de edad de KOMBAX.'},{name:'telefono',label:'Teléfono',help:'Opcional. Puedes completarlo más adelante en tu ficha.'},
       ...(tutor?[{name:'menor_nombre',label:'Nombre del menor',required:true},{name:'menor_apellidos',label:'Apellidos del menor',required:true},{name:'menor_fecha_nacimiento',label:'Nacimiento menor',type:'date',required:true}]:[]),
-      {name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:c.d.map(x=>({value:x.id,label:x.nombre}))},{name:'grupo_id',label:'Grupo preferido',type:'select',options:c.g.map(x=>({value:x.id,label:x.nombre}))},{name:'tarifa_id',label:'Tarifa',type:'select',options:c.t.map(x=>({value:x.id,label:`${x.nombre} · ${Number(x.importe||0).toFixed(2)} €`}))},
+      {name:'disciplina_id',label:'Disciplina · opcional',type:'select',options:c.d.map(x=>({value:x.id,label:x.nombre})),help:'Puedes crear la cuenta y solicitar la vinculación sin asignar todavía una disciplina.'},{name:'grupo_id',label:'Grupo preferido · opcional',type:'select',options:c.g.map(x=>({value:x.id,label:x.nombre})),help:'Puede asignarse después desde el Club.'},{name:'tarifa_id',label:'Tarifa · opcional',type:'select',options:c.t.map(x=>({value:x.id,label:`${x.nombre} · ${Number(x.importe||0).toFixed(2)} €`}))},
       {name:'terms',label:'He leído y acepto las Condiciones de uso.',type:'checkbox',value:false,required:true,full:true},{name:'privacy',label:'He leído la Política de privacidad.',type:'checkbox',value:false,required:true,full:true},{name:'image_rights',label:tutor?'Autorizo, de forma opcional, el uso de la imagen del menor dentro del club.':'Autorizo, de forma opcional, el uso de mi imagen dentro del club.',type:'checkbox',value:false,full:true}
     ],submitText:'Crear cuenta y enviar solicitud',onSubmit:async v=>{
       if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de privacidad.');
-      const years=ageYears(v.adulto_fecha_nacimiento);if(years==null)throw new Error('Indica una fecha de nacimiento válida.');if(!tutor&&years<16)throw new Error('El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor de 16, utiliza el alta mediante tutor o contacta con el club.');if(tutor&&years<18)throw new Error('La cuenta de padre, madre o tutor debe corresponder a una persona adulta.');
+      validateBirthDate(v.adulto_fecha_nacimiento,{minAge:tutor?18:16,minimumMessage:tutor?'La cuenta de padre, madre o tutor requiere una persona adulta de 18 años o más.':'El autorregistro como alumno está disponible a partir de los 16 años. Si eres menor de 16, utiliza el alta mediante tutor o contacta con el club.'});
       const legal_acceptances=[{tipo:'condiciones_uso',version:byType.condiciones_uso?.version||'2.0.0',aceptado:true},{tipo:'privacidad',version:byType.privacidad?.version||'2.0.0',aceptado:true},{tipo:'derechos_imagen',version:byType.derechos_imagen?.version||'2.0.0',aceptado:v.image_rights===true}];
       const r=await backend.registerAccount({...v,tipo_cuenta:type,legal_acceptances,invite_code:invite?.code||null,club_slug:invite?.club_slug||selectedClubSlug()});if(r.confirmationRequired){toast('Revisa tu email para confirmar la cuenta');renderLogin(v.email);}else{toast('Cuenta creada');renderClubSessionOrLegal({startAtHome:true});}
     }});
@@ -322,7 +325,7 @@ function openBoundStudentActivation(info,code,email){
     {name:'modo_cuenta',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta KOMBAX'},{value:'nueva',label:'No, crear mi cuenta KOMBAX'}]},
     {name:'email',label:'Email de acceso',type:'email',required:true,value:email,disabled:true,help:'La invitación solo puede activarse con este correo verificado.'},
     {name:'password',label:'Contraseña',type:'password',required:true,help:'Mínimo 8 caracteres.'},
-    {name:'nombre',label:'Nombre (solo cuenta nueva)',value:String(info?.nombre||'')},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'fecha_nacimiento',label:'Fecha de nacimiento (solo cuenta nueva)',type:'date',help:'Necesaria para verificar los requisitos de edad de la cuenta KOMBAX.'},
+    {name:'nombre',label:'Nombre (solo cuenta nueva)',value:String(info?.nombre||'')},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'fecha_nacimiento',label:'Fecha de nacimiento (solo cuenta nueva)',type:'date',help:'Obligatoria al crear una cuenta nueva. Dato privado.'},
     {name:'terms',label:'He leído y acepto las Condiciones de uso de KOMBAX.',type:'checkbox',value:false,required:true,full:true},
     {name:'privacy',label:'He leído la Política de Privacidad global de KOMBAX.',type:'checkbox',value:false,required:true,full:true}
   ],submitText:'Activar mi ficha',onSubmit:async v=>{
@@ -333,8 +336,9 @@ function openBoundStudentActivation(info,code,email){
       await backend.acceptStudentMembership(code);toast(`Ficha de ${clubName} activada sin duplicados.`,'ok');
       await backend.signOut();renderClubLogin(email);return;
     }
-    if(!String(v.nombre||'').trim())throw new Error('Indica tu nombre para crear la cuenta.');const years=ageYears(v.fecha_nacimiento);if(years==null||years<16)throw new Error('Indica una fecha de nacimiento válida. La cuenta autónoma KOMBAX está disponible a partir de los 16 años.');
-    const created=await backend.registerGlobalAccount({email,password:v.password,nombre:v.nombre,apellidos:v.apellidos||'',fecha_nacimiento:v.fecha_nacimiento,terms:v.terms,privacy:v.privacy});
+    if(!String(v.nombre||'').trim())throw new Error('Indica tu nombre para crear la cuenta.');
+    const birth=validateBirthDate(v.fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años. Si eres menor, utiliza el acceso familiar/tutor.'});
+    const created=await backend.registerGlobalAccount({email,password:v.password,nombre:v.nombre,apellidos:v.apellidos||'',fecha_nacimiento:birth.value,terms:v.terms,privacy:v.privacy});
     if(created.confirmationRequired){localStorage.setItem('uw2_pending_student_membership',JSON.stringify({code,email,club_id:info?.club_id||null,socio_id:info?.socio_id||null}));toast('Cuenta creada. Confirma tu correo y al entrar KOMBAX activará esta misma ficha del club.');renderGatewayRoot();return;}
     await backend.acceptStudentMembership(code);toast(`Cuenta creada y ficha de ${clubName} activada.`,'ok');
     await backend.signOut();renderClubLogin(email);
@@ -365,7 +369,7 @@ function openTeamAccessCode(prefill='',prefillRole=''){
     ...(!oneTime?[{name:'rol',label:'Rol solicitado',type:'select',required:true,value:validRequested||'monitor',options:TEAM_INVITE_ROLES}]:[]),
     {name:'modo',label:'¿Ya tienes una cuenta KOMBAX?',type:'select',required:true,value:'existente',options:[{value:'existente',label:'Sí, ya tengo cuenta'},{value:'nueva',label:'No, crear cuenta ahora'}]},
     {name:'email',label:'Email',type:'email',required:true},{name:'password',label:'Contraseña',type:'password',required:true,help:'Mínimo 8 caracteres.'},
-    {name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'fecha_nacimiento',label:'Fecha de nacimiento (solo cuenta nueva)',type:'date',help:'Necesaria para verificar los requisitos de edad de la cuenta KOMBAX.'},
+    {name:'nombre',label:'Nombre (solo cuenta nueva)'},{name:'apellidos',label:'Apellidos (solo cuenta nueva)'},{name:'fecha_nacimiento',label:'Fecha de nacimiento (solo cuenta nueva)',type:'date',help:'Obligatoria para crear una cuenta KOMBAX nueva. Dato privado.'},
     {name:'terms',label:'He leído y acepto las Condiciones de uso de KOMBAX.',type:'checkbox',value:false,required:true,full:true},
     {name:'privacy',label:'He leído la Política de Privacidad global de KOMBAX.',type:'checkbox',value:false,required:true,full:true}
   ];
@@ -386,8 +390,9 @@ function openTeamAccessCode(prefill='',prefillRole=''){
         else{await backend.requestTeamAccess(slug,code,v.email,role);toast(`Solicitud enviada para ${teamInviteRoleLabel(role)}. El club debe aprobarla.`,'ok');}
         await backend.signOut();renderClubLogin(v.email);return;
       }
-      if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');const years=ageYears(v.fecha_nacimiento);if(years==null||years<16)throw new Error('Indica una fecha de nacimiento válida. La cuenta autónoma KOMBAX está disponible a partir de los 16 años.');
-      const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos,fecha_nacimiento:v.fecha_nacimiento,terms:v.terms,privacy:v.privacy});
+      if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');
+      const birth=validateBirthDate(v.fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años.'});
+      const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos,fecha_nacimiento:birth.value,terms:v.terms,privacy:v.privacy});
       if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({kind:oneTime?'one_time':'generic',club_slug:slug,code,email:v.email,role}));toast(oneTime?'Cuenta creada. Confirma tu email y después accede a KOMBAX; la invitación personal se activará al validar el mismo correo.':'Cuenta creada. Confirma tu email y después accede a KOMBAX; la solicitud quedará registrada.');renderGatewayRoot();return;}
       if(oneTime){await backend.acceptTeamInvitation(code);toast(`Cuenta creada e invitación aceptada como ${teamInviteRoleLabel(role)}.`,'ok');}
       else{await backend.requestTeamAccess(slug,code,v.email,role);toast(`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');}
@@ -438,7 +443,7 @@ async function boot(){
     const hasTransactionalEntry=Boolean(paymentsEntry||paymentEntry||validConnect);
     if(marketingIdentity&&!hasTransactionalEntry&&(!session||session?.scope==='kombax')){
       renderIdentityPresentation(marketingIdentity,{onBack:session?.scope==='kombax'?()=>renderDirectProfileHub({onBack:renderGatewayRoot}):renderGatewayRoot});
-    }else if(session?.scope==='kombax')renderGlobalHome({onBack:renderGatewayRoot,restoreLast:!hasTransactionalEntry,autoMemberEntry:!hasTransactionalEntry});else if(session)renderClubSessionOrLegal({startAtHome:false});else renderLogin();
+    }else if(session?.scope==='kombax')renderGlobalHome({onBack:renderGatewayRoot,restoreLast:!hasTransactionalEntry});else if(session)renderClubSessionOrLegal({startAtHome:false});else renderLogin();
     if(connectNotice||paymentNotice){history.replaceState({},'',`${location.pathname}${location.hash||''}`);setTimeout(()=>toast(connectNotice||paymentNotice,paymentEntry==='cancelled'?'error':'ok'),80);}
   }catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));

@@ -14,7 +14,7 @@
 
 La entrada al programa Club Piloto es autoservicio durante la ventana configurada y mientras queden plazas. No existe requisito de `pilot_code`. La generación de códigos del programa piloto queda deshabilitada. Esto no elimina los códigos de acceso/invitaciones de alumnos, familias o equipo, que permanecen como vías opcionales de vinculación.
 
-### 2. Elite Social independiente de la membresía privada
+### 2. Perfil Social independiente de la membresía privada
 
 Se separan tres capacidades:
 

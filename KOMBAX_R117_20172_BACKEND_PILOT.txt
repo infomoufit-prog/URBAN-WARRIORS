@@ -1,18 +1,31 @@
-KOMBAX R117 build 20172 · BACKEND PILOTO
-Proyecto Supabase activo: poggsobhtutbuagjiydc
-Fecha: 2026-10-02
+KOMBAX R117 build 20172 · BACKEND PILOTO · REGISTRO/AUTH
 
-El backend del piloto YA contiene los hotfixes de esta entrega, incluidos:
-- lectura Social autenticada para Espectador;
-- visibilidad de solicitudes de acceso al club;
-- alta Club Piloto abierta sin código;
-- Elite Social Miembro independiente del club;
-- Espectador sin álbum/feed;
-- red/interacción separada del permiso de publicar;
-- vinculación Miembro/Familia por código opcional o solicitud + autorización del club;
-- perfil público básico de identidades directas;
-- fecha de nacimiento privada/canónica;
-- fecha de nacimiento obligatoria para toda NUEVA cuenta KOMBAX.
+El backend del proyecto piloto activo de Supabase ya contiene los hotfixes de estabilizacion aplicados durante el 02-03/10/2026.
+NO ejecutar automaticamente `supabase db push` contra el proyecto piloto solo por abrir este ZIP.
+Primero hay que reconciliar el historial local con las migraciones/hotfixes ya aplicados.
 
-NO ejecutar automáticamente las migraciones 302-308 en el backend piloto actual.
-Se incluyen en el ZIP para reconstrucción, auditoría y entornos nuevos.
+ESTADO CANONICO
+- Toda cuenta NUEVA debe aportar fecha de nacimiento privada en Auth (`fecha_nacimiento`, ISO YYYY-MM-DD).
+- El trigger de Auth valida y guarda DOB en `kombax_account_private_r117`.
+- Las cuentas historicas sin DOB disponen de RPC de estado/completado; nunca se inventa una fecha.
+- Backfill historico: solo se completa si todas las fuentes canonicas existentes coinciden en una unica fecha.
+- Alta Club Piloto: directa durante ventana/plazas, sin codigo de programa piloto, sin autorizacion manual previa.
+- Invitacion/codigo de alumno/familia: se conserva como VIA OPCIONAL de vinculacion.
+- Solicitud de vinculacion miembro/familia + aprobacion del club: activa.
+- Miembro sin club: Perfil Social + avatar/banner/info + album/red; feed bloqueado.
+- Espectador: Perfil Social basico + avatar/banner/info/red; sin album y sin feed.
+- Membresia confirmada habilita la capa privada del club y la publicacion de Miembro cuando cumple las reglas aplicables.
+- Showcase/Events/compra publica no exige pertenecer a un club; se conservan las reglas de edad y pago.
+- Taxonomia de perfiles alineada e incluye Media.
+
+MIGRACIONES ACUMULATIVAS R117 EN ESTE ZIP
+- 302_kombax_pilot_social_read_and_member_interest_r117.sql
+- 303_kombax_pilot_open_registration_no_code_r117.sql
+- 304_kombax_public_profiles_member_spectator_r117.sql
+- 305_kombax_pilot_easy_linking_elite_social_network_r117.sql
+- 306_kombax_elite_social_universal_public_profiles_r117.sql
+- 307_kombax_pilot_club_direct_self_service_r117.sql
+- 308_kombax_registration_birth_date_contract_r117.sql
+
+NOTA
+La migracion de datos concreta que convirtio la antigua solicitud de sanpedrourbanwarriors@gmail.com en Club Piloto activo fue una operacion de datos del piloto y no se replica como seed general.

@@ -1,4 +1,4 @@
-// KOMBAX R117 build 20172 Pilot Hotfix.
+// KOMBAX R117 build 20174 Pilot Hotfix.
 // New pilot copy uses English as the explicit fallback for all non-Spanish locales.
 // This prevents Spanish leakage during the pilot while native-language copy is curated.
 const EN=Object.freeze({
@@ -67,7 +67,55 @@ const EN=Object.freeze({
   "Se utilizará como foto principal de tu perfil público.":"It will be used as the main photo for your public profile.",
   "Se utilizará como cabecera de tu perfil público.":"It will be used as the header of your public profile.",
   "Gestionar álbum, foto y banner":"Manage album, photo and banner",
-  "Avatar, banner y álbum forman parte de tu perfil. Las fotos y vídeos del álbum no se publican automáticamente en el feed Social.":"Avatar, banner and album are part of your profile. Album photos and videos are not automatically published to the Social feed."
+  "Avatar, banner y álbum forman parte de tu perfil. Las fotos y vídeos del álbum no se publican automáticamente en el feed Social.":"Avatar, banner and album are part of your profile. Album photos and videos are not automatically published to the Social feed.",
+  "Fecha de nacimiento del adulto":"Adult's date of birth",
+  "La cuenta de padre, madre o tutor requiere una persona adulta de 18 años o más.":"A parent or guardian account requires an adult aged 18 or over.",
+  "Fecha de nacimiento (solo cuenta nueva)":"Date of birth (new account only)",
+  "Obligatoria al crear una cuenta nueva. Dato privado.":"Required when creating a new account. Private data.",
+  "La cuenta KOMBAX independiente está disponible a partir de los 16 años. Si eres menor, utiliza el acceso familiar/tutor.":"An independent KOMBAX account is available from age 16. If you are younger, use family/guardian access.",
+  "Obligatoria para crear una cuenta KOMBAX nueva. Dato privado.":"Required to create a new KOMBAX account. Private data.",
+  "La cuenta KOMBAX independiente está disponible a partir de los 16 años.":"An independent KOMBAX account is available from age 16.",
+  "Indica tu fecha de nacimiento.":"Enter your date of birth.",
+  "Estado de fecha de nacimiento:":"Date-of-birth status:",
+  "El autorregistro como alumno está disponible a partir de los 16 años.":"Student self-registration is available from age 16.",
+  "Indica tu fecha de nacimiento para crear la cuenta KOMBAX.":"Enter your date of birth to create the KOMBAX account.",
+  "La fecha de nacimiento no es válida. Revísala e inténtalo de nuevo.":"The date of birth is not valid. Check it and try again.",
+  "Si eres menor de 16 años, utiliza el alta mediante padre, madre o tutor.":"If you are under 16, register through a parent or guardian.",
+  "Ya existe una cuenta KOMBAX con este correo. Inicia sesión o recupera tu contraseña.":"A KOMBAX account already exists with this email. Sign in or recover your password.",
+  "No se pudo crear la cuenta. Revisa la fecha de nacimiento y los datos obligatorios e inténtalo de nuevo.":"The account could not be created. Check the date of birth and required details and try again.",
+  "Completa tu cuenta KOMBAX":"Complete your KOMBAX account",
+  "Necesitamos tu fecha de nacimiento para aplicar de forma privada las reglas de edad. No se muestra en tu perfil público.":"We need your date of birth to apply age rules privately. It is not shown on your public profile.",
+  "Dato privado. Se utiliza únicamente para comprobar requisitos de edad y seguridad.":"Private data. It is used only to check age and safety requirements.",
+  "Guardar y continuar":"Save and continue",
+  "Fecha de nacimiento guardada de forma privada.":"Date of birth saved privately.",
+  "Confirmo que los datos introducidos son correctos y que solicito activar este Club en el programa piloto KOMBAX":"I confirm that the information entered is correct and request activation of this Club in the KOMBAX pilot programme",
+  "Debes confirmar que los datos del Club son correctos.":"You must confirm that the Club information is correct.",
+  "Se usa de forma privada para verificar los requisitos de edad de KOMBAX.":"It is used privately to verify KOMBAX age requirements.",
+  "Crearé mi propia cuenta y solicitaré vincularme al club. La disciplina y el grupo se pueden completar después.":"I will create my own account and request to link it to the club. Discipline and group can be completed later.",
+  "Opcional. Puedes completarlo más adelante en tu ficha.":"Optional. You can complete it later in your profile.",
+  "Puede asignarse después desde el Club.":"It can be assigned later by the Club.",
+  "Puedes crear la cuenta y solicitar la vinculación sin asignar todavía una disciplina.":"You can create the account and request the link without assigning a discipline yet.",
+  "El Perfil Social independiente de Miembro/Practicante está disponible a partir de los 16 años. Para menores, utiliza la vinculación familiar o del club.":"The independent Member/Practitioner Social Profile is available from age 16. For younger users, use family or club linking.",
+  "Hemos encontrado una ficha del Club que podría corresponder a esta persona. Revisa la ficha existente y vincúlala en lugar de crear un duplicado.":"We found a Club record that may belong to this person. Review the existing record and link it instead of creating a duplicate.",
+  "La cuenta de padre, madre o tutor debe pertenecer a una persona de 18 años o más.":"A parent or guardian account must belong to a person aged 18 or over.",
+  "Ya existe una solicitud de vinculación pendiente para esta persona. Revisa la solicitud existente antes de crear otra.":"A pending link request already exists for this person. Review the existing request before creating another one.",
+  "Completar más adelante":"Complete later",
+  "El Perfil Social puede crearse primero. La especialidad será necesaria cuando actives capacidades profesionales verificadas.":"The Social Profile can be created first. A specialty will be required when you activate verified professional capabilities.",
+  "Puedes completarla después desde el perfil del Club.":"You can complete it later from the Club profile.",
+  "Puedes completarlo después.":"You can complete it later.",
+  "Separadas por comas; máximo 12. Puedes configurarlas después.":"Comma-separated; maximum 12. You can configure them later.",
+  "Teléfono de contacto del Club · opcional":"Club contact phone · optional",
+  "Ubicación pública · opcional":"Public location · optional",
+  "Email de acceso / tutor":"Access / guardian email",
+  "Indica el correo del tutor responsable.":"Enter the responsible guardian's email.",
+  "La ficha puede guardarse sin disciplina y completarse después.":"The record can be saved without a discipline and completed later.",
+  "No es necesario asignar grupo para registrar al alumno.":"A group does not need to be assigned to register the student.",
+  "Opcional en una preinscripción administrativa de adulto. Para menores se necesita el email del tutor responsable; si existe una cuenta KOMBAX vinculada, se reutiliza.":"Optional for an administrative adult pre-enrollment. For minors, the responsible guardian's email is required; if a linked KOMBAX account exists, it is reused.",
+  "Puede asignarse después.":"It can be assigned later.",
+  "Registro progresivo: primero los datos esenciales; disciplina, grupo, tarifa y teléfono pueden completarse después. Menores: tutor responsable.":"Progressive registration: enter the essential details first; discipline, group, fee and phone can be completed later. Minors: responsible guardian.",
+  "Teléfono · opcional":"Phone · optional",
+  "Solo se conserva para solicitudes iniciadas antes de R110. Las nuevas altas Club Piloto son directas: sin código de invitación, sin documentación inicial y sin revisión manual previa.":"This is kept only for requests started before R110. New Pilot Club registrations are direct: no invitation code, no initial documentation and no prior manual review."
+
 });
 export function localizeR117PilotHotfixText(source,locale='es'){
   if(String(locale||'es').toLowerCase()==='es')return '';

@@ -3,7 +3,7 @@
 > node scripts/android-debug-qa.mjs
 
 > /opt/nvm/versions/node/v22.16.0/bin/node scripts/build.mjs
-OK build 622 archivos · web = dist = Android
+OK build 624 archivos · web = dist = Android
 > sh ./gradlew clean assembleDebug
 Downloading https://services.gradle.org/distributions/gradle-8.11.1-bin.zip
 

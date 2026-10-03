@@ -66,6 +66,15 @@ function humanErrorSpanish(error) {
   if(error?.code==='AUTH_EXPIRED')return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
   const raw=technicalError(error).trim();
   if(/KOMBAX_BASE_VERIFICATION_REQUIRED/i.test(raw))return 'Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.';
+  if(/KOMBAX_ACCOUNT_BIRTH_DATE_REQUIRED/i.test(raw))return 'Indica tu fecha de nacimiento para crear la cuenta KOMBAX.';
+  if(/KOMBAX_ACCOUNT_BIRTH_DATE_INVALID/i.test(raw))return 'La fecha de nacimiento no es válida. Revísala e inténtalo de nuevo.';
+  if(/KOMBAX_MINOR_MUST_USE_TUTOR_FLOW/i.test(raw))return 'Si eres menor de 16 años, utiliza el alta mediante padre, madre o tutor.';
+  if(/KOMBAX_TUTOR_MIN_AGE_18/i.test(raw))return 'La cuenta de padre, madre o tutor debe pertenecer a una persona de 18 años o más.';
+  if(/KOMBAX_MEMBER_INDEPENDENT_MIN_AGE_16/i.test(raw))return 'El Perfil Social independiente de Miembro/Practicante está disponible a partir de los 16 años. Para menores, utiliza la vinculación familiar o del club.';
+  if(/KOMBAX_POSSIBLE_IMPORTED_MEMBER_REVIEW_REQUIRED|KOMBAX_EXISTING_MEMBER_EMAIL_USE_EXISTING_RECORD/i.test(raw))return 'Hemos encontrado una ficha del Club que podría corresponder a esta persona. Revisa la ficha existente y vincúlala en lugar de crear un duplicado.';
+  if(/KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT_EMAIL|KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT/i.test(raw))return 'Ya existe una solicitud de vinculación pendiente para esta persona. Revisa la solicitud existente antes de crear otra.';
+  if(/user already registered|already been registered|email.*already.*registered|email.*already.*exists/i.test(raw))return 'Ya existe una cuenta KOMBAX con este correo. Inicia sesión o recupera tu contraseña.';
+  if(/database error saving new user/i.test(raw))return 'No se pudo crear la cuenta. Revisa la fecha de nacimiento y los datos obligatorios e inténtalo de nuevo.';
   if(/SELLER_APPLICATION_DATA_INCOMPLETE/i.test(raw))return 'Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos.';
   if(/SELLER_DECLARATIONS_REQUIRED/i.test(raw))return 'Acepta las dos declaraciones de vendedor antes de enviar la solicitud.';
   if(/SELLER_SHIPPING_MODE_REQUIRED/i.test(raw))return 'Selecciona al menos una forma de entrega para tus productos.';

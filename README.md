@@ -1,10 +1,12 @@
-# KOMBAX R117 · build 20172 · Pilot Hotfix 2 · Onboarding directo + edad canónica + continuidad
+> **BASE ACUMULATIVA ACTUAL:** KOMBAX R117 build 20174 · Pilot Hotfix 4 · Perfil Social / registro progresivo.
+
+# KOMBAX R117 · build 20174 · Pilot Hotfix 4 · Perfil Social + registro progresivo
 
 R117 es la entrega acumulativa corregida sobre R116 para el piloto 01/10/2026–15/11/2026. Conserva el onboarding gratuito, los 8 recorridos de perfil, el gate de publicación Social para Miembro/Practicante confirmado por club, Competidor verificable e independiente, Owner Command Center y el bloqueo público de precios durante el piloto.
 
 Corrección principal R117: el gate web de Netlify ya no exige `android/app/google-services.json`. Firebase Android continúa siendo obligatorio y se valida únicamente en `android:preflight` y en los scripts Android. El ZIP local sí incluye el `google-services.json` existente para poder abrir y compilar el proyecto en Android Studio.
 
-Versión runtime: `2.0.0-rc.13-r117-pilot-hotfix-2` · build/versionCode `20172` · package `com.urbanwarriors.app` · compileSdk/targetSdk `36`.
+Versión runtime: `2.0.0-rc.13-r117-pilot-hotfix-4` · build/versionCode `20174` · package `com.urbanwarriors.app` · compileSdk/targetSdk `36`.
 
 Scripts principales:
 - `KOMBAX_R117_VERIFY_LOCAL.cmd`
@@ -15,26 +17,23 @@ Scripts principales:
 
 La firma Google Play no se incluye. Para AAB/APK release usa la upload key ya registrada mediante `android/keystore.properties` o variables `UW_*`.
 
+## R117 build 20172 · Pilot Hotfix 2 · 03/10/2026
 
-## R117 build 20172 · Pilot Hotfix 2 · 02/10/2026
+Base acumulativa derivada del build 20171. Corrige el contrato de creación de cuentas: la fecha de nacimiento privada es obligatoria y se transmite de extremo a extremo al Auth signup en todas las vías que crean una cuenta. Las cuentas históricas sin DOB se completan mediante un flujo privado de una sola vez, sin inventar fechas. Se alinea la taxonomía con Media y se mantienen intactas las reglas Perfil Social, Club Piloto sin autorización y continuidad Android.
 
-Base acumulativa de fase piloto. Toda cuenta NUEVA exige fecha de nacimiento privada al registrarse, con independencia del perfil que quiera crear. La fecha se reutiliza para las comprobaciones de edad y nunca se muestra en el perfil público. Los Miembros ya vinculados, con Elite Social y autorización Social activa, entran directamente a su espacio de club sin volver a pasar por la pantalla de solicitud de perfil.
-
-Se mantienen íntegramente las reglas del Hotfix 1: Club Piloto sin código; códigos de Miembro/Familia como vía opcional; vinculación sin código mediante solicitud + aprobación del club; Elite Social sin club; álbum de Miembro sin publicación en feed; Espectador sin álbum ni feed; red independiente de publicar; continuidad Android.
-
-Comandos de trabajo:
+Comandos Windows de esta base:
 - `KOMBAX_R117_20172_VERIFY_LOCAL.cmd`
 - `KOMBAX_R117_20172_DEPLOY_NETLIFY.cmd`
 - `KOMBAX_R117_20172_BUILD_ANDROID_QA.cmd`
 - `KOMBAX_R117_20172_BUILD_ANDROID_PLAY.cmd`
 
-El backend piloto activo ya contiene estas migraciones. No ejecutar `supabase db push` contra el proyecto piloto salvo auditoría previa.
+El backend piloto activo ya contiene los hotfixes. Consultar `KOMBAX_R117_20172_BACKEND_PILOT.txt` antes de usar Supabase CLI.
 
 ## R117 build 20171 · Pilot Hotfix 1 · 02/10/2026
 
 Base acumulativa derivada de R117 build 20170 para estabilización del piloto.
 
-Cambios canónicos: alta Club Piloto directa sin código; perfil Elite Social independiente de membresía; Miembro/Practicante con álbum pero sin feed hasta confirmación de club; Espectador con perfil público básico sin álbum ni feed; red/contactos separados del permiso de publicación; vinculación miembro/familia mediante invitación/código opcional o solicitud + autorización del club; continuidad Android tras llamadas/multitarea; build/versionCode 20171.
+Cambios canónicos: alta Club Piloto directa sin código; perfil Perfil Social independiente de membresía; Miembro/Practicante con álbum pero sin feed hasta confirmación de club; Espectador con perfil público básico sin álbum ni feed; red/contactos separados del permiso de publicación; vinculación miembro/familia mediante invitación/código opcional o solicitud + autorización del club; continuidad Android tras llamadas/multitarea; build/versionCode 20171.
 
 Comandos Windows incluidos en raíz:
 - `KOMBAX_R117_20171_VERIFY_LOCAL.cmd`

@@ -1,8 +1,0 @@
-KOMBAX R117 build 20172 · Pilot Hotfix 2
-Targeted QA: PASS 15/15
-Cumulative R115/R116/R117/20171/20172 verification: PASS
-Netlify pilot gate: 62 PASS · 5 P2 conocidos I18N · 0 fallos nuevos
-Parity web=dist=Android: PASS · 622 archivos
-Android preflight: 7/8 · code 2 expected because release keystore is intentionally absent from package
-Android debug build in this environment: NOT COMPLETED because Gradle wrapper cannot reach services.gradle.org (network-restricted environment)
-Signed AAB: must be generated on the authorized local machine with the existing KOMBAX keystore

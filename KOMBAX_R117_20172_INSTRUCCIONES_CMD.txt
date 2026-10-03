@@ -1,32 +1,93 @@
-KOMBAX R117 build 20172 · PILOT HOTFIX 2
+KOMBAX R117 · build 20172 · PILOT HOTFIX 2 · REGISTRO/AUTH
+Release: 2.0.0-rc.13-r117-pilot-hotfix-2
+Android versionCode: 20172
+Package: com.urbanwarriors.app
 
-1) VERIFICAR EL PROYECTO
-   KOMBAX_R117_20172_VERIFY_LOCAL.cmd
+OBJETIVO DE ESTA ENTREGA
+- Corregir el fallo de alta de cuentas con fecha de nacimiento.
+- Usar un contrato unico de DOB/Auth en todas las vias de registro.
+- Mantener las reglas Perfil Social / Club / Espectador / Miembro ya cerradas en R117.
+- Mantener Club Piloto como alta directa sin codigo ni autorizacion manual previa.
+- Preservar el hotfix Android de continuidad ante llamadas/multitarea.
 
-2) DEPLOY WEB / NETLIFY
-   KOMBAX_R117_20172_DEPLOY_NETLIFY.cmd
-   El script ejecuta QA y exige escribir DESPLEGAR antes de publicar producción.
+1) VERIFICAR EN TU PC
+Ejecuta:
+  KOMBAX_R117_20172_VERIFY_LOCAL.cmd
 
-3) APK DE QA ANDROID
-   KOMBAX_R117_20172_BUILD_ANDROID_QA.cmd
-   Esperado: artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_QA_DEBUG.apk
+Debe pasar:
+- R115 11/11
+- R116 12/12
+- R117 perfiles/alta abierta 7/7
+- Registro/Auth build 20172 34/34
+- Netlify pilot gate sin fallos nuevos
+El preflight Android puede terminar 7/8 si aun no has configurado tu keystore local. Eso no es un fallo del codigo fuente.
 
-4) AAB GOOGLE PLAY
-   Configura la misma keystore usada por KOMBAX y ejecuta:
-   KOMBAX_R117_20172_BUILD_ANDROID_PLAY.cmd
-   Esperado: artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab
+2) BACKEND SUPABASE
+El proyecto piloto activo YA contiene los hotfixes funcionales.
+NO ejecutes `supabase db push` de forma indiscriminada contra produccion/piloto.
+Consulta `KOMBAX_R117_20172_BACKEND_PILOT.txt`.
+Las migraciones 302-308 se incluyen para reconstruccion, auditoria y continuidad de la base acumulativa.
 
-5) GOOGLE PLAY
-   No canceles una release actualmente en revisión solo para introducir este hotfix.
-   Cuando corresponda, sube build 20172 al mismo track cerrado, mismo package com.urbanwarriors.app y misma firma.
+3) DEPLOY WEB / NETLIFY
+Ejecuta:
+  KOMBAX_R117_20172_DEPLOY_NETLIFY.cmd
 
-6) BACKEND
-   El Supabase piloto YA está actualizado. No hagas supabase db push contra producción/piloto sin auditoría previa.
+El script:
+- ejecuta QA 20172;
+- ejecuta el gate de release Netlify;
+- muestra `netlify status` para que compruebes el sitio enlazado;
+- exige escribir DESPLEGAR;
+- publica `dist` en produccion.
 
-QA REAL RECOMENDADO ANTES DE GOOGLE PLAY
-- Crear cuentas de los distintos recorridos: DOB obligatorio.
-- Miembro sin club: Elite Social + álbum, sin feed.
-- Vinculación sin código: solicitud -> aprobación club.
-- Miembro vinculado y Social autorizado: nuevo login -> entrada directa al espacio de club.
-- Espectador: sin álbum y sin publicación.
-- Android: llamada, WhatsApp, background, bloqueo/desbloqueo y retorno sin perder pantalla.
+No uses el CMD si `netlify status` no muestra el sitio KOMBAX/kombax.es correcto.
+
+4) PRUEBA ANDROID DEBUG
+Ejecuta:
+  KOMBAX_R117_20172_BUILD_ANDROID_QA.cmd
+
+Salida esperada:
+  artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_QA_DEBUG.apk
+
+Pruebas reales minimas:
+- crear una cuenta nueva con fecha de nacimiento;
+- confirmar email/login;
+- Miembro/Practicante sin club: perfil + album, sin feed;
+- Espectador: perfil basico, sin album/feed;
+- solicitud/vinculacion a club;
+- Club Piloto: alta directa;
+- recibir una llamada y volver a la misma pantalla;
+- WhatsApp/segundo plano/bloqueo-desbloqueo;
+- Social, Showcase y Events.
+
+5) GENERAR AAB GOOGLE PLAY
+Configura la MISMA upload key registrada en Google Play mediante:
+- android\keystore.properties
+  o
+- UW_KEYSTORE_PATH
+- UW_KEYSTORE_PASSWORD
+- UW_KEY_ALIAS
+- UW_KEY_PASSWORD
+
+Despues ejecuta:
+  KOMBAX_R117_20172_BUILD_ANDROID_PLAY.cmd
+
+Salidas esperadas:
+  artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab
+  artifacts\KOMBAX_20172_R117_PILOT_HOTFIX_SIGNED.apk
+
+No canceles una release que Google Play ya tenga en revision. Build 20172 mantiene `com.urbanwarriors.app` y debe subirse como actualizacion del mismo track cuando corresponda.
+
+6) SMOKE TEST DESPUES DEL DEPLOY
+- alta global con DOB;
+- alta/seleccion Miembro;
+- alta Familiar/Tutor;
+- invitacion de alumno y equipo creando cuenta nueva;
+- Club Piloto;
+- login/logout y recuperacion;
+- perfil Perfil Social;
+- Mi Red/chat segun edad;
+- compra/interes Showcase/Events;
+- ausencia de solicitudes de autorizacion para Club Piloto.
+
+IMPORTANTE SOBRE CUENTAS HISTORICAS
+No se inventan fechas de nacimiento. Si una cuenta antigua no tiene DOB canonica, la interfaz debe pedirsela una sola vez mediante el flujo privado de actualizacion. En el backend piloto quedan cuentas historicas pendientes de esa completitud hasta que sus titulares las aporten.

@@ -4,6 +4,7 @@ import { uuid, humanError, technicalError } from './utils.js';
 import { selectedClubSlug, selectClubSlug } from './platform.js';
 import { invalidateCache } from './query-cache.js';
 import { getLocale } from '../i18n/index.js';
+import { validateBirthDate } from './account-birth-date.js';
 
 const APP_SESSION='uw2_app_session';
 const cfg=window.UW_CONFIG;
@@ -54,6 +55,15 @@ async function recordPlatformLegalAcceptance(){
     p_terms_accepted:true,p_privacy_acknowledged:true,p_user_agent:typeof navigator!=='undefined'?navigator.userAgent:''
   });
 }
+async function accountBirthDateStatusSafe(){
+  try{
+    const status=await client.rpc('app_kombax_account_birth_date_status_r117',{});
+    return status&&typeof status==='object'?status:{present:true,required:false};
+  }catch(error){
+    console.warn('Estado de fecha de nacimiento:',humanError(error));
+    return {present:true,required:false};
+  }
+}
 
 async function globalIdentityFromAuth(authUser){
   const userId=authUser.id;
@@ -63,11 +73,13 @@ async function globalIdentityFromAuth(authUser){
   const applications=await client.rpc('app_kombax_mis_solicitudes_v072',{}).catch(()=>[]);
   const platform=await platformContext();
   const platformLegal=await platformLegalStatus();
+  const birthDate=await accountBirthDateStatusSafe();
   return {
     scope:'kombax',id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',fecha_nacimiento:authUser.user_metadata?.fecha_nacimiento||'',preferred_locale:profile.preferred_locale||'',
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',
     club_id:null,club:null,rol:'kombax',roles:['kombax'],directProfiles:Array.isArray(directProfiles)?directProfiles:[],applications:Array.isArray(applications)?applications:[],platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
-    platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
+    platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal,
+    birth_date_required:birthDate?.required===true,birth_date_age:birthDate?.age??null,birth_date_source:birthDate?.source||null
   };
 }
 
@@ -94,12 +106,14 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
   const effectiveRoles=isCoordination?['coordinacion']:[...new Set(clubMemberships.map(m=>m.rol))];
   const platform=await platformContext();
   const platformLegal=await platformLegalStatus();
+  const birthDate=await accountBirthDateStatusSafe();
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
-    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',fecha_nacimiento:authUser.user_metadata?.fecha_nacimiento||'',preferred_locale:profile.preferred_locale||'',avatar_path:profile.avatar_path||'',avatar_presentation:profile.avatar_presentation||{},
+    apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',avatar_path:profile.avatar_path||'',avatar_presentation:profile.avatar_presentation||{},
     rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,
     memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
-    platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal
+    platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal,
+    birth_date_required:birthDate?.required===true,birth_date_age:birthDate?.age??null,birth_date_source:birthDate?.source||null
   };
 }
 
@@ -327,10 +341,9 @@ export const backend={
     state.clearError();
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
-    const selectedType=['club','marca','federacion','profesional','media'].includes(accountType)?accountType:''; // Competidor se fija al crear/solicitar el perfil, no en Auth signup.
-    const dob=String(fecha_nacimiento||'').trim();
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(dob))throw new Error('Indica tu fecha de nacimiento.');
-    const auth=await client.signUp(email,password,{nombre,apellidos,fecha_nacimiento:dob,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
+    const birth=validateBirthDate(fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años. Si eres menor, utiliza el acceso familiar/tutor.'});
+    const selectedType=['club','marca','federacion','profesional','media'].includes(accountType)?accountType:''; // Competidor/Miembro/Espectador se fijan al activar su perfil, no en Auth signup.
+    const auth=await client.signUp(email,password,{nombre,apellidos,fecha_nacimiento:birth.value,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
     if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
     let session=await globalIdentityFromAuth(auth.user);
     const legal=await recordPlatformLegalAcceptance();session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};
@@ -361,9 +374,9 @@ export const backend={
   },
   async registerAccount(input){
     const clubSlug=input.club_slug||selectedClubSlug()||cfg.clubSlug;
-    const dob=String(input.adulto_fecha_nacimiento||'').trim();
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(dob))throw new Error('Indica la fecha de nacimiento del titular de la cuenta.');
-    const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,telefono:input.telefono,fecha_nacimiento:dob,tipo_cuenta:input.tipo_cuenta,club_slug:clubSlug,preferred_locale:getLocale()});
+    const minimumAge=input.tipo_cuenta==='tutor'?18:16;
+    const birth=validateBirthDate(input.adulto_fecha_nacimiento,{minAge:minimumAge,minimumMessage:input.tipo_cuenta==='tutor'?'La cuenta de padre, madre o tutor requiere una persona adulta de 18 años o más.':'El autorregistro como alumno está disponible a partir de los 16 años.'});
+    const auth=await client.signUp(input.email,input.password,{nombre:input.adulto_nombre,apellidos:input.adulto_apellidos,fecha_nacimiento:birth.value,telefono:input.telefono,tipo_cuenta:input.tipo_cuenta,club_slug:clubSlug,preferred_locale:getLocale()});
     const payload={club_slug:clubSlug,tipo_cuenta:input.tipo_cuenta,adulto_nombre:input.adulto_nombre,adulto_apellidos:input.adulto_apellidos,telefono:input.telefono||'',fecha_nacimiento_adulto:input.adulto_fecha_nacimiento||null,menor_nombre:input.menor_nombre||null,menor_apellidos:input.menor_apellidos||null,fecha_nacimiento_menor:input.menor_fecha_nacimiento||null,disciplina_id:input.disciplina_id||null,grupo_id:input.grupo_id||null,tarifa_id:input.tarifa_id||null,invite_code:input.invite_code||null};
     const legalEntries=input.legal_acceptances||[];
     if(!auth?.access_token){localStorage.setItem('uw2_pending_registration',JSON.stringify({email:input.email,payload}));if(legalEntries.length)localStorage.setItem('uw2_pending_legal',JSON.stringify(legalEntries));return {confirmationRequired:true};}
@@ -371,6 +384,19 @@ export const backend={
     const session=await identityFromAuth(auth.user);await this.contract(session);persistSession(session);
     for(const item of legalEntries){await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});}
     return {confirmationRequired:false,session};
+  },
+  async accountBirthDateStatus(){
+    if(!client.session?.access_token)throw new AuthExpiredError();
+    return client.rpc('app_kombax_account_birth_date_status_r117',{});
+  },
+  async setAccountBirthDate(fecha_nacimiento){
+    if(!client.session?.access_token)throw new AuthExpiredError();
+    const birth=validateBirthDate(fecha_nacimiento);
+    const result=await client.rpc('app_kombax_account_birth_date_set_r117',{p_fecha_nacimiento:birth.value});
+    if(state.session){
+      persistSession({...state.session,birth_date_required:false,birth_date_age:result?.age??birth.age,birth_date_source:'self_service_completion'});
+    }
+    return result;
   },
   async validateInvitation(code,email){
     const normalized=String(email||'').trim().toLowerCase();

@@ -1,0 +1,18 @@
+@echo off
+setlocal
+cd /d "%~dp0"
+echo.
+echo ================================================================
+echo KOMBAX R117 build 20174 - ANDROID QA DEBUG
+echo ================================================================
+where java >nul 2>nul || (echo ERROR: Java no esta en PATH. Usa JDK 17 o 21.& exit /b 1)
+where node >nul 2>nul || (echo ERROR: Node.js no esta en PATH.& exit /b 1)
+call npm run verify:20174
+if errorlevel 1 exit /b 1
+call npm run android:debug:r117
+if errorlevel 1 exit /b 1
+echo.
+echo OK: APK QA:
+echo artifacts\KOMBAX_20174_R117_PILOT_HOTFIX_QA_DEBUG.apk
+echo.
+echo Pruebas reales obligatorias: alta con DOB, login, llamada/multitarea, Miembro sin club, Espectador, Club Piloto.

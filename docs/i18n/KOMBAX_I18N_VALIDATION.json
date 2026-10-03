@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-02T14:00:10.383Z",
+  "generated_at": "2026-10-03T08:41:52.786Z",
   "master_locale": "es",
   "master_catalog_keys": 1756,
   "locales": {
@@ -84,7 +84,7 @@
     }
   ],
   "warnings": [],
-  "active_translation_references": 1196,
+  "active_translation_references": 1194,
   "missing_active_keys_by_locale": {
     "es": [],
     "en": [],

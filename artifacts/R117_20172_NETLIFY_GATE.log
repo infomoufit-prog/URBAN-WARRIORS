@@ -3,6 +3,6 @@ P2 conocido, sin ocultar: scripts/test-kombax-20130-r79-i18n-phases-6-10.mjs
 P2 conocido, sin ocultar: scripts/i18n-runtime-copy-audit.mjs
 P2 conocido, sin ocultar: scripts/i18n-validate.mjs
 P2 conocido, sin ocultar: scripts/test-kombax-i18n-b02.mjs
-KOMBAX Netlify pilot gate: 62 PASS, 5 P2 conocidos, 0 fallos nuevos.
+KOMBAX Netlify pilot gate: 63 PASS, 5 P2 conocidos, 0 fallos nuevos.
 La suite estricta completa sigue disponible mediante npm test y continúa fallando hasta cerrar los P2 documentados.
-OK build 622 archivos · web = dist = Android
+OK build 624 archivos · web = dist = Android
