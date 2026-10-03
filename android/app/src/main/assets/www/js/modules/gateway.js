@@ -315,6 +315,16 @@ export async function renderClubDirectory({onBack,onSelect,onAdminAccess,mode='m
 }
 
 function globalAuthenticated(){return state.session?.scope==='kombax'&&Boolean(state.session?.id);}
+const PILOT_PENDING_KEY='kombax_pending_pilot_club';
+function pilotPending(){
+  try{return localStorage.getItem(PILOT_PENDING_KEY)==='1'||sessionStorage.getItem(PILOT_PENDING_KEY)==='1';}catch{return false;}
+}
+function setPilotPending(){
+  try{localStorage.setItem(PILOT_PENDING_KEY,'1');sessionStorage.setItem(PILOT_PENDING_KEY,'1');}catch{}
+}
+function clearPilotPending(){
+  try{localStorage.removeItem(PILOT_PENDING_KEY);sessionStorage.removeItem(PILOT_PENDING_KEY);}catch{}
+}
 
 async function hydratePilotClubEntry({onBack}={}){
   const host=document.getElementById('gateway-pilot-entry');if(!host)return;
@@ -328,17 +338,17 @@ async function hydratePilotClubEntry({onBack}={}){
 function metricPilotSlots(pilot){const remaining=Math.max(0,Number(pilot?.slots_remaining||0));return `${remaining} ${remaining===1?'plaza disponible':'plazas disponibles'}`;}
 
 function pilotAuthChoice({onBack}={}){
-  sessionStorage.setItem('kombax_pending_pilot_club','1');
-  const {wrap}=openDetail({title:'Alta Club Piloto',subtitle:'Alta directa durante la ventana temporal del piloto.',width:'640px',body:'<div class="gateway-auth-explain"><strong>No necesitas código de invitación</strong><p>Crea o utiliza tu cuenta KOMBAX de Club. Tras confirmar el correo, completarás los datos básicos y, mientras la ventana tenga plazas, el sistema activará directamente el Club Piloto Premium.</p></div>',actions:'<button class="btn btn-primary" id="kx-pilot-login">Ya tengo cuenta</button><button class="btn btn-ghost" id="kx-pilot-register">Crear cuenta Club</button>'});
+  setPilotPending();
+  const {wrap}=openDetail({title:'Alta Club Piloto',subtitle:'Alta directa durante la ventana temporal del piloto.',width:'640px',body:'<div class="gateway-auth-explain"><strong>No necesitas código de invitación</strong><p>Crea o utiliza tu cuenta KOMBAX. Tras confirmar el correo, completarás los datos básicos y, mientras la ventana tenga plazas, el sistema activará directamente el Club Piloto Premium.</p></div>',actions:'<button class="btn btn-primary" id="kx-pilot-login">Ya tengo cuenta</button><button class="btn btn-ghost" id="kx-pilot-register">Crear cuenta KOMBAX</button>'});
   wrap.querySelector('#kx-pilot-login')?.addEventListener('click',()=>openGlobalAuth({onBack,pendingType:'club',mode:'login',onAuthenticated:()=>openPilotClubActivation({onBack})}));
   wrap.querySelector('#kx-pilot-register')?.addEventListener('click',()=>openGlobalAuth({onBack,pendingType:'club',mode:'register',onAuthenticated:()=>openPilotClubActivation({onBack})}));
 }
 
 async function openPilotClubActivation({onBack}={}){
   let pilot;try{pilot=await repos.pilot.window();}catch(error){setError(error);return;}
-  if(!pilot?.open||Number(pilot?.slots_remaining||0)<=0){sessionStorage.removeItem('kombax_pending_pilot_club');toast('La ventana de alta Club Piloto está cerrada o ya no quedan plazas.','warning');return;}
+  if(!pilot?.open||Number(pilot?.slots_remaining||0)<=0){clearPilotPending();toast('La ventana de alta Club Piloto está cerrada o ya no quedan plazas.','warning');return;}
   if(!globalAuthenticated()){pilotAuthChoice({onBack});return;}
-  if(state.session?.platform_legal_required===true){sessionStorage.setItem('kombax_pending_pilot_club','1');toast('Revisa primero las Condiciones y la Política de Privacidad de KOMBAX.','warning');renderDirectProfileHub({onBack,pendingType:'club'});return;}
+  if(state.session?.platform_legal_required===true){setPilotPending();toast('Revisa primero las Condiciones y la Política de Privacidad de KOMBAX.','warning');renderDirectProfileHub({onBack,pendingType:'club'});return;}
   openForm({
     title:'Alta Club Piloto',subtitle:'Alta directa · sin código de invitación · Premium piloto · sin documentación inicial.',width:'820px',
     fields:[
@@ -357,7 +367,7 @@ async function openPilotClubActivation({onBack}={}){
       if(!v.declaration)throw new Error('Debes confirmar que los datos del Club son correctos.');
       const disciplinas=String(v.disciplinas||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
       const result=await repos.pilot.activateClub({...v,disciplinas,declaration:true});
-      sessionStorage.removeItem('kombax_pending_pilot_club');sessionStorage.removeItem('kombax_pending_profile_type');
+      clearPilotPending();sessionStorage.removeItem('kombax_pending_profile_type');
       await backend.restore().catch(()=>null);closeModal();toast('Club Piloto activado. Premium piloto y vinculación de miembros disponibles.');
       await renderDirectProfileHub({onBack});
       return result;
@@ -721,7 +731,7 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     if(newlyCreated&&commercialAudienceForType(newlyCreated.tipo)&&selectedCommercialPlan(newlyCreated.tipo).plan_code){
       sessionStorage.removeItem('kombax_new_profile_id');
       setTimeout(()=>saveAndSubmitApplication(newlyCreated.tipo,{profile:newlyCreated,onBack}),420);
-    }else if(sessionStorage.getItem('kombax_pending_pilot_club')==='1'){
+    }else if(pilotPending()){
       setTimeout(()=>openPilotClubActivation({onBack}),260);
     }else if(pendingType==='miembro_familia'){
       setTimeout(()=>openMemberPublicProfileSetup({onBack}),220);
