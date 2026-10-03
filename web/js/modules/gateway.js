@@ -51,7 +51,7 @@ const directTypes=DIRECT_PROFILE_TYPES.map(x=>({...x}));
 const MEMBER_FAMILY_ONBOARDING=Object.freeze({
   id:'miembro_familia',label:'Miembro / Familiar',icon:'identity',accent:'#5B8CFF',
   description:'Vincula tu cuenta con un club como practicante/miembro o familiar/tutor. La publicación Social como Miembro solo se habilita cuando el club confirma la membresía.',
-  benefits:['Buscar o invitar a mi club','Membresía aprobada por el club','Evolución de Miembro a Competidor']
+  benefits:['Buscar o invitar a mi club','Membresía aprobada por el club','Compatible con Competidor y Profesional']
 });
 const ONBOARDING_PROFILE_ORDER=Object.freeze(['espectador','miembro_familia','competidor','club','federacion','marca','profesional','media']);
 function onboardingProfileTypes(){
@@ -62,7 +62,7 @@ function onboardingProfileTypes(){
 let activeAccountPolicy=null;
 function requireProfileChoice(type){
   if(!activeAccountPolicy||canRequestAccountProfile(type,activeAccountPolicy))return true;
-  toast('Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor.','warning');
+  toast(type==='club'?'Esta cuenta ya gestiona un Club o tiene un alta de Club pendiente.':'Ya existe este tipo de perfil o una solicitud equivalente en esta cuenta.','warning');
   return false;
 }
 const TYPE_LABEL=PROFILE_TYPE_LABEL;
@@ -765,11 +765,10 @@ function startCommercialOnboarding(selection,{onBack}={}){
 }
 
 function chooseProfileType({onBack,memberProfiles=[],policy=activeAccountPolicy}={}){
-  const isNew=!policy||policy.kind==='new';
-  const available=isNew?onboardingProfileTypes():directTypes.filter(x=>!x.disabled&&!x.baseOnly&&canRequestAccountProfile(x.id,policy));
-  if(!available.length){toast('Esta cuenta ya tiene asignado su tipo de perfil.','warning');return;}
-  const subtitle=policy?.kind==='miembro'?'Tu membresía ya está confirmada. Puedes solicitar Competidor sin crear otra cuenta.':'Elige cómo quieres usar KOMBAX. La cuenta es gratuita; Espectador y Miembro/Familiar son recorridos de acceso, y las identidades oficiales mantienen sus verificaciones.';
-  const {wrap}=openDetail({title:policy?.kind==='miembro'?'Evolucionar mi perfil':'Elige tu perfil KOMBAX',subtitle,width:'880px',body:`<div class="kx-type-picker">${available.map(t=>`<button type="button" data-kx-pick="${esc(t.id)}"><span>${featureIcon(t.icon,{size:42})}</span><strong>${esc(t.label)}</strong><small>${esc(t.description)}</small>${t.id==='miembro_familia'?'<i class="kx-type-price">Vinculación y aprobación del club</i>':t.id==='espectador'?'<i class="kx-type-price">Explorar sin identidad especializada</i>':commercialAudienceForType(t.id)?'<i class="kx-type-price">Perfil público gratuito · planes opcionales</i>':'<i class="kx-type-price">Solicitud y verificación cuando corresponda</i>'}<em>${(t.benefits||[]).map(x=>`✓ ${esc(x)}`).join(' · ')}</em></button>`).join('')}</div>`});
+  const available=onboardingProfileTypes().filter(x=>!x.disabled&&canRequestAccountProfile(x.id,policy));
+  if(!available.length){toast('No hay nuevos perfiles compatibles pendientes de añadir en esta cuenta.','warning');return;}
+  const subtitle='Tu cuenta KOMBAX es única y gratuita. Puedes añadir perfiles y capacidades compatibles sin perder los que ya tienes; cada verificación y cada organización conservan sus propios permisos.';
+  const {wrap}=openDetail({title:'Añadir perfil o vinculación',subtitle,width:'880px',body:`<div class="kx-type-picker">${available.map(t=>`<button type="button" data-kx-pick="${esc(t.id)}"><span>${featureIcon(t.icon,{size:42})}</span><strong>${esc(t.label)}</strong><small>${esc(t.description)}</small>${t.id==='miembro_familia'?'<i class="kx-type-price">Vinculación y aprobación del club</i>':t.id==='espectador'?'<i class="kx-type-price">Explorar con la identidad personal</i>':commercialAudienceForType(t.id)?'<i class="kx-type-price">Identidad pública gratuita · suscripción organizativa independiente</i>':'<i class="kx-type-price">Faceta personal · verificación independiente cuando corresponda</i>'}<em>${(t.benefits||[]).map(x=>`✓ ${esc(x)}`).join(' · ')}</em></button>`).join('')}</div>`});
   wrap.querySelectorAll('[data-kx-pick]').forEach(b=>b.addEventListener('click',()=>{const type=b.dataset.kxPick;closeModal();if(type==='miembro_familia'){renderMemberFamilyPresentation({onBack:()=>renderDirectProfileHub({onBack})});return;}renderIdentityPresentation(type,{onBack:()=>renderDirectProfileHub({onBack}),memberProfiles});}));
 }
 
@@ -782,7 +781,7 @@ export function renderDirectProfiles({onBack}){
       <div class="gateway-directory-top"><button class="gateway-icon-button" id="direct-back" type="button" aria-label="${t('marketing.gateway.actions.back')}">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class="gateway-directory-step">CUENTA GRATUITA KOMBAX</span></div>
       <header><span class="gateway-eyebrow">IDENTIDAD KOMBAX</span><h1>¿Cómo quieres usar KOMBAX?</h1><p>Crea una única cuenta KOMBAX gratuita y elige tu recorrido. Crear la cuenta no te convierte automáticamente en Espectador ni concede una identidad oficial. Podrás explorar Social, Showcase y Events mientras completas el perfil que corresponda.</p><button class="btn btn-ghost btn-sm" id="kx-direct-pricing" type="button">Ver todos los planes y precios</button></header>
       <div class="direct-profile-grid">${onboardingTypes.map(t=>`<button class="direct-profile-card ${t.disabled?'is-disabled':''}" type="button" style="--profile-accent:${t.accent}" data-profile-type="${esc(t.id)}" ${t.disabled?'disabled':''}><div class="direct-profile-icon">${featureIcon(t.icon,{size:58})}</div><div class="direct-profile-copy"><span>${esc(t.id==='espectador'?'EXPLORAR GRATIS':t.id==='miembro_familia'?'VINCULACIÓN CON CLUB':t.applicationOnly?'SOLICITUD + VERIFICACIÓN':'PERFIL + VERIFICACIÓN')}</span><h2>${esc(t.label)}</h2><p>${esc(t.description)}</p></div><footer><b>${t.disabled?`${icon('lock',{size:13})} PENDIENTE`:`${icon('arrowUpRight',{size:13})} CONOCER RECORRIDO`}</b><span>${icon('chevronRight',{size:18})}</span></footer></button>`).join('')}</div>
-      <div class="gateway-safety-note"><span class="gateway-safety-icon">${icon('shieldCheck',{size:22})}</span><div><strong>Una cuenta, una identidad principal</strong><p>Miembro/Practicante solo puede publicar en Social cuando un club confirma su membresía. Competidor puede solicitarse directamente o evolucionar desde Miembro y requiere su verificación. Club, Federación y Marca mantienen sus procesos de acreditación.</p></div></div>
+      <div class="gateway-safety-note"><span class="gateway-safety-icon">${icon('shieldCheck',{size:22})}</span><div><strong>Una cuenta, un Perfil Social, varias capacidades</strong><p>Tu Perfil Social personal no se duplica. Puedes ser Miembro, Competidor y Profesional con la misma cuenta. Los roles de Club, las verificaciones y las suscripciones de organizaciones se gestionan por separado.</p></div></div>
       <div class="kx-direct-auth-row"><button class="btn btn-primary" id="kx-free-account">Crear cuenta gratuita</button><button class="btn btn-ghost" id="kx-existing-account">Ya tengo cuenta KOMBAX</button></div>
     </section>
   </main>`);
