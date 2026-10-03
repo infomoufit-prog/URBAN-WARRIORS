@@ -65,6 +65,43 @@ async function accountBirthDateStatusSafe(){
   }
 }
 
+function pendingTeamAccessFor(authUser){
+  const email=String(authUser?.email||'').trim().toLowerCase();
+  let local=null;
+  try{local=JSON.parse(localStorage.getItem('uw2_pending_team_access')||'null')}catch{}
+  const meta=authUser?.user_metadata?.kombax_pending_team_access;
+  const candidate=local&&(!local.email||String(local.email).trim().toLowerCase()===email)?local:(meta&&typeof meta==='object'?meta:null);
+  if(!candidate)return null;
+  if(candidate.email&&String(candidate.email).trim().toLowerCase()!==email)return null;
+  return {
+    kind:String(candidate.kind||'generic'),
+    club_slug:String(candidate.club_slug||'').trim().toLowerCase(),
+    code:String(candidate.code||'').trim(),
+    email:email,
+    role:String(candidate.role||'').trim().toLowerCase()||null
+  };
+}
+
+async function completePendingTeamAccess(authUser){
+  const pending=pendingTeamAccessFor(authUser);
+  if(!pending?.club_slug||!pending?.code)return {completed:false};
+  let result;
+  if(pending.kind==='one_time'){
+    result=await client.rpc('app_kombax_invitacion_aceptar_equipo_v059',{p_codigo:pending.code});
+  }else{
+    try{
+      result=await client.rpc('app_kombax_equipo_solicitar_v109',{p_club_slug:pending.club_slug,p_codigo:pending.code,p_rol_solicitado:pending.role});
+    }catch(error){
+      if(pending.role)throw error;
+      result=await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:pending.club_slug,p_codigo:pending.code});
+    }
+    if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');
+  }
+  try{localStorage.removeItem('uw2_pending_team_access')}catch{}
+  try{await client.updateUserMetadata({kombax_pending_team_access:null})}catch(error){console.warn('Limpieza de solicitud de equipo pendiente:',humanError(error));}
+  return {completed:true,kind:pending.kind,club_slug:pending.club_slug,result};
+}
+
 async function globalIdentityFromAuth(authUser){
   const userId=authUser.id;
   const profiles=await client.select('perfiles',`select=*&id=eq.${qs(userId)}&limit=1`).catch(()=>[]);
@@ -83,7 +120,7 @@ async function globalIdentityFromAuth(authUser){
   };
 }
 
-async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
+async function identityFromAuth(authUser,requestedSlug=''){
   const userId=authUser.id;
   let memberships;
   try{
@@ -95,7 +132,9 @@ async function identityFromAuth(authUser,requestedSlug=selectedClubSlug()){
   if(!memberships?.length)throw new Error('El usuario no pertenece a ningún club activo.');
   const priority=['direccion','secretaria','economia','comunicacion','monitor','familia','alumno'];
   memberships.sort((a,b)=>priority.indexOf(a.rol)-priority.indexOf(b.rol));
-  const candidate=memberships.find(m=>m.clubes?.slug===requestedSlug)||memberships[0];
+  const requested=String(requestedSlug||'').trim().toLowerCase();
+  const candidate=requested?memberships.find(m=>String(m.clubes?.slug||'').toLowerCase()===requested):memberships[0];
+  if(requested&&!candidate)throw new Error('Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación.');
   if(candidate?.clubes?.slug)selectClubSlug(candidate.clubes.slug,candidate.clubes);
   const clubMemberships=memberships.filter(m=>m.club_id===candidate.club_id);
   const isCoordination=clubMemberships.some(m=>m.coordinacion===true);
@@ -229,22 +268,7 @@ export const backend={
         }
       }catch(error){console.warn('Membresía de alumno pendiente:',humanError(error));}
     }
-    const pendingTeam=localStorage.getItem('uw2_pending_team_access');
-    if(pendingTeam){
-      try{
-        const p=JSON.parse(pendingTeam)||{};
-        if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){
-          if(p.kind==='one_time'){
-            await client.rpc('app_kombax_invitacion_aceptar_equipo_v059',{p_codigo:String(p.code||'').trim()});
-          }else{
-            const role=String(p.role||'').trim().toLowerCase()||null;
-            try{await client.rpc('app_kombax_equipo_solicitar_v109',{p_club_slug:p.club_slug,p_codigo:p.code,p_rol_solicitado:role});}
-            catch(error){if(role)throw error;await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:p.club_slug,p_codigo:p.code});}
-          }
-          localStorage.removeItem('uw2_pending_team_access');
-        }
-      }catch(error){console.warn('Solicitud de equipo pendiente:',humanError(error));}
-    }
+    try{await completePendingTeamAccess(auth.user);}catch(error){console.warn('Solicitud de equipo pendiente:',humanError(error));}
     let session=await globalIdentityFromAuth(auth.user);
     const pendingLegal=localStorage.getItem('uw2_pending_platform_legal');
     if(pendingLegal){
@@ -337,17 +361,30 @@ export const backend={
       await client.signOut();
     }finally{state.session=null;state.setCapabilities([]);try{sessionStorage.removeItem('uw2_platform_admin_session')}catch{}}
   },
-  async registerGlobalAccount({email,password,nombre='',apellidos='',fecha_nacimiento='',terms=false,privacy=false,accountType=''}){
+  async registerGlobalAccount({email,password,nombre='',apellidos='',fecha_nacimiento='',terms=false,privacy=false,accountType='',pendingTeamAccess=null}){
     state.clearError();
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
     const birth=validateBirthDate(fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años. Si eres menor, utiliza el acceso familiar/tutor.'});
     const selectedType=['club','marca','federacion','profesional','media'].includes(accountType)?accountType:''; // Competidor/Miembro/Espectador se fijan al activar su perfil, no en Auth signup.
-    const auth=await client.signUp(email,password,{nombre,apellidos,fecha_nacimiento:birth.value,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale()});
-    if(!auth?.access_token){localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));return {confirmationRequired:true};}
+    const teamIntent=pendingTeamAccess&&typeof pendingTeamAccess==='object'?{
+      kind:String(pendingTeamAccess.kind||'generic'),
+      club_slug:String(pendingTeamAccess.club_slug||'').trim().toLowerCase(),
+      code:String(pendingTeamAccess.code||'').trim(),
+      email:String(email||'').trim().toLowerCase(),
+      role:String(pendingTeamAccess.role||'').trim().toLowerCase()||null
+    }:null;
+    const auth=await client.signUp(email,password,{nombre,apellidos,fecha_nacimiento:birth.value,tipo_cuenta:'kombax_global',kombax_account_type:selectedType,preferred_locale:getLocale(),kombax_pending_team_access:teamIntent});
+    if(!auth?.access_token){
+      localStorage.setItem('uw2_pending_kombax_global',JSON.stringify({email}));
+      localStorage.setItem('uw2_pending_platform_legal',JSON.stringify({email,terms_version:PLATFORM_TERMS_VERSION,privacy_version:PLATFORM_PRIVACY_VERSION}));
+      if(teamIntent)localStorage.setItem('uw2_pending_team_access',JSON.stringify(teamIntent));
+      return {confirmationRequired:true};
+    }
+    const pendingTeamResult=teamIntent?await completePendingTeamAccess(auth.user):{completed:false};
     let session=await globalIdentityFromAuth(auth.user);
     const legal=await recordPlatformLegalAcceptance();session={...session,platform_legal_required:legal?.required!==false,platform_legal:legal};
-    persistSession(session);state.setCapabilities([]);return {confirmationRequired:false,session};
+    persistSession(session);state.setCapabilities([]);return {confirmationRequired:false,session,pendingTeamResult};
   },
   async acceptPlatformLegal(){
     if(!client.session?.access_token)throw new AuthExpiredError('Inicia sesión para aceptar las condiciones de KOMBAX.');
@@ -359,18 +396,31 @@ export const backend={
   async signIn(email,password){
     state.clearError();
     const auth=await client.signIn(email,password);
-    const pendingRegistration=localStorage.getItem('uw2_pending_registration');
-    if(pendingRegistration){
-      const p=JSON.parse(pendingRegistration);
-      if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){await this.bootstrapMutate('cuenta.registrar',p.payload);localStorage.removeItem('uw2_pending_registration');}
+    try{
+      const pendingRegistration=localStorage.getItem('uw2_pending_registration');
+      if(pendingRegistration){
+        const p=JSON.parse(pendingRegistration);
+        if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){await this.bootstrapMutate('cuenta.registrar',p.payload);localStorage.removeItem('uw2_pending_registration');}
+      }
+      const pendingTeam=await completePendingTeamAccess(auth.user);
+      let session;
+      try{session=await identityFromAuth(auth.user,selectedClubSlug());}
+      catch(error){
+        if(pendingTeam.completed&&pendingTeam.kind!=='one_time')throw new Error('Solicitud enviada al club. Tu acceso está pendiente de aprobación.');
+        throw error;
+      }
+      await this.contract(session);
+      persistSession(session);
+      const pendingLegal=localStorage.getItem('uw2_pending_legal');
+      if(pendingLegal){try{const entries=JSON.parse(pendingLegal)||[];for(const item of entries)await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});localStorage.removeItem('uw2_pending_legal');}catch(error){console.warn('Aceptaciones legales pendientes:',humanError(error));}}
+      state.pushTrace({kind:'auth',ok:true,label:'Login validado',detail:`${session.email} · ${session.rol}`});
+      return session;
+    }catch(error){
+      await client.signOut().catch(()=>{});
+      persistSession(null);
+      state.setCapabilities([]);
+      throw error;
     }
-    const session=await identityFromAuth(auth.user);
-    await this.contract(session);
-    persistSession(session);
-    const pendingLegal=localStorage.getItem('uw2_pending_legal');
-    if(pendingLegal){try{const entries=JSON.parse(pendingLegal)||[];for(const item of entries)await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});localStorage.removeItem('uw2_pending_legal');}catch(error){console.warn('Aceptaciones legales pendientes:',humanError(error));}}
-    state.pushTrace({kind:'auth',ok:true,label:'Login validado',detail:`${session.email} · ${session.rol}`});
-    return session;
   },
   async registerAccount(input){
     const clubSlug=input.club_slug||selectedClubSlug()||cfg.clubSlug;
@@ -431,7 +481,7 @@ export const backend={
       if(saved.scope==='kombax'){
         const session=await globalIdentityFromAuth(authUser);persistSession(session);state.setCapabilities([]);return session;
       }
-      const session=await identityFromAuth(authUser);
+      const session=await identityFromAuth(authUser,saved?.club?.slug||selectedClubSlug());
       await this.contract(session); persistSession(session); return session;
     }catch(error){
       // Una pérdida puntual de red no invalida una sesión que sigue almacenada.
