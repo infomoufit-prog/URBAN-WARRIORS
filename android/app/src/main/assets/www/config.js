@@ -11,8 +11,8 @@ window.UW_CONFIG = {
     anonKey: 'sb_publishable_wLRr_1E8WmJcOW_gd-VH4g_KquHKiL3'
   },
   release: {
-    version: '2.0.0-rc.13-r117-pilot-hotfix-5',
-    build: 20175,
+    version: '2.0.0-rc.13-r117-pilot-hotfix-6',
+    build: 20176,
     backendVersion: '1.6.0',
     schemaEpoch: 160,
     mutationEndpoint: 'app_mutate_v160',
