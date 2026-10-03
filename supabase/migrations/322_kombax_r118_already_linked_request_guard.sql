@@ -125,6 +125,9 @@ end
 $function$;
 
 -- Repair only real, already-satisfied member requests. No synthetic data is created.
+-- R117 notification lifecycle is guarded, so this repair enters the lifecycle gateway
+-- for the duration of the state transition.
+select set_config('kombax.lifecycle_gateway','on',true);
 update public.kombax_club_interest_threads_r58 t
 set estado='respondida',
     resolved_at=coalesce(t.resolved_at,now()),
@@ -141,8 +144,9 @@ where t.estado='abierta'
     where s.club_id=t.club_id and s.perfil_id=t.account_id and s.estado='activo'
       and s.kombax_acceso_estado='activo'
   );
+select set_config('kombax.lifecycle_gateway','',true);
 
-do $$
+do $
 begin
  if position('already_linked' in pg_get_functiondef('public.app_kombax_club_link_request_r117(uuid,text,text,uuid)'::regprocedure))=0 then
    raise exception 'R118_ASSERT_ALREADY_LINKED_GUARD_MISSING';
