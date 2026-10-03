@@ -238,7 +238,7 @@ begin
 end
 $function$;
 
-do $
+do $$
 begin
  if position('kombax.lifecycle_gateway' in pg_get_functiondef('private.kombax_team_request_notification_sync_r117()'::regprocedure))=0 then
    raise exception 'R118_ASSERT_TEAM_LIFECYCLE_GATEWAY_MISSING';
