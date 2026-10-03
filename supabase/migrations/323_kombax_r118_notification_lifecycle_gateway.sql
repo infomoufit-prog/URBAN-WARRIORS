@@ -80,8 +80,7 @@ begin
   end if;
   return new;
 end
-$function$
-
+$function$;
 
 CREATE OR REPLACE FUNCTION private.kombax_membership_claim_notification_sync_r117()
  RETURNS trigger
@@ -153,8 +152,7 @@ begin
   end if;
   return new;
 end
-$function$
-
+$function$;
 
 CREATE OR REPLACE FUNCTION private.kombax_team_request_notification_sync_r117()
  RETURNS trigger
@@ -238,10 +236,9 @@ begin
   end if;
   return new;
 end
-$function$
+$function$;
 
-
-do $$
+do $
 begin
  if position('kombax.lifecycle_gateway' in pg_get_functiondef('private.kombax_team_request_notification_sync_r117()'::regprocedure))=0 then
    raise exception 'R118_ASSERT_TEAM_LIFECYCLE_GATEWAY_MISSING';
