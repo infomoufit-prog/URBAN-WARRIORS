@@ -1,4 +1,5 @@
 export default {
+  "ownerAutomation":{"policy": "During the pilot, AI may verify readable, relevant documents for complete, low-risk applications. Owner handles uncertain cases. Manual review remains available. Clubs, federations, minors, payments, privileges and deletions require human review.", "analyze": "Analyze evidence, readability, relevance and requirements; verify only if there is no uncertainty.", "approved": "Automatic verification completed and audited.", "manual": "Manual review required; check the Owner alert."},
   "title": "KOMBAX Administration",
   "team": "Team",
   "permissions": "Team and permissions",

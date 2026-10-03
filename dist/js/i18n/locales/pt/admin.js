@@ -1,4 +1,5 @@
 export default {
+  "ownerAutomation":{"policy": "No piloto, a IA pode verificar documentos legíveis e pertinentes de pedidos completos de baixo risco. O Owner intervém em caso de dúvida. A revisão manual continua disponível. Clubes, federações, menores, pagamentos, privilégios e exclusões exigem revisão humana.", "analyze": "Analise evidências, legibilidade, pertinência e requisitos; verifique apenas sem dúvidas.", "approved": "Verificação automática concluída e auditada.", "manual": "Revisão manual necessária; consulte o aviso Owner."},
   "title": "Administração KOMBAX",
   "team": "Equipa",
   "permissions": "Equipa e permissões",

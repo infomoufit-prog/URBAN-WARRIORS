@@ -20,7 +20,7 @@ import { renderEvents } from './modules/events.js';
 import { renderHelpLegal } from './modules/help-legal.js';
 import { KOMBAX_BRAND, platformFeatures, hasExplicitClubSelection, selectedClubSlug, selectedClubPreview, selectClubSlug, clearSelectedClub, themeDefinition } from './core/platform.js';
 import { renderLifecycle } from './modules/lifecycle.js';
-import { renderKombaxGateway, renderClubDirectory, renderDirectProfiles, renderDirectProfileHub, renderGlobalHome, renderIdentityPresentation } from './modules/gateway.js';
+import { renderKombaxGateway, renderClubDirectory, renderDirectProfiles, renderDirectProfileHub, renderGlobalHome, renderIdentityPresentation, openMyAccount } from './modules/gateway.js';
 import { renderClubKombaxHub } from './modules/club-kombax-hub.js';
 import { renderPlatformAdminAccess, renderPlatformAdminConsole } from './modules/platform-admin-access.js';
 import { renderWorkScopes } from './modules/work-scopes.js';
@@ -243,8 +243,24 @@ function renderShell(){
   const nav=navFor(state.session),mobile=mobileNavFor(state.session),initial=(location.hash||'#dashboard').slice(1);const allowed=new Set(nav.map(n=>n.id));['workspace','resources','guides','consulting','training'].forEach(x=>allowed.add(x));const route=allowed.has(initial)?initial:'dashboard';setAppHtml(shell(nav,route,mobile));bindDismissAlerts();bindShellNavigation();bindLanguageSelectors(document,{persistAccount:locale=>backend.setPreferredLocale(locale)});hydrateSessionAvatar();startNotificationMonitor();syncNativePushToken();navigate(route,{replace:true});
 }
 
+async function openAccountSpace(){
+  if(state.session?.support_mode)return;
+  stopNotificationMonitor();closeModal();
+  try{await openMyAccount({onBack:renderGatewayRoot});if(state.session?.club_id)startNotificationMonitor();}catch(error){setError(error);if(state.session?.club_id)startNotificationMonitor();}
+}
+window.addEventListener('kx-account-open',openAccountSpace);
+async function openClubEntry(club){
+  selectClubSlug(club.slug,club);
+  if(!state.session?.id){renderClubLogin();return;}
+  try{await backend.switchClub(club.slug);renderClubSessionOrLegal();}
+  catch(error){
+    if(/no pertenece|no está vinculada|no perteneces/i.test(String(error?.message||''))){selectClubSlug(club.slug,club);openInvitationChoice();}else setError(error);
+  }
+}
+window.addEventListener('kx-club-entry',event=>openClubEntry(event.detail).catch(setError));
+
 function renderGatewayRoot(){
-  renderKombaxGateway({onClubDirectory:()=>renderClubDirectory({onBack:renderGatewayRoot,onSelect:club=>{selectClubSlug(club.slug,club);renderClubLogin();},onAdminAccess:()=>renderPlatformAdminAccess({onCancel:renderGatewayRoot,onSuccess:renderPlatformAdminConsole})}),onDirectProfiles:()=>renderDirectProfiles({onBack:renderGatewayRoot})});
+  renderKombaxGateway({onAccountAccess:openAccountSpace,onClubDirectory:()=>renderClubDirectory({onBack:renderGatewayRoot,onSelect:club=>openClubEntry(club).catch(setError),onAdminAccess:()=>renderPlatformAdminAccess({onCancel:renderGatewayRoot,onSuccess:renderPlatformAdminConsole})}),onDirectProfiles:()=>renderDirectProfiles({onBack:renderGatewayRoot})});
 }
 
 function renderClubSessionOrLegal({startAtHome=false}={}){
@@ -392,10 +408,13 @@ function openTeamAccessCode(prefill='',prefillRole=''){
       }
       if(!String(v.nombre||'').trim()||!String(v.apellidos||'').trim())throw new Error('Indica nombre y apellidos para crear la cuenta.');
       const birth=validateBirthDate(v.fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años.'});
-      const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos,fecha_nacimiento:birth.value,terms:v.terms,privacy:v.privacy});
-      if(created.confirmationRequired){localStorage.setItem('uw2_pending_team_access',JSON.stringify({kind:oneTime?'one_time':'generic',club_slug:slug,code,email:v.email,role}));toast(oneTime?'Cuenta creada. Confirma tu email y después accede a KOMBAX; la invitación personal se activará al validar el mismo correo.':'Cuenta creada. Confirma tu email y después accede a KOMBAX; la solicitud quedará registrada.');renderGatewayRoot();return;}
-      if(oneTime){await backend.acceptTeamInvitation(code);toast(`Cuenta creada e invitación aceptada como ${teamInviteRoleLabel(role)}.`,'ok');}
-      else{await backend.requestTeamAccess(slug,code,v.email,role);toast(`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');}
+      const pendingTeamAccess={kind:oneTime?'one_time':'generic',club_slug:slug,code,email:v.email,role};
+      const created=await backend.registerGlobalAccount({email:v.email,password:v.password,nombre:v.nombre,apellidos:v.apellidos,fecha_nacimiento:birth.value,terms:v.terms,privacy:v.privacy,pendingTeamAccess});
+      if(created.confirmationRequired){
+        toast(oneTime?'Cuenta creada. Confirma tu email y después inicia sesión; KOMBAX completará la invitación personal con ese mismo correo.':'Cuenta creada. Confirma tu email y después inicia sesión; KOMBAX enviará entonces la solicitud al club.');
+        renderGatewayRoot();return;
+      }
+      toast(oneTime?`Cuenta creada e invitación aceptada como ${teamInviteRoleLabel(role)}.`:`Cuenta creada y solicitud enviada para ${teamInviteRoleLabel(role)}.`,'ok');
       await backend.signOut();renderClubLogin(v.email);
     }
   });
@@ -443,7 +462,7 @@ async function boot(){
     const hasTransactionalEntry=Boolean(paymentsEntry||paymentEntry||validConnect);
     if(marketingIdentity&&!hasTransactionalEntry&&(!session||session?.scope==='kombax')){
       renderIdentityPresentation(marketingIdentity,{onBack:session?.scope==='kombax'?()=>renderDirectProfileHub({onBack:renderGatewayRoot}):renderGatewayRoot});
-    }else if(session?.scope==='kombax')renderGlobalHome({onBack:renderGatewayRoot,restoreLast:!hasTransactionalEntry});else if(session)renderClubSessionOrLegal({startAtHome:false});else renderLogin();
+    }else if(session?.scope==='kombax'){if(hasTransactionalEntry)renderGlobalHome({onBack:renderGatewayRoot});else renderDirectProfileHub({onBack:renderGatewayRoot,pendingType:sessionStorage.getItem('kombax_pending_profile_type')||''});}else if(session)renderClubSessionOrLegal({startAtHome:false});else renderLogin();
     if(connectNotice||paymentNotice){history.replaceState({},'',`${location.pathname}${location.hash||''}`);setTimeout(()=>toast(connectNotice||paymentNotice,paymentEntry==='cancelled'?'error':'ok'),80);}
   }catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));

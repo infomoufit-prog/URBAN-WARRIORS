@@ -71,6 +71,11 @@ function syncBodyTheme(app){
 export function setAppHtml(html){
   const app=document.getElementById('app');if(!app)return;
   app.innerHTML=localizeHtmlString(html);syncBodyTheme(app);app.classList.remove('app-view-enter');
+  if(state.session?.id&&['kombax','club'].includes(state.session.scope||'club')&&!state.session.support_mode&&!app.querySelector('[data-kombax-view="profile-hub"],[data-kombax-view="platform-legal-required"],[data-kombax-view="gateway"]')){
+    const switcher=document.createElement('button');switcher.type='button';switcher.className='btn btn-ghost kx-account-switch';switcher.id='kx-switch-space';switcher.textContent=t('marketing.accountAccess.switchSpace');
+    switcher.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('kx-account-open')));
+    const actions=app.querySelector('.topbar-actions');(actions||app).appendChild(switcher);if(actions)switcher.classList.add('in-topbar');
+  }
   requestAnimationFrame(()=>{app.classList.add('app-view-enter');enhanceSubviewExitControls(app);});
 }
 export function setMainHtml(html){

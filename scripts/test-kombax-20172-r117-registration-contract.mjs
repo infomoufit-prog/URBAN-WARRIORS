@@ -13,10 +13,11 @@ const [backend,app,gateway,utils,birthCore,birthModule,config,gradle,mainActivit
 const checks=[];
 const ok=(name,condition)=>{assert.ok(condition,name);checks.push(name);};
 
-ok('build web 20172',/build:\s*20172/.test(config));
-ok('release hotfix 2',/r117-pilot-hotfix-2/.test(config));
-ok('Android versionCode 20172',/versionCode\s+20172/.test(gradle));
-ok('Android UA 20172',/KOMBAXApp\/2\.0\.0-rc\.13\/20172/.test(mainActivity));
+const currentBuild=Number(config.match(/build:\s*(\d+)/)?.[1]);
+ok('web includes registration contract',currentBuild>=20172);
+ok('release is defined',/version:\s*'[^']+'/.test(config));
+ok('Android matches web build',Number(gradle.match(/versionCode\s+(\d+)/)?.[1])===currentBuild);
+ok('Android UA matches web build',mainActivity.includes(`KOMBAXApp/2.0.0-rc.13/${currentBuild}`));
 
 ok('registerGlobalAccount requires fecha_nacimiento',/registerGlobalAccount\(\{[^}]*fecha_nacimiento/.test(backend));
 ok('global Auth signup sends fecha_nacimiento',/client\.signUp\(email,password,\{nombre,apellidos,fecha_nacimiento:birth\.value/.test(backend));

@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, statSync, mkdirSync, copyFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
+import {runAndroidGradle} from './android-toolchain.mjs';
 
 const root=resolve(import.meta.dirname,'..');
 const android=resolve(root,'android');
@@ -19,17 +20,11 @@ const run=(cmd,args,cwd=root)=>{
 };
 
 const runGradle=(args)=>{
-  if(process.platform==='win32'){
-    // En Windows, los .bat deben ejecutarse a través de cmd.exe.
-    const comspec=process.env.ComSpec||process.env.COMSPEC||'cmd.exe';
-    run(comspec,['/d','/s','/c',['call','gradlew.bat',...args].join(' ')],android);
-  }else{
-    // No dependemos del permiso ejecutable preservado por el ZIP.
-    run('sh',['./gradlew',...args],android);
-  }
+  runAndroidGradle(args,android);
 };
 
 // 1) Misma fuente para Web/PWA y Android.
+run(process.execPath,['scripts/sync-release-build.mjs']);
 run(process.execPath,['scripts/build.mjs']);
 // 2) Build limpio.
 runGradle(['clean','assembleDebug']);
@@ -41,9 +36,9 @@ if(!existsSync(apk) || statSync(apk).size<1024){
 }
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R117_PILOT_HOTFIX_QA_DEBUG.apk`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R118_PILOT_QA_DEBUG.apk`);
 copyFileSync(apk,namedApk);
-console.log(`\nOK · KOMBAX R117 Golden Pilot build ${versionCode} · Pilot QA Android`);
+console.log(`\nOK · KOMBAX R118 build ${versionCode} · Pilot QA Android`);
 console.log('APK Gradle: android/app/build/outputs/apk/debug/app-debug.apk');
 console.log(`APK QA: ${namedApk}`);
 

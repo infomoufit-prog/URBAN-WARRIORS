@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {synchronizeWorker} from './release-metadata.mjs';
+const historical="// historical-release-marker: const BUILD_MARKER='kombax-build-20177'; const VERSION='kombax-2.0.0-rc13-20177-r118-pilot-stabilization-1';";
+const old=historical+"\nconst BUILD_MARKER='kombax-build-20174';\nconst VERSION='kombax-2.0.0-rc13-20174-r117-pilot-hotfix-4';\n";
+const synced=synchronizeWorker(old,20177,'2.0.0-rc.13-r118-pilot-stabilization-1');
+assert.ok(synced.startsWith(historical+'\n'));
+assert.match(synced,/^const BUILD_MARKER='kombax-build-20177';$/m);
+assert.match(synced,/^const VERSION='kombax-2\.0\.0-rc13-20177-r118-pilot-stabilization-1';$/m);
+assert.equal(synchronizeWorker(synced,20177,'2.0.0-rc.13-r118-pilot-stabilization-1'),synced);
+assert.throws(()=>synchronizeWorker(historical,20177,'2.0.0-rc.13-r118-pilot-stabilization-1'),/NOT_APPLIED/);
+console.log('PASS release metadata: active cache synchronized, historical markers unchanged, idempotent, missing declarations blocked');

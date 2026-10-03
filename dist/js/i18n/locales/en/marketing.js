@@ -1,4 +1,22 @@
 export default {
+  "accountAccess": {
+  "login": "Access my account",
+  "switchSpace": "Switch space",
+  "title": "My account",
+  "clubs": "My clubs",
+  "profiles": "My profiles",
+  "join": "Join a club",
+  "createProfile": "Create a profile",
+  "register": "Create free account",
+  "freeNote": "Your KOMBAX account is free. You can then join clubs and create your profiles.",
+  "clubTitle": "I manage or belong to a club",
+  "clubBody": "Request membership, accept an invitation or use your access code.",
+  "noClubs": "You have no linked clubs yet.",
+  "noProfiles": "You have not created a profile yet.",
+  "loadError": "Your account could not be loaded.",
+  "retry": "Retry",
+  "chooseSpace": "Choose the club or profile you want to access."
+},
   "overview": {
     "kicker": "DISCOVER KOMBAX",
     "title": "What is KOMBAX and how can it help your activity grow?",

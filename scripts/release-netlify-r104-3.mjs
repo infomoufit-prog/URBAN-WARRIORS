@@ -1,30 +1,35 @@
 import {readFileSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {resolve} from 'node:path';
+import {inheritedI18nOnly} from './i18n-pilot-baseline.mjs';
 
 const root=resolve(import.meta.dirname,'..');
 const scripts=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8')).scripts;
 
-// Existing strict suites remain available through `npm test`. The remaining
-// I18N failures are tracked pilot P2 debt; any unexpected failure still blocks deploy.
-const R79_I18N_UNRESOLVED_BASELINE=255; // R110 audited historical debt; blocks any increase.
-const RUNTIME_COPY_UNRESOLVED_BASELINE=242; // R110 audited historical debt; blocks any increase.
+const sync=spawnSync(process.execPath,['scripts/sync-release-build.mjs'],{
+  cwd:root,encoding:'utf8',maxBuffer:4*1024*1024,timeout:30000,
+});
+if(sync.error) throw sync.error;
+if(sync.status!==0){
+  console.error('BLOCKED release sync');
+  console.error(`${sync.stdout||''}\n${sync.stderr||''}`.slice(-5000));
+  process.exit(1);
+}
+if(sync.stdout) console.log(sync.stdout.trim());
+
+// Build before regression tests: several suites compare generated copies with
+// web/. A fresh clone must work even if committed copies were stale.
+runBuild();
 
 const knownP2=new Map([
-  ['scripts/i18n-r79-full-product-audit.mjs',output=>boundedUnresolved(output,R79_I18N_UNRESOLVED_BASELINE)],
+  ['scripts/i18n-r79-full-product-audit.mjs',output=>/\b\d+ unresolved\b/.test(output)&&inheritedI18nOnly('r79')],
   ['scripts/test-kombax-20130-r79-i18n-phases-6-10.mjs',output=>{
-    const count=Number(output.match(/(\d+) !== 0/)?.[1]);
-    return count>0&&count<=R79_I18N_UNRESOLVED_BASELINE&&output.includes('Global strict audit records zero unresolved system copy');
+    const failed=[...output.matchAll(/✗ ([^\r\n]+)/g)].map(match=>match[1]);
+    const summary=output.match(/KOMBAX R79 I18N PHASES 6-10: (\d+)\/(\d+) PASS/);
+    return failed.length===1&&failed[0]==='Global strict audit records zero unresolved system copy'&&summary&&Number(summary[1])===Number(summary[2])-1&&inheritedI18nOnly('r79');
   }],
-  ['scripts/i18n-runtime-copy-audit.mjs',output=>boundedUnresolved(output,RUNTIME_COPY_UNRESOLVED_BASELINE)],
-  ['scripts/i18n-validate.mjs',output=>output.includes('"regional_hardcodes"')&&output.includes('web/js/modules/customer-operations.js')&&!output.includes('missing_active_keys')],
-  ['scripts/test-kombax-i18n-b02.mjs',output=>output.includes("'web/js/modules/customer-operations.js'")&&output.includes('Expected values to be strictly deep-equal')],
+  ['scripts/i18n-runtime-copy-audit.mjs',output=>/runtime copy audit:/.test(output)&&inheritedI18nOnly('runtime')],
 ]);
-
-function boundedUnresolved(output,max){
-  const count=Number(output.match(/\b(\d+) unresolved\b/)?.[1]);
-  return count>0&&count<=max;
-}
 
 let passed=0;
 const deferred=[];
@@ -38,7 +43,7 @@ for(const phase of ['pretest','test']){
     if(result.error) throw result.error;
     if(result.status===0){passed++;continue;}
     const output=`${result.stdout||''}\n${result.stderr||''}`;
-    const allowed=phase==='test'&&knownP2.get(parts[1])?.(output);
+    const allowed=result.status===1&&phase==='test'&&knownP2.get(parts[1])?.(output);
     if(!allowed){
       console.error(`BLOCKED ${phase}: ${command}`);
       console.error(output.slice(-5000));
@@ -51,6 +56,14 @@ for(const phase of ['pretest','test']){
 
 console.log(`KOMBAX Netlify pilot gate: ${passed} PASS, ${deferred.length} P2 conocidos, 0 fallos nuevos.`);
 console.log('La suite estricta completa sigue disponible mediante npm test y continúa fallando hasta cerrar los P2 documentados.');
+const compatibility=spawnSync(process.execPath,['scripts/verify-build-compatibility.mjs'],{
+  cwd:root,encoding:'utf8',maxBuffer:16*1024*1024,timeout:120000,
+});
+if(compatibility.error)throw compatibility.error;
+if(compatibility.status!==0){console.error(compatibility.stdout,compatibility.stderr);process.exit(1);}
+console.log(compatibility.stdout.trim());
+
+function runBuild(){
 const build=spawnSync(process.execPath,['scripts/build.mjs'],{
   cwd:root,encoding:'utf8',maxBuffer:16*1024*1024,timeout:120000,
 });
@@ -61,3 +74,4 @@ if(build.status!==0){
   process.exit(1);
 }
 console.log((build.stdout||'').trim());
+}

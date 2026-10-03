@@ -4,7 +4,7 @@ import vm from 'node:vm';
 
 const showcaseSource = readFileSync(new URL('../web/js/modules/showcase.js', import.meta.url), 'utf8');
 const opsSource = readFileSync(new URL('../web/js/modules/customer-operations.js', import.meta.url), 'utf8');
-const repoSource = readFileSync(new URL('../web/js/core/repositories.js', import.meta.url), 'utf8');
+const repoSource = readFileSync(new URL('../web/js/core/repositories.js', import.meta.url), 'utf8').replace(/\r\n/g,'\n');
 
 // Showcase editor: run its actual submit handler against a fully local mock repository.
 const editorStart = showcaseSource.indexOf('function itemEditor(');
@@ -106,7 +106,9 @@ assert.equal(validate([{ name:'grande.pdf', type:'application/pdf', size:10*1024
 assert.equal(validate([{ name:'foto.heic', type:'image/heic', size:100 }])?.name, 'foto.heic');
 
 const stageStart = repoSource.indexOf('    async stageMigrationFiles(ticket_id,files=[],onProgress=null){');
-const stageEnd = repoSource.indexOf('\n    }\n  },\n  platformAdmin:', stageStart);
+// The pilot repository now follows customerOps before platformAdmin.
+// Delimit the adapter at its own object boundary independently of the next name.
+const stageEnd = repoSource.indexOf('\n    }\n  },', stageStart);
 assert.ok(stageStart >= 0 && stageEnd > stageStart, 'Existe el flujo de carga de documentos de Migrations');
 let stagedUploads = [], registrations = [], progress = [];
 const stageSnippet = `({${repoSource.slice(stageStart, stageEnd+6).trim().replace(/^async stageMigrationFiles/, 'async stageMigrationFiles')}})`;

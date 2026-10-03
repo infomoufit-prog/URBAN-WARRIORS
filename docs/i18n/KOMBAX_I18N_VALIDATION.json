@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-03T08:41:52.786Z",
+  "generated_at": "2026-10-03T21:52:13.883Z",
   "master_locale": "es",
-  "master_catalog_keys": 1756,
+  "master_catalog_keys": 1776,
   "locales": {
     "es": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -13,7 +13,7 @@
       "technical_leaks": []
     },
     "en": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -22,7 +22,7 @@
       "technical_leaks": []
     },
     "fr": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -31,7 +31,7 @@
       "technical_leaks": []
     },
     "pt": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -40,7 +40,7 @@
       "technical_leaks": []
     },
     "it": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -49,7 +49,7 @@
       "technical_leaks": []
     },
     "de": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -58,7 +58,7 @@
       "technical_leaks": []
     },
     "th": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -67,7 +67,7 @@
       "technical_leaks": []
     },
     "fil": {
-      "translated_catalog_keys": 1756,
+      "translated_catalog_keys": 1776,
       "catalog_coverage_percent": 100,
       "missing_keys": [],
       "extra_keys": [],
@@ -76,15 +76,9 @@
       "technical_leaks": []
     }
   },
-  "errors": [
-    {
-      "regional_hardcodes": [
-        "web/js/modules/customer-operations.js"
-      ]
-    }
-  ],
+  "errors": [],
   "warnings": [],
-  "active_translation_references": 1194,
+  "active_translation_references": 1207,
   "missing_active_keys_by_locale": {
     "es": [],
     "en": [],
@@ -95,7 +89,5 @@
     "th": [],
     "fil": []
   },
-  "remaining_ui_es_es_hardcodes": [
-    "web/js/modules/customer-operations.js"
-  ]
+  "remaining_ui_es_es_hardcodes": []
 }

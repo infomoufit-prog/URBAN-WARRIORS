@@ -1007,8 +1007,35 @@ export const repos={
     taxonomy:()=>backend.publicRpc('app_kombax_profile_taxonomy_v196',{}),
     capabilities:(profileId)=>backend.globalReadRpc('app_kombax_profile_capabilities_v196',{p_perfil_directo_id:profileId}),
     workspace:(profileId)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_managed_profile_hub_v200',{p_perfil_directo_id:profileId}),()=>backend.globalReadRpc('app_kombax_managed_profile_hub_v197',{p_perfil_directo_id:profileId}),'app_kombax_managed_profile_hub_v200'),
-    professionalWorkspace:(profileId)=>backend.globalReadRpc('app_kombax_professional_workspace_v198',{p_profile_id:profileId}),
+    professionalWorkspace:(profileId)=>rpcWithFallback(
+      ()=>backend.globalReadRpc('app_kombax_professional_workspace_r118',{p_profile_id:profileId}),
+      ()=>backend.globalReadRpc('app_kombax_professional_workspace_v198',{p_profile_id:profileId}),
+      'app_kombax_professional_workspace_r118'
+    ),
     professionalMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_mutate_v198',operation,payload),
+    professionalCredentialMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_credential_mutate_r118',operation,payload),
+    professionalPublicCredentials:(profileId)=>backend.globalReadRpc('app_kombax_professional_public_credentials_r118',{p_profile_id:profileId}),
+    async uploadProfessionalCredentialEvidence(profileId,credentialId,file){
+      if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+      if(!profileId||!credentialId)throw new Error('Credencial profesional no disponible.');
+      if(!file?.size)throw new Error('Selecciona un documento de acreditación.');
+      const allowed=new Set(['application/pdf','image/jpeg','image/png','image/webp']);
+      if(!allowed.has(file.type))throw new Error('Formato no admitido. Usa PDF, JPG, PNG o WEBP.');
+      if(file.size>15*1024*1024)throw new Error('El documento supera 15 MB.');
+      const ext=file.type==='application/pdf'?'pdf':file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';
+      const uid=String(session().id),token=crypto.randomUUID?.()||Math.random().toString(36).slice(2);
+      const path=`${uid}/professional-credential/${credentialId}/${Date.now()}-${token}.${ext}`;
+      await backend.upload('kombax-verification-docs',path,file,false);
+      try{
+        const out=await kombaxGlobalMutation('app_kombax_professional_credential_mutate_r118','professional.credential.evidence.register',{
+          professional_profile_id:profileId,credential_id:credentialId,storage_path:path,mime_type:file.type,size_bytes:file.size
+        });
+        return {...out,storage_path:path};
+      }catch(error){
+        await backend.remove('kombax-verification-docs',path).catch(()=>{});
+        throw error;
+      }
+    },
     professionalFinance:(profileId)=>backend.globalReadRpc('app_kombax_professional_finance_v199',{p_profile_id:profileId}),
     professionalFinanceNotifications:(profileId)=>backend.globalReadRpc('app_kombax_professional_finance_notifications_v199',{p_profile_id:profileId}),
     professionalFinanceMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_finance_mutate_v199',operation,payload),
@@ -1073,8 +1100,6 @@ export const repos={
     activateMember:({fecha_nacimiento=null,acepta_normas,acepta_privacidad,acepta_seguridad_menor=false})=>kombaxIdentityMutation('kombax.identity.member.activate',{club_id:session()?.club_id||null,fecha_nacimiento:fecha_nacimiento||null,acepta_normas:acepta_normas===true,acepta_privacidad:acepta_privacidad===true,acepta_seguridad_menor:acepta_seguridad_menor===true,user_agent:navigator.userAgent}),
     updateMemberProfile:(payload={})=>kombaxIdentityMutation('kombax.identity.member.profile.update',{club_id:session()?.club_id||null,bio_publica:String(payload.bio_publica||'').trim(),apodo_deportivo:String(payload.apodo_deportivo||'').trim(),disciplinas_publicas:String(payload.disciplinas_publicas||'').trim(),experiencia_anos:payload.experiencia_anos===''||payload.experiencia_anos==null?null:Number(payload.experiencia_anos),guardia:String(payload.guardia||'').trim(),tecnica_favorita:String(payload.tecnica_favorita||'').trim(),especialidad:String(payload.especialidad||'').trim(),trayectoria_declarada:String(payload.trayectoria_declarada||'').trim(),objetivos:String(payload.objetivos||'').trim()}),
     setTeamPermission:(perfil_id,permiso,activo=true)=>kombaxIdentityMutation('kombax.club.permission.set',{club_id:session()?.club_id||null,perfil_id,permiso,activo:activo===true}),
-    minorSocialControls:()=>backend.globalReadRpc('app_kombax_minor_social_controls_v121',{}),
-    setMinorSocialConsent:(socio_id,enabled)=>backend.globalWriteRpc('app_kombax_minor_social_consent_v121',{p_socio_id:socio_id,p_enabled:enabled===true,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
   },
   kombaxSocial:{
     status:()=>backend.globalReadRpc('app_kombax_social_estado_v124',{p_club_id:session()?.club_id||null}),
@@ -1279,10 +1304,19 @@ export const repos={
     register:(invitation_id,registered_participant_id)=>backend.globalWriteRpc('app_kombax_fight_invitation_mutate_v221',{p_operation:'register',p_payload:{invitation_id,registered_participant_id}})
   },
   discovery:{
-    search:(filters={})=>backend.globalReadRpc('app_kombax_discovery_search_r626',{p_filters:filters||{}}),
+    search:(filters={})=>rpcWithFallback(
+      ()=>backend.globalReadRpc('app_kombax_discovery_search_r118',{p_filters:filters||{}}),
+      ()=>backend.globalReadRpc('app_kombax_discovery_search_r626',{p_filters:filters||{}}),
+      'app_kombax_discovery_search_r118'
+    ),
     profile:(profile_id)=>backend.globalReadRpc('app_kombax_discovery_profile_r626',{p_profile_id:profile_id}),
     save:(profile_id,payload={})=>backend.globalWriteRpc('app_kombax_discovery_mutate_r626',{p_profile_id:profile_id,p_payload:payload||{},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
-    publicProfile:(social_profile_id)=>backend.globalReadRpc('app_kombax_discovery_public_profile_r626',{p_social_profile_id:social_profile_id}),
+    publicProfile:(social_profile_id)=>rpcWithFallback(
+      ()=>backend.globalReadRpc('app_kombax_discovery_public_profile_r118',{p_social_profile_id:social_profile_id}),
+      ()=>backend.globalReadRpc('app_kombax_discovery_public_profile_r626',{p_social_profile_id:social_profile_id}),
+      'app_kombax_discovery_public_profile_r118'
+    ),
+    personFacets:(social_profile_id)=>backend.globalReadRpc('app_kombax_person_facets_r118',{p_social_profile_id:social_profile_id}),
     slots:(profile_id)=>backend.globalReadRpc('app_kombax_discovery_slots_r626',{p_profile_id:profile_id}),
     saveSlot:(profile_id,payload={})=>backend.globalWriteRpc('app_kombax_discovery_slot_mutate_r626',{p_profile_id:profile_id,p_operation:'save',p_payload:payload||{},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
     deleteSlot:(profile_id,slot_id)=>backend.globalWriteRpc('app_kombax_discovery_slot_mutate_r626',{p_profile_id:profile_id,p_operation:'delete',p_payload:{id:slot_id},p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`})
@@ -1350,6 +1384,11 @@ export const repos={
     profiles:(query='',limit=100)=>backend.globalReadRpc('app_kombax_platform_profiles_v117',{p_query:String(query||'').trim(),p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
     application:(solicitud_id)=>backend.globalReadRpc('app_kombax_platform_application_v072',{p_solicitud_id:solicitud_id}),
     verificationDocumentUrl:(path)=>backend.signedUrl('kombax-verification-docs',path,600),
+    professionalCredentialQueue:()=>backend.globalReadRpc('app_kombax_professional_credential_queue_r118',{}),
+    professionalCredentialReview:(professional_profile_id,credential_id,decision,review_note='')=>kombaxGlobalMutation(
+      'app_kombax_professional_credential_mutate_r118','professional.credential.review',
+      {professional_profile_id,credential_id,decision,review_note:String(review_note||'').trim()}
+    ),
     club:(club_id)=>backend.globalReadRpc('app_kombax_platform_club_v055',{p_club_id:club_id}),
     releaseContract:()=>backend.globalReadRpc('app_kombax_release_contract_v056',{}),
     reviewApplication:(solicitud_id,estado,motivo='')=>kombaxGlobalMutation('app_kombax_perfil_mutate_v196','kombax.application.review',{solicitud_id,estado,motivo}),

@@ -36,3 +36,6 @@ verify_jwt = true
 
 [functions.kombax-owner-report-r114]
 verify_jwt = true
+
+[functions.kombax-owner-verification-worker-r118]
+verify_jwt = false

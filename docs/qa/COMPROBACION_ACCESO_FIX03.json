@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "Two primary entry cards; no separate free-account card",
+    "Single email/password login with registration and recovery",
+    "Free registration preserves birth date and legal consent",
+    "Login opens My account and empty-account actions",
+    "Team clubs grouped by club with actual roles; personal profiles separate; tenant data cleared",
+    "Club entry rechecks active membership; unauthorized club denied and previous context restored",
+    "Club header fits mobile screen with Switch space button",
+    "Switch space returns from club to account without logout",
+    "Mobile layout and separate temporary pilot entry",
+    "Pilot login retains activation intent and next form remains open",
+    "Account load failure is recoverable without redirect loop",
+    "Club entry preserves authenticated account and offers first-access codes",
+    "Account access labels available in all eight supported languages"
+  ],
+  "passed": 13,
+  "errors": [],
+  "scope": "Browser fixtures; no production signup, email or payments performed"
+}

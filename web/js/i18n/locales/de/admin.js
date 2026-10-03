@@ -1,4 +1,5 @@
 export default {
+  "ownerAutomation":{"policy": "Im Pilotbetrieb darf die KI lesbare, relevante Dokumente vollständiger Anträge mit geringem Risiko prüfen. Bei Zweifeln entscheidet Owner. Die manuelle Prüfung bleibt verfügbar. Vereine, Verbände, Minderjährige, Zahlungen, Berechtigungen und Löschungen erfordern eine menschliche Prüfung.", "analyze": "Prüfe Nachweise, Lesbarkeit, Relevanz und Anforderungen; bestätige nur ohne Zweifel.", "approved": "Automatische Verifizierung abgeschlossen und protokolliert.", "manual": "Manuelle Prüfung erforderlich; siehe Owner-Meldung."},
   "title": "KOMBAX Verwaltung",
   "team": "Team",
   "permissions": "Team und Berechtigungen",

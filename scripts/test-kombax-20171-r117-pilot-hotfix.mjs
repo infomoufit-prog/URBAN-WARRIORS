@@ -9,11 +9,12 @@ const [cfg,gradle,activity,gateway,members,repos,social,app,m303,m304,m305,m306]
 ]);
 const checks=[];const ok=(c,m)=>{checks.push([!!c,m]);if(!c)throw new Error(m)};
 const currentBuild=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0);
-ok(currentBuild>=20171&&cfg.includes('r117-pilot-hotfix'),'build 20171+ / config monotonic');
+const currentVersion=cfg.match(/version:\s*'([^']+)'/)?.[1];
+ok(currentBuild>=20171&&Number(currentVersion?.match(/-r(\d+)/)?.[1])>=117,'build 20171+ / config monotonic');
 const androidCode=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
-ok(androidCode>=20171&&gradle.includes("r117-pilot-hotfix"),'Android versionCode/versionName monotonic');
+ok(androidCode===currentBuild&&gradle.includes(`versionName '${currentVersion}'`),'Android versionCode/versionName monotonic');
 ok(activity.includes('webView.restoreState(savedInstanceState)')&&activity.includes('webView.saveState(outState)')&&activity.includes('persistInternalUrl()'),'Android lifecycle state persistence');
-ok(app.includes('renderClubSessionOrLegal({startAtHome:false})')&&app.includes('restoreLast:!hasTransactionalEntry'),'frontend restores navigation instead of forcing home');
+ok(app.includes('renderClubSessionOrLegal({startAtHome:false})')&&app.includes("renderDirectProfileHub({onBack:renderGatewayRoot,pendingType:sessionStorage.getItem('kombax_pending_profile_type')||''})"),'club navigation restores and account login opens its space selector');
 ok(gateway.includes('Alta directa sin código de invitación')&&!gateway.includes("name:'pilot_code'"),'pilot club UI no code');
 ok(m303.includes("invite_code_required',false")&&m303.includes('PILOT_INVITE_CODES_DISABLED'),'pilot club backend no code');
 ok(m304.includes('album_enabled')&&m304.includes("KOMBAX_SPECTATOR_ALBUM_DISABLED")&&m304.includes('publication_enabled'),'member/spectator public profile separation');

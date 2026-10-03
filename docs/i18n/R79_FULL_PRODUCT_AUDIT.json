@@ -1,33 +1,114 @@
 {
-  "generated_at": "2026-10-03T08:41:51.467Z",
-  "candidates": 5052,
-  "covered_r79": 540,
-  "covered_r78": 1220,
-  "covered_legacy_all7": 3051,
-  "unresolved": 241,
+  "generated_at": "2026-10-03T21:52:01.002Z",
+  "candidates": 5091,
+  "covered_r79": 542,
+  "covered_r78": 1218,
+  "covered_legacy_all7": 3045,
+  "unresolved": 286,
   "by_file": {
+    "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 67,
-    "web/js/modules/platform-admin.js": 64,
+    "web/js/modules/gateway.js": 32,
     "web/js/modules/plan-services.js": 32,
-    "web/js/modules/gateway.js": 25,
+    "web/js/modules/professional-operations.js": 21,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 11,
     "web/js/modules/showcase.js": 7,
     "web/js/modules/finance-guide.js": 5,
+    "web/js/core/repositories.js": 4,
     "web/js/core/utils.js": 4,
     "web/js/modules/admin.js": 4,
+    "web/js/core/backend.js": 3,
     "web/js/modules/club-poster.js": 3,
+    "web/js/modules/public-profile.js": 3,
     "web/js/modules/club-profile.js": 2,
     "web/js/core/media.js": 1,
-    "web/js/core/repositories.js": 1,
+    "web/js/modules/comms-material.js": 1,
     "web/js/modules/guides.js": 1,
     "web/js/modules/help-legal.js": 1,
+    "web/js/modules/kombax-discovery.js": 1,
     "web/js/modules/kombax-social.js": 1
   },
   "unresolved_rows": [
     {
+      "file": "web/js/core/backend.js",
+      "value": "Limpieza de solicitud de equipo pendiente:",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "value": "Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "value": "Solicitud enviada al club. Tu acceso está pendiente de aprobación.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
       "file": "web/js/core/media.js",
       "value": "El logo supera 5 MB. Selecciona una versión más ligera.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "Credencial profesional no disponible.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "Selecciona un documento de acreditación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "El documento supera 15 MB.",
       "missing": [
         "en",
         "fr",
@@ -203,6 +284,19 @@
       "file": "web/js/modules/club-profile.js",
       "value": "Máximo 5 MB. Se usa también en Social, tickets vinculados al club, informes y nuevos recibos.",
       "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/comms-material.js",
+      "value": "“Marcar informativas como leídas” nunca oculta estas tareas. Abre “Revisar” y resuélvelas en su apartado para cerrarlas.",
+      "missing": [
+        "en",
         "fr",
         "pt",
         "it",
@@ -1145,9 +1239,33 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor.",
+      "value": "Compatible con Competidor y Profesional",
       "missing": [
         "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Esta cuenta ya gestiona un Club o tiene un alta de Club pendiente.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Ya existe este tipo de perfil o una solicitud equivalente en esta cuenta.",
+      "missing": [
         "fr",
         "pt",
         "it",
@@ -1410,7 +1528,19 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Esta cuenta ya tiene asignado su tipo de perfil.",
+      "value": "No hay nuevos perfiles compatibles pendientes de añadir en esta cuenta.",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Tu cuenta KOMBAX es única y gratuita. Puedes añadir perfiles y capacidades compatibles sin perder los que ya tienes; cada verificación y cada organización conservan sus propios permisos.",
       "missing": [
         "en",
         "fr",
@@ -1430,6 +1560,19 @@
     },
     {
       "file": "web/js/modules/gateway.js",
+      "value": "Crea o utiliza tu cuenta KOMBAX. Tras confirmar el correo, completarás los datos básicos y, mientras la ventana tenga plazas, el sistema activará directamente el Club Piloto Premium.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
       "value": "La plaza y el nivel de acceso requieren confirmación de KOMBAX. No necesitas tarjeta para el piloto.",
       "missing": [
         "en",
@@ -1443,7 +1586,46 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Perfil público gratuito · planes opcionales",
+      "value": "Identidad pública gratuita · suscripción organizativa independiente",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Faceta personal · verificación independiente cuando corresponda",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Una cuenta, un Perfil Social, varias capacidades",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Tu Perfil Social personal no se duplica. Puedes ser Miembro, Competidor y Profesional con la misma cuenta. Los roles de Club, las verificaciones y las suscripciones de organizaciones se gestionan por separado.",
       "missing": [
         "en",
         "fr",
@@ -1470,6 +1652,19 @@
     {
       "file": "web/js/modules/help-legal.js",
       "value": "Imprimir A4",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/kombax-discovery.js",
+      "value": "Médico / Sanitario",
       "missing": [
         "en",
         "fr",
@@ -2557,6 +2752,19 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "} · revisión privada KOMBAX`,width:",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": ":item.estado,options:[{value:",
       "missing": [
         "en",
@@ -2882,19 +3090,6 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Los agentes analizan, priorizan, preparan acciones y mantienen trazabilidad. Pagos, menores, credenciales, privilegios, eliminaciones y decisiones irreversibles conservan las validaciones humanas y del backend.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
       "value": "Los borradores usan datos agregados. Una publicación PDF exige revisión Owner.",
       "missing": [
         "en",
@@ -2999,6 +3194,83 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "VERIFICACIÓN PROFESIONAL · R118",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Cada credencial se revisa de forma independiente. La evidencia es privada y una aprobación solo certifica esta credencial concreta.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Declaración de autenticidad",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Abrir evidencia",
+      "missing": [
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Aprobar certifica únicamente esta acreditación. No valida automáticamente todas las afirmaciones del perfil.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Rechazar / solicitar corrección",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": "SESIÓN OWNER",
       "missing": [
         "en",
@@ -3013,6 +3285,318 @@
     {
       "file": "web/js/modules/platform-admin.js",
       "value": "Administración KOMBAX activa",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Médico / Sanitario",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Ocultar del perfil público",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Publicar credencial verificada",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Licencia, titulación, colegiación…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Declaro que la información y documentación aportadas son auténticas y autorizo a KOMBAX a utilizarlas para verificar esta credencial.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Adjunta la evidencia de la acreditación.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Debes aceptar la declaración de autenticidad antes de enviar la credencial.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Preparando acreditación…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "KOMBAX no devolvió una credencial verificable.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Enviando a revisión…",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Acreditación enviada a revisión KOMBAX",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Enviar acreditación a verificación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Credencial ocultada del perfil público",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Declaración de autenticidad registrada",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "La acreditación caducada no se publica.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "VERIFICACIÓN DOCUMENTAL",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "El documento se guarda de forma privada. Solo publicaremos los datos de una credencial después de verificarla y cuando tú decidas hacerla visible.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Enlace oficial de verificación opcional",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Documento de evidencia",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "PDF, JPG, PNG o WEBP · máximo 15 MB · almacenamiento privado.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Si la credencial se verifica y posteriormente la publico, permitir mostrar también la referencia pública.",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "Médico / Sanitario",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "Acreditación",
+      "missing": [
+        "en",
+        "fr",
+        "pt",
+        "it",
+        "de",
+        "th",
+        "fil"
+      ]
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "Una sola identidad pública. Las capacidades y credenciales se verifican por separado.",
       "missing": [
         "en",
         "fr",

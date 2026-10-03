@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T08:41:52.148Z",
+  "generated_at": "2026-10-03T21:52:07.534Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -98,11 +98,11 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4920,
-  "covered": 4693,
-  "unresolved": 227,
-  "coverage": 95.39,
-  "skipped": 384,
+  "phrases": 4961,
+  "covered": 4694,
+  "unresolved": 267,
+  "coverage": 94.62,
+  "skipped": 385,
   "files": {
     "web/js/app.js": {
       "total": 126,
@@ -135,10 +135,10 @@
       "coverage": 100
     },
     "web/js/core/backend.js": {
-      "total": 46,
-      "covered": 46,
+      "total": 49,
+      "covered": 48,
       "skipped": 5,
-      "coverage": 100
+      "coverage": 97.96
     },
     "web/js/core/capability-resolver.js": {
       "total": 0,
@@ -225,10 +225,10 @@
       "coverage": 100
     },
     "web/js/core/repositories.js": {
-      "total": 43,
+      "total": 46,
       "covered": 42,
       "skipped": 73,
-      "coverage": 97.67
+      "coverage": 91.3
     },
     "web/js/core/security-go-live-20084.js": {
       "total": 7,
@@ -328,9 +328,9 @@
     },
     "web/js/modules/comms-material.js": {
       "total": 88,
-      "covered": 88,
+      "covered": 87,
       "skipped": 11,
-      "coverage": 100
+      "coverage": 98.86
     },
     "web/js/modules/community.js": {
       "total": 77,
@@ -435,10 +435,10 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 282,
-      "covered": 261,
+      "total": 278,
+      "covered": 253,
       "skipped": 7,
-      "coverage": 92.55
+      "coverage": 91.01
     },
     "web/js/modules/groups-members.js": {
       "total": 178,
@@ -459,10 +459,10 @@
       "coverage": 99.69
     },
     "web/js/modules/kombax-discovery.js": {
-      "total": 65,
-      "covered": 65,
-      "skipped": 10,
-      "coverage": 100
+      "total": 68,
+      "covered": 67,
+      "skipped": 9,
+      "coverage": 98.53
     },
     "web/js/modules/kombax-event-visuals.js": {
       "total": 7,
@@ -525,10 +525,10 @@
       "coverage": 100
     },
     "web/js/modules/platform-admin.js": {
-      "total": 207,
-      "covered": 144,
+      "total": 214,
+      "covered": 146,
       "skipped": 15,
-      "coverage": 69.57
+      "coverage": 68.22
     },
     "web/js/modules/platform-legal.js": {
       "total": 9,
@@ -561,16 +561,16 @@
       "coverage": 100
     },
     "web/js/modules/professional-operations.js": {
-      "total": 33,
-      "covered": 33,
+      "total": 56,
+      "covered": 35,
       "skipped": 4,
-      "coverage": 100
+      "coverage": 62.5
     },
     "web/js/modules/public-profile.js": {
-      "total": 85,
-      "covered": 85,
-      "skipped": 8,
-      "coverage": 100
+      "total": 91,
+      "covered": 87,
+      "skipped": 10,
+      "coverage": 95.6
     },
     "web/js/modules/resource-center.js": {
       "total": 0,
@@ -683,8 +683,24 @@
   },
   "unresolved_samples": [
     {
+      "file": "web/js/core/backend.js",
+      "value": "Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación."
+    },
+    {
       "file": "web/js/core/media.js",
       "value": "El logo supera 5 MB. Selecciona una versión más ligera."
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "Credencial profesional no disponible."
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "Selecciona un documento de acreditación."
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "value": "El documento supera 15 MB."
     },
     {
       "file": "web/js/core/repositories.js",
@@ -729,6 +745,10 @@
     {
       "file": "web/js/modules/club-profile.js",
       "value": "Perfil público del club · el logo y la portada se comparten con la identidad del club"
+    },
+    {
+      "file": "web/js/modules/comms-material.js",
+      "value": "“Marcar informativas como leídas” nunca oculta estas tareas. Abre “Revisar” y resuélvelas en su apartado para cerrarlas."
     },
     {
       "file": "web/js/modules/customer-operations.js",
@@ -1008,7 +1028,7 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Esta cuenta ya tiene un tipo de perfil. Solo una cuenta de miembro puede solicitar Competidor."
+      "value": "Compatible con Competidor y Profesional"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -1080,7 +1100,11 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Esta cuenta ya tiene asignado su tipo de perfil."
+      "value": "Tu cuenta KOMBAX es única y gratuita. Puedes añadir perfiles y capacidades compatibles sin perder los que ya tienes; cada verificación y cada organización conservan sus propios permisos."
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Crea o utiliza tu cuenta KOMBAX. Tras confirmar el correo, completarás los datos básicos y, mientras la ventana tenga plazas, el sistema activará directamente el Club Piloto Premium."
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -1088,7 +1112,19 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Perfil público gratuito · planes opcionales"
+      "value": "Identidad pública gratuita · suscripción organizativa independiente"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Faceta personal · verificación independiente cuando corresponda"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Una cuenta, un Perfil Social, varias capacidades"
+    },
+    {
+      "file": "web/js/modules/gateway.js",
+      "value": "Tu Perfil Social personal no se duplica. Puedes ser Miembro, Competidor y Profesional con la misma cuenta. Los roles de Club, las verificaciones y las suscripciones de organizaciones se gestionan por separado."
     },
     {
       "file": "web/js/modules/guides.js",
@@ -1097,6 +1133,10 @@
     {
       "file": "web/js/modules/help-legal.js",
       "value": "Imprimir A4"
+    },
+    {
+      "file": "web/js/modules/kombax-discovery.js",
+      "value": "Médico / Sanitario"
     },
     {
       "file": "web/js/modules/kombax-social.js",
@@ -1416,6 +1456,10 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "} · revisión privada KOMBAX`,width:"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": ":item.estado,options:[{value:"
     },
     {
@@ -1524,10 +1568,6 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
-      "value": "Los agentes analizan, priorizan, preparan acciones y mantienen trazabilidad. Pagos, menores, credenciales, privilegios, eliminaciones y decisiones irreversibles conservan las validaciones humanas y del backend."
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
       "value": "Los borradores usan datos agregados. Una publicación PDF exige revisión Owner."
     },
     {
@@ -1556,11 +1596,131 @@
     },
     {
       "file": "web/js/modules/platform-admin.js",
+      "value": "VERIFICACIÓN PROFESIONAL · R118"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Cada credencial se revisa de forma independiente. La evidencia es privada y una aprobación solo certifica esta credencial concreta."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Declaración de autenticidad"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Aprobar certifica únicamente esta acreditación. No valida automáticamente todas las afirmaciones del perfil."
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
+      "value": "Rechazar / solicitar corrección"
+    },
+    {
+      "file": "web/js/modules/platform-admin.js",
       "value": "SESIÓN OWNER"
     },
     {
       "file": "web/js/modules/platform-admin.js",
       "value": "Administración KOMBAX activa"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Médico / Sanitario"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Ocultar del perfil público"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Publicar credencial verificada"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Licencia, titulación, colegiación…"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Declaro que la información y documentación aportadas son auténticas y autorizo a KOMBAX a utilizarlas para verificar esta credencial."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Adjunta la evidencia de la acreditación."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Debes aceptar la declaración de autenticidad antes de enviar la credencial."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Preparando acreditación…"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "KOMBAX no devolvió una credencial verificable."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Enviando a revisión…"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Acreditación enviada a revisión KOMBAX"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Enviar acreditación a verificación"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Credencial ocultada del perfil público"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Declaración de autenticidad registrada"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "La acreditación caducada no se publica."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "VERIFICACIÓN DOCUMENTAL"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "El documento se guarda de forma privada. Solo publicaremos los datos de una credencial después de verificarla y cuando tú decidas hacerla visible."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Enlace oficial de verificación opcional"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Documento de evidencia"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "PDF, JPG, PNG o WEBP · máximo 15 MB · almacenamiento privado."
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "value": "Si la credencial se verifica y posteriormente la publico, permitir mostrar también la referencia pública."
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "Médico / Sanitario"
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "Acreditación"
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "{VAR}):''} Competidor{VAR}"
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "value": "Una sola identidad pública. Las capacidades y credenciales se verifican por separado."
     },
     {
       "file": "web/js/modules/showcase.js",

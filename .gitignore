@@ -13,6 +13,7 @@ android/**/build/
 
 # Entorno y dependencias
 node_modules/
+.netlify/
 .env
 .env.*
 

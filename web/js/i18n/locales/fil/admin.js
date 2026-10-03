@@ -1,4 +1,5 @@
 export default {
+  "ownerAutomation":{"policy": "Sa pilot, maaaring beripikahin ng AI ang malinaw at angkop na dokumento ng kumpletong aplikasyon na mababa ang panganib. Owner ang susuri kapag may pagdududa. Available pa rin ang manu-manong pagsusuri. Kailangan ng tao para sa club, federation, menor de edad, bayad, pribilehiyo at pagbura.", "analyze": "Suriin ang ebidensya, linaw, kaugnayan at mga kailangan; beripikahin lamang kung walang pagdududa.", "approved": "Nakumpleto at naitala ang awtomatikong beripikasyon.", "manual": "Kailangan ng manu-manong pagsusuri; tingnan ang Owner alert."},
   "title": "KOMBAX Administration",
   "team": "Team",
   "permissions": "Team at permissions",

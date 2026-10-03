@@ -6,7 +6,7 @@ const cfg=read('web/config.js'),gradle=read('android/app/build.gradle'),admin=re
 const build=Number(cfg.match(/build:\s*(\d+)/)?.[1]||0),versionCode=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);assert.ok(build>=20074);assert.ok(versionCode>=20074);
 assert.match(admin,/Correo electrónico del miembro/);assert.match(admin,/type:'email'/);assert.match(admin,/createTeamInvitation\(email,role/);assert.match(admin,/sendTeamInvitation\(invitation\.id\)/);
 assert.match(repos,/app_kombax_invitacion_crear_v059/);assert.match(repos,/invokeFunction\('invite-email'/);
-assert.match(backend,/app_kombax_invitacion_validar_v059/);assert.match(backend,/app_kombax_invitacion_aceptar_equipo_v059/);assert.match(backend,/p\.kind==='one_time'/);
+assert.match(backend,/app_kombax_invitacion_validar_v059/);assert.match(backend,/app_kombax_invitacion_aceptar_equipo_v059/);assert.match(backend,/(?:pending|p)\.kind==='one_time'/);assert.match(backend,/app_kombax_invitacion_aceptar_equipo_v059/);
 assert.match(app,/\^EQP-/);assert.match(app,/Invitación personal al equipo/);assert.match(app,/kind:oneTime\?'one_time':'generic'/);assert.match(app,/La invitación no es válida para este correo o ha caducado/);
 assert.match(mig,/lower\(v\.email\)<>v_email/);assert.match(mig,/tipo_invitacion='equipo'/);assert.match(mig,/expira_en<=now\(\)/);
 for(const x of ['RESEND_API_KEY','KOMBAX_INVITE_FROM','app_kombax_invitacion_email_payload_v059','app_kombax_invitacion_email_estado_v059','access-control-allow-origin','Revisar invitación'])assert.ok(edge.includes(x),`invite-email incompleto: ${x}`);

@@ -27,9 +27,9 @@ test('Historical release functionality remains on a monotonic cumulative build',
   has(sw,`kombax-build-${webBuild}`);has(health,`build:${webBuild}`);
 });
 
-test('Public gateway keeps Spectator as an explicit free-account route',()=>{
-  has(gateway,'id="gateway-spectator"');has(gateway,"marketing.gateway.home.spectatorTitle");has(marketingEs,'Quiero explorar KOMBAX primero');
-  has(gateway,"renderIdentityPresentation('espectador'");
+test('Public gateway uses two routes and a shared free account login',()=>{
+  has(gateway,'id="gateway-club"');has(gateway,'id="gateway-direct"');has(gateway,'id="gateway-account-login"');not(gateway,'id="gateway-spectator"');
+  has(registry,"id:'espectador'");
   has(gateway,'id="kx-free-account">Crear cuenta gratuita');not(gateway,'Crear cuenta gratuita / Espectador');
 });
 

@@ -2,6 +2,7 @@ import { access, readFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { isAbsolute, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { androidEnvironment } from './android-toolchain.mjs';
 
 const root=resolve(import.meta.dirname,'..');
 const android=resolve(root,'android');
@@ -19,14 +20,17 @@ add(new RegExp(`build: ${versionCode}\\b`).test(webConfig)&&activity.includes(`K
   'Misma versión en web y Android','config.js y User-Agent');
 add(await exists(resolve(android,'app/src/main/assets/www/index.html')),'Aplicación web embebida','assets/www presente');
 const gradlewPath=resolve(android,process.platform==='win32'?'gradlew.bat':'gradlew');
-const gradlewExecutable=process.platform==='win32'?await exists(gradlewPath):await (async()=>{try{await access(gradlewPath,constants.X_OK);return true}catch{return false}})();
-add(gradlewExecutable,'Gradle wrapper ejecutable',process.platform==='win32'?'gradlew.bat presente':'android/gradlew con permiso de ejecución');
+const gradlewExecutable=await exists(gradlewPath);
+add(gradlewExecutable,'Gradle wrapper disponible',process.platform==='win32'?'gradlew.bat presente':'android/gradlew disponible; se ejecuta mediante sh');
 
-const javaPath=process.env.JAVA_HOME?resolve(process.env.JAVA_HOME,'bin',process.platform==='win32'?'java.exe':'java'):'java';
-const java=spawnSync(javaPath,['-version'],{encoding:'utf8'});
+const toolchain=androidEnvironment();
+const javaPath=toolchain.JAVA_HOME?resolve(toolchain.JAVA_HOME,'bin',process.platform==='win32'?'java.exe':'java'):'java';
+const java=spawnSync(javaPath,['-version'],{encoding:'utf8',env:toolchain});
 const javaVersion=Number((`${java.stderr||''}\n${java.stdout||''}`).match(/version "(\d+)/)?.[1]||0);
 add(java.status===0&&javaVersion>=17&&javaVersion<=23,'Java compatible con Gradle 8.11.1',
   javaVersion?`Java ${javaVersion} · selecciona JDK 17 o 21 en Android Studio`:'Java no disponible');
+const sdk=toolchain.ANDROID_HOME||toolchain.ANDROID_SDK_ROOT;
+add(Boolean(sdk)&&await exists(resolve(sdk,'platforms/android-36/android.jar')),'Android SDK 36',sdk?'SDK localizado':'configura ANDROID_HOME');
 
 const firebasePath=resolve(android,'app/google-services.json');
 add(await exists(firebasePath),'Firebase para notificaciones push',

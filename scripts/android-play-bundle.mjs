@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, statSync, mkdirSync, copyFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
+import {runAndroidGradle} from './android-toolchain.mjs';
 
 const root=resolve(import.meta.dirname,'..');
 const android=resolve(root,'android');
@@ -12,10 +13,7 @@ const run=(cmd,args,cwd=root)=>{
   if(out.status!==0)process.exit(out.status??1);
 };
 const runGradle=(args)=>{
-  if(process.platform==='win32'){
-    const comspec=process.env.ComSpec||process.env.COMSPEC||'cmd.exe';
-    run(comspec,['/d','/s','/c',['call','gradlew.bat',...args].join(' ')],android);
-  }else run('sh',['./gradlew',...args],android);
+  runAndroidGradle(args,android);
 };
 
 const gradle=readFileSync(resolve(android,'app/build.gradle'),'utf8');
@@ -31,11 +29,11 @@ if(!existsSync(aab) || statSync(aab).size<1024){console.error(`\nERROR: no se en
 if(!existsSync(apk) || statSync(apk).size<1024){console.error(`\nERROR: no se encontró APK válido en ${apk}`);process.exit(1);}
 const artifacts=resolve(root,'artifacts');
 mkdirSync(artifacts,{recursive:true});
-const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R117_PILOT_HOTFIX_GOOGLE_PLAY.aab`);
-const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R117_PILOT_HOTFIX_SIGNED.apk`);
+const namedAab=resolve(artifacts,`KOMBAX_${versionCode}_R118_PILOT_GOOGLE_PLAY.aab`);
+const namedApk=resolve(artifacts,`KOMBAX_${versionCode}_R118_PILOT_SIGNED.apk`);
 copyFileSync(aab,namedAab);
 copyFileSync(apk,namedApk);
-console.log(`\nOK · KOMBAX R117 Golden Pilot build ${versionCode} · Android release`);
+console.log(`\nOK · KOMBAX R118 build ${versionCode} · Android release`);
 console.log('AAB Gradle: android/app/build/outputs/bundle/release/app-release.aab');
 console.log(`AAB Play: ${namedAab}`);
 console.log(`APK firmada: ${namedApk}`);

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {accountProfilePolicy,canRequestAccountProfile} from '../web/js/core/account-profile-policy.js';
 const read=p=>readFileSync(new URL(`../${p}`,import.meta.url),'utf8');
 const pkg=JSON.parse(read('package.json'));
 const cfg=read('web/config.js'),sw=read('web/service-worker.js'),gradle=read('android/app/build.gradle');
@@ -16,6 +17,15 @@ test('Member Social gate requires active approved membership',()=>{assert.ok(r11
 test('Social repositories use hardened R115 status/mutation wrappers',()=>{assert.ok(repos.includes("app_kombax_social_estado_v124"));assert.ok(repos.includes("app_kombax_identity_mutate_v124"));});
 test('Standalone Competitor rule remains preserved',()=>{assert.ok(r115.includes("d.tipo='competidor'"));assert.ok(r115.includes("d.verificacion_estado='verificado'"));assert.ok(r115.includes("current_date-interval '16 years'"));});
 test('Verification document flows remain present',()=>{for(const type of ["type==='competidor'","type==='marca'","type==='federacion'","type==='club'"])assert.ok(gateway.includes(type),type);assert.ok(gateway.includes("name:'documento'"));assert.ok(gateway.includes("required:!mediaVerification&&!application"));});
-test('Member can evolve to Competitor without second account',()=>{assert.ok(gateway.includes('Evolución de Miembro a Competidor'));assert.ok(gateway.includes('conservando la misma identidad'));assert.ok(gateway.includes("allowed:types.has('competidor')")||read('web/js/core/account-profile-policy.js').includes("allowed:types.has('competidor')"));});
+test('Member and Competitor remain compatible on the same account',()=>{
+  assert.ok(gateway.includes('Compatible con Competidor y Profesional'));
+  assert.ok(gateway.includes('Tu cuenta personal puede solicitar Competidor de forma autónoma'));
+  const memberPolicy=accountProfilePolicy({memberProfiles:[{id:'member'}]});
+  assert.equal(canRequestAccountProfile('competidor',memberPolicy),true);
+  const competitorPolicy=accountProfilePolicy({profiles:[{tipo:'competidor'}]});
+  assert.equal(canRequestAccountProfile('miembro_familia',competitorPolicy),true);
+  assert.equal(canRequestAccountProfile('competidor',competitorPolicy),false);
+  assert.equal(canRequestAccountProfile('competidor',accountProfilePolicy({applications:[{tipo:'competidor',estado:'pendiente'}]})),false);
+});
 test('Open browsing routes stay visible to free accounts',()=>{assert.ok(gateway.includes('KOMBAX Showcase'));assert.ok(gateway.includes('KOMBAX Events'));assert.ok(gateway.includes('Explorar Social, Showcase y Events'));});
 console.log(`R115 pilot onboarding / member Social gate QA: ${pass}/11 PASS`);

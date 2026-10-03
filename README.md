@@ -1,3 +1,13 @@
+# KOMBAX R118 · build 20177 · acceso único y estabilización FIX03
+
+Base congelable procedente de GitHub main, commit 7dd7c7ed39df13bb67880685c7c2df875b43f267. Versión 2.0.0-rc.13-r118-pilot-stabilization-1; versionCode 20177; com.urbanwarriors.app; SDK 36.
+
+Empieza por [LEEME_KOMBAX_20177_FIX03.md](LEEME_KOMBAX_20177_FIX03.md). FIX03 incorpora las dos tarjetas de entrada, el acceso único y el selector Mi cuenta con clubes y perfiles separados. Supabase ya tiene activadas las reparaciones Owner y de alta Club Piloto, el procesamiento periódico y la preferencia de idioma. El alta gratuita y el rechazo del quinto Club se comprobaron en la base real dentro de una transacción revertida. Las comprobaciones y límites figuran en [ESTABILIZACION_PILOTO_FIX02.md](ESTABILIZACION_PILOTO_FIX02.md). Stripe mantiene requisitos de activación pendientes; los pagos no están certificados. La compilación se comprueba localmente sin publicar ni hacer push.
+
+Esta entrega no incluye Firebase Android, firma privada ni .git. Conserva los tuyos. Las notas de versiones anteriores que siguen son históricas y no describen los archivos privados incluidos en esta entrega.
+
+## Historial conservado
+
 > **BASE ACUMULATIVA ACTUAL:** KOMBAX R117 build 20174 · Pilot Hotfix 4 · Perfil Social / registro progresivo.
 
 # KOMBAX R117 · build 20174 · Pilot Hotfix 4 · Perfil Social + registro progresivo
