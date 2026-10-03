@@ -55,13 +55,13 @@ ok('pilot backend still avoids approval/code/document gates',/invite_code_requir
 
 ok('normal registration creates pre-enrollment before membership',/membership_created',false/.test(m311)&&/club_authorization_required',true/.test(m311));
 ok('bound student invitation survives email confirmation',/uw2_pending_student_membership/.test(app)&&/app_kombax_alumno_aceptar_r59/.test(backend));
-ok('generic team request remains approval-gated',/estado,'pendiente'/.test(m315)&&/rol_solicitado/.test(m315));
+ok('generic team request remains approval-gated',/r\.estado='pendiente'/.test(m315)&&/rol_solicitado/.test(m315));
 ok('team request persists across confirmation',/kombax_pending_team_access/.test(backend)&&/completePendingTeamAccess/.test(backend));
 
 ok('professional credential evidence is private metadata',/kombax_professional_credential_evidence_r118/.test(m318)&&/revoke all on public\.kombax_professional_credential_evidence_r118/.test(m318));
 ok('credential truth declaration is versioned',/credential_acceptances_r118/.test(m318)&&/declaration_version/.test(m318));
 ok('credential verification uses canonical Spanish state',/estado='verificada'/.test(m318)&&!/estado='verified'/.test(m319));
-ok('professional UI requires evidence and declaration',/Evidencia privada/.test(professionalOps)&&/declaration_accepted/.test(professionalOps));
+ok('professional UI requires evidence and declaration',/Documento de evidencia/.test(professionalOps)&&/almacenamiento privado/.test(professionalOps)&&/declaration_accepted/.test(professionalOps));
 ok('Owner has credential review queue',/professionalCredentialQueue/.test(platformAdmin)&&/professionalCredentialReview/.test(platformAdmin));
 
 ok('Discovery aggregates one person with facets',/facet_types/.test(m319)&&/'facets'/.test(m319)&&/person_profile_id/.test(m319));
