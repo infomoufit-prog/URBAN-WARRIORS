@@ -1,0 +1,26 @@
+name: Validate Netlify R118 20177 G
+
+on:
+  push:
+    branches:
+      - validate-netlify-20177-g
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact main commit
+        uses: actions/checkout@v4
+        with:
+          ref: 7dd7c7ed39df13bb67880685c7c2df875b43f267
+          fetch-depth: 1
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run exact Netlify build command
+        run: npm run release:build
