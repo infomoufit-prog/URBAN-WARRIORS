@@ -1,0 +1,95 @@
+name: Package KOMBAX R118 20177
+
+on:
+  push:
+    branches:
+      - r118-package-20177
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout certified R118 commit
+        uses: actions/checkout@v4
+        with:
+          ref: 3e4d7d97bda60a0f1503715b2659ccf029980bc7
+          fetch-depth: 1
+
+      - name: Create cumulative archive, parts and verification helpers
+        shell: bash
+        run: |
+          set -euo pipefail
+          NAME="KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE"
+          CERTIFIED_SHA="3e4d7d97bda60a0f1503715b2659ccf029980bc7"
+
+          test "$(git rev-parse HEAD)" = "$CERTIFIED_SHA"
+
+          git archive --format=zip --output="$NAME.zip" HEAD
+          sha256sum "$NAME.zip" > "$NAME.sha256.txt"
+
+          split -b 90M -d -a 3 --numeric-suffixes=1 "$NAME.zip" "$NAME.zip."
+          sha256sum "$NAME.zip".??? > "$NAME.parts.sha256.txt"
+
+          {
+            printf '@echo off\r\n'
+            printf 'setlocal\r\n'
+            printf 'cd /d "%%~dp0"\r\n'
+            printf 'echo Reunificando KOMBAX R118 build 20177...\r\n'
+            printf 'copy /b '
+            first=1
+            for p in "$NAME.zip".???; do
+              base="$(basename "$p")"
+              if [ "$first" -eq 1 ]; then
+                printf '"%s"' "$base"
+                first=0
+              else
+                printf '+"%s"' "$base"
+              fi
+            done
+            printf ' "%s.zip" >nul\r\n' "$NAME"
+            printf 'if errorlevel 1 goto :error\r\n'
+            printf 'powershell -NoProfile -Command "$e=((Get-Content ''%s.sha256.txt'' -Raw).Trim() -split ''\\s+'')[0].ToLower(); $a=(Get-FileHash ''%s.zip'' -Algorithm SHA256).Hash.ToLower(); if($a -ne $e){Write-Host ''SHA256 ERROR''; exit 1}else{Write-Host ''SHA256 OK: '' $a}"\r\n' "$NAME" "$NAME"
+            printf 'if errorlevel 1 goto :error\r\n'
+            printf 'echo ZIP completo: %s.zip\r\n' "$NAME"
+            printf 'pause\r\n'
+            printf 'exit /b 0\r\n'
+            printf ':error\r\n'
+            printf 'echo ERROR: no se pudo reunificar o verificar el ZIP.\r\n'
+            printf 'pause\r\n'
+            printf 'exit /b 1\r\n'
+          } > "REUNIFICAR_KOMBAX_R118_20177.cmd"
+
+          {
+            echo "KOMBAX R118 build 20177"
+            echo "Certified Git commit: $CERTIFIED_SHA"
+            echo "Release: 2.0.0-rc.13-r118-pilot-stabilization-1"
+            echo
+            echo "ZIP completo:"
+            cat "$NAME.sha256.txt"
+            echo
+            echo "Partes:"
+            cat "$NAME.parts.sha256.txt"
+            echo
+            echo "Para Windows: coloca todas las partes .001, .002... junto al CMD y ejecuta REUNIFICAR_KOMBAX_R118_20177.cmd."
+          } > "KOMBAX_R118_20177_RELEASE_MANIFEST.txt"
+
+          ls -lh "$NAME.zip" "$NAME.zip".??? "$NAME.sha256.txt" "$NAME.parts.sha256.txt" "REUNIFICAR_KOMBAX_R118_20177.cmd" "KOMBAX_R118_20177_RELEASE_MANIFEST.txt"
+
+      - name: Upload cumulative package
+        uses: actions/upload-artifact@v4
+        with:
+          name: KOMBAX_R118_20177_CUMULATIVE
+          path: |
+            KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.zip
+            KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.zip.???
+            KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.sha256.txt
+            KOMBAX_R118_20177_PILOT_STABILIZATION_CUMULATIVE.parts.sha256.txt
+            REUNIFICAR_KOMBAX_R118_20177.cmd
+            KOMBAX_R118_20177_RELEASE_MANIFEST.txt
+          compression-level: 0
+          retention-days: 30
+          if-no-files-found: error
