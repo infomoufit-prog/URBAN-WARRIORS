@@ -5,6 +5,7 @@ const root=resolve(import.meta.dirname,'..');
 const webDir=resolve(root,'web');
 const configPath=resolve(webDir,'config.js');
 const workerPath=resolve(webDir,'service-worker.js');
+const healthPath=resolve(root,'supabase/functions/health/index.ts');
 
 const config=await readFile(configPath,'utf8');
 const buildMatch=config.match(/build:\s*(\d+)/);
@@ -31,4 +32,12 @@ if(!workerAfter.includes(`kombax-build-${build}`)||!workerAfter.includes(`rc13-$
 }
 if(workerAfter!==workerBefore) await writeFile(workerPath,workerAfter,'utf8');
 
-console.log('KOMBAX public HTML assets and service worker synced to build '+build);
+const healthBefore=await readFile(healthPath,'utf8');
+let healthAfter=healthBefore.replace(/build:\d+/g,'build:'+build);
+healthAfter=healthAfter.replace(/'x-kombax-build':'\d+'/g,"'x-kombax-build':'"+build+"'");
+if(!healthAfter.includes('build:'+build)||!healthAfter.includes("'x-kombax-build':'"+build+"'")){
+  throw new Error('KOMBAX_RELEASE_HEALTH_BUILD_NOT_APPLIED:'+build);
+}
+if(healthAfter!==healthBefore) await writeFile(healthPath,healthAfter,'utf8');
+
+console.log('KOMBAX public HTML, service worker and health endpoint synced to build '+build);
