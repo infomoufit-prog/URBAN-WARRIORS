@@ -11,7 +11,7 @@ export function accountProfilePolicy({profiles=[],applications=[],managedClubs=[
     .filter(row=>row?.tipo&&!CLOSED_APPLICATION_STATES.has(String(row?.estado||'')))
     .map(row=>String(row.tipo)));
   const member=Boolean((memberProfiles||[]).length)||(memberships||[]).some(row=>row?.estado==='activo'&&['alumno','tutor'].includes(String(row?.modo||'')));
-  const hasPersonalPublic=member||['competidor','profesional','media','espectador'].some(type=>existing.has(type));
+  const hasPersonalPublic=Boolean((memberProfiles||[]).length)||['competidor','profesional','espectador'].some(type=>existing.has(type));
 
   const allowed=PROFILE_TYPES.filter(type=>{
     if(type==='club')return !(managedClubs||[]).length&&!pending.has('club');

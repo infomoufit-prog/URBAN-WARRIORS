@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {personalSpaceModel} from '../web/js/core/personal-space.js';
+import {accountProfilePolicy} from '../web/js/core/account-profile-policy.js';
+assert.equal(personalSpaceModel({profiles:[{tipo:'federacion',id:'org'}]}).hasPersonalProfile,false);
+assert.equal(personalSpaceModel({}).hasPersonalProfile,false);
+const facets=[{tipo:'espectador',social_profile_id:'canonical',nombre_publico:'Ana'},{tipo:'competidor',social_profile_id:'canonical'},{tipo:'profesional',social_profile_id:'canonical'}];
+const personal=personalSpaceModel({profiles:facets});assert.equal(personal.socialId,'canonical');assert.equal(personal.facets.length,3);
+assert.equal(personalSpaceModel({memberPublicProfile:{id:'member',membership_confirmed:false,publication_enabled:true}}).memberCanPublish,false);
+assert.equal(personalSpaceModel({memberPublicProfile:{id:'member',membership_confirmed:true,publication_enabled:true}}).memberCanPublish,true);
+assert.equal(personalSpaceModel({memberPublicProfile:{id:'member',membership_confirmed:true,publication_enabled:false}}).memberCanPublish,false);
+const family=accountProfilePolicy({memberships:[{modo:'tutor',estado:'activo'}]});assert.ok(family.allowed.includes('espectador'));
+assert.ok(!accountProfilePolicy({profiles:facets}).allowed.includes('espectador'));
+console.log('PASS personal space: public identity separate from organizations and memberships; shared facets; confirmed publication; no duplicate spectator.');

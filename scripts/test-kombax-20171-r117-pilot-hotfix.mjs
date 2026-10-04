@@ -14,7 +14,7 @@ ok(currentBuild>=20171&&Number(currentVersion?.match(/-r(\d+)/)?.[1])>=117,'buil
 const androidCode=Number(gradle.match(/versionCode\s+(\d+)/)?.[1]||0);
 ok(androidCode===currentBuild&&gradle.includes(`versionName '${currentVersion}'`),'Android versionCode/versionName monotonic');
 ok(activity.includes('webView.restoreState(savedInstanceState)')&&activity.includes('webView.saveState(outState)')&&activity.includes('persistInternalUrl()'),'Android lifecycle state persistence');
-ok(app.includes('renderClubSessionOrLegal({startAtHome:false})')&&app.includes("renderDirectProfileHub({onBack:renderGatewayRoot,pendingType:sessionStorage.getItem('kombax_pending_profile_type')||''})"),'club navigation restores and account login opens its space selector');
+ok(app.includes('renderClubSessionOrLegal({startAtHome:false})')&&app.includes("if(pendingType)renderDirectProfileHub({onBack:renderGatewayRoot,pendingType});else renderGlobalHome({onBack:renderGatewayRoot});"),'club navigation restores and general account entry opens exploration and preserves profile intent');
 ok(gateway.includes('Alta directa sin código de invitación')&&!gateway.includes("name:'pilot_code'"),'pilot club UI no code');
 ok(m303.includes("invite_code_required',false")&&m303.includes('PILOT_INVITE_CODES_DISABLED'),'pilot club backend no code');
 ok(m304.includes('album_enabled')&&m304.includes("KOMBAX_SPECTATOR_ALBUM_DISABLED")&&m304.includes('publication_enabled'),'member/spectator public profile separation');

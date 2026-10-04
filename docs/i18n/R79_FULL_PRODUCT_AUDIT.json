@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-03T22:22:53.508Z",
-  "candidates": 5091,
+  "generated_at": "2026-10-04T01:14:49.563Z",
+  "candidates": 5081,
   "covered_r79": 542,
-  "covered_r78": 1218,
-  "covered_legacy_all7": 3045,
-  "unresolved": 286,
+  "covered_r78": 1219,
+  "covered_legacy_all7": 3036,
+  "unresolved": 284,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 67,
-    "web/js/modules/gateway.js": 32,
-    "web/js/modules/plan-services.js": 32,
+    "web/js/modules/gateway.js": 31,
+    "web/js/modules/plan-services.js": 31,
     "web/js/modules/professional-operations.js": 21,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 11,
@@ -1365,19 +1365,6 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "value": "Acceso al club",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
       "value": "¿Tu club aún no aparece?",
       "missing": [
         "en",
@@ -2289,19 +2276,6 @@
       "file": "web/js/modules/plan-services.js",
       "value": "Tu condición anterior se conserva según sus términos y no se sustituye por el nuevo catálogo público.",
       "missing": [
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/plan-services.js",
-      "value": "15 días de prueba del plan elegido",
-      "missing": [
-        "en",
         "fr",
         "pt",
         "it",

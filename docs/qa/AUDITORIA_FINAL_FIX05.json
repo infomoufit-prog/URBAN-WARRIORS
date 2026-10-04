@@ -1,0 +1,58 @@
+{
+  "base_build": 20177,
+  "revision_build": 20178,
+  "revision": "R118 FIX05",
+  "release": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "netlify_build_local": {
+    "passed_suites": 72,
+    "new_failures": 0,
+    "inherited_i18n_p2": 3,
+    "strict_npm_test_all_green": false,
+    "runtime": "Node 22.23.3 / Windows"
+  },
+  "browser_fixtures": {
+    "passed": 18,
+    "javascript_errors": 0,
+    "desktop_and_mobile": true,
+    "real_signup_email_payments_tested": false
+  },
+  "postgres_isolated_fixtures": {
+    "passed": 18
+  },
+  "compatibility": {
+    "javascript_files": 360,
+    "case_sensitive_imports": 837,
+    "web_dist_android_identical": true,
+    "linux_runtime_executed": false
+  },
+  "supabase_migrations_applied": [
+    "20261004010000",
+    "20261004011000",
+    "20261004012000"
+  ],
+  "pilot": {
+    "project_id": "poggsobhtutbuagjiydc",
+    "window_open": true,
+    "slots_total": 4,
+    "slots_used": 1,
+    "slots_remaining": 3,
+    "invite_code_required": false,
+    "document_verification_required": false,
+    "plan_code": "premium",
+    "new_commercial_trials_started_during_qa": 0,
+    "scope": "Live read-only RPC; registration window preserved. No new production club was created in FIX05."
+  },
+  "android": {
+    "versionCode": 20178,
+    "sdk": 36,
+    "preflight_pass": 7,
+    "preflight_total": 9,
+    "signed_apk_aab_produced": false,
+    "gradle_attempts": 2,
+    "blocker": "java.io.IOException: Unable to establish loopback connection",
+    "private_firebase_and_signing_not_packaged": true,
+    "play_console_versioncode_verified": false
+  },
+  "deployment_performed": false,
+  "github_push_performed": false
+}

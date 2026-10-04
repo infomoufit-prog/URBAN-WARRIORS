@@ -42,12 +42,12 @@ test('A fresh KOMBAX account remains neutral until the user chooses a route',()=
 
 test('Free-account discovery home exposes Social Showcase and Events',()=>{
   for(const id of ['kx-spectator-social','kx-spectator-showcase','kx-spectator-events'])has(gateway,id);
-  has(gateway,'Explora ahora. Completa tu perfil cuando quieras.');
-  has(gateway,'La publicación Social y la gestión privada aparecen solo cuando una identidad o membresía real las habilita.');
+  has(gateway,"t('marketing.space.noProfile')");
+  has(gateway,"if(target==='social')return openGlobalArea");
 });
 
 test('Spectator home does not surface organization-only Assist or Migrations',()=>{
-  const start=gateway.indexOf('freeUnconfiguredAccount?`<section class="kx-spectator-home"');
+  const start=gateway.indexOf('freeUnconfiguredAccount?`<section class="premium-empty"');
   const end=gateway.indexOf("${supportDirect?'':`<div class=\"kx-hub-actions",start);
   assert.ok(start>=0&&end>start,'spectator home template not found');
   const block=gateway.slice(start,end);

@@ -1,4 +1,4 @@
-import { formatCurrency, formatDate, formatDateTime, getLocale } from '../i18n/index.js';
+import { formatCurrency, formatDate, formatDateTime, getLocale, t } from '../i18n/index.js';
 import { localizeSystemText } from '../i18n/legacy-runtime.js';
 export const esc = (value) => String(value ?? '')
   .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
@@ -120,6 +120,7 @@ function humanErrorSpanish(error) {
 }
 
 export function humanError(error) {
+  if(/SOCIAL_FREE_MONTHLY_LIMIT_3/.test(technicalError(error)))return t('marketing.space.quotaNote');
   return localizeSystemText(humanErrorSpanish(error), getLocale());
 }
 

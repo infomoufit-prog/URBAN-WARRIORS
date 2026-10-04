@@ -1,3 +1,9 @@
+# KOMBAX R118 FIX05 · build 20178
+
+Base congelada 20177; revisión acumulativa con Mi Espacio y pruebas explícitas de 30 días. Empieza por [LEEME_KOMBAX_20178_FIX05.md](LEEME_KOMBAX_20178_FIX05.md). Los apartados siguientes se conservan como historial de FIX03, no como instrucciones de esta entrega.
+
+---
+
 # KOMBAX R118 · build 20177 · acceso único y estabilización FIX03
 
 Base congelable procedente de GitHub main, commit 7dd7c7ed39df13bb67880685c7c2df875b43f267. Versión 2.0.0-rc.13-r118-pilot-stabilization-1; versionCode 20177; com.urbanwarriors.app; SDK 36.

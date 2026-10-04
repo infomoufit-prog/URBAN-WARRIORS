@@ -602,3 +602,13 @@ img,video,canvas{max-width:100%}
 .kx-assist-specialists-wrap{display:grid;gap:12px}.kx-assist-specialists{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.kx-assist-specialist{display:grid;align-content:start;gap:7px;min-height:184px;padding:16px;border:1px solid rgba(255,255,255,.09);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018))}.kx-assist-specialist>span{color:#ff5a67;font-size:9px;font-weight:900;letter-spacing:.12em}.kx-assist-specialist>strong{font-size:15px;line-height:1.25}.kx-assist-specialist>p{min-height:44px;margin:0;color:var(--muted,#aeb1bd);font-size:10px;line-height:1.5}.kx-assist-specialist>.btn{align-self:end;width:100%;margin-top:auto}.kx-assist-specialist:has([data-kx-assist-specialist="stripe"]){border-color:rgba(99,235,247,.28);background:linear-gradient(145deg,rgba(43,198,218,.075),rgba(255,255,255,.018))}.kx-assist-specialist:has([data-kx-assist-specialist="stripe"])>span{color:#63ebf7}
 @media(max-width:1000px){.kx-assist-specialists{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.kx-assist-specialists{grid-template-columns:1fr}.kx-assist-specialist{min-height:0}.kx-assist-specialist>p{min-height:0}}
+
+/* R118 FIX05 — common personal navigation, including global subviews. */
+.kx-personal-shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100dvh}
+.kx-personal-sidebar{position:sticky;top:0;height:100dvh;padding:28px 16px;background:#0b1019;border-right:1px solid #ffffff18;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.kx-personal-sidebar>strong{font-size:24px}.kx-personal-sidebar>small{overflow-wrap:anywhere;color:#aeb8ca}
+.kx-personal-sidebar nav{display:flex;flex-direction:column;gap:8px}.kx-personal-sidebar .btn{text-align:left;justify-content:flex-start;white-space:normal}
+.kx-personal-content{min-width:0}.kx-personal-content .kombax-gateway{min-height:100dvh;padding:24px}.kx-personal-content .gateway-directory{width:100%;max-width:1120px}
+.kx-personal-mobile{display:none}.kx-canonical-profile{grid-column:1/-1;padding:24px;border:1px solid #ffffff24;border-radius:20px;background:#111a27}
+.kx-member-capability{min-width:0}.kx-personal-content [data-account-section]{scroll-margin-top:24px}
+@media(max-width:800px){.kx-personal-shell{display:block}.kx-personal-sidebar{display:none;position:relative;height:auto}.kx-personal-shell.menu-open .kx-personal-sidebar{display:flex}.kx-personal-mobile{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#0b1019}.kx-personal-content .kombax-gateway{padding:12px}.kx-personal-content .gateway-directory-top{flex-wrap:wrap}.kx-personal-content .kx-hub-actions{flex-wrap:wrap}}

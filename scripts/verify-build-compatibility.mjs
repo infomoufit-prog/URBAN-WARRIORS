@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
-import {readFileSync,readdirSync,existsSync} from 'node:fs';
-import {resolve,dirname,relative} from 'node:path';
+import {readFileSync,readdirSync,existsSync,mkdtempSync,unlinkSync,rmdirSync} from 'node:fs';
+import {resolve,dirname,relative,join} from 'node:path';
+import {tmpdir} from 'node:os';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 
@@ -35,11 +36,24 @@ for(const file of files(web)){
 }
 // Parse every module with Node's ECMAScript module parser in one child.
 // No module is linked or evaluated. Repeated process startup is slow on Windows.
-const syntax=spawnSync(process.execPath,['--experimental-vm-modules','--no-warnings','scripts/check-web-module-syntax.mjs'],{
- cwd:root,input:JSON.stringify(syntaxFiles),encoding:'utf8',timeout:120000,maxBuffer:1024*1024,
-});
-assert.equal(syntax.status,0,syntax.stderr||syntax.error?.message||'Module syntax check failed');
-assert.equal(Number(syntax.stdout.trim()),syntaxFiles.length,'Not every module was parsed');
+const reportDirectory=mkdtempSync(join(tmpdir(),'kombax-module-syntax-'));
+const reportFile=join(reportDirectory,'result.json');
+try{
+  const syntax=spawnSync(process.execPath,['--experimental-vm-modules','--no-warnings','scripts/check-web-module-syntax.mjs',reportFile],{
+    cwd:root,input:JSON.stringify(syntaxFiles),encoding:'utf8',timeout:120000,maxBuffer:1024*1024,
+  });
+  assert.ifError(syntax.error);
+  assert.equal(syntax.status,0,syntax.stderr||'Module syntax check failed');
+  // Build instrumentation can add stdout text. Read the parser result through
+  // a private report file, independently of console output on Windows/Linux.
+  assert.ok(existsSync(reportFile),'Module syntax report was not produced');
+  const report=JSON.parse(readFileSync(reportFile,'utf8'));
+  assert.ok(Number.isSafeInteger(report.parsedModules),'Invalid parsed module count');
+  assert.equal(report.parsedModules,syntaxFiles.length,'Not every module was parsed');
+}finally{
+  if(existsSync(reportFile))unlinkSync(reportFile);
+  rmdirSync(reportDirectory);
+}
 const config=readFileSync(resolve(web,'config.js'),'utf8');
 const build=Number(config.match(/build:\s*(\d+)/)?.[1]);
 const version=config.match(/version:\s*'([^']+)'/)?.[1];

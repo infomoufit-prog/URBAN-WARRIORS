@@ -1,3 +1,4 @@
+import { personalNavigationHtml, bindPersonalNavigation } from './personal-navigation.js';
 import { esc, humanError, fullName } from '../core/utils.js';
 import { state } from '../core/state.js';
 import { rolesLabel } from '../core/permissions.js';
@@ -71,10 +72,18 @@ function syncBodyTheme(app){
 export function setAppHtml(html){
   const app=document.getElementById('app');if(!app)return;
   app.innerHTML=localizeHtmlString(html);syncBodyTheme(app);app.classList.remove('app-view-enter');
-  if(state.session?.id&&['kombax','club'].includes(state.session.scope||'club')&&!state.session.support_mode&&!app.querySelector('[data-kombax-view="profile-hub"],[data-kombax-view="platform-legal-required"],[data-kombax-view="gateway"]')){
-    const switcher=document.createElement('button');switcher.type='button';switcher.className='btn btn-ghost kx-account-switch';switcher.id='kx-switch-space';switcher.textContent=t('marketing.accountAccess.switchSpace');
-    switcher.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('kx-account-open')));
-    const actions=app.querySelector('.topbar-actions');(actions||app).appendChild(switcher);if(actions)switcher.classList.add('in-topbar');
+  const signedIn=Boolean(state.session?.id)&&!state.session.support_mode;
+  const excluded=app.querySelector('[data-kombax-view="gateway"],[data-kombax-view="platform-legal-required"],[data-kombax-view="profiles"],.kx-admin-console');
+  if(signedIn&&!excluded){
+    if(!app.querySelector('.app-shell')){
+      app.innerHTML=personalNavigationHtml(app.innerHTML);
+    }else{
+      const sidebar=app.querySelector('.sidebar');
+      if(sidebar&&!sidebar.querySelector('[data-kx-personal-nav]')){
+        sidebar.insertAdjacentHTML('afterbegin',`<button class="nav-item nav-primary" type="button" data-kx-personal-nav="workspace">${icon('home')}<b>${esc(t('marketing.space.title'))}</b></button>`);
+      }
+    }
+    bindPersonalNavigation(app);
   }
   requestAnimationFrame(()=>{app.classList.add('app-view-enter');enhanceSubviewExitControls(app);});
 }

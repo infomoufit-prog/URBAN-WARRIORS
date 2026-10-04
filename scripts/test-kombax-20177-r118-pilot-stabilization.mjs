@@ -34,13 +34,13 @@ const [
 const checks=[];
 const ok=(name,value)=>{assert.ok(value,name);checks.push(name);};
 
-ok('web build 20177',/build:\s*20177/.test(config));
-ok('dist build 20177',/build:\s*20177/.test(distConfig));
-ok('android asset build 20177',/build:\s*20177/.test(androidConfig));
-ok('R118 release name',/r118-pilot-stabilization-1/.test(config)&&/r118-pilot-stabilization-1/.test(gradle));
-ok('Android versionCode 20177',/versionCode\s+20177/.test(gradle));
-ok('Android UA 20177',/KOMBAXRevision\/r118-pilot-stabilization KOMBAXApp\/2\.0\.0-rc\.13\/20177/.test(activity));
-ok('package version R118',/"version":\s*"2\.0\.0-rc\.13-r118-pilot-stabilization-1"/.test(packageJson));
+ok('web build 20178',/build:\s*20178/.test(config));
+ok('dist build 20178',/build:\s*20178/.test(distConfig));
+ok('android asset build 20178',/build:\s*20178/.test(androidConfig));
+ok('R118 release name',/r118-pilot-stabilization-2/.test(config)&&/r118-pilot-stabilization-2/.test(gradle));
+ok('Android versionCode 20178',/versionCode\s+20178/.test(gradle));
+ok('Android UA 20178',/KOMBAXRevision\/r118-pilot-stabilization KOMBAXApp\/2\.0\.0-rc\.13\/20178/.test(activity));
+ok('package version R118',/"version":\s*"2\.0\.0-rc\.13-r118-pilot-stabilization-2"/.test(packageJson));
 
 ok('R118 contract says one canonical social profile',/Perfil Social público canónico/.test(contract));
 ok('R118 contract separates entitlement subject',/subject_type \+ subject_id \+ capability/.test(contract));
@@ -83,5 +83,5 @@ ok('resolved legacy manager notices are archived',/n\.rol_destino is not null/.t
 ok('selected-club login remains strict',/if\(requested&&!candidate\)throw new Error\('Esta cuenta no está vinculada a este club/.test(backend));
 ok('selected-club login still has no silent fallback',!/memberships\.find\(m=>m\.clubes\?\.slug===requestedSlug\)\|\|memberships\[0\]/.test(backend));
 
-console.log(`PASS ${checks.length}/${checks.length} · KOMBAX R118 build 20177 identity / pilot / verification / request lifecycle`);
+console.log(`PASS ${checks.length}/${checks.length} · KOMBAX R118 build 20178 identity / pilot / verification / request lifecycle`);
 for(const name of checks)console.log(`  ✓ ${name}`);

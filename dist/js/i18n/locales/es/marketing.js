@@ -1,4 +1,5 @@
 export default {
+  "space": {"title": "Mi Espacio", "profile": "Mi perfil", "organizations": "Mis organizaciones", "settings": "Configuración de cuenta", "manage": "Crear o gestionar mi perfil", "publicProfile": "Perfil público personal", "facets": "Capacidades y verificaciones", "noProfile": "Tu cuenta todavía no tiene un perfil público. Puedes explorar y comprar; crea tu perfil para presentarte en la comunidad.", "create": "Crear mi perfil", "oneProfile": "Un perfil social personal; sus capacidades y verificaciones se suman sin duplicarlo.", "explore": "Explorar KOMBAX", "menu": "Menú", "club": "Mi club", "trial": "Activar prueba gratuita de 30 días", "trialNote": "La prueba empieza al activarla. No realiza cobros automáticos.", "memberGate": "Tu perfil público está creado. Para publicar como miembro / practicante necesitas la confirmación de tu club.", "pilotActive": "Esta organización ya dispone de los servicios autorizados del piloto.", "planActive": "Tu organización ya tiene un plan activo.", "trialExpired": "Tu prueba ha terminado. Tu perfil público se conserva; puedes consultar los planes para continuar.", "trialError": "No se pudo activar la prueba", "trialActivated": "Prueba de 30 días activada. No se ha realizado ningún cobro.", "serviceError": "No se pudo consultar el servicio. Inténtalo de nuevo.", "quotaNote": "Sin plan: hasta tres publicaciones sociales al mes. La verificación y los permisos del equipo se gestionan por separado.", "trialUntil": "Prueba activa hasta"},
   "accountAccess": {
   "login": "Acceder a mi cuenta",
   "switchSpace": "Cambiar espacio",
@@ -389,7 +390,7 @@ export default {
       "spectator": {
         "eyebrow": "ESPECTADOR",
         "headline": "Empieza gratis: descubre KOMBAX antes de decidir qué perfil necesitas.",
-        "lead": "Toda cuenta KOMBAX nueva puede navegar como Espectador. No necesitas un Club ni un perfil especializado para conocer la comunidad, los productos y los eventos.",
+        "lead": "Toda cuenta KOMBAX nueva puede explorar sin crear un perfil público. No necesitas un Club ni un perfil especializado para conocer la comunidad, los productos y los eventos.",
         "forWho": "Cualquier persona que quiera explorar KOMBAX, seguir el sector o decidir más adelante qué identidad necesita.",
         "benefits": [
           "Explorar KOMBAX Social",

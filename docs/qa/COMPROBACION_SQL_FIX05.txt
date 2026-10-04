@@ -1,0 +1,1 @@
+PASS space trial/quota database: 18 checks (isolated PostgreSQL fixtures).
