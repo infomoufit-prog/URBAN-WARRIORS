@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:49:03.640Z",
+  "generated_at": "2026-10-04T20:43:14.074Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
   "files_scanned": 121,
   "system_ui_candidates": 2641,
@@ -1182,7 +1182,7 @@
       "line": 349,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');"
+      "sample": "if(v.modo_cuenta==='nueva'&&String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');"
     },
     {
       "file": "web/js/app.js",
@@ -1350,7 +1350,7 @@
       "line": 399,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');"
+      "sample": "if(v.modo==='nueva'&&String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');"
     },
     {
       "file": "web/js/app.js",
@@ -1599,469 +1599,469 @@
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 98,
+      "line": 101,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 101,
+      "line": 104,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "try{await client.updateUserMetadata({kombax_pending_team_access:null})}catch(error){console.warn('Limpieza de solicitud de equipo pendiente:',humanError(error));}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 107,
+      "line": 110,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const profiles=await client.select('perfiles',`select=*&id=eq.${qs(userId)}&limit=1`).catch(()=>[]);"
-    },
-    {
-      "file": "web/js/core/backend.js",
-      "line": 127,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "memberships=await client.select('miembros_club',`select=club_id,rol,coordinacion,clubes(id,nombre,slug,lema,logo_url,portada_url,logo_presentation,portada_presentation,color_primario,color_secundario,theme_id,branding_version)&perfil_id=eq.${qs(userId)}&activo=eq.true`);"
     },
     {
       "file": "web/js/core/backend.js",
       "line": 130,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "memberships=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,lema,logo_url,portada_url,logo_presentation,portada_presentation,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);"
-    },
-    {
-      "file": "web/js/core/backend.js",
-      "line": 132,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(!memberships?.length)throw new Error('El usuario no pertenece a ningún club activo.');"
+      "sample": "memberships=await client.select('miembros_club',`select=club_id,rol,coordinacion,clubes(id,nombre,slug,lema,logo_url,portada_url,logo_presentation,portada_presentation,color_primario,color_secundario,theme_id,branding_version)&perfil_id=eq.${qs(userId)}&activo=eq.true`);"
     },
     {
       "file": "web/js/core/backend.js",
       "line": 133,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const priority=['direccion','secretaria','economia','comunicacion','monitor','familia','alumno'];"
+      "sample": "memberships=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,lema,logo_url,portada_url,logo_presentation,portada_presentation,color_primario,color_secundario)&perfil_id=eq.${qs(userId)}&activo=eq.true`);"
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "line": 135,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!memberships?.length)throw new Error('El usuario no pertenece a ningún club activo.');"
     },
     {
       "file": "web/js/core/backend.js",
       "line": 136,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "const priority=['direccion','secretaria','economia','comunicacion','monitor','familia','alumno'];"
+    },
+    {
+      "file": "web/js/core/backend.js",
+      "line": 139,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "const candidate=requested?memberships.find(m=>String(m.clubes?.slug||'').toLowerCase()===requested):memberships[0];"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 137,
+      "line": 140,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(requested&&!candidate)throw new Error('Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 138,
+      "line": 141,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(candidate?.clubes?.slug)selectClubSlug(candidate.clubes.slug,candidate.clubes);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 142,
+      "line": 145,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const profiles=await client.select('perfiles',`select=*&id=eq.${qs(userId)}&limit=1`).catch(()=>[]);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 152,
+      "line": 155,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 153,
+      "line": 156,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null,"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 188,
+      "line": 191,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(response?.ok===false&&response?.error_code)throw new Error(response.message||`Operación rechazada: ${response.error_code}`);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 189,
+      "line": 192,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!response?.ok||response.operation!==operation||response.request_id!==requestId)throw new Error(`Respuesta bootstrap inválida para ${operation}.`);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 196,
+      "line": 199,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalized))throw new Error('Indica un correo electrónico válido.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 200,
+      "line": 203,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/rate.?limit|too many|frequent|seconds|429/i.test(message)||Number(error?.status)===429)throw new Error('Has solicitado códigos demasiado rápido. Espera un momento antes de volver a intentarlo.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 211,
+      "line": 214,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!/^\\d{6}$/.test(code))throw new Error('El código debe tener 6 dígitos.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 212,
+      "line": 215,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(next.length<8)throw new Error('La nueva contraseña debe tener al menos 8 caracteres.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 218,
+      "line": 221,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/otp|token|code|expired|invalid/i.test(message))throw new Error('El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 233,
+      "line": 236,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!client.session?.access_token||!email||!expectedUserId)throw new AuthExpiredError('Inicia sesión de nuevo antes de cambiar la contraseña.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 234,
+      "line": 237,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!current)throw new Error('Introduce tu contraseña actual.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 235,
+      "line": 238,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(next.length<8)throw new Error('La nueva contraseña debe tener al menos 8 caracteres.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 236,
+      "line": 239,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(current===next)throw new Error('La nueva contraseña debe ser distinta de la actual.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 244,
+      "line": 247,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "throw new AuthExpiredError('No se pudo verificar de forma segura la identidad de la cuenta.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 249,
+      "line": 252,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/invalid login credentials|invalid credentials|email or password|wrong password|bad password/i.test(message))throw new Error('La contraseña actual no es correcta.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 250,
+      "line": 253,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/weak password|password.*weak|password.*short|password.*characters/i.test(message))throw new Error('La nueva contraseña no cumple los requisitos de seguridad configurados para KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 269,
+      "line": 272,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "}catch(error){console.warn('Membresía de alumno pendiente:',humanError(error));}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 271,
+      "line": 274,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "try{await completePendingTeamAccess(auth.user);}catch(error){console.warn('Solicitud de equipo pendiente:',humanError(error));}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 276,
+      "line": 279,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "catch(error){console.warn('Aceptación legal KOMBAX pendiente:',humanError(error));}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 286,
+      "line": 289,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalized))throw new Error('Indica un correo electrónico válido.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 287,
+      "line": 290,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!String(password||''))throw new Error('Introduce tu contraseña.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 291,
+      "line": 294,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(result?.authorized!==true)throw new Error('No se pudo abrir la sesión de administración.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 293,
+      "line": 296,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(session.platform_admin!==true)throw new Error('No se pudo confirmar la autorización global KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 297,
+      "line": 300,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "state.pushTrace({kind:'auth',ok:true,label:'Acceso maestro: contraseña Owner verificada',detail:normalized});"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 301,
+      "line": 304,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/platform_admin_required|not authorized|forbidden/i.test(message)){await client.signOut().catch(()=>{});throw new Error('Esta cuenta no tiene autorización de administración global KOMBAX.');}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 302,
+      "line": 305,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/invalid login credentials|invalid credentials|email or password/i.test(message)){await client.signOut().catch(()=>{});throw new Error('El correo o la contraseña no son correctos.');}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 314,
+      "line": 317,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!challengeId)throw new Error('La verificación crítica ha caducado. Vuelve a intentarlo.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 316,
+      "line": 319,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "state.pushTrace({kind:'auth',ok:true,label:'Elevación crítica Owner: OTP solicitado',detail:normalized});"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 320,
+      "line": 323,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/password_required/i.test(message))throw new Error('Por seguridad, vuelve a abrir la Consola Owner con tu contraseña antes de esta operación crítica.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 321,
+      "line": 324,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/challenge_rate_limit|rate limit/i.test(message))throw new Error('Espera unos segundos antes de solicitar otro código de seguridad.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 329,
+      "line": 332,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!/^\\d{6}$/.test(code))throw new Error('Introduce el código de 6 dígitos recibido por correo.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 333,
+      "line": 336,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(result?.authorized!==true)throw new Error('No se pudo completar la autorización crítica.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 337,
+      "line": 340,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "state.pushTrace({kind:'auth',ok:true,label:'Elevación crítica Owner: OTP verificado',detail:normalized});"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 341,
+      "line": 344,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(/otp.*expired|token.*expired|invalid.*otp|token.*invalid|invalid.*token/i.test(message))throw new Error('El código no es válido o ha caducado. Solicita uno nuevo.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 366,
+      "line": 370,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 367,
+      "line": 371,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 368,
+      "line": 372,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const birth=validateBirthDate(fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años. Si eres menor, utiliza el acceso familiar/tutor.'});"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 369,
+      "line": 373,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const selectedType=['club','marca','federacion','profesional','media'].includes(accountType)?accountType:''; // Competidor/Miembro/Espectador se fijan al activar su perfil, no en Auth signup."
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 390,
+      "line": 394,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!client.session?.access_token)throw new AuthExpiredError('Inicia sesión para aceptar las condiciones de KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 392,
+      "line": 396,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(legal?.required!==false)throw new Error('No se pudo registrar la aceptación legal de KOMBAX.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 403,
+      "line": 407,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!p.email||String(p.email).toLowerCase()===String(auth.user.email||'').toLowerCase()){await this.bootstrapMutate('cuenta.registrar',p.payload);localStorage.removeItem('uw2_pending_registration');}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 409,
+      "line": 413,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(pendingTeam.completed&&pendingTeam.kind!=='one_time')throw new Error('Solicitud enviada al club. Tu acceso está pendiente de aprobación.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 415,
+      "line": 419,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(pendingLegal){try{const entries=JSON.parse(pendingLegal)||[];for(const item of entries)await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});localStorage.removeItem('uw2_pending_legal');}catch(error"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 427,
+      "line": 432,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const minimumAge=input.tipo_cuenta==='tutor'?18:16;"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 428,
+      "line": 433,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const birth=validateBirthDate(input.adulto_fecha_nacimiento,{minAge:minimumAge,minimumMessage:input.tipo_cuenta==='tutor'?'La cuenta de padre, madre o tutor requiere una persona adulta de 18 años o más.':'El autorregistro como alumno está disponible a partir de los 16 años.'});"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 433,
+      "line": 438,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "await this.bootstrapMutate('cuenta.registrar',payload);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 435,
+      "line": 440,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "for(const item of legalEntries){await this.mutate('legal.aceptar',{tipo:item.tipo,version:item.version||'2.0.0',aceptado:item.aceptado!==false,socio_id:item.socio_id||null,user_agent:navigator.userAgent});}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 470,
+      "line": 475,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(requestedRole)throw new Error('La invitación por rol necesita activar la actualización de equipo 109.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 473,
+      "line": 478,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 489,
+      "line": 494,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(isTransientNetworkError(error)&&client.session?.access_token){console.warn('Sesión conservada sin conexión:',humanError(error));persistSession(saved);return saved;}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 496,
+      "line": 501,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(isTransientNetworkError(globalError)&&client.session?.access_token){console.warn('Identidad KOMBAX pendiente de red:',humanError(globalError));persistSession(saved);return saved;}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 499,
+      "line": 504,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "console.warn('No se restaura la sesión:',humanError(error));await client.signOut().catch(()=>{});persistSession(null);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 506,
+      "line": 511,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const rows=await client.select('miembros_club',`select=club_id,rol,clubes(id,nombre,slug,logo_url)&perfil_id=eq.${qs(state.session.id)}&activo=eq.true`);"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 508,
+      "line": 513,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "for(const row of rows||[]){if(!row.clubes?.slug)continue;const item=clubs.get(row.club_id)||{club_id:row.club_id,club:row.clubes,roles:[]};if(!item.roles.includes(row.rol))item.roles.push(row.rol);clubs.set(row.club_id,item);}"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 529,
+      "line": 534,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(session.club?.slug!==slug)throw new Error('No perteneces a este club o la membresía no está activa.');"
     },
     {
       "file": "web/js/core/backend.js",
-      "line": 539,
+      "line": 544,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "catch(error){console.warn('Preferencia de idioma no persistida en cuenta:',humanError(error));return {ok:false,local_only:true};}"
@@ -2747,1092 +2747,1092 @@
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 343,
+      "line": 346,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 346,
+      "line": 349,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(prepared.file.size>(type==='video'?100:25)*1024*1024)throw new Error(type==='video'?'El vídeo supera 100 MB.':'El archivo supera 25 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 359,
+      "line": 362,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 360,
+      "line": 363,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!clubId)throw new Error('Club no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 361,
+      "line": 364,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona un archivo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 365,
+      "line": 368,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!normalizedType)throw new Error('Tipo de contenido no válido. Usa una fotografía o un vídeo compatible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 369,
+      "line": 372,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(prepared.file.size>(normalizedType==='video'?100:25)*1024*1024)throw new Error(normalizedType==='video'?'El vídeo supera 100 MB.':'El archivo supera 25 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 383,
+      "line": 386,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 432,
+      "line": 435,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "safe('grupos',`select=id,nombre,disciplina_id,activo,plazas,monitor_nombre,monitor_principal_id&${q}`),(session()?.rol==='monitor'?backend.readRpc('app_kombax_mis_alumnos_v057',{p_club_id:c}).catch(()=>[]):safe('socios',`select=id,nombre,apellidos,estado&${q}`)),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 433,
+      "line": 436,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "safe('cuotas',`select=id,socio_id,estado,importe,vencimiento&${q}&order=vencimiento.desc&limit=300`),safe('sesiones_entrenamiento',`select=id,grupo_id,fecha,hora_inicio,hora_fin,estado,monitor_nombre&${q}&ciclo_estado=eq.activo&order=fecha.desc&limit=120`),backend.readRpc('app_kombax_header_summary_v105',{p_club_id:c})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 434,
+      "line": 437,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "safe('preinscripciones',`select=id,nombre,apellidos,estado,creado_en&${q}&order=creado_en.desc&limit=200`),safe('pagos',`select=id,socio_id,importe,fecha,estado_validacion&${q}&order=fecha.desc&limit=400`),safe('socio_disciplinas',`select=id,socio_id,grupo_id,activa&${q}`)"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 443,
+      "line": 446,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "saveDiscipline:(p)=>mutation('disciplina.guardar',{id:p.id||null,nombre:p.nombre,descripcion:p.descripcion||'',color:p.color||'#ffffff',activa:p.activa!==false,orden:Number(p.orden||0)}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 444,
+      "line": 447,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveGrade:(p)=>mutation('grado.guardar',{id:p.id||null,disciplina_id:p.disciplina_id,nombre:p.nombre,orden:Number(p.orden||1),color:p.color||null,meses_minimos:p.meses_minimos===''||p.meses_minimos==null?null:Number(p.meses_minimos),activo:p.activo!==false}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 445,
+      "line": 448,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deleteDiscipline:(disciplina_id)=>mutation('disciplina.eliminar',{disciplina_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 447,
+      "line": 450,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deleteGrade:(grado_id)=>mutation('grado.eliminar',{grado_id}), forceDeleteGrade:(grado_id)=>mutation('grado.eliminar_forzado',{grado_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 451,
+      "line": 454,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('grupo.guardar',{id:p.id||null,disciplina_id:p.disciplina_id,nombre:p.nombre,monitor_nombre:p.monitor_nombre||'',sala:p.sala||'',edad_min:p.edad_min===''?null:Number(p.edad_min),edad_max:p.edad_max===''?null:Number(p.edad_max),plazas:p.plazas===''?null:Number(p.plazas),activo:p.activo!==false,horario"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 452,
+      "line": 455,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(grupo_id)=>mutation('grupo.eliminar',{grupo_id}), forceDelete:(grupo_id)=>mutation('grupo.eliminar_forzado',{grupo_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 456,
+      "line": 459,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('alumno.guardar',{id:p.id||null,nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,telefono:p.telefono||'',email:p.email||'',tutor_nombre:p.tutor_nombre||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,grado_id:p.grado_id||null,grado_texto:p.grado_texto||"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 457,
+      "line": 460,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 458,
+      "line": 461,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deactivateEnrollment:(matricula_id)=>mutation('matricula.desactivar',{matricula_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 460,
+      "line": 463,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "archive:(socio_id,motivo='',fecha_baja=isoDate())=>mutation('alumno.archivar',{socio_id,motivo,fecha_baja}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 465,
+      "line": 468,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(socio_id)=>mutation('alumno.eliminar',{socio_id}), async forceDelete(socio_id){const out=await mutation('alumno.eliminar_forzado',{socio_id});await Promise.all([(out?.document_paths||[]).map(p=>backend.remove('member-documents',p).catch(()=>{})),(out?.payment_paths||[]).map(p=>backend.remove('justificantes-pago"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 469,
+      "line": 472,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "create:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:p.tipo_solicitud||'adulto',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.email_acceso||p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grup"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 470,
+      "line": 473,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "approve:(id)=>rpcWithFallback(()=>backend.writeRpc('app_kombax_preinscripcion_aprobar_r59',{p_preinscripcion_id:id}),()=>mutation('preinscripcion.aprobar',{preinscripcion_id:id}),'app_kombax_preinscripcion_aprobar_r59'), wait:(id,motivo)=>mutation('preinscripcion.espera',{preinscripcion_id:id,motivo:motivo||null}), rej"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 471,
+      "line": 474,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "cancel:(id,motivo)=>mutation('preinscripcion.cancelar',{preinscripcion_id:id,motivo:motivo||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 472,
+      "line": 475,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(id)=>mutation('preinscripcion.eliminar',{preinscripcion_id:id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 476,
+      "line": 479,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('tarifa.guardar',{id:p.id||null,nombre:p.nombre,descripcion:p.descripcion||'',importe:Number(p.importe||0),matricula:Number(p.matricula||0),periodicidad:p.periodicidad||'mensual',activa:p.activa!==false}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 477,
+      "line": 480,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(tarifa_id)=>mutation('tarifa.eliminar',{tarifa_id}), forceDelete:(tarifa_id)=>mutation('tarifa.eliminar_forzado',{tarifa_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 480,
+      "line": 483,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "fees:(limit=120)=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), payments:(limit=120)=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), receipts:(limit=120)=>read('recibos_cuota',`s"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 483,
+      "line": 486,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "detail:({year,month,socio,origin,status,limit=150}={})=>read('v_finanzas_detalle',`select=*&${filterClub()}${year?`&anio=eq.${enc(year)}`:''}${month?`&mes=eq.${enc(month)}`:''}${socio?`&socio_id=eq.${enc(socio)}`:''}${origin?`&origen=eq.${enc(origin)}`:''}${status?`&estado=eq.${enc(status)}`:''}&order=periodo.desc,venc"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 486,
+      "line": 489,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "generate:(periodo=monthStart())=>mutation('cuotas.generar',{periodo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 500,
+      "line": 503,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "annulReceipt:(recibo_id,motivo)=>mutation('recibo.anular',{recibo_id,motivo})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 512,
+      "line": 515,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 563,
+      "line": 566,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
-    },
-    {
-      "file": "web/js/core/repositories.js",
-      "line": 564,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(file.size>15*1024*1024)throw new Error('El documento supera el límite de 15 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
       "line": 567,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "if(file.size>15*1024*1024)throw new Error('El documento supera el límite de 15 MB.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 570,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "const uid=session()?.id;if(!uid)throw new Error('Sesión requerida.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 584,
+      "line": 587,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveSeries:(p)=>mutation('sesion.serie.guardar',{id:p.id||null,grupo_id:p.grupo_id,dias_semana:p.dias_semana||[],hora_inicio:p.hora_inicio,hora_fin:p.hora_fin||null,monitor_nombre:p.monitor_nombre||'',sala:p.sala||'',codigo_acceso:p.codigo_acceso||'',fecha_inicio:p.fecha_inicio||isoDate(),fecha_fin:p.fecha_fin||null,ac"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 587,
+      "line": 590,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "exception:(p)=>mutation('sesion.excepcion.guardar',{sesion_id:p.sesion_id,estado:p.estado||null,monitor_nombre:p.monitor_nombre||null,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,sala:p.sala||null,motivo:p.motivo||'',observacion_general:p.observacion_general||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 588,
+      "line": 591,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('sesion.guardar',{id:p.id||null,grupo_id:p.grupo_id,fecha:p.fecha,hora_inicio:p.hora_inicio,hora_fin:p.hora_fin||null,monitor_nombre:p.monitor_nombre||'',estado:p.estado||'programada',observacion_general:p.observacion_general||'',codigo_acceso:p.codigo_acceso||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 592,
+      "line": 595,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "cancelReservation:(sesion_id,socio_id)=>mutation('sesion.reserva.cancelar',{sesion_id,socio_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 593,
+      "line": 596,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveAttendance:(p)=>mutation('asistencia.guardar',{sesion_id:p.sesion_id,socio_id:p.socio_id,estado:p.estado,observacion:p.observacion||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 595,
+      "line": 598,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(sesion_id)=>mutation('sesion.eliminar',{sesion_id}), forceDelete:(sesion_id)=>mutation('sesion.eliminar_forzado',{sesion_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 602,
+      "line": 605,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('seguimiento.guardar',{socio_id:p.socio_id,tipo:p.tipo,nota:p.nota,visibilidad:p.visibilidad||'equipo',fecha:p.fecha||isoDate()})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 607,
+      "line": 610,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('publicacion.guardar',{id:p.id||null,tipo:p.tipo||'noticia',titulo:p.titulo,cuerpo:p.cuerpo,audiencia:p.audiencia||'todos',estado:p.estado||'borrador',evento_fecha:p.evento_fecha||null,ubicacion:p.ubicacion||'',imagen_url:p.imagen_url||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 608,
+      "line": 611,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(publicacion_id){const out=await mutation('publicacion.eliminar',{publicacion_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 617,
+      "line": 620,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('material.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,categoria:p.categoria||'',descripcion:p.descripcion||'',imagen_url:p.imagen_url||'',precio:Number(p.precio||0),stock:Number(p.stock||0),obligatorio:p.obligatorio===true,referencia:p.referencia||'',activo:p.activo!=="
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 618,
+      "line": 621,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveVariant:(p)=>mutation('material.variante.guardar',{id:p.id||null,material_id:p.material_id,talla:p.talla||'',color:p.color||'',referencia:p.referencia||'',stock:Number(p.stock||0),activa:p.activa!==false}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 619,
+      "line": 622,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "request:(p)=>mutation('material.solicitar',{socio_id:p.socio_id,material_id:p.material_id,variante_id:p.variante_id||null,cantidad:Number(p.cantidad||1),observaciones:p.observaciones||'',validar_ahora:p.validar_ahora===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 620,
+      "line": 623,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "orderStatus:(pedido_id,estado)=>mutation('material.pedido.estado',{pedido_id,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 621,
+      "line": 624,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(material_id){const out=await mutation('material.eliminar',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}, async forceDelete(material_id){const out=await mutation('material.eliminar_forzado',{material_id});if(out?.imagen_url)await removePublicImage(out.i"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 636,
+      "line": 639,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "members:(limit=150)=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&rol=in.(direccion,secretaria,economia,comunicacion,monitor)&order=creado_en&limit=${Math.min(300,Math.max(30,Number(limit)||150))}`),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 638,
+      "line": 641,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "resolveTeamRequest:(id,estado,rol=null,nota='')=>backend.writeRpc('app_kombax_solicitud_equipo_resolver_v060',{p_solicitud_id:id,p_estado:estado,p_rol:rol,p_nota:nota||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 641,
+      "line": 644,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "createStudentInvitation:(email,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:'alumno',p_email:String(email||'').trim().toLowerCase(),p_rol:null,p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 660,
+      "line": 663,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!out?.ok||out.request_id!==requestId)throw new Error('Respuesta de ámbitos no verificable.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 667,
+      "line": 670,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async list({tipo='',estado='',desde='',hasta='',limit=150}={}){await this.maintenance().catch(()=>null);return backend.readRpc('app_ciclo_listar_v038',{p_club_id:session()?.club_id,p_tipo:tipo||null,p_estado:estado||null,p_desde:desde||null,p_hasta:hasta||null,p_limit:Math.min(300,Math.max(20,Number(limit)||150))});},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 668,
+      "line": 671,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async listPage({tipo='',estado='',desde='',hasta='',limit=10,offset=0}={}){await this.maintenance().catch(()=>null);return backend.readRpc('app_ciclo_listar_page_r89',{p_club_id:session()?.club_id,p_tipo:tipo||null,p_estado:estado||null,p_desde:desde||null,p_hasta:hasta||null,p_limit:Math.min(50,Math.max(1,Number(limit"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 689,
+      "line": 692,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "fees:()=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=180`),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 692,
+      "line": 695,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "communications:()=>read('comunicaciones',`select=*&${filterClub()}&ciclo_estado=eq.activo&estado=in.(publicada,programada)&order=publicada_en.desc,creado_en.desc&limit=200`),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 694,
+      "line": 697,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestMinor:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:'menor',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 695,
+      "line": 698,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 697,
+      "line": 700,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "cancelSessionReservation:(sesion_id,socio_id)=>mutation('sesion.reserva.cancelar',{sesion_id,socio_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 701,
+      "line": 704,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "club:()=>cachedRead('settings:club',()=>read('clubes',`select=*&id=eq.${enc(session()?.club_id)}&limit=1`),60000), config:()=>cachedRead('settings:config',()=>read('config_club',`select=*&${filterClub()}`),60000),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 706,
+      "line": 709,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveClub:(p)=>mutation('club.configurar',p), profile:(p)=>mutation('perfil.guardar',{nombre:p.nombre||'',apellidos:p.apellidos||'',telefono:p.telefono||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 707,
+      "line": 710,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "async uploadAvatar(file){if(!file||!file.size)throw new Error('Selecciona una imagen.');if(file.size>5*1024*1024)throw new Error('La foto supera 5 MB.');if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');const ext=file.type==='image/png'?'png':file.type==='image/webp"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 708,
+      "line": 711,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async removeAvatar(){const out=await mutation('perfil.avatar',{avatar_path:null});if(out?.old_avatar_path)await backend.remove('profile-media',out.old_avatar_path).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 713,
+      "line": 716,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('club_publico.guardar',{slug:p.slug,nombre_publico:p.nombre_publico,alias:p.alias||'',lema:p.lema||'',descripcion:p.descripcion||'',historia:p.historia||'',ciudad:p.ciudad||'',provincia:p.provincia||'',pais:p.pais||'España',logros:p.logros||'',contacto_publico:p.contacto_publico||'',web_publica:p.web"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 728,
+      "line": 731,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('perfil_deportivo.guardar',{socio_id:p.socio_id,apodo:p.apodo||'',presentacion:p.presentacion||'',experiencia_anos:p.experiencia_anos===''||p.experiencia_anos==null?null:Number(p.experiencia_anos),guardia:p.guardia||'',tecnica_favorita:p.tecnica_favorita||'',especialidad:p.especialidad||'',categoria_"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 731,
+      "line": 734,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona una imagen.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 753,
+      "line": 756,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async list({query='',tipo='',estado='',limit=24}={}){const rows=await rpcWithFallback(()=>backend.globalReadRpc('app_kombax_eventos_publicos_v178',{p_query:query||'',p_tipo:tipo||null,p_estado:estado||null,p_limit:Math.min(100,Math.max(1,Number(limit)||24))}),()=>backend.globalReadRpc('app_kombax_eventos_publicos_v173'"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 755,
+      "line": 758,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async listPage({query='',tipo='',estado='',phase='',cursor=null,limit=24}={}){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 757,
+      "line": 760,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const out=await backend.globalReadRpc('app_kombax_eventos_visible_page_v236',{p_query:String(query||'').trim(),p_tipo:tipo||null,p_estado:estado||null,p_phase:phase||null,p_cursor_bucket:cursor?.bucket??null,p_cursor_fecha:cursor?.fecha||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(48,Math.max(1,Number(limit)||24"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 762,
+      "line": 765,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const out=await backend.globalReadRpc('app_kombax_eventos_publicos_page_v191',{p_query:String(query||'').trim(),p_tipo:tipo||null,p_estado:estado||null,p_phase:phase||null,p_cursor_bucket:cursor?.bucket??null,p_cursor_fecha:cursor?.fecha||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(48,Math.max(1,Number(limit)||2"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 766,
+      "line": 769,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const items=await this.list({query,tipo,estado,limit});return {items:Array.isArray(items)?items:[],has_more:false,next_cursor:null,keyset:false};"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 782,
+      "line": 785,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return {...event,main_event:bundled.main_event||null,entities:bundled.entities||[],participants,participants_count:Number(bundled.participants_count??participants.length),participants_accepted_count:Number(bundled.participants_accepted_count??participants.filter(x=>x.estado_inscripcion==='aceptada').length),participant"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 814,
+      "line": 817,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const items=await this.participants(id);return {items,total_count:items.length,accepted_count:items.filter(x=>x.estado_inscripcion==='aceptada').length,pending_count:items.filter(x=>x.estado_inscripcion==='pendiente').length,has_more:false,next_cursor:null};"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 865,
+      "line": 868,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 866,
+      "line": 869,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!evento_id)throw new Error('Guarda primero el evento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 867,
+      "line": 870,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(!['cartel','banner'].includes(kind))throw new Error('Tipo visual no válido.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 868,
+      "line": 871,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona una imagen.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 878,
+      "line": 881,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 879,
+      "line": 882,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!evento_id)throw new Error('Evento no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 880,
+      "line": 883,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona una imagen.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 892,
+      "line": 895,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "respondInvitation:(entity_id,aceptar)=>kombaxEventsMutation('event.entity.respond',{entity_id,aceptar:aceptar===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 894,
+      "line": 897,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setParticipantStatus:(participant_id,estado)=>kombaxEventsMutation('event.participant.status',{participant_id,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 900,
+      "line": 903,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setInterest:(evento_id,estado='interesado',notificaciones=true)=>kombaxEventsMutation('event.interest.set',{evento_id,estado,notificaciones:notificaciones===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 902,
+      "line": 905,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "async uploadMedia(evento_id,file,{tipo='',combate_id=null,competidor_social_profile_id=null,titulo='',descripcion='',destacado=false,allow_download=false,orden=0,estado='visible',momento='evento',onProgress=null}={}){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 903,
+      "line": 906,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona una foto o vídeo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 907,
+      "line": 910,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(file.size>(isVideo?100:10)*1024*1024)throw new Error(isVideo?'El vídeo supera 100 MB.':'La imagen supera 10 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 919,
+      "line": 922,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "const data=await kombaxEventsMutation('event.media.register',{media_id:mediaId,evento_id,tipo:tipo||(isVideo?'clip':'foto'),combate_id,competidor_social_profile_id,storage_path:path,mime_type:prepared.mime||prepared.file.type||file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prep"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 941,
+      "line": 944,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "registerExternalVideo:(evento_id,external_url,{combate_id=null,competidor_social_profile_id=null,titulo='',descripcion='',destacado=false,orden=0,estado='visible',momento='evento'}={})=>kombaxEventsMutation('event.media.register',{media_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`,ev"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 942,
+      "line": 945,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "addMediaReference:(evento_id,{source_kind,source_id=null,titulo='',momento='evento'}={})=>kombaxEventsMutation('event.media.reference.add',{evento_id,source_kind,source_id,titulo,momento}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 944,
+      "line": 947,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async setVideoCover(evento_id,media,file,{presentation={},mode='upload',time=0}={}){const out=await storeEventVideoCoverWithRetry(evento_id,media.id,file,{presentation,mode,time,attempts:3});if(out.status!=='ready')throw out.error||new Error('La portada quedó pendiente de regeneración.');return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 945,
+      "line": 948,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "async uploadDemoMedia(evento_id,file,{media_id,titulo='',descripcion='',destacado=false,orden=0,momento='evento'}={}){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 954,
+      "line": 957,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "return await backend.globalWriteRpc('app_kombax_eventos_mutate_v175',{p_operation:'event.media.register',p_payload:{media_id,evento_id,tipo:'foto',storage_path:path,mime_type:prepared.mime||prepared.file.type||file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 972,
+      "line": 975,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('evento.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,descripcion:p.descripcion||'',fecha:p.fecha,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,lugar:p.lugar||'',organizador:p.organizador||'',fecha_limite_inscripcion:p.fecha_limite_inscripcion||null,estado:p."
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 973,
+      "line": 976,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setStatus:(evento_id,estado)=>mutation('evento.estado',{evento_id,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 974,
+      "line": 977,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveExternal:(p)=>mutation('evento.participante.externo',{id:p.id||null,evento_id:p.evento_id,nombre:p.nombre,apellidos:p.apellidos||'',club_origen:p.club_origen||'',disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',peso:p.peso===''||p.peso==null?null:Number(p.peso),grado_texto:p.grado_texto"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 975,
+      "line": 978,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestRegistration:(p)=>mutation('evento.inscripcion.solicitar',{evento_id:p.evento_id,socio_id:p.socio_id,disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',peso:p.peso===''||p.peso==null?null:Number(p.peso),grado_texto:p.grado_texto||'',observaciones:p.observaciones||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 976,
+      "line": 979,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setRegistrationStatus:(participante_id,estado,observaciones='')=>mutation('evento.inscripcion.estado',{participante_id,estado,observaciones}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 977,
+      "line": 980,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "withdraw:(participante_id,observaciones='')=>mutation('evento.inscripcion.baja',{participante_id,observaciones}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 978,
+      "line": 981,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveFight:(p)=>mutation('evento.combate.guardar',{id:p.id||null,evento_id:p.evento_id,participante_a_id:p.participante_a_id,participante_b_id:p.participante_b_id,disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',tatami_ring:p.tatami_ring||'',orden:p.orden===''||p.orden==null?null:Number(p.or"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 979,
+      "line": 982,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deleteFight:(combate_id)=>mutation('evento.combate.eliminar',{combate_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 991,
+      "line": 994,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "async upload(file){if(!file||!file.size)throw new Error('Selecciona una imagen o vídeo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(f"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 993,
+      "line": 996,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "publish:(p)=>mutation('comunidad.publicar',{texto:p.texto||'',media_path:p.media_path,media_tipo:p.media_tipo,duracion_segundos:p.duracion_segundos||null,media_mime:p.media_mime||null,media_width:p.media_width||null,media_height:p.media_height||null,media_size_bytes:p.media_size_bytes||null,portada_automatica_path:p.po"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 994,
+      "line": 997,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});for(const path of [...new Set([out?.media_path,out?.portada_automatica_path,out?.portada_manual_path].filter(Boolean))])await backend.remove('community-media',path).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 999,
+      "line": 1002,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "block:(perfil_id,bloquear=true)=>mutation('comunidad.bloquear',{perfil_id,bloquear:bloquear===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1000,
+      "line": 1003,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "report:(objetivo_tipo,objetivo_id,motivo,detalle='',ambito='club')=>mutation('comunidad.denunciar',{objetivo_tipo,objetivo_id,motivo,detalle,ambito}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1002,
+      "line": 1005,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reportStatus:(reporte_id,estado,{resolucion='',ocultar_publicacion=false}={})=>mutation('comunidad.denuncia.estado',{reporte_id,estado,resolucion,ocultar_publicacion:ocultar_publicacion===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1019,
+      "line": 1022,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1020,
+      "line": 1023,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!profileId||!credentialId)throw new Error('Credencial profesional no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1021,
+      "line": 1024,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona un documento de acreditación.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1050,
+      "line": 1053,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070','kombax.profile.manager.set',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1060,
+      "line": 1063,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "contactClub:(club_id,mensaje,request_kind='member',target_socio_id=null)=>backend.globalWriteRpc('app_kombax_club_link_request_r117',{p_club_id:club_id,p_request_kind:request_kind,p_mensaje:String(mensaje||'').trim(),p_target_socio_id:target_socio_id||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1075,
+      "line": 1078,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1076,
+      "line": 1079,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!licenseId)throw new Error('Licencia no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1077,
+      "line": 1080,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona un documento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1092,
+      "line": 1095,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "moderateAccess:(perfil_id,estado,motivo)=>mutation('comunidad_general.moderar_acceso',{perfil_id,estado,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1137,
+      "line": 1140,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const albumScope=type==='club'?'club_media':type==='miembro'?'social_media':'profile_media';"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1141,
+      "line": 1144,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(type==='miembro'){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1144,
+      "line": 1147,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const avatar=media.find(x=>x.tipo==='avatar'&&x.estado==='active');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1150,
+      "line": 1153,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const avatar=media.find(x=>x.tipo==='avatar'&&x.estado==='active');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1177,
+      "line": 1180,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "publish:(autor_perfil_id,tipo,texto,options={})=>kombaxSocialMutation('kombax.social.publicar',{autor_perfil_id,tipo,texto,comentarios_estado:options.comentarios_estado||'open',social_media_id:options.social_media_id||null,audiencia:options.audiencia||'publica',audiencia_club_id:options.audiencia_club_id||null,audienci"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1197,
+      "line": 1200,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deletePost:async(publicacion_id)=>{const out=await kombaxSocialMutation('kombax.social.eliminar',{publicacion_id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1204,
+      "line": 1207,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "block:(perfil_social_id,bloquear=true)=>kombaxSocialMutation('kombax.social.bloquear',{perfil_social_id,bloquear:bloquear===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1205,
+      "line": 1208,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "contact:(remitente_social_id,destinatario_social_id,motivo,mensaje)=>kombaxSocialNetworkMutation('kombax.contact.request',{remitente_social_id,destinatario_social_id,motivo,mensaje}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1206,
+      "line": 1209,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "showcaseContact:(remitente_social_id,elemento_id,mensaje)=>kombaxSocialNetworkMutation('kombax.showcase.contact.request',{remitente_social_id,elemento_id,mensaje}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1207,
+      "line": 1210,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "contactStatus:async(contacto_id,estado)=>{const out=await kombaxSocialMutation('kombax.social.contacto.estado',{contacto_id,estado});window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1213,
+      "line": 1216,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "report:(objetivo_tipo,objetivo_id,motivo,detalle='')=>kombaxSocialMutation('kombax.social.denunciar',{objetivo_tipo,objetivo_id,motivo,detalle}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1217,
+      "line": 1220,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "decideMinorConsent:(consent_id,estado)=>{const requestId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;return backend.globalWriteRpc('app_kombax_social_minor_consent_mutate_v121',{p_operation:'kombax.social.minor.consent.decide',p_payload:{consent_id,estado},p_request_id:requestId});},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1219,
+      "line": 1222,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "moderate:(reporte_id,estado,resolucion='',accion='ninguna')=>kombaxSocialMutation('kombax.social.moderar',{reporte_id,estado,resolucion,accion}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1221,
+      "line": 1224,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "save:(publicacion_id,activo=true)=>kombaxSocialMutation('kombax.social.guardar',{publicacion_id,activo:activo===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1224,
+      "line": 1227,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "removeComment:(comentario_id,motivo='')=>kombaxSocialMutation('kombax.social.comentario.eliminar',{comentario_id,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1228,
+      "line": 1231,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "relationState:async(relacion_id,estado)=>{const args={p_relacion_id:relacion_id,p_estado:estado,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`};const out=await rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_relation_state_v255',args),()=>kombaxGlobalMutation('app_komb"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1234,
+      "line": 1237,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "toggleSaved:(elemento_id,activo=true)=>kombaxShowcaseMutation(activo?'kombax.showcase.guardar':'kombax.showcase.desguardar',{elemento_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1237,
+      "line": 1240,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveBrand:(payload)=>kombaxShowcaseMutation('kombax.showcase.marca.guardar',payload),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1238,
+      "line": 1241,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "brandState:(marca_id,estado,verificada=false)=>kombaxShowcaseMutation('kombax.showcase.marca.estado',{marca_id,estado,verificada:verificada===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1239,
+      "line": 1242,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveItem:(payload)=>kombaxShowcaseMutation('kombax.showcase.elemento.guardar',payload),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1242,
+      "line": 1245,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "itemState:(elemento_id,estado,options={})=>kombaxShowcaseMutation('kombax.showcase.elemento.estado',{elemento_id,estado,destacado:options.destacado===true,etiqueta_destacada:options.etiqueta_destacada||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1251,
+      "line": 1254,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deleteItem:async(elemento_id)=>{const out=await kombaxShowcaseMutation('kombax.showcase.elemento.eliminar',{elemento_id});if(out?.deleted===true)await removeOwnedShowcaseImages([out?.imagen_url,...(Array.isArray(out?.galeria)?out.galeria:[])]);return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1252,
+      "line": 1255,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "inquiryRequest:(elemento_id,mensaje)=>backend.globalWriteRpc('app_kombax_showcase_inquiry_request_r58',{p_elemento_id:elemento_id,p_mensaje:String(mensaje||'').trim()}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1256,
+      "line": 1259,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "inquirySend:(inquiry_id,mensaje)=>backend.globalWriteRpc('app_kombax_showcase_inquiry_send_r58',{p_inquiry_id:inquiry_id,p_mensaje:String(mensaje||'').trim()}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1362,
+      "line": 1365,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const allowed=new Set(Object.values(mimeByExt));const input=[...(files||[])];if(!input.length)throw new Error('Selecciona al menos un archivo para la migración.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1366,
+      "line": 1369,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!mime)throw new Error(`Formato no admitido: ${file?.name||'archivo'}.`);if(!file?.size||file.size>10*1024*1024)throw new Error(`El archivo ${file?.name||''} supera el límite de 10 MB.`);"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1394,
+      "line": 1397,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reviewApplication:(solicitud_id,estado,motivo='')=>kombaxGlobalMutation('app_kombax_perfil_mutate_v196','kombax.application.review',{solicitud_id,estado,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1396,
+      "line": 1399,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setProfileService:(perfil_directo_id,plan_codigo,estado='activa')=>kombaxGlobalMutation('app_kombax_subscription_mutate_v071','kombax.subscription.set',{perfil_directo_id,plan_codigo,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1408,
+      "line": 1411,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1413,
+      "line": 1416,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const uid=String(session()?.id||'');if(!uid)throw new Error('La sesión Owner ha caducado.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1434,
+      "line": 1437,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "entityStatus:(entity_session_id,payload)=>kombaxGlobalMutation('app_kombax_platform_entity_mutate_v114',payload?.estado?'kombax.admin.entity.moderation.set':'kombax.admin.entity.status.set',{...payload,entity_session_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1435,
+      "line": 1438,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deletionQueue:(estado=null,limit=50)=>backend.globalReadRpc('app_kombax_deletion_queue_v119',{p_estado:estado,p_limit:limit}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1436,
+      "line": 1439,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reviewDeletion:(solicitud_id,estado,resolucion='',nota_retencion='')=>kombaxGlobalMutation('app_kombax_eliminacion_mutate_v047','kombax.deletion.review',{solicitud_id,estado,resolucion,nota_retencion}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1468,
+      "line": 1471,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "accept:(tipo,version='2.0.0',aceptado=true,socio_id=null)=>mutation('legal.aceptar',{tipo,version,aceptado,socio_id,user_agent:navigator.userAgent}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1474,
+      "line": 1477,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un archivo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1475,
+      "line": 1478,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(file.size>10*1024*1024)throw new Error('El archivo supera el límite de 10 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1484,
+      "line": 1487,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(meta.reemplaza_id){await mutation('documento.archivar',{documento_id:meta.reemplaza_id,estado:'sustituido',reemplazado_por:created.id});}"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1489,
+      "line": 1492,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "archive:(documento_id,estado='archivado',reemplazado_por=null)=>mutation('documento.archivar',{documento_id,estado,reemplazado_por}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1490,
+      "line": 1493,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(documento_id){const out=await mutation('documento.eliminar',{documento_id});if(out?.storage_path)await backend.remove('member-documents',out.storage_path).catch(()=>{});return out;},"
@@ -4091,315 +4091,315 @@
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 68,
+      "line": 71,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_BASE_VERIFICATION_REQUIRED/i.test(raw))return 'Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 69,
+      "line": 72,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_ACCOUNT_BIRTH_DATE_REQUIRED/i.test(raw))return 'Indica tu fecha de nacimiento para crear la cuenta KOMBAX.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 70,
+      "line": 73,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_ACCOUNT_BIRTH_DATE_INVALID/i.test(raw))return 'La fecha de nacimiento no es válida. Revísala e inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 71,
+      "line": 74,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_MINOR_MUST_USE_TUTOR_FLOW/i.test(raw))return 'Si eres menor de 16 años, utiliza el alta mediante padre, madre o tutor.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 72,
+      "line": 75,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_TUTOR_MIN_AGE_18/i.test(raw))return 'La cuenta de padre, madre o tutor debe pertenecer a una persona de 18 años o más.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 73,
+      "line": 76,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_MEMBER_INDEPENDENT_MIN_AGE_16/i.test(raw))return 'El Perfil Social independiente de Miembro/Practicante está disponible a partir de los 16 años. Para menores, utiliza la vinculación familiar o del club.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 74,
+      "line": 77,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_POSSIBLE_IMPORTED_MEMBER_REVIEW_REQUIRED|KOMBAX_EXISTING_MEMBER_EMAIL_USE_EXISTING_RECORD/i.test(raw))return 'Hemos encontrado una ficha del Club que podría corresponder a esta persona. Revisa la ficha existente y vincúlala en lugar de crear un duplicado.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 75,
+      "line": 78,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT_EMAIL|KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT/i.test(raw))return 'Ya existe una solicitud de vinculación pendiente para esta persona. Revisa la solicitud existente antes de crear otra.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 76,
+      "line": 79,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/user already registered|already been registered|email.*already.*registered|email.*already.*exists/i.test(raw))return 'Ya existe una cuenta KOMBAX con este correo. Inicia sesión o recupera tu contraseña.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 77,
+      "line": 80,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/database error saving new user/i.test(raw))return 'No se pudo crear la cuenta. Revisa la fecha de nacimiento y los datos obligatorios e inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 78,
+      "line": 81,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/SELLER_APPLICATION_DATA_INCOMPLETE/i.test(raw))return 'Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 79,
+      "line": 82,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/SELLER_DECLARATIONS_REQUIRED/i.test(raw))return 'Acepta las dos declaraciones de vendedor antes de enviar la solicitud.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 80,
+      "line": 83,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/SELLER_SHIPPING_MODE_REQUIRED/i.test(raw))return 'Selecciona al menos una forma de entrega para tus productos.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 81,
+      "line": 84,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/invalid\\s*refresh\\s*token|refresh\\s*token\\s*(?:not\\s*found|invalid|expired)|refresh_token_not_found|jwt.*expired|token.*expired/i.test(raw))return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 82,
+      "line": 85,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/failed to fetch|networkerror|network request failed|load failed|internet|timeout|tiempo de espera|aborterror/i.test(raw))return 'No se pudo conectar. Comprueba tu conexión a Internet e inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 84,
+      "line": 87,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/invalid login credentials|invalid credentials|email or password|wrong password|bad password/i.test(raw))return 'El correo o la contraseña no son correctos.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 85,
+      "line": 88,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/otp|one.?time|token|code.*expired|expired.*code|invalid.*code/i.test(raw)&&!/codigo|código/i.test(raw))return 'El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 86,
+      "line": 89,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_PAYMENT_ALREADY_COVERED/i.test(raw))return 'Esta cuota ya está completamente pagada. Revisa o rechaza el pago pendiente duplicado; no puede validarse otro cobro.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 87,
+      "line": 90,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_PAYMENT_EXCEEDS_REMAINING/i.test(raw))return 'El importe supera el saldo pendiente de esta cuota. Revisa el importe antes de continuar.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 88,
+      "line": 91,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_PAYMENT_DUPLICATE/i.test(raw))return 'Ya existe un pago prácticamente idéntico registrado hace unos instantes. Revisa la lista antes de repetirlo.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 89,
+      "line": 92,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_PAYMENT_ALREADY_REVIEWED/i.test(raw))return 'Este pago ya fue revisado y no puede volver a validarse.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 90,
+      "line": 93,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_DOCUMENT_REASON_REQUIRED/i.test(raw))return 'Indica el motivo antes de archivar o enviar documentación financiera a la papelera.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 92,
+      "line": 95,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_CHARGE_DUPLICATE/i.test(raw))return 'Ya existe un cargo prácticamente idéntico creado hace unos instantes. Revisa la lista antes de repetirlo.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 93,
+      "line": 96,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/FINANCE_PAYMENT_CHARGE_CLOSED/i.test(raw))return 'Esta cuota está anulada o exenta y no admite nuevos pagos ni validaciones.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 94,
+      "line": 97,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_VERIFICATION_DOCUMENT_REQUIRED/i.test(raw))return 'Adjunta un documento acreditativo antes de enviar la solicitud.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 95,
+      "line": 98,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_SOCIAL_COMPETITOR_VERIFIED_AGE_REQUIRED/i.test(raw))return 'Verifica tu condición de competidor y la edad requerida para activar Social como Competidor.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 96,
+      "line": 99,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_SOCIAL_PROFESSIONAL_AGE_REQUIRED/i.test(raw))return 'Tu perfil Profesional debe estar verificado y acreditar 18 años o más para activar Social.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 97,
+      "line": 100,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_DIRECT_PROFILE_VERIFIED_REQUIRED/i.test(raw))return 'Verifica esta identidad antes de activar su publicación en Social.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 99,
+      "line": 102,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_DECLARATION_REQUIRED/i.test(raw))return 'Debes confirmar la declaración de identidad y representación.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 100,
+      "line": 103,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_APPLICATION_LOCKED_FOR_REVIEW/i.test(raw))return 'La solicitud ya está en revisión y no se puede modificar.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 101,
+      "line": 104,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_APPLICATION_NOT_SUBMITTABLE/i.test(raw))return 'La solicitud no está en un estado que permita volver a enviarla.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 102,
+      "line": 105,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_WEIGHT_OUT_OF_RANGE/i.test(raw))return 'Introduce un peso válido entre 15 y 300 kg.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 103,
+      "line": 106,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_PREPARATION_SUBJECT_REQUIRED/i.test(raw))return 'Selecciona el competidor o miembro al que pertenece esta preparación.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 104,
+      "line": 107,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_COMPETITOR_PROFILE_REQUIRED/i.test(raw))return 'Esta preparación necesita un perfil Competidor válido.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 105,
+      "line": 108,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_COMPETITOR_PROFILE_EDIT_REQUIRED|KOMBAX_PREPARATION_SUBJECT_EDIT_REQUIRED/i.test(raw))return 'No tienes permiso para crear o modificar la preparación de este deportista.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 106,
+      "line": 109,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_PREPARATION_READ_REQUIRED/i.test(raw))return 'No tienes permiso para consultar esta preparación.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 107,
+      "line": 110,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_PREPARATION_LOG_REQUIRED/i.test(raw))return 'No tienes permiso para añadir registros de peso en esta preparación.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 109,
+      "line": 112,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_PREPARATION_MANAGE_REQUIRED/i.test(raw))return 'No tienes permiso para gestionar esta preparación ni sus accesos.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 110,
+      "line": 113,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_ACCESS_PROFILE_REQUIRED/i.test(raw))return 'Selecciona una persona válida para conceder acceso.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 111,
+      "line": 114,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_ACCESS_ROLE_INVALID|KOMBAX_ACCESS_PERMISSIONS_INVALID|KOMBAX_ACCESS_PERMISSION_NOT_ALLOWED/i.test(raw))return 'Revisa el rol y los permisos del equipo de preparación.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 113,
+      "line": 116,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/KOMBAX_MEASUREMENT_CONTEXT_INVALID/i.test(raw))return 'Selecciona un contexto válido para el registro.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 115,
+      "line": 118,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/not authorized|unauthorized|forbidden|permission denied|platform_admin_required/i.test(raw))return 'No tienes permiso para realizar esta acción.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 116,
+      "line": 119,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(/not found|does not exist|no rows|404/i.test(raw)&&!SAFE_SPANISH_PREFIX.test(raw))return 'El contenido solicitado ya no está disponible.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 117,
+      "line": 120,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(TECHNICAL_ERROR_PATTERN.test(raw))return 'No se ha podido completar la operación. Inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
-      "line": 119,
+      "line": 122,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return 'No se ha podido completar la operación. Inténtalo de nuevo.';"
@@ -10282,14 +10282,14 @@
       "line": 361,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'lema',label:'Lema público'},"
+      "sample": "{name:'lema',label:'Lema público',maxLength:180},"
     },
     {
       "file": "web/js/modules/gateway.js",
       "line": 362,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true},"
+      "sample": "{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1200,full:true},"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10324,7 +10324,7 @@
       "line": 367,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'web_publica',label:'Web pública HTTPS',type:'url',full:true},{name:'instagram',label:'Instagram público',full:true},"
+      "sample": "{name:'web_publica',label:'Web pública HTTPS',type:'url',full:true},{name:'instagram',label:'Instagram público',full:true,placeholder:'@username · https://www.instagram.com/username/'},"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10359,7 +10359,7 @@
       "line": 448,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'nombre_publico',label:type==='marca'?'Nombre oficial':type==='federacion'?'Nombre institucional':'Nombre público',required:true,full:true,value:profile.nombre_publico||''},"
+      "sample": "{name:'nombre_publico',label:type==='marca'?'Nombre oficial':type==='federacion'?'Nombre institucional':'Nombre público',required:true,minLength:2,maxLength:160,full:true,value:profile.nombre_publico||''},"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10450,7 +10450,7 @@
       "line": 471,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const fields=[{name:'nombre_publico',label:type==='club'?'Nombre del club':`Nombre público de ${TYPE_LABEL[type]||type}`,required:true,full:true,value:application?.nombre_publico||profile?.nombre_publico||''}];"
+      "sample": "const fields=[{name:'nombre_publico',label:type==='club'?'Nombre del club':`Nombre público de ${TYPE_LABEL[type]||type}`,required:true,minLength:2,maxLength:160,full:true,value:application?.nombre_publico||profile?.nombre_publico||''}];"
     },
     {
       "file": "web/js/modules/gateway.js",
@@ -10569,7 +10569,7 @@
       "line": 514,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "{name:'lema',label:'Lema público',value:data.lema||''},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true,value:data.descripcion||'',help:'Será la presentación inicial del perfil público del Club.'},"
+      "sample": "{name:'lema',label:'Lema público',maxLength:180,value:data.lema||''},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1200,full:true,value:data.descripcion||'',help:'Será la presentación inicial del perfil público del Club.'},"
     },
     {
       "file": "web/js/modules/gateway.js",

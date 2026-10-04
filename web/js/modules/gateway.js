@@ -357,14 +357,14 @@ async function openPilotClubActivation({onBack}={}){
   openForm({
     title:'Alta Club Piloto',subtitle:'Alta directa · sin código de invitación · Premium piloto · sin documentación inicial.',width:'820px',
     fields:[
-      {name:'nombre_publico',label:'Nombre del Club',required:true,full:true},
-      {name:'lema',label:'Lema público'},
-      {name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true},
+      {name:'nombre_publico',label:'Nombre del Club',required:true,minLength:2,maxLength:160,full:true},
+      {name:'lema',label:'Lema público',maxLength:180},
+      {name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1200,full:true},
       {name:'ubicacion',label:'Ubicación pública · opcional',help:'Puedes completarla después desde el perfil del Club.'},{name:'ciudad',label:'Ciudad'},
       {name:'provincia',label:'Provincia / región'},{name:'pais',label:'País',value:'España'},
       {name:'disciplinas',label:'Disciplinas · opcional',full:true,help:'Separadas por comas; máximo 12. Puedes configurarlas después.'},
       {name:'telefono',label:'Teléfono de contacto del Club · opcional',help:'Puedes completarlo después.'},
-      {name:'web_publica',label:'Web pública HTTPS',type:'url',full:true},{name:'instagram',label:'Instagram público',full:true},
+      {name:'web_publica',label:'Web pública HTTPS',type:'url',full:true},{name:'instagram',label:'Instagram público',full:true,placeholder:'@username · https://www.instagram.com/username/'},
       {name:'declaration',label:'Confirmo que los datos introducidos son correctos y que solicito activar este Club en el programa piloto KOMBAX',type:'checkbox',required:true,value:false,full:true}
     ],
     submitText:'Activar Club Piloto',
@@ -445,7 +445,7 @@ function authChoice({onBack,pendingType=''}) {
 
 function profileFields(type,profile={},memberProfiles=[]){
   const fields=[
-    {name:'nombre_publico',label:type==='marca'?'Nombre oficial':type==='federacion'?'Nombre institucional':'Nombre público',required:true,full:true,value:profile.nombre_publico||''},
+    {name:'nombre_publico',label:type==='marca'?'Nombre oficial':type==='federacion'?'Nombre institucional':'Nombre público',required:true,minLength:2,maxLength:160,full:true,value:profile.nombre_publico||''},
     {name:'descripcion',label:'Presentación pública',type:'textarea',rows:5,maxLength:1600,full:true,value:profile.descripcion||'',help:'No incluyas teléfono, email, domicilio, fecha de nacimiento ni documentación privada.'},
     {name:'ubicacion',label:'Ubicación pública',value:profile.ubicacion||''},
     {name:'disciplinas',label:'Disciplinas',value:(profile.disciplinas||[]).join(', '),help:'Separadas por comas; máximo 12.'},
@@ -468,7 +468,7 @@ function profileFields(type,profile={},memberProfiles=[]){
 function applicationFields(type,profile=null,application=null){
   const data=application?.datos_publicos||{};
   const verify=application?.datos_verificacion||{};
-  const fields=[{name:'nombre_publico',label:type==='club'?'Nombre del club':`Nombre público de ${TYPE_LABEL[type]||type}`,required:true,full:true,value:application?.nombre_publico||profile?.nombre_publico||''}];
+  const fields=[{name:'nombre_publico',label:type==='club'?'Nombre del club':`Nombre público de ${TYPE_LABEL[type]||type}`,required:true,minLength:2,maxLength:160,full:true,value:application?.nombre_publico||profile?.nombre_publico||''}];
   if(type==='competidor')fields.push(
     {name:'ubicacion',label:'Ubicación pública',value:data.ubicacion||profile?.ubicacion||''},
     {name:'disciplinas',label:'Disciplina(s)',required:true,value:Array.isArray(data.disciplinas)?data.disciplinas.join(', '):(profile?.disciplinas||[]).join(', ')},
@@ -511,7 +511,7 @@ function applicationFields(type,profile=null,application=null){
     {name:'email',label:'Email profesional · privado',type:'email',required:true,value:verify.email||''}
   );
   if(type==='club')fields.push(
-    {name:'lema',label:'Lema público',value:data.lema||''},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1600,full:true,value:data.descripcion||'',help:'Será la presentación inicial del perfil público del Club.'},
+    {name:'lema',label:'Lema público',maxLength:180,value:data.lema||''},{name:'descripcion',label:'Presentación pública',type:'textarea',rows:4,maxLength:1200,full:true,value:data.descripcion||'',help:'Será la presentación inicial del perfil público del Club.'},
     {name:'ubicacion',label:'Ubicación pública',required:true,value:data.ubicacion||''},{name:'ciudad',label:'Ciudad',value:data.ciudad||''},{name:'provincia',label:'Provincia / región',value:data.provincia||''},{name:'pais',label:'País',required:true,value:data.pais||'España'},
     {name:'disciplinas',label:'Disciplina(s)',required:true,value:Array.isArray(data.disciplinas)?data.disciplinas.join(', '):String(data.disciplinas||''),help:'Separadas por comas; máximo 12.'},
     {name:'web_publica',label:'Web HTTPS',type:'url',value:data.web_publica||''},{name:'instagram',label:'Instagram público',value:data.instagram||''},{name:'tiktok',label:'TikTok público',value:data.tiktok||''},{name:'youtube',label:'YouTube público',value:data.youtube||''},

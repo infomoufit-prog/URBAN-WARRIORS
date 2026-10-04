@@ -65,6 +65,9 @@ function applicationFieldsMessage(raw){
 function humanErrorSpanish(error) {
   if(error?.code==='AUTH_EXPIRED')return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
   const raw=technicalError(error).trim();
+  if(/KOMBAX_CLUB_PUBLIC_LINK_INVALID/i.test(raw))return t('errors.clubPublicLinkInvalid');
+  if(/KOMBAX_CLUB_DESCRIPTION_TOO_LONG/i.test(raw))return t('errors.clubDescriptionTooLong');
+  if(/KOMBAX_CLUB_ALREADY_EXISTS/i.test(raw))return t('errors.clubAlreadyExists');
   if(/KOMBAX_BASE_VERIFICATION_REQUIRED/i.test(raw))return 'Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.';
   if(/KOMBAX_ACCOUNT_BIRTH_DATE_REQUIRED/i.test(raw))return 'Indica tu fecha de nacimiento para crear la cuenta KOMBAX.';
   if(/KOMBAX_ACCOUNT_BIRTH_DATE_INVALID/i.test(raw))return 'La fecha de nacimiento no es válida. Revísala e inténtalo de nuevo.';

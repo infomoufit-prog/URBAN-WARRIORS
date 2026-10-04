@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-04T10:02:05.902Z",
-  "candidates": 5072,
+  "generated_at": "2026-10-04T20:43:02.376Z",
+  "candidates": 5073,
   "covered_r79": 543,
   "covered_r78": 1212,
-  "covered_legacy_all7": 3034,
+  "covered_legacy_all7": 3035,
   "unresolved": 283,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,

@@ -1,0 +1,63 @@
+{
+  "release_gate": {
+    "passed_suites": 83,
+    "known_i18n_P2": 3,
+    "new_failures": 0,
+    "strict_all_tests_clean": false
+  },
+  "new_isolated_database_checks": {
+    "pilot_input": 23,
+    "registration_validation": 15,
+    "social_bio": 21,
+    "total": 59
+  },
+  "chrome_fixture_checks": 73,
+  "chrome_page_errors": 0,
+  "live_rollback_proofs_passed": [
+    "target_account_club_activation_profile_manager_premium_idempotence",
+    "four_pilot_slots_fifth_blocked",
+    "club_team_invite_generic_pending_no_premature_permissions_student_session_products",
+    "six_direct_profile_types",
+    "six_long_descriptions_and_social_preview",
+    "adult_family_canonical_dob_future_dates_duplicates",
+    "signup_minimum_16_tutor_18_no_partial_accounts",
+    "free_member_profile_without_club_no_feed_publication"
+  ],
+  "live_final_counts": {
+    "clubs_total": 3,
+    "pilot_clubs_registered": 1,
+    "pilot_limit": 4,
+    "target_confirmed": true,
+    "target_memberships": 0,
+    "qa_auth_accounts_remaining": 0,
+    "orphan_profiles": 0
+  },
+  "supabase_migrations_applied": [
+    {
+      "local_version": "20261004193838",
+      "live_version": "20261004194516",
+      "name": "kombax_pilot_profile_input_r119"
+    },
+    {
+      "local_version": "20261004195147",
+      "live_version": "20261004195622",
+      "name": "kombax_registration_validation_r119"
+    },
+    {
+      "local_version": "20261004200243",
+      "live_version": "20261004201756",
+      "name": "kombax_profile_social_bio_limit_r119"
+    }
+  ],
+  "frontend_updated": true,
+  "frontend_deployed": false,
+  "github_pushed": false,
+  "installed_apk_verified": false,
+  "apk_aab_generated": false,
+  "real_email_confirmation_verified": false,
+  "real_stripe_checkout_verified": false,
+  "real_accounts_or_clubs_created_for_testing": false,
+  "advisors_globally_clean": false,
+  "next_public_profiles_plan_implemented": false,
+  "source_build": 20178
+}

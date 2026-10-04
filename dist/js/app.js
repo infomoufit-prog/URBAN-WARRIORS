@@ -346,7 +346,7 @@ function openBoundStudentActivation(info,code,email){
     {name:'terms',label:'He leído y acepto las Condiciones de uso de KOMBAX.',type:'checkbox',value:false,required:true,full:true},
     {name:'privacy',label:'He leído la Política de Privacidad global de KOMBAX.',type:'checkbox',value:false,required:true,full:true}
   ],submitText:'Activar mi ficha',onSubmit:async v=>{
-    if(String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');
+    if(v.modo_cuenta==='nueva'&&String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');
     if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de Privacidad.');
     if(v.modo_cuenta==='existente'){
       await backend.signInGlobal(email,v.password);if(state.session?.platform_legal_required===true)await backend.acceptPlatformLegal();
@@ -396,7 +396,7 @@ function openTeamAccessCode(prefill='',prefillRole=''){
     width:'760px',fields,submitText:oneTime?'Aceptar invitación':'Enviar solicitud',
     onSubmit:async v=>{
       const code=oneTime?rawPrefill:String(v.code||'').trim();if(oneTime&&!/^EQP-[A-Z0-9]{10}$/i.test(code))throw new Error('El código personal de invitación no es válido.');if(!oneTime&&!/^\d{4,5}$/.test(code))throw new Error('El código debe tener 4 o 5 dígitos.');
-      if(String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');
+      if(v.modo==='nueva'&&String(v.password||'').length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');
       if(!v.terms||!v.privacy)throw new Error('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de Privacidad de KOMBAX.');
       let role=String(v.rol||validRequested||'').trim().toLowerCase();let inviteInfo=null;
       if(oneTime){inviteInfo=await backend.validateTeamInvitation(code,v.email);if(!inviteInfo?.valid)throw new Error('La invitación no es válida para este correo o ha caducado.');role=String(inviteInfo.rol||'').toLowerCase();slug=String(inviteInfo.club_slug||slug);}

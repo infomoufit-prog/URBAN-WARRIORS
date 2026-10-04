@@ -3,7 +3,7 @@ import { state } from './state.js';
 import { uuid, humanError, technicalError } from './utils.js';
 import { selectedClubSlug, selectClubSlug, clearSelectedClub } from './platform.js';
 import { invalidateCache } from './query-cache.js';
-import { getLocale } from '../i18n/index.js';
+import { getLocale, t } from '../i18n/index.js';
 import { validateBirthDate } from './account-birth-date.js';
 
 const APP_SESSION='uw2_app_session';
@@ -92,7 +92,10 @@ async function completePendingTeamAccess(authUser){
     try{
       result=await client.rpc('app_kombax_equipo_solicitar_v109',{p_club_slug:pending.club_slug,p_codigo:pending.code,p_rol_solicitado:pending.role});
     }catch(error){
-      if(pending.role)throw error;
+      if(pending.role||!(
+        ['PGRST202','42883'].includes(String(error?.code||''))||
+        /could not find the function|function .* does not exist/i.test(String(error?.message||''))
+      ))throw error;
       result=await client.rpc('app_kombax_equipo_solicitar_v060',{p_club_slug:pending.club_slug,p_codigo:pending.code});
     }
     if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');
@@ -363,6 +366,7 @@ export const backend={
   },
   async registerGlobalAccount({email,password,nombre='',apellidos='',fecha_nacimiento='',terms=false,privacy=false,accountType='',pendingTeamAccess=null}){
     state.clearError();
+    if(String(password||'').length<8)throw new Error(t('marketing.gateway.auth.passwordError'));
     if(terms!==true)throw new Error('Debes aceptar las Condiciones de uso de KOMBAX.');
     if(privacy!==true)throw new Error('Debes confirmar que has leído la Política de Privacidad de KOMBAX.');
     const birth=validateBirthDate(fecha_nacimiento,{minAge:16,minimumMessage:'La cuenta KOMBAX independiente está disponible a partir de los 16 años. Si eres menor, utiliza el acceso familiar/tutor.'});
@@ -423,6 +427,7 @@ export const backend={
     }
   },
   async registerAccount(input){
+    if(String(input.password||'').length<8)throw new Error(t('marketing.gateway.auth.passwordError'));
     const clubSlug=input.club_slug||selectedClubSlug()||cfg.clubSlug;
     const minimumAge=input.tipo_cuenta==='tutor'?18:16;
     const birth=validateBirthDate(input.adulto_fecha_nacimiento,{minAge:minimumAge,minimumMessage:input.tipo_cuenta==='tutor'?'La cuenta de padre, madre o tutor requiere una persona adulta de 18 años o más.':'El autorregistro como alumno está disponible a partir de los 16 años.'});

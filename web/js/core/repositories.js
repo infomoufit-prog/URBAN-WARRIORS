@@ -335,7 +335,10 @@ async function kombaxProfileMutationR58(operation,payload={}){
   try{return await kombaxGlobalMutation('app_kombax_perfil_mutate_r58',operation,payload);}
   catch(error){
     // Compatibilidad R57 mientras Work aplica la migración 249. El endpoint histórico sigue siendo v196.
-    if(String(payload?.tipo||'').toLowerCase()==='media')throw error;
+    if(String(payload?.tipo||'').toLowerCase()==='media'||!(
+      ['PGRST202','42883'].includes(String(error?.code||''))||
+      /could not find the function|function .* does not exist/i.test(String(error?.message||''))
+    ))throw error;
     return kombaxGlobalMutation('app_kombax_perfil_mutate_v196',operation,payload);
   }
 }

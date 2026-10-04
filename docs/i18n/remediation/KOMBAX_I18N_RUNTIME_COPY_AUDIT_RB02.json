@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:48:59.275Z",
+  "generated_at": "2026-10-04T20:43:08.804Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -109,12 +109,12 @@
   "covered": 4678,
   "unresolved": 264,
   "coverage": 94.66,
-  "skipped": 389,
+  "skipped": 390,
   "files": {
     "web/js/app.js": {
       "total": 126,
       "covered": 126,
-      "skipped": 6,
+      "skipped": 7,
       "coverage": 100
     },
     "web/js/core/account-birth-date.js": {
