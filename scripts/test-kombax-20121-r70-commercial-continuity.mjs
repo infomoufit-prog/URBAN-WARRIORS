@@ -97,10 +97,11 @@ test('Showcase routes Club Basic Commerce into the exact commercial context',()=
   not(showcase,"location.hash='#plans-services'");
 });
 
-test('Showcase explains Federation limitations instead of dead-ending',()=>{
-  has(showcase,'Federación sin catálogo comercial');
-  has(showcase,'Ver plan Federation');
-  has(showcase,"federation?'Ver capacidades'");
+test('Verified Federation exposes seller onboarding with capacity and Commerce guards',()=>{
+  has(showcase,'sellerCapable=!professional');
+  has(showcase,"t('marketing.space.sellerEntry')");
+  has(showcase,'openSellerCenter(brand)');
+  not(showcase,'Federación sin catálogo comercial');
 });
 
 test('Events converts plan restrictions into contextual commercial guidance',()=>{

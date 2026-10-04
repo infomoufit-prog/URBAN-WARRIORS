@@ -1,0 +1,16 @@
+{
+  "passed": 9,
+  "checks": [
+    "marca free seller workspace without forced subscription",
+    "marca punctual Commerce request available only from seller center",
+    "federacion free seller workspace without forced subscription",
+    "federacion punctual Commerce request available only from seller center",
+    "competidor free seller workspace without forced subscription",
+    "competidor punctual Commerce request available only from seller center",
+    "club free seller workspace without forced subscription",
+    "club punctual Commerce request available only from seller center",
+    "Seller workspace fits mobile"
+  ],
+  "errors": [],
+  "scope": "Real frontend with backend fixtures; no commercial activation or charges"
+}

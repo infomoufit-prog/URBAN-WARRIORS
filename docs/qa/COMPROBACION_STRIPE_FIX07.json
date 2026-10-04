@@ -1,0 +1,46 @@
+{
+  "account": "acct_1UDpcOHoLKPkpnMv",
+  "environment": "Entorno de prueba de KOMBAX",
+  "livemode": false,
+  "price": {
+    "id": "price_1UMlS9HoLKPkpnMv262sfKWL",
+    "currency": "eur",
+    "unit_amount": 2390,
+    "recurring": {
+      "interval": "month",
+      "interval_count": 1,
+      "meter": null,
+      "trial_period_days": null,
+      "usage_type": "licensed"
+    }
+  },
+  "trial": {
+    "id": "sub_1UMlW8HoLKPkpnMvm8fjoZYY",
+    "status": "trialing",
+    "days": 30,
+    "collection_method": "charge_automatically",
+    "has_saved_payment_method": true,
+    "invoice": {
+      "id": "in_1UMlW8HoLKPkpnMv4nWWxdBB",
+      "status": "paid",
+      "amount_due": 0,
+      "amount_paid": 0
+    }
+  },
+  "saved_card_charge": {
+    "id": "sub_1UMlaXHoLKPkpnMv2xajaXXG",
+    "status": "active",
+    "invoice": {
+      "id": "in_1UMlaXHoLKPkpnMvX2PJ3kYB",
+      "status": "paid",
+      "amount_paid": 2390
+    }
+  },
+  "not_verified": [
+    "30-day time advancement and renewal",
+    "Stripe cancellation and failed-payment live transitions",
+    "App Checkout/webhook end-to-end",
+    "Live billing or taxes"
+  ],
+  "real_charges": false
+}

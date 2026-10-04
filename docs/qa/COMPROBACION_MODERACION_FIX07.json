@@ -1,0 +1,25 @@
+{
+  "passed": 18,
+  "checks": [
+    "Visual Social feed includes controlled video without autoplay",
+    "Real fixture video decodes and plays",
+    "Image previews load actual project asset",
+    "User content rendered as escaped text",
+    "Withdrawal submits reason to protected RPC",
+    "Hidden content has restoration workflow",
+    "Showcase products display image galleries",
+    "Product editor submits title and description with reason",
+    "Permanent platform deletion requires explicit confirmation",
+    "Search and state filters reach server",
+    "Moderation history shows reason and before/after evidence",
+    "Mobile visual feed does not overflow",
+    "Cards use the existing dark theme surface",
+    "Author can request review from moderation notice",
+    "Accordion pages load ten items without duplicate cards",
+    "Partial final page and previous navigation preserve complete groups",
+    "All new filters reach server together and reset pagination",
+    "New filters fit mobile viewport"
+  ],
+  "errors": [],
+  "scope": "Headless Chrome fixtures; no production content changed"
+}

@@ -1,0 +1,162 @@
+{
+  "revision": "R118 FIX07",
+  "created_utc": "2026-10-04T10:05:15.423579+00:00",
+  "base_version_code": 20178,
+  "netlify_local_gate": {
+    "suites_passed": 77,
+    "new_failures": 0,
+    "known_inherited_i18n_P2": 3,
+    "strict_npm_test_all_green": false,
+    "js_files": 364,
+    "linux_local_imports": 855,
+    "web_dist_android_identical": true,
+    "deploy_performed": false
+  },
+  "isolated_database_tests": {
+    "owner_filters": 19,
+    "verified_billing": 37,
+    "punctual_services": 22
+  },
+  "isolated_actual_edge_handlers": 18,
+  "browser_fixtures": {
+    "COMPROBACION_ACCESO_FIX07.json": {
+      "checks": [
+        "Two primary entry cards; no separate free-account card",
+        "Single email/password login with registration and recovery",
+        "Free registration preserves birth date and legal consent",
+        "Login opens four-card exploration; My Space has sidebar and no-public-profile prompt",
+        "Team clubs grouped by club with actual roles; personal profiles separate; tenant data cleared",
+        "Club entry rechecks active membership; unauthorized club denied and previous context restored",
+        "Club header and sidebar access fit mobile screen",
+        "Sidebar returns from club to My Space without logout",
+        "Mobile menu reaches exploration; no floating switch control",
+        "Mobile layout and separate temporary pilot entry",
+        "Pilot login retains activation intent and next form remains open",
+        "Account load failure is recoverable without redirect loop",
+        "Club entry preserves authenticated account and offers first-access codes",
+        "Personal facets share one public presentation; federation remains separate",
+        "Organization activation requires verification and configured Stripe; no cardless trial",
+        "Free account registration precedes identity cards",
+        "Confirmed free registration opens exploration without creating a public identity",
+        "Account access labels available in all eight supported languages"
+      ],
+      "passed": 18,
+      "errors": [],
+      "scope": "Browser fixtures; no production signup, email or payments performed"
+    },
+    "COMPROBACION_MODERACION_FIX07.json": {
+      "passed": 18,
+      "checks": [
+        "Visual Social feed includes controlled video without autoplay",
+        "Real fixture video decodes and plays",
+        "Image previews load actual project asset",
+        "User content rendered as escaped text",
+        "Withdrawal submits reason to protected RPC",
+        "Hidden content has restoration workflow",
+        "Showcase products display image galleries",
+        "Product editor submits title and description with reason",
+        "Permanent platform deletion requires explicit confirmation",
+        "Search and state filters reach server",
+        "Moderation history shows reason and before/after evidence",
+        "Mobile visual feed does not overflow",
+        "Cards use the existing dark theme surface",
+        "Author can request review from moderation notice",
+        "Accordion pages load ten items without duplicate cards",
+        "Partial final page and previous navigation preserve complete groups",
+        "All new filters reach server together and reset pagination",
+        "New filters fit mobile viewport"
+      ],
+      "errors": [],
+      "scope": "Headless Chrome fixtures; no production content changed"
+    },
+    "COMPROBACION_VENDEDOR_FIX07.json": {
+      "passed": 9,
+      "checks": [
+        "marca free seller workspace without forced subscription",
+        "marca punctual Commerce request available only from seller center",
+        "federacion free seller workspace without forced subscription",
+        "federacion punctual Commerce request available only from seller center",
+        "competidor free seller workspace without forced subscription",
+        "competidor punctual Commerce request available only from seller center",
+        "club free seller workspace without forced subscription",
+        "club punctual Commerce request available only from seller center",
+        "Seller workspace fits mobile"
+      ],
+      "errors": [],
+      "scope": "Real frontend with backend fixtures; no commercial activation or charges"
+    },
+    "COMPROBACION_STRIPE_FIX07.json": {
+      "account": "acct_1UDpcOHoLKPkpnMv",
+      "environment": "Entorno de prueba de KOMBAX",
+      "livemode": false,
+      "price": {
+        "id": "price_1UMlS9HoLKPkpnMv262sfKWL",
+        "currency": "eur",
+        "unit_amount": 2390,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1,
+          "meter": null,
+          "trial_period_days": null,
+          "usage_type": "licensed"
+        }
+      },
+      "trial": {
+        "id": "sub_1UMlW8HoLKPkpnMvm8fjoZYY",
+        "status": "trialing",
+        "days": 30,
+        "collection_method": "charge_automatically",
+        "has_saved_payment_method": true,
+        "invoice": {
+          "id": "in_1UMlW8HoLKPkpnMv4nWWxdBB",
+          "status": "paid",
+          "amount_due": 0,
+          "amount_paid": 0
+        }
+      },
+      "saved_card_charge": {
+        "id": "sub_1UMlaXHoLKPkpnMv2xajaXXG",
+        "status": "active",
+        "invoice": {
+          "id": "in_1UMlaXHoLKPkpnMvX2PJ3kYB",
+          "status": "paid",
+          "amount_paid": 2390
+        }
+      },
+      "not_verified": [
+        "30-day time advancement and renewal",
+        "Stripe cancellation and failed-payment live transitions",
+        "App Checkout/webhook end-to-end",
+        "Live billing or taxes"
+      ],
+      "real_charges": false
+    }
+  },
+  "supabase_live": {
+    "new_migrations_applied": 4,
+    "stripe_subscriptions_function_version": 2,
+    "stripe_billing_webhook_function_version": 1,
+    "commercial_plans_published": 0,
+    "application_billing_subscriptions": 0,
+    "pilot_entities_unchanged": 1,
+    "new_commercial_charges": false
+  },
+  "native_android": {
+    "preflight_passed": 7,
+    "preflight_total": 9,
+    "apk_built": false,
+    "aab_built": false,
+    "reason": "Gradle: Unable to establish loopback connection; Firebase and local signing pending",
+    "version_code": 20178,
+    "play_update_requires_higher_code_if_20178_used": true
+  },
+  "pending": [
+    "Official Stripe prices and published plans",
+    "Billing keys and signed webhook destination configured in the intended sandbox",
+    "Stripe Tax readiness and Customer Portal configuration",
+    "End-to-end application Checkout and webhook",
+    "Actual Stripe renewal after 30 days, cancellation and failed payment",
+    "Android signing/Firebase and successful native build",
+    "Physical device push/email delivery"
+  ]
+}

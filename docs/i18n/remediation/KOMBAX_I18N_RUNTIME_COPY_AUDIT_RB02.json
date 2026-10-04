@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T07:55:55.240Z",
+  "generated_at": "2026-10-04T10:02:12.487Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -17,6 +17,7 @@
     "web/js/core/identity-context.js",
     "web/js/core/invitations.js",
     "web/js/core/media.js",
+    "web/js/core/moderation-filters.js",
     "web/js/core/permissions.js",
     "web/js/core/personal-space.js",
     "web/js/core/platform.js",
@@ -70,6 +71,7 @@
     "web/js/modules/managed-profile-hub.js",
     "web/js/modules/media-content-center.js",
     "web/js/modules/moderation-notices.js",
+    "web/js/modules/organization-billing.js",
     "web/js/modules/owner-content-moderation.js",
     "web/js/modules/payments-center.js",
     "web/js/modules/plan-services.js",
@@ -102,11 +104,11 @@
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4952,
-  "covered": 4687,
-  "unresolved": 265,
-  "coverage": 94.65,
-  "skipped": 387,
+  "phrases": 4941,
+  "covered": 4677,
+  "unresolved": 264,
+  "coverage": 94.66,
+  "skipped": 389,
   "files": {
     "web/js/app.js": {
       "total": 126,
@@ -203,6 +205,12 @@
       "covered": 11,
       "skipped": 0,
       "coverage": 91.67
+    },
+    "web/js/core/moderation-filters.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
     },
     "web/js/core/permissions.js": {
       "total": 0,
@@ -522,10 +530,16 @@
       "skipped": 0,
       "coverage": 100
     },
-    "web/js/modules/owner-content-moderation.js": {
-      "total": 1,
-      "covered": 1,
+    "web/js/modules/organization-billing.js": {
+      "total": 0,
+      "covered": 0,
       "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/owner-content-moderation.js": {
+      "total": 2,
+      "covered": 2,
+      "skipped": 3,
       "coverage": 100
     },
     "web/js/modules/payments-center.js": {
@@ -607,10 +621,10 @@
       "coverage": 100
     },
     "web/js/modules/showcase.js": {
-      "total": 343,
-      "covered": 336,
-      "skipped": 11,
-      "coverage": 97.96
+      "total": 331,
+      "covered": 325,
+      "skipped": 10,
+      "coverage": 98.19
     },
     "web/js/modules/social-network.js": {
       "total": 0,
@@ -1761,10 +1775,6 @@
     {
       "file": "web/js/modules/showcase.js",
       "value": "Mi Showcase aún no está habilitado"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "value": "Verifica tu perfil, activa la capacidad Showcase de tu plan y vuelve aquí para solicitar la verificación como vendedor. La venta con tarjeta requiere completar Stripe y activar Commerce."
     },
     {
       "file": "web/js/modules/showcase.js",

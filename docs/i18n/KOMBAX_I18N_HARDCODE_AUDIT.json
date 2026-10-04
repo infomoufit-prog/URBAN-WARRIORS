@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-04T07:56:00.366Z",
+  "generated_at": "2026-10-04T10:02:17.900Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
-  "files_scanned": 118,
-  "system_ui_candidates": 2644,
+  "files_scanned": 120,
+  "system_ui_candidates": 2640,
   "target_block_1_system_ui_candidates": 558,
   "target_files": [
     "web/js/modules/gateway.js",
@@ -396,7 +396,7 @@
       "target_block_1": false
     },
     "web/js/modules/owner-content-moderation.js": {
-      "system_ui": 1,
+      "system_ui": 3,
       "technical": 1,
       "user_content": 0,
       "target_block_1": false
@@ -450,7 +450,7 @@
       "target_block_1": true
     },
     "web/js/modules/showcase.js": {
-      "system_ui": 139,
+      "system_ui": 133,
       "technical": 2,
       "user_content": 2,
       "target_block_1": false
@@ -10966,140 +10966,140 @@
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 696,
+      "line": 697,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-hub-section\" data-account-section=\"clubs\"><div class=\"kx-section-title\"><h2>${t('marketing.accountAccess.clubs')}</h2><button class=\"btn btn-ghost btn-sm\" id=\"kx-account-join-club\" type=\"button\">${t('marketing.accountAccess.join')}</button></div><div class=\"kx-profile-owned-grid\">${teamCards}${member"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 697,
+      "line": 698,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "<section class=\"kx-hub-section\" data-account-section=\"organizations\"><div class=\"kx-section-title\"><h2>${esc(t('marketing.space.organizations'))}</h2></div><div class=\"kx-profile-owned-grid\">${profiles.filter(p=>!['competidor','profesional','espectador'].includes(p.tipo)).map(p=>`<article class=\"kx-profile-owned\"><head"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 698,
+      "line": 699,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "<section class=\"kx-hub-section\" data-account-section=\"profiles\"><div class=\"kx-section-title\"><h2>${t('marketing.space.profile')}</h2></div><div class=\"kx-profile-owned-grid\">${spaceModel.hasPersonalProfile?`<article class=\"kx-canonical-profile\" data-personal-profile><strong>${esc(t('marketing.space.publicProfile'))}</"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 699,
+      "line": 700,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-hub-section\" data-account-section=\"verification\"><div class=\"kx-section-title\"><div><span>REVISIÓN</span><h2>Solicitudes</h2></div><small>${applications.length} solicitud${applications.length===1?'':'es'}</small></div>${applications.length?`<div class=\"kx-application-grid\">${applications.map(a=>appli"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 700,
+      "line": 701,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Verificación separada del autorregistro</strong><p>Crear una cuenta o un perfil nunca concede una insignia, un club ni permisos sensibles. La revisión es explícita y trazable.</p></div></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 709,
+      "line": 710,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.getElementById('kx-global-logout')?.addEventListener('click',async()=>{await backend.signOut();toast('Sesión cerrada');renderDirectProfiles({onBack});});"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 727,
+      "line": 732,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.getElementById('kx-account-support')?.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'account',subjectId:state.session?.id,title:'Privacidad y soporte de mi cuenta',canAuthorize:true}));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 733,
+      "line": 738,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-profile-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'direct_profile',subjectId:b.dataset.kxProfileSupport,title:'Privacidad y soporte del perfil',canAuthorize:true})));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 737,
+      "line": 742,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-club-support]').forEach(b=>b.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'club',subjectId:b.dataset.kxClubSupport,title:'Privacidad y soporte del club',canAuthorize:true})));"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 745,
+      "line": 750,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-application-withdraw]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Retirar solicitud','La solicitud dejará de revisarse. El historial no se falsifica ni se elimina.',async()=>{await repos.kombaxProfiles.withdrawApplication(b.dataset.kxApplicationWithdraw);toast('Solicit"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 755,
+      "line": 760,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "}else if(pendingType&&directTypes.some(t=>t.id===pendingType&&!t.disabled&&!t.baseOnly)&&['competidor','marca','federacion','profesional','media','espectador'].includes(pendingType)){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 757,
+      "line": 762,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "}else if(pendingType==='club'&&!applications.some(a=>a.tipo==='club'&&['submitted','under_review','needs_information'].includes(a.estado))){"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 777,
+      "line": 782,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const type=({club:'club',brand:'marca',federation:'federacion'})[selection?.audience];"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 786,
+      "line": 791,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!available.length){toast('No hay nuevos perfiles compatibles pendientes de añadir en esta cuenta.','warning');return;}"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 787,
+      "line": 792,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const subtitle='Tu cuenta KOMBAX es única y gratuita. Puedes añadir perfiles y capacidades compatibles sin perder los que ya tienes; cada verificación y cada organización conservan sus propios permisos.';"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 788,
+      "line": 793,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const {wrap}=openDetail({title:'Añadir capacidad o vinculación',subtitle,width:'880px',body:`<div class=\"kx-type-picker\">${available.map(t=>`<button type=\"button\" data-kx-pick=\"${esc(t.id)}\"><span>${featureIcon(t.icon,{size:42})}</span><strong>${esc(t.label)}</strong><small>${esc(t.description)}</small>${t.id==='miembr"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 798,
+      "line": 803,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-directory-top\"><button class=\"gateway-icon-button\" id=\"direct-back\" type=\"button\" aria-label=\"${t('marketing.gateway.actions.back')}\">${icon('chevronLeft',{size:22})}</button>${mark({compact:true})}<span class=\"gateway-directory-step\">CUENTA GRATUITA KOMBAX</span></div>"
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 799,
+      "line": 804,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"kx-direct-auth-row\"><button class=\"btn btn-primary\" id=\"kx-free-account\">Crear cuenta gratuita</button><button class=\"btn btn-ghost\" id=\"kx-existing-account\">Ya tengo cuenta KOMBAX</button></div><header><span class=\"gateway-eyebrow\">IDENTIDAD KOMBAX</span><h1>${esc(t('marketing.space.manage'))}</h1><p>Crea "
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 800,
+      "line": 805,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"direct-profile-grid\">${onboardingTypes.map(t=>`<button class=\"direct-profile-card ${t.disabled?'is-disabled':''}\" type=\"button\" style=\"--profile-accent:${t.accent}\" data-profile-type=\"${esc(t.id)}\" ${t.disabled?'disabled':''}><div class=\"direct-profile-icon\">${featureIcon(t.icon,{size:58})}</div><div class="
     },
     {
       "file": "web/js/modules/gateway.js",
-      "line": 801,
+      "line": 806,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"gateway-safety-note\"><span class=\"gateway-safety-icon\">${icon('shieldCheck',{size:22})}</span><div><strong>Una cuenta, un Perfil Social, varias capacidades</strong><p>Tu Perfil Social personal no se duplica. Puedes ser Miembro, Competidor y Profesional con la misma cuenta. Los roles de Club, las verificacio"
@@ -16251,17 +16251,31 @@
     },
     {
       "file": "web/js/modules/owner-content-moderation.js",
-      "line": 33,
+      "line": 34,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(kind==='delete')fields.push({name:'confirmation',label:label('confirmation'),required:true,pattern:'ELIMINAR'});"
     },
     {
       "file": "web/js/modules/owner-content-moderation.js",
-      "line": 36,
+      "line": 37,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(kind==='delete'&&value.confirmation!=='ELIMINAR')throw new Error(label('confirmation'));"
+    },
+    {
+      "file": "web/js/modules/owner-content-moderation.js",
+      "line": 42,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const typeLabels={club:t('admin.moderation.type_club'),marca:t('admin.moderation.type_marca'),federacion:t('admin.moderation.type_federacion'),profesional:t('admin.moderation.type_profesional'),competidor:t('admin.moderation.type_competidor'),miembro:t('admin.moderation.type_miembro'),espectador:t('admin.moderation.typ"
+    },
+    {
+      "file": "web/js/modules/owner-content-moderation.js",
+      "line": 52,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "setMainHtml(`<section class=\"kx-platform-admin\"><h1>${label('title')}</h1><p>${label('intro')}</p><div class=\"kx-moderation-toolbar\"><button class=\"btn ${channel==='social'?'btn-primary':'btn-ghost'}\" data-mod-channel=\"social\">Social</button><button class=\"btn ${channel==='showcase'?'btn-primary':'btn-ghost'}\" data-mod"
     },
     {
       "file": "web/js/modules/plan-services.js",
@@ -19499,168 +19513,126 @@
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 556,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "?`<span class=\"kx-market-status pending\">${icon('lock',{size:14})} Federación · sin catálogo comercial</span><button class=\"btn btn-ghost\" id=\"showcase-commercial-plan\">Ver plan Federation</button>`"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "line": 557,
+      "line": 555,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": ":`${sellerStatus}${commerceStatus}<button class=\"btn ${sellerAccountActive?'btn-ghost':'btn-primary'}\" id=\"showcase-seller-center\">${sellerAccountActive?'Gestionar cuenta vendedor':'Activar cuenta vendedor'}</button>${catalogPlusEligible?'<button class=\"btn btn-showcase\" id=\"showcase-catalog-plus\">+25 productos · 8 €/3"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 560,
+      "line": 558,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const workspace=sellerCapable?`<section class=\"kx-seller-workspace\" aria-label=\"Mi Showcase · Centro privado de vendedor\"><header><div><span class=\"page-kicker\">MI SHOWCASE · CENTRO DE VENDEDOR</span><h2>${esc(brand.nombre)}</h2><p>Gestiona catálogo, activación de vendedor, estadísticas y, cuando tu plan lo permita, pe"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 562,
+      "line": 560,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const dashboardStrip=`<div class=\"kx-showcase-management-kpis\"><article><small>Productos</small><strong>${Number(stats.products||0)}</strong></article><article><small>Servicios</small><strong>${Number(stats.services||0)}</strong></article><article><small>Activos / capacidad</small><strong>${esc(capacityLabel)}</strong>"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 564,
+      "line": 562,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "?`<div class=\"alert success\"><strong>Showcase de servicios profesionales</strong><span>Este perfil puede publicar servicios y recibir contactos sin alta como vendedor, sin stock y sin checkout. Si en el futuro vende productos físicos, esa función deberá pasar por Marketplace + Centro de vendedor.</span></div>`"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 566,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "?`<div class=\"alert\"><strong>Federación sin catálogo comercial</strong><span>El plan está orientado a red, KOMBAX Events y Ticketing puntual. Consulta Plan y servicios si necesitas revisar capacidades.</span></div>`"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "line": 568,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "?`<div class=\"alert success\"><strong>Showcase Club activo${sellerAccountActive?' · vendedor activado':''}</strong><span>Puedes usar ${capacityUnlimited?'catálogo ilimitado':`hasta ${capacityLimit} productos activos`} aunque Commerce no esté activo. Los ${capacityBase||15} incluidos en el plan pueden ampliarse en bloque"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "line": 569,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": ":brand.sujeto_tipo==='marca'&&!commercialContext?.plan_code&&!planCode"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "line": 570,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "?`<div class=\"alert\"><strong>Elige un plan de Marca antes de publicar comercialmente</strong><span>Brand Start incluye Commerce; Growth amplía catálogo y Events; Enterprise añade capacidades avanzadas.</span></div>`"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "line": 572,
+      "line": 565,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "?`<div class=\"alert\"><strong>Cuenta de vendedor pendiente</strong><span>Tu plan puede incluir Commerce, pero no podrás aceptar pagos hasta completar verificación de vendedor, condiciones vigentes y Stripe Connect.</span></div>`:'';"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 573,
+      "line": 566,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const title=professional?'Gestión de Showcase':federation?'KOMBAX Showcase':'Mi Showcase';"
+      "sample": "const title=professional?'Gestión de Showcase':'Mi Showcase';"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 574,
+      "line": 567,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const subtitle=professional?'Publica y clasifica tus servicios profesionales para que otros usuarios puedan encontrarte y contactarte.':federation?'Consulta las capacidades de tu Federación en Showcase.':brand.sujeto_tipo==='club'&&!commerceAllowed?'Tu espacio privado de vendedor: catálogo y estadísticas siempre dispon"
+      "sample": "const subtitle=professional?'Publica y clasifica tus servicios profesionales para que otros usuarios puedan encontrarte y contactarte.':brand.sujeto_tipo==='club'&&!commerceAllowed?'Tu espacio privado de vendedor: catálogo y estadísticas siempre disponibles; Commerce se activa aparte cuando necesites cobrar.':'Tu espac"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 575,
+      "line": 568,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`<div class=\"kombax-showcase-page\">${showcaseBrand()}${pageHeader(title,subtitle,subviewActions({backId:'showcase-back',closeId:'showcase-close',backLabel:'Volver a Showcase'}),'KOMBAX Showcase')}<div class=\"showcase-management-head\"><label>Espacio gestionado<select id=\"showcase-brand-select\">${managedBrand"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 579,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "const openNewItem=()=>{if(federation){openShowcaseCommercialPlans(brand,commercialDescriptor);return;}if(brand.sujeto_tipo==='marca'&&!commercialContext?.plan_code&&!planCode){openShowcaseCommercialPlans(brand,commercialDescriptor);return;}if(!capacityUnlimited&&capacityAvailable<=0){toast('Has alcanzado la capacidad a"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "line": 588,
+      "line": 581,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "try{await repos.commercial.requestActivation(commercialDescriptor.subjectType,commercialDescriptor.subjectId,'SHOWCASE_CATALOG_PLUS_25',{days:30});toast('Solicitud +25 registrada · 8 €/30 días. No se ha realizado ningún cobro automático.');await renderManagement(brand.id);}catch(error){button.disabled=false;toast(human"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 597,
+      "line": 590,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "document.querySelectorAll('[data-seller-tool]').forEach(button=>button.addEventListener('click',()=>{const toolId=button.dataset.sellerTool,reason=button.dataset.lockReason||'';if(toolId==='products'){document.getElementById('showcase-products-section')?.scrollIntoView({behavior:'smooth',block:'start'});return;}if(tool"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 601,
+      "line": 594,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "box.innerHTML=rows.length?`<div class=\"showcase-manage-list kx-r77-product-list\">${rows.map(x=>{const inv=inventoryMap.get(String(x.id))||x,perf=analyticsMap.get(String(x.id))||{},service=isProfessionalService(x),image=safeExternal(x.imagen_url);return `<article class=\"kx-showcase-product-row\"><div class=\"kx-showcase-p"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 604,
+      "line": 597,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "box.querySelectorAll('[data-showcase-gallery-frame]').forEach(b=>b.addEventListener('click',()=>{const row=rows.find(x=>x.id===b.dataset.showcaseGalleryFrame),gallery=(Array.isArray(row?.galeria)?row.galeria:[]).map(safeExternal).filter(Boolean).slice(0,3);if(!row||!gallery.length)return;const modal=openDetail({title:`"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 607,
+      "line": 600,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "box.querySelectorAll('[data-showcase-state]').forEach(b=>b.addEventListener('click',()=>confirmDialog(b.dataset.showcaseState==='publicado'?'Publicar ficha':'Archivar ficha',b.dataset.showcaseState==='publicado'?'La información será visible en Showcase.':'La ficha dejará de mostrarse sin eliminar su historial.',async()"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 608,
+      "line": 601,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "box.querySelectorAll('[data-showcase-delete]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar producto','Si la referencia no tiene pedidos ni valoraciones se eliminará definitivamente. Si existe historial comercial o reputación, KOMBAX la retirará del catálogo y conservará la trazabilidad, las ventas"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 609,
+      "line": 602,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "}catch(error){box.innerHTML=empty('No se pudo cargar la gestión',humanError(error)||'Revisa tus permisos.');}"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 630,
+      "line": 623,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "setMainHtml(`${empty('Mi Showcase aún no está habilitado',state.session?.club_id?t('showcase.privateCenter.unavailableBody'):'Verifica tu perfil, activa la capacidad Showcase de tu plan y vuelve aquí para solicitar la verificación como vendedor. La venta con tarjeta requiere completar Stripe y activar Commerce.') }<div"
+      "sample": "setMainHtml(`${empty('Mi Showcase aún no está habilitado',state.session?.club_id?t('showcase.privateCenter.unavailableBody'):t('marketing.space.sellerEntry')) }<div class=\"row-actions\" style=\"justify-content:center\"><button type=\"button\" class=\"btn btn-ghost\" id=\"showcase-private-explore\">${esc(t('navigation.products.e"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 640,
+      "line": 633,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Cargando KOMBAX Showcase…</div>');"
     },
     {
       "file": "web/js/modules/showcase.js",
-      "line": 642,
+      "line": 635,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "catch(error){setError(error);setMainHtml(`${showcaseBrand()}${empty('Showcase no disponible',humanError(error)||'No se ha podido cargar el escaparate. Inténtalo de nuevo.')}`);return;}"

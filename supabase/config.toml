@@ -39,3 +39,9 @@ verify_jwt = true
 
 [functions.kombax-owner-verification-worker-r118]
 verify_jwt = false
+
+[functions.stripe-subscriptions]
+verify_jwt = true
+
+[functions.stripe-billing-webhook]
+verify_jwt = false
