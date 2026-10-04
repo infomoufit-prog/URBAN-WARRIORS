@@ -1,3 +1,7 @@
+# KOMBAX R118 FIX06 — Administración visual Social y Showcase
+
+Consulta `LEEME_KOMBAX_20178_FIX06.md` para accesos, alcance de automatización y límites de QA. Entrega acumulativa; conserva cuatro clubes piloto.
+
 # KOMBAX R118 FIX05 Â· build 20178
 
 Base congelada 20177; revisiÃ³n acumulativa con Mi Espacio y pruebas explÃ­citas de 30 dÃ­as. Empieza por [LEEME_KOMBAX_20178_FIX05.md](LEEME_KOMBAX_20178_FIX05.md). Los apartados siguientes se conservan como historial de FIX03, no como instrucciones de esta entrega.

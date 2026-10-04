@@ -422,7 +422,7 @@ export async function renderPlatformAdmin(){
     bindOwnerAgents(box,ownerAgents,ownerConversations);
     bindOwnerAnalytics(document.getElementById('owner-analytics'),metrics);
     box.querySelectorAll('[data-owner-retry]').forEach(b=>b.addEventListener('click',()=>renderPlatformAdmin()));
-    box.querySelectorAll('[data-owner-alert-jump]').forEach(b=>b.addEventListener('click',()=>revealOwnerSection(b.dataset.ownerAlertJump)));
+    box.querySelectorAll('[data-owner-alert-jump]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.ownerAlertJump==='owner-moderation')document.querySelector('[data-admin-console="moderation"]')?.click();else revealOwnerSection(b.dataset.ownerAlertJump);}));
     document.getElementById('kx-owner-close-admin')?.addEventListener('click',async()=>{const button=document.getElementById('kx-owner-close-admin');button.disabled=true;button.textContent='Cerrando…';try{await backend.signOutPlatformAdmin();location.href='/';}catch(error){button.disabled=false;button.textContent='Cerrar administración';toast(humanError(error));}});
     box.querySelectorAll('[data-pilot-enroll]').forEach(b=>b.addEventListener('click',()=>{const club=clubs.find(c=>String(c.id)===b.dataset.pilotEnroll);if(club)pilotAssignDialog(club.id,club.nombre,reload);}));
     box.querySelectorAll('[data-pilot-request-approve]').forEach(b=>b.addEventListener('click',()=>{const item=(pilotRequests?.requests||[]).find(x=>String(x.club_id)===b.dataset.pilotRequestApprove);if(item?.club_id)pilotAssignDialog(item.club_id,item.name||'Club',reload);}));

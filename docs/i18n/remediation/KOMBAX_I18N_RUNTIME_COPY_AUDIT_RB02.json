@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T01:14:54.931Z",
+  "generated_at": "2026-10-04T08:08:00.923Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -69,6 +69,8 @@
     "web/js/modules/lifecycle.js",
     "web/js/modules/managed-profile-hub.js",
     "web/js/modules/media-content-center.js",
+    "web/js/modules/moderation-notices.js",
+    "web/js/modules/owner-content-moderation.js",
     "web/js/modules/payments-center.js",
     "web/js/modules/plan-services.js",
     "web/js/modules/platform-admin-access.js",
@@ -100,8 +102,8 @@
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4951,
-  "covered": 4686,
+  "phrases": 4952,
+  "covered": 4687,
   "unresolved": 265,
   "coverage": 94.65,
   "skipped": 387,
@@ -513,6 +515,18 @@
       "covered": 8,
       "skipped": 0,
       "coverage": 42.11
+    },
+    "web/js/modules/moderation-notices.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/owner-content-moderation.js": {
+      "total": 1,
+      "covered": 1,
+      "skipped": 0,
+      "coverage": 100
     },
     "web/js/modules/payments-center.js": {
       "total": 0,

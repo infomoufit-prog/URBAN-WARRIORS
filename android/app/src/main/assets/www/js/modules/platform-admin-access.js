@@ -5,6 +5,7 @@ import { setAppHtml, setMainHtml, empty, toast } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { KOMBAX_BRAND } from '../core/platform.js';
 import { repos } from '../core/repositories.js';
+import { t } from '../i18n/index.js';
 let platformAdminModulePromise=null;
 const renderPlatformAdmin=(...args)=>{platformAdminModulePromise ||= import('./platform-admin.js').catch(error=>{platformAdminModulePromise=null;throw error;});return platformAdminModulePromise.then(m=>m.renderPlatformAdmin(...args));};
 
@@ -57,8 +58,9 @@ export async function renderPlatformAdminConsole(){
   if(!valid){renderPlatformAdminAccess({onCancel:()=>{location.href='/';},onSuccess:renderPlatformAdminConsole,message:'La verificación de administración ha caducado.'});return;}
   const level=state.session?.platform_level||'owner';
   setAppHtml(`<div class="kx-admin-console"><header class="kx-admin-console-top">${accessMark()}<div class="kx-admin-console-status"><span>ACCESO VERIFICADO</span><strong>${esc(String(level).toUpperCase())}</strong></div><button class="btn btn-ghost btn-sm" id="kx-admin-console-exit" type="button">Cerrar administración</button></header><nav class="kx-admin-console-nav"><button type="button" class="active" data-admin-console="platform">${icon('key',{size:18})} Plataforma</button><button type="button" data-admin-console="maintenance">${icon('activity',{size:18})} Mantenimiento</button></nav><main id="main-view" class="main-view"><div class="loading-card">Abriendo Consola KOMBAX…</div></main></div>`);
+  const moderationButton=document.createElement('button');moderationButton.type='button';moderationButton.dataset.adminConsole='moderation';moderationButton.textContent=t('admin.moderation.title');document.querySelector('.kx-admin-console-nav')?.append(moderationButton);
   const buttons=[...document.querySelectorAll('[data-admin-console]')];
-  const open=async view=>{buttons.forEach(b=>b.classList.toggle('active',b.dataset.adminConsole===view));if(view==='maintenance')await renderMaintenance();else await renderPlatformAdmin();};
+  const open=async view=>{buttons.forEach(b=>b.classList.toggle('active',b.dataset.adminConsole===view));if(view==='moderation'){const module=await import('./owner-content-moderation.js');await module.renderOwnerContentModeration();}else if(view==='maintenance')await renderMaintenance();else await renderPlatformAdmin();};
   buttons.forEach(button=>button.addEventListener('click',()=>open(button.dataset.adminConsole)));
   document.getElementById('kx-admin-console-exit')?.addEventListener('click',async()=>{clearIdle();await backend.signOutPlatformAdmin();if(/\/admin\/?$/.test(location.pathname))location.href='/';else location.reload();});
   armIdle(async()=>{await backend.signOutPlatformAdmin().catch(()=>{});renderPlatformAdminAccess({onCancel:()=>{if(/\/admin\/?$/.test(location.pathname))location.href='/';else location.reload();},onSuccess:renderPlatformAdminConsole,message:'La sesión de administración se cerró por inactividad.'});});

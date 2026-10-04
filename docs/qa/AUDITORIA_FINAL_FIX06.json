@@ -1,0 +1,34 @@
+{
+  "revision": "R118 FIX06",
+  "build": 20178,
+  "base": "R118 FIX05",
+  "netlify_local": {
+    "passed_suites": 73,
+    "inherited_i18n_p2": 3,
+    "new_failures": 0,
+    "os": "Windows",
+    "remote_deploy": false
+  },
+  "sql_isolated": 32,
+  "chrome_visual_fixtures": 14,
+  "account_access_regressions": 18,
+  "supabase_applied_migrations": [
+    "20261004072423",
+    "20261004075015",
+    "20261004080350"
+  ],
+  "live_notification_test_rolled_back": true,
+  "live_anon_denied": true,
+  "live_triggers": 3,
+  "production_moderation_actions": 0,
+  "pilot": {
+    "slots_total": 4,
+    "used": 1,
+    "remaining": 3
+  },
+  "automatic_detection": "Explicit Spanish text rules; no visual AI classifier",
+  "permanent_deletion": "Logical platform deletion; shared Storage files and orders retained",
+  "prior_stripe_checkout_sessions_cancelled": false,
+  "native_android_compiled_FIX06": false,
+  "push_performed": false
+}

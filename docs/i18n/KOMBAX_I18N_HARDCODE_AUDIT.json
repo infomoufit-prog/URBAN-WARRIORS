@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-04T01:14:59.450Z",
+  "generated_at": "2026-10-04T08:08:06.382Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
-  "files_scanned": 116,
-  "system_ui_candidates": 2643,
+  "files_scanned": 118,
+  "system_ui_candidates": 2644,
   "target_block_1_system_ui_candidates": 558,
   "target_files": [
     "web/js/modules/gateway.js",
@@ -391,6 +391,12 @@
     },
     "web/js/modules/media-content-center.js": {
       "system_ui": 9,
+      "technical": 1,
+      "user_content": 0,
+      "target_block_1": false
+    },
+    "web/js/modules/owner-content-moderation.js": {
+      "system_ui": 1,
       "technical": 1,
       "user_content": 0,
       "target_block_1": false
@@ -16244,6 +16250,20 @@
       "sample": "setAppHtml(`<main class=\"kx-managed-hub\"><header class=\"kx-managed-top\"><button class=\"gateway-icon-button\" id=\"kx-media-back\" type=\"button\" aria-label=\"Volver\">${icon('chevronLeft',{size:22})}</button><div class=\"kx-managed-title\"><strong>Mi contenido</strong></div></header><div class=\"empty-card compact\"><strong>No s"
     },
     {
+      "file": "web/js/modules/owner-content-moderation.js",
+      "line": 33,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(kind==='delete')fields.push({name:'confirmation',label:label('confirmation'),required:true,pattern:'ELIMINAR'});"
+    },
+    {
+      "file": "web/js/modules/owner-content-moderation.js",
+      "line": 36,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "if(kind==='delete'&&value.confirmation!=='ELIMINAR')throw new Error(label('confirmation'));"
+    },
+    {
       "file": "web/js/modules/plan-services.js",
       "line": 12,
       "classification": "SYSTEM_UI_CANDIDATE",
@@ -16567,49 +16587,49 @@
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 32,
+      "line": 33,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setAppHtml(`<main class=\"kx-admin-access-shell\"><section class=\"kx-admin-access-card\">${accessMark()}<div class=\"kx-admin-access-kicker\">ACCESO MAESTRO</div><h1>Administración global KOMBAX</h1><p>Acceso independiente del rol de cualquier club. La puerta permanece oculta y solo una cuenta Owner autorizada puede abrir l"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 38,
+      "line": 39,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "catch(error){errorBox.hidden=false;errorBox.textContent=humanError(error);button.disabled=false;button.innerHTML=`Abrir Consola Owner ${icon('shieldCheck',{size:17})}`;}"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 46,
+      "line": 47,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Comprobando estado de plataforma…</div>');"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 51,
+      "line": 52,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`<div class=\"kx-platform-admin\"><div class=\"page-head\"><div><span class=\"page-kicker\">MANTENIMIENTO</span><h1>Estado de KOMBAX</h1><p>Área técnica visible únicamente dentro de la Consola de Plataforma.</p></div></div><div class=\"kx-platform-stats\"><article><span>Build web</span><strong>${Number(window.UW_CO"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 57,
+      "line": 58,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(!valid){renderPlatformAdminAccess({onCancel:()=>{location.href='/';},onSuccess:renderPlatformAdminConsole,message:'La verificación de administración ha caducado.'});return;}"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 59,
+      "line": 60,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setAppHtml(`<div class=\"kx-admin-console\"><header class=\"kx-admin-console-top\">${accessMark()}<div class=\"kx-admin-console-status\"><span>ACCESO VERIFICADO</span><strong>${esc(String(level).toUpperCase())}</strong></div><button class=\"btn btn-ghost btn-sm\" id=\"kx-admin-console-exit\" type=\"button\">Cerrar administración</"
     },
     {
       "file": "web/js/modules/platform-admin-access.js",
-      "line": 64,
+      "line": 66,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "armIdle(async()=>{await backend.signOutPlatformAdmin().catch(()=>{});renderPlatformAdminAccess({onCancel:()=>{if(/\\/admin\\/?$/.test(location.pathname))location.href='/';else location.reload();},onSuccess:renderPlatformAdminConsole,message:'La sesión de administración se cerró por inactividad.'});});"
