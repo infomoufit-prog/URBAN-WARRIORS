@@ -4,6 +4,7 @@ import {repos} from '../core/repositories.js';
 import {esc,dtFmt,humanError} from '../core/utils.js';
 import {setMainHtml,openForm,openDetail,toast} from '../ui/components.js';
 import {t} from '../i18n/index.js';
+import {deletionConfirmation} from '../core/content-visibility.js';
 
 export function safeModerationUrl(value){
  try{const u=new URL(String(value||''),location.origin);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}
@@ -31,11 +32,12 @@ export async function renderOwnerContentModeration(){
    if(channel==='showcase')fields.unshift({name:'title',label:label('productName'),value:row.title,required:true,maxLength:160},{name:'summary',label:label('summary'),value:row.summary||'',maxLength:500});
    fields.unshift({name:'text',label:label('text'),type:'textarea',value:row.text||'',required:true,maxLength:channel==='social'?1500:10000,full:true});
   }
-  if(kind==='delete')fields.push({name:'confirmation',label:label('confirmation'),required:true,pattern:'ELIMINAR'});
+  if(kind==='delete')fields.push({name:'confirmation',label:label('confirmation'),required:true,placeholder:'ELIMINAR'});
   const selectedChannel=channel;
   openForm({title:label(kind),subtitle:kind==='delete'?label('deleteNote'):label('auditNote'),fields,submitText:label('apply'),onSubmit:async value=>{
+   value.confirmation=deletionConfirmation(value.confirmation);
    if(kind==='delete'&&value.confirmation!=='ELIMINAR')throw new Error(label('confirmation'));
-   await backend.globalWriteRpc('app_kombax_content_action_r118',{p_channel:selectedChannel,p_id:row.id,p_action:kind,p_reason:value.reason,p_patch:kind==='edit'?{text:value.text,...(selectedChannel==='showcase'?{title:value.title,summary:value.summary}:{})}:{},p_confirmation:value.confirmation||''});toast(label('saved'));await load();
+   await backend.globalWriteRpc('app_kombax_content_action_r118',{p_channel:selectedChannel,p_id:row.id,p_action:kind,p_reason:value.reason,p_patch:kind==='edit'?{text:value.text,...(selectedChannel==='showcase'?{title:value.title,summary:value.summary}:{})}:{},p_confirmation:value.confirmation||''});window.dispatchEvent(new CustomEvent('uw-kombax-content-changed'));toast(label('saved'));await load();
   }});
  };
  const render=async ticket=>{
@@ -45,7 +47,7 @@ export async function renderOwnerContentModeration(){
    if(row.media?.storage_path){
     try{const url=await repos.kombaxSocial.mediaAccessUrl(row.media.storage_path,row.media.storage_bucket||'kombax-public-media');media=[{url,type:row.media.tipo==='video'||String(row.media.mime_type||'').startsWith('video/')?'video':'photo'},...media];}catch{/* Display a visible unavailable marker below. */}
    }
-   return `<article class="kx-moderation-card"><header><strong>${esc(row.title)}</strong><small>${esc(row.seller||'')} · ${esc(row.state)} · ${dtFmt(row.created_at)}</small></header><div class="kx-moderation-media">${media.map(m=>{const url=safeModerationUrl(m.url);return url?m.type==='video'?`<video controls preload="metadata" playsinline src="${esc(url)}"></video>`:`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer"><img loading="lazy" src="${esc(url)}" alt="${esc(row.title)}"></a>`:'';}).join('')}${row.media?.storage_path&&!media.length?`<p role="status">${label('mediaUnavailable')}</p>`:''}</div><p class="kx-moderation-text">${esc(row.text||'')}</p>${row.reason?`<p class="alert">${esc(row.reason)}</p>`:''}<footer>${['warn','edit','hide',...(row.moderation_state==='hidden'?['restore']:[]),'history',...(row.moderation_state!=='deleted'?['delete']:[])].map(kind=>`<button class="btn btn-ghost btn-sm" data-mod-id="${esc(row.id)}" data-mod-action="${kind}" ${row.moderation_state==='deleted'&&kind!=='history'?'disabled':''}>${label(kind)}</button>`).join('')}</footer></article>`;
+   return `<article class="kx-moderation-card"><header><strong>${esc(row.title)}</strong><small>${esc(row.seller||'')} · ${esc(row.state)} · ${dtFmt(row.created_at)}</small></header><div class="kx-moderation-media">${media.map(m=>{const url=safeModerationUrl(m.url);return url?m.type==='video'?`<video controls preload="metadata" playsinline src="${esc(url)}"></video>`:`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer"><img loading="lazy" src="${esc(url)}" alt="${esc(row.title)}"></a>`:'';}).join('')}${row.media?.storage_path&&!media.length?`<p role="status">${label('mediaUnavailable')}</p>`:''}</div><p class="kx-moderation-text">${esc(row.text||'')}</p>${row.reason?`<p class="alert">${esc(row.reason)}</p>`:''}<footer>${['warn','edit','hide',...(row.moderation_state==='hidden'?['restore']:[]),'history','delete'].map(kind=>`<button class="btn btn-ghost btn-sm" data-mod-id="${esc(row.id)}" data-mod-action="${kind}" ${row.moderation_state==='deleted'&&kind!=='history'&&kind!=='delete'?'disabled':''}>${label(kind)}</button>`).join('')}</footer></article>`;
   }));
   if(ticket!==request)return;
   const states=channel==='social'?['activa','oculta','retirada']:['publicado','oculto','archivado','borrador'];

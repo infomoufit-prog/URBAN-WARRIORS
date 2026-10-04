@@ -1,4 +1,5 @@
 import { personalNavigationHtml, bindPersonalNavigation } from './personal-navigation.js';
+import {watchContentVisibility} from '../core/content-visibility.js';
 import { esc, humanError, fullName } from '../core/utils.js';
 import { state } from '../core/state.js';
 import { rolesLabel } from '../core/permissions.js';
@@ -87,9 +88,11 @@ export function setAppHtml(html){
   }
   requestAnimationFrame(()=>{app.classList.add('app-view-enter');enhanceSubviewExitControls(app);});
 }
+let stopContentVisibility=()=>{};
 export function setMainHtml(html){
   const el=document.getElementById('main-view');if(!el)return;
-  el.classList.remove('view-enter');el.innerHTML=localizeHtmlString(html);
+  stopContentVisibility();el.classList.remove('view-enter');el.innerHTML=localizeHtmlString(html);
+  stopContentVisibility=el.querySelector('[data-content-channel]')?watchContentVisibility(el):()=>{};
   requestAnimationFrame(()=>{el.classList.add('view-enter');enhanceSubviewExitControls(el);});
 }
 

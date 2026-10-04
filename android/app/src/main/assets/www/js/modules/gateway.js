@@ -822,8 +822,9 @@ export function finishAccountEntry({onBack,pendingType=''}={}){
 window.addEventListener('kx-personal-navigate',async event=>{
   try{
     if(!state.session?.id||state.session.support_mode)return;
-    if(state.session.scope!=='kombax')await backend.switchGlobal();
     const target=event.detail?.target;
+    if(target==='logout'){await backend.signOut();location.assign('/');return;}
+    if(state.session.scope!=='kombax')await backend.switchGlobal();
     if(target==='home')return renderGlobalHome();
     if(target==='social')return openGlobalArea(renderKombaxSocial,{onBack:()=>renderGlobalHome(),title:'KOMBAX Social'});
     if(target==='showcase')return openGlobalArea(renderShowcase,{onBack:()=>renderGlobalHome(),title:'KOMBAX Showcase'});

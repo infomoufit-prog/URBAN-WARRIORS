@@ -1,0 +1,24 @@
+{
+  "browser": "Chrome fixture, not installed APK",
+  "checks": 10,
+  "watcher": {
+    "original": 2,
+    "socialRemoved": true,
+    "outageRetained": true,
+    "productRemoved": true,
+    "stoppedRetained": true,
+    "normalized": "ELIMINAR",
+    "wrong": "NO"
+  },
+  "owner_confirmations": [
+    {
+      "channel": "social",
+      "confirmation": "ELIMINAR"
+    },
+    {
+      "channel": "showcase",
+      "confirmation": "ELIMINAR"
+    }
+  ],
+  "page_errors": []
+}

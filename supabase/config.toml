@@ -45,3 +45,7 @@ verify_jwt = true
 
 [functions.stripe-billing-webhook]
 verify_jwt = false
+
+# Authenticated by x-uw-cron-secret; rejects requests without the server secret.
+[functions.kombax-content-cleanup]
+verify_jwt = false

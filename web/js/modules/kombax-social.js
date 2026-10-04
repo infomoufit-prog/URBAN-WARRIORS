@@ -212,7 +212,7 @@ function eventLinkCard(link){
 
 function feedCards(){
   if(!posts.length)return `${empty('Todavía no hay publicaciones','Los clubes, miembros y perfiles KOMBAX autorizados pueden compartir aquí su actividad pública.')}${done?'':'<span id="kombax-social-sentinel" class="kx-feed-sentinel" aria-hidden="true"></span>'}`;
-  return `<div class="kombax-social-feed">${posts.map((p,index)=>`<article class="kombax-social-post">
+  return `<div class="kombax-social-feed">${posts.map((p,index)=>`<article class="kombax-social-post" data-content-channel="social" data-content-id="${esc(p.id)}">
     <header class="kx-social-post-head"><div class="kx-social-author-open" data-social-profile-open="${esc(p.autor_id)}" tabindex="0" role="button" aria-label="Ver perfil público de ${esc(p.autor_nombre)}"><div class="kombax-social-avatar">${profileAvatar(p)}</div><div class="kx-social-author-copy"><strong>${esc(p.autor_nombre)} ${verified(p.autor_verificado,p.autor_tipo)}</strong><small>${dtFmt(p.creado_en)} · ${esc(PUBLIC_TYPE_LABEL[p.autor_tipo]||PROFILE_LABEL[p.autor_tipo]||p.autor_tipo)}</small>${affiliationChip(p)}<span class="kx-social-profile-cue">Ver perfil</span></div></div><details class="kx-post-menu"><summary aria-label="Opciones de la publicación">${icon('more',{size:20})}</summary><div class="kx-post-menu-popover">
       <button type="button" data-social-save="${esc(p.id)}" data-active="${p.saved_by_me?'true':'false'}">${icon('archive',{size:16})} ${p.saved_by_me?'Quitar de guardados':'Guardar publicación'}</button>
       ${p.contactable&&!isOwn(p.autor_id)?`<button type="button" data-social-contact="${esc(p.autor_id)}" data-social-name="${esc(p.autor_nombre)}">${icon('message',{size:16})} Contactar</button>`:''}

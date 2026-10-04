@@ -1,3 +1,4 @@
+import {embedDocumentImage} from '../_shared/document-image.ts'
 import { createClient } from 'npm:@supabase/supabase-js@2.112.3'
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'npm:pdf-lib@1.17.1'
 import fontkit from 'npm:@pdf-lib/fontkit@1.1.1'
@@ -73,12 +74,9 @@ const PDF_COPY:Record<string,any>={
 }
 function reportTypeLabel(type:string,c:any){return c.types?.[type]||type}
 
-async function embedLogo(pdf:PDFDocument,url:unknown){
-  const value=String(url||'').trim();if(!/^https:\/\//i.test(value))return null
-  try{const res=await fetch(value,{signal:AbortSignal.timeout(4500)});if(!res.ok)return null;const bytes=new Uint8Array(await res.arrayBuffer());const type=res.headers.get('content-type')||'';if(/png/i.test(type)||/\.png(?:\?|$)/i.test(value))return await pdf.embedPng(bytes);if(/jpe?g/i.test(type)||/\.jpe?g(?:\?|$)/i.test(value))return await pdf.embedJpg(bytes)}catch{/* optional branding */}return null
-}
+async function embedLogo(pdf:PDFDocument,url:unknown){return embedDocumentImage(pdf,url,{required:Boolean(url)})}
 
-async function buildPdf(payload:any,requestedLocale='es'){
+export async function buildPdf(payload:any,requestedLocale='es'){
   const snap=payload.snapshot||{},club=snap.club||{},summary=snap.totales||{},months=Array.isArray(snap.meses)?snap.meses:[],rows=Array.isArray(snap.rows)?snap.rows:[]
   const pdf=await PDFDocument.create();const fonts=await embedDocumentFonts(pdf,requestedLocale);const locale=fonts.documentLocale;const c=PDF_COPY[locale]||PDF_COPY.es;const {normal,bold}=fonts
   pdf.setTitle(clean(snap.titulo||payload.titulo||c.financialReport));pdf.setSubject(`KOMBAX Finance Premium · ${clean(payload.identificador)}`);pdf.setCreator('KOMBAX Finance Premium 2.0');pdf.setProducer('KOMBAX');

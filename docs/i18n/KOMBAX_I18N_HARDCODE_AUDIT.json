@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-04T10:02:17.900Z",
+  "generated_at": "2026-10-04T12:49:03.640Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
-  "files_scanned": 120,
-  "system_ui_candidates": 2640,
+  "files_scanned": 121,
+  "system_ui_candidates": 2641,
   "target_block_1_system_ui_candidates": 558,
   "target_files": [
     "web/js/modules/gateway.js",
@@ -501,6 +501,12 @@
       "system_ui": 6,
       "technical": 0,
       "user_content": 2,
+      "target_block_1": false
+    },
+    "web/js/ui/personal-navigation.js": {
+      "system_ui": 1,
+      "technical": 0,
+      "user_content": 0,
       "target_block_1": false
     },
     "web/js/ui/video-cover.js": {
@@ -16251,28 +16257,28 @@
     },
     {
       "file": "web/js/modules/owner-content-moderation.js",
-      "line": 34,
+      "line": 35,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(kind==='delete')fields.push({name:'confirmation',label:label('confirmation'),required:true,pattern:'ELIMINAR'});"
+      "sample": "if(kind==='delete')fields.push({name:'confirmation',label:label('confirmation'),required:true,placeholder:'ELIMINAR'});"
     },
     {
       "file": "web/js/modules/owner-content-moderation.js",
-      "line": 37,
+      "line": 39,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(kind==='delete'&&value.confirmation!=='ELIMINAR')throw new Error(label('confirmation'));"
     },
     {
       "file": "web/js/modules/owner-content-moderation.js",
-      "line": 42,
+      "line": 44,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const typeLabels={club:t('admin.moderation.type_club'),marca:t('admin.moderation.type_marca'),federacion:t('admin.moderation.type_federacion'),profesional:t('admin.moderation.type_profesional'),competidor:t('admin.moderation.type_competidor'),miembro:t('admin.moderation.type_miembro'),espectador:t('admin.moderation.typ"
     },
     {
       "file": "web/js/modules/owner-content-moderation.js",
-      "line": 52,
+      "line": 54,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`<section class=\"kx-platform-admin\"><h1>${label('title')}</h1><p>${label('intro')}</p><div class=\"kx-moderation-toolbar\"><button class=\"btn ${channel==='social'?'btn-primary':'btn-ghost'}\" data-mod-channel=\"social\">Social</button><button class=\"btn ${channel==='showcase'?'btn-primary':'btn-ghost'}\" data-mod"
@@ -18879,7 +18885,7 @@
       "line": 139,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "return `<article class=\"showcase-item ${item.destacado?'featured':''} ${service?'is-service':''}\" data-showcase-detail=\"${esc(item.id)}\" tabindex=\"0\" role=\"button\" aria-label=\"Abrir ${esc(item.nombre)}\">"
+      "sample": "return `<article class=\"showcase-item ${item.destacado?'featured':''} ${service?'is-service':''}\" data-content-channel=\"showcase\" data-content-id=\"${esc(item.id)}\" data-showcase-detail=\"${esc(item.id)}\" tabindex=\"0\" role=\"button\" aria-label=\"Abrir ${esc(item.nombre)}\">"
     },
     {
       "file": "web/js/modules/showcase.js",
@@ -20332,63 +20338,63 @@
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 40,
+      "line": 41,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "nav.innerHTML=`<button type=\"button\" class=\"btn btn-ghost kx-subview-back\" aria-label=\"Volver\">${icon('chevronLeft',{size:16})} Volver</button><button type=\"button\" class=\"icon-btn kx-subview-close\" aria-label=\"Cerrar\" title=\"Cerrar\">${icon('close',{size:18})}</button>`;"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 44,
+      "line": 45,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(header&&!header.querySelector('.kx-subview-back,[aria-label=\"Volver\"],button[id$=\"-back\"]')){"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 46,
+      "line": 47,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const back=document.createElement('button');back.type='button';back.className='btn btn-ghost kx-auto-page-back kx-subview-back';back.setAttribute('aria-label','Volver');back.innerHTML=`${icon('chevronLeft',{size:16})}<span>Volver</span>`;"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 49,
+      "line": 50,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const close=document.createElement('button');close.type='button';close.className='icon-btn kx-auto-page-close kx-subview-close';close.setAttribute('aria-label','Cerrar');close.setAttribute('title','Cerrar');close.innerHTML=icon('close',{size:18});"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 57,
+      "line": 58,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const back=header.querySelector('.kx-subview-back,[aria-label=\"Volver\"],button[id$=\"-back\"],button[id*=\"-back-\"]');"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 59,
+      "line": 60,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(header.querySelector('.kx-subview-close,.kx-auto-subview-close,[aria-label=\"Cerrar\"],button[id$=\"-close\"]'))continue;"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 190,
+      "line": 193,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"sidebar-foot\"><div class=\"user-avatar session-avatar\" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt=\"${esc(t('common.accessibility.profilePhoto'))}\" hidden></div><span>${esc(`${s?.nombre||''} ${s?.apellidos||''}`.trim())}</span><small>${esc(rolesLabel(s?.r"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 195,
+      "line": 198,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<header class=\"topbar\"><div class=\"topbar-identity\"><strong>${esc(s?.club?.nombre||t('common.app.clubFallback'))}</strong><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small></div><div class=\"topbar-actions\"><span class=\"kombax-shell-mark\" title=\"Tecnología ${esc(KOMBAX_BRAND.name)}\"><img src=\"${esc(KOMBAX_BRAND.symbo"
     },
     {
       "file": "web/js/ui/components.js",
-      "line": 211,
+      "line": 214,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "export function subviewActions({backId='kx-subview-back',closeId='kx-subview-close',backLabel='Volver',closeLabel='Cerrar'}={}){"
@@ -20448,6 +20454,13 @@
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "modal.wrap.querySelector('[data-kx-frame-save]')?.addEventListener('click',async e=>{const button=e.currentTarget;button.disabled=true;const old=button.textContent;button.textContent='Guardando…';try{sync();await onSave?.(current);toast('Encuadre guardado');modal.close?.();}catch(error){button.disabled=false;button.tex"
+    },
+    {
+      "file": "web/js/ui/personal-navigation.js",
+      "line": 6,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "return `<div class=\"kx-personal-shell\"><aside class=\"kx-personal-sidebar\" aria-label=\"${esc(t('marketing.space.title'))}\"><strong>KOMBAX</strong><small>${esc(state.session?.nombre||state.session?.email||'')}</small><nav>${targets.map(([target,label])=>`<button class=\"btn btn-ghost\" type=\"button\" data-kx-personal-nav=\"$"
     },
     {
       "file": "web/js/ui/video-cover.js",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T10:02:12.487Z",
+  "generated_at": "2026-10-04T12:48:59.275Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -9,6 +9,7 @@
     "web/js/core/backend.js",
     "web/js/core/capability-resolver.js",
     "web/js/core/commercial-pricing.js",
+    "web/js/core/content-visibility.js",
     "web/js/core/context-isolation-20083.js",
     "web/js/core/demo-directory.js",
     "web/js/core/demo-showcase.js",
@@ -104,8 +105,8 @@
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4941,
-  "covered": 4677,
+  "phrases": 4942,
+  "covered": 4678,
   "unresolved": 264,
   "coverage": 94.66,
   "skipped": 389,
@@ -155,6 +156,12 @@
     "web/js/core/commercial-pricing.js": {
       "total": 4,
       "covered": 4,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/content-visibility.js": {
+      "total": 0,
+      "covered": 0,
       "skipped": 0,
       "coverage": 100
     },
@@ -711,8 +718,8 @@
       "coverage": 100
     },
     "web/js/ui/personal-navigation.js": {
-      "total": 0,
-      "covered": 0,
+      "total": 1,
+      "covered": 1,
       "skipped": 0,
       "coverage": 100
     },

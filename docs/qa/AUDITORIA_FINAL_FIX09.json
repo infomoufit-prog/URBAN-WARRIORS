@@ -1,0 +1,29 @@
+{
+  "release_gate": {
+    "passed_suites": 79,
+    "known_i18n_P2": 3,
+    "new_failures": 0,
+    "strict_all_tests_clean": false
+  },
+  "isolated_moderation_and_hard_delete_checks": 55,
+  "worker_storage_retry_tests": 1,
+  "live_backend_deletion_implemented": true,
+  "showcase_included": true,
+  "live_content_counts_before_after": {
+    "social": 12,
+    "showcase": 5
+  },
+  "live_cleanup_http_status": 200,
+  "live_cleanup_claimed": 0,
+  "real_content_or_files_deleted_for_testing": false,
+  "installed_apk_button_verified": false,
+  "apk_aab_generated": false,
+  "netlify_deployed": false,
+  "github_pushed": false,
+  "public_profiles_next_plan_implemented": false,
+  "live_migration_versions": [
+    "20261004122656",
+    "20261004122748"
+  ],
+  "cleanup_edge_version": 1
+}
