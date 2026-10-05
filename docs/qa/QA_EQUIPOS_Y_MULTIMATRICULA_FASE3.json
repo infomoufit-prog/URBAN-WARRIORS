@@ -1,0 +1,20 @@
+{
+  "passed": 14,
+  "cases": [
+    "inbox accepts the selected invitation",
+    "accepted invitation no longer offers duplicate actions",
+    "failed acceptance restores button",
+    "failed acceptance displays an error",
+    "owner has no revoke button",
+    "invite carries explicit identity",
+    "team view reopens after successful invitation",
+    "mobile modal does not overflow",
+    "group waits for discipline",
+    "second group in same discipline remains available",
+    "already enrolled group and other discipline are excluded",
+    "changing discipline clears incompatible selection",
+    "other discipline group is offered",
+    "wrong discipline is rejected before submission"
+  ],
+  "mode": "Headless Chrome, real modules, mocked transport; no real invitations sent"
+}

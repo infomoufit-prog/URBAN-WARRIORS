@@ -5,7 +5,9 @@ export const PROFESSIONAL_SPECIALTIES=Object.freeze([
   {code:'representante_manager',name:'Representante / Manager'},
   {code:'medico_sanitario',name:'Médico / Sanitario deportivo'},
   {code:'arbitro_juez',name:'Árbitro / Juez'},
-  {code:'promotor_organizador',name:'Promotor / Organizador'}
+  {code:'promotor_organizador',name:'Promotor / Organizador'},
+  {code:'psicologo_deportivo',name:'Psicólogo deportivo'},
+  {code:'psicoterapeuta',name:'Psicoterapeuta'}
 ]);
 
 export const DIRECT_PROFILE_TYPES=Object.freeze([

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T20:43:08.804Z",
+  "generated_at": "2026-10-05T17:42:04.047Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -18,6 +18,7 @@
     "web/js/core/identity-context.js",
     "web/js/core/invitations.js",
     "web/js/core/media.js",
+    "web/js/core/member-enrollment.js",
     "web/js/core/moderation-filters.js",
     "web/js/core/permissions.js",
     "web/js/core/personal-space.js",
@@ -81,9 +82,12 @@
     "web/js/modules/platform-legal.js",
     "web/js/modules/portal.js",
     "web/js/modules/private-training.js",
+    "web/js/modules/professional-documents.js",
     "web/js/modules/professional-finance.js",
     "web/js/modules/professional-hub.js",
     "web/js/modules/professional-operations.js",
+    "web/js/modules/profile-operations.js",
+    "web/js/modules/profile-team.js",
     "web/js/modules/public-profile.js",
     "web/js/modules/resource-center.js",
     "web/js/modules/showcase-cart.js",
@@ -102,14 +106,15 @@
     "web/js/ui/conversation-ui.js",
     "web/js/ui/icons.js",
     "web/js/ui/media-framing.js",
+    "web/js/ui/member-enrollment-picker.js",
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 4942,
-  "covered": 4678,
+  "phrases": 5030,
+  "covered": 4766,
   "unresolved": 264,
-  "coverage": 94.66,
-  "skipped": 390,
+  "coverage": 94.75,
+  "skipped": 392,
   "files": {
     "web/js/app.js": {
       "total": 126,
@@ -142,10 +147,10 @@
       "coverage": 100
     },
     "web/js/core/backend.js": {
-      "total": 49,
-      "covered": 48,
+      "total": 50,
+      "covered": 49,
       "skipped": 5,
-      "coverage": 97.96
+      "coverage": 98
     },
     "web/js/core/capability-resolver.js": {
       "total": 0,
@@ -213,6 +218,12 @@
       "skipped": 0,
       "coverage": 91.67
     },
+    "web/js/core/member-enrollment.js": {
+      "total": 4,
+      "covered": 4,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/core/moderation-filters.js": {
       "total": 0,
       "covered": 0,
@@ -238,8 +249,8 @@
       "coverage": 100
     },
     "web/js/core/profile-registry.js": {
-      "total": 17,
-      "covered": 17,
+      "total": 18,
+      "covered": 18,
       "skipped": 6,
       "coverage": 100
     },
@@ -250,10 +261,10 @@
       "coverage": 100
     },
     "web/js/core/repositories.js": {
-      "total": 46,
-      "covered": 42,
+      "total": 47,
+      "covered": 43,
       "skipped": 73,
-      "coverage": 91.3
+      "coverage": 91.49
     },
     "web/js/core/security-go-live-20084.js": {
       "total": 7,
@@ -280,10 +291,10 @@
       "coverage": 100
     },
     "web/js/core/utils.js": {
-      "total": 53,
-      "covered": 50,
+      "total": 62,
+      "covered": 59,
       "skipped": 0,
-      "coverage": 94.34
+      "coverage": 95.16
     },
     "web/js/core/verification-visual.js": {
       "total": 1,
@@ -466,8 +477,8 @@
       "coverage": 91.04
     },
     "web/js/modules/groups-members.js": {
-      "total": 178,
-      "covered": 178,
+      "total": 182,
+      "covered": 182,
       "skipped": 11,
       "coverage": 100
     },
@@ -520,10 +531,10 @@
       "coverage": 100
     },
     "web/js/modules/managed-profile-hub.js": {
-      "total": 47,
-      "covered": 36,
+      "total": 51,
+      "covered": 40,
       "skipped": 3,
-      "coverage": 76.6
+      "coverage": 78.43
     },
     "web/js/modules/media-content-center.js": {
       "total": 19,
@@ -580,14 +591,20 @@
       "coverage": 100
     },
     "web/js/modules/portal.js": {
-      "total": 105,
-      "covered": 105,
-      "skipped": 10,
+      "total": 107,
+      "covered": 107,
+      "skipped": 9,
       "coverage": 100
     },
     "web/js/modules/private-training.js": {
       "total": 0,
       "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/modules/professional-documents.js": {
+      "total": 12,
+      "covered": 12,
       "skipped": 0,
       "coverage": 100
     },
@@ -604,16 +621,28 @@
       "coverage": 100
     },
     "web/js/modules/professional-operations.js": {
-      "total": 56,
-      "covered": 35,
+      "total": 58,
+      "covered": 37,
       "skipped": 4,
-      "coverage": 62.5
+      "coverage": 63.79
+    },
+    "web/js/modules/profile-operations.js": {
+      "total": 23,
+      "covered": 23,
+      "skipped": 3,
+      "coverage": 100
+    },
+    "web/js/modules/profile-team.js": {
+      "total": 21,
+      "covered": 21,
+      "skipped": 0,
+      "coverage": 100
     },
     "web/js/modules/public-profile.js": {
-      "total": 91,
-      "covered": 87,
+      "total": 92,
+      "covered": 88,
       "skipped": 10,
-      "coverage": 95.6
+      "coverage": 95.65
     },
     "web/js/modules/resource-center.js": {
       "total": 0,
@@ -714,6 +743,12 @@
     "web/js/ui/media-framing.js": {
       "total": 10,
       "covered": 10,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/member-enrollment-picker.js": {
+      "total": 3,
+      "covered": 3,
       "skipped": 0,
       "coverage": 100
     },

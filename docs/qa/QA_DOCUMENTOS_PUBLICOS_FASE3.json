@@ -1,0 +1,15 @@
+{
+  "passed": 9,
+  "cases": [
+    "no upload without consent",
+    "HTML upload rejected before storage",
+    "explicit public copy uses upload flow",
+    "failed publication cleans up its uploaded copy",
+    "publication form requires an explicit checkbox",
+    "publication form explains privacy separation",
+    "PDF viewer uses a sandbox",
+    "mobile document modal does not overflow",
+    "empty public listing is explained"
+  ],
+  "mode": "Chrome real frontend modules, mocked transport; no user files uploaded"
+}

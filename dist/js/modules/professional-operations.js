@@ -23,7 +23,7 @@ function assignmentsHtml(rows=[]){
 }
 function clientsHtml(rows=[]){return rows.length?`<div class="kx-pro-list">${rows.map(c=>`<article><div><span>Cliente / deportista propio</span><strong>${esc(c.nombre)}</strong><small>${esc(c.email||c.telefono||c.estado)}</small></div></article>`).join('')}</div>`:'<p class="muted">Aún no hay clientes propios registrados.</p>'}
 function sessionsHtml(rows=[]){return rows.length?`<div class="kx-pro-list">${rows.slice(0,12).map(s=>`<article><div><span>${esc(fmt(s.starts_at))}</span><strong>${esc(s.titulo)}</strong><small>${esc(s.estado)}</small></div></article>`).join('')}</div>`:'<p class="muted">Aún no hay sesiones profesionales.</p>'}
-const SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Representante / Manager',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador'};
+const SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Representante / Manager',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador',psicologo_deportivo:'Psicólogo deportivo',psicoterapeuta:'Psicoterapeuta'};
 const specialtyLabel=value=>SPECIALTY_LABEL[value]||String(value||'Especialidad');
 function credentialsHtml(rows=[]){
  if(!rows.length)return '<p class="muted">Aún no hay acreditaciones declaradas.</p>';
@@ -75,6 +75,10 @@ export async function renderProfessionalOperations(profileId,{onBack,onEvents}={
       });
       toast('Acreditación enviada a revisión KOMBAX');await renderProfessionalOperations(profileId,{onBack,onEvents});
     }catch(error){setError(error);button.disabled=false;button.textContent='Enviar acreditación a verificación';}
+  });
+  document.querySelectorAll('[data-pro-credential-visibility]').forEach(button=>{
+    const copy=document.createElement('button');copy.type='button';copy.className='btn btn-ghost btn-sm';copy.dataset.proPublicCopy=button.dataset.proCredentialVisibility;copy.textContent='Subir copia para el perfil público';
+    button.parentElement.appendChild(copy);copy.addEventListener('click',async()=>{const module=await import('./professional-documents.js');module.publishProfessionalDocument(copy.dataset.proPublicCopy);});
   });
   document.querySelectorAll('[data-pro-credential-visibility]').forEach(button=>button.addEventListener('click',async()=>{
     if(button.disabled)return;button.disabled=true;

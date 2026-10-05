@@ -1,0 +1,13 @@
+{
+  "passed": 7,
+  "cases": [
+    "manager add uses supported backend operation",
+    "manager revocation uses remove",
+    "team mutation response reaches caller",
+    "invitation endpoint and request id are present",
+    "inbox is account scoped",
+    "workspace passes explicit identity",
+    "mismatched response fails closed"
+  ],
+  "mode": "Chrome with mocked transport; actual repositories module"
+}

@@ -457,6 +457,7 @@ export const repos={
   members:{
     list:(limit=120)=>session()?.rol==='monitor'?backend.readRpc('app_kombax_mis_alumnos_v057',{p_club_id:session()?.club_id}):read('socios',`select=*&${filterClub()}&order=apellidos,nombre&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), enrollments:(limit=400)=>read('socio_disciplinas',`select=*&${filterClub()}&order=fecha_inicio.desc&limit=${Math.min(1000,Math.max(50,Number(limit)||400))}`), tutors:()=>read('tutores_socios',`select=*&${filterClub()}`),
     save:(p)=>mutation('alumno.guardar',{id:p.id||null,nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,telefono:p.telefono||'',email:p.email||'',tutor_nombre:p.tutor_nombre||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,grado_id:p.grado_id||null,grado_texto:p.grado_texto||'',tarifa_id:p.tarifa_id||null,estado:p.estado||'activo',contacto_emergencia:p.contacto_emergencia||'',telefono_emergencia:p.telefono_emergencia||'',notas_internas:p.notas_internas||''}),
+    saveBatch:async(member,enrollments=[])=>{const out=await kombaxGlobalMutation('app_kombax_member_batch_mutate_r120','member.save.batch',{club_id:session()?.club_id,member,enrollments});invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);return out;},
     requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),
     deactivateEnrollment:(matricula_id)=>mutation('matricula.desactivar',{matricula_id}),
     graduation:(p)=>mutation('graduacion.registrar',{socio_id:p.socio_id,disciplina_id:p.disciplina_id,grado_id:p.grado_id,fecha:p.fecha||isoDate(),examinador:p.examinador||'',nota:p.nota||''}),
@@ -695,6 +696,7 @@ export const repos={
     communications:()=>read('comunicaciones',`select=*&${filterClub()}&ciclo_estado=eq.activo&estado=in.(publicada,programada)&order=publicada_en.desc,creado_en.desc&limit=200`),
     notifications:()=>notificationList(300),
     requestMinor:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:'menor',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa_id||null,parentesco:p.parentesco||null,observaciones:p.observaciones||null}),
+    requestEnrollmentBatch:async(socio_id,enrollments,tarifa_id)=>{const out=await kombaxGlobalMutation('app_kombax_member_batch_mutate_r120','enrollment.request.batch',{club_id:session()?.club_id,socio_id,enrollments,tarifa_id:tarifa_id||null});invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);return out;},
     requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),
     reserveSession:(sesion_id,socio_id)=>mutation('sesion.reserva.confirmar',{sesion_id,socio_id}),
     cancelSessionReservation:(sesion_id,socio_id)=>mutation('sesion.reserva.cancelar',{sesion_id,socio_id}),
@@ -1018,6 +1020,17 @@ export const repos={
     professionalMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_mutate_v198',operation,payload),
     professionalCredentialMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_credential_mutate_r118',operation,payload),
     professionalPublicCredentials:(profileId)=>backend.globalReadRpc('app_kombax_professional_public_credentials_r118',{p_profile_id:profileId}),
+    professionalPublicDocuments:(profileId)=>backend.publicRpc('app_kombax_public_documents_r120',{p_profile_id:profileId}),
+    async publishProfessionalDocument(credentialId,file,authorized){
+      if(!authorized)throw new Error('Confirma que deseas publicar esta copia del documento.');
+      if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
+      const exts={'application/pdf':'pdf','image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
+      if(!file?.size||!exts[file.type]||file.size>15*1024*1024)throw new Error('Usa un PDF, JPG, PNG o WEBP de hasta 15 MB.');
+      const path=`${session().id}/${credentialId}/${crypto.randomUUID()}.${exts[file.type]}`;
+      await backend.upload('kombax-credential-public-copies',path,file,false);
+      try{return await kombaxGlobalMutation('app_kombax_public_copy_mutate_r120','professional.credential.public_copy.publish',{credential_id:credentialId,storage_path:path,publication_authorized:true});}
+      catch(error){await backend.remove('kombax-credential-public-copies',path).catch(()=>{});throw error;}
+    },
     async uploadProfessionalCredentialEvidence(profileId,credentialId,file){
       if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');
       if(!profileId||!credentialId)throw new Error('Credencial profesional no disponible.');
@@ -1040,6 +1053,9 @@ export const repos={
       }
     },
     professionalFinance:(profileId)=>backend.globalReadRpc('app_kombax_professional_finance_v199',{p_profile_id:profileId}),
+    operationsAccess:(profileId)=>backend.globalReadRpc('app_kombax_profile_operations_access_r120',{p_profile_id:profileId}),
+    operationsWorkspace:(profileId,kind='finance',offset=0)=>backend.globalReadRpc('app_kombax_profile_operations_workspace_r120',{p_profile_id:profileId,p_kind:kind,p_offset:Math.max(0,Number(offset)||0)}),
+    operationsMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_profile_operations_mutate_r120',operation,payload),
     professionalFinanceNotifications:(profileId)=>backend.globalReadRpc('app_kombax_professional_finance_notifications_v199',{p_profile_id:profileId}),
     professionalFinanceMutate:(operation,payload={})=>kombaxGlobalMutation('app_kombax_professional_finance_mutate_v199',operation,payload),
     clubs:()=>backend.globalReadRpc('app_kombax_mis_clubes_v097',{}),
@@ -1050,7 +1066,10 @@ export const repos={
     submitApplication:(solicitud_id)=>kombaxProfileMutationR58('kombax.application.submit',{solicitud_id}),
     withdrawApplication:(solicitud_id)=>kombaxGlobalMutation('app_kombax_perfil_mutate_v072','kombax.application.withdraw',{solicitud_id}),
     managers:(profileId)=>backend.globalReadRpc('app_kombax_profile_managers_v070',{p_perfil_directo_id:profileId}),
-    setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070','kombax.profile.manager.set',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),
+    teamInbox:()=>backend.globalReadRpc('app_kombax_profile_team_inbox_r120',{}),
+    teamWorkspace:(profileId)=>backend.globalReadRpc('app_kombax_profile_team_workspace_r120',{p_profile_id:profileId}),
+    teamMutate:(operation,payload)=>kombaxGlobalMutation('app_kombax_profile_team_mutate_r120',operation,payload),
+    setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070',estado==='revocado'?'kombax.profile.manager.remove':'kombax.profile.manager.add',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),
     uploadMedia:uploadKombaxProfileMedia,
     setVideoCover:(profileId,media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('profile_media',media.id,file,{bucket:'kombax-public-media',pathPrefix:`${session()?.id}/${profileId}/${media.id}`,presentation,mode,time}),
     removeMedia:async(media)=>{const out=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.remove',{media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');return out;},

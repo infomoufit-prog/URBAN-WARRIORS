@@ -586,6 +586,16 @@ export const backend={
     try{const data=await withReadSlot(()=>client.rpc(name,args));state.pushTrace({kind:'read',ok:true,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0)});return data;}
     catch(error){state.pushTrace({kind:'read',ok:false,label:`PUBLIC RPC ${name}`,ms:Math.round(performance.now()-t0),error:technicalError(error)});throw error;}
   },
+  async publicDocumentDownload(credentialId){
+    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),30000);
+    try{
+      const response=await fetch(`${client.url}/functions/v1/professional-public-document`,{method:'POST',headers:{apikey:client.key,Authorization:`Bearer ${client.session?.access_token||client.key}`,'Content-Type':'application/json'},body:JSON.stringify({credential_id:credentialId}),signal:ctrl.signal});
+      if(!response.ok)throw new Error('El documento no está disponible públicamente.');
+      const blob=await response.blob();
+      if(!['application/pdf','image/jpeg','image/png','image/webp'].includes(blob.type)||blob.size>15728640)throw new Error('Formato documental no admitido.');
+      return blob;
+    }finally{clearTimeout(timer);}
+  },
   async globalWriteRpc(name,args={}){
     if(!client.session?.access_token)throw new AuthExpiredError();
     const t0=performance.now();state.pushTrace({kind:'mutation',stage:'request',ok:null,label:`GLOBAL RPC ${name}`});

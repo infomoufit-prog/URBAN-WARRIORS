@@ -1,0 +1,25 @@
+{
+  "passed": 18,
+  "checks": [
+    "existing group locked checked",
+    "single incompatible group and grade fields removed",
+    "admin submits two additional memberships atomically",
+    "child two choices not excluded by child one enrollment",
+    "mother request applies only selected child",
+    "brand context sidebar provides finance",
+    "brand retains general logout",
+    "context navigation no mobile overflow",
+    "marca premium identity brand and LED",
+    "marca sidebar and logout remain available",
+    "federacion premium identity brand and LED",
+    "federacion sidebar and logout remain available",
+    "profesional premium identity brand and LED",
+    "profesional sidebar and logout remain available",
+    "media premium identity brand and LED",
+    "media sidebar and logout remain available",
+    "money sent as integer minor units for correct identity",
+    "no financial creation without service"
+  ],
+  "pageErrors": [],
+  "transport": "mocked, no user data edited"
+}

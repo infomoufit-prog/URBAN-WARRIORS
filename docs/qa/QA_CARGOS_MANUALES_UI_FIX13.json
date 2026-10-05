@@ -1,0 +1,11 @@
+{
+  "passed": 4,
+  "checks": [
+    "authorized manual charge button present",
+    "two charge operations for same student",
+    "distinct concepts and amounts preserved",
+    "unpermitted role not offered manual creation"
+  ],
+  "pageErrors": [],
+  "transport": "mocked; no real fees or payments created"
+}

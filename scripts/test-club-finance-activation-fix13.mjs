@@ -1,0 +1,30 @@
+import {PGlite} from '@electric-sql/pglite';
+import {readFileSync,readdirSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const db=new PGlite();let passed=0;
+const ok=(n,v)=>{assert.ok(v,n);passed++;};
+const id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+const flag=async(n,k)=>(await db.query('select valor from config_club where club_id=$1 and clave=$2',[id(n),k])).rows[0]?.valor;
+try{
+ await db.exec(`create role anon;create role authenticated;create schema private;create schema kombax_commercial;
+ create table clubes(id uuid primary key);
+ create table config_club(club_id uuid references clubes(id),clave text,valor jsonb,descripcion text,actualizado_en timestamptz,primary key(club_id,clave));
+ create table kombax_commercial.pilot_entities_r97(subject_type text,subject_id uuid,primary key(subject_type,subject_id));
+ insert into clubes values('${id(1)}'),('${id(2)}');
+ insert into config_club values('${id(1)}','finance_recurring_enabled','false',null,null),('${id(2)}','finance_pilot_live_enabled','false',null,null);
+ insert into kombax_commercial.pilot_entities_r97 values('club','${id(2)}');`);
+ const dir=new URL('../supabase/migrations/',import.meta.url),name=readdirSync(dir).find(n=>n.endsWith('_club_finance_panel_all_pilot_premium_fix13.sql'));
+ await db.exec(readFileSync(new URL(name,dir),'utf8'));
+ ok('existing ordinary club gets manual panel',await flag(1,'finance_v2_enabled')===true&&await flag(1,'finance_dashboard_v2_enabled')===true);
+ ok('registered pilot gets premium reports',await flag(2,'finance_reports_enabled')===true);
+ ok('recurring collection stays closed',await flag(1,'finance_recurring_enabled')===false&&await flag(2,'finance_pilot_live_enabled')===false);
+ await db.query('insert into clubes values($1)',[id(3)]);
+ ok('future club gets manual panel',await flag(3,'finance_v2_enabled')===true);
+ ok('future ordinary club not granted premium reports',await flag(3,'finance_reports_enabled')===false);
+ await db.query("insert into kombax_commercial.pilot_entities_r97 values('club',$1)",[id(3)]);
+ ok('future authorized pilot gets reports',await flag(3,'finance_reports_enabled')===true);
+ await db.query("insert into kombax_commercial.pilot_entities_r97 values('direct_profile',$1)",[id(4)]);
+ ok('nonclub registry ignored',(await db.query('select count(*)::int n from config_club where club_id=$1',[id(4)])).rows[0].n===0);
+ ok('trigger helper not exposed',(await db.query("select has_function_privilege('authenticated','private.club_finance_seed_fix13()','execute') v")).rows[0].v===false);
+ console.log(`PASS ${passed}/${passed} finance activation and future pilot cases`);
+}catch(e){console.error(e.message,e.code);process.exitCode=1;}finally{await db.close();}

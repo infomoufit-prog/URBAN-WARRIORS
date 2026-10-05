@@ -604,14 +604,34 @@ img,video,canvas{max-width:100%}
 @media(max-width:580px){.kx-assist-specialists{grid-template-columns:1fr}.kx-assist-specialist{min-height:0}.kx-assist-specialist>p{min-height:0}}
 
 /* R118 FIX05 — common personal navigation, including global subviews. */
-.kx-personal-shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100dvh}
-.kx-personal-sidebar{position:sticky;top:0;height:100dvh;padding:28px 16px;background:#0b1019;border-right:1px solid #ffffff18;display:flex;flex-direction:column;gap:14px;overflow:auto}
-.kx-personal-sidebar>strong{font-size:24px}.kx-personal-sidebar>small{overflow-wrap:anywhere;color:#aeb8ca}
+.kx-personal-shell{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100dvh;background:radial-gradient(ellipse at top left,#891a2020,transparent 55%),#080b12}
+.kx-personal-sidebar{position:sticky;top:0;height:100dvh;padding:26px 16px;background:linear-gradient(155deg,#1a101b,#0b1019 45%,#070a11);border-right:1px solid #f4475538;box-shadow:4px 0 28px #e21d2d0b;display:flex;flex-direction:column;gap:18px;overflow:auto;overscroll-behavior:contain}
+.kx-personal-brand{display:flex;align-items:center;gap:12px;padding:2px 6px 16px;border-bottom:1px solid #ffffff14}
+.kx-personal-brand>div{flex:1;min-width:0}.kx-personal-brand strong{display:block;font-size:23px;letter-spacing:.1em;color:#fff}.kx-personal-brand small{display:block;color:#aeb8ca;font-size:12px;margin-top:4px}
+.kx-personal-brand-symbol{display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;color:#ff5969;border:1px solid #ff596945;border-radius:13px;background:#e21d2d12;box-shadow:0 0 20px #e21d2d18}
+.kx-personal-sidebar .kx-personal-account{overflow-wrap:anywhere;color:#aeb8ca;padding:0 7px}
 .kx-personal-sidebar nav{display:flex;flex-direction:column;gap:8px}.kx-personal-sidebar .btn{text-align:left;justify-content:flex-start;white-space:normal}
+.kx-personal-sidebar .kx-personal-nav-item{display:flex;align-items:center;gap:12px;min-height:46px;padding:11px 13px;border:1px solid transparent;border-radius:12px;background:transparent;color:#e5eaf4;transition:background .15s,border-color .15s}
+.kx-personal-nav-icon{display:grid;place-items:center;flex-shrink:0;color:#d7ddea}.kx-personal-nav-item>span:last-child{min-width:0;overflow-wrap:anywhere}
+.kx-personal-sidebar .kx-personal-nav-item:hover{background:#ffffff08;border-color:#ff59693a}.kx-personal-sidebar .kx-personal-nav-item:focus-visible{outline:2px solid #ff5969;outline-offset:2px}
+.kx-personal-sidebar .kx-personal-logout{margin-top:16px;border-top:1px solid #ffffff20;color:#ffb6bf}.kx-personal-logout .kx-personal-nav-icon{color:inherit}
+.kx-personal-close,.kx-personal-scrim{display:none}
 .kx-personal-content{min-width:0}.kx-personal-content .kombax-gateway{min-height:100dvh;padding:24px}.kx-personal-content .gateway-directory{width:100%;max-width:1120px}
 .kx-personal-mobile{display:none}.kx-canonical-profile{grid-column:1/-1;padding:24px;border:1px solid #ffffff24;border-radius:20px;background:#111a27}
 .kx-member-capability{min-width:0}.kx-personal-content [data-account-section]{scroll-margin-top:24px}
-@media(max-width:800px){.kx-personal-shell{display:block}.kx-personal-sidebar{display:none;position:relative;height:auto}.kx-personal-shell.menu-open .kx-personal-sidebar{display:flex}.kx-personal-mobile{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#0b1019}.kx-personal-content .kombax-gateway{padding:12px}.kx-personal-content .gateway-directory-top{flex-wrap:wrap}.kx-personal-content .kx-hub-actions{flex-wrap:wrap}}
+@media(max-width:800px){.kx-personal-shell{display:block}.kx-personal-sidebar{display:none;position:fixed;inset:0 auto 0 0;width:min(290px,85vw);height:100dvh;z-index:151}.kx-personal-shell.menu-open .kx-personal-sidebar{display:flex}.kx-personal-close{display:inline-flex;flex-shrink:0}.kx-personal-shell.menu-open .kx-personal-scrim{display:block;position:fixed;inset:0;z-index:150;border:0;border-radius:0;background:#0009;backdrop-filter:blur(3px)}.kx-personal-mobile{display:flex;position:sticky;top:0;z-index:30;gap:12px;justify-content:space-between;align-items:center;padding:12px;background:#0b1019f5;border-bottom:1px solid #ff59692b}.kx-personal-mobile .btn{display:flex;gap:8px;align-items:center;min-height:44px}.kx-personal-content .kombax-gateway{padding:12px}.kx-personal-content .gateway-directory-top{flex-wrap:wrap}.kx-personal-content .kx-hub-actions{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.kx-personal-sidebar .kx-personal-nav-item{transition:none}}
 .kx-moderation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px;margin:20px 0}
 .kx-moderation-card{border:1px solid var(--border,#d8dee8);border-radius:14px;padding:16px;min-width:0;background:var(--panel,#15191f);color:var(--text,#f2f4f8)}
 .kx-moderation-card header{display:grid;gap:6px}.kx-moderation-media{display:grid;gap:8px;margin-top:12px}.kx-moderation-media img,.kx-moderation-media video{width:100%;max-height:420px;object-fit:contain;background:#111;border-radius:8px}.kx-moderation-card footer{display:flex;gap:8px;flex-wrap:wrap}.kx-moderation-text{white-space:pre-wrap;overflow-wrap:anywhere}.kx-moderation-toolbar,.kx-moderation-toolbar form{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.kx-moderation-toolbar label{display:grid;gap:4px}
+
+/* R120 context navigation and operational workspaces */
+.kx-profile-context-nav{border-bottom:1px solid rgba(255,65,90,.3);padding-bottom:12px;margin-bottom:12px}.kx-profile-context-nav>small{display:block;padding:12px;color:#ff8899;overflow-wrap:anywhere}.kx-profile-operations{min-width:0}.kx-profile-operations .row-actions{flex-wrap:wrap}.kx-profile-operations article{min-width:0;overflow-wrap:anywhere}.kx-profile-operations details>summary{cursor:pointer;padding:14px;background:rgba(255,40,70,.08);border-radius:12px}.kx-profile-operations .kx-brand-proposal-card{flex-wrap:wrap}
+
+.kx-member-enrollment-picker{grid-column:1/-1;min-width:0;border:1px solid rgba(255,70,95,.3);border-radius:16px;padding:16px}.kx-member-enrollment-picker details{padding:10px;border-bottom:1px solid rgba(255,255,255,.1)}.kx-enrollment-choice{display:flex!important;align-items:center;gap:12px;padding:10px!important}.kx-enrollment-choice input{width:20px!important;min-width:20px!important;height:20px;accent-color:#ff3655}.kx-enrollment-choice span{overflow-wrap:anywhere}
+
+/* Same KOMBAX premium red LED treatment for every managed identity. */
+.kx-profile-brand strong{font-size:17px;letter-spacing:.06em;overflow-wrap:anywhere;text-shadow:0 0 16px #ff405b45}.kx-profile-brand .kx-personal-brand-symbol{box-shadow:0 0 18px #ff405b35,inset 0 0 12px #ff405b18}.kx-personal-sidebar:has(.kx-profile-brand){border-right-color:#ff405b55;box-shadow:4px 0 28px #ff405b14}
+
+/* Managed profiles reuse Club product cards and the shared multicolor LED rules. */
+.kx-profile-context-nav{display:grid;gap:4px}.kx-profile-context-nav .kx-profile-product-social{display:flex;align-items:center;gap:12px;width:calc(100% - 4px);text-align:left}.kx-profile-context-nav .kx-profile-product-social b{font-size:13px}.kx-profile-context-nav .club-nav-copy{min-width:0}.kx-profile-context-nav .kx-profile-module-link{width:100%;min-height:44px}.kx-profile-context-nav .kx-sidebar-resources>summary{min-height:62px}.kx-profile-context-nav summary:focus-visible{outline-offset:2px}

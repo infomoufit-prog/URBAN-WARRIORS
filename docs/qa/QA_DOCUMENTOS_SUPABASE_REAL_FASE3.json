@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "status": 404,
+  "result": {
+    "error": "document_unavailable"
+  },
+  "scenario": "Nonexistent credential; anonymous public key; no data mutations"
+}

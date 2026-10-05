@@ -1,15 +1,33 @@
 import { esc } from '../core/utils.js';
 import { state } from '../core/state.js';
 import { t } from '../i18n/index.js';
+import { icon } from './icons.js';
 export function personalNavigationHtml(content){
   const targets=[['home',t('marketing.space.explore')],['workspace',t('marketing.space.title')],['profile',t('marketing.space.profile')],['organizations',t('marketing.space.organizations')],['services',t('marketing.space.services')],['settings',t('marketing.space.settings')]];
-  return `<div class="kx-personal-shell"><aside class="kx-personal-sidebar" aria-label="${esc(t('marketing.space.title'))}"><strong>KOMBAX</strong><small>${esc(state.session?.nombre||state.session?.email||'')}</small><nav>${targets.map(([target,label])=>`<button class="btn btn-ghost" type="button" data-kx-personal-nav="${target}">${esc(label)}</button>`).join('')}<button type="button" class="btn btn-ghost" data-kx-moderation-notices>${esc(t('admin.moderation.warn'))}</button><button type="button" class="btn btn-ghost" data-kx-personal-nav="logout">Cerrar sesión</button></nav></aside><section class="kx-personal-content"><header class="kx-personal-mobile"><button class="btn btn-ghost" id="kx-personal-menu" type="button" aria-expanded="false">${esc(t('marketing.space.menu'))}</button><span>${esc(t('marketing.space.title'))}</span></header>${content}</section></div>`;
+  const symbols={home:'home',workspace:'layers',profile:'user',organizations:'users',services:'sparkles',settings:'settings'};
+  return `<div class="kx-personal-shell"><aside class="kx-personal-sidebar" id="kx-personal-sidebar" aria-label="${esc(t('marketing.space.title'))}"><div class="kx-personal-brand"><span class="kx-personal-brand-symbol" aria-hidden="true">${icon('layers',{size:24})}</span><div><strong>KOMBAX</strong><small>${esc(t('marketing.space.title'))}</small></div><button type="button" class="icon-btn kx-personal-close" data-kx-personal-menu-close aria-label="${esc(t('common.accessibility.closeMenu'))}">${icon('close')}</button></div><small class="kx-personal-account">${esc(state.session?.nombre||state.session?.email||'')}</small><nav>${targets.map(([target,label])=>`<button class="btn btn-ghost kx-personal-nav-item" type="button" data-kx-personal-nav="${target}"><span class="kx-personal-nav-icon" aria-hidden="true">${icon(symbols[target],{size:19})}</span><span>${esc(label)}</span></button>`).join('')}<button type="button" class="btn btn-ghost kx-personal-nav-item" data-kx-moderation-notices><span class="kx-personal-nav-icon" aria-hidden="true">${icon('bell',{size:19})}</span><span>${esc(t('admin.moderation.notices'))}</span></button><button type="button" class="btn btn-ghost kx-personal-nav-item kx-personal-logout" data-kx-personal-nav="logout"><span class="kx-personal-nav-icon" aria-hidden="true">${icon('logOut',{size:19})}</span><span>Cerrar sesión</span></button></nav></aside><button type="button" class="kx-personal-scrim" data-kx-personal-menu-close aria-label="${esc(t('common.accessibility.closeMenu'))}" tabindex="-1"></button><section class="kx-personal-content"><header class="kx-personal-mobile"><button class="btn btn-ghost" id="kx-personal-menu" type="button" aria-controls="kx-personal-sidebar" aria-expanded="false">${icon('menu',{size:20})}<span>${esc(t('marketing.space.menu'))}</span></button><span>${esc(t('marketing.space.title'))}</span></header>${content}</section></div>`;
 }
 export function bindPersonalNavigation(root){
-  const notices=root.querySelector('[data-kx-moderation-notices]');if(notices)notices.textContent=t('admin.moderation.notices');
-  notices?.addEventListener('click',async()=>{const module=await import('../modules/moderation-notices.js');await module.openModerationNotices();});
-  root.querySelectorAll('[data-kx-personal-nav]').forEach(button=>button.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('kx-personal-navigate',{detail:{target:button.dataset.kxPersonalNav}}))));
-  root.querySelector('#kx-personal-menu')?.addEventListener('click',event=>{
-    const shell=root.querySelector('.kx-personal-shell');const open=shell.classList.toggle('menu-open');event.currentTarget.setAttribute('aria-expanded',String(open));
+  const shell=root.querySelector('.kx-personal-shell'),toggle=root.querySelector('#kx-personal-menu');
+  const setMenuOpen=(open,{restoreFocus=false}={})=>{
+    if(!shell)return;
+    shell.classList.toggle('menu-open',open);toggle?.setAttribute('aria-expanded',String(open));
+    if(open)shell.querySelector('.kx-personal-sidebar button')?.focus();
+    else if(restoreFocus)toggle?.focus();
+  };
+  const notices=root.querySelector('[data-kx-moderation-notices]');
+  const nav=root.querySelector('.kx-personal-sidebar nav');
+  if(nav){const button=document.createElement('button');button.type='button';button.className='btn btn-ghost kx-personal-nav-item';button.dataset.kxTeamInbox='';button.innerHTML=`<span class="kx-personal-nav-icon" aria-hidden="true">${icon('users',{size:19})}</span><span>Invitaciones a equipos</span>`;nav.insertBefore(button,notices||nav.lastElementChild);button.addEventListener('click',async()=>{setMenuOpen(false);const module=await import('../modules/profile-team.js');await module.openProfileTeamInbox();});}
+  notices?.addEventListener('click',async()=>{setMenuOpen(false);const module=await import('../modules/moderation-notices.js');await module.openModerationNotices();});
+  root.querySelectorAll('[data-kx-personal-nav]').forEach(button=>button.addEventListener('click',()=>{setMenuOpen(false);window.dispatchEvent(new CustomEvent('kx-personal-navigate',{detail:{target:button.dataset.kxPersonalNav}}));}));
+  toggle?.addEventListener('click',()=>setMenuOpen(!shell?.classList.contains('menu-open')));
+  root.querySelectorAll('[data-kx-personal-menu-close]').forEach(button=>button.addEventListener('click',()=>setMenuOpen(false,{restoreFocus:true})));
+  shell?.addEventListener('keydown',event=>{
+    if(!shell.classList.contains('menu-open'))return;
+    if(event.key==='Escape'){event.preventDefault();setMenuOpen(false,{restoreFocus:true});return;}
+    if(event.key!=='Tab')return;
+    const buttons=[...shell.querySelectorAll('.kx-personal-sidebar button')].filter(button=>button.getClientRects().length&&!button.disabled),first=buttons[0],last=buttons.at(-1);
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
   });
 }

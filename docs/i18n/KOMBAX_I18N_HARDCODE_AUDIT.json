@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-04T20:43:14.074Z",
+  "generated_at": "2026-10-05T17:42:09.961Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
-  "files_scanned": 121,
-  "system_ui_candidates": 2641,
+  "files_scanned": 126,
+  "system_ui_candidates": 2692,
   "target_block_1_system_ui_candidates": 558,
   "target_files": [
     "web/js/modules/gateway.js",
@@ -66,7 +66,7 @@
       "target_block_1": false
     },
     "web/js/core/backend.js": {
-      "system_ui": 44,
+      "system_ui": 45,
       "technical": 12,
       "user_content": 12,
       "target_block_1": false
@@ -125,6 +125,12 @@
       "user_content": 0,
       "target_block_1": false
     },
+    "web/js/core/member-enrollment.js": {
+      "system_ui": 3,
+      "technical": 0,
+      "user_content": 0,
+      "target_block_1": false
+    },
     "web/js/core/permissions.js": {
       "system_ui": 1,
       "technical": 0,
@@ -144,13 +150,13 @@
       "target_block_1": false
     },
     "web/js/core/profile-registry.js": {
-      "system_ui": 11,
+      "system_ui": 12,
       "technical": 0,
       "user_content": 0,
       "target_block_1": false
     },
     "web/js/core/repositories.js": {
-      "system_ui": 140,
+      "system_ui": 142,
       "technical": 18,
       "user_content": 18,
       "target_block_1": false
@@ -174,7 +180,7 @@
       "target_block_1": false
     },
     "web/js/core/utils.js": {
-      "system_ui": 50,
+      "system_ui": 59,
       "technical": 0,
       "user_content": 1,
       "target_block_1": false
@@ -312,8 +318,8 @@
       "target_block_1": false
     },
     "web/js/modules/finance-premium.js": {
-      "system_ui": 58,
-      "technical": 8,
+      "system_ui": 57,
+      "technical": 9,
       "user_content": 1,
       "target_block_1": true
     },
@@ -330,8 +336,8 @@
       "target_block_1": true
     },
     "web/js/modules/groups-members.js": {
-      "system_ui": 48,
-      "technical": 5,
+      "system_ui": 51,
+      "technical": 6,
       "user_content": 0,
       "target_block_1": false
     },
@@ -384,8 +390,8 @@
       "target_block_1": false
     },
     "web/js/modules/managed-profile-hub.js": {
-      "system_ui": 31,
-      "technical": 3,
+      "system_ui": 32,
+      "technical": 4,
       "user_content": 0,
       "target_block_1": false
     },
@@ -426,9 +432,15 @@
       "target_block_1": false
     },
     "web/js/modules/portal.js": {
-      "system_ui": 47,
+      "system_ui": 48,
       "technical": 3,
       "user_content": 1,
+      "target_block_1": false
+    },
+    "web/js/modules/professional-documents.js": {
+      "system_ui": 4,
+      "technical": 0,
+      "user_content": 0,
       "target_block_1": false
     },
     "web/js/modules/professional-finance.js": {
@@ -438,13 +450,25 @@
       "target_block_1": false
     },
     "web/js/modules/professional-operations.js": {
-      "system_ui": 30,
+      "system_ui": 31,
       "technical": 0,
       "user_content": 0,
       "target_block_1": false
     },
+    "web/js/modules/profile-operations.js": {
+      "system_ui": 14,
+      "technical": 1,
+      "user_content": 1,
+      "target_block_1": false
+    },
+    "web/js/modules/profile-team.js": {
+      "system_ui": 9,
+      "technical": 1,
+      "user_content": 0,
+      "target_block_1": false
+    },
     "web/js/modules/public-profile.js": {
-      "system_ui": 56,
+      "system_ui": 57,
       "technical": 7,
       "user_content": 0,
       "target_block_1": true
@@ -501,6 +525,12 @@
       "system_ui": 6,
       "technical": 0,
       "user_content": 2,
+      "target_block_1": false
+    },
+    "web/js/ui/member-enrollment-picker.js": {
+      "system_ui": 2,
+      "technical": 0,
+      "user_content": 0,
       "target_block_1": false
     },
     "web/js/ui/personal-navigation.js": {
@@ -2067,6 +2097,13 @@
       "sample": "catch(error){console.warn('Preferencia de idioma no persistida en cuenta:',humanError(error));return {ok:false,local_only:true};}"
     },
     {
+      "file": "web/js/core/backend.js",
+      "line": 593,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!response.ok)throw new Error('El documento no está disponible públicamente.');"
+    },
+    {
       "file": "web/js/core/commercial-pricing.js",
       "line": 28,
       "classification": "SYSTEM_UI_CANDIDATE",
@@ -2459,6 +2496,27 @@
       "sample": "video.onerror=()=>finish(null,new Error('El formato de vídeo no puede procesarse en este navegador. Usa MP4 H.264 o WEBM.'));"
     },
     {
+      "file": "web/js/core/member-enrollment.js",
+      "line": 8,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!group||group.disciplina_id!==disciplineId)throw new Error('Selecciona un grupo activo de la disciplina elegida.');"
+    },
+    {
+      "file": "web/js/core/member-enrollment.js",
+      "line": 9,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(enrollments.some(e=>e.socio_id===memberId&&e.grupo_id===groupId&&e.activa))throw new Error('El alumno ya tiene una matrícula activa en ese grupo.');"
+    },
+    {
+      "file": "web/js/core/member-enrollment.js",
+      "line": 17,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "group.replaceChildren(new Option(discipline.value?(rows.length?'Selecciona un grupo':'Sin grupos disponibles'):'Selecciona primero una disciplina',''));"
+    },
+    {
       "file": "web/js/core/permissions.js",
       "line": 15,
       "classification": "SYSTEM_UI_CANDIDATE",
@@ -2554,53 +2612,60 @@
       "line": 8,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{code:'promotor_organizador',name:'Promotor / Organizador'}"
+      "sample": "{code:'promotor_organizador',name:'Promotor / Organizador'},"
     },
     {
       "file": "web/js/core/profile-registry.js",
-      "line": 12,
+      "line": 9,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{id:'club',label:'Club',icon:'club',accent:'#E21D2D',description:'Gestiona tu club, tu equipo y tu comunidad desde un único espacio KOMBAX.',applicationOnly:true,benefits:['Perfil oficial','Gestión del club','Afiliaciones confirmadas']},"
-    },
-    {
-      "file": "web/js/core/profile-registry.js",
-      "line": 13,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "{id:'competidor',label:'Competidor',icon:'fighter',accent:'#E21D2D',description:'Tu identidad como peleador: trayectoria, categoría, club y oportunidades para competir.',benefits:['Identidad deportiva','Fight Cards','Trayectoria y oportunidades']},"
+      "sample": "{code:'psicologo_deportivo',name:'Psicólogo deportivo'},"
     },
     {
       "file": "web/js/core/profile-registry.js",
       "line": 14,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{id:'federacion',label:'Federación',icon:'federation',accent:'#F7F7F5',description:'Representa a tu federación, conecta con clubes y organiza su actividad dentro de KOMBAX.',benefits:['Perfil institucional','Clubes relacionados','Calendario y Events']},"
+      "sample": "{id:'club',label:'Club',icon:'club',accent:'#E21D2D',description:'Gestiona tu club, tu equipo y tu comunidad desde un único espacio KOMBAX.',applicationOnly:true,benefits:['Perfil oficial','Gestión del club','Afiliaciones confirmadas']},"
     },
     {
       "file": "web/js/core/profile-registry.js",
       "line": 15,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{id:'profesional',label:'Profesional',icon:'professional',accent:'#8F111B',description:'Presenta tu experiencia y servicios como entrenador, manager, sanitario, árbitro o promotor.',benefits:['Mi actividad','Servicios y agenda','Capacidades por especialidad']},"
+      "sample": "{id:'competidor',label:'Competidor',icon:'fighter',accent:'#E21D2D',description:'Tu identidad como peleador: trayectoria, categoría, club y oportunidades para competir.',benefits:['Identidad deportiva','Fight Cards','Trayectoria y oportunidades']},"
     },
     {
       "file": "web/js/core/profile-registry.js",
       "line": 16,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{id:'marca',label:'Marca',icon:'brand',accent:'#FF3B4D',description:'Da visibilidad a tu marca, productos y colaboraciones dentro del ecosistema KOMBAX.',benefits:['Marca oficial','Showcase','Equipo de gestores']},"
+      "sample": "{id:'federacion',label:'Federación',icon:'federation',accent:'#F7F7F5',description:'Representa a tu federación, conecta con clubes y organiza su actividad dentro de KOMBAX.',benefits:['Perfil institucional','Clubes relacionados','Calendario y Events']},"
     },
     {
       "file": "web/js/core/profile-registry.js",
       "line": 17,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "{id:'media',label:'Media / Creador',icon:'sparkles',accent:'#26D7C7',description:'Crea publicaciones y organiza tu material visual desde Mi contenido.',benefits:['Mi contenido','Publicar en Social','Identidad de medio o creador']},"
+      "sample": "{id:'profesional',label:'Profesional',icon:'professional',accent:'#8F111B',description:'Presenta tu experiencia y servicios como entrenador, manager, sanitario, árbitro o promotor.',benefits:['Mi actividad','Servicios y agenda','Capacidades por especialidad']},"
     },
     {
       "file": "web/js/core/profile-registry.js",
       "line": 18,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "{id:'marca',label:'Marca',icon:'brand',accent:'#FF3B4D',description:'Da visibilidad a tu marca, productos y colaboraciones dentro del ecosistema KOMBAX.',benefits:['Marca oficial','Showcase','Equipo de gestores']},"
+    },
+    {
+      "file": "web/js/core/profile-registry.js",
+      "line": 19,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "{id:'media',label:'Media / Creador',icon:'sparkles',accent:'#26D7C7',description:'Crea publicaciones y organiza tu material visual desde Mi contenido.',benefits:['Mi contenido','Publicar en Social','Identidad de medio o creador']},"
+    },
+    {
+      "file": "web/js/core/profile-registry.js",
+      "line": 20,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{id:'espectador',label:'Espectador',icon:'spectator',accent:'#A7ABB4',description:'Descubre KOMBAX, sigue la actividad del sector e interactúa con la comunidad.',baseOnly:true,benefits:['Ver Social, Showcase y Events','Likes, comentarios y compartir','Sin publicación propia hasta disponer de una identidad habilitada']}"
@@ -2873,112 +2938,105 @@
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 460,
+      "line": 461,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 461,
+      "line": 462,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deactivateEnrollment:(matricula_id)=>mutation('matricula.desactivar',{matricula_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 463,
+      "line": 464,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "archive:(socio_id,motivo='',fecha_baja=isoDate())=>mutation('alumno.archivar',{socio_id,motivo,fecha_baja}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 468,
+      "line": 469,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(socio_id)=>mutation('alumno.eliminar',{socio_id}), async forceDelete(socio_id){const out=await mutation('alumno.eliminar_forzado',{socio_id});await Promise.all([(out?.document_paths||[]).map(p=>backend.remove('member-documents',p).catch(()=>{})),(out?.payment_paths||[]).map(p=>backend.remove('justificantes-pago"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 472,
+      "line": 473,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "create:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:p.tipo_solicitud||'adulto',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.email_acceso||p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grup"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 473,
+      "line": 474,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "approve:(id)=>rpcWithFallback(()=>backend.writeRpc('app_kombax_preinscripcion_aprobar_r59',{p_preinscripcion_id:id}),()=>mutation('preinscripcion.aprobar',{preinscripcion_id:id}),'app_kombax_preinscripcion_aprobar_r59'), wait:(id,motivo)=>mutation('preinscripcion.espera',{preinscripcion_id:id,motivo:motivo||null}), rej"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 474,
+      "line": 475,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "cancel:(id,motivo)=>mutation('preinscripcion.cancelar',{preinscripcion_id:id,motivo:motivo||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 475,
+      "line": 476,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(id)=>mutation('preinscripcion.eliminar',{preinscripcion_id:id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 479,
+      "line": 480,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('tarifa.guardar',{id:p.id||null,nombre:p.nombre,descripcion:p.descripcion||'',importe:Number(p.importe||0),matricula:Number(p.matricula||0),periodicidad:p.periodicidad||'mensual',activa:p.activa!==false}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 480,
+      "line": 481,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(tarifa_id)=>mutation('tarifa.eliminar',{tarifa_id}), forceDelete:(tarifa_id)=>mutation('tarifa.eliminar_forzado',{tarifa_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 483,
+      "line": 484,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "fees:(limit=120)=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), payments:(limit=120)=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), receipts:(limit=120)=>read('recibos_cuota',`s"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 486,
+      "line": 487,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "detail:({year,month,socio,origin,status,limit=150}={})=>read('v_finanzas_detalle',`select=*&${filterClub()}${year?`&anio=eq.${enc(year)}`:''}${month?`&mes=eq.${enc(month)}`:''}${socio?`&socio_id=eq.${enc(socio)}`:''}${origin?`&origen=eq.${enc(origin)}`:''}${status?`&estado=eq.${enc(status)}`:''}&order=periodo.desc,venc"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 489,
+      "line": 490,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "generate:(periodo=monthStart())=>mutation('cuotas.generar',{periodo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 503,
+      "line": 504,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "annulReceipt:(recibo_id,motivo)=>mutation('recibo.anular',{recibo_id,motivo})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 515,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
-    },
-    {
-      "file": "web/js/core/repositories.js",
-      "line": 566,
+      "line": 516,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
@@ -2988,851 +3046,872 @@
       "line": 567,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 568,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "if(file.size>15*1024*1024)throw new Error('El documento supera el límite de 15 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 570,
+      "line": 571,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const uid=session()?.id;if(!uid)throw new Error('Sesión requerida.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 587,
+      "line": 588,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveSeries:(p)=>mutation('sesion.serie.guardar',{id:p.id||null,grupo_id:p.grupo_id,dias_semana:p.dias_semana||[],hora_inicio:p.hora_inicio,hora_fin:p.hora_fin||null,monitor_nombre:p.monitor_nombre||'',sala:p.sala||'',codigo_acceso:p.codigo_acceso||'',fecha_inicio:p.fecha_inicio||isoDate(),fecha_fin:p.fecha_fin||null,ac"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 590,
+      "line": 591,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "exception:(p)=>mutation('sesion.excepcion.guardar',{sesion_id:p.sesion_id,estado:p.estado||null,monitor_nombre:p.monitor_nombre||null,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,sala:p.sala||null,motivo:p.motivo||'',observacion_general:p.observacion_general||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 591,
+      "line": 592,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('sesion.guardar',{id:p.id||null,grupo_id:p.grupo_id,fecha:p.fecha,hora_inicio:p.hora_inicio,hora_fin:p.hora_fin||null,monitor_nombre:p.monitor_nombre||'',estado:p.estado||'programada',observacion_general:p.observacion_general||'',codigo_acceso:p.codigo_acceso||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 595,
+      "line": 596,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "cancelReservation:(sesion_id,socio_id)=>mutation('sesion.reserva.cancelar',{sesion_id,socio_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 596,
+      "line": 597,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveAttendance:(p)=>mutation('asistencia.guardar',{sesion_id:p.sesion_id,socio_id:p.socio_id,estado:p.estado,observacion:p.observacion||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 598,
+      "line": 599,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "delete:(sesion_id)=>mutation('sesion.eliminar',{sesion_id}), forceDelete:(sesion_id)=>mutation('sesion.eliminar_forzado',{sesion_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 605,
+      "line": 606,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('seguimiento.guardar',{socio_id:p.socio_id,tipo:p.tipo,nota:p.nota,visibilidad:p.visibilidad||'equipo',fecha:p.fecha||isoDate()})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 610,
+      "line": 611,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('publicacion.guardar',{id:p.id||null,tipo:p.tipo||'noticia',titulo:p.titulo,cuerpo:p.cuerpo,audiencia:p.audiencia||'todos',estado:p.estado||'borrador',evento_fecha:p.evento_fecha||null,ubicacion:p.ubicacion||'',imagen_url:p.imagen_url||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 611,
+      "line": 612,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(publicacion_id){const out=await mutation('publicacion.eliminar',{publicacion_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 620,
+      "line": 621,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('material.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,categoria:p.categoria||'',descripcion:p.descripcion||'',imagen_url:p.imagen_url||'',precio:Number(p.precio||0),stock:Number(p.stock||0),obligatorio:p.obligatorio===true,referencia:p.referencia||'',activo:p.activo!=="
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 621,
+      "line": 622,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveVariant:(p)=>mutation('material.variante.guardar',{id:p.id||null,material_id:p.material_id,talla:p.talla||'',color:p.color||'',referencia:p.referencia||'',stock:Number(p.stock||0),activa:p.activa!==false}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 622,
+      "line": 623,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "request:(p)=>mutation('material.solicitar',{socio_id:p.socio_id,material_id:p.material_id,variante_id:p.variante_id||null,cantidad:Number(p.cantidad||1),observaciones:p.observaciones||'',validar_ahora:p.validar_ahora===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 623,
+      "line": 624,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "orderStatus:(pedido_id,estado)=>mutation('material.pedido.estado',{pedido_id,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 624,
+      "line": 625,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(material_id){const out=await mutation('material.eliminar',{material_id});if(out?.imagen_url)await removePublicImage(out.imagen_url).catch(()=>{});return out;}, async forceDelete(material_id){const out=await mutation('material.eliminar_forzado',{material_id});if(out?.imagen_url)await removePublicImage(out.i"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 639,
+      "line": 640,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "members:(limit=150)=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&rol=in.(direccion,secretaria,economia,comunicacion,monitor)&order=creado_en&limit=${Math.min(300,Math.max(30,Number(limit)||150))}`),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 641,
+      "line": 642,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "resolveTeamRequest:(id,estado,rol=null,nota='')=>backend.writeRpc('app_kombax_solicitud_equipo_resolver_v060',{p_solicitud_id:id,p_estado:estado,p_rol:rol,p_nota:nota||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 644,
+      "line": 645,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "createStudentInvitation:(email,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:'alumno',p_email:String(email||'').trim().toLowerCase(),p_rol:null,p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 663,
+      "line": 664,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!out?.ok||out.request_id!==requestId)throw new Error('Respuesta de ámbitos no verificable.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 670,
+      "line": 671,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async list({tipo='',estado='',desde='',hasta='',limit=150}={}){await this.maintenance().catch(()=>null);return backend.readRpc('app_ciclo_listar_v038',{p_club_id:session()?.club_id,p_tipo:tipo||null,p_estado:estado||null,p_desde:desde||null,p_hasta:hasta||null,p_limit:Math.min(300,Math.max(20,Number(limit)||150))});},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 671,
+      "line": 672,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async listPage({tipo='',estado='',desde='',hasta='',limit=10,offset=0}={}){await this.maintenance().catch(()=>null);return backend.readRpc('app_ciclo_listar_page_r89',{p_club_id:session()?.club_id,p_tipo:tipo||null,p_estado:estado||null,p_desde:desde||null,p_hasta:hasta||null,p_limit:Math.min(50,Math.max(1,Number(limit"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 692,
+      "line": 693,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "fees:()=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=180`),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 695,
+      "line": 696,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "communications:()=>read('comunicaciones',`select=*&${filterClub()}&ciclo_estado=eq.activo&estado=in.(publicada,programada)&order=publicada_en.desc,creado_en.desc&limit=200`),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 697,
+      "line": 698,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestMinor:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:'menor',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 698,
+      "line": 700,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestEnrollment:(socio_id,disciplina_id,grupo_id,tarifa_id)=>mutation('matricula.solicitar',{socio_id,disciplina_id,grupo_id,tarifa_id:tarifa_id||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 700,
+      "line": 702,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "cancelSessionReservation:(sesion_id,socio_id)=>mutation('sesion.reserva.cancelar',{sesion_id,socio_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 704,
+      "line": 706,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "club:()=>cachedRead('settings:club',()=>read('clubes',`select=*&id=eq.${enc(session()?.club_id)}&limit=1`),60000), config:()=>cachedRead('settings:config',()=>read('config_club',`select=*&${filterClub()}`),60000),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 709,
+      "line": 711,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveClub:(p)=>mutation('club.configurar',p), profile:(p)=>mutation('perfil.guardar',{nombre:p.nombre||'',apellidos:p.apellidos||'',telefono:p.telefono||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 710,
+      "line": 712,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "async uploadAvatar(file){if(!file||!file.size)throw new Error('Selecciona una imagen.');if(file.size>5*1024*1024)throw new Error('La foto supera 5 MB.');if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Usa JPG, PNG o WEBP.');const ext=file.type==='image/png'?'png':file.type==='image/webp"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 711,
+      "line": 713,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async removeAvatar(){const out=await mutation('perfil.avatar',{avatar_path:null});if(out?.old_avatar_path)await backend.remove('profile-media',out.old_avatar_path).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 716,
+      "line": 718,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('club_publico.guardar',{slug:p.slug,nombre_publico:p.nombre_publico,alias:p.alias||'',lema:p.lema||'',descripcion:p.descripcion||'',historia:p.historia||'',ciudad:p.ciudad||'',provincia:p.provincia||'',pais:p.pais||'España',logros:p.logros||'',contacto_publico:p.contacto_publico||'',web_publica:p.web"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 731,
+      "line": 733,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('perfil_deportivo.guardar',{socio_id:p.socio_id,apodo:p.apodo||'',presentacion:p.presentacion||'',experiencia_anos:p.experiencia_anos===''||p.experiencia_anos==null?null:Number(p.experiencia_anos),guardia:p.guardia||'',tecnica_favorita:p.tecnica_favorita||'',especialidad:p.especialidad||'',categoria_"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 734,
+      "line": 736,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona una imagen.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 756,
+      "line": 758,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async list({query='',tipo='',estado='',limit=24}={}){const rows=await rpcWithFallback(()=>backend.globalReadRpc('app_kombax_eventos_publicos_v178',{p_query:query||'',p_tipo:tipo||null,p_estado:estado||null,p_limit:Math.min(100,Math.max(1,Number(limit)||24))}),()=>backend.globalReadRpc('app_kombax_eventos_publicos_v173'"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 758,
+      "line": 760,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async listPage({query='',tipo='',estado='',phase='',cursor=null,limit=24}={}){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 760,
+      "line": 762,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const out=await backend.globalReadRpc('app_kombax_eventos_visible_page_v236',{p_query:String(query||'').trim(),p_tipo:tipo||null,p_estado:estado||null,p_phase:phase||null,p_cursor_bucket:cursor?.bucket??null,p_cursor_fecha:cursor?.fecha||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(48,Math.max(1,Number(limit)||24"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 765,
+      "line": 767,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const out=await backend.globalReadRpc('app_kombax_eventos_publicos_page_v191',{p_query:String(query||'').trim(),p_tipo:tipo||null,p_estado:estado||null,p_phase:phase||null,p_cursor_bucket:cursor?.bucket??null,p_cursor_fecha:cursor?.fecha||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(48,Math.max(1,Number(limit)||2"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 769,
+      "line": 771,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const items=await this.list({query,tipo,estado,limit});return {items:Array.isArray(items)?items:[],has_more:false,next_cursor:null,keyset:false};"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 785,
+      "line": 787,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return {...event,main_event:bundled.main_event||null,entities:bundled.entities||[],participants,participants_count:Number(bundled.participants_count??participants.length),participants_accepted_count:Number(bundled.participants_accepted_count??participants.filter(x=>x.estado_inscripcion==='aceptada').length),participant"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 817,
+      "line": 819,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const items=await this.participants(id);return {items,total_count:items.length,accepted_count:items.filter(x=>x.estado_inscripcion==='aceptada').length,pending_count:items.filter(x=>x.estado_inscripcion==='pendiente').length,has_more:false,next_cursor:null};"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 868,
+      "line": 870,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
-    },
-    {
-      "file": "web/js/core/repositories.js",
-      "line": 869,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(!evento_id)throw new Error('Guarda primero el evento.');"
-    },
-    {
-      "file": "web/js/core/repositories.js",
-      "line": 870,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
-      "target_block_1": false,
-      "sample": "if(!['cartel','banner'].includes(kind))throw new Error('Tipo visual no válido.');"
     },
     {
       "file": "web/js/core/repositories.js",
       "line": 871,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "if(!evento_id)throw new Error('Guarda primero el evento.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 872,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "if(!['cartel','banner'].includes(kind))throw new Error('Tipo visual no válido.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 873,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona una imagen.');"
-    },
-    {
-      "file": "web/js/core/repositories.js",
-      "line": 881,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
-    },
-    {
-      "file": "web/js/core/repositories.js",
-      "line": 882,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(!evento_id)throw new Error('Evento no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
       "line": 883,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(!file?.size)throw new Error('Selecciona una imagen.');"
+      "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 895,
+      "line": 884,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "respondInvitation:(entity_id,aceptar)=>kombaxEventsMutation('event.entity.respond',{entity_id,aceptar:aceptar===true}),"
+      "sample": "if(!evento_id)throw new Error('Evento no disponible.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 885,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!file?.size)throw new Error('Selecciona una imagen.');"
     },
     {
       "file": "web/js/core/repositories.js",
       "line": 897,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "respondInvitation:(entity_id,aceptar)=>kombaxEventsMutation('event.entity.respond',{entity_id,aceptar:aceptar===true}),"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 899,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "setParticipantStatus:(participant_id,estado)=>kombaxEventsMutation('event.participant.status',{participant_id,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 903,
+      "line": 905,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setInterest:(evento_id,estado='interesado',notificaciones=true)=>kombaxEventsMutation('event.interest.set',{evento_id,estado,notificaciones:notificaciones===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 905,
+      "line": 907,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "async uploadMedia(evento_id,file,{tipo='',combate_id=null,competidor_social_profile_id=null,titulo='',descripcion='',destacado=false,allow_download=false,orden=0,estado='visible',momento='evento',onProgress=null}={}){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 906,
+      "line": 908,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona una foto o vídeo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 910,
+      "line": 912,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(file.size>(isVideo?100:10)*1024*1024)throw new Error(isVideo?'El vídeo supera 100 MB.':'La imagen supera 10 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 922,
+      "line": 924,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "const data=await kombaxEventsMutation('event.media.register',{media_id:mediaId,evento_id,tipo:tipo||(isVideo?'clip':'foto'),combate_id,competidor_social_profile_id,storage_path:path,mime_type:prepared.mime||prepared.file.type||file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prep"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 944,
+      "line": 946,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "registerExternalVideo:(evento_id,external_url,{combate_id=null,competidor_social_profile_id=null,titulo='',descripcion='',destacado=false,orden=0,estado='visible',momento='evento'}={})=>kombaxEventsMutation('event.media.register',{media_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`,ev"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 945,
+      "line": 947,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "addMediaReference:(evento_id,{source_kind,source_id=null,titulo='',momento='evento'}={})=>kombaxEventsMutation('event.media.reference.add',{evento_id,source_kind,source_id,titulo,momento}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 947,
+      "line": 949,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async setVideoCover(evento_id,media,file,{presentation={},mode='upload',time=0}={}){const out=await storeEventVideoCoverWithRetry(evento_id,media.id,file,{presentation,mode,time,attempts:3});if(out.status!=='ready')throw out.error||new Error('La portada quedó pendiente de regeneración.');return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 948,
+      "line": 950,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "async uploadDemoMedia(evento_id,file,{media_id,titulo='',descripcion='',destacado=false,orden=0,momento='evento'}={}){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 957,
+      "line": 959,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "return await backend.globalWriteRpc('app_kombax_eventos_mutate_v175',{p_operation:'event.media.register',p_payload:{media_id,evento_id,tipo:'foto',storage_path:path,mime_type:prepared.mime||prepared.file.type||file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 975,
+      "line": 977,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "save:(p)=>mutation('evento.guardar',{id:p.id||null,disciplina_id:p.disciplina_id||null,nombre:p.nombre,descripcion:p.descripcion||'',fecha:p.fecha,hora_inicio:p.hora_inicio||null,hora_fin:p.hora_fin||null,lugar:p.lugar||'',organizador:p.organizador||'',fecha_limite_inscripcion:p.fecha_limite_inscripcion||null,estado:p."
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 976,
+      "line": 978,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setStatus:(evento_id,estado)=>mutation('evento.estado',{evento_id,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 977,
+      "line": 979,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveExternal:(p)=>mutation('evento.participante.externo',{id:p.id||null,evento_id:p.evento_id,nombre:p.nombre,apellidos:p.apellidos||'',club_origen:p.club_origen||'',disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',peso:p.peso===''||p.peso==null?null:Number(p.peso),grado_texto:p.grado_texto"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 978,
+      "line": 980,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "requestRegistration:(p)=>mutation('evento.inscripcion.solicitar',{evento_id:p.evento_id,socio_id:p.socio_id,disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',peso:p.peso===''||p.peso==null?null:Number(p.peso),grado_texto:p.grado_texto||'',observaciones:p.observaciones||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 979,
+      "line": 981,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setRegistrationStatus:(participante_id,estado,observaciones='')=>mutation('evento.inscripcion.estado',{participante_id,estado,observaciones}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 980,
+      "line": 982,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "withdraw:(participante_id,observaciones='')=>mutation('evento.inscripcion.baja',{participante_id,observaciones}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 981,
+      "line": 983,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "saveFight:(p)=>mutation('evento.combate.guardar',{id:p.id||null,evento_id:p.evento_id,participante_a_id:p.participante_a_id,participante_b_id:p.participante_b_id,disciplina_texto:p.disciplina_texto||'',categoria_texto:p.categoria_texto||'',tatami_ring:p.tatami_ring||'',orden:p.orden===''||p.orden==null?null:Number(p.or"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 982,
+      "line": 984,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deleteFight:(combate_id)=>mutation('evento.combate.eliminar',{combate_id})"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 994,
+      "line": 996,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "async upload(file){if(!file||!file.size)throw new Error('Selecciona una imagen o vídeo.');const isVideo=String(file.type||'').startsWith('video/');const allowedImage=['image/jpeg','image/png','image/webp'];const allowedVideo=['video/mp4','video/webm','video/quicktime'];if(!(isVideo?allowedVideo:allowedImage).includes(f"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 996,
+      "line": 998,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "publish:(p)=>mutation('comunidad.publicar',{texto:p.texto||'',media_path:p.media_path,media_tipo:p.media_tipo,duracion_segundos:p.duracion_segundos||null,media_mime:p.media_mime||null,media_width:p.media_width||null,media_height:p.media_height||null,media_size_bytes:p.media_size_bytes||null,portada_automatica_path:p.po"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 997,
+      "line": 999,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(publicacion_id){const out=await mutation('comunidad.eliminar',{publicacion_id});for(const path of [...new Set([out?.media_path,out?.portada_automatica_path,out?.portada_manual_path].filter(Boolean))])await backend.remove('community-media',path).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1002,
+      "line": 1004,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "block:(perfil_id,bloquear=true)=>mutation('comunidad.bloquear',{perfil_id,bloquear:bloquear===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1003,
+      "line": 1005,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "report:(objetivo_tipo,objetivo_id,motivo,detalle='',ambito='club')=>mutation('comunidad.denunciar',{objetivo_tipo,objetivo_id,motivo,detalle,ambito}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1005,
+      "line": 1007,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reportStatus:(reporte_id,estado,{resolucion='',ocultar_publicacion=false}={})=>mutation('comunidad.denuncia.estado',{reporte_id,estado,resolucion,ocultar_publicacion:ocultar_publicacion===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1022,
+      "line": 1025,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!authorized)throw new Error('Confirma que deseas publicar esta copia del documento.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 1026,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1023,
+      "line": 1035,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
+    },
+    {
+      "file": "web/js/core/repositories.js",
+      "line": 1036,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!profileId||!credentialId)throw new Error('Credencial profesional no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1024,
+      "line": 1037,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona un documento de acreditación.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1053,
+      "line": 1072,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070','kombax.profile.manager.set',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),"
+      "sample": "setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070',estado==='revocado'?'kombax.profile.manager.remove':'kombax.profile.manager.add',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1063,
+      "line": 1082,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "contactClub:(club_id,mensaje,request_kind='member',target_socio_id=null)=>backend.globalWriteRpc('app_kombax_club_link_request_r117',{p_club_id:club_id,p_request_kind:request_kind,p_mensaje:String(mensaje||'').trim(),p_target_socio_id:target_socio_id||null}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1078,
+      "line": 1097,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!session()?.id)throw new Error('Inicia sesión en KOMBAX.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1079,
+      "line": 1098,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!licenseId)throw new Error('Licencia no disponible.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1080,
+      "line": 1099,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file?.size)throw new Error('Selecciona un documento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1095,
+      "line": 1114,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "moderateAccess:(perfil_id,estado,motivo)=>mutation('comunidad_general.moderar_acceso',{perfil_id,estado,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1140,
+      "line": 1159,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const albumScope=type==='club'?'club_media':type==='miembro'?'social_media':'profile_media';"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1144,
+      "line": 1163,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(type==='miembro'){"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1147,
+      "line": 1166,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const avatar=media.find(x=>x.tipo==='avatar'&&x.estado==='active');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1153,
+      "line": 1172,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const avatar=media.find(x=>x.tipo==='avatar'&&x.estado==='active');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1180,
+      "line": 1199,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "publish:(autor_perfil_id,tipo,texto,options={})=>kombaxSocialMutation('kombax.social.publicar',{autor_perfil_id,tipo,texto,comentarios_estado:options.comentarios_estado||'open',social_media_id:options.social_media_id||null,audiencia:options.audiencia||'publica',audiencia_club_id:options.audiencia_club_id||null,audienci"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1200,
+      "line": 1219,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deletePost:async(publicacion_id)=>{const out=await kombaxSocialMutation('kombax.social.eliminar',{publicacion_id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1207,
+      "line": 1226,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "block:(perfil_social_id,bloquear=true)=>kombaxSocialMutation('kombax.social.bloquear',{perfil_social_id,bloquear:bloquear===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1208,
+      "line": 1227,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "contact:(remitente_social_id,destinatario_social_id,motivo,mensaje)=>kombaxSocialNetworkMutation('kombax.contact.request',{remitente_social_id,destinatario_social_id,motivo,mensaje}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1209,
+      "line": 1228,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "showcaseContact:(remitente_social_id,elemento_id,mensaje)=>kombaxSocialNetworkMutation('kombax.showcase.contact.request',{remitente_social_id,elemento_id,mensaje}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1210,
+      "line": 1229,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "contactStatus:async(contacto_id,estado)=>{const out=await kombaxSocialMutation('kombax.social.contacto.estado',{contacto_id,estado});window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1216,
+      "line": 1235,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "report:(objetivo_tipo,objetivo_id,motivo,detalle='')=>kombaxSocialMutation('kombax.social.denunciar',{objetivo_tipo,objetivo_id,motivo,detalle}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1220,
+      "line": 1239,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "decideMinorConsent:(consent_id,estado)=>{const requestId=crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;return backend.globalWriteRpc('app_kombax_social_minor_consent_mutate_v121',{p_operation:'kombax.social.minor.consent.decide',p_payload:{consent_id,estado},p_request_id:requestId});},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1222,
+      "line": 1241,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "moderate:(reporte_id,estado,resolucion='',accion='ninguna')=>kombaxSocialMutation('kombax.social.moderar',{reporte_id,estado,resolucion,accion}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1224,
+      "line": 1243,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "save:(publicacion_id,activo=true)=>kombaxSocialMutation('kombax.social.guardar',{publicacion_id,activo:activo===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1227,
+      "line": 1246,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "removeComment:(comentario_id,motivo='')=>kombaxSocialMutation('kombax.social.comentario.eliminar',{comentario_id,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1231,
+      "line": 1250,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "relationState:async(relacion_id,estado)=>{const args={p_relacion_id:relacion_id,p_estado:estado,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`};const out=await rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_relation_state_v255',args),()=>kombaxGlobalMutation('app_komb"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1237,
+      "line": 1256,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "toggleSaved:(elemento_id,activo=true)=>kombaxShowcaseMutation(activo?'kombax.showcase.guardar':'kombax.showcase.desguardar',{elemento_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1240,
+      "line": 1259,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveBrand:(payload)=>kombaxShowcaseMutation('kombax.showcase.marca.guardar',payload),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1241,
+      "line": 1260,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "brandState:(marca_id,estado,verificada=false)=>kombaxShowcaseMutation('kombax.showcase.marca.estado',{marca_id,estado,verificada:verificada===true}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1242,
+      "line": 1261,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "saveItem:(payload)=>kombaxShowcaseMutation('kombax.showcase.elemento.guardar',payload),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1245,
+      "line": 1264,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "itemState:(elemento_id,estado,options={})=>kombaxShowcaseMutation('kombax.showcase.elemento.estado',{elemento_id,estado,destacado:options.destacado===true,etiqueta_destacada:options.etiqueta_destacada||''}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1254,
+      "line": 1273,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deleteItem:async(elemento_id)=>{const out=await kombaxShowcaseMutation('kombax.showcase.elemento.eliminar',{elemento_id});if(out?.deleted===true)await removeOwnedShowcaseImages([out?.imagen_url,...(Array.isArray(out?.galeria)?out.galeria:[])]);return out;},"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1255,
+      "line": 1274,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "inquiryRequest:(elemento_id,mensaje)=>backend.globalWriteRpc('app_kombax_showcase_inquiry_request_r58',{p_elemento_id:elemento_id,p_mensaje:String(mensaje||'').trim()}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1259,
+      "line": 1278,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "inquirySend:(inquiry_id,mensaje)=>backend.globalWriteRpc('app_kombax_showcase_inquiry_send_r58',{p_inquiry_id:inquiry_id,p_mensaje:String(mensaje||'').trim()}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1365,
+      "line": 1384,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const allowed=new Set(Object.values(mimeByExt));const input=[...(files||[])];if(!input.length)throw new Error('Selecciona al menos un archivo para la migración.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1369,
+      "line": 1388,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!mime)throw new Error(`Formato no admitido: ${file?.name||'archivo'}.`);if(!file?.size||file.size>10*1024*1024)throw new Error(`El archivo ${file?.name||''} supera el límite de 10 MB.`);"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1397,
+      "line": 1416,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reviewApplication:(solicitud_id,estado,motivo='')=>kombaxGlobalMutation('app_kombax_perfil_mutate_v196','kombax.application.review',{solicitud_id,estado,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1399,
+      "line": 1418,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setProfileService:(perfil_directo_id,plan_codigo,estado='activa')=>kombaxGlobalMutation('app_kombax_subscription_mutate_v071','kombax.subscription.set',{perfil_directo_id,plan_codigo,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1411,
+      "line": 1430,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1416,
+      "line": 1435,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const uid=String(session()?.id||'');if(!uid)throw new Error('La sesión Owner ha caducado.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1437,
+      "line": 1456,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "entityStatus:(entity_session_id,payload)=>kombaxGlobalMutation('app_kombax_platform_entity_mutate_v114',payload?.estado?'kombax.admin.entity.moderation.set':'kombax.admin.entity.status.set',{...payload,entity_session_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1438,
+      "line": 1457,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deletionQueue:(estado=null,limit=50)=>backend.globalReadRpc('app_kombax_deletion_queue_v119',{p_estado:estado,p_limit:limit}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1439,
+      "line": 1458,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reviewDeletion:(solicitud_id,estado,resolucion='',nota_retencion='')=>kombaxGlobalMutation('app_kombax_eliminacion_mutate_v047','kombax.deletion.review',{solicitud_id,estado,resolucion,nota_retencion}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1471,
+      "line": 1490,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "accept:(tipo,version='2.0.0',aceptado=true,socio_id=null)=>mutation('legal.aceptar',{tipo,version,aceptado,socio_id,user_agent:navigator.userAgent}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1477,
+      "line": 1496,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un archivo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1478,
+      "line": 1497,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(file.size>10*1024*1024)throw new Error('El archivo supera el límite de 10 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1487,
+      "line": 1506,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(meta.reemplaza_id){await mutation('documento.archivar',{documento_id:meta.reemplaza_id,estado:'sustituido',reemplazado_por:created.id});}"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1492,
+      "line": 1511,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "archive:(documento_id,estado='archivado',reemplazado_por=null)=>mutation('documento.archivar',{documento_id,estado,reemplazado_por}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1493,
+      "line": 1512,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(documento_id){const out=await mutation('documento.eliminar',{documento_id});if(out?.storage_path)await backend.remove('member-documents',out.storage_path).catch(()=>{});return out;},"
@@ -4091,315 +4170,378 @@
     },
     {
       "file": "web/js/core/utils.js",
+      "line": 68,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/MEMBER_GROUP_DISCIPLINE_MISMATCH|El grupo no pertenece a la disciplina/i.test(raw))return 'El grupo elegido no corresponde a esa disciplina. Selecciona un grupo de la disciplina correcta.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 69,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/MEMBER_GRADE_DISCIPLINE_MISMATCH|El grado no pertenece a la disciplina/i.test(raw))return 'El grado corresponde a otra disciplina. Revisa el grado de esta matrícula.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 70,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/MEMBER_GROUP_FULL|No quedan plazas disponibles|El grupo está completo/i.test(raw))return 'El grupo está completo. Escoge otro grupo o consulta al club antes de confirmar la matrícula.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
       "line": 71,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_BASE_VERIFICATION_REQUIRED/i.test(raw))return 'Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.';"
+      "sample": "if(/MEMBER_OR_AUTHORIZED_TUTOR_REQUIRED/i.test(raw))return 'Solo el alumno o su tutor autorizado pueden solicitar nuevas matrículas de esta ficha.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 72,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_ACCOUNT_BIRTH_DATE_REQUIRED/i.test(raw))return 'Indica tu fecha de nacimiento para crear la cuenta KOMBAX.';"
+      "sample": "if(/MEMBER_CONTEXT_MISMATCH|MEMBER_ADMIN_REQUIRED/i.test(raw))return 'No tienes autorización para modificar esta ficha en este club.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 73,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_ACCOUNT_BIRTH_DATE_INVALID/i.test(raw))return 'La fecha de nacimiento no es válida. Revísala e inténtalo de nuevo.';"
+      "sample": "if(/MEMBER_DISCIPLINE_INVALID|Disciplina no válida o inactiva/i.test(raw))return 'La disciplina no está activa en este club. Selecciona una disciplina disponible.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 74,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_MINOR_MUST_USE_TUTOR_FLOW/i.test(raw))return 'Si eres menor de 16 años, utiliza el alta mediante padre, madre o tutor.';"
-    },
-    {
-      "file": "web/js/core/utils.js",
-      "line": 75,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(/KOMBAX_TUTOR_MIN_AGE_18/i.test(raw))return 'La cuenta de padre, madre o tutor debe pertenecer a una persona de 18 años o más.';"
+      "sample": "if(/VERIFIED_ACTIVE_SERVICE_AND_FINANCE_REQUIRED|VERIFIED_ACTIVE_SERVICE_REQUIRED/i.test(raw))return 'Necesitas verificar esta identidad y activar el servicio correspondiente para realizar esta operación.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 76,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_MEMBER_INDEPENDENT_MIN_AGE_16/i.test(raw))return 'El Perfil Social independiente de Miembro/Practicante está disponible a partir de los 16 años. Para menores, utiliza la vinculación familiar o del club.';"
+      "sample": "if(/PRIVATE_OPERATIONS_REQUIRED|PROFILE_ACCESS_REQUIRED|FINANCE_CORRECTION_ONLY/i.test(raw))return 'Tu acceso a esta identidad no permite realizar esa operación privada.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 77,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_POSSIBLE_IMPORTED_MEMBER_REVIEW_REQUIRED|KOMBAX_EXISTING_MEMBER_EMAIL_USE_EXISTING_RECORD/i.test(raw))return 'Hemos encontrado una ficha del Club que podría corresponder a esta persona. Revisa la ficha existente y vincúlala en lugar de crear un duplicado.';"
-    },
-    {
-      "file": "web/js/core/utils.js",
-      "line": 78,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(/KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT_EMAIL|KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT/i.test(raw))return 'Ya existe una solicitud de vinculación pendiente para esta persona. Revisa la solicitud existente antes de crear otra.';"
-    },
-    {
-      "file": "web/js/core/utils.js",
-      "line": 79,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(/user already registered|already been registered|email.*already.*registered|email.*already.*exists/i.test(raw))return 'Ya existe una cuenta KOMBAX con este correo. Inicia sesión o recupera tu contraseña.';"
-    },
-    {
-      "file": "web/js/core/utils.js",
-      "line": 80,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(/database error saving new user/i.test(raw))return 'No se pudo crear la cuenta. Revisa la fecha de nacimiento y los datos obligatorios e inténtalo de nuevo.';"
+      "sample": "if(/CAMPAIGN_CONTEXT_MISMATCH/i.test(raw))return 'La campaña seleccionada no pertenece a esta identidad.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 81,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/SELLER_APPLICATION_DATA_INCOMPLETE/i.test(raw))return 'Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos.';"
+      "sample": "if(/KOMBAX_BASE_VERIFICATION_REQUIRED/i.test(raw))return 'Primero debe verificarse la identidad del club en KOMBAX. Puedes preparar el catálogo, pero todavía no activar la venta directa.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 82,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/SELLER_DECLARATIONS_REQUIRED/i.test(raw))return 'Acepta las dos declaraciones de vendedor antes de enviar la solicitud.';"
+      "sample": "if(/KOMBAX_ACCOUNT_BIRTH_DATE_REQUIRED/i.test(raw))return 'Indica tu fecha de nacimiento para crear la cuenta KOMBAX.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 83,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/SELLER_SHIPPING_MODE_REQUIRED/i.test(raw))return 'Selecciona al menos una forma de entrega para tus productos.';"
+      "sample": "if(/KOMBAX_ACCOUNT_BIRTH_DATE_INVALID/i.test(raw))return 'La fecha de nacimiento no es válida. Revísala e inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 84,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/invalid\\s*refresh\\s*token|refresh\\s*token\\s*(?:not\\s*found|invalid|expired)|refresh_token_not_found|jwt.*expired|token.*expired/i.test(raw))return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';"
+      "sample": "if(/KOMBAX_MINOR_MUST_USE_TUTOR_FLOW/i.test(raw))return 'Si eres menor de 16 años, utiliza el alta mediante padre, madre o tutor.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 85,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/failed to fetch|networkerror|network request failed|load failed|internet|timeout|tiempo de espera|aborterror/i.test(raw))return 'No se pudo conectar. Comprueba tu conexión a Internet e inténtalo de nuevo.';"
+      "sample": "if(/KOMBAX_TUTOR_MIN_AGE_18/i.test(raw))return 'La cuenta de padre, madre o tutor debe pertenecer a una persona de 18 años o más.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 86,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_MEMBER_INDEPENDENT_MIN_AGE_16/i.test(raw))return 'El Perfil Social independiente de Miembro/Practicante está disponible a partir de los 16 años. Para menores, utiliza la vinculación familiar o del club.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 87,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/invalid login credentials|invalid credentials|email or password|wrong password|bad password/i.test(raw))return 'El correo o la contraseña no son correctos.';"
+      "sample": "if(/KOMBAX_POSSIBLE_IMPORTED_MEMBER_REVIEW_REQUIRED|KOMBAX_EXISTING_MEMBER_EMAIL_USE_EXISTING_RECORD/i.test(raw))return 'Hemos encontrado una ficha del Club que podría corresponder a esta persona. Revisa la ficha existente y vincúlala en lugar de crear un duplicado.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 88,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/otp|one.?time|token|code.*expired|expired.*code|invalid.*code/i.test(raw)&&!/codigo|código/i.test(raw))return 'El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.';"
+      "sample": "if(/KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT_EMAIL|KOMBAX_DUPLICATE_PENDING_PRE_ENROLLMENT/i.test(raw))return 'Ya existe una solicitud de vinculación pendiente para esta persona. Revisa la solicitud existente antes de crear otra.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 89,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/FINANCE_PAYMENT_ALREADY_COVERED/i.test(raw))return 'Esta cuota ya está completamente pagada. Revisa o rechaza el pago pendiente duplicado; no puede validarse otro cobro.';"
+      "sample": "if(/user already registered|already been registered|email.*already.*registered|email.*already.*exists/i.test(raw))return 'Ya existe una cuenta KOMBAX con este correo. Inicia sesión o recupera tu contraseña.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 90,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/FINANCE_PAYMENT_EXCEEDS_REMAINING/i.test(raw))return 'El importe supera el saldo pendiente de esta cuota. Revisa el importe antes de continuar.';"
+      "sample": "if(/database error saving new user/i.test(raw))return 'No se pudo crear la cuenta. Revisa la fecha de nacimiento y los datos obligatorios e inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 91,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/FINANCE_PAYMENT_DUPLICATE/i.test(raw))return 'Ya existe un pago prácticamente idéntico registrado hace unos instantes. Revisa la lista antes de repetirlo.';"
+      "sample": "if(/SELLER_APPLICATION_DATA_INCOMPLETE/i.test(raw))return 'Revisa los datos de vendedor: domicilio, teléfono, identificación fiscal y correo de atención deben estar completos.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 92,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/FINANCE_PAYMENT_ALREADY_REVIEWED/i.test(raw))return 'Este pago ya fue revisado y no puede volver a validarse.';"
+      "sample": "if(/SELLER_DECLARATIONS_REQUIRED/i.test(raw))return 'Acepta las dos declaraciones de vendedor antes de enviar la solicitud.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 93,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/FINANCE_DOCUMENT_REASON_REQUIRED/i.test(raw))return 'Indica el motivo antes de archivar o enviar documentación financiera a la papelera.';"
+      "sample": "if(/SELLER_SHIPPING_MODE_REQUIRED/i.test(raw))return 'Selecciona al menos una forma de entrega para tus productos.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 94,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/invalid\\s*refresh\\s*token|refresh\\s*token\\s*(?:not\\s*found|invalid|expired)|refresh_token_not_found|jwt.*expired|token.*expired/i.test(raw))return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 95,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/FINANCE_CHARGE_DUPLICATE/i.test(raw))return 'Ya existe un cargo prácticamente idéntico creado hace unos instantes. Revisa la lista antes de repetirlo.';"
-    },
-    {
-      "file": "web/js/core/utils.js",
-      "line": 96,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(/FINANCE_PAYMENT_CHARGE_CLOSED/i.test(raw))return 'Esta cuota está anulada o exenta y no admite nuevos pagos ni validaciones.';"
+      "sample": "if(/failed to fetch|networkerror|network request failed|load failed|internet|timeout|tiempo de espera|aborterror/i.test(raw))return 'No se pudo conectar. Comprueba tu conexión a Internet e inténtalo de nuevo.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 97,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_VERIFICATION_DOCUMENT_REQUIRED/i.test(raw))return 'Adjunta un documento acreditativo antes de enviar la solicitud.';"
+      "sample": "if(/invalid login credentials|invalid credentials|email or password|wrong password|bad password/i.test(raw))return 'El correo o la contraseña no son correctos.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 98,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_SOCIAL_COMPETITOR_VERIFIED_AGE_REQUIRED/i.test(raw))return 'Verifica tu condición de competidor y la edad requerida para activar Social como Competidor.';"
+      "sample": "if(/otp|one.?time|token|code.*expired|expired.*code|invalid.*code/i.test(raw)&&!/codigo|código/i.test(raw))return 'El código no es válido o ha caducado. Solicita uno nuevo e inténtalo otra vez.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 99,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_SOCIAL_PROFESSIONAL_AGE_REQUIRED/i.test(raw))return 'Tu perfil Profesional debe estar verificado y acreditar 18 años o más para activar Social.';"
+      "sample": "if(/FINANCE_PAYMENT_ALREADY_COVERED/i.test(raw))return 'Esta cuota ya está completamente pagada. Revisa o rechaza el pago pendiente duplicado; no puede validarse otro cobro.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 100,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_DIRECT_PROFILE_VERIFIED_REQUIRED/i.test(raw))return 'Verifica esta identidad antes de activar su publicación en Social.';"
+      "sample": "if(/FINANCE_PAYMENT_EXCEEDS_REMAINING/i.test(raw))return 'El importe supera el saldo pendiente de esta cuota. Revisa el importe antes de continuar.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 101,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/FINANCE_PAYMENT_DUPLICATE/i.test(raw))return 'Ya existe un pago prácticamente idéntico registrado hace unos instantes. Revisa la lista antes de repetirlo.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 102,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_DECLARATION_REQUIRED/i.test(raw))return 'Debes confirmar la declaración de identidad y representación.';"
+      "sample": "if(/FINANCE_PAYMENT_ALREADY_REVIEWED/i.test(raw))return 'Este pago ya fue revisado y no puede volver a validarse.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 103,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_APPLICATION_LOCKED_FOR_REVIEW/i.test(raw))return 'La solicitud ya está en revisión y no se puede modificar.';"
-    },
-    {
-      "file": "web/js/core/utils.js",
-      "line": 104,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(/KOMBAX_APPLICATION_NOT_SUBMITTABLE/i.test(raw))return 'La solicitud no está en un estado que permita volver a enviarla.';"
+      "sample": "if(/FINANCE_DOCUMENT_REASON_REQUIRED/i.test(raw))return 'Indica el motivo antes de archivar o enviar documentación financiera a la papelera.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 105,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_WEIGHT_OUT_OF_RANGE/i.test(raw))return 'Introduce un peso válido entre 15 y 300 kg.';"
+      "sample": "if(/FINANCE_CHARGE_DUPLICATE/i.test(raw))return 'Ya existe un cargo prácticamente idéntico creado hace unos instantes. Revisa la lista antes de repetirlo.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 106,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_PREPARATION_SUBJECT_REQUIRED/i.test(raw))return 'Selecciona el competidor o miembro al que pertenece esta preparación.';"
+      "sample": "if(/FINANCE_PAYMENT_CHARGE_CLOSED/i.test(raw))return 'Esta cuota está anulada o exenta y no admite nuevos pagos ni validaciones.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 107,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_COMPETITOR_PROFILE_REQUIRED/i.test(raw))return 'Esta preparación necesita un perfil Competidor válido.';"
+      "sample": "if(/KOMBAX_VERIFICATION_DOCUMENT_REQUIRED/i.test(raw))return 'Adjunta un documento acreditativo antes de enviar la solicitud.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 108,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_COMPETITOR_PROFILE_EDIT_REQUIRED|KOMBAX_PREPARATION_SUBJECT_EDIT_REQUIRED/i.test(raw))return 'No tienes permiso para crear o modificar la preparación de este deportista.';"
+      "sample": "if(/KOMBAX_SOCIAL_COMPETITOR_VERIFIED_AGE_REQUIRED/i.test(raw))return 'Verifica tu condición de competidor y la edad requerida para activar Social como Competidor.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 109,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_PREPARATION_READ_REQUIRED/i.test(raw))return 'No tienes permiso para consultar esta preparación.';"
+      "sample": "if(/KOMBAX_SOCIAL_PROFESSIONAL_AGE_REQUIRED/i.test(raw))return 'Tu perfil Profesional debe estar verificado y acreditar 18 años o más para activar Social.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 110,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_PREPARATION_LOG_REQUIRED/i.test(raw))return 'No tienes permiso para añadir registros de peso en esta preparación.';"
+      "sample": "if(/KOMBAX_DIRECT_PROFILE_VERIFIED_REQUIRED/i.test(raw))return 'Verifica esta identidad antes de activar su publicación en Social.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 112,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_PREPARATION_MANAGE_REQUIRED/i.test(raw))return 'No tienes permiso para gestionar esta preparación ni sus accesos.';"
+      "sample": "if(/KOMBAX_DECLARATION_REQUIRED/i.test(raw))return 'Debes confirmar la declaración de identidad y representación.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 113,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_ACCESS_PROFILE_REQUIRED/i.test(raw))return 'Selecciona una persona válida para conceder acceso.';"
+      "sample": "if(/KOMBAX_APPLICATION_LOCKED_FOR_REVIEW/i.test(raw))return 'La solicitud ya está en revisión y no se puede modificar.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 114,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_ACCESS_ROLE_INVALID|KOMBAX_ACCESS_PERMISSIONS_INVALID|KOMBAX_ACCESS_PERMISSION_NOT_ALLOWED/i.test(raw))return 'Revisa el rol y los permisos del equipo de preparación.';"
+      "sample": "if(/KOMBAX_APPLICATION_NOT_SUBMITTABLE/i.test(raw))return 'La solicitud no está en un estado que permita volver a enviarla.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 115,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_WEIGHT_OUT_OF_RANGE/i.test(raw))return 'Introduce un peso válido entre 15 y 300 kg.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 116,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/KOMBAX_MEASUREMENT_CONTEXT_INVALID/i.test(raw))return 'Selecciona un contexto válido para el registro.';"
+      "sample": "if(/KOMBAX_PREPARATION_SUBJECT_REQUIRED/i.test(raw))return 'Selecciona el competidor o miembro al que pertenece esta preparación.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 117,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_COMPETITOR_PROFILE_REQUIRED/i.test(raw))return 'Esta preparación necesita un perfil Competidor válido.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 118,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/not authorized|unauthorized|forbidden|permission denied|platform_admin_required/i.test(raw))return 'No tienes permiso para realizar esta acción.';"
+      "sample": "if(/KOMBAX_COMPETITOR_PROFILE_EDIT_REQUIRED|KOMBAX_PREPARATION_SUBJECT_EDIT_REQUIRED/i.test(raw))return 'No tienes permiso para crear o modificar la preparación de este deportista.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 119,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/not found|does not exist|no rows|404/i.test(raw)&&!SAFE_SPANISH_PREFIX.test(raw))return 'El contenido solicitado ya no está disponible.';"
+      "sample": "if(/KOMBAX_PREPARATION_READ_REQUIRED/i.test(raw))return 'No tienes permiso para consultar esta preparación.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 120,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(TECHNICAL_ERROR_PATTERN.test(raw))return 'No se ha podido completar la operación. Inténtalo de nuevo.';"
+      "sample": "if(/KOMBAX_PREPARATION_LOG_REQUIRED/i.test(raw))return 'No tienes permiso para añadir registros de peso en esta preparación.';"
     },
     {
       "file": "web/js/core/utils.js",
       "line": 122,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_PREPARATION_MANAGE_REQUIRED/i.test(raw))return 'No tienes permiso para gestionar esta preparación ni sus accesos.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 123,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_ACCESS_PROFILE_REQUIRED/i.test(raw))return 'Selecciona una persona válida para conceder acceso.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 124,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_ACCESS_ROLE_INVALID|KOMBAX_ACCESS_PERMISSIONS_INVALID|KOMBAX_ACCESS_PERMISSION_NOT_ALLOWED/i.test(raw))return 'Revisa el rol y los permisos del equipo de preparación.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 126,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/KOMBAX_MEASUREMENT_CONTEXT_INVALID/i.test(raw))return 'Selecciona un contexto válido para el registro.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 128,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/not authorized|unauthorized|forbidden|permission denied|platform_admin_required/i.test(raw))return 'No tienes permiso para realizar esta acción.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 129,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/not found|does not exist|no rows|404/i.test(raw)&&!SAFE_SPANISH_PREFIX.test(raw))return 'El contenido solicitado ya no está disponible.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 130,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(TECHNICAL_ERROR_PATTERN.test(raw))return 'No se ha podido completar la operación. Inténtalo de nuevo.';"
+    },
+    {
+      "file": "web/js/core/utils.js",
+      "line": 132,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return 'No se ha podido completar la operación. Inténtalo de nuevo.';"
@@ -9559,9 +9701,9 @@
     {
       "file": "web/js/modules/finance-premium.js",
       "line": 183,
-      "classification": "SYSTEM_UI_CANDIDATE",
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
-      "sample": "const actions=`<div class=\"fv2-actions\"><button class=\"btn btn-primary\" id=\"new-charge\">+ Nuevo cargo</button><button class=\"btn btn-ghost\" id=\"new-rule\">Nueva automatización</button><button class=\"btn btn-ghost\" id=\"stripe-connect-start\" title=\"${esc(stripeStatusLabel(connect.status))}\">${stripeAction}</button><button"
+      "sample": "const actions=`<div class=\"fv2-actions\">${roles().some(r=>['direccion','secretaria','economia'].includes(r))?'<button class=\"btn btn-primary\" id=\"new-charge\">+ Nuevo cargo</button>':''}<button class=\"btn btn-ghost\" id=\"new-rule\">Nueva automatización</button><button class=\"btn btn-ghost\" id=\"stripe-connect-start\" title="
     },
     {
       "file": "web/js/modules/finance-premium.js",
@@ -9575,7 +9717,7 @@
       "line": 191,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "setMainHtml(`${pageHeader('Finanzas Premium','Dashboard interactivo, automatización y trazabilidad. KOMBAX registra y valida; los cobros con tarjeta se procesan directamente en la cuenta Stripe del club.',actions,'Economía')}${tabs()}${D.pending_validation?`<div class=\"alert alert-warning\" style=\"margin:0 0 14px\"><stro"
+      "sample": "setMainHtml(`${pageHeader(F.finance_reports_enabled?'Finanzas Premium':'Finanzas','Dashboard interactivo, automatización y trazabilidad. KOMBAX registra y valida; los cobros con tarjeta se procesan directamente en la cuenta Stripe del club.',actions,'Economía')}${tabs()}${D.pending_validation?`<div class=\"alert alert-w"
     },
     {
       "file": "web/js/modules/finance-premium.js",
@@ -11112,371 +11254,399 @@
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 10,
+      "line": 12,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const DAYS=['','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 11,
+      "line": 13,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const DOC_TYPES=[['inscripcion_asociacion','Inscripción asociación'],['contrato_alta','Ficha / contrato de alta'],['autorizacion','Autorización'],['consentimiento','Consentimiento'],['tutor','Documentación tutor/a'],['certificado','Certificado'],['medico','Documento médico'],['identidad','Identidad'],['otro','Otro']];"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 21,
+      "line": 23,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'edad_min',label:'Edad mínima',type:'number',min:0},{name:'edad_max',label:'Edad máxima',type:'number',min:0},{name:'plazas',label:'Plazas',type:'number',min:1},{name:'activo',label:'Grupo activo',type:'checkbox',value:true}"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 23,
+      "line": 25,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "rows.forEach((r,i)=>{const n=i+1;f.push({name:`dia_${n}`,label:`Horario ${n} · día`,type:'select',options:DAYS.slice(1).map((d,j)=>({value:j+1,label:d})),value:r.dia_semana||''});f.push({name:`inicio_${n}`,label:`Horario ${n} · inicio`,type:'time',value:r.hora_inicio?.slice(0,5)||''});f.push({name:`fin_${n}`,label:`Hor"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 29,
+      "line": 31,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Cargando grupos…</div>');"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 33,
+      "line": 35,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const cards=groups.map(g=>{const d=disciplines.find(x=>x.id===g.disciplina_id);const hs=schedules.filter(h=>h.grupo_id===g.id).map(h=>`${DAYS[h.dia_semana]} ${String(h.hora_inicio).slice(0,5)}–${String(h.hora_fin).slice(0,5)}`);const count=new Set(enrollments.filter(e=>e.grupo_id===g.id&&e.activa).map(e=>e.socio_id)).s"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 34,
+      "line": 36,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`${pageHeader(state.session?.rol==='monitor'?'Mis grupos':'Grupos y horarios',state.session?.rol==='monitor'?'Grupos asignados a tu perfil':'Clases regulares, ocupación y responsables',can?'<button class=\"btn btn-primary\" id=\"new-group\">Nuevo grupo</button>':'','Club')}<div class=\"grid-2\">${cards||empty('Si"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 36,
+      "line": 38,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const open=(g={})=>openForm({title:g.id?'Editar grupo':'Nuevo grupo',fields:groupFields(disciplines,schedules.filter(h=>h.grupo_id===g.id)),initial:g,onSubmit:async v=>{await repos.groups.save({...g,...v,id:g.id||null,horarios:collectSchedules(v)});toast('Grupo guardado');await reload();},width:'840px'});"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 38,
+      "line": 40,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.archive-group',id=>{const g=groups.find(x=>x.id===id);confirmDialog(g.activo?'Archivar grupo':'Reactivar grupo',g.activo?'El grupo dejará de ofrecerse para nuevas matrículas, pero conservará su histórico.':'El grupo volverá a estar activo.',async()=>{await repos.groups.save({...g,activo:!g.activo,horarios:schedu"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 39,
+      "line": 41,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.delete-group',id=>confirmDialog('Eliminar grupo','Solo se elimina si no tiene matrículas ni sesiones relacionadas. Si ya tuvo actividad, archiva el grupo para conservar el histórico.',async()=>{await repos.groups.delete(id);toast('Grupo eliminado');await reload();},{confirmText:'Eliminar',danger:true}));"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 46,
+      "line": 48,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'telefono',label:'Teléfono'},{name:'email',label:'Email',type:'email',help:'Opcional para fichas históricas/migradas. Las nuevas altas de adultos deben usar Preinscripciones y llevan email obligatorio.'},{name:'tutor_nombre',label:'Tutor/a'},"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 47,
+      "line": 49,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'disciplina_id',label:'Disciplina · opcional',type:'select',options:options(r.disciplines.filter(d=>d.activa)),help:'La ficha puede guardarse sin disciplina y completarse después.'},{name:'grupo_id',label:'Grupo · opcional',type:'select',options:options(r.groups.filter(g=>g.activo)),help:'No es necesario asignar "
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 50,
+      "line": 52,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'estado',label:'Estado',type:'select',required:true,options:['prealta','activo','baja','suspendido'].map(x=>({value:x,label:x}))},"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 51,
+      "line": 53,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{name:'contacto_emergencia',label:'Contacto de emergencia'},{name:'telefono_emergencia',label:'Teléfono emergencia'},{name:'notas_internas',label:'Notas internas',type:'textarea',full:true}"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 55,
+      "line": 57,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Cargando tus alumnos…</div>');"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 58,
+      "line": 60,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const rows=(members||[]).map(m=>`<tr data-member-row data-search=\"${esc(`${m.nombre||''} ${m.apellidos||''} ${m.email||''} ${m.telefono||''} ${m.disciplinas||''} ${m.grupos||''}`.toLowerCase())}\" data-status=\"${esc(m.estado||'')}\"><td><strong>${esc(m.apellidos||'')}, ${esc(m.nombre||'')}</strong></td><td>${m.edad==null"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 59,
+      "line": 61,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`${pageHeader('Mis alumnos','Solo alumnos asignados a tus ámbitos o grupos. Los datos administrativos, familiares, documentales y financieros permanecen separados.','','Privacidad')}"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 60,
+      "line": 62,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<div class=\"alert alert-info\"><strong>Acceso por ámbito</strong><span>Si un alumno pertenece a otro monitor no aparecerá aquí. El contacto solo se muestra cuando el Gestor lo autoriza expresamente.</span></div>"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 61,
+      "line": 63,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<div class=\"filter-bar\"><input id=\"member-search\" type=\"search\" placeholder=\"Buscar por alumno, disciplina o grupo…\"><select id=\"member-status\"><option value=\"\">Todos los estados</option>${['activo','prealta','suspendido','baja'].map(x=>`<option value=\"${x}\">${x}</option>`).join('')}</select><span class=\"badge badge-ne"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 62,
+      "line": 64,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${card('Alumnos asignados',rows.length?table(['Alumno','Edad','Actividad','Contacto','Estado'],rows):empty('Sin alumnos asignados','Pide al Gestor o Coordinación que te asigne un ámbito, alumnos o grupos.'))}`);"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 70,
+      "line": 72,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Cargando alumnos…</div>');"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 73,
+      "line": 75,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const accessLabel={sin_activar:'Sin activar',invitacion_pendiente:'Invitación pendiente',vinculacion_pendiente:'Vinculación pendiente',activo:'Activo en KOMBAX'};"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 74,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "const rowFor=(m)=>{const links=enrollments.filter(x=>x.socio_id===m.id&&x.activa);const names=links.map(l=>relations.disciplines.find(d=>d.id===l.disciplina_id)?.nombre).filter(Boolean).join(', ');const groups=links.map(l=>relations.groups.find(g=>g.id===l.grupo_id)?.nombre).filter(Boolean).join(', ');const docs=docume"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 75,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "const claimRows=(claims||[]).map(c=>quickRow(icon('link'),`${c.nombre} ${c.apellidos}`,`Cuenta verificada: ${c.account_email||'—'}`,`<div class=\"row-actions\"><button class=\"btn btn-primary btn-sm approve-member-claim\" data-id=\"${esc(c.claim_id)}\">Aprobar vínculo</button><button class=\"btn btn-ghost btn-sm reject-member"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
       "line": 76,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const interestRows=(interests||[]).map(item=>{const family=item.request_kind==='family';return quickRow(icon('userPlus'),item.account_name||item.account_email||'',`${family?'Familiar / tutor':'Miembro / Practicante'} · ${item.account_email||''} · ${item.message||''}`,`<div class=\"row-actions\"><button class=\"btn btn-pri"
+      "sample": "const rowFor=(m)=>{const links=enrollments.filter(x=>x.socio_id===m.id&&x.activa);const names=[...new Set(links.map(l=>relations.disciplines.find(d=>d.id===l.disciplina_id)?.nombre).filter(Boolean))].join(', ');const groups=links.map(l=>relations.groups.find(g=>g.id===l.grupo_id)?.nombre).filter(Boolean).join(', ');con"
     },
     {
       "file": "web/js/modules/groups-members.js",
       "line": 77,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "const claimRows=(claims||[]).map(c=>quickRow(icon('link'),`${c.nombre} ${c.apellidos}`,`Cuenta verificada: ${c.account_email||'—'}`,`<div class=\"row-actions\"><button class=\"btn btn-primary btn-sm approve-member-claim\" data-id=\"${esc(c.claim_id)}\">Aprobar vínculo</button><button class=\"btn btn-ghost btn-sm reject-member"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 78,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const interestRows=(interests||[]).map(item=>{const family=item.request_kind==='family';return quickRow(icon('userPlus'),item.account_name||item.account_email||'',`${family?'Familiar / tutor':'Miembro / Practicante'} · ${item.account_email||''} · ${item.message||''}`,`<div class=\"row-actions\"><button class=\"btn btn-pri"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 79,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "const headerActions=(can||canCodes)?`<div class=\"row-actions\">${can?'<button class=\"btn btn-primary\" id=\"student-email-invite\">Invitar alumno por email</button>':''}${canCodes?'<button class=\"btn btn-ghost\" id=\"student-access-code\">Código alumnos/familias</button>':''}${can?'<button class=\"btn btn-ghost\" id=\"new-member"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 81,
+      "line": 83,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "more.innerHTML='<summary>Más acciones</summary><div class=\"kx-member-more-grid\"></div>';"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 85,
+      "line": 87,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "headerNode?.insertAdjacentHTML('afterend',migrationAssistBanner({title:'¿Ya tienes tus alumnos en Excel, CSV o fichas?',body:'Súbelos a KOMBAX Migrations y revisa la propuesta de importación antes de crear o actualizar fichas.'}));"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 88,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "line": 90,
+      "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const reload=()=>renderMembers();const openMember=(m={estado:'activo'})=>openForm({title:m.id?'Editar alumno':'Nuevo alumno',fields:memberFields(relations),initial:m,onSubmit:async v=>{await repos.members.save({...m,...v,id:m.id||null});toast('Alumno guardado');await reload();},width:'900px'});"
+      "sample": "const reload=()=>renderMembers();const openMember=(m={estado:'activo'})=>{"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 89,
+      "line": 92,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "const modal=openForm({title:m.id?'Editar alumno y matrículas':'Nuevo alumno',subtitle:'Una sola ficha. Puedes añadir varias disciplinas y varios grupos sin sustituir las matrículas anteriores.',fields:memberFields(relations).filter(f=>!['disciplina_id','grupo_id','grado_id'].includes(f.name)),initial:m,onSubmit:async v"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 93,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "await repos.members.saveBatch({...m,...v,id:m.id||null},selection());toast('Ficha y matrículas guardadas');await reload();"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 97,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "document.getElementById('student-email-invite')?.addEventListener('click',()=>openForm({title:'Invitar alumno o familia por email',subtitle:'La invitación será personal, de un solo uso y quedará vinculada al correo indicado. Puede usarla un alumno/a adulto o el padre, madre o tutor que gestione a un menor.',fields:[{na"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 91,
+      "line": 99,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "document.getElementById('student-access-code')?.addEventListener('click',()=>{const code=accessCodes?.alumnos?.codigo||'—';const clubName=state.session?.club?.nombre||'Urban Warriors';const slug=state.session?.club?.slug||window.UW_CONFIG?.clubSlug||'';const url=clubInviteUrl({clubSlug:slug,type:'alumnos',code});const "
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 92,
+      "line": 100,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.activate-kombax-member',id=>{const m=members.find(x=>x.id===id);if(!m)return;const age=ageFromDob(m.fecha_nacimiento);if(age==null){setError(new Error('Completa la fecha de nacimiento antes de activar KOMBAX.'));return;}const needsTutor=age<16;openForm({title:`${needsTutor?'Vincular tutor':'Activar KOMBAX'} · ${"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 93,
+      "line": 101,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.approve-member-claim',id=>confirmDialog('Aprobar vinculación','La cuenta KOMBAX verificada quedará vinculada a esta ficha administrativa del club. El histórico no se duplica ni se mueve.',async()=>{await repos.members.resolveClaim(id,true);toast('Cuenta vinculada a la ficha');await reload();},{confirmText:'Aprob"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 94,
+      "line": 102,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.reject-member-claim',id=>confirmDialog('Rechazar vinculación','La solicitud se cerrará y la ficha seguirá sin activar en KOMBAX.',async()=>{await repos.members.resolveClaim(id,false);toast('Solicitud rechazada');await reload();},{confirmText:'Rechazar'}));"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 95,
+      "line": 103,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.approve-club-link',(id,el)=>{const kind=el.dataset.kind||'member';if(kind==='family'){openForm({title:'Autorizar acceso familiar',subtitle:'Selecciona el alumno/a al que esta cuenta tendrá acceso como familiar o tutor.',fields:[{name:'socio_id',label:'Alumno/a',type:'select',required:true,options:members.filter("
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 96,
+      "line": 104,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.reject-club-link',id=>confirmDialog('Rechazar solicitud','La cuenta conservará su perfil público KOMBAX, pero no tendrá acceso privado a este club.',async()=>{await repos.kombaxMemberships.resolveClubLink(id,false,null);toast('Solicitud rechazada');await reload();},{confirmText:'Rechazar'}));"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 98,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "bind('.enroll-member',id=>openForm({title:'Añadir matrícula',subtitle:members.find(x=>x.id===id)?.nombre||'',fields:[{name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:options(relations.disciplines.filter(d=>d.activa))},{name:'grupo_id',label:'Grupo',type:'select',required:true,options:options"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 99,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "bind('.deactivate-enrollment',id=>{const links=enrollments.filter(x=>x.socio_id===id&&x.activa);openForm({title:'Desactivar matrícula',fields:[{name:'matricula_id',label:'Matrícula',type:'select',required:true,options:links.map(l=>({value:l.id,label:`${relations.disciplines.find(d=>d.id===l.disciplina_id)?.nombre||'Dis"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 100,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "bind('.graduate-member',id=>openForm({title:'Registrar graduación',subtitle:members.find(x=>x.id===id)?.nombre||'',fields:[{name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:options(relations.disciplines.filter(d=>d.activa))},{name:'grado_id',label:'Nuevo grado',type:'select',required:true,opt"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 101,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "bind('.document-member',id=>openForm({title:'Subir al expediente',subtitle:'Documentación privada del alumno',fields:[{name:'tipo',label:'Tipo',type:'select',required:true,options:DOC_TYPES.map(([value,label])=>({value,label}))},{name:'nombre',label:'Nombre del documento'},{name:'fecha_documento',label:'Fecha del docum"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 102,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "bind('.archive-member',id=>openForm({title:'Dar de baja al alumno',subtitle:'Se conserva todo su histórico de asistencia, pagos, recibos y documentación.',fields:[{name:'fecha_baja',label:'Fecha de baja',type:'date',value:isoDate(),required:true},{name:'motivo',label:'Motivo',type:'textarea',full:true,required:true}],s"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 103,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "bind('.delete-member',id=>confirmDialog('Eliminar alumno','Solo se elimina si no tiene actividad histórica. Si ya entrenó, tuvo cuotas, documentos o movimientos, utiliza Dar de baja y conserva su expediente histórico.',async()=>{await repos.members.delete(id);toast('Alumno eliminado');await reload();},{confirmText:'Eli"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
       "line": 108,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "setMainHtml('<div class=\"loading-card\">Cargando preinscripciones…</div>');"
+      "sample": "const modal=openForm({title:'Añadir disciplinas y grupos',subtitle:'Alta administrativa: selecciona varios grupos y disciplinas. Los anteriores permanecen activos.',fields:[],submitText:'Añadir matrículas',onSubmit:async()=>{"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 111,
+      "line": 109,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const groups=[{key:'enviada',label:'Nuevas'},{key:'en_revision',label:'En revisión'},{key:'pendiente_documentacion',label:'Documentación'},{key:'lista_espera',label:'Lista de espera'},{key:'aprobada',label:'Aprobadas'}];"
+      "sample": "const chosen=selection();if(!chosen.length)throw new Error('Marca al menos una nueva disciplina o grupo.');"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 112,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "line": 110,
+      "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const actions=(p)=>can?`<div class=\"row-actions\">${p.estado==='enviada'?`<button class=\"btn btn-primary btn-sm approve-pre\" data-id=\"${esc(p.id)}\">Aprobar</button><button class=\"btn btn-ghost btn-sm wait-pre\" data-id=\"${esc(p.id)}\">Espera</button><button class=\"btn btn-ghost btn-sm reject-pre\" data-id=\"${esc(p.id)}\">Re"
-    },
-    {
-      "file": "web/js/modules/groups-members.js",
-      "line": 113,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
-      "target_block_1": false,
-      "sample": "const col=(g)=>`<section class=\"pipeline-col\"><h3>${esc(g.label)} · ${items.filter(x=>x.estado===g.key).length}</h3>${items.filter(x=>x.estado===g.key).map(p=>`<div class=\"pipeline-card\"><strong>${esc(p.nombre)} ${esc(p.apellidos)}</strong><small>${esc(p.tipo_solicitud==='menor'?'Menor · acceso tutor':'Adulto')} · ${es"
+      "sample": "await repos.members.saveBatch(member,chosen);toast('Matrículas añadidas a la misma ficha');await reload();"
     },
     {
       "file": "web/js/modules/groups-members.js",
       "line": 114,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const extras=items.filter(x=>!groups.some(g=>g.key===x.estado));"
+      "sample": "bind('.deactivate-enrollment',id=>{const links=enrollments.filter(x=>x.socio_id===id&&x.activa);openForm({title:'Desactivar matrícula',fields:[{name:'matricula_id',label:'Matrícula',type:'select',required:true,options:links.map(l=>({value:l.id,label:`${relations.disciplines.find(d=>d.id===l.disciplina_id)?.nombre||'Dis"
     },
     {
       "file": "web/js/modules/groups-members.js",
       "line": 115,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "setMainHtml(`${pageHeader('Preinscripciones','Pipeline de solicitudes y altas',can?'<button class=\"btn btn-primary\" id=\"new-pre\">Nueva preinscripción</button>':'','Gestión')}<div class=\"pipeline\">${groups.map(col).join('')}</div>${extras.length?card('Otros estados',extras.map(x=>quickRow(icon('userPlus'),`${x.nombre} $"
+      "sample": "bind('.graduate-member',id=>openForm({title:'Registrar graduación',subtitle:members.find(x=>x.id===id)?.nombre||'',fields:[{name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:options(relations.disciplines.filter(d=>d.activa))},{name:'grado_id',label:'Nuevo grado',type:'select',required:true,opt"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 116,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "bind('.document-member',id=>openForm({title:'Subir al expediente',subtitle:'Documentación privada del alumno',fields:[{name:'tipo',label:'Tipo',type:'select',required:true,options:DOC_TYPES.map(([value,label])=>({value,label}))},{name:'nombre',label:'Nombre del documento'},{name:'fecha_documento',label:'Fecha del docum"
     },
     {
       "file": "web/js/modules/groups-members.js",
       "line": 117,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "document.getElementById('new-pre')?.addEventListener('click',()=>openForm({title:'Nueva preinscripción',subtitle:'Registro progresivo: primero los datos esenciales; disciplina, grupo, tarifa y teléfono pueden completarse después. Menores: tutor responsable.',fields:[{name:'tipo_solicitud',label:'Tipo',type:'select',req"
+      "sample": "bind('.archive-member',id=>openForm({title:'Dar de baja al alumno',subtitle:'Se conserva todo su histórico de asistencia, pagos, recibos y documentación.',fields:[{name:'fecha_baja',label:'Fecha de baja',type:'date',value:isoDate(),required:true},{name:'motivo',label:'Motivo',type:'textarea',full:true,required:true}],s"
     },
     {
       "file": "web/js/modules/groups-members.js",
       "line": 118,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "bind('.delete-member',id=>confirmDialog('Eliminar alumno','Solo se elimina si no tiene actividad histórica. Si ya entrenó, tuvo cuotas, documentos o movimientos, utiliza Dar de baja y conserva su expediente histórico.',async()=>{await repos.members.delete(id);toast('Alumno eliminado');await reload();},{confirmText:'Eli"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 123,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "setMainHtml('<div class=\"loading-card\">Cargando preinscripciones…</div>');"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 126,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const groups=[{key:'enviada',label:'Nuevas'},{key:'en_revision',label:'En revisión'},{key:'pendiente_documentacion',label:'Documentación'},{key:'lista_espera',label:'Lista de espera'},{key:'aprobada',label:'Aprobadas'}];"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 127,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "const actions=(p)=>can?`<div class=\"row-actions\">${p.estado==='enviada'?`<button class=\"btn btn-primary btn-sm approve-pre\" data-id=\"${esc(p.id)}\">Aprobar</button><button class=\"btn btn-ghost btn-sm wait-pre\" data-id=\"${esc(p.id)}\">Espera</button><button class=\"btn btn-ghost btn-sm reject-pre\" data-id=\"${esc(p.id)}\">Re"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 128,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "const col=(g)=>`<section class=\"pipeline-col\"><h3>${esc(g.label)} · ${items.filter(x=>x.estado===g.key).length}</h3>${items.filter(x=>x.estado===g.key).map(p=>`<div class=\"pipeline-card\"><strong>${esc(p.nombre)} ${esc(p.apellidos)}</strong><small>${esc(p.tipo_solicitud==='menor'?'Menor · acceso tutor':'Adulto')} · ${es"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 129,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const extras=items.filter(x=>!groups.some(g=>g.key===x.estado));"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 130,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "setMainHtml(`${pageHeader('Preinscripciones','Pipeline de solicitudes y altas',can?'<button class=\"btn btn-primary\" id=\"new-pre\">Nueva preinscripción</button>':'','Gestión')}<div class=\"pipeline\">${groups.map(col).join('')}</div>${extras.length?card('Otros estados',extras.map(x=>quickRow(icon('userPlus'),`${x.nombre} $"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 132,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "document.getElementById('new-pre')?.addEventListener('click',()=>openForm({title:'Nueva preinscripción',subtitle:'Registro progresivo: primero los datos esenciales; disciplina, grupo, tarifa y teléfono pueden completarse después. Menores: tutor responsable.',fields:[{name:'tipo_solicitud',label:'Tipo',type:'select',req"
+    },
+    {
+      "file": "web/js/modules/groups-members.js",
+      "line": 133,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "bind('.approve-pre',async(id,el)=>{el.disabled=true;try{const out=await repos.preenrollments.approve(id);if(out?.invitation_id){try{await repos.users.sendStudentInvitation(out.invitation_id);toast('Preinscripción aprobada · invitación KOMBAX enviada');}catch(error){toast('Preinscripción aprobada · invitación creada, en"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 119,
+      "line": 134,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const reasonAction=(selector,title,fn,required=false)=>bind(selector,id=>openForm({title,fields:[{name:'motivo',label:'Motivo',type:'textarea',full:true,required}],onSubmit:async v=>{await fn(id,v.motivo);toast('Estado actualizado');await reload();}}));"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 120,
+      "line": 135,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reasonAction('.wait-pre','Pasar a lista de espera',repos.preenrollments.wait);reasonAction('.reject-pre','Rechazar preinscripción',repos.preenrollments.reject,true);reasonAction('.cancel-pre','Cancelar preinscripción',repos.preenrollments.cancel,true);"
     },
     {
       "file": "web/js/modules/groups-members.js",
-      "line": 121,
+      "line": 136,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "bind('.delete-pre',id=>confirmDialog('Eliminar solicitud','Solo se permite borrar solicitudes no aprobadas. La acción es definitiva.',async()=>{await repos.preenrollments.delete(id);toast('Solicitud eliminada');await reload();},{confirmText:'Eliminar',danger:true}));"
@@ -15949,238 +16119,252 @@
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 22,
+      "line": 24,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "federacion:{title:'Mi Federación',eyebrow:'ENTORNO INSTITUCIONAL',icon:'federation',description:'Calendario, Events, comunicación y relaciones públicas federativas sin acceso automático a la zona privada de los clubes.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 23,
+      "line": 25,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "marca:{title:'Mi Marca',eyebrow:'BUSINESS HUB',icon:'brand',description:'Identidad corporativa, catálogo, campañas, colaboraciones, patrocinios, Events y equipo comercial dentro del ecosistema KOMBAX.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 24,
+      "line": 26,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "profesional:{title:'Mi actividad',eyebrow:'ENTORNO PROFESIONAL',icon:'professional',description:'Servicios, agenda y herramientas profesionales habilitadas por especialidad y capacidades.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 25,
+      "line": 27,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "competidor:{title:'Mi Competidor',eyebrow:'IDENTIDAD DEPORTIVA',icon:'fighter',description:'Trayectoria, Events, Fight Cards y Social. Competidor sigue separado del Perfil Profesional.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 26,
+      "line": 28,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "media:{title:'Mi contenido',eyebrow:'MEDIA / CREADOR',icon:'sparkles',description:'Publicaciones, álbum y presencia de creador dentro de KOMBAX Social y Showcase.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 27,
+      "line": 29,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "espectador:{title:'Mi perfil',eyebrow:'EXPERIENCIA ESPECTADOR',icon:'spectator',description:'Perfil público básico, foto y banner, además de guardados, intereses y avisos. Espectador no dispone de álbum ni publica en el feed Social.'}"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 29,
+      "line": 31,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const MODULE_LABELS={content_center:'Mi contenido',seller_center:'Mi Showcase · vendedor',professional_operations:'Operaciones profesionales',professional_finance:'Finanzas Profesionales',representation_requests:'Representación',overview:'Resumen',public_profile:'Perfil público',federation_admin:'Administración federat"
-    },
-    {
-      "file": "web/js/modules/managed-profile-hub.js",
-      "line": 43,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "social:{title:'KOMBAX Social',body:'Comparte contenido desde una identidad activa y conecta con tu comunidad. Publicar requiere el vínculo o la verificación correspondiente; explorar perfiles públicos sigue disponible.'},"
-    },
-    {
-      "file": "web/js/modules/managed-profile-hub.js",
-      "line": 44,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "showcase:{title:'KOMBAX Showcase',body:'Presenta productos o servicios en un escaparate público. La venta, el carrito y los cobros requieren Commerce y la verificación del vendedor. Una ampliación de catálogo no activa Commerce.'},"
+      "sample": "const MODULE_LABELS={organization_finance:'Finanzas de mi organización',operational_planning:'Centro de actividad',organizer_events:'Mis eventos · producción y ticketing',content_center:'Mi contenido',seller_center:'Mi Showcase · vendedor',professional_operations:'Operaciones profesionales',professional_finance:'Finanz"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "line": 45,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "seller_center:{title:'Mi Showcase · vendedor',body:'Primero verifica tu identidad de Competidor o Media / Creador y activa la capacidad Showcase de tu plan. Después podrás solicitar la verificación independiente como vendedor, aceptar las condiciones y configurar Stripe. Cobrar requiere además Commerce activo.'},"
+      "sample": "social:{title:'KOMBAX Social',body:'Comparte contenido desde una identidad activa y conecta con tu comunidad. Publicar requiere el vínculo o la verificación correspondiente; explorar perfiles públicos sigue disponible.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "line": 46,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "events:{title:'KOMBAX Events',body:'Descubre experiencias y prepara eventos desde tu identidad. Publicar un evento, destacarlo y vender entradas son capacidades independientes; Ticketing incluye entradas y control QR.'},"
+      "sample": "showcase:{title:'KOMBAX Showcase',body:'Presenta productos o servicios en un escaparate público. La venta, el carrito y los cobros requieren Commerce y la verificación del vendedor. Una ampliación de catálogo no activa Commerce.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "line": 47,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "authorized_licenses:{title:'Licencias autorizadas',body:'Consulta licencias profesionales únicamente cuando una federación o entidad competente te haya concedido autorización. Tu perfil no obtiene acceso a datos privados de un club por sí solo.'}"
+      "sample": "seller_center:{title:'Mi Showcase · vendedor',body:'Primero verifica tu identidad de Competidor o Media / Creador y activa la capacidad Showcase de tu plan. Después podrás solicitar la verificación independiente como vendedor, aceptar las condiciones y configurar Stripe. Cobrar requiere además Commerce activo.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "line": 48,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "}[module]||{title:MODULE_LABELS[module]||module,body:'Esta función requiere una capacidad activa para la identidad seleccionada.'};"
+      "sample": "events:{title:'KOMBAX Events',body:'Descubre experiencias y prepara eventos desde tu identidad. Publicar un evento, destacarlo y vender entradas son capacidades independientes; Ticketing incluye entradas y control QR.'},"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "line": 49,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "authorized_licenses:{title:'Licencias autorizadas',body:'Consulta licencias profesionales únicamente cuando una federación o entidad competente te haya concedido autorización. Tu perfil no obtiene acceso a datos privados de un club por sí solo.'}"
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "line": 50,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "}[module]||{title:MODULE_LABELS[module]||module,body:'Esta función requiere una capacidad activa para la identidad seleccionada.'};"
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "line": 51,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "const modal=openDetail({title:details.title,subtitle:'Vista previa de la función',width:'720px',body:`<div class=\"kx-module-preview\"><p>${esc(details.body)}</p><p><strong>Para usarla:</strong> consulta las capacidades de tu identidad, los límites aplicables y su estado de verificación. Encontrarás pasos y ejemplos en R"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 56,
+      "line": 58,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return `<div class=\"kx-managed-specialty\"><span>Especialidad profesional</span><strong>${esc(p.principal)}</strong><small>${esc(secondary.replace(/^ · /,''))}</small></div>`;"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 60,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(type==='marca')return ['social','showcase','events','plans_services','assist_management','migration_guide','brand_business','brand_campaigns','brand_collaborations','brand_sponsorships','brand_analytics','brand_team'];"
-    },
-    {
-      "file": "web/js/modules/managed-profile-hub.js",
-      "line": 61,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(type==='profesional')return ['social','events','discovery_availability','my_licenses','brand_opportunities','authorized_licenses',...(caps.has('events.public.organize')?['payments']:[])];"
-    },
-    {
-      "file": "web/js/modules/managed-profile-hub.js",
       "line": 62,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(type==='marca')return ['organization_finance','operational_planning','social','showcase','events','plans_services','assist_management','migration_guide','brand_business','brand_campaigns','brand_collaborations','brand_sponsorships','brand_analytics','brand_team'];"
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "line": 63,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(type==='profesional')return [...(caps.has('events.public.organize')?['operational_planning','organizer_events']:[]),'social','events','discovery_availability','my_licenses','brand_opportunities','authorized_licenses',...(caps.has('events.public.organize')?['payments']:[])];"
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "line": 64,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(type==='competidor')return ['social','events','discovery_availability','my_licenses','preparation','fight_opportunities','brand_opportunities','seller_center'];"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 67,
+      "line": 69,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "function accountLicenseTool(type){return ['federacion','marca','media','espectador'].includes(type);}"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 71,
+      "line": 73,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setAppHtml('<main class=\"kx-managed-hub\"><div class=\"loading-card\">Abriendo entorno del perfil…</div></main>');"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 73,
+      "line": 75,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const workspace=await repos.kombaxProfiles.workspace(profileId);const profile=workspace?.profile||{};const meta=HUB_META[profile.tipo]||HUB_META.competidor;"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 74,
+      "line": 76,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const caps=capabilitySet(workspace?.capabilities);const connectType=profile.tipo==='federacion'?'federation':profile.tipo==='profesional'&&caps.has('events.public.organize')?'event_organizer':null;"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 78,
+      "line": 80,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<header class=\"kx-managed-top\"><button class=\"gateway-icon-button\" id=\"kx-managed-back\" type=\"button\" aria-label=\"Volver\">${icon('chevronLeft',{size:22})}</button><div class=\"kx-managed-title\"><span>${esc(meta.eyebrow)}</span><strong>${esc(meta.title)}</strong></div><button class=\"btn btn-ghost btn-sm\" id=\"kx-managed-h"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 79,
+      "line": 81,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<section class=\"kx-managed-hero\"><div class=\"kx-managed-icon\">${featureIcon(meta.icon,{size:62})}</div><div><span>${esc(profile.tipo||'PERFIL')}</span><h1>${esc(profile.nombre_publico||meta.title)}</h1><p>${esc(meta.description)}</p><div class=\"kx-managed-tags\">${(profile.disciplinas||[]).slice(0,5).map(x=>`<b>${esc(x)"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 80,
+      "line": 82,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${profile.tipo==='profesional'?specialtyCopy(workspace):''}"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 81,
+      "line": 83,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "${['federacion','marca'].includes(profile.tipo)?managementAssistBanner({context:{profileId:profile.id,profileType:profile.tipo}}):''}${['federacion','marca'].includes(profile.tipo)?migrationAssistBanner({context:{profileId:profile.id,profileType:profile.tipo}}):''}"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 83,
+      "line": 85,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${profile.tipo==='federacion'?'<div class=\"kx-managed-boundary\"><strong>Frontera de privacidad federativa</strong><p>La afiliación o relación con un club no concede acceso a alumnos, finanzas, asistencia, documentos privados, comunidad interna ni datos de menores.</p></div>':''}"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 84,
+      "line": 86,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${profile.tipo==='espectador'?'<div class=\"kx-managed-boundary\"><strong>Perfil público básico</strong><p>Espectador puede tener foto, banner e información pública y consumir/guardar contenido. No dispone de álbum ni publica en el feed Social.</p></div>':''}"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 85,
+      "line": 87,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<section class=\"kx-managed-grid\">${modules.map(m=>`<button class=\"kx-managed-module ${moduleAllowed(m,caps,profile)?ACTIONABLE.has(m)?'actionable':'planned':'planned'}\" data-module=\"${esc(m)}\" type=\"button\"><span>${esc(MODULE_LABELS[m]||m)}</span><small>${moduleAllowed(m,caps,profile)?ACTIONABLE.has(m)?'Abrir':'Disponi"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 86,
+      "line": 88,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${accountLicenseTool(profile.tipo)?`<section class=\"kx-managed-account-tools\"><div><span>MI CUENTA</span><strong>Documentación personal</strong><small>Esta herramienta pertenece a tu cuenta personal; no concede permisos federativos a ${esc(meta.title)}.</small></div><button class=\"kx-managed-module actionable\" data-mod"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 87,
+      "line": 89,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<section class=\"kx-managed-security\"><div><strong>Aislamiento activo</strong><p>Perfil directo independiente · acceso privado cruzado: ${boundaries.cross_profile_private_access?'permitido':'bloqueado'} · acceso privado a Club por identidad: ${boundaries.private_club_access?'permitido':'bloqueado'}.</p></div><button cla"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 98,
+      "line": 99,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "if(['marca','federacion','profesional','competidor','media'].includes(profile.tipo)){"
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "line": 112,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const openPrivacy=()=>openSupportPrivacyCenter({subjectType:'direct_profile',subjectId:profile.id,title:`Privacidad y soporte · ${profile.nombre_publico||meta.title}`,canAuthorize:true});"
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 105,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "line": 121,
+      "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const mod=button.dataset.module;if(mod==='public_profile'){if(profile.social_profile_id)return openKombaxPublicProfile(profile.social_profile_id);return openBlockedModulePreview(mod,profile);}if(mod==='content_center'&&profile.tipo==='media')return renderMediaContentCenter(profile,{onBack:()=>renderManagedProfileHub(pr"
+      "sample": "const moduleButton=(m)=>`<button class=\"nav-item nav-club-item kx-profile-module-link\" type=\"button\" data-module=\"${esc(m)}\"><span>${icon(m.includes('finance')?'wallet':m.includes('event')?'calendar':'layers',{size:19})}</span><b>${esc(m==='operational_planning'?(profile.tipo==='marca'?'Campañas y Embajadores':profile."
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
-      "line": 110,
+      "line": 135,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "const mod=button.dataset.module;if(mod==='organization_finance'||mod==='operational_planning')return openProfileOperations(profile,{kind:mod==='organization_finance'?'finance':'tasks'});if(mod==='organizer_events')return import('./kombax-events.js').then(m=>m.renderMyEventsCenter()).catch(setError);if(mod==='public_pro"
+    },
+    {
+      "file": "web/js/modules/managed-profile-hub.js",
+      "line": 141,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "export function managedHubTitle(type){return HUB_META[type]?.title||'Mi perfil KOMBAX';}"
@@ -17566,360 +17750,395 @@
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 11,
+      "line": 13,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const DAYS=['','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 18,
+      "line": 20,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const action=status.eligible&&!['activa','suspendida','cerrada'].includes(status.status)?'<button class=\"btn btn-primary btn-sm\" id=\"activate-general-community\">Activar KOMBAX Social</button>':'';"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 20,
+      "line": 22,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "const message=status.status==='activa'?'Tu identidad pública está activa. Ya puedes acceder al feed profesional desde KOMBAX Social.':status.reason||'Este servicio social es opcional y se activa por separado de las funciones del club.';"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 21,
+      "line": 23,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "return card('KOMBAX Social',`<div class=\"social-access-card\"><div><span class=\"page-kicker\">RED PROFESIONAL GLOBAL · SERVICIO OPCIONAL</span><div class=\"row-actions social-access-status\">${badge(stateText,tone)}</div><p>${esc(message)}</p><small>La edad se comprueba con la fecha de nacimiento validada por el club. El e"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 25,
+      "line": 27,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "openDetail({title:'Normas de KOMBAX Social',subtitle:rule?`Versión ${rule.version}`:'Servicio social opcional',width:'760px',body:`<div class=\"legal-dialog-body\">${esc(rule?.cuerpo||'Las normas específicas se mostrarán antes de activar el servicio.').replace(/\\n/g,'<br>')}</div>`});"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 29,
+      "line": 31,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{value:'inscripcion_asociacion',label:'Inscripción a la asociación'},"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 30,
+      "line": 32,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{value:'autorizacion',label:'Autorización'},"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 33,
+      "line": 35,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "{value:'medico',label:'Documento médico'},"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 72,
+      "line": 74,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const today=isoDate();return d.sessions.filter(x=>groupIds.includes(x.grupo_id)&&x.estado!=='cancelada'&&String(x.fecha)>=today).sort((a,b)=>`${a.fecha} ${a.hora_inicio}`.localeCompare(`${b.fecha} ${b.hora_inicio}`))[0]||null;"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 74,
+      "line": 76,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "function feeState(d,member){const list=d.fees.filter(x=>x.socio_id===member?.id);const open=list.find(x=>['vencida','pendiente','parcialmente_pagada'].includes(x.estado));return open||list[0]||null;}"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 79,
+      "line": 81,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const d=await loadPortalDashboard();if(!d.member){setMainHtml(`${pageHeader('Mi espacio','Tu actividad en tu club')}${empty('Todavía no hay un alumno vinculado','Cuando el club apruebe tu inscripción aparecerá aquí. Puedes enviar una nueva solicitud desde Solicitudes.')}`);return;}"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 83,
+      "line": 85,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<div class=\"profile-hero\">${hero({kicker:'Perfil seleccionado',title:`${d.member.nombre} ${d.member.apellidos||''}`,body:`${rel.discipline?.nombre||'Tu club'}${rel.group?` · ${rel.group.nombre}`:''}${pr.grado_actual?` · ${pr.grado_actual}`:''}`,actions,sideValue:`${pct}%`,sideLabel:'asistencia registrada'})}"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 84,
+      "line": 86,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<div class=\"personal-kpis\"><div class=\"personal-kpi\"><span>Grado actual</span><strong>${esc(pr.grado_actual||'—')}</strong></div><div class=\"personal-kpi\"><span>Próxima clase</span><strong>${esc(ns?`${dateFmt(ns.fecha)} · ${String(ns.hora_inicio||'').slice(0,5)}`:'—')}</strong></div><div class=\"personal-kpi\"><span>Cuot"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 87,
+      "line": 89,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${card('Acciones rápidas',`<div class=\"action-grid\"><button class=\"action-tile\" data-action=\"portal-checkin\"><span>${icon('checkCircle')}</span><strong>Registrar acceso</strong><small>Check-in para una clase de hoy</small></button><button class=\"action-tile\" data-nav=\"finance\"><span>${icon('wallet')}</span><strong>Info"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 88,
+      "line": 90,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<div class=\"grid-2\">${card('Progreso',`<div style=\"display:flex;justify-content:space-between;align-items:end;margin-bottom:10px\"><div><small class=\"muted\">ASISTENCIA</small><div style=\"font-size:30px;font-weight:900;margin-top:5px\">${pct}%</div></div><div style=\"text-align:right\"><small class=\"muted\">${present} presen"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 89,
+      "line": 91,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "${card('Próxima actividad',ns?quickRow(icon('clock'),rel.group?.nombre||'Clase',`${dateFmt(ns.fecha)} · ${String(ns.hora_inicio||'').slice(0,5)}${ns.hora_fin?`–${String(ns.hora_fin).slice(0,5)}`:''}`,(()=>{const r=d.reservations.find(x=>x.sesion_id===ns.id&&x.socio_id===d.member.id);const reservation=r?.estado==='confi"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 98,
+      "line": 100,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const rel=enrollmentSummary(d,member);const today=d.sessions.filter(x=>x.fecha===isoDate()&&rel.links.some(l=>l.grupo_id===x.grupo_id)&&x.estado!=='cancelada');"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 99,
+      "line": 101,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!today.length){toast('No hay una clase disponible hoy para este alumno','error');return;}"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 100,
+      "line": 102,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "openForm({title:'Registrar acceso',subtitle:`${member.nombre} · check-in del día`,fields:[{name:'sesion_id',label:'Clase',type:'select',required:true,options:today.map(s=>({value:s.id,label:`${d.groups.find(g=>g.id===s.grupo_id)?.nombre||'Clase'} · ${String(s.hora_inicio||'').slice(0,5)}`}))},{name:'codigo',label:'Códi"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 104,
+      "line": 106,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Cargando horarios…</div>');"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 106,
+      "line": 108,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const d=await loadPortalSchedule();if(!d.member){setMainHtml(`${pageHeader('Horarios')} ${empty('Sin alumno vinculado')}`);return;}"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 107,
+      "line": 109,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const rel=enrollmentSummary(d,d.member);const gids=new Set(rel.links.map(x=>x.grupo_id));const sched=d.schedules.filter(x=>gids.has(x.grupo_id));const range=weekRange(portalWeekOffset);const sessions=sortSessionsForWeek(d.sessions.filter(x=>gids.has(x.grupo_id)&&String(x.fecha)>=range.start&&String(x.fecha)<=range.end&"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 110,
+      "line": 112,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const sessionAttendanceAction=(s)=>{const r=d.reservations.find(x=>x.sesion_id===s.id&&x.socio_id===d.member.id);const confirmed=r?.estado==='confirmada';const sessionKey=`${String(s.fecha||'')} ${String(s.hora_inicio||'').slice(0,5)}`;const future=sessionKey>=nowKey;if(!future)return badge('Sesión pasada','neutral');r"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 111,
+      "line": 113,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const upcoming=d.sessions.filter(s=>gids.has(s.grupo_id)&&s.estado!=='cancelada'&&`${String(s.fecha||'')} ${String(s.hora_inicio||'').slice(0,5)}`>=nowKey).sort((a,b)=>`${a.fecha} ${a.hora_inicio}`.localeCompare(`${b.fecha} ${b.hora_inicio}`));"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 113,
+      "line": 115,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const nextCard=next?card('Próxima sesión',quickRow(String(next.fecha).slice(8,10),d.groups.find(g=>g.id===next.grupo_id)?.nombre||'Clase',`${dateFmt(next.fecha)} · ${String(next.hora_inicio||'').slice(0,5)}${next.hora_fin?`–${String(next.hora_fin).slice(0,5)}`:''} · ${next.estado}`,`<div class=\"row-actions\">${sessionAt"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 114,
+      "line": 116,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const sessionRows=sessions.map(s=>{const sessionKey=`${String(s.fecha||'')} ${String(s.hora_inicio||'').slice(0,5)}`;const future=sessionKey>=nowKey;const actions=`<div class=\"row-actions\">${sessionAttendanceAction(s)}${future&&s.fecha===isoDate()?`<button class=\"btn btn-ghost btn-sm check-session\" data-id=\"${esc(s.id)"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 116,
+      "line": 118,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const weekSummary=`<div class=\"week-summary\"><strong>${esc(portalWeekTitle(portalWeekOffset,range.start,range.end))}</strong><span>${dateFmt(range.start)} – ${dateFmt(range.end)} · ${sessions.length} ${sessions.length===1?'sesión':'sesiones'}</span></div>`;"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 117,
+      "line": 119,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`${profileSwitcher(d.members,d.member.id)}${pageHeader('Horarios y asistencia','Consulta tus clases por semana, confirma a cuál asistirás y realiza el check-in al llegar','<button class=\"btn btn-primary\" id=\"checkin-now\">Registrar acceso</button>','Mi actividad')}${card('Horario habitual',scheduleRows.lengt"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 122,
+      "line": 124,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "document.querySelectorAll('.check-session').forEach(b=>b.addEventListener('click',()=>openForm({title:'Check-in',subtitle:d.groups.find(g=>g.id===d.sessions.find(s=>s.id===b.dataset.id)?.grupo_id)?.nombre||'',fields:[{name:'codigo',label:'Código de acceso'}],submitText:'Registrar',onSubmit:async v=>{await repos.portal."
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 127,
+      "line": 129,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml('<div class=\"loading-card\">Cargando solicitudes…</div>');"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 130,
+      "line": 132,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const active=enrollments.filter(x=>x.activa).map(x=>{const m=members.find(s=>s.id===x.socio_id);return quickRow(icon('checkCircle'),`${m?.nombre||'Alumno'} · ${disciplines.find(d=>d.id===x.disciplina_id)?.nombre||'Disciplina'}`,groups.find(g=>g.id===x.grupo_id)?.nombre||'Sin grupo',badge('Activa','ok'))}).join('');"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 131,
+      "line": 133,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const requestNotifs=notifs.filter(n=>n.tipo==='inscripcion').slice(0,12).map(n=>quickRow(icon('userPlus'),n.titulo,n.cuerpo||'',badge(n.leida?'Revisada':'Nueva',n.leida?'neutral':'warn'))).join('');"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 132,
+      "line": 134,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`${members.length?profileSwitcher(members,member?.id):''}${pageHeader('Solicitudes','Amplía tu actividad o añade un menor',`${member?'<button class=\"btn btn-primary\" id=\"request-sport\">Solicitar disciplina o grupo</button>':''}${family?'<button class=\"btn btn-ghost\" id=\"request-minor\">Añadir menor</button>'"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 135,
+      "line": 139,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "document.getElementById('request-sport')?.addEventListener('click',()=>openForm({title:'Nueva solicitud deportiva',subtitle:member?`${member.nombre} ${member.apellidos||''}`:'',fields:relationFields,submitText:'Enviar solicitud',onSubmit:async v=>{await repos.portal.requestEnrollment(member.id,v.disciplina_id,v.grupo_i"
+      "sample": "const modal=openForm({title:'Solicitar disciplinas y grupos',subtitle:`${member.nombre} ${member.apellidos||''} · solo para este alumno. Cada solicitud requiere aprobación del club.`,fields:[{name:'tarifa_id',label:'Tarifa',type:'select',options:options(tariffs.filter(t=>t.activa))}],submitText:'Enviar solicitudes',onS"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 136,
+      "line": 140,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "document.getElementById('request-minor')?.addEventListener('click',()=>openForm({title:'Añadir menor',subtitle:'La solicitud quedará pendiente de aprobación por el club.',fields:[{name:'nombre',label:'Nombre del menor',required:true},{name:'apellidos',label:'Apellidos',required:true},{name:'fecha_nacimiento',label:'Fec"
+      "sample": "const chosen=selection();if(!chosen.length)throw new Error('Marca al menos un nuevo grupo.');"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 141,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "setMainHtml('<div class=\"loading-card\">Cargando Mi perfil…</div>');"
-    },
-    {
-      "file": "web/js/modules/portal.js",
-      "line": 143,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "const d=await loadPortalProfile();if(!d.member){setMainHtml(`${pageHeader('Mi perfil')} ${empty('Sin alumno vinculado')}`);return;}"
+      "sample": "await repos.portal.requestEnrollmentBatch(member.id,chosen,v.tarifa_id);toast('Solicitudes enviadas al club para este alumno');await renderPortalRequests();"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 145,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const docs=d.documents.filter(x=>x.socio_id===member.id&&x.estado!=='archivado'&&x.estado!=='sustituido'),tracks=d.tracking.filter(x=>x.socio_id===member.id&&x.visibilidad==='familia'),grads=d.graduations.filter(x=>x.socio_id===member.id);"
+      "sample": "document.getElementById('request-minor')?.addEventListener('click',()=>openForm({title:'Añadir menor',subtitle:'La solicitud quedará pendiente de aprobación por el club.',fields:[{name:'nombre',label:'Nombre del menor',required:true},{name:'apellidos',label:'Apellidos',required:true},{name:'fecha_nacimiento',label:'Fec"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 146,
+      "line": 150,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const isStudent=state.session?.rol==='alumno';"
-    },
-    {
-      "file": "web/js/modules/portal.js",
-      "line": 149,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "const privateHtml=`<section class=\"kx-private-club-context\"><div class=\"kx-private-club-head\"><div>${icon('lock',{size:18})}</div><div><strong>Información privada del club</strong><span>No forma parte de tu perfil público KOMBAX.</span></div></div>"
-    },
-    {
-      "file": "web/js/modules/portal.js",
-      "line": 151,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "${card('Mis competiciones',quickRow(icon('activity'),'Preparación y peso','El seguimiento se activa desde una inscripción concreta a un interclub, open o competición. Tu histórico sigue siendo privado.','<button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"portal-preparation\">Abrir mis competiciones</button>'))}"
+      "sample": "setMainHtml('<div class=\"loading-card\">Cargando Mi perfil…</div>');"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 152,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "<div class=\"grid-2\">${card('Evolución privada',`${progress(pct)}<div class=\"timeline\" style=\"margin-top:20px\">${grads.slice(0,12).map(g=>`<div class=\"timeline-item\"><strong>${esc(d.grades.find(x=>x.id===g.grado_id)?.nombre||'Graduación')}</strong><small>${dateFmt(g.fecha)}${g.examinador?` · ${esc(g.examinador)}`:''}</s"
-    },
-    {
-      "file": "web/js/modules/portal.js",
-      "line": 153,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "${card('Seguridad y acceso',quickRow(icon('lock'),'Cambiar contraseña','Confirma tu contraseña actual y crea una nueva. La sesión se cerrará por seguridad al terminar.','<button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"portal-change-password\">Cambiar contraseña</button>'))}"
+      "sample": "const d=await loadPortalProfile();if(!d.member){setMainHtml(`${pageHeader('Mi perfil')} ${empty('Sin alumno vinculado')}`);return;}"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 154,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "${card('Expediente privado',`<div class=\"profile-photo-card\"><div class=\"profile-photo-large\">${avatarUrl?`<img ${mediaFrameAttrs(state.session?.avatar_presentation,'avatar')} src=\"${esc(avatarUrl)}\" alt=\"Foto privada de acceso\">`:esc(ai)}</div><div><strong>Cuenta de acceso</strong><small style=\"display:block;margin-to"
+      "sample": "const docs=d.documents.filter(x=>x.socio_id===member.id&&x.estado!=='archivado'&&x.estado!=='sustituido'),tracks=d.tracking.filter(x=>x.socio_id===member.id&&x.visibilidad==='familia'),grads=d.graduations.filter(x=>x.socio_id===member.id);"
+    },
+    {
+      "file": "web/js/modules/portal.js",
+      "line": 158,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const privateHtml=`<section class=\"kx-private-club-context\"><div class=\"kx-private-club-head\"><div>${icon('lock',{size:18})}</div><div><strong>Ficha privada · ${esc(member.nombre)} ${esc(member.apellidos||'')}</strong><span>${isStudent?'No forma parte de tu perfil público KOMBAX.':'Estás consultando la ficha del famili"
+    },
+    {
+      "file": "web/js/modules/portal.js",
+      "line": 160,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "${card('Mis competiciones',quickRow(icon('activity'),'Preparación y peso','El seguimiento se activa desde una inscripción concreta a un interclub, open o competición. Tu histórico sigue siendo privado.','<button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"portal-preparation\">Abrir mis competiciones</button>'))}"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 161,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "root.querySelector('#portal-avatar')?.addEventListener('click',()=>openForm({title:'Foto privada de acceso',fields:[{name:'avatar',label:'Imagen',type:'file',accept:'image/jpeg,image/png,image/webp',required:true,help:'JPG, PNG o WEBP · máximo 5 MB. No sustituye automáticamente tu avatar público KOMBAX.'}],submitText:'"
+      "sample": "<div class=\"grid-2\">${card('Evolución privada',`${progress(pct)}<div class=\"timeline\" style=\"margin-top:20px\">${grads.slice(0,12).map(g=>`<div class=\"timeline-item\"><strong>${esc(d.grades.find(x=>x.id===g.grado_id)?.nombre||'Graduación')}</strong><small>${dateFmt(g.fecha)}${g.examinador?` · ${esc(g.examinador)}`:''}</s"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 162,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "root.querySelector('#portal-avatar-frame')?.addEventListener('click',()=>openMediaFramingEditor({title:'Ajustar foto privada',subtitle:'Elige el encuadre que se usará en tu perfil y accesos del club.',src:avatarUrl,initial:state.session?.avatar_presentation,preset:'avatar',onSave:async presentation=>{await repos.mediaF"
+      "sample": "${card('Seguridad y acceso',quickRow(icon('lock'),'Cambiar contraseña','Confirma tu contraseña actual y crea una nueva. La sesión se cerrará por seguridad al terminar.','<button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"portal-change-password\">Cambiar contraseña</button>'))}"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 164,
+      "line": 163,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "root.querySelector('#upload-portal-doc')?.addEventListener('click',()=>openForm({title:'Adjuntar documento',subtitle:`${member.nombre} ${member.apellidos||''} · se guardará en su expediente privado`,fields:[{name:'archivo',label:'Archivo',type:'file',required:true,accept:'application/pdf,image/jpeg,image/png,image/webp"
+      "sample": "${card('Expediente privado',`<div class=\"profile-photo-card\"><div class=\"profile-photo-large\">${avatarUrl?`<img ${mediaFrameAttrs(state.session?.avatar_presentation,'avatar')} src=\"${esc(avatarUrl)}\" alt=\"Foto privada de acceso\">`:esc(ai)}</div><div><strong>Cuenta de acceso</strong><small style=\"display:block;margin-to"
+    },
+    {
+      "file": "web/js/modules/portal.js",
+      "line": 170,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "root.querySelector('#portal-avatar')?.addEventListener('click',()=>openForm({title:'Foto privada de acceso',fields:[{name:'avatar',label:'Imagen',type:'file',accept:'image/jpeg,image/png,image/webp',required:true,help:'JPG, PNG o WEBP · máximo 5 MB. No sustituye automáticamente tu avatar público KOMBAX.'}],submitText:'"
     },
     {
       "file": "web/js/modules/portal.js",
       "line": 171,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
+      "sample": "root.querySelector('#portal-avatar-frame')?.addEventListener('click',()=>openMediaFramingEditor({title:'Ajustar foto privada',subtitle:'Elige el encuadre que se usará en tu perfil y accesos del club.',src:avatarUrl,initial:state.session?.avatar_presentation,preset:'avatar',onSave:async presentation=>{await repos.mediaF"
+    },
+    {
+      "file": "web/js/modules/portal.js",
+      "line": 173,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "root.querySelector('#upload-portal-doc')?.addEventListener('click',()=>openForm({title:'Adjuntar documento',subtitle:`${member.nombre} ${member.apellidos||''} · se guardará en su expediente privado`,fields:[{name:'archivo',label:'Archivo',type:'file',required:true,accept:'application/pdf,image/jpeg,image/png,image/webp"
+    },
+    {
+      "file": "web/js/modules/portal.js",
+      "line": 180,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
       "sample": "const activation=isStudent?`${socialGeneralCardHtml(socialStatus)}<div class=\"alert\"><strong>Tu perfil KOMBAX será tu única ficha pública</strong><span>Al activarlo, banner, avatar, información deportiva, álbum y publicaciones vivirán en la misma identidad Social. Tu expediente del club seguirá privado.</span></div>`:'"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 172,
+      "line": 181,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setMainHtml(`${isStudent?'':profileSwitcher(d.members,member.id)}${pageHeader(isStudent?'Mi perfil':'Mi cuenta y familiares',`${member.nombre} ${member.apellidos||''}`,'','Cuenta')}${activation}${privateHtml}`);"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 175,
+      "line": 184,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "document.getElementById('activate-general-community')?.addEventListener('click',()=>openForm({title:'Activar KOMBAX Social',subtitle:'Tu perfil KOMBAX será tu única ficha pública. El expediente administrativo del club permanece privado.',width:'650px',fields:[{name:'acepta_normas',label:'He leído y acepto las Normas de"
     },
     {
       "file": "web/js/modules/portal.js",
-      "line": 177,
+      "line": 186,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "}catch(e){setError(e);setMainHtml(`${pageHeader('Mi perfil')} ${empty('No se pudo cargar Mi perfil',humanError(e))}`)}"
+    },
+    {
+      "file": "web/js/modules/professional-documents.js",
+      "line": 7,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "return openForm({title:'Publicar copia documental',subtitle:'Esta copia será visible en el perfil público. No se publica la evidencia privada original. Revisa y oculta datos personales innecesarios antes de subirla.',fields:[{name:'document',label:'Copia para mostrar en público',type:'file',required:true,accept:'applic"
+    },
+    {
+      "file": "web/js/modules/professional-documents.js",
+      "line": 10,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const modal=openDetail({title:'Documentos públicos profesionales',body:'<p>Cargando documentos…</p>'});"
+    },
+    {
+      "file": "web/js/modules/professional-documents.js",
+      "line": 15,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "body.innerHTML=`<p>Copias elegidas por el titular y asociadas a sus acreditaciones. La copia publicada no sustituye la evidencia privada revisada.</p>${rows.map(d=>`<article class=\"card\"><h3>${esc(d.title)}</h3><p>${esc(d.issuer||'')}</p><button type=\"button\" class=\"btn btn-primary\" data-view-document=\"${esc(d.credenti"
+    },
+    {
+      "file": "web/js/modules/professional-documents.js",
+      "line": 22,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const detail=openDetail({title:'Copia documental pública',body:blob.type==='application/pdf'?`<iframe title=\"Documento PDF\" sandbox src=\"${esc(url)}\" style=\"width:100%;height:65vh;border:0\"></iframe>`:`<img src=\"${esc(url)}\" alt=\"Copia documental pública\" style=\"max-width:100%;height:auto\">`});"
     },
     {
       "file": "web/js/modules/professional-finance.js",
@@ -18087,7 +18306,7 @@
       "line": 26,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "const SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Representante / Manager',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador'};"
+      "sample": "const SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Representante / Manager',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador',psicologo_deportivo:'Psicólogo deportivo',psicoterapeuta:'Psicoterapeuta'};"
     },
     {
       "file": "web/js/modules/professional-operations.js",
@@ -18238,10 +18457,199 @@
     },
     {
       "file": "web/js/modules/professional-operations.js",
-      "line": 84,
+      "line": 80,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const copy=document.createElement('button');copy.type='button';copy.className='btn btn-ghost btn-sm';copy.dataset.proPublicCopy=button.dataset.proCredentialVisibility;copy.textContent='Subir copia para el perfil público';"
+    },
+    {
+      "file": "web/js/modules/professional-operations.js",
+      "line": 88,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "});toast(button.dataset.public==='1'?'Credencial ocultada del perfil público':'Credencial publicada en el perfil');await renderProfessionalOperations(profileId,{onBack,onEvents});}"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 6,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const labels={income:'Ingreso recibido',expense:'Gasto pagado',refund:'Devolución realizada',task:'Actividad',open:'Pendiente',done:'Completado',cancelled:'Anulado'};"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 8,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": false,
+      "sample": "const modeTitle=(profile,kind)=>kind==='finance'?`Finanzas · ${profile.nombre_publico}`:profile.tipo==='marca'?'Campañas y Embajadores':profile.tipo==='federacion'?'Centro de Temporada':'Centro de Producción';"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 9,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const categories=profile=>profile.tipo==='marca'?[['campaign','Campaña'],['collaboration','Colaboración'],['ambassadors','Embajadores · avanzado'],['attribution','Resultado documentado · avanzado']]:profile.tipo==='federacion'?[['season','Temporada'],['renewal','Renovación de licencias'],['calendar','Calendario federat"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 15,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const body=`<div class=\"kx-profile-operations\"><p>${kind==='finance'?'Registro administrativo de ingresos recibidos, gastos y devoluciones. No inicia cobros ni sustituye facturas fiscales. Los movimientos de Stripe se consultan por separado.':'Planifica tareas, responsables y entregables en las notas; registra resultad"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 16,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "${!a.active_service?'<div class=\"alert\">Para crear actividad necesitas verificación y el servicio correspondiente. Puedes consultar el historial autorizado y anular registros existentes.</div>':''}"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 17,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "${kind==='finance'?`<div class=\"kx-brand-metrics\">${(ws.totals||[]).map(x=>`<article class=\"kx-brand-metric\"><span>${esc(x.currency)} · movimientos registrados</span><strong>${esc(money(Number(x.income_minor)-Number(x.expense_minor)-Number(x.refund_minor),x.currency))}</strong><small>Ingresos ${esc(money(x.income_minor"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 18,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "<div class=\"row-actions\">${canCreate?`<button class=\"btn btn-primary\" data-ops-new>${kind==='finance'?'Registrar movimiento':'Crear actividad'}</button>`:''}${kind==='finance'&&profile.tipo==='federacion'?'<button class=\"btn btn-ghost\" data-ops-stripe>Historial de cobros y Stripe</button>':''}<button class=\"btn btn-gho"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 19,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "<details open><summary>${rows.length?`${offset+1}–${offset+rows.length} de ${Number(ws.total)||0} registros`:'Sin registros'}</summary><div class=\"kx-brand-proposal-list\">${rows.map(r=>`<article class=\"kx-brand-proposal-card\"><div><small>${esc(labels[r.kind])} · ${esc(labels[r.state])} · ${esc(r.occurred_on)}</small><s"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 25,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "modal.wrap.querySelector('[data-ops-stripe]')?.addEventListener('click',()=>openFinanceContext({subjectType:'federation',subjectId:profile.id,title:'Cobros de Federación'}));"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 29,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "{name:'category',label:kind==='finance'?'Categoría':'Tipo de actividad',...(kind==='tasks'?{type:'select',options:categories(profile).filter(([v])=>a.advanced||!['ambassadors','attribution'].includes(v)).map(([value,label])=>({value,label}))}:{maxLength:80})},"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 30,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "{name:'occurred_on',label:kind==='finance'?'Fecha del movimiento':'Fecha de planificación',type:'date',required:true,value:localIsoDate()},"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 31,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "...(kind==='tasks'?[{name:'due_on',label:'Fecha límite',type:'date'}]:[]),"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 33,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "],submitText:'Guardar',onSubmit:async v=>{"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 35,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(!Number.isFinite(amount)||Math.abs(amount-Math.round(amount))>0.000001)throw new Error('El importe debe tener como máximo dos decimales.');"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 39,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "modal.wrap.querySelectorAll('[data-ops-state]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Actualizar registro','Se conserva el registro y su trazabilidad. No modifica pagos ni entradas de Stripe.',async()=>{"
+    },
+    {
+      "file": "web/js/modules/profile-operations.js",
+      "line": 44,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const csv=[['fecha','concepto','tipo','estado','importe_centimos','moneda','categoria','notas'],...rows.map(r=>[r.occurred_on,r.title,r.kind,r.state,r.amount_minor,r.currency,r.category,r.notes])].map(r=>r.map(safe).join(';')).join('\\r\\n');"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 5,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const roles={admin:'Administración y equipos',editor:'Gestión y edición · operaciones privadas',comunicacion:'Comunicación y contenido'};"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 6,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const statuses={pending:'Pendiente',accepted:'Aceptada',declined:'Rechazada',revoked:'Revocada',expired:'Vencida'};"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 10,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const modal=openDetail({title:'Invitaciones a equipos',subtitle:'Acepta con tu cuenta y tu correo confirmado.',body:'<div class=\"loading-card\">Cargando invitaciones…</div>'});"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 15,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "body.innerHTML=rows.length?rows.map(i=>`<article class=\"card\"><h3>${esc(i.profile_name||'Perfil')}</h3><p>${esc(i.profile_type)} · ${esc(roles[i.role]||i.role)}</p><p>Válida hasta ${dateFmt(i.expires_at)}</p><div class=\"row-actions\"><button type=\"button\" class=\"btn btn-primary\" data-team-accept=\"${esc(i.id)}\">Aceptar i"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 22,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "article.querySelector('[data-team-result]').textContent=accepted?'Invitación aceptada. La identidad aparecerá al volver a abrir Mi Espacio.':'Invitación rechazada.';"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 30,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "const modal=openDetail({title:`Equipo · ${profile.nombre_publico||'Perfil'}`,subtitle:'Accesos propios de esta identidad. No comparte contraseñas ni transfiere su titularidad.',body:'<div class=\"loading-card\">Cargando equipo…</div>'});"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 37,
+      "classification": "TECHNICAL_OR_DIAGNOSTIC",
+      "target_block_1": false,
+      "sample": "body.innerHTML=`<p>Solo administración puede invitar y revocar. Comunicación no incluye las operaciones privadas profesionales. Las funciones de licencias, catálogo y finanzas conservan sus permisos propios.</p><button type=\"button\" class=\"btn btn-primary\" data-team-invite>Invitar por correo</button><h3>Invitaciones</h"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 38,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "body.querySelector('[data-team-invite]')?.addEventListener('click',()=>openForm({title:'Invitar al equipo',subtitle:`${profile.nombre_publico||'Perfil'} · invitación válida durante siete días.`,fields:[{name:'email',label:'Correo del invitado',type:'email',required:true},{name:'role',label:'Permiso',type:'select',requi"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 40,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "toast('Invitación creada. El destinatario debe entrar con ese correo y abrir Invitaciones a equipos.');"
+    },
+    {
+      "file": "web/js/modules/profile-team.js",
+      "line": 43,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "body.querySelectorAll('[data-team-revoke],[data-manager-revoke]').forEach(button=>button.addEventListener('click',()=>confirmDialog('Retirar acceso','Este acceso dejará de permitir gestionar la identidad. No se elimina la cuenta del invitado.',async()=>{"
     },
     {
       "file": "web/js/modules/public-profile.js",
@@ -18269,7 +18677,7 @@
       "line": 99,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
-      "sample": "const PROFESSIONAL_SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Manager / Representante',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador'};"
+      "sample": "const PROFESSIONAL_SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Manager / Representante',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador',psicologo_deportivo:'Psicólogo deportivo',psicoterapeuta:'Psicoterapeuta'};"
     },
     {
       "file": "web/js/modules/public-profile.js",
@@ -18581,105 +18989,112 @@
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 283,
+      "line": 276,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": true,
+      "sample": "const facets=arr(p?.person_facets?.facets).filter(f=>f.type==='profesional'&&f.profile_id);"
+    },
+    {
+      "file": "web/js/modules/public-profile.js",
+      "line": 289,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const modal=openDetail({title:`Álbum · ${p.nombre_publico}`,subtitle:`${rows.length} elementos públicos · fotos y vídeos`,body:fullAlbumMarkup(p),actions:'<button type=\"button\" class=\"btn btn-ghost\" id=\"kx-public-album-close\">Volver al perfil</button>',width:'980px',className:'kx-public-album-modal'});"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 293,
+      "line": 299,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.querySelector('#kx-public-network')?.addEventListener('click',async e=>{const b=e.currentTarget;b.disabled=true;try{await requestNetworkConnection(p,{onSent:()=>{b.textContent='Solicitud enviada';}});}finally{if(b.isConnected&&b.textContent!=='Solicitud enviada')b.disabled=false;}});"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 298,
+      "line": 304,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "root.querySelector('#kx-profile-post-more')?.addEventListener('click',async e=>{const b=e.currentTarget;b.disabled=true;b.textContent='Cargando…';try{const page=await repos.kombaxSocial.profilePosts(p.id,postCursor,10);const list=root.querySelector('#kx-profile-post-list');if(list&&page.length){list.insertAdjacentHTML("
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 302,
+      "line": 308,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.querySelector('#kx-public-share-affiliation')?.addEventListener('click',async()=>{const b=root.querySelector('#kx-public-share-affiliation');b.disabled=true;try{await repos.kombaxSocial.shareAffiliation(p.id);toast(`Afiliación con ${p.affiliation?.club_nombre||'tu club'} publicada`);await onRefresh?.();}catch(erro"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 303,
+      "line": 309,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.querySelector('#kx-public-avatar-position')?.addEventListener('click',()=>{const src=resolveIdentityMedia(p,'avatar');if(!p.avatar_media_id||!src)return;openMediaFramingEditor({title:'Ajustar avatar',subtitle:'Centra el rostro sin modificar la fotografía original.',src,initial:p.avatar_media_presentation,preset:'a"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 315,
+      "line": 321,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const p=await repos.kombaxSocial.publicProfile(socialId);if(!p?.id)throw new Error('El perfil público no está disponible.');const type=p.perfil_tipo||p.sujeto_tipo;const usage=p.own?await repos.kombaxSocial.quota(p.id).catch(()=>null):null;"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 317,
+      "line": 323,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "if(['competidor','profesional'].includes(type))p.discovery=await repos.discovery.publicProfile(p.id).catch(()=>null);"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 318,
+      "line": 324,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='competidor')p.event_history=await repos.kombaxEvents.history(p.id,60).catch(()=>[]);"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 319,
+      "line": 325,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='marca'&&p.perfil_directo_id)p.brand_business=await repos.brandBusiness.publicProfile(p.perfil_directo_id).catch(()=>null);"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 320,
+      "line": 326,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const modal=openDetail({title:p.nombre_publico,subtitle:`Perfil público KOMBAX · ${identityTypeLabel[type]||type}`,body:profileArticle(p,{usage}),actions:profileActions(p),width:'980px',className:'kx-public-profile-modal'});"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 327,
+      "line": 333,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const p=await repos.kombaxSocial.publicProfile(socialId);if(!p?.id)throw new Error('Tu perfil KOMBAX no está disponible.');const usage=await repos.kombaxSocial.quota(p.id).catch(()=>null);const type=p.perfil_tipo||p.sujeto_tipo;"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 329,
+      "line": 335,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "if(['competidor','profesional'].includes(type))p.discovery=await repos.discovery.publicProfile(p.id).catch(()=>null);"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 330,
+      "line": 336,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='competidor')p.event_history=await repos.kombaxEvents.history(p.id,60).catch(()=>[]);"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 331,
+      "line": 337,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(type==='marca'&&p.perfil_directo_id)p.brand_business=await repos.brandBusiness.publicProfile(p.perfil_directo_id).catch(()=>null);"
     },
     {
       "file": "web/js/modules/public-profile.js",
-      "line": 335,
+      "line": 341,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){setError(error);setMainHtml(`${pageHeader('Mi perfil')}<div class=\"empty\"><strong>No se pudo abrir tu perfil KOMBAX</strong><p>${esc(humanError(error)||'Inténtalo de nuevo.')}</p></div>`);return null;}"
@@ -20456,11 +20871,25 @@
       "sample": "modal.wrap.querySelector('[data-kx-frame-save]')?.addEventListener('click',async e=>{const button=e.currentTarget;button.disabled=true;const old=button.textContent;button.textContent='Guardando…';try{sync();await onSave?.(current);toast('Encuadre guardado');modal.close?.();}catch(error){button.disabled=false;button.tex"
     },
     {
-      "file": "web/js/ui/personal-navigation.js",
+      "file": "web/js/ui/member-enrollment-picker.js",
       "line": 6,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "return `<div class=\"kx-personal-shell\"><aside class=\"kx-personal-sidebar\" aria-label=\"${esc(t('marketing.space.title'))}\"><strong>KOMBAX</strong><small>${esc(state.session?.nombre||state.session?.email||'')}</small><nav>${targets.map(([target,label])=>`<button class=\"btn btn-ghost\" type=\"button\" data-kx-personal-nav=\"$"
+      "sample": "fieldset.innerHTML=`<legend>Disciplinas y grupos del alumno</legend><p>Marca todas las opciones que quieras añadir. Las matrículas actuales se conservan. Puedes elegir mañana y tarde y varias disciplinas.</p>${disciplines.filter(d=>d.activa).map(d=>{"
+    },
+    {
+      "file": "web/js/ui/member-enrollment-picker.js",
+      "line": 9,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "return `<details open><summary>${esc(d.nombre)}</summary>${choices.map(g=>{const active=enrollments.some(e=>e.socio_id===memberId&&e.disciplina_id===d.id&&(e.grupo_id||'')===g.id&&e.activa);return `<label class=\"kx-enrollment-choice\"><input type=\"checkbox\" data-enrollment-choice data-discipline=\"${esc(d.id)}\" data-grou"
+    },
+    {
+      "file": "web/js/ui/personal-navigation.js",
+      "line": 8,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "return `<div class=\"kx-personal-shell\"><aside class=\"kx-personal-sidebar\" id=\"kx-personal-sidebar\" aria-label=\"${esc(t('marketing.space.title'))}\"><div class=\"kx-personal-brand\"><span class=\"kx-personal-brand-symbol\" aria-hidden=\"true\">${icon('layers',{size:24})}</span><div><strong>KOMBAX</strong><small>${esc(t('market"
     },
     {
       "file": "web/js/ui/video-cover.js",

@@ -65,6 +65,16 @@ function applicationFieldsMessage(raw){
 function humanErrorSpanish(error) {
   if(error?.code==='AUTH_EXPIRED')return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
   const raw=technicalError(error).trim();
+  if(/MEMBER_GROUP_DISCIPLINE_MISMATCH|El grupo no pertenece a la disciplina/i.test(raw))return 'El grupo elegido no corresponde a esa disciplina. Selecciona un grupo de la disciplina correcta.';
+  if(/MEMBER_GRADE_DISCIPLINE_MISMATCH|El grado no pertenece a la disciplina/i.test(raw))return 'El grado corresponde a otra disciplina. Revisa el grado de esta matrícula.';
+  if(/MEMBER_GROUP_FULL|No quedan plazas disponibles|El grupo está completo/i.test(raw))return 'El grupo está completo. Escoge otro grupo o consulta al club antes de confirmar la matrícula.';
+  if(/MEMBER_OR_AUTHORIZED_TUTOR_REQUIRED/i.test(raw))return 'Solo el alumno o su tutor autorizado pueden solicitar nuevas matrículas de esta ficha.';
+  if(/MEMBER_CONTEXT_MISMATCH|MEMBER_ADMIN_REQUIRED/i.test(raw))return 'No tienes autorización para modificar esta ficha en este club.';
+  if(/MEMBER_DISCIPLINE_INVALID|Disciplina no válida o inactiva/i.test(raw))return 'La disciplina no está activa en este club. Selecciona una disciplina disponible.';
+  if(/VERIFIED_ACTIVE_SERVICE_AND_FINANCE_REQUIRED|VERIFIED_ACTIVE_SERVICE_REQUIRED/i.test(raw))return 'Necesitas verificar esta identidad y activar el servicio correspondiente para realizar esta operación.';
+  if(/ADVANCED_SERVICE_REQUIRED/i.test(raw))return 'Esta herramienta requiere un servicio avanzado activo para esta identidad.';
+  if(/PRIVATE_OPERATIONS_REQUIRED|PROFILE_ACCESS_REQUIRED|FINANCE_CORRECTION_ONLY/i.test(raw))return 'Tu acceso a esta identidad no permite realizar esa operación privada.';
+  if(/CAMPAIGN_CONTEXT_MISMATCH/i.test(raw))return 'La campaña seleccionada no pertenece a esta identidad.';
   if(/KOMBAX_CLUB_PUBLIC_LINK_INVALID/i.test(raw))return t('errors.clubPublicLinkInvalid');
   if(/KOMBAX_CLUB_DESCRIPTION_TOO_LONG/i.test(raw))return t('errors.clubDescriptionTooLong');
   if(/KOMBAX_CLUB_ALREADY_EXISTS/i.test(raw))return t('errors.clubAlreadyExists');

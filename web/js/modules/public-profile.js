@@ -96,7 +96,7 @@ function core(profile){
   return `<div class="kx-profile-facts">${c.descripcion?`<p ${contentTranslationAttrs({contentId:profile.id||profile.social_profile_id||'profile',contentType:'public_profile_bio',fieldName:'description',sourceLocale:profile.source_locale||profile.idioma||'',visibility:'public'})}>${esc(c.descripcion)}</p>`:''}${c.disciplinas?`<p><strong>${t('profile.public.disciplinesLabel')}</strong> ${esc(Array.isArray(c.disciplinas)?c.disciplinas.join(' · '):c.disciplinas)}</p>`:''}${c.club_nombre?`<p>${icon('shield',{size:16})} ${esc(c.club_nombre)}</p>`:''}</div>`;
 }
 const PERSON_FACET_LABEL={competidor:'Competidor',profesional:'Profesional',espectador:'Espectador'};
-const PROFESSIONAL_SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Manager / Representante',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador'};
+const PROFESSIONAL_SPECIALTY_LABEL={entrenador:'Entrenador/a',representante_manager:'Manager / Representante',medico_sanitario:'Médico / Sanitario',arbitro_juez:'Árbitro / Juez',promotor_organizador:'Promotor / Organizador',psicologo_deportivo:'Psicólogo deportivo',psicoterapeuta:'Psicoterapeuta'};
 function personFacetsSection(profile){
   const facets=arr(profile?.person_facets?.facets);if(!facets.length)return '';
   const meaningful=facets.filter(f=>['competidor','profesional'].includes(String(f.type||'')));
@@ -273,6 +273,12 @@ function bindProfilePostMedia(root){
   root.querySelectorAll('[data-kx-profile-post-media]').forEach(b=>{if(b.dataset.kxBound==='1')return;b.dataset.kxBound='1';b.addEventListener('click',()=>openImmersiveMedia({src:b.dataset.kxMediaSrc||'',type:b.dataset.kxMediaType==='video'?'video':'image',poster:b.dataset.kxMediaPoster||'',alt:'Contenido de la publicación KOMBAX'}));});
 }
 function bindPublicAlbum(root,p){
+  const facets=arr(p?.person_facets?.facets).filter(f=>f.type==='profesional'&&f.profile_id);
+  const section=root.querySelector('.kx-person-facets');
+  if(section)for(const facet of facets){
+    const button=document.createElement('button');button.type='button';button.className='btn btn-ghost btn-sm';button.dataset.kxPublicDocuments=facet.profile_id;button.textContent='Ver documentos profesionales';section.appendChild(button);
+    button.addEventListener('click',async()=>{const module=await import('./professional-documents.js');await module.openProfessionalDocuments(facet.profile_id);});
+  }
   const rows=arr(p.album).filter(x=>['photo','video'].includes(x.tipo));
   root.querySelectorAll('[data-kx-public-photo]').forEach(b=>b.addEventListener('click',()=>openProfileAlbumMedia(p,rows.find(x=>String(x.id)===String(b.dataset.kxPublicPhoto)))));
   root.querySelectorAll('[data-kx-public-video]').forEach(b=>b.addEventListener('click',()=>openProfileAlbumMedia(p,rows.find(x=>String(x.id)===String(b.dataset.kxPublicVideo)))));

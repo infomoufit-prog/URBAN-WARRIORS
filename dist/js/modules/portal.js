@@ -1,3 +1,4 @@
+import {mountMemberEnrollmentPicker} from '../ui/member-enrollment-picker.js';
 import { repos } from '../core/repositories.js';
 import { state } from '../core/state.js';
 import { esc, dateFmt, money, isoDate, weekRange, sortSessionsForWeek, humanError } from '../core/utils.js';
@@ -7,6 +8,7 @@ import { renderOwnKombaxProfilePage } from './public-profile.js';
 import { openAuthenticatedPasswordChange } from './account-security.js';
 import { mediaFrameAttrs, openMediaFramingEditor } from '../ui/media-framing.js';
 import { renderCompetitionPreparation } from './competition-preparation.js';
+import {bindEnrollmentGroups,validateEnrollmentSelection} from '../core/member-enrollment.js';
 
 const DAYS=['','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 let portalWeekOffset=0;
@@ -132,7 +134,14 @@ export async function renderPortalRequests(){
     setMainHtml(`${members.length?profileSwitcher(members,member?.id):''}${pageHeader('Solicitudes','Amplía tu actividad o añade un menor',`${member?'<button class="btn btn-primary" id="request-sport">Solicitar disciplina o grupo</button>':''}${family?'<button class="btn btn-ghost" id="request-minor">Añadir menor</button>':''}`,'Mi cuenta')}${card('Matrículas activas',active||empty('Sin matrículas activas'))}${card('Estado y avisos de solicitudes',requestNotifs||empty('Sin novedades','Las resoluciones y cambios de estado de las solicitudes se muestran mediante notificaciones del club.'))}`);
     memberBind(members,renderPortalRequests);
     const relationFields=[{name:'disciplina_id',label:'Disciplina',type:'select',required:true,options:options(disciplines.filter(d=>d.activa))},{name:'grupo_id',label:'Grupo',type:'select',required:true,options:options(groups.filter(g=>g.activo),g=>`${disciplines.find(d=>d.id===g.disciplina_id)?.nombre||''} · ${g.nombre}`)},{name:'tarifa_id',label:'Tarifa',type:'select',options:options(tariffs.filter(t=>t.activa),t=>`${t.nombre} · ${money(t.importe)}`)}];
-    document.getElementById('request-sport')?.addEventListener('click',()=>openForm({title:'Nueva solicitud deportiva',subtitle:member?`${member.nombre} ${member.apellidos||''}`:'',fields:relationFields,submitText:'Enviar solicitud',onSubmit:async v=>{await repos.portal.requestEnrollment(member.id,v.disciplina_id,v.grupo_id,v.tarifa_id);toast('Solicitud enviada al club');await renderPortalRequests();}}));
+    document.getElementById('request-sport')?.addEventListener('click',()=>{
+      if(!member)return;let selection=()=>[];
+      const modal=openForm({title:'Solicitar disciplinas y grupos',subtitle:`${member.nombre} ${member.apellidos||''} · solo para este alumno. Cada solicitud requiere aprobación del club.`,fields:[{name:'tarifa_id',label:'Tarifa',type:'select',options:options(tariffs.filter(t=>t.activa))}],submitText:'Enviar solicitudes',onSubmit:async v=>{
+        const chosen=selection();if(!chosen.length)throw new Error('Marca al menos un nuevo grupo.');
+        await repos.portal.requestEnrollmentBatch(member.id,chosen,v.tarifa_id);toast('Solicitudes enviadas al club para este alumno');await renderPortalRequests();
+      }});
+      selection=mountMemberEnrollmentPicker(modal.form,{disciplines,groups,enrollments,memberId:member.id});
+    });
     document.getElementById('request-minor')?.addEventListener('click',()=>openForm({title:'Añadir menor',subtitle:'La solicitud quedará pendiente de aprobación por el club.',fields:[{name:'nombre',label:'Nombre del menor',required:true},{name:'apellidos',label:'Apellidos',required:true},{name:'fecha_nacimiento',label:'Fecha de nacimiento',type:'date'},{name:'parentesco',label:'Parentesco',required:true},{name:'telefono',label:'Teléfono de contacto',required:true,value:state.session?.telefono||''},...relationFields,{name:'observaciones',label:'Observaciones',type:'textarea',full:true}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.portal.requestMinor({...v,tutor_nombre:`${state.session?.nombre||''} ${state.session?.apellidos||''}`.trim(),tutor_email:state.session?.email||''});toast('Solicitud del menor enviada');await renderPortalRequests();}}));
   }catch(e){setError(e);setMainHtml(`${pageHeader('Solicitudes')} ${empty('No se pudieron cargar las solicitudes',humanError(e))}`)}
 }
@@ -143,10 +152,10 @@ export async function renderPortalProfile(){
     const d=await loadPortalProfile();if(!d.member){setMainHtml(`${pageHeader('Mi perfil')} ${empty('Sin alumno vinculado')}`);return;}
     const member=d.member,pr=d.progressRows.find(x=>x.socio_id===member.id)||{},total=Number(pr.asistencias_registradas||0),present=Number(pr.asistencias_presentes||0),pct=total?Math.round(present/total*100):0;
     const docs=d.documents.filter(x=>x.socio_id===member.id&&x.estado!=='archivado'&&x.estado!=='sustituido'),tracks=d.tracking.filter(x=>x.socio_id===member.id&&x.visibilidad==='familia'),grads=d.graduations.filter(x=>x.socio_id===member.id);
-    const isStudent=state.session?.rol==='alumno';
+    const isStudent=Boolean(member.perfil_id&&String(member.perfil_id)===String(state.session?.id));
     const [avatarUrl,socialStatus,socialRules]=await Promise.all([state.session?.avatar_path?repos.settings.avatarUrl(state.session.avatar_path).catch(()=> ''):Promise.resolve(''),isStudent?repos.socialGeneral.status().catch(()=>null):Promise.resolve(null),isStudent?repos.socialGeneral.rules().catch(()=>null):Promise.resolve(null)]);
     const ai=String(`${state.session?.nombre||''} ${state.session?.apellidos||''}`).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()).join('')||'UW';
-    const privateHtml=`<section class="kx-private-club-context"><div class="kx-private-club-head"><div>${icon('lock',{size:18})}</div><div><strong>Información privada del club</strong><span>No forma parte de tu perfil público KOMBAX.</span></div></div>
+    const privateHtml=`<section class="kx-private-club-context"><div class="kx-private-club-head"><div>${icon('lock',{size:18})}</div><div><strong>Ficha privada · ${esc(member.nombre)} ${esc(member.apellidos||'')}</strong><span>${isStudent?'No forma parte de tu perfil público KOMBAX.':'Estás consultando la ficha del familiar seleccionado. Tu perfil público y tu cuenta de acceso son independientes; cambiar de hijo no modifica ningún perfil Social.'}</span></div></div>
       <div class="metrics">${metric('Asistencia',`${pct}%`,`${present}/${total} registros`)}${metric('Grado actual',pr.grado_actual||'—')}${metric('Graduaciones',grads.length)}${metric('Documentos',docs.length)}</div>
       ${card('Mis competiciones',quickRow(icon('activity'),'Preparación y peso','El seguimiento se activa desde una inscripción concreta a un interclub, open o competición. Tu histórico sigue siendo privado.','<button type="button" class="btn btn-primary btn-sm" id="portal-preparation">Abrir mis competiciones</button>'))}
       <div class="grid-2">${card('Evolución privada',`${progress(pct)}<div class="timeline" style="margin-top:20px">${grads.slice(0,12).map(g=>`<div class="timeline-item"><strong>${esc(d.grades.find(x=>x.id===g.grado_id)?.nombre||'Graduación')}</strong><small>${dateFmt(g.fecha)}${g.examinador?` · ${esc(g.examinador)}`:''}</small></div>`).join('')||'<div class="timeline-item"><strong>Sin graduaciones registradas</strong></div>'}</div>`)}${card('Seguimiento compartido',tracks.length?`<div class="timeline">${tracks.slice(0,20).map(x=>`<div class="timeline-item"><strong>${esc(x.tipo)}</strong><small>${dateFmt(x.fecha)} · ${esc(x.nota)}</small></div>`).join('')}</div>`:empty('Sin notas compartidas'))}</div>
