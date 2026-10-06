@@ -32,7 +32,7 @@ ok(await exists('supabase/migrations/260_kombax_showcase_club_autoprovision.sql'
 ok(await exists('supabase/migrations/261_kombax_events_multiclub_authorized_connections.sql'),'migración 261 Events multiclub existe');
 ok(await exists('supabase/migrations/263_kombax_events_multiclub_fk_indexes_r74.sql'),'migración 263 hardening de índices existe');
 ok(/const \[nameTranslation,descriptionTranslation\]=await Promise\.all/.test(showcase),'descriptionTranslation se define antes de usarse');
-ok(/export async function renderMyShowcase\(\)[\s\S]*showcase\.privateCenter\.unavailableTitle[\s\S]*showcase-private-explore[\s\S]*return;/.test(showcase)&&/export async function renderShowcase\(\)[\s\S]*activeView='catalog'[\s\S]*loadCatalog\(false\)/.test(showcase),'Mi Showcase conserva su ruta privada y Explorar Showcase conserva el catálogo público');
+ok(/export async function renderMyShowcase\([^)]*\)[\s\S]*showcase\.privateCenter\.unavailableTitle[\s\S]*showcase-private-explore[\s\S]*return;/.test(showcase)&&/export async function renderShowcase\(\)[\s\S]*activeView='catalog'[\s\S]*loadCatalog\(false\)/.test(showcase),'Mi Showcase conserva su ruta privada y Explorar Showcase conserva el catálogo público');
 ok(/app_kombax_showcase_ensure_club_v045/.test(m260)&&/app_puede_gestionar_perfil_club_v035/.test(m260),'autoprovision Showcase exige gestión autorizada del club');
 ok(/active_plan_r64/.test(m260)&&/premium/.test(m260)&&/club_pro/.test(m260),'autoprovision Showcase respeta plan elegible');
 ok(/on conflict\(marca_id,perfil_id\)/.test(m260)&&/on conflict \(club_id\)/.test(m260),'autoprovision Showcase es idempotente para proveedor y gestor');

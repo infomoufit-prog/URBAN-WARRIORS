@@ -27,6 +27,9 @@ const renderShowcase=(...args)=>gatewayLazy('./showcase.js').then(m=>m.renderSho
 const renderMyShowcase=(...args)=>gatewayLazy('./showcase.js').then(m=>m.renderMyShowcase(...args));
 const renderKombaxEvents=(...args)=>gatewayLazy('./kombax-events.js').then(m=>m.renderKombaxEvents(...args));
 import { renderManagedProfileHub, managedHubTitle } from './managed-profile-hub.js';
+import { clearPersonalWorkspaceNavigation } from '../ui/personal-navigation.js';
+import { accountWorkspaceTargets, automaticWorkspaceTarget, accountEntryDestination } from '../core/workspace-access.js';
+import { openProfileAdministration } from './profile-administration.js';
 import { renderProfessionalOperations } from './professional-operations.js';
 import { renderPendingFederationInvitations } from './federation-licenses.js';
 import { openPasswordRecovery } from './auth-recovery.js';
@@ -380,7 +383,7 @@ async function openPilotClubActivation({onBack}={}){
   });
 }
 
-function openGlobalAuth({onBack,pendingType='',mode='login',onAuthenticated=null}={}){
+export function openGlobalAuth({onBack,pendingType='',mode='login',onAuthenticated=null}={}){
   if(mode==='register'){
     const registerModal=openForm({
       title:t('marketing.gateway.auth.registerTitle'),subtitle:t('marketing.accountAccess.freeNote'),
@@ -417,10 +420,11 @@ function openGlobalAuth({onBack,pendingType='',mode='login',onAuthenticated=null
     title:t('marketing.accountAccess.login'),subtitle:t('marketing.gateway.auth.loginSubtitle'),
     fields:[
       {name:'email',label:'Email',type:'email',required:true},
-      {name:'password',label:t('marketing.gateway.auth.password'),type:'password',required:true}
+      {name:'password',label:t('marketing.gateway.auth.password'),type:'password',required:true},
+      ...(!pendingType&&!onAuthenticated?[{name:'entry_destination',label:'¿Dónde quieres entrar?',type:'select',required:true,value:'direct',options:[{value:'direct',label:'Entrar a un perfil o club'},{value:'account',label:'Gestionar mi cuenta e identidades'}],help:'Si tienes varios espacios, podrás elegir cuál abrir. Esta elección no modifica tus perfiles ni tus permisos.',full:true}]:[])
     ],
     submitText:t('marketing.gateway.auth.enter'),
-    onSubmit:async v=>{await backend.signInGlobal(v.email,v.password);activeAccountPolicy=null;toast(t('marketing.gateway.auth.sessionStarted'));setTimeout(()=>Promise.resolve(onAuthenticated?onAuthenticated():finishAccountEntry({onBack,pendingType:pendingType||sessionStorage.getItem('kombax_pending_profile_type')||''})).catch(setError),350);}
+    onSubmit:async v=>{await backend.signInGlobal(v.email,v.password);activeAccountPolicy=null;toast(t('marketing.gateway.auth.sessionStarted'));setTimeout(()=>Promise.resolve(onAuthenticated?onAuthenticated():finishAccountEntry({onBack,destination:v.entry_destination||'direct',pendingType:pendingType||sessionStorage.getItem('kombax_pending_profile_type')||''})).catch(setError),350);}
   });
   const recover=document.createElement('button');recover.type='button';recover.className='btn btn-ghost';recover.textContent=t('marketing.gateway.auth.forgotPassword');
   recover.addEventListener('click',()=>openPasswordRecovery({prefillEmail:authModal.form.elements.email?.value||'',onComplete:()=>openGlobalAuth({onBack,pendingType,mode:'login',onAuthenticated})}));
@@ -553,7 +557,7 @@ async function saveAndSubmitApplication(type,{profile=null,application=null,onBa
   });
 }
 
-function profileEditor(type,{profile=null,onBack,memberProfiles=[]}={}){
+function profileEditor(type,{profile=null,onBack,memberProfiles=[],onSaved=null}={}){
   if(!profile&&!requireProfileChoice(type))return;
   openForm({
     title:profile?'Editar perfil KOMBAX':`Preparar solicitud ${TYPE_LABEL[type]||type}`,
@@ -563,7 +567,7 @@ function profileEditor(type,{profile=null,onBack,memberProfiles=[]}={}){
       const disciplinas=String(v.disciplinas||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
       const result=await repos.kombaxProfiles.saveProfile({perfil_directo_id:profile?.id||null,tipo:type,nombre_publico:v.nombre_publico,descripcion:v.descripcion||'',ubicacion:v.ubicacion||'',disciplinas,categoria:v.categoria||'',club_declarado:v.club_declarado||'',web_publica:v.web_publica||'',miembro_social_id:v.miembro_social_id||null,fecha_nacimiento:v.fecha_nacimiento||null,especialidad_principal:v.especialidad_principal||null,especialidades_secundarias:String(v.especialidades_secundarias||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,4)});
       toast(profile?'Perfil actualizado':'Borrador de solicitud creado');const saved=result?.data||result;if(!profile&&saved?.id&&commercialAudienceForType(type)&&selectedCommercialPlan(type).plan_code)sessionStorage.setItem('kombax_new_profile_id',saved.id);
-      await renderDirectProfileHub({onBack});
+      if(onSaved)await onSaved();else await renderDirectProfileHub({onBack});
     }
   });
 }
@@ -630,7 +634,7 @@ export function renderGlobalHome({onBack=()=>renderDirectProfileHub({onBack:()=>
   localStorage.setItem('kombax_last_global_view','home');
   const openHome=()=>renderGlobalHome({onBack,pendingType});
   const rendered=renderKombaxHome({standalone:true,contextName:state.session?.active_identity_name||state.session?.nombre||'Mi KOMBAX',onBack,onNavigate:target=>{
-    if(target==='workspace')return renderDirectProfileHub({onBack:openHome,pendingType});
+    if(target==='workspace')return renderDirectProfileHub({onBack:openHome,pendingType,autoSelect:true});
     if(target==='social')return openGlobalArea(renderKombaxSocial,{onBack:openHome,title:'KOMBAX Social'});
     if(target==='showcase')return openGlobalArea(renderShowcase,{onBack:openHome,title:'KOMBAX Showcase'});
     if(target==='kombax-events')return openGlobalArea(renderKombaxEvents,{onBack:openHome,title:'KOMBAX Events'});
@@ -647,7 +651,8 @@ async function openGlobalArea(renderer,{onBack,title}){
   try{await renderer();}catch(error){setError(error);}
 }
 
-export async function renderDirectProfileHub({onBack,pendingType=''}={}){
+export async function renderDirectProfileHub({onBack,pendingType='',autoSelect=false}={}){
+  clearPersonalWorkspaceNavigation();
   if(state.session?.club_id&&!state.session?.support_mode){await backend.switchGlobal();}
   if(!globalAuthenticated()){renderDirectProfiles({onBack});return;}
   if(state.session?.platform_legal_required===true){
@@ -672,6 +677,9 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     const profileById=new Map(profiles.map(x=>[x.id,x]));
     const clubById=new Map((managedClubs||[]).map(x=>[x.club_id,x]));
     const identityCount=profiles.length+(managedClubs||[]).length;
+    const workspaceSettings=await repos.kombaxProfiles.workspaceSettings().catch(()=>null);
+    const preferenceById=new Map((workspaceSettings||[]).map(x=>[String(x.profile_id),x]));
+    if(autoSelect&&workspaceSettings){const target=automaticWorkspaceTarget(accountWorkspaceTargets({profiles,clubs:teamMemberships||[],settings:workspaceSettings}),{pendingType,applications,legalRequired:state.session?.platform_legal_required,supportMode:state.session?.support_mode});if(target)return enterWorkspaceTarget(target);}
     const membershipRows=supportDirect?[]:(memberships||[]);
     const memberMemberships=membershipRows.filter(x=>x.modo==='alumno'&&x.estado==='activo');
     const familyMemberships=membershipRows.filter(x=>x.modo==='tutor'&&x.estado==='activo');
@@ -695,8 +703,8 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
         ${supportDirect?'':`<section class="kx-hub-section" data-account-section="services"><div class="kx-section-title"><h2>${esc(t('marketing.space.servicesTitle'))}</h2></div><div class="kx-profile-owned-grid"><article class="kx-profile-owned"><h3>${esc(t('marketing.space.servicesEvents'))}</h3><p>${esc(t('marketing.space.servicesEventsBody'))}</p><button class="btn btn-primary" type="button" id="kx-services-events">${esc(t('marketing.space.servicesEventsAction'))}</button></article><article class="kx-profile-owned"><h3>${esc(t('marketing.space.servicesTickets'))}</h3><p>${esc(t('marketing.space.servicesTicketsBody'))}</p><button class="btn btn-ghost" type="button" id="kx-services-ticketing">${esc(t('marketing.space.servicesEventsAction'))}</button></article><article class="kx-profile-owned"><h3>${esc(t('marketing.space.servicesSeller'))}</h3><p>${esc(t('marketing.space.servicesSellerBody'))}</p><button class="btn btn-ghost" type="button" id="kx-services-seller">Showcase</button></article><article class="kx-profile-owned"><h3>${esc(t('marketing.space.servicesSubscriptions'))}</h3><p>${esc(t('marketing.space.servicesSubscriptionsBody'))}</p><button class="btn btn-ghost" type="button" id="kx-services-plans">${esc(t('marketing.space.servicesPlans'))}</button></article></div><p>${esc(t('marketing.space.servicesPilot'))}</p></section>`}
         ${supportDirect?'':'<div id="kx-fed-account-invitations"></div>'}
         <section class="kx-hub-section" data-account-section="clubs"><div class="kx-section-title"><h2>${t('marketing.accountAccess.clubs')}</h2><button class="btn btn-ghost btn-sm" id="kx-account-join-club" type="button">${t('marketing.accountAccess.join')}</button></div><div class="kx-profile-owned-grid">${teamCards}${membershipCards}${(managedClubs||[]).map(c=>`<article class="kx-profile-owned kx-club-identity"><header><div class="direct-profile-icon">${c.logo_url?`<img src="${esc(c.logo_url)}" alt="" loading="lazy">`:featureIcon('club',{size:44})}</div><div><span>${esc(rolesLabel((teamMemberships||[]).find(m=>String(m.club_id)===String(c.club_id))?.roles||[c.coordinacion?'coordinacion':c.rol||'direccion']))}</span><strong>${esc(c.nombre_publico)}</strong><small>${esc([c.ciudad,c.provincia,c.pais].filter(Boolean).join(' · ')||'Perfil oficial de club')}</small></div><b class="kx-state ${c.activo?'ok':'warn'}">${c.activo?'Activo':'Inactivo'}</b></header><p>${esc(c.descripcion||c.lema||'Completa el perfil público de tu Club desde su entorno de gestión.')}</p><div class="kx-profile-tags">${(c.disciplinas||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}<span>Club KOMBAX</span></div><footer><button class="btn btn-primary btn-sm" data-kx-club-enter="${esc(c.club_id)}">Gestionar club</button><button class="btn btn-ghost btn-sm" data-kx-org-services="${esc(c.club_id)}" data-subject-type="club">${esc(t('marketing.space.club'))}</button>${c.social_profile_id?`<button class="btn btn-ghost btn-sm" data-kx-club-public="${esc(c.club_id)}">Ver perfil público</button>`:''}<button class="btn btn-ghost btn-sm" data-kx-club-security="${esc(c.club_id)}">Seguridad y acceso</button><button class="btn btn-ghost btn-sm" data-kx-club-support="${esc(c.club_id)}">Privacidad y soporte</button></footer></article>`).join('')}</div>${teamClubs.length||membershipRows.length||managedClubs.length?'':`<div class="premium-empty compact"><p>${t('marketing.accountAccess.noClubs')}</p></div>`}</section>
-        <section class="kx-hub-section" data-account-section="organizations"><div class="kx-section-title"><h2>${esc(t('marketing.space.organizations'))}</h2></div><div class="kx-profile-owned-grid">${profiles.filter(p=>!['competidor','profesional','espectador'].includes(p.tipo)).map(p=>`<article class="kx-profile-owned"><header><div class="direct-profile-icon">${featureIcon(directTypes.find(x=>x.id===p.tipo)?.icon||'identity',{size:44})}</div><div><span>${esc(TYPE_LABEL[p.tipo]||p.tipo)}</span><strong>${esc(p.nombre_publico)}</strong><small>${esc(p.ubicacion||'Sin ubicación pública')}</small></div><b class="kx-state ${esc(workflowTone(p.workflow_estado))}">${esc(WORKFLOW_LABEL[p.workflow_estado]||p.workflow_estado)}</b></header><p>${esc(p.descripcion||'Completa la presentación pública de este perfil.')}</p><div class="kx-profile-tags">${(p.disciplinas||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}<span>${esc(p.verificacion_estado==='verificado'?(p.servicio_estado==='activa'||p.servicio_estado==='prueba'?'Insignia activa':'Verificado · pendiente de servicio'):'Sin insignia')}</span></div><footer><button class="btn btn-primary btn-sm" data-kx-profile-open-hub="${esc(p.id)}">Abrir ${esc(managedHubTitle(p.tipo))}</button>${['federacion','marca'].includes(p.tipo)?`<button class="btn btn-ghost btn-sm" data-kx-org-services="${esc(p.id)}" data-subject-type="direct_profile">${esc(t('marketing.space.servicesSubscriptions'))}</button>`:''}${p.social_profile_id?`<button class="btn btn-ghost btn-sm" data-kx-profile-public="${esc(p.id)}">Ver perfil público</button>`:''}<button class="btn btn-ghost btn-sm" data-kx-profile-edit="${esc(p.id)}">Editar</button>${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-security="${esc(p.id)}">Seguridad y acceso</button>`}${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-support="${esc(p.id)}">Privacidad y soporte</button>`}${p.tipo==='espectador'?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Foto y banner</button>`:['activa','prueba'].includes(p.servicio_estado)?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Álbum</button>`:''}${p.tipo!=='espectador'&&!applications.some(a=>a.perfil_directo_id===p.id&&['submitted','under_review','verified'].includes(a.estado))?`<button class="btn btn-primary btn-sm" data-kx-profile-verify="${esc(p.id)}">Solicitar verificación</button>`:''}</footer></article>`).join('')}</div></section>
-        <section class="kx-hub-section" data-account-section="profiles"><div class="kx-section-title"><h2>${t('marketing.space.profile')}</h2></div><div class="kx-profile-owned-grid">${spaceModel.hasPersonalProfile?`<article class="kx-canonical-profile" data-personal-profile><strong>${esc(t('marketing.space.publicProfile'))}</strong><h3>${esc(spaceModel.name||state.session?.nombre||'KOMBAX')}</h3><p>${esc(t('marketing.space.oneProfile'))}</p>${spaceModel.socialId?`<button class="btn btn-primary" type="button" data-kx-canonical-public="${esc(spaceModel.socialId)}">${esc(t('marketing.space.publicProfile'))}</button>`:''}<div class="kx-profile-tags">${spaceModel.facets.map(type=>`<span>${esc(TYPE_LABEL[type]||type)}</span>`).join('')}</div></article>`:`<article class="premium-empty" data-no-public-profile><p>${esc(t('marketing.space.noProfile'))}</p><button class="btn btn-primary" id="kx-create-public-profile" type="button">${esc(t('marketing.space.create'))}</button></article>`}${memberPublicCard?`<div class="kx-member-capability">${memberPublicCard}</div>`:''}${profiles.filter(p=>['competidor','profesional','espectador'].includes(p.tipo)).map(p=>`<article class="kx-profile-owned"><header><div class="direct-profile-icon">${featureIcon(directTypes.find(x=>x.id===p.tipo)?.icon||'identity',{size:44})}</div><div><span>${esc(TYPE_LABEL[p.tipo]||p.tipo)} · ${esc(t('marketing.space.facets'))}</span><strong>${esc(p.nombre_publico)}</strong><small>${esc(p.ubicacion||'Sin ubicación pública')}</small></div><b class="kx-state ${esc(workflowTone(p.workflow_estado))}">${esc(WORKFLOW_LABEL[p.workflow_estado]||p.workflow_estado)}</b></header><p>${esc(p.descripcion||'Completa la presentación pública de este perfil.')}</p><div class="kx-profile-tags">${(p.disciplinas||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}<span>${esc(p.verificacion_estado==='verificado'?(p.servicio_estado==='activa'||p.servicio_estado==='prueba'?'Insignia activa':'Verificado · pendiente de servicio'):'Sin insignia')}</span></div><footer><button class="btn btn-primary btn-sm" data-kx-profile-open-hub="${esc(p.id)}">Abrir ${esc(managedHubTitle(p.tipo))}</button>${['federacion','marca'].includes(p.tipo)?`<button class="btn btn-ghost btn-sm" data-kx-org-services="${esc(p.id)}" data-subject-type="direct_profile">${esc(t('marketing.space.servicesSubscriptions'))}</button>`:''}<button class="btn btn-ghost btn-sm" data-kx-profile-edit="${esc(p.id)}">Editar</button>${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-security="${esc(p.id)}">Seguridad y acceso</button>`}${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-support="${esc(p.id)}">Privacidad y soporte</button>`}${p.tipo==='espectador'?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Foto y banner</button>`:['activa','prueba'].includes(p.servicio_estado)?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Álbum</button>`:''}${p.tipo!=='espectador'&&!applications.some(a=>a.perfil_directo_id===p.id&&['submitted','under_review','verified'].includes(a.estado))?`<button class="btn btn-primary btn-sm" data-kx-profile-verify="${esc(p.id)}">Solicitar verificación</button>`:''}</footer></article>`).join('')}</div>${memberPublicCard||profiles.length?'':`<div class="premium-empty compact"><p>${t('marketing.accountAccess.noProfiles')}</p></div>`}</section>
+        <section class="kx-hub-section" data-account-section="organizations"><div class="kx-section-title"><h2>${esc(t('marketing.space.organizations'))}</h2></div><div class="kx-profile-owned-grid">${profiles.filter(p=>!['competidor','profesional','espectador'].includes(p.tipo)).map(p=>`<article class="kx-profile-owned" data-workspace-profile="${esc(p.id)}"><header><div class="direct-profile-icon">${featureIcon(directTypes.find(x=>x.id===p.tipo)?.icon||'identity',{size:44})}</div><div><span>${esc(TYPE_LABEL[p.tipo]||p.tipo)}</span><strong>${esc(p.nombre_publico)}</strong><small>${esc(p.ubicacion||'Sin ubicación pública')}</small></div><b class="kx-state ${esc(workflowTone(p.workflow_estado))}">${esc(WORKFLOW_LABEL[p.workflow_estado]||p.workflow_estado)}</b></header><p>${esc(p.descripcion||'Completa la presentación pública de este perfil.')}</p><div class="kx-profile-tags">${(p.disciplinas||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}<span>${esc(p.verificacion_estado==='verificado'?(p.servicio_estado==='activa'||p.servicio_estado==='prueba'?'Insignia activa':'Verificado · pendiente de servicio'):'Sin insignia')}</span></div><footer><button class="btn btn-primary btn-sm" data-kx-profile-open-hub="${esc(p.id)}">Abrir ${esc(managedHubTitle(p.tipo))}</button>${['federacion','marca'].includes(p.tipo)?`<button class="btn btn-ghost btn-sm" data-kx-org-services="${esc(p.id)}" data-subject-type="direct_profile">${esc(t('marketing.space.servicesSubscriptions'))}</button>`:''}${p.social_profile_id?`<button class="btn btn-ghost btn-sm" data-kx-profile-public="${esc(p.id)}">Ver perfil público</button>`:''}<button class="btn btn-ghost btn-sm" data-kx-profile-edit="${esc(p.id)}">Editar</button>${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-security="${esc(p.id)}">Seguridad y acceso</button>`}${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-support="${esc(p.id)}">Privacidad y soporte</button>`}${p.tipo==='espectador'?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Foto y banner</button>`:['activa','prueba'].includes(p.servicio_estado)?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Álbum</button>`:''}${p.tipo!=='espectador'&&!applications.some(a=>a.perfil_directo_id===p.id&&['submitted','under_review','verified'].includes(a.estado))?`<button class="btn btn-primary btn-sm" data-kx-profile-verify="${esc(p.id)}">Solicitar verificación</button>`:''}</footer></article>`).join('')}</div></section>
+        <section class="kx-hub-section" data-account-section="profiles"><div class="kx-section-title"><h2>${t('marketing.space.profile')}</h2></div><div class="kx-profile-owned-grid">${spaceModel.hasPersonalProfile?`<article class="kx-canonical-profile" data-personal-profile><strong>${esc(t('marketing.space.publicProfile'))}</strong><h3>${esc(spaceModel.name||state.session?.nombre||'KOMBAX')}</h3><p>${esc(t('marketing.space.oneProfile'))}</p>${spaceModel.socialId?`<button class="btn btn-primary" type="button" data-kx-canonical-public="${esc(spaceModel.socialId)}">${esc(t('marketing.space.publicProfile'))}</button>`:''}<div class="kx-profile-tags">${spaceModel.facets.map(type=>`<span>${esc(TYPE_LABEL[type]||type)}</span>`).join('')}</div></article>`:`<article class="premium-empty" data-no-public-profile><p>${esc(t('marketing.space.noProfile'))}</p><button class="btn btn-primary" id="kx-create-public-profile" type="button">${esc(t('marketing.space.create'))}</button></article>`}${memberPublicCard?`<div class="kx-member-capability">${memberPublicCard}</div>`:''}${profiles.filter(p=>['competidor','profesional','espectador'].includes(p.tipo)).map(p=>`<article class="kx-profile-owned" data-workspace-profile="${esc(p.id)}"><header><div class="direct-profile-icon">${featureIcon(directTypes.find(x=>x.id===p.tipo)?.icon||'identity',{size:44})}</div><div><span>${esc(TYPE_LABEL[p.tipo]||p.tipo)} · ${esc(t('marketing.space.facets'))}</span><strong>${esc(p.nombre_publico)}</strong><small>${esc(p.ubicacion||'Sin ubicación pública')}</small></div><b class="kx-state ${esc(workflowTone(p.workflow_estado))}">${esc(WORKFLOW_LABEL[p.workflow_estado]||p.workflow_estado)}</b></header><p>${esc(p.descripcion||'Completa la presentación pública de este perfil.')}</p><div class="kx-profile-tags">${(p.disciplinas||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}<span>${esc(p.verificacion_estado==='verificado'?(p.servicio_estado==='activa'||p.servicio_estado==='prueba'?'Insignia activa':'Verificado · pendiente de servicio'):'Sin insignia')}</span></div><footer><button class="btn btn-primary btn-sm" data-kx-profile-open-hub="${esc(p.id)}">Abrir ${esc(managedHubTitle(p.tipo))}</button>${['federacion','marca'].includes(p.tipo)?`<button class="btn btn-ghost btn-sm" data-kx-org-services="${esc(p.id)}" data-subject-type="direct_profile">${esc(t('marketing.space.servicesSubscriptions'))}</button>`:''}<button class="btn btn-ghost btn-sm" data-kx-profile-edit="${esc(p.id)}">Editar</button>${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-security="${esc(p.id)}">Seguridad y acceso</button>`}${supportDirect?'':`<button class="btn btn-ghost btn-sm" data-kx-profile-support="${esc(p.id)}">Privacidad y soporte</button>`}${p.tipo==='espectador'?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Foto y banner</button>`:['activa','prueba'].includes(p.servicio_estado)?`<button class="btn btn-ghost btn-sm" data-kx-profile-album="${esc(p.id)}">Álbum</button>`:''}${p.tipo!=='espectador'&&!applications.some(a=>a.perfil_directo_id===p.id&&['submitted','under_review','verified'].includes(a.estado))?`<button class="btn btn-primary btn-sm" data-kx-profile-verify="${esc(p.id)}">Solicitar verificación</button>`:''}</footer></article>`).join('')}</div>${memberPublicCard||profiles.length?'':`<div class="premium-empty compact"><p>${t('marketing.accountAccess.noProfiles')}</p></div>`}</section>
         <section class="kx-hub-section" data-account-section="verification"><div class="kx-section-title"><div><span>REVISIÓN</span><h2>Solicitudes</h2></div><small>${applications.length} solicitud${applications.length===1?'':'es'}</small></div>${applications.length?`<div class="kx-application-grid">${applications.map(a=>applicationCard(a,profileById.get(a.perfil_directo_id),onBack)).join('')}</div>`:'<div class="premium-empty compact"><strong>Sin solicitudes</strong><p>Las verificaciones enviadas aparecerán aquí con su estado.</p></div>'}</section>
         <div class="gateway-safety-note"><span class="gateway-safety-icon">${icon('shieldCheck',{size:22})}</span><div><strong>Verificación separada del autorregistro</strong><p>Crear una cuenta o un perfil nunca concede una insignia, un club ni permisos sensibles. La revisión es explícita y trazable.</p></div></div>
       </section>
@@ -718,8 +726,11 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     document.getElementById('kx-open-events')?.addEventListener('click',()=>openGlobalArea(renderKombaxEvents,{onBack,title:'KOMBAX Events'}));
     for(const id of ['kx-services-events','kx-services-ticketing'])document.getElementById(id)?.addEventListener('click',()=>openGlobalArea(renderKombaxEvents,{onBack:()=>renderDirectProfileHub({onBack}),title:'KOMBAX Events'}));
     document.getElementById('kx-services-plans')?.addEventListener('click',()=>document.getElementById('kx-open-plans')?.click());
-    if(!supportDirect)gatewayLazy('./organization-billing.js').then(module=>module.mountOwnedBilling(document.querySelector('[data-account-section="services"]'))).catch(error=>console.warn('Billing list unavailable',error));
-    document.getElementById('kx-services-seller')?.addEventListener('click',()=>openGlobalArea(renderMyShowcase,{onBack:()=>renderDirectProfileHub({onBack}),title:'Showcase'}));
+    if(!supportDirect)gatewayLazy('./organization-billing.js').then(module=>module.mountOwnedBilling(document.querySelector('.kx-account-services-panel')||document.querySelector('[data-account-section="services"]'))).catch(error=>console.warn('Billing list unavailable',error));
+    document.getElementById('kx-services-seller')?.addEventListener('click',()=>openWorkspaceIdentitySelector({targets:accountWorkspaceTargets({profiles:profiles.filter(p=>['marca','federacion','profesional','media','competidor'].includes(p.tipo)),clubs:teamMemberships||[],settings:workspaceSettings||[]}),onSelect:async target=>{
+      if(target.kind==='club'){await backend.switchClub(target.slug);location.hash='my-showcase';location.reload();return;}
+      await openManagedIdentity(target.id);await openGlobalArea(()=>renderMyShowcase({profileId:target.id}),{onBack:()=>openManagedIdentity(target.id),title:'Mi Showcase'});
+    }}));
     document.getElementById('kx-spectator-social')?.addEventListener('click',()=>openGlobalArea(renderKombaxSocial,{onBack,title:'KOMBAX Social'}));
     document.getElementById('kx-spectator-showcase')?.addEventListener('click',()=>openGlobalArea(renderShowcase,{onBack,title:'KOMBAX Showcase'}));
     document.getElementById('kx-spectator-events')?.addEventListener('click',()=>openGlobalArea(renderKombaxEvents,{onBack,title:'KOMBAX Events'}));
@@ -731,7 +742,7 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     document.getElementById('kx-account-privacy')?.addEventListener('click',openGlobalDeletionCenter);
     document.getElementById('kx-account-support')?.addEventListener('click',()=>openSupportPrivacyCenter({subjectType:'account',subjectId:state.session?.id,title:'Privacidad y soporte de mi cuenta',canAuthorize:true}));
     if(!supportDirect)renderPendingFederationInvitations({container:'#kx-fed-account-invitations',onChanged:()=>renderDirectProfileHub({onBack})});
-    document.querySelectorAll('[data-kx-profile-open-hub]').forEach(b=>{const p=profileById.get(b.dataset.kxProfileOpenHub);b.addEventListener('click',()=>renderManagedProfileHub(p.id,{onBack:()=>renderDirectProfileHub({onBack}),onSocial:()=>openGlobalArea(renderKombaxSocial,{onBack,title:'KOMBAX Social'}),onShowcase:(view)=>openGlobalArea(view==='manage'?renderMyShowcase:renderShowcase,{onBack,title:view==='manage'?'Mi Showcase':'KOMBAX Showcase'}),onEvents:()=>openGlobalArea(renderKombaxEvents,{onBack,title:'KOMBAX Events'}),onProfessionalOps:(profileId)=>renderProfessionalOperations(profileId,{onBack:()=>renderManagedProfileHub(profileId,{onBack:()=>renderDirectProfileHub({onBack}),onSocial:()=>openGlobalArea(renderKombaxSocial,{onBack,title:'KOMBAX Social'}),onShowcase:(view)=>openGlobalArea(view==='manage'?renderMyShowcase:renderShowcase,{onBack,title:view==='manage'?'Mi Showcase':'KOMBAX Showcase'}),onEvents:()=>openGlobalArea(renderKombaxEvents,{onBack,title:'KOMBAX Events'}),onProfessionalOps:(id)=>renderProfessionalOperations(id,{onBack:()=>renderDirectProfileHub({onBack}),onEvents:()=>openGlobalArea(renderKombaxEvents,{onBack,title:'KOMBAX Events'})})}),onEvents:()=>openGlobalArea(renderKombaxEvents,{onBack,title:'KOMBAX Events'})})}));});
+    document.querySelectorAll('[data-kx-profile-open-hub]').forEach(b=>b.addEventListener('click',()=>openManagedIdentity(b.dataset.kxProfileOpenHub)));
     document.querySelectorAll('[data-kx-profile-public]').forEach(b=>{const p=profileById.get(b.dataset.kxProfilePublic);b.addEventListener('click',()=>{if(p?.social_profile_id)openKombaxPublicProfile(p.social_profile_id);});});
     document.querySelectorAll('[data-kx-profile-edit]').forEach(b=>{const p=profileById.get(b.dataset.kxProfileEdit);b.addEventListener('click',()=>profileEditor(p.tipo,{profile:p,onBack,memberProfiles}));});
     document.querySelectorAll('[data-kx-profile-security]').forEach(b=>b.addEventListener('click',()=>openAuthenticatedPasswordChange({onComplete:()=>renderDirectProfiles({onBack})})));
@@ -748,6 +759,7 @@ export async function renderDirectProfileHub({onBack,pendingType=''}={}){
     document.querySelectorAll('[data-kx-profile-album]').forEach(b=>{const p=profileById.get(b.dataset.kxProfileAlbum);b.addEventListener('click',()=>openAlbum(p,{onBack}).catch(setError));});
     document.querySelectorAll('[data-kx-application-edit]').forEach(b=>{const a=applications.find(x=>x.id===b.dataset.kxApplicationEdit),p=profileById.get(a?.perfil_directo_id);b.addEventListener('click',()=>saveAndSubmitApplication(a.tipo,{profile:p,application:a,onBack}));});
     document.querySelectorAll('[data-kx-application-withdraw]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Retirar solicitud','La solicitud dejará de revisarse. El historial no se falsifica ni se elimina.',async()=>{await repos.kombaxProfiles.withdrawApplication(b.dataset.kxApplicationWithdraw);toast('Solicitud retirada');await renderDirectProfileHub({onBack});},{confirmText:'Eliminar',danger:true})));
+    mountWorkspaceSearch({profiles,preferenceById,onRefresh:()=>renderDirectProfileHub({onBack})});
     const newlyCreatedId=sessionStorage.getItem('kombax_new_profile_id');
     const newlyCreated=newlyCreatedId?profileById.get(newlyCreatedId):null;
     if(newlyCreated&&commercialAudienceForType(newlyCreated.tipo)&&selectedCommercialPlan(newlyCreated.tipo).plan_code){
@@ -814,10 +826,64 @@ export function renderDirectProfiles({onBack}){
   document.getElementById('kx-existing-account')?.addEventListener('click',()=>openGlobalAuth({onBack,mode:'login'}));
 }
 
-// General entry opens exploration; transactional intents continue their own flow.
-export function finishAccountEntry({onBack,pendingType=''}={}){
+// The choice selects a destination, never grants a profile or a permission.
+export async function finishAccountEntry({onBack,pendingType='',destination='direct'}={}){
   if(pendingType||pilotPending())return renderDirectProfileHub({onBack,pendingType});
-  return renderGlobalHome({onBack});
+  if(destination==='account'||state.session?.platform_legal_required||state.session?.birth_date_required)return renderDirectProfileHub({onBack,pendingType});
+  try{
+    const [profiles,clubs,settings,applications]=await Promise.all([repos.kombaxProfiles.mine(),backend.accountClubs(),repos.kombaxProfiles.workspaceSettings(),repos.kombaxProfiles.applications()]);
+    const targets=accountWorkspaceTargets({profiles,clubs,settings}),route=accountEntryDestination(targets,{destination,applications,supportMode:state.session?.support_mode});
+    if(route.kind==='workspace')return enterWorkspaceTarget(route.target);
+    if(route.kind==='explore')return renderGlobalHome({onBack});
+    await renderDirectProfileHub({onBack});
+    if(route.kind==='select')return openWorkspaceIdentitySelector({targets});
+  }catch(error){setError(error);return renderDirectProfileHub({onBack});}
+}
+
+export async function enterWorkspaceTarget(target){
+  clearPersonalWorkspaceNavigation();
+  if(target.kind==='club'){await backend.switchClub(target.slug);location.hash='workspace';location.reload();return;}
+  return openManagedIdentity(target.id);
+}
+
+export async function openManagedIdentity(profileId){
+  if(state.session?.club_id&&!state.session?.support_mode)await backend.switchGlobal();
+  const account=()=>renderDirectProfileHub({onBack:()=>renderGlobalHome()}),back=()=>openManagedIdentity(profileId);
+  return renderManagedProfileHub(profileId,{onBack:account,
+    onSocial:()=>openGlobalArea(renderKombaxSocial,{onBack:back,title:'KOMBAX Social'}),
+    onShowcase:(view,selectedId)=>openGlobalArea(view==='manage'?()=>renderMyShowcase({profileId:selectedId||profileId}):renderShowcase,{onBack:back,title:view==='manage'?'Mi Showcase':'KOMBAX Showcase'}),
+    onEvents:()=>openGlobalArea(renderKombaxEvents,{onBack:back,title:'KOMBAX Events'}),
+    onProfessionalOps:id=>renderProfessionalOperations(id,{onBack:back,onEvents:()=>openGlobalArea(renderKombaxEvents,{onBack:back,title:'KOMBAX Events'})})});
+}
+export async function editManagedIdentity(profileId){
+  const profile=(await repos.kombaxProfiles.mine()).find(p=>p.id===profileId);
+  if(!profile)throw new Error('No tienes acceso a esta identidad.');
+  return profileEditor(profile.tipo,{profile,onSaved:()=>openManagedIdentity(profileId)});
+}
+
+export async function openWorkspaceIdentitySelector({targets=null,onSelect=null}={}){
+  try{
+    if(!targets){const [profiles,clubs,settings]=await Promise.all([repos.kombaxProfiles.mine(),backend.accountClubs(),repos.kombaxProfiles.workspaceSettings()]);targets=accountWorkspaceTargets({profiles,clubs,settings});}
+    const modal=openDetail({title:'Seleccionar identidad',subtitle:'Cada espacio conserva su equipo, sus permisos y sus servicios.',
+      body:`<div class="kx-workspace-selection">${targets.map((x,i)=>`<button class="btn btn-ghost" type="button" data-workspace-target="${i}"><strong>${esc(x.name||'Perfil')}</strong><small>${esc(TYPE_LABEL[x.type]||x.type)}</small></button>`).join('')||'<p>No hay espacios activos. Puedes crear una identidad o vincularte a un club desde tu cuenta.</p>'}</div>`,actions:'<button class="btn btn-primary" type="button" data-workspace-account>Gestionar mi cuenta e identidades</button>'});
+    modal.wrap.querySelectorAll('[data-workspace-target]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{const target=targets[Number(b.dataset.workspaceTarget)];closeModal();await (onSelect?onSelect(target):enterWorkspaceTarget(target));}catch(error){b.disabled=false;setError(error);}}));
+    modal.wrap.querySelector('[data-workspace-account]')?.addEventListener('click',()=>{closeModal();renderDirectProfileHub({onBack:()=>renderGlobalHome()});});
+  }catch(error){setError(error);}
+}
+
+function mountWorkspaceSearch({profiles,preferenceById,onRefresh}){
+  const cards=[...document.querySelectorAll('[data-workspace-profile],.kx-club-identity,.kx-team-club,.kx-member-identity')];
+  const box=document.createElement('section');box.className='kx-workspace-filters';box.innerHTML=`<label>Buscar identidades o clubes<input type="search" data-workspace-search placeholder="Nombre del perfil o club"></label><label>Tipo<select data-workspace-type><option value="">Todos</option>${[...new Set(['club',...profiles.map(p=>p.tipo)])].map(type=>`<option value="${esc(type)}">${esc(TYPE_LABEL[type]||type)}</option>`).join('')}</select></label><label>Mostrar<select data-workspace-state><option value="active">Activos</option><option value="archived">Archivados</option><option value="all">Todos</option></select></label><p data-workspace-search-result role="status"></p>`;
+  document.querySelector('.kx-hub-header')?.after(box);
+  const services=document.querySelector('[data-account-section="services"]');
+  if(services){const details=document.createElement('details');details.className='kx-account-services';details.innerHTML='<summary>Servicios y suscripciones de mi cuenta</summary><div class="kx-account-services-panel"></div>';const panel=details.querySelector('.kx-account-services-panel');while(services.firstChild)panel.appendChild(services.firstChild);services.appendChild(details);}
+  for(const card of cards){const profile=profiles.find(p=>p.id===card.dataset.workspaceProfile),prefs=preferenceById.get(String(profile?.id));card.dataset.workspaceType=profile?.tipo||'club';card.dataset.workspaceArchived=String(Boolean(prefs?.archived));card.dataset.workspaceName=profile?.nombre_publico||card.querySelector('header strong')?.textContent||card.textContent;
+    if(profile){const button=document.createElement('button');button.type='button';button.className='btn btn-ghost btn-sm';button.textContent='Gestionar identidad';button.dataset.workspaceAdministration=profile.id;button.addEventListener('click',()=>openProfileAdministration(profile,{onRefresh}));card.querySelector('footer')?.appendChild(button);}
+  }
+  const filter=()=>{const text=box.querySelector('[data-workspace-search]').value.trim().toLocaleLowerCase(),type=box.querySelector('[data-workspace-type]').value,status=box.querySelector('[data-workspace-state]').value;let visible=0;
+    cards.forEach(card=>{const archived=card.dataset.workspaceArchived==='true',show=(!text||card.dataset.workspaceName.toLocaleLowerCase().includes(text))&&(!type||type===card.dataset.workspaceType)&&(status==='all'||(status==='archived'?archived:!archived));card.hidden=!show;if(show)visible++;});box.querySelector('[data-workspace-search-result]').textContent=`${visible} espacios encontrados`;
+  };
+  box.querySelectorAll('input,select').forEach(input=>{input.addEventListener('input',filter);if(input.tagName==='SELECT')input.addEventListener('change',filter);});filter();
 }
 window.addEventListener('kx-personal-navigate',async event=>{
   try{
@@ -825,13 +891,14 @@ window.addEventListener('kx-personal-navigate',async event=>{
     const target=event.detail?.target;
     if(target==='logout'){await backend.signOut();location.assign('/');return;}
     if(state.session.scope!=='kombax')await backend.switchGlobal();
+    clearPersonalWorkspaceNavigation();
     if(target==='home')return renderGlobalHome();
     if(target==='social')return openGlobalArea(renderKombaxSocial,{onBack:()=>renderGlobalHome(),title:'KOMBAX Social'});
     if(target==='showcase')return openGlobalArea(renderShowcase,{onBack:()=>renderGlobalHome(),title:'KOMBAX Showcase'});
     if(target==='events')return openGlobalArea(renderKombaxEvents,{onBack:()=>renderGlobalHome(),title:'KOMBAX Events'});
     await renderDirectProfileHub({onBack:()=>renderGlobalHome()});
     const section={profile:'profiles',organizations:'clubs',services:'services',settings:'settings'}[target];
-    if(section)document.querySelector(`[data-account-section="${section}"]`)?.scrollIntoView({behavior:'smooth',block:'start'});
+    if(section){const element=document.querySelector(`[data-account-section="${section}"]`);if(section==='services'&&element?.querySelector('details'))element.querySelector('details').open=true;element?.scrollIntoView({behavior:'smooth',block:'start'});}
   }catch(error){setError(error);}
 });
 

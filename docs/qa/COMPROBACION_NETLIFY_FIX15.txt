@@ -1,0 +1,7 @@
+FIX15: ajuste CSS acumulativo sobre FIX14.
+OK build 639 archivos · web = dist = Android
+PASS compatibility · 373 JavaScript files · 895 local imports checked for Linux
+PASS 10 responsive artwork cases
+PASS 40 browser FIX14 cases
+PASS 42 cumulative context/family cases
+La puerta completa de 96 PASS y 3 P2 corresponde a la base FIX14 y no se repitió en FIX15.

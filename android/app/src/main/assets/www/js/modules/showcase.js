@@ -78,7 +78,7 @@ function orderProgress(status){const meta=orderMeta(status);if(meta.step<0)retur
 function statusBadge(ok,label,pending='Pendiente'){return `<span class="kx-market-status ${ok?'ok':'pending'}">${ok?icon('checkCircle',{size:14}):icon('clock',{size:14})} ${esc(ok?label:pending)}</span>`;}
 function sellerApplicationEditable(status){return !['verified','suspended'].includes(String(status||''));}
 
-async function openSellerCenter(brand){
+export async function openSellerCenter(brand){
   try{
     const [data,connectSnapshot]=await Promise.all([repos.marketplace.sellerCenter(brand.id),repos.payments.paymentMethodsStatus('showcase_provider',brand.id).catch(()=>null)]),checks=data?.checks||{},base=data?.base_verification||{},app=data?.application||{},policies=Array.isArray(data?.policies)?data.policies:[],stripe=data?.stripe||connectSnapshot||{},sellerAccount=data?.seller_account||{},commercialAccess=data?.commercial_access||{};
     const sellerActive=sellerAccount.active===true||checks.selling_ready===true,commerceAllowed=commercialAccess.commerce_allowed===true,checkoutAvailable=commercialAccess.checkout_available===true||(sellerActive&&commerceAllowed),planCode=commercialAccess.plan_code||'';
@@ -93,16 +93,9 @@ async function openSellerCenter(brand){
       <section><h4>4. ${esc(t('payments.title'))}</h4>${paymentCenterSummaryHtml(stripe||{}, {subjectType:'showcase_provider',title:t('payments.title'),compact:true})}</section>
     </div>`;
     const modal=openDetail({title:'Centro de vendedor',subtitle:`${brand.nombre} · activación, verificación, Stripe y derechos comerciales`,body,width:'980px',className:'kx-seller-center-modal'});
-    modal.wrap.querySelector('#seller-application-edit')?.addEventListener('click',()=>openForm({title:'Alta de vendedor KOMBAX Showcase',subtitle:'Reutilizamos la identidad KOMBAX ya verificada. Confirma únicamente los datos comerciales necesarios para vender.',fields:[
-      {name:'legal_name',label:'Razón social / nombre legal',required:true,value:app.legal_name||base.legal_name||brand.nombre},{name:'tax_id',label:'NIF / CIF / VAT',required:true,value:app.tax_id||base.tax_id||''},{name:'country',label:'País (código ISO)',required:true,value:app.country||'ES',maxLength:2},{name:'registered_address',label:'Domicilio legal / administrativo',required:true,full:true,value:app.registered_address||base.registered_address||''},{name:'support_email',label:'Email de atención al comprador',type:'email',required:true,value:app.support_email||base.support_email||''},{name:'support_phone',label:'Teléfono de atención',required:true,value:app.support_phone||base.support_phone||''},{name:'returns_contact',label:'Contacto para devoluciones (opcional)',value:app.returns_contact||''},{name:'seller_shipping',label:'Realiza envíos',type:'checkbox',value:(app.shipping_modes||[]).includes('seller_shipping'),full:true},{name:'seller_pickup',label:'Permite recogida',type:'checkbox',value:(app.shipping_modes||[]).includes('seller_pickup'),full:true},{name:'digital',label:'Entrega digital (si aplica)',type:'checkbox',value:(app.shipping_modes||[]).includes('digital'),full:true},{name:'compliance_statement',label:'Declaro que los productos y mi actividad cumplen la normativa aplicable',type:'checkbox',required:true,value:app.compliance_statement===true,full:true},{name:'marketplace_statement',label:'Declaro que actúo como vendedor independiente y soy responsable del producto, entrega, garantía y devoluciones',type:'checkbox',required:true,value:app.marketplace_statement===true,full:true}],submitText:'Enviar solicitud',onSubmit:async v=>{const shipping_modes=['seller_shipping','seller_pickup','digital'].filter(k=>v[k]===true);await repos.marketplace.sellerApplication(brand.id,'submit',{...v,shipping_modes});toast('Solicitud de vendedor enviada');modal.close();await openSellerCenter(brand);}}));
-    if(!checks.identity_verified){
-      const applicationButton=modal.wrap.querySelector('#seller-application-edit');
-      if(applicationButton){
-        applicationButton.disabled=true;
-        applicationButton.textContent='Verificación del club pendiente';
-        applicationButton.insertAdjacentHTML('afterend','<p class="muted">Puedes crear fichas desde «Añadir producto» en Mi Showcase. Para activar pagos, primero debe revisarse la identidad real del club.</p>');
-      }
-    }
+    modal.wrap.querySelector('#seller-application-edit')?.addEventListener('click',()=>openForm({title:'Alta de vendedor KOMBAX Showcase',subtitle:checks.identity_verified?'Reutilizamos la identidad KOMBAX ya verificada. Confirma únicamente los datos comerciales necesarios para vender.':'Puedes preparar los datos comerciales. La solicitud se enviará cuando tu identidad esté verificada.',fields:[
+      {name:'legal_name',label:'Razón social / nombre legal',required:true,value:app.legal_name||base.legal_name||brand.nombre},{name:'tax_id',label:'NIF / CIF / VAT',required:true,value:app.tax_id||base.tax_id||''},{name:'country',label:'País (código ISO)',required:true,value:app.country||'ES',maxLength:2},{name:'registered_address',label:'Domicilio legal / administrativo',required:true,full:true,value:app.registered_address||base.registered_address||''},{name:'support_email',label:'Email de atención al comprador',type:'email',required:true,value:app.support_email||base.support_email||''},{name:'support_phone',label:'Teléfono de atención',required:true,value:app.support_phone||base.support_phone||''},{name:'returns_contact',label:'Contacto para devoluciones (opcional)',value:app.returns_contact||''},{name:'seller_shipping',label:'Realiza envíos',type:'checkbox',value:(app.shipping_modes||[]).includes('seller_shipping'),full:true},{name:'seller_pickup',label:'Permite recogida',type:'checkbox',value:(app.shipping_modes||[]).includes('seller_pickup'),full:true},{name:'digital',label:'Entrega digital (si aplica)',type:'checkbox',value:(app.shipping_modes||[]).includes('digital'),full:true},{name:'compliance_statement',label:'Declaro que los productos y mi actividad cumplen la normativa aplicable',type:'checkbox',required:true,value:app.compliance_statement===true,full:true},{name:'marketplace_statement',label:'Declaro que actúo como vendedor independiente y soy responsable del producto, entrega, garantía y devoluciones',type:'checkbox',required:true,value:app.marketplace_statement===true,full:true}],submitText:checks.identity_verified?'Enviar solicitud':'Guardar borrador',onSubmit:async v=>{const shipping_modes=['seller_shipping','seller_pickup','digital'].filter(k=>v[k]===true);await repos.marketplace.sellerApplication(brand.id,checks.identity_verified?'submit':'save',{...v,shipping_modes});toast(checks.identity_verified?'Solicitud de vendedor enviada':'Borrador de vendedor guardado');modal.close();await openSellerCenter(brand);}}));
+    if(!checks.identity_verified){const button=modal.wrap.querySelector('#seller-application-edit');if(button)button.textContent='Preparar datos de vendedor';}
     modal.wrap.querySelectorAll('[data-seller-policy]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{await repos.marketplace.acceptSellerPolicy(brand.id,btn.dataset.sellerPolicy,btn.dataset.policyVersion);toast('Documento aceptado');modal.close();await openSellerCenter(brand);}catch(error){btn.disabled=false;setError(error);}}));
     modal.wrap.querySelector('#seller-commerce-plan')?.addEventListener('click',async e=>{if(!sellerActive){toast(t('marketing.space.sellerVerify'),'error');return;}e.currentTarget.disabled=true;try{await repos.commercial.requestActivation(data.provider.subject_type,data.provider.subject_id,'SHOWCASE_COMMERCE',{days:30});toast(t('marketing.space.sellerRequested'));}catch(error){e.currentTarget.disabled=false;toast(humanError(error),'error');}});
     bindPaymentCenter(modal.wrap,{subjectType:'showcase_provider',subjectId:brand.id,onRefresh:async()=>{modal.close();await openSellerCenter(brand);},assistContext:{profileId:data?.provider?.subject_id||brand?.perfil_directo_id||null,profileType:brand?.sujeto_tipo||null}});
@@ -602,7 +595,12 @@ async function renderManagement(selectedBrandId=''){
   }catch(error){box.innerHTML=empty('No se pudo cargar la gestión',humanError(error)||'Revisa tus permisos.');}
 }
 
-export async function renderMyShowcase(){
+export async function openProfileSellerCenter(profileId){
+  const brand=await repos.kombaxProfiles.sellerEntry(profileId);
+  return openSellerCenter(brand);
+}
+
+export async function renderMyShowcase({profileId=null}={}){
   activeView='manage';
   managedBrands=[];
   setMainHtml(`<div class="loading-card">${esc(t('showcase.privateCenter.opening'))}</div>`);
@@ -616,13 +614,18 @@ export async function renderMyShowcase(){
     setError(error);
     setMainHtml(`${empty(t('showcase.privateCenter.unavailableTitle'),humanError(error)||t('showcase.privateCenter.unavailableBody'))}<div class="row-actions" style="justify-content:center"><button type="button" class="btn btn-ghost" id="showcase-private-explore">${esc(t('navigation.products.exploreShowcase'))}</button><button type="button" class="btn btn-showcase" id="showcase-private-retry">${esc(t('showcase.privateCenter.retry'))}</button></div>`);
     document.getElementById('showcase-private-explore')?.addEventListener('click',openPublicShowcaseRoute);
-    document.getElementById('showcase-private-retry')?.addEventListener('click',()=>renderMyShowcase());
+    document.getElementById('showcase-private-retry')?.addEventListener('click',()=>renderMyShowcase({profileId}));
     return;
+  }
+  if(profileId){
+    const provider=managedBrands.find(x=>String(x.perfil_directo_id)===String(profileId))||await repos.kombaxProfiles.sellerEntry(profileId);
+    if(!managedBrands.some(x=>x.id===provider.id))managedBrands.push(provider);
+    return renderManagement(provider.id);
   }
   if(managedBrands.length)return renderManagement();
   setMainHtml(`${empty('Mi Showcase aún no está habilitado',state.session?.club_id?t('showcase.privateCenter.unavailableBody'):t('marketing.space.sellerEntry')) }<div class="row-actions" style="justify-content:center"><button type="button" class="btn btn-ghost" id="showcase-private-explore">${esc(t('navigation.products.exploreShowcase'))}</button><button type="button" class="btn btn-showcase" id="showcase-private-retry">${esc(t('showcase.privateCenter.retry'))}</button></div>`);
   document.getElementById('showcase-private-explore')?.addEventListener('click',openPublicShowcaseRoute);
-  document.getElementById('showcase-private-retry')?.addEventListener('click',()=>renderMyShowcase());
+  document.getElementById('showcase-private-retry')?.addEventListener('click',()=>renderMyShowcase({profileId}));
 }
 
 export async function renderShowcase(){

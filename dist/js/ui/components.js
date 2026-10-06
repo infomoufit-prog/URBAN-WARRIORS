@@ -1,4 +1,4 @@
-import { personalNavigationHtml, bindPersonalNavigation } from './personal-navigation.js';
+import { personalNavigationHtml, bindPersonalNavigation, clearPersonalWorkspaceNavigation } from './personal-navigation.js';
 import {watchContentVisibility} from '../core/content-visibility.js';
 import { esc, humanError, fullName } from '../core/utils.js';
 import { state } from '../core/state.js';
@@ -79,9 +79,11 @@ export function setAppHtml(html){
     if(!app.querySelector('.app-shell')){
       app.innerHTML=personalNavigationHtml(app.innerHTML);
     }else{
+      clearPersonalWorkspaceNavigation();
       const sidebar=app.querySelector('.sidebar');
       if(sidebar&&!sidebar.querySelector('[data-kx-personal-nav]')){
         sidebar.insertAdjacentHTML('afterbegin',`<button class="nav-item nav-primary" type="button" data-kx-personal-nav="workspace">${icon('home')}<b>${esc(t('marketing.space.title'))}</b></button>`);
+        sidebar.insertAdjacentHTML('afterbegin','<button class="nav-item kx-workspace-selector" type="button" data-kx-workspace-select>Seleccionar identidad</button>');
       }
     }
     bindPersonalNavigation(app);

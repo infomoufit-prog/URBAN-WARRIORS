@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-05T17:41:57.076Z",
-  "candidates": 5163,
+  "generated_at": "2026-10-06T10:07:57.970Z",
+  "candidates": 5208,
   "covered_r79": 545,
   "covered_r78": 1215,
-  "covered_legacy_all7": 3120,
-  "unresolved": 283,
+  "covered_legacy_all7": 3168,
+  "unresolved": 280,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 67,
@@ -12,12 +12,12 @@
     "web/js/modules/plan-services.js": 31,
     "web/js/modules/professional-operations.js": 21,
     "web/js/modules/media-content-center.js": 12,
-    "web/js/modules/managed-profile-hub.js": 11,
-    "web/js/modules/showcase.js": 6,
+    "web/js/modules/managed-profile-hub.js": 10,
     "web/js/modules/finance-guide.js": 5,
     "web/js/core/repositories.js": 4,
     "web/js/core/utils.js": 4,
     "web/js/modules/admin.js": 4,
+    "web/js/modules/showcase.js": 4,
     "web/js/core/backend.js": 3,
     "web/js/modules/club-poster.js": 3,
     "web/js/modules/public-profile.js": 3,
@@ -1717,19 +1717,6 @@
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "value": "Presenta productos o servicios en un escaparate público. La venta, el carrito y los cobros requieren Commerce y la verificación del vendedor. Una ampliación de catálogo no activa Commerce.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/managed-profile-hub.js",
-      "value": "Primero verifica tu identidad de Competidor o Media / Creador y activa la capacidad Showcase de tu plan. Después podrás solicitar la verificación independiente como vendedor, aceptar las condiciones y configurar Stripe. Cobrar requiere además Commerce activo.",
       "missing": [
         "en",
         "fr",
@@ -3596,19 +3583,6 @@
     },
     {
       "file": "web/js/modules/showcase.js",
-      "value": "Verificación del club pendiente",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/showcase.js",
       "value": "Opcional. Si lo dejas vacío, se genera automáticamente a partir del nombre.",
       "missing": [
         "en",
@@ -3636,19 +3610,6 @@
     {
       "file": "web/js/modules/showcase.js",
       "value": "Mi Showcase aún no está habilitado",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "value": "Puedes crear fichas desde «Añadir producto» en Mi Showcase. Para activar pagos, primero debe revisarse la identidad real del club.",
       "missing": [
         "en",
         "fr",

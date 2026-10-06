@@ -12,7 +12,7 @@ const VERSION='kombax-2.0.0-rc13-20178-r118-pilot-stabilization-2';
 // historical cache marker: media-r37
 // historical cache marker: media-r38
 // historical cache marker: media-r39
-const STATIC_CACHE=`${VERSION}-profiles-r120-fix13-media-r44`; // historical cache marker: media-r40; media-r41; media-r42; media-r43
+const STATIC_CACHE=`${VERSION}-profiles-r120-fix15-media-r45`; // historical cache marker: media-r40; media-r41; media-r42; media-r43; media-r44
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key!==STATIC_CACHE)await caches.delete(key);await self.clients.claim();})()));
 self.addEventListener('fetch',event=>{

@@ -639,6 +639,7 @@ export const repos={
   users:{
     members:(limit=150)=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&rol=in.(direccion,secretaria,economia,comunicacion,monitor)&order=creado_en&limit=${Math.min(300,Math.max(30,Number(limit)||150))}`),
     teamRequests:async()=>{try{return await backend.readRpc('app_kombax_solicitudes_equipo_v109',{p_club_id:session()?.club_id});}catch{return backend.readRpc('app_kombax_solicitudes_equipo_v060',{p_club_id:session()?.club_id});}},
+    changeTeamRole:(profileId,role)=>backend.writeRpc('app_kombax_club_team_role_fix14',{p_club_id:session()?.club_id,p_perfil_id:profileId,p_role:role}),
     resolveTeamRequest:(id,estado,rol=null,nota='')=>backend.writeRpc('app_kombax_solicitud_equipo_resolver_v060',{p_solicitud_id:id,p_estado:estado,p_rol:rol,p_nota:nota||null}),
     createInvitation:(tipo,email,rol=null,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:String(tipo||'').trim().toLowerCase(),p_email:String(email||'').trim().toLowerCase(),p_rol:rol?String(rol).trim().toLowerCase():null,p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),
     createTeamInvitation:(email,rol,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:'equipo',p_email:String(email||'').trim().toLowerCase(),p_rol:String(rol||'').trim().toLowerCase(),p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),
@@ -1008,6 +1009,21 @@ export const repos={
     removePath:(path)=>path?backend.remove('community-media',path):Promise.resolve()
   },
   kombaxProfiles:{
+    workspaceSettings:(profileId=null)=>backend.globalReadRpc('app_kombax_workspace_settings_fix14',{p_profile_id:profileId}),
+    saveWorkspace:(profileId,action,value)=>backend.globalWriteRpc('app_kombax_workspace_save_fix14',{p_profile_id:profileId,p_action:action,p_value:String(value??'')}),
+    sellerEntry:(profileId)=>backend.globalWriteRpc('app_kombax_seller_entry_fix14',{p_profile_id:profileId}),
+    workspaceMediaUrl:(path)=>backend.signedUrl('kombax-workspace-media',path,3600),
+    async uploadWorkspaceMedia(profileId,kind,file){
+      const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[file?.type];
+      if(!session()?.id||!profileId||!['avatar','banner'].includes(kind))throw new Error('Espacio no disponible.');
+      if(!ext||!file?.size||file.size>5*1024*1024)throw new Error('Usa JPG, PNG o WEBP de hasta 5 MB.');
+      const path=`${session().id}/${profileId}/${kind}/${crypto.randomUUID()}.${ext}`;
+      await backend.upload('kombax-workspace-media',path,file,false);
+      let saved;try{saved=await repos.kombaxProfiles.saveWorkspace(profileId,kind,path);}
+      catch(error){await backend.remove('kombax-workspace-media',path).catch(()=>{});throw error;}
+      if(saved?.old_path&&saved.old_path!==path)await backend.remove('kombax-workspace-media',saved.old_path).catch(()=>{});
+      return saved;
+    },
     mine:()=>backend.globalReadRpc('app_kombax_mis_perfiles_v196',{}),
     taxonomy:()=>backend.publicRpc('app_kombax_profile_taxonomy_v196',{}),
     capabilities:(profileId)=>backend.globalReadRpc('app_kombax_profile_capabilities_v196',{p_perfil_directo_id:profileId}),

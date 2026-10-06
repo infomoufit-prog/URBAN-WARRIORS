@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-05T17:42:04.047Z",
+  "generated_at": "2026-10-06T10:08:06.718Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -32,6 +32,7 @@
     "web/js/core/telemetry.js",
     "web/js/core/utils.js",
     "web/js/core/verification-visual.js",
+    "web/js/core/workspace-access.js",
     "web/js/delete-account.js",
     "web/js/modules/account-birth-date.js",
     "web/js/modules/account-security.js",
@@ -86,6 +87,7 @@
     "web/js/modules/professional-finance.js",
     "web/js/modules/professional-hub.js",
     "web/js/modules/professional-operations.js",
+    "web/js/modules/profile-administration.js",
     "web/js/modules/profile-operations.js",
     "web/js/modules/profile-team.js",
     "web/js/modules/public-profile.js",
@@ -110,11 +112,11 @@
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5030,
-  "covered": 4766,
-  "unresolved": 264,
-  "coverage": 94.75,
-  "skipped": 392,
+  "phrases": 5074,
+  "covered": 4813,
+  "unresolved": 261,
+  "coverage": 94.86,
+  "skipped": 396,
   "files": {
     "web/js/app.js": {
       "total": 126,
@@ -261,10 +263,10 @@
       "coverage": 100
     },
     "web/js/core/repositories.js": {
-      "total": 47,
-      "covered": 43,
+      "total": 48,
+      "covered": 44,
       "skipped": 73,
-      "coverage": 91.49
+      "coverage": 91.67
     },
     "web/js/core/security-go-live-20084.js": {
       "total": 7,
@@ -302,6 +304,12 @@
       "skipped": 2,
       "coverage": 100
     },
+    "web/js/core/workspace-access.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/delete-account.js": {
       "total": 17,
       "covered": 17,
@@ -321,10 +329,10 @@
       "coverage": 100
     },
     "web/js/modules/admin.js": {
-      "total": 162,
-      "covered": 159,
+      "total": 166,
+      "covered": 163,
       "skipped": 6,
-      "coverage": 98.15
+      "coverage": 98.19
     },
     "web/js/modules/auth-recovery.js": {
       "total": 18,
@@ -399,8 +407,8 @@
       "coverage": 76.56
     },
     "web/js/modules/dashboard-catalog.js": {
-      "total": 39,
-      "covered": 39,
+      "total": 40,
+      "covered": 40,
       "skipped": 3,
       "coverage": 100
     },
@@ -471,10 +479,10 @@
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 268,
-      "covered": 244,
+      "total": 277,
+      "covered": 253,
       "skipped": 7,
-      "coverage": 91.04
+      "coverage": 91.34
     },
     "web/js/modules/groups-members.js": {
       "total": 182,
@@ -531,10 +539,10 @@
       "coverage": 100
     },
     "web/js/modules/managed-profile-hub.js": {
-      "total": 51,
-      "covered": 40,
+      "total": 53,
+      "covered": 43,
       "skipped": 3,
-      "coverage": 78.43
+      "coverage": 81.13
     },
     "web/js/modules/media-content-center.js": {
       "total": 19,
@@ -626,6 +634,12 @@
       "skipped": 4,
       "coverage": 63.79
     },
+    "web/js/modules/profile-administration.js": {
+      "total": 25,
+      "covered": 25,
+      "skipped": 4,
+      "coverage": 100
+    },
     "web/js/modules/profile-operations.js": {
       "total": 23,
       "covered": 23,
@@ -657,10 +671,10 @@
       "coverage": 100
     },
     "web/js/modules/showcase.js": {
-      "total": 331,
-      "covered": 325,
+      "total": 332,
+      "covered": 328,
       "skipped": 10,
-      "coverage": 98.19
+      "coverage": 98.8
     },
     "web/js/modules/social-network.js": {
       "total": 0,
@@ -753,8 +767,8 @@
       "coverage": 100
     },
     "web/js/ui/personal-navigation.js": {
-      "total": 1,
-      "covered": 1,
+      "total": 2,
+      "covered": 2,
       "skipped": 0,
       "coverage": 100
     },
@@ -1237,10 +1251,6 @@
     {
       "file": "web/js/modules/managed-profile-hub.js",
       "value": "Presenta productos o servicios en un escaparate público. La venta, el carrito y los cobros requieren Commerce y la verificación del vendedor. Una ampliación de catálogo no activa Commerce."
-    },
-    {
-      "file": "web/js/modules/managed-profile-hub.js",
-      "value": "Primero verifica tu identidad de Competidor o Media / Creador y activa la capacidad Showcase de tu plan. Después podrás solicitar la verificación independiente como vendedor, aceptar las condiciones y configurar Stripe. Cobrar requiere además Commerce activo."
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",
@@ -1804,10 +1814,6 @@
     },
     {
       "file": "web/js/modules/showcase.js",
-      "value": "Verificación del club pendiente"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
       "value": "Opcional. Si lo dejas vacío, se genera automáticamente a partir del nombre."
     },
     {
@@ -1817,10 +1823,6 @@
     {
       "file": "web/js/modules/showcase.js",
       "value": "Mi Showcase aún no está habilitado"
-    },
-    {
-      "file": "web/js/modules/showcase.js",
-      "value": "Puedes crear fichas desde «Añadir producto» en Mi Showcase. Para activar pagos, primero debe revisarse la identidad real del club."
     }
   ]
 }

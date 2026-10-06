@@ -1,0 +1,115 @@
+{
+  "passed": 10,
+  "checks": [
+    {
+      "width": 360,
+      "screen": "onboarding",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 360,
+      "screen": "inicio",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 390,
+      "screen": "onboarding",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 390,
+      "screen": "inicio",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 844,
+      "screen": "onboarding",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 844,
+      "screen": "inicio",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333335,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 1024,
+      "screen": "onboarding",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 1024,
+      "screen": "inicio",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 1440,
+      "screen": "onboarding",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    },
+    {
+      "width": 1440,
+      "screen": "inicio",
+      "fit": "contain",
+      "transform": "none",
+      "ratio": 1.3333333333333333,
+      "naturalRatio": 1.3333333333333333,
+      "overlap": false,
+      "overflow": false,
+      "mask": "none"
+    }
+  ]
+}

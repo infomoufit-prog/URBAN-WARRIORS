@@ -7,7 +7,9 @@ const sql=read('supabase/migrations/264_kombax_showcase_multiclub_context_r75.sq
 let pass=0;const ok=(cond,msg)=>{if(!cond)throw new Error(`FAIL R75: ${msg}`);pass++;console.log(`PASS ${pass}: ${msg}`)};
 ok(/export async function renderShowcase\(\)[\s\S]*activeView='catalog';[\s\S]*managedBrands=\[\];[\s\S]*categories=await repos\.kombaxShowcase\.categories\(\)/.test(showcase),'Explorar Showcase resetea estado y carga solo catálogo público');
 ok(!/export async function renderShowcase\(\)[\s\S]*Promise\.all\(\[repos\.kombaxShowcase\.categories\(\),repos\.kombaxShowcase\.myBrands/.test(showcase),'Explorar Showcase no depende de espacios privados');
-ok(/export async function renderMyShowcase\(\)[\s\S]*repos\.kombaxShowcase\.myBrands\(\)/.test(showcase),'Mi Showcase resuelve explícitamente el espacio privado');
+// FIX14 conserva la separación pública/privada y añade un destino de identidad opcional.
+ok(/export async function renderMyShowcase\([^)]*\)[\s\S]*repos\.kombaxShowcase\.myBrands\(\)/.test(showcase),'Mi Showcase resuelve explícitamente el espacio privado');
+ok(/if\(profileId\)\{[\s\S]*perfil_directo_id\)===String\(profileId\)[\s\S]*sellerEntry\(profileId\)[\s\S]*renderManagement\(provider.id\)/.test(showcase),'La identidad seleccionada resuelve su proveedor y nunca la primera marca por defecto');
 ok(/openPrivateShowcaseRoute/.test(showcase)&&/openPublicShowcaseRoute/.test(showcase),'Navegación pública y privada usa rutas separadas');
 ok(/else if\(a==='showcase'\)go\('my-showcase'\)/.test(hub),'Hub del Club entra por la ruta privada dedicada');
 ok(/PRIVATE_SHOWCASE_ROLES=new Set\(\['direccion','coordinacion'\]\)/.test(app),'Navegación privada se alinea con Dirección/Coordinación');
