@@ -1,0 +1,70 @@
+{
+  "checks": [
+    "marca public photo and banner available without verification or plan",
+    "marca selected identity album",
+    "federacion public photo and banner available without verification or plan",
+    "federacion selected identity album",
+    "profesional public photo and banner available without verification or plan",
+    "profesional selected identity album",
+    "media public photo and banner available without verification or plan",
+    "media selected identity album",
+    "competidor public photo and banner available without verification or plan",
+    "competidor selected identity album",
+    "espectador public photo and banner available without verification or plan",
+    "espectador selected identity album",
+    "avatar file optimized and uploaded for selected identity",
+    "avatar correct direct profile RPC and payload",
+    "banner file optimized and uploaded for selected identity",
+    "banner correct direct profile RPC and payload",
+    "successful uploads refresh parent profile",
+    "visitor has no profile management button",
+    "unknown identity rejected before upload",
+    "invalid image rejected before storage"
+  ],
+  "calls": [
+    {
+      "kind": "upload",
+      "bucket": "kombax-public-media",
+      "path": "qa-user/brand-b/1791358563787-91202264-e8a2-428c-b952-ddc7f914f453.png",
+      "mime": "image/png",
+      "size": 122
+    },
+    {
+      "kind": "rpc",
+      "endpoint": "app_kombax_media_mutate_v072",
+      "payload": {
+        "perfil_directo_id": "brand-b",
+        "tipo": "avatar",
+        "storage_path": "qa-user/brand-b/1791358563787-91202264-e8a2-428c-b952-ddc7f914f453.png",
+        "mime_type": "image/png",
+        "bytes": 122,
+        "width": 32,
+        "height": 24,
+        "duration_seconds": null
+      }
+    },
+    {
+      "kind": "upload",
+      "bucket": "kombax-public-media",
+      "path": "qa-user/brand-b/1791358564505-06aea089-8b41-4b33-9a48-8c2c54cc225b.png",
+      "mime": "image/png",
+      "size": 122
+    },
+    {
+      "kind": "rpc",
+      "endpoint": "app_kombax_media_mutate_v072",
+      "payload": {
+        "perfil_directo_id": "brand-b",
+        "tipo": "banner",
+        "storage_path": "qa-user/brand-b/1791358564505-06aea089-8b41-4b33-9a48-8c2c54cc225b.png",
+        "mime_type": "image/png",
+        "bytes": 122,
+        "width": 32,
+        "height": 24,
+        "duration_seconds": null
+      }
+    }
+  ],
+  "transport": "Isolated browser: real form/image optimization and repositories; storage/RPC transports mocked. No real files uploaded.",
+  "pageErrors": []
+}

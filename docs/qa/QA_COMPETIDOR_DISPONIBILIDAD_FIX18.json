@@ -1,0 +1,50 @@
+{
+  "checks": [
+    "public competitor data Boxeo",
+    "public competitor data Kickboxing",
+    "public competitor data 70.0",
+    "public competitor data 75.0",
+    "public competitor data Preparando temporada",
+    "public competitor data Piloto",
+    "availability editor selected competitor",
+    "availability form exists",
+    "availability saves selected competitor",
+    "multiple disciplines retained",
+    "availability update submitted"
+  ],
+  "calls": [
+    [
+      "read",
+      "competitor-a"
+    ],
+    [
+      "save",
+      "competitor-a",
+      {
+        "discoverable": true,
+        "availability_status": "limited",
+        "availability_public": true,
+        "availability_reason": "Preparando temporada",
+        "territory": "Barcelona",
+        "max_travel_km": null,
+        "disciplines": [
+          "Boxeo",
+          "Kickboxing"
+        ],
+        "min_notice_hours": 72,
+        "competition_level": "amateur",
+        "usual_category": "",
+        "public_weight_min_kg": 70,
+        "public_weight_max_kg": 75,
+        "fight_count_declared": 10,
+        "wins_declared": 7,
+        "losses_declared": 2,
+        "draws_declared": 1,
+        "affiliation_status": "unspecified",
+        "accepts_short_notice": false
+      }
+    ]
+  ],
+  "transport": "Isolated browser; mocked API transport; real profile renderer, form and normalization.",
+  "pageErrors": []
+}

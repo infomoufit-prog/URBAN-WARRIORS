@@ -1,0 +1,148 @@
+TAP version 13
+# Subtest: configuration rejects missing secrets, non-HTTPS and redirect paths
+ok 1 - configuration rejects missing secrets, non-HTTPS and redirect paths
+  ---
+  duration_ms: 2.0087
+  type: 'test'
+  ...
+# Subtest: AES-GCM protects tokens, detects tampering and binds ciphertext to identity
+ok 2 - AES-GCM protects tokens, detects tampering and binds ciphertext to identity
+  ---
+  duration_ms: 16.5548
+  type: 'test'
+  ...
+# Subtest: unauthenticated callers rejected
+ok 3 - unauthenticated callers rejected
+  ---
+  duration_ms: 32.4417
+  type: 'test'
+  ...
+# Subtest: wrong web origin rejected before any RPC
+ok 4 - wrong web origin rejected before any RPC
+  ---
+  duration_ms: 0.8554
+  type: 'test'
+  ...
+# Subtest: Android can use existing connection but must initiate OAuth from web
+ok 5 - Android can use existing connection but must initiate OAuth from web
+  ---
+  duration_ms: 21.722
+  type: 'test'
+  ...
+# Subtest: non-admin cannot initiate connection and sees no SQL error
+ok 6 - non-admin cannot initiate connection and sees no SQL error
+  ---
+  duration_ms: 1.599
+  type: 'test'
+  ...
+# Subtest: start returns random one-use state, correct config and exact callback
+ok 7 - start returns random one-use state, correct config and exact callback
+  ---
+  duration_ms: 4.5795
+  type: 'test'
+  ...
+# Subtest: callback without code returns safe failure and exchanges nothing
+ok 8 - callback without code returns safe failure and exchanges nothing
+  ---
+  duration_ms: 2.1284
+  type: 'test'
+  ...
+# Subtest: callback incorrect and expired state rejected
+ok 9 - callback incorrect and expired state rejected
+  ---
+  duration_ms: 14.1841
+  type: 'test'
+  ...
+# Subtest: callback replay rejected; no raw authorization code returned
+ok 10 - callback replay rejected; no raw authorization code returned
+  ---
+  duration_ms: 4.4482
+  type: 'test'
+  ...
+# Subtest: wrong browser proof cannot complete OAuth or exchange tokens
+ok 11 - wrong browser proof cannot complete OAuth or exchange tokens
+  ---
+  duration_ms: 4.6504
+  type: 'test'
+  ...
+# Subtest: multiple pages explicitly selected; tokens absent from response/status/logs
+ok 12 - multiple pages explicitly selected; tokens absent from response/status/logs
+  ---
+  duration_ms: 12.374
+  type: 'test'
+  ...
+# Subtest: page without Instagram produces actionable safe error
+ok 13 - page without Instagram produces actionable safe error
+  ---
+  duration_ms: 9.6455
+  type: 'test'
+  ...
+# Subtest: revoked token produces sanitized error
+ok 14 - revoked token produces sanitized error
+  ---
+  duration_ms: 10.5384
+  type: 'test'
+  ...
+# Subtest: publish uses server-owned image/caption and succeeds exactly once
+ok 15 - publish uses server-owned image/caption and succeeds exactly once
+  ---
+  duration_ms: 11.6413
+  type: 'test'
+  ...
+# Subtest: publish requires existing permission and explicit confirmation
+ok 16 - publish requires existing permission and explicit confirmation
+  ---
+  duration_ms: 12.3255
+  type: 'test'
+  ...
+# Subtest: processing status can be resumed without creating another media container
+ok 17 - processing status can be resumed without creating another media container
+  ---
+  duration_ms: 9.8133
+  type: 'test'
+  ...
+# Subtest: Meta rejection marks failed without leaking provider details
+ok 18 - Meta rejection marks failed without leaking provider details
+  ---
+  duration_ms: 10.7983
+  type: 'test'
+  ...
+# Subtest: uncertain publish result never retried automatically
+ok 19 - uncertain publish result never retried automatically
+  ---
+  duration_ms: 9.8402
+  type: 'test'
+  ...
+# Subtest: disconnect deletes local credential and never revokes other entities app-wide
+ok 20 - disconnect deletes local credential and never revokes other entities app-wide
+  ---
+  duration_ms: 5.8039
+  type: 'test'
+  ...
+# Subtest: signed request verifies signature, timestamp, algorithm and actor
+ok 21 - signed request verifies signature, timestamp, algorithm and actor
+  ---
+  duration_ms: 2.234
+  type: 'test'
+  ...
+# Subtest: Meta deauthorization and data deletion require signed payload
+ok 22 - Meta deauthorization and data deletion require signed payload
+  ---
+  duration_ms: 3.8037
+  type: 'test'
+  ...
+# Subtest: missing environment disables handlers safely
+ok 23 - missing environment disables handlers safely
+  ---
+  duration_ms: 0.6208
+  type: 'test'
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 215.0761

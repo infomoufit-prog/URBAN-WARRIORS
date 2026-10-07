@@ -1,3 +1,4 @@
+import {openHistoricalFinance} from './historical-finance.js';
 import { getLocale as kxGetLocale, t } from '../i18n/index.js';
 import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
 import { repos } from '../core/repositories.js';
@@ -184,6 +185,7 @@ export async function renderFinance(){
     }
     for(const [id,key] of [['finance-year','year'],['finance-month','month'],['finance-member','socio'],['finance-origin','origin'],['finance-status','status']])document.getElementById(id)?.addEventListener('change',e=>{financeFilters[key]=e.target.value;renderFinance();});
 
+    if(has(state.session,'paymentAdmin')){const host=document.querySelector('#main-view .page-header');if(host){const button=document.createElement('button');button.type='button';button.className='btn btn-ghost';button.textContent=kxGetLocale()==='es'?'Registrar histórico':'Record historical entry';button.addEventListener('click',()=>openHistoricalFinance(members,renderFinance));host.appendChild(button);}}
     const reload=()=>renderFinance();
     bind('.stripe-pay',async(id,button)=>{button.disabled=true;try{const out=await repos.payments.checkout('club_fee',id,1);if(!out?.url)throw new Error('No se pudo abrir el pago seguro.');location.assign(out.url);}catch(error){setError(error);button.disabled=false;}});
     bind('.sepa-setup',async(id,button)=>{button.disabled=true;try{const out=await repos.payments.sepaSetup(id);if(!out?.url)throw new Error(t('payments.connectError'));toast(t('payments.sepaSetupOpened'));location.assign(out.url);}catch(error){setError(error);button.disabled=false;}});

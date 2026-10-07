@@ -1,0 +1,33 @@
+{
+  "club19result": {
+    "rollback": true,
+    "authorized_pilot_publication_preserved": true,
+    "verified_club_without_active_pilot_allowed": true,
+    "all_remaining_active_pilots_keep_publication": true,
+    "club_without_verified_application_or_active_pilot_denied": true
+  },
+  "free19": {
+    "role": "authenticated",
+    "checks": [
+      "free account without public profile: Social feed/directory, Showcase, Events and purchase eligibility",
+      "spectator: like, save, comment allowed; publish denied by server",
+      "unverified marca: publish denied by server",
+      "unverified federacion: publish denied by server",
+      "unverified profesional: publish denied by server",
+      "unverified media: publish denied by server",
+      "verified pilot competitor after explicit terms: Social publish allowed",
+      "competitor without Club plan: event draft, punctual publication and Ticketing requests allowed, no charge"
+    ],
+    "rollback": true,
+    "stripe_calls": 0,
+    "unverified_competitor_publish_and_organize_denied": true
+  },
+  "member19": {
+    "rollback": true,
+    "member_without_approved_club_cannot_publish": true
+  },
+  "scope": "Live Supabase authenticated RPCs, transaction rollback; no real Stripe checkout or production browser test.",
+  "qa_users_remaining": 0,
+  "pilot_slots_used": 0,
+  "active_club_pilots": 3
+}

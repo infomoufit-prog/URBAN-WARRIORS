@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "no profile shows voluntary invitation",
+    "no misleading active profile",
+    "no automatic activation",
+    "no public-profile creation on reading",
+    "no publishing without identity",
+    "invitation opens existing profile picker",
+    "free account keeps Social entry",
+    "free account keeps Showcase entry",
+    "free account keeps Events entry",
+    "choosing is voluntary; opening picker makes no write",
+    "{\"perfil_tipo\":\"espectador\",\"publication_enabled\":false} publisher matches explicit permission",
+    "{\"perfil_tipo\":\"espectador\",\"publication_enabled\":false} no duplicate create invitation",
+    "spectator never prompts member activation",
+    "{\"perfil_tipo\":\"espectador\",\"publication_enabled\":true} publisher matches explicit permission",
+    "{\"perfil_tipo\":\"espectador\",\"publication_enabled\":true} no duplicate create invitation",
+    "spectator never prompts member activation",
+    "{\"perfil_tipo\":\"competidor\",\"publication_enabled\":false} publisher matches explicit permission",
+    "{\"perfil_tipo\":\"competidor\",\"publication_enabled\":false} no duplicate create invitation",
+    "{\"perfil_tipo\":\"competidor\"} publisher matches explicit permission",
+    "{\"perfil_tipo\":\"competidor\"} no duplicate create invitation",
+    "{\"perfil_tipo\":\"competidor\",\"publication_enabled\":true} publisher matches explicit permission",
+    "{\"perfil_tipo\":\"competidor\",\"publication_enabled\":true} no duplicate create invitation"
+  ],
+  "writes": 0,
+  "transport": "Isolated Edge browser with mocked repositories. Live permission tests are recorded separately.",
+  "pageErrors": []
+}

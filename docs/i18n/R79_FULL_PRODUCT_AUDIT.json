@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-06T22:19:38.199Z",
-  "candidates": 5240,
+  "generated_at": "2026-10-07T21:25:11.716Z",
+  "candidates": 5296,
   "covered_r79": 546,
-  "covered_r78": 1216,
-  "covered_legacy_all7": 3200,
-  "unresolved": 278,
+  "covered_r78": 1217,
+  "covered_legacy_all7": 3256,
+  "unresolved": 277,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,
-    "web/js/modules/customer-operations.js": 65,
+    "web/js/modules/customer-operations.js": 64,
     "web/js/modules/gateway.js": 31,
     "web/js/modules/plan-services.js": 31,
     "web/js/modules/professional-operations.js": 21,
@@ -1072,19 +1072,6 @@
     {
       "file": "web/js/modules/customer-operations.js",
       "value": "Guía práctica para incorporar alumnos, cuotas y pagos al Club con autorización final. Federaciones y Marcas pueden analizar sus documentos y solicitar revisión humana.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/customer-operations.js",
-      "value": "Canal de Club, Federación y Marca para analizar archivos. La incorporación directa está disponible en Club para alumnos, cuotas y pagos tras autorización final; los demás perfiles usan revisión humana.",
       "missing": [
         "en",
         "fr",

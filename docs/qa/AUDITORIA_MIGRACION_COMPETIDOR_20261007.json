@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-07",
+  "project": "poggsobhtutbuagjiydc",
+  "migration": {
+    "name": "member_seniority_historical_finance_fix20",
+    "version": "20261007205827",
+    "applied": true
+  },
+  "history": [
+    {
+      "check_name": "history pendiente idempotent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "history pagado idempotent",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "history payment recorded",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "reject negative amount",
+      "passed": true,
+      "detail": "HISTORY_INVALID"
+    },
+    {
+      "check_name": "real member seniority preserves registration and enrollments",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "unauthorized history denied",
+      "passed": true,
+      "detail": "FINANCE_ADMIN_REQUIRED"
+    }
+  ],
+  "competitor": [
+    {
+      "check_name": "verified competitor profile edit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor media avatar",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor media banner",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor media photo",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor social publish",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor instagram context",
+      "passed": false,
+      "detail": "META_LEGAL_ACCEPTANCE_REQUIRED"
+    }
+  ],
+  "socialMedia": [
+    {
+      "check_name": "competitor social media avatar",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor social media banner",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "competitor social media photo",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "storageDenials": [
+    {
+      "check_name": "foreign upload path denied",
+      "passed": true
+    },
+    {
+      "check_name": "foreign media metadata path denied",
+      "passed": true
+    }
+  ],
+  "browser": {
+    "availability": 11,
+    "uploadRepositoryMocked": 14,
+    "instagramMocked": 32
+  },
+  "isolatedHistory": 29,
+  "notes": [
+    "All live test writes rolled back.",
+    "Storage RLS insert tested as authenticated; metadata only, no real binary upload.",
+    "Instagram real OAuth/publication not performed. Existing verified competitor requires current platform legal acceptance.",
+    "Frontend unchanged; existing FIX21 ZIP unchanged. Full build not repeated for this backend migration."
+  ],
+  "advisors": {
+    "security": [
+      {
+        "name": "rls_enabled_no_policy",
+        "count": 235,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "count": 60,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable"
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "count": 640,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "count": 1,
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+      }
+    ],
+    "performance": [
+      {
+        "name": "unindexed_foreign_keys",
+        "count": 256,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys"
+      },
+      {
+        "name": "unused_index",
+        "count": 305,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "duplicate_index",
+        "count": 1,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0009_duplicate_index"
+      }
+    ]
+  }
+}

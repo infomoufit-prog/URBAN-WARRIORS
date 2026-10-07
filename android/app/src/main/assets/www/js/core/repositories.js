@@ -352,7 +352,7 @@ async function uploadKombaxProfileMedia(profileId,type,file){
   const path=`${session().id}/${profileId}/${Date.now()}-${token}.${ext}`;
   await backend.upload('kombax-public-media',path,prepared.file,false);
   try{
-    const data=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.add',{perfil_directo_id:profileId,tipo,storage_path:path,mime_type:prepared.mime||prepared.file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,duration_seconds:prepared.duration||null});
+    const data=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.add',{perfil_directo_id:profileId,tipo:type,storage_path:path,mime_type:prepared.mime||prepared.file.type,bytes:prepared.sizeBytes||prepared.file.size,width:prepared.width||null,height:prepared.height||null,duration_seconds:prepared.duration||null});
     let mediaPresentation=data?.media_presentation||{};
     if(type==='video'&&prepared.cover&&data?.id){try{const cover=await storeMediaCover('profile_media',data.id,prepared.cover,{bucket:'kombax-public-media',pathPrefix:`${session().id}/${profileId}/${data.id}`,presentation:mediaPresentation,mode:'auto',time:prepared.coverTime||0});mediaPresentation=cover.presentation;}catch(error){console.warn('KOMBAX profile video cover:',error);}}
     return {...data,media_presentation:mediaPresentation,public_url:backend.publicUrl('kombax-public-media',path)};
@@ -481,6 +481,7 @@ export const repos={
     delete:(tarifa_id)=>mutation('tarifa.eliminar',{tarifa_id}), forceDelete:(tarifa_id)=>mutation('tarifa.eliminar_forzado',{tarifa_id})
   },
   finance:{
+    historical:async(p,requestId)=>{const out=await backend.writeRpc('app_kombax_historical_finance_fix20',{p_club_id:session()?.club_id,p_payload:p,p_request_id:requestId});invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);return out;},
     fees:(limit=120)=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), payments:(limit=120)=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), receipts:(limit=120)=>read('recibos_cuota',`select=*&${filterClub()}&order=periodo.desc,numero.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`),
     account:(limit=180)=>read('v_estado_cuenta_socio',`select=*&${filterClub()}&order=periodo.desc&limit=${Math.min(600,Math.max(30,Number(limit)||180))}`),
     async years(){const rows=await read('v_finanzas_metricas_anuales',`select=anio&${filterClub()}&order=anio.desc&limit=50`);return rows.map(r=>({periodo:`${r.anio}-01-01`}));},
@@ -1195,6 +1196,7 @@ export const repos={
     quota:(social_id)=>backend.globalReadRpc('app_kombax_social_cupo_v099',{p_social_id:social_id}),
     profilePosts:(social_id,cursor=null,limit=10)=>readSocialProfilePosts(social_id,cursor,limit),
     headerActivity:()=>backend.globalReadRpc('app_kombax_header_activity_v106',{}),
+    profileContacts:(socialId,limit=50)=>backend.globalReadRpc('app_kombax_profile_contacts_fix18',{p_social_id:socialId,p_limit:Math.min(200,Math.max(20,Number(limit)||50))}),
     contacts:(limit=50)=>rpcWithFallback(
       ()=>backend.globalReadRpc('app_kombax_contactos_v133',{p_limit:Math.min(200,Math.max(20,Number(limit)||50))}),
       ()=>rpcWithFallback(

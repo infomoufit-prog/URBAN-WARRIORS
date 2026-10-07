@@ -49,3 +49,16 @@ verify_jwt = false
 # Authenticated by x-uw-cron-secret; rejects requests without the server secret.
 [functions.kombax-content-cleanup]
 verify_jwt = false
+
+[functions.meta-instagram]
+verify_jwt = true
+
+# Public provider callbacks; state/browser proof or HMAC is validated in code.
+[functions.meta-instagram-callback]
+verify_jwt = false
+
+[functions.meta-instagram-deauthorize]
+verify_jwt = false
+
+[functions.meta-instagram-data-deletion]
+verify_jwt = false

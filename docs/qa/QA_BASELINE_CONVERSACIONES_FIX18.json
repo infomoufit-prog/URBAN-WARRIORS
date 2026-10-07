@@ -1,0 +1,5 @@
+{
+  "baseline": "FIX17 ZIP",
+  "exit": 1,
+  "output": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: unified conversation route exists\n\nfalse !== true\n\n    at file:///C:/Users/Bryan%20Work/Documents/Codex/2026-10-03/ahora-necesito-que-vayas-al-repositorio/work/qa-conversations-baseline-fix17/scripts/test-kombax-20110-r60-final-pilot-assist-conversations.mjs:41:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.3\n"
+}

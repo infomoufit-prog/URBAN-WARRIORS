@@ -1,0 +1,66 @@
+// Same pilot policy as r120-profile-copy: English fallback outside Spanish.
+// Native translations remain pending; no inherited audit baseline is changed.
+const EN=Object.freeze({
+ "Registrar histórico":"Record historical entry",
+ "Registro manual. No realiza cargos bancarios. Los avisos quedan pausados.":"Manual record. No bank charge is made. Reminders remain paused.",
+ "Alumno":"Student",
+ "Situación del histórico":"Historical status",
+ "Cuota anterior pendiente":"Previous outstanding charge",
+ "Pago anterior ya realizado":"Previous payment already made",
+ "Concepto":"Description",
+ "Importe":"Amount",
+ "Periodo al que corresponde":"Period covered",
+ "Vencimiento original":"Original due date",
+ "Fecha real del pago":"Actual payment date",
+ "Método de pago":"Payment method",
+ "Referencia":"Reference",
+ "Observaciones":"Notes",
+ "Registrar histórico":"Record historical entry",
+ "Histórico registrado":"Historical entry recorded",
+
+ 'Fecha de incorporación al club':'Club joining date',
+ 'Puede ser anterior al registro en KOMBAX. No cambia la fecha de creación de la cuenta.':'May precede registration in KOMBAX. Does not change the account creation date.',
+ 'Instagram · Conexión de esta identidad':'Instagram · Connection for this identity',
+ 'Instagram · Redes sociales':'Instagram · Social networks',
+ 'Autorización caducada':'Authorization expired',
+ 'Autorización retirada':'Authorization revoked',
+ 'Resultado pendiente de revisión':'Result pending review',
+ 'La conexión con Instagram todavía no está habilitada.':'The Instagram connection is not enabled yet.',
+ 'Conecta Instagram desde la web KOMBAX autenticada. Después podrás utilizar la conexión desde tus dispositivos.':'Connect Instagram from the authenticated KOMBAX website. You can then use the connection from your devices.',
+ 'No se ha podido iniciar la conexión.':'The connection could not be started.',
+ 'Volver a conectar':'Reconnect',
+ 'Conexión comprobada':'Connection checked',
+ 'Publicar también en Instagram':'Also publish on Instagram',
+ 'No se ha podido completar el envío. Consulta el estado de Instagram antes de volver a intentarlo.':'The submission could not be completed. Check the Instagram status before trying again.',
+ 'No se ha podido consultar Instagram. Inténtalo de nuevo.':'Instagram could not be checked. Please try again.',
+ 'No se ha podido consultar Instagram. Comprueba que administras esta identidad y vuelve a intentarlo.':'Instagram could not be checked. Make sure you administer this identity and try again.',
+ 'Integración preparada para pruebas. La conexión estará disponible cuando administración complete la configuración y el despliegue.':'Integration prepared for testing. The connection will be available after administration completes configuration and deployment.',
+ 'Conecta una cuenta profesional vinculada a una página de Facebook. Esta conexión pertenece solo a esta identidad. Cada publicación requiere tu confirmación.':'Connect a professional account linked to a Facebook Page. This connection belongs only to this identity. Each publication requires your confirmation.',
+ 'Últimos envíos a Instagram':'Recent Instagram submissions',
+ 'Comprobar envío':'Check submission',
+ 'Comprobar conexión':'Check connection',
+ 'Se enviará la imagen JPEG original y este texto. La imagen debe tener un formato admitido por Instagram. El encuadre visual de KOMBAX no modifica el archivo original.':'The original JPEG image and this text will be submitted. The image must have a format supported by Instagram. The KOMBAX visual crop does not modify the original file.',
+ 'Esta acción crea una publicación externa. Retirarla después en KOMBAX no elimina la copia de Instagram.':'This action creates an external publication. Removing it later in KOMBAX does not delete the Instagram copy.',
+ 'Confirmar publicación en Instagram':'Confirm Instagram publication',
+ 'Instagram conectado. Ya puedes volver a KOMBAX y consultar la conexión desde Social.':'Instagram connected. You can return to KOMBAX and check the connection from Social.',
+ 'No se ha podido conectar la cuenta. Vuelve a intentarlo o inicia una nueva conexión.':'The account could not be connected. Try again or start a new connection.',
+ 'No se ha podido completar la conexión. Vuelve a KOMBAX e inicia de nuevo la conexión desde el mismo navegador y cuenta.':'The connection could not be completed. Return to KOMBAX and start again from the same browser and account.',
+ 'Selecciona la página y cuenta de Instagram que quieres conectar a esta identidad.':'Select the Page and Instagram account you want to connect to this identity.',
+ 'Confirmar conexión':'Confirm connection',
+ 'Comprobando autorización…':'Checking authorization…',
+ 'Volver a KOMBAX':'Return to KOMBAX',
+ 'Conectar Instagram':'Connect Instagram',
+ 'Conectar desde la web KOMBAX':'Connect from the KOMBAX website',
+ 'Instagram desconectado':'Instagram disconnected',
+ 'Desconectar Instagram':'Disconnect Instagram',
+ 'Procesando en Instagram':'Processing on Instagram',
+ 'Enviando a Instagram':'Submitting to Instagram',
+ 'Publicado en Instagram':'Published on Instagram',
+ 'No publicado':'Not published'
+});
+export function localizeMetaInstagramText(source,locale='es'){
+ if(String(locale).toLowerCase().split('-')[0]==='es')return '';
+ if(EN[source])return EN[source];
+ const disconnect=source.match(/^Se retirará la conexión de (.+)\. No elimina publicaciones ya enviadas a Instagram ni afecta a otras identidades\.$/);
+ return disconnect?`The connection for ${disconnect[1]} will be removed. This does not delete publications already submitted to Instagram or affect other identities.`:'';
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "club": "Sant Pedro urban warrios",
+    "check": "Showcase premium and authorized manager",
+    "passed": true,
+    "plan": "premium",
+    "limit": 25
+  },
+  {
+    "club": "Sant Pedro urban warrios",
+    "check": "Events premium and authorized actor",
+    "passed": true,
+    "plan": "premium",
+    "limit": 2
+  },
+  {
+    "club": "Urban Warriors",
+    "check": "Showcase premium and authorized manager",
+    "passed": true,
+    "plan": "premium",
+    "limit": 25
+  },
+  {
+    "club": "Urban Warriors",
+    "check": "Events premium and authorized actor",
+    "passed": true,
+    "plan": "premium",
+    "limit": 2
+  },
+  {
+    "club": "Doragon Santa Coloma",
+    "check": "Showcase premium and authorized manager",
+    "passed": true,
+    "plan": "premium",
+    "limit": 25
+  },
+  {
+    "club": "Doragon Santa Coloma",
+    "check": "Events premium and authorized actor",
+    "passed": true,
+    "plan": "premium",
+    "limit": 2
+  }
+]

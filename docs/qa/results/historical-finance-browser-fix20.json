@@ -1,0 +1,24 @@
+{
+  "checks": [
+    "390: pending mode hides payment controls",
+    "390: pending submit records historical period",
+    "390: pending never invents payment date",
+    "390: paid mode requires actual payment date",
+    "390: missing payment date blocks submission",
+    "390: paid submit preserves payment date",
+    "390: each new record receives distinct request id",
+    "390: refresh after recording",
+    "390: no horizontal overflow",
+    "1280: pending mode hides payment controls",
+    "1280: pending submit records historical period",
+    "1280: pending never invents payment date",
+    "1280: paid mode requires actual payment date",
+    "1280: missing payment date blocks submission",
+    "1280: paid submit preserves payment date",
+    "1280: each new record receives distinct request id",
+    "1280: refresh after recording",
+    "1280: no horizontal overflow"
+  ],
+  "passed": 18,
+  "transport": "mocked; no production writes"
+}

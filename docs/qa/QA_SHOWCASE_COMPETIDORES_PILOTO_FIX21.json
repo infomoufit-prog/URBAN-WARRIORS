@@ -1,0 +1,74 @@
+{
+  "scope": "Live Supabase transaction rolled back; no actual content publication committed. Approved product state seeded only inside test transaction; no seller approval granted.",
+  "checks": [
+    {
+      "check_name": "new competitor assigned pilot automatically",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "non-pilot no free catalog",
+      "passed": true,
+      "detail": "0"
+    },
+    {
+      "check_name": "pilot catalog 15 slots",
+      "passed": true,
+      "detail": "15"
+    },
+    {
+      "check_name": "pilot saves Showcase draft",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "unreviewed product still protected",
+      "passed": true,
+      "detail": "SHOWCASE_PRODUCT_COMPLIANCE_REQUIRED"
+    },
+    {
+      "check_name": "approved pilot content publication",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check_name": "suspended pilot loses free capacity",
+      "passed": true,
+      "detail": "0"
+    }
+  ],
+  "advisors": {
+    "security": [
+      {
+        "name": "rls_enabled_no_policy",
+        "count": 235
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "count": 60
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "count": 640
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "count": 1
+      }
+    ],
+    "performance": [
+      {
+        "name": "unindexed_foreign_keys",
+        "count": 256
+      },
+      {
+        "name": "unused_index",
+        "count": 305
+      },
+      {
+        "name": "duplicate_index",
+        "count": 1
+      }
+    ]
+  }
+}

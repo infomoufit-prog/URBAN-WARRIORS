@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+const config={META_APP_ID:'123',META_LOGIN_CONFIG_ID:'456',META_APP_SECRET:'fake-secret',META_GRAPH_API_VERSION:'v99.0',META_TOKEN_ENCRYPTION_KEY:'12'.repeat(32),KOMBAX_APP_URL:'https://example.test',SUPABASE_URL:'https://db.example.test',SUPABASE_PUBLISHABLE_KEYS:JSON.stringify({default:'sb_publishable_fake'}),SUPABASE_SECRET_KEYS:JSON.stringify({default:'sb_secret_fake'})};
+globalThis.Deno={env:{get:k=>config[k]}};
+const calls=[];globalThis.fetch=async(url,options)=>{calls.push({url,options});return new Response(JSON.stringify(url.endsWith('/auth/v1/user')?{id:'10000000-0000-4000-8000-000000000001'}:url.endsWith('app_kombax_meta_context_fix20')?{can_manage:true,can_publish:true}:{status:'not_connected'}),{status:200,headers:{'content-type':'application/json'}})};
+const {metaInstagram}=await import('../supabase/functions/_shared/meta-instagram-runtime.js');
+const request=()=>new Request('https://db.example.test/functions/v1/meta-instagram',{method:'POST',headers:{authorization:'Bearer fake-user-jwt','content-type':'application/json',origin:'https://example.test'},body:JSON.stringify({action:'status',social_id:'40000000-0000-4000-8000-000000000001'})});
+assert.equal((await metaInstagram.control(request())).status,200);
+const service=calls.find(x=>x.url.endsWith('app_kombax_meta_internal_fix20'));assert.ok(service);assert.equal(service.options.headers.apikey,'sb_secret_fake');assert.equal(service.options.headers.authorization,undefined);
+const user=calls.find(x=>x.url.endsWith('app_kombax_meta_context_fix20'));assert.equal(user.options.headers.authorization,'Bearer fake-user-jwt');assert.equal(user.options.headers.apikey,'sb_publishable_fake');
+config.SUPABASE_SECRET_KEYS='';config.SUPABASE_SERVICE_ROLE_KEY='fake-legacy-jwt';calls.length=0;assert.equal((await metaInstagram.control(request())).status,200);
+assert.equal(calls.find(x=>x.url.endsWith('app_kombax_meta_internal_fix20')).options.headers.authorization,'Bearer fake-legacy-jwt');
+console.log('PASS 8 runtime transport checks: new secret apikey, user JWT preserved, legacy service JWT supported; fetch mocked');

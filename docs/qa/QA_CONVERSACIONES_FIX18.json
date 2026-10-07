@@ -1,0 +1,298 @@
+{
+  "checks": [
+    "competidor four Club channels",
+    "competidor scoped Social rows",
+    "competidor switch showcase",
+    "competidor switch assist",
+    "competidor switch migrations",
+    "competidor switch social",
+    "competidor AI selected tenant",
+    "profesional four Club channels",
+    "profesional scoped Social rows",
+    "profesional switch showcase",
+    "profesional switch assist",
+    "profesional switch migrations",
+    "profesional switch social",
+    "profesional AI selected tenant",
+    "marca four Club channels",
+    "marca scoped Social rows",
+    "marca switch showcase",
+    "marca switch assist",
+    "marca switch migrations",
+    "marca switch social",
+    "marca AI selected tenant",
+    "federacion four Club channels",
+    "federacion scoped Social rows",
+    "federacion switch showcase",
+    "federacion switch assist",
+    "federacion switch migrations",
+    "federacion switch social",
+    "federacion AI selected tenant",
+    "revocation clears old conversation UI",
+    "revoked identity never queries history"
+  ],
+  "calls": [
+    [
+      "workspace",
+      "p-competidor"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-competidor"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-competidor"
+    ],
+    [
+      "tickets",
+      "profile:p-competidor"
+    ],
+    [
+      "dashboard",
+      "profile:p-competidor"
+    ],
+    [
+      "guide",
+      "profile:p-competidor"
+    ],
+    [
+      "credits",
+      "profile:p-competidor"
+    ],
+    [
+      "workspace",
+      "p-competidor"
+    ],
+    [
+      "tickets",
+      "profile:p-competidor"
+    ],
+    [
+      "dashboard",
+      "profile:p-competidor"
+    ],
+    [
+      "guide",
+      "profile:p-competidor"
+    ],
+    [
+      "credits",
+      "profile:p-competidor"
+    ],
+    [
+      "workspace",
+      "p-competidor"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-profesional"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-profesional"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-profesional"
+    ],
+    [
+      "tickets",
+      "profile:p-profesional"
+    ],
+    [
+      "dashboard",
+      "profile:p-profesional"
+    ],
+    [
+      "guide",
+      "profile:p-profesional"
+    ],
+    [
+      "credits",
+      "profile:p-profesional"
+    ],
+    [
+      "workspace",
+      "p-profesional"
+    ],
+    [
+      "tickets",
+      "profile:p-profesional"
+    ],
+    [
+      "dashboard",
+      "profile:p-profesional"
+    ],
+    [
+      "guide",
+      "profile:p-profesional"
+    ],
+    [
+      "credits",
+      "profile:p-profesional"
+    ],
+    [
+      "workspace",
+      "p-profesional"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-marca"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-marca"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-marca"
+    ],
+    [
+      "tickets",
+      "profile:p-marca"
+    ],
+    [
+      "dashboard",
+      "profile:p-marca"
+    ],
+    [
+      "guide",
+      "profile:p-marca"
+    ],
+    [
+      "credits",
+      "profile:p-marca"
+    ],
+    [
+      "workspace",
+      "p-marca"
+    ],
+    [
+      "tickets",
+      "profile:p-marca"
+    ],
+    [
+      "dashboard",
+      "profile:p-marca"
+    ],
+    [
+      "guide",
+      "profile:p-marca"
+    ],
+    [
+      "credits",
+      "profile:p-marca"
+    ],
+    [
+      "workspace",
+      "p-marca"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-federacion"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-federacion"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-federacion"
+    ],
+    [
+      "tickets",
+      "profile:p-federacion"
+    ],
+    [
+      "dashboard",
+      "profile:p-federacion"
+    ],
+    [
+      "guide",
+      "profile:p-federacion"
+    ],
+    [
+      "credits",
+      "profile:p-federacion"
+    ],
+    [
+      "workspace",
+      "p-federacion"
+    ],
+    [
+      "tickets",
+      "profile:p-federacion"
+    ],
+    [
+      "dashboard",
+      "profile:p-federacion"
+    ],
+    [
+      "guide",
+      "profile:p-federacion"
+    ],
+    [
+      "credits",
+      "profile:p-federacion"
+    ],
+    [
+      "workspace",
+      "p-federacion"
+    ],
+    [
+      "contacts",
+      "s-a"
+    ],
+    [
+      "workspace",
+      "p-federacion"
+    ]
+  ],
+  "transport": "Isolated Edge browser, repository transports mocked; no real messages sent.",
+  "pageErrors": []
+}

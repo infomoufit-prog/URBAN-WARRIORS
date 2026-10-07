@@ -112,7 +112,8 @@ Deno.serve(async(req:Request)=>{
   let ctx:any;
   try{ctx=await rpc(base,secret,`Bearer ${secret}`,'app_kombax_assist_turn_internal_v227',{p_turn_id:turnId},15000);}catch(error){await rpc(base,secret,`Bearer ${secret}`,'app_kombax_assist_turn_fail_v227',{p_turn_id:turnId,p_error_code:'CONTEXT_ERROR'}).catch(()=>{});return json(500,{ok:false,error:'context_error'});}
   const migration=String(ctx?.category||'')==='MIGRATION';const management=String(ctx?.category||'')==='MANAGEMENT';const files=Array.isArray(ctx?.files)?ctx.files:[];const history=Array.isArray(ctx?.messages)?ctx.messages:[];
-  const migrationRows=migration?await rpc(base,publishable,bearer,'app_kombax_migration_records_v271',{p_ticket_id:ticketId},12000).then((data:any)=>(Array.isArray(data?.files)?data.files:[]).flatMap((file:any)=>Array.isArray(file?.records)?file.records:[]).slice(0,100)).catch(()=>[]):[];
+  const personalMigration=migration&&['profesional','competidor'].includes(String(ctx?.identity_context?.entity_type||''));
+  const migrationRows=migration&&!personalMigration?await rpc(base,publishable,bearer,'app_kombax_migration_records_v271',{p_ticket_id:ticketId},12000).then((data:any)=>(Array.isArray(data?.files)?data.files:[]).flatMap((file:any)=>Array.isArray(file?.records)?file.records:[]).slice(0,100)).catch(()=>[]):[];
   const paymentActivationIntent=management&&specialty==='stripe'&&/(activar|configurar|habilitar).{0,40}(cobros?|pagos?).{0,40}(tarjeta|stripe)?/i.test(message);
   const transcript=history.filter((m:any)=>String(m.turn_id||'')!==turnId).slice(-8).map((m:any)=>`${String(m.role||'user').toUpperCase()}: ${safeText(m.content,1600)}`).join('\n');
   const managementSnapshot=management&&ctx?.management_context&&typeof ctx.management_context==='object'?safeText(JSON.stringify(ctx.management_context),7000):'';
@@ -129,7 +130,7 @@ Deno.serve(async(req:Request)=>{
     content.push(...preparedFiles);
   }catch(error){await rpc(base,secret,`Bearer ${secret}`,'app_kombax_assist_turn_fail_v227',{p_turn_id:turnId,p_error_code:'FILE_READ_ERROR'}).catch(()=>{});return json(422,{ok:false,error:'file_read_error'});}
   const baseInstructions=migration?`${MIGRATION_INSTRUCTIONS}\n\n${MIGRATION_FOLLOWUP_INSTRUCTIONS}`:management?`${MANAGEMENT_INSTRUCTIONS}\n\n${SPECIALTY_INSTRUCTIONS[specialty]}`:SUPPORT_GUIDED_INSTRUCTIONS;
-  const instructions=`${baseInstructions}\n\n${management||migration?PLATFORM_WORKFLOW_FIX16:''}\n\n${migration?MIGRATION_FAST_FLOW_FIX16:''}\n\n${localeInstruction(userLocale,migration)}`;
+  const instructions=`${baseInstructions}\n\n${management||migration?PLATFORM_WORKFLOW_FIX16:''}\n\n${migration?MIGRATION_FAST_FLOW_FIX16:''}\n\n${personalMigration?'PREPARACIÓN DOCUMENTAL PERSONAL: analiza trayectoria, experiencia, diplomas y acreditaciones de la identidad autorizada. No conviertas documentos personales en alumnos, cargos o pagos de un club. Devuelve preview.records=[], detected_records=0 y field_updates=[]. Puedes resumir los documentos y señalar datos ilegibles; no concedas verificaciones ni acreditaciones. Explica que este canal prepara y revisa documentación, sin importación automática.':''}\n\n${localeInstruction(userLocale,migration)}`;
   // Migration responses contain structured rows for several files. The ordinary
   // chat limit can truncate the JSON before the first record is returned.
   const requestBody:any={model:String(ctx?.model_alias||'gpt-5.6-luna'),instructions,input:[{role:'user',content}],max_output_tokens:migration?3000:Number(ctx?.max_output_tokens||500),store:false};
@@ -149,6 +150,8 @@ Deno.serve(async(req:Request)=>{
     // Marking it analyzed here would make the customer's files impossible to retry.
     if(!analyses.length&&files.length)assistantText=FALLBACK_COPY[userLocale].issue;
   }
+  // Personal documents never become club records, even if a model returns them.
+  if(personalMigration){analyses=analyses.map(a=>({...a,detected_records:0,needs_review:true,preview:{...a.preview,records:[]}}));fieldUpdates=[];}
   const usage=response?.usage,model=String(ctx?.model_alias||'gpt-5.6-luna');
   if(!usage||!Number.isFinite(Number(usage.input_tokens))||!Number.isFinite(Number(usage.output_tokens))||!response?.id){
     await rpc(base,secret,`Bearer ${secret}`,'app_kombax_assist_turn_fail_v227',{p_turn_id:turnId,p_error_code:'OFFICIAL_USAGE_MISSING'}).catch(()=>{});

@@ -44,6 +44,7 @@ export async function renderGroups(){
 
 async function loadMemberRelations(){const [disciplines,grades,groups,tariffs]=await Promise.all([repos.catalog.disciplines(),repos.catalog.grades(),repos.groups.list(),repos.tariffs.list()]);return {disciplines,grades,groups,tariffs};}
 function memberFields(r){return [
+  {name:'fecha_alta',label:'Fecha de incorporación al club',type:'date',help:'Puede ser anterior al registro en KOMBAX. No cambia la fecha de creación de la cuenta.'},
   {name:'nombre',label:'Nombre',required:true},{name:'apellidos',label:'Apellidos',required:true},{name:'fecha_nacimiento',label:'Fecha de nacimiento',type:'date'},
   {name:'telefono',label:'Teléfono'},{name:'email',label:'Email',type:'email',help:'Opcional para fichas históricas/migradas. Las nuevas altas de adultos deben usar Preinscripciones y llevan email obligatorio.'},{name:'tutor_nombre',label:'Tutor/a'},
   {name:'disciplina_id',label:'Disciplina · opcional',type:'select',options:options(r.disciplines.filter(d=>d.activa)),help:'La ficha puede guardarse sin disciplina y completarse después.'},{name:'grupo_id',label:'Grupo · opcional',type:'select',options:options(r.groups.filter(g=>g.activo)),help:'No es necesario asignar grupo para registrar al alumno.'},

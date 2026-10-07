@@ -1,0 +1,15 @@
+PASS pending historical charge retains original period
+PASS pending does not create payment
+PASS reminders paused
+PASS replay no duplicate
+PASS paid history goes through real payment function
+PASS original payment date
+PASS validated full payment
+PASS paid status
+PASS paid replay one record
+PASS joining date saved
+PASS registration timestamp untouched
+PASS stale retry cannot undo newer joining date
+PASS history request table RLS
+PASS no direct authenticated table access
+PASS 29 isolated PostgreSQL checks; payment function real, batch membership dependency stubbed; no production writes.

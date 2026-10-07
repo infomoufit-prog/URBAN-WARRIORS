@@ -18,6 +18,7 @@ import { conversationChannelTabs, bindConversationChannelTabs } from '../ui/conv
 import { t } from '../i18n/index.js';
 import { contentTranslationAttrs, prewarmUserContentTranslations } from '../i18n/user-content-translation.js';
 import { verificationVisual } from '../core/verification-visual.js';
+import {instagramEnabled,openInstagramIntegration,publishPostToInstagram} from './instagram-integration.js';
 
 const PAGE_SIZE=20;
 const TYPE_LABEL={actualizacion:t('social.types.update'),resultado:t('social.types.result'),evento:t('social.types.event'),oportunidad:t('social.types.opportunity')};
@@ -82,7 +83,7 @@ function tabBar(){
 }
 
 function activeIdentity(){return ownProfiles.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(ownProfiles)||null;}
-const publishProfiles=()=>ownProfiles.filter(p=>p.publication_enabled!==false);
+const publishProfiles=()=>ownProfiles.filter(p=>p.publication_enabled===true&&(p.perfil_tipo||p.sujeto_tipo)!=='espectador');
 function activePublishIdentity(){const rows=publishProfiles();return rows.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(rows)||null;}
 function identitySwitcher(){
   if(!ownProfiles.length)return '';
@@ -96,9 +97,15 @@ function socialHeaderActions(primary=''){return `${primary||''}${socialInfoTrigg
 function openSocialInfoPanel(){
   const modal=openDetail({title:t('social.info.title'),subtitle:t('social.info.subtitle'),body:`<div class="kx-social-info-panel">${identitySwitcher()}${socialTopicPolicyNotice()}${socialRulesCard()}</div>`,actions:'',width:'680px',className:'kx-social-info-modal'});
   modal.wrap.querySelector('#kx-active-identity')?.addEventListener('change',e=>{activeIdentityId=e.target.value;setActiveIdentity(activeIdentityId);closeModal();renderKombaxSocial();});
+  if(activeIdentity()){
+    const button=document.createElement('button');button.type='button';button.className='btn btn-ghost';button.textContent='Instagram · Conexión de esta identidad';
+    button.addEventListener('click',()=>openInstagramIntegration(activeIdentity()));modal.wrap.querySelector('.kx-social-info-panel')?.append(button);
+  }
 }
 
 function activationPanel(){
+  if(!ownProfiles.length)return `<section class="kombax-social-notice" data-public-profile-invitation><div>${icon('identity',{size:28})}</div><div><strong>Tu cuenta aún no tiene un perfil público</strong><p>Puedes explorar Social, Showcase y Events y comprar con tu cuenta gratuita. Crea voluntariamente tu perfil público Espectador para comentar, dar «me gusta» y guardar. Es gratuito y no permite publicar. Los demás perfiles necesitan su validación para publicar; Miembro requiere vinculación aprobada a un club.</p><button type="button" class="btn btn-primary btn-sm" id="kx-social-create-profile">Crear o gestionar mi perfil</button></div></section>`;
+  if((activeIdentity()?.perfil_tipo||activeIdentity()?.sujeto_tipo)==='espectador')return '';
   if(socialStatus?.status==='activa')return '';
   const eligible=socialStatus?.eligible===true;
   return `<section class="kombax-social-notice"><div>${icon('shieldCheck',{size:28})}</div><div><strong>${eligible?t('social.activation.eligible'):t('social.activation.unavailable')}</strong><p>${esc(socialStatus?.reason||t('social.activation.defaultReason'))}</p>${eligible?`<button type="button" class="btn btn-primary btn-sm" id="kombax-social-activate">${t('social.actions.reviewActivate')}</button>`:''}</div></section>`;
@@ -154,7 +161,11 @@ async function refreshActiveQuota(){const current=activeIdentity();activeQuota=c
 
 function quickComposer(){
   const current=activePublishIdentity();
-  if(!current)return '<section class="kx-social-composer kx-social-readonly"><div class="kx-social-composer-head"><div>'+icon('shieldCheck',{size:24})+'</div><div><small>PERFIL SOCIAL ACTIVO</small><strong>Explora, comenta y construye tu red</strong></div></div><p class="muted">Tu perfil público está activo. La publicación en el feed se habilita cuando tu tipo de identidad cumple sus requisitos; para Miembro/Practicante, cuando el club confirma la membresía.</p></section>';
+  if(!current){
+    if(!ownProfiles.length)return '';
+    const spectator=(activeIdentity()?.perfil_tipo||activeIdentity()?.sujeto_tipo)==='espectador';
+    return `<section class="kx-social-composer kx-social-readonly"><div class="kx-social-composer-head"><div>${icon('shieldCheck',{size:24})}</div><div><small>${spectator?'PERFIL ESPECTADOR':'VALIDACIÓN PARA PUBLICAR'}</small><strong>Explora e interactúa con tu comunidad</strong></div></div><p class="muted">${spectator?'Como Espectador puedes comentar, dar «me gusta» y guardar. Este perfil no permite publicar en el feed.':'Publicar requiere la validación correspondiente a tu perfil. Para Miembro/Practicante, el club debe confirmar la vinculación. Puedes seguir explorando mientras completas el proceso.'}</p></section>`;
+  }
   return `<section class="kx-social-composer" id="kombax-social-feed-top">
     <div class="kx-social-composer-head"><div class="kombax-social-avatar">${profileAvatar(current)}</div><div><small>PUBLICAR EN KOMBAX</small><strong>${esc(identityLabel(current))}</strong></div></div>
     ${quotaAction()}
@@ -215,6 +226,7 @@ function feedCards(){
   return `<div class="kombax-social-feed">${posts.map((p,index)=>`<article class="kombax-social-post" data-content-channel="social" data-content-id="${esc(p.id)}">
     <header class="kx-social-post-head"><div class="kx-social-author-open" data-social-profile-open="${esc(p.autor_id)}" tabindex="0" role="button" aria-label="Ver perfil público de ${esc(p.autor_nombre)}"><div class="kombax-social-avatar">${profileAvatar(p)}</div><div class="kx-social-author-copy"><strong>${esc(p.autor_nombre)} ${verified(p.autor_verificado,p.autor_tipo)}</strong><small>${dtFmt(p.creado_en)} · ${esc(PUBLIC_TYPE_LABEL[p.autor_tipo]||PROFILE_LABEL[p.autor_tipo]||p.autor_tipo)}</small>${affiliationChip(p)}<span class="kx-social-profile-cue">Ver perfil</span></div></div><details class="kx-post-menu"><summary aria-label="Opciones de la publicación">${icon('more',{size:20})}</summary><div class="kx-post-menu-popover">
       <button type="button" data-social-save="${esc(p.id)}" data-active="${p.saved_by_me?'true':'false'}">${icon('archive',{size:16})} ${p.saved_by_me?'Quitar de guardados':'Guardar publicación'}</button>
+      ${instagramEnabled()&&isOwn(p.autor_id)&&p.audiencia==='publica'&&p.media_path&&p.media_tipo!=='video'?`<button type="button" data-instagram-post="${esc(p.id)}">Publicar también en Instagram</button>`:''}
       ${p.contactable&&!isOwn(p.autor_id)?`<button type="button" data-social-contact="${esc(p.autor_id)}" data-social-name="${esc(p.autor_nombre)}">${icon('message',{size:16})} Contactar</button>`:''}
       ${isOwn(p.autor_id)&&p.social_media_id?`<button type="button" data-social-frame="${esc(p.id)}">${icon('image',{size:16})} Ajustar encuadre</button>`:''}${isOwn(p.autor_id)&&p.social_media_id&&p.media_tipo==='video'?`<button type="button" data-social-cover="${esc(p.id)}">${icon('image',{size:16})} Elegir portada del vídeo</button>`:''}
       ${!isOwn(p.autor_id)?`<button type="button" data-social-report-post="${esc(p.id)}">${icon('alert',{size:16})} Denunciar</button><button type="button" data-social-block="${esc(p.autor_id)}" data-social-name="${esc(p.autor_nombre)}">${icon('shield',{size:16})} Bloquear perfil</button>`:`<button type="button" data-social-visibility="${esc(p.id)}">${icon('eye',{size:16})} Visibilidad</button><button type="button" data-social-delete="${esc(p.id)}">${icon('trash',{size:16})} Eliminar publicación</button>`}
@@ -338,7 +350,7 @@ async function openContact(targetId,targetName){
   openForm({title:`Contactar con ${targetName}`,subtitle:'Indica el motivo y un primer mensaje. La otra persona debe aceptar la solicitud antes de que se habilite el chat.',fields:[{name:'remitente',label:'Enviar como',type:'select',required:true,value:senders[0].id,options:senders.map(p=>({value:p.id,label:p.nombre_publico}))},{name:'motivo',label:'Motivo',type:'select',required:true,value:'informacion',options:Object.entries(CONTACT_LABEL).map(([value,label])=>({value,label}))},{name:'mensaje',label:'Primer mensaje',type:'textarea',required:true,full:true,rows:5,minLength:10,maxLength:500,help:'Entre 10 y 500 caracteres. Se enviará junto a la solicitud. No admite imágenes, vídeos, audios ni archivos.'}],submitText:'Enviar solicitud',onSubmit:async v=>{await repos.kombaxSocial.contact(v.remitente,targetId,v.motivo,v.mensaje);toast('Solicitud de contacto enviada');activeView='contacts';await renderKombaxSocial();}});
 }
 
-async function openContactThread(contact){
+async function openContactThread(contact,{onChanged}={}){
   let current=contact,disposed=false,syncing=false,syncPoller=null,lastMetaSyncAt=0;
   let messages=[],olderAvailable=false,lastOrdinal=0;
   const PAGE=30;
@@ -446,7 +458,7 @@ async function openContactThread(contact){
   syncPoller.start({immediate:false});
   modal.wrap.querySelector('#modal-close')?.addEventListener('click',cleanup);
   modal.wrap.addEventListener('click',e=>{if(e.target===modal.wrap)cleanup();});
-  modal.wrap.querySelector('#kx-contact-delete-thread')?.addEventListener('click',()=>{const actor=senderFor();if(!actor){toast('No se puede identificar la copia de esta conversación.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La otra persona conservará su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(current.id,actor.id);toast('Conversación eliminada de tu bandeja');cleanup();modal.close();await renderContacts();},{confirmText:'Eliminar conversación',danger:true});});
+  modal.wrap.querySelector('#kx-contact-delete-thread')?.addEventListener('click',()=>{const actor=senderFor();if(!actor){toast('No se puede identificar la copia de esta conversación.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La otra persona conservará su copia hasta que también la elimine.',async()=>{await repos.kombaxSocial.deleteContact(current.id,actor.id);toast('Conversación eliminada de tu bandeja');cleanup();modal.close();if(onChanged)await onChanged();else await renderContacts();},{confirmText:'Eliminar conversación',danger:true});});
   await loadInitial();
 }
 
@@ -538,9 +550,11 @@ function isBackendVersionMismatch(error){const raw=String(error?.message||error|
 function socialUnavailable(error){return isBackendVersionMismatch(error)?'<div class="alert alert-danger"><strong>KOMBAX Social pendiente de sincronización</strong><span>La interfaz y el backend no están en la misma versión. El acceso Social queda bloqueado para evitar mezclar identidades o clubes hasta completar la actualización segura.</span></div>':empty('KOMBAX Social no disponible',humanError(error)||'No se pudo completar la operación.')}
 
 function bindCommon(){
+  document.querySelectorAll('[data-instagram-post]').forEach(b=>b.addEventListener('click',()=>{const post=posts.find(p=>p.id===b.dataset.instagramPost),identity=ownProfiles.find(p=>p.id===post?.autor_id);if(post&&identity)void publishPostToInstagram(post,identity);}));
   document.querySelectorAll('[data-social-view]').forEach(b=>b.addEventListener('click',()=>{const next=b.dataset.socialView;if(next==='contacts'){try{sessionStorage.setItem('kombax_conversation_channel','social')}catch{};location.hash='#conversations';return;}activeView=next;renderKombaxSocial();}));
   document.getElementById('kombax-social-publish')?.addEventListener('click',openPublisher);
   document.getElementById('kombax-social-activate')?.addEventListener('click',activateSocial);
+  document.getElementById('kx-social-create-profile')?.addEventListener('click',()=>import('./gateway.js').then(m=>m.renderDirectProfileHub({onBack:()=>renderKombaxSocial(),openProfilePicker:true})).catch(setError));
   document.getElementById('kx-social-info')?.addEventListener('click',openSocialInfoPanel);
 }
 
@@ -614,31 +628,31 @@ async function renderDiscovery(){
   renderKombaxDiscovery(document.getElementById('kx-social-discovery-root'),{preset:'all'});
 }
 
-async function renderContacts({standalone=false}={}){
+async function renderContacts({standalone=false,context={}}={}){
   if(standalone){try{const requested=sessionStorage.getItem('kombax_conversation_channel');if(['social','showcase'].includes(requested))contactFilter=requested;}catch{};if(contactFilter==='all')contactFilter='social';}
-  const canOrgAssist=Boolean(state.session?.club_id&&['direccion','coordinacion','secretaria','economia'].includes(String(state.session?.rol||'')));
+  const canOrgAssist=Boolean(context.profileId)||Boolean(state.session?.club_id&&['direccion','coordinacion','secretaria','economia'].includes(String(state.session?.rol||'')));
   const head=standalone?`${pageHeader('Conversaciones KOMBAX','Mensajes y asistencia en una capa propia. Cada canal conserva sus permisos y su contexto.',subviewActions({backId:'kx-conversations-back',closeId:'kx-conversations-close',backLabel:'Volver'}),'Conversaciones')}${conversationChannelTabs(contactFilter,{showAssist:canOrgAssist,showMigrations:canOrgAssist})}`:`${socialHeader()}${pageHeader('Mensajes KOMBAX','Conversaciones privadas de Social y consultas comerciales de Showcase.',socialHeaderActions(),'KOMBAX Social')}${tabBar()}`;
   const filterTabs=standalone?'':`<div class="kx-message-filters" role="tablist" aria-label="Filtrar mensajes"><button type="button" data-message-filter="social" class="${contactFilter==='social'?'active':''}">${icon('users',{size:15})} Social</button><button type="button" data-message-filter="showcase" class="${contactFilter==='showcase'?'active':''}">${icon('shoppingBag',{size:15})} Showcase</button></div>`;
   setMainHtml(`<div class="${standalone?'kx-conversations-page':'kombax-social-page'}">${head}${filterTabs}<div id="kombax-contact-list"><div class="loading-card">Cargando mensajes…</div></div></div>`);
-  if(standalone){bindConversationChannelTabs(document,{onSocial:()=>{contactFilter='social';renderContacts({standalone:true})},onShowcase:()=>{contactFilter='showcase';renderContacts({standalone:true})}});bindSubviewActions(document,{backId:'kx-conversations-back',closeId:'kx-conversations-close',onBack:()=>goBackOrFallback('#social'),onClose:()=>{location.hash='#dashboard';}});}else bindCommon();
+  if(standalone){bindConversationChannelTabs(document,{context,onSocial:context.onSocial||(()=>{contactFilter='social';renderContacts({standalone:true,context})}),onShowcase:context.onShowcase||(()=>{contactFilter='showcase';renderContacts({standalone:true,context})}),onAssist:context.onAssist,onMigrations:context.onMigrations});bindSubviewActions(document,{backId:'kx-conversations-back',closeId:'kx-conversations-close',onBack:context.onBack||(()=>goBackOrFallback('#social')),onClose:context.onBack||(()=>{location.hash='#dashboard';})});}else bindCommon();
   const box=document.getElementById('kombax-contact-list');
   try{
-    const rows=await repos.kombaxSocial.contacts(contactLimit);
-    const visible=rows.filter(c=>contactFilter==='all'||String(c.canal||'social')===contactFilter);
+    const rows=context.profileId?await repos.kombaxSocial.profileContacts(context.socialId,contactLimit):await repos.kombaxSocial.contacts(contactLimit);
+    const visible=rows.filter(c=>(!context.profileId||[c.remitente_id,c.destinatario_id].includes(context.socialId))&&(contactFilter==='all'||String(c.canal||'social')===contactFilter));
     box.innerHTML=(visible.length?`<div class="kombax-contact-list">${visible.map(c=>{const showcase=String(c.canal||'social')==='showcase';return `<article class="kx-message-card ${showcase?'showcase':'social'}"><header><div><span class="page-kicker">${showcase?'SHOWCASE':esc(c.direccion==='recibida'?'SOCIAL · RECIBIDA':c.direccion==='enviada'?'SOCIAL · ENVIADA':'SOCIAL')} ${showcase&&c.showcase_marca_nombre?`· ${esc(c.showcase_marca_nombre)}`:`· ${esc(CONTACT_LABEL[c.motivo]||c.motivo)}`}</span><strong>${esc(c.remitente_nombre)} → ${esc(c.destinatario_nombre)}</strong></div>${badge(c.estado,c.estado==='aceptada'?'ok':c.estado==='rechazada'||c.estado==='cerrada'?'warn':'neutral')}</header>${showcase?`<div class="kx-message-product">${c.showcase_producto_imagen_url?`<img src="${esc(c.showcase_producto_imagen_url)}" alt="">`:`<span>${icon('shoppingBag',{size:20})}</span>`}<div><small>Producto / servicio</small><strong>${esc(c.showcase_producto_nombre||'Ficha Showcase')}</strong></div></div>`:''}<p>${esc(c.ultimo_mensaje||'Solicitud de contacto')}</p><div class="kx-contact-meta"><small>${dtFmt(c.ultimo_mensaje_en||c.creado_en)}</small><span>${c.estado==='aceptada'?'Conversación abierta':c.estado==='pendiente'?'Pendiente de aceptación':'Conversación finalizada'}</span>${Number(c.no_leidos||0)>0?`<b>${Number(c.no_leidos)} nuevo${Number(c.no_leidos)===1?'':'s'}</b>`:''}</div><div class="row-actions">${c.gestionable?`<button class="btn btn-primary btn-sm" data-contact-state="aceptada" data-contact-id="${esc(c.id)}">Aceptar</button><button class="btn btn-ghost btn-sm" data-contact-state="rechazada" data-contact-id="${esc(c.id)}">Rechazar</button>`:''}<button class="btn btn-ghost btn-sm" data-contact-open="${esc(c.id)}">Abrir conversación</button><button class="btn btn-danger btn-sm" data-contact-delete="${esc(c.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`;}).join('')}</div>`:empty(contactFilter==='all'?'Sin mensajes':`Sin mensajes ${contactFilter==='showcase'?'Showcase':'Social'}`,contactFilter==='showcase'?'Las consultas iniciadas desde una ficha de Showcase aparecerán aquí con la imagen y el producto asociado.':'Las conversaciones iniciadas desde KOMBAX Social aparecerán aquí.'))+`${rows.length>=contactLimit&&contactLimit<200?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-contacts">Cargar conversaciones anteriores</button></div>':''}`;
-    document.getElementById('load-more-contacts')?.addEventListener('click',()=>{contactLimit=Math.min(200,contactLimit+50);renderContacts({standalone});});
-    document.querySelectorAll('[data-message-filter]').forEach(b=>b.addEventListener('click',()=>{contactFilter=b.dataset.messageFilter||'social';try{sessionStorage.setItem('kombax_conversation_channel',contactFilter)}catch{};renderContacts({standalone});}));
-    box.querySelectorAll('[data-contact-state]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.contactStatus(b.dataset.contactId,b.dataset.contactState);toast(b.dataset.contactState==='aceptada'?'Solicitud aceptada · contacto abierto':'Solicitud rechazada');await renderContacts({standalone});}catch(error){b.disabled=false;setError(error);}}));
-    box.querySelectorAll('[data-contact-open]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactOpen));if(c)openContactThread(c);}));
-    box.querySelectorAll('[data-contact-delete]').forEach(b=>b.addEventListener('click',()=>{const c=rows.find(x=>String(x.id)===String(b.dataset.contactDelete));if(!c)return;const actor=ownProfiles.find(p=>p.id===c.remitente_id||p.id===c.destinatario_id);if(!actor){toast('No se puede identificar tu identidad en esta conversación.','error');return;}confirmDialog('Eliminar conversación','Se eliminará de tu bandeja y dejará de admitir nuevos mensajes. La contraparte conservará su historial hasta que también lo elimine.',async()=>{await repos.kombaxSocial.deleteContact(c.id,actor.id);toast('Conversación eliminada');await renderContacts({standalone});},{confirmText:'Eliminar conversación',danger:true});}));
-    const pendingOpen=sessionStorage.getItem('kombax_social_open_contact');if(pendingOpen){const c=rows.find(x=>String(x.id)===String(pendingOpen));sessionStorage.removeItem('kombax_social_open_contact');if(c)setTimeout(()=>openContactThread(c),0);}
+    document.getElementById('load-more-contacts')?.addEventListener('click',()=>{contactLimit=Math.min(200,contactLimit+50);renderContacts({standalone,context});});
+    document.querySelectorAll('[data-message-filter]').forEach(b=>b.addEventListener('click',()=>{contactFilter=b.dataset.messageFilter||'social';try{sessionStorage.setItem('kombax_conversation_channel',contactFilter)}catch{};renderContacts({standalone,context});}));
+    box.querySelectorAll('[data-contact-state]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.contactStatus(b.dataset.contactId,b.dataset.contactState);toast(b.dataset.contactState==='aceptada'?'Solicitud aceptada · contacto abierto':'Solicitud rechazada');await renderContacts({standalone,context});}catch(error){b.disabled=false;setError(error);}}));
+    box.querySelectorAll('[data-contact-open]').forEach(b=>b.addEventListener('click',()=>{const c=visible.find(x=>String(x.id)===String(b.dataset.contactOpen));if(c)openContactThread(c,{onChanged:()=>renderContacts({standalone,context})});}));
+    box.querySelectorAll('[data-contact-delete]').forEach(b=>b.addEventListener('click',()=>{const c=visible.find(x=>String(x.id)===String(b.dataset.contactDelete));if(!c)return;const actor=ownProfiles.find(p=>p.id===c.remitente_id||p.id===c.destinatario_id);if(!actor){toast('No se puede identificar tu identidad en esta conversación.','error');return;}confirmDialog('Eliminar conversación','Se eliminará de tu bandeja y dejará de admitir nuevos mensajes. La contraparte conservará su historial hasta que también lo elimine.',async()=>{await repos.kombaxSocial.deleteContact(c.id,actor.id);toast('Conversación eliminada');await renderContacts({standalone,context});},{confirmText:'Eliminar conversación',danger:true});}));
+    const pendingOpen=sessionStorage.getItem('kombax_social_open_contact');if(pendingOpen){const c=visible.find(x=>String(x.id)===String(pendingOpen));sessionStorage.removeItem('kombax_social_open_contact');if(c)setTimeout(()=>openContactThread(c,{onChanged:()=>renderContacts({standalone,context})}),0);}
   }catch(error){box.innerHTML=empty('No se pudieron cargar los contactos',humanError(error)||'Revisa la conexión.');}
 }
 
-export async function renderKombaxConversations(){
+export async function renderKombaxConversations({context={},channel=null}={}){
   setMainHtml('<div class="loading-card">Abriendo Conversaciones KOMBAX…</div>');
-  try{[socialStatus,ownProfiles]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles()]);const preferred=chooseDefaultIdentity(ownProfiles);activeIdentityId=preferred?.id||activeIdentityId||'';}catch(error){setMainHtml(`${pageHeader('Conversaciones KOMBAX')}<div class="empty-card"><strong>No se pudieron cargar las conversaciones</strong><p>${esc(humanError(error)||'Revisa la conexión.')}</p></div>`);return;}
-  return renderContacts({standalone:true});
+  try{[socialStatus,ownProfiles]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles()]);if(context.profileId){ownProfiles=ownProfiles.filter(p=>p.id===context.socialId);if(!context.socialId)throw new Error('Esta identidad aún no tiene perfil Social.');}const preferred=chooseDefaultIdentity(ownProfiles);activeIdentityId=context.profileId?context.socialId:(preferred?.id||activeIdentityId||'');}catch(error){setMainHtml(`${pageHeader('Conversaciones KOMBAX')}<div class="empty-card"><strong>No se pudieron cargar las conversaciones</strong><p>${esc(humanError(error)||'Revisa la conexión.')}</p></div>`);return;}
+  if(channel){contactFilter=channel;sessionStorage.setItem('kombax_conversation_channel',channel);}return renderContacts({standalone:true,context});
 }
 
 async function renderSaved(){

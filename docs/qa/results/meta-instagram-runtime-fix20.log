@@ -1,0 +1,1 @@
+PASS 8 runtime transport checks: new secret apikey, user JWT preserved, legacy service JWT supported; fetch mocked

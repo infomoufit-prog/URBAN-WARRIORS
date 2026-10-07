@@ -1,6 +1,8 @@
 import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import assert from 'node:assert/strict';
+import { resources } from '../web/js/i18n/resources.js';
+const copy=resources.es;
 const root=resolve(import.meta.dirname,'..');
 const read=rel=>readFile(resolve(root,rel),'utf8');
 const [app,social,showcase,customer,hub,supportPrivacy,tabs,stab,hero,m253,m254,edge,repos]=await Promise.all([
@@ -9,16 +11,16 @@ const [app,social,showcase,customer,hub,supportPrivacy,tabs,stab,hero,m253,m254,
 const assetNames=['hero-assist.webp','hero-migrations.webp','assistant-avatar.webp','chat-empty.webp'];
 const assetOk=(await Promise.all(assetNames.map(async n=>(await stat(resolve(root,'web/assets/assist',n))).size>10000))).every(Boolean);
 const checks=[
-  ['unified conversation route exists',/conversations:renderKombaxConversations/.test(app)&&/Conversaciones KOMBAX/.test(app)],
-  ['formal Support has its own full route',/support:renderKombaxSupportHome/.test(app)&&/support:'Soporte KOMBAX'/.test(app)&&/allowed\.add\('support'\)/.test(app)],
+  ['unified conversation route exists',/conversations:renderKombaxConversations/.test(app)&&/conversations:'conversations'/.test(app)&&copy.navigation.routes.conversations==='Conversaciones KOMBAX'],
+  ['formal Support has its own full route',/support:renderKombaxSupportHome/.test(app)&&/support:'support'/.test(app)&&copy.navigation.routes.support==='Soporte KOMBAX'&&/\['conversations','support','workspace','resources','guides','consulting','training'\]\.forEach\(x=>allowed\.add\(x\)\)/.test(app)],
   ['Social messages leave the Social feed layer',/location\.hash='#conversations'/.test(social)&&/renderKombaxConversations/.test(social)],
   ['Showcase interest routes to conversation layer',/kombax_conversation_channel','showcase'/.test(showcase)&&/#conversations/.test(showcase)],
   ['conversation shell exposes exactly four isolated channels and excludes Support',/Social/.test(tabs)&&/Showcase/.test(tabs)&&/Assist/.test(tabs)&&/Migrations/.test(tabs)&&!/Soporte/.test(tabs)&&!/onSupport/.test(tabs)],
   ['all four approved Assist/Migrations visuals are local assets',assetOk],
   ['Assist hero and Migrations hero are wired',/hero-assist\.webp/.test(customer)&&/hero-migrations\.webp/.test(customer)],
   ['robot avatar is used in conversation without the full generated chat artwork',/assistant-avatar\.webp/.test(customer)&&/kx-assist-welcome-avatar/.test(customer)&&!/chat-empty\.webp/.test(customer)],
-  ['Assist is management AI for Club Federation Brand',/Club, Federación o Marca/.test(customer)&&/Asistencia de gestión/.test(customer)],
-  ['formal Support is separate from management AI',/KOMBAX Assist no es Soporte KOMBAX/.test(customer)&&/Atención técnica y formal/.test(customer)],
+  ['Assist is management AI for Club Federation Brand',/Club, Federación, Marca, Competidor o Profesional/.test(customer)&&/t\('assist.home.heroBody'\)/.test(customer)&&/contexto autorizado/.test(copy.assist.home.heroBody)],
+  ['formal Support is separate from management AI',/t\('assist.home.notSupport'\)/.test(customer)&&copy.assist.home.notSupport==='KOMBAX Assist no es Soporte KOMBAX'&&/Atención técnica y formal/.test(customer)],
   ['formal Support exposes privacy security and child-safety channels',/PRIVACY_EMAIL/.test(customer)&&/SECURITY_EMAIL/.test(customer)&&/CHILD_SAFETY_EMAIL/.test(customer)&&/canal humano/i.test(supportPrivacy)],
   ['formal Support is email-first and KOMBAX controls guided/human escalation',/primero atendemos el caso por correo/i.test(customer)&&/puede habilitar este chat guiado/i.test(customer)&&/Combots puede asignar asistencia humana/i.test(customer)&&!/Solicitar verificación \/ revisión humana/.test(customer)],
   ['guided Support cannot self-activate',/SUPPORT_CHAT_ACTIVATION_REQUIRED/.test(m253)&&/guided_chat_requires_activation/.test(m254)&&/activation_owner','KOMBAX_SUPPORT'/.test(m254)],

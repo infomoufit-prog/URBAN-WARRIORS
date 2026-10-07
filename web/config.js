@@ -5,6 +5,7 @@ window.UW_CONFIG = {
   locale: 'es-ES',
   currency: 'EUR',
   timezone: 'Europe/Madrid',
+  integrations: { instagram: { enabled: true } }, // Supabase configured; Meta callbacks registered. Real OAuth validation pending.
   supabase: {
     enabled: true,
     url: 'https://poggsobhtutbuagjiydc.supabase.co',

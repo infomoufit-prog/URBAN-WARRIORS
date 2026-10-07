@@ -1,0 +1,29 @@
+PASS complete migration compiles in isolated PostgreSQL
+PASS club titular access and existing publication capability
+PASS existing legal acceptance gate preserved
+PASS other club owner denied
+PASS coordination cannot manage external credentials
+PASS active profile administrator allowed
+PASS revocation effective immediately
+PASS anon: no credential/table/internal RPC access
+PASS authenticated: no credential/table/internal RPC access
+PASS RLS enabled on all six private tables
+PASS wrong callback state denied
+PASS callback consumed once
+PASS different account cannot finish
+PASS wrong browser proof denied
+PASS handoff consumed once
+PASS status never returns secrets
+PASS status tenant isolation
+PASS unique claim prevents duplicate sends
+PASS withdrawal rechecked before publish
+PASS atomic lock prevents concurrent media_publish
+PASS private post cannot be exported
+PASS media from another identity rejected
+PASS non-JPEG rejected
+PASS unsupported aspect ratio rejected
+PASS hidden media rejected
+PASS disconnect removes credential
+PASS expired OAuth state denied
+PASS Meta deletion only removes integration data, preserves KOMBAX users
+PASS 28 isolated PostgreSQL checks; live database unchanged

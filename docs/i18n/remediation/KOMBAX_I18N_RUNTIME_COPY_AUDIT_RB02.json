@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T22:19:45.714Z",
+  "generated_at": "2026-10-07T21:25:17.447Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -35,6 +35,7 @@
     "web/js/core/verification-visual.js",
     "web/js/core/workspace-access.js",
     "web/js/delete-account.js",
+    "web/js/meta-instagram-return.js",
     "web/js/modules/account-birth-date.js",
     "web/js/modules/account-security.js",
     "web/js/modules/admin.js",
@@ -66,6 +67,8 @@
     "web/js/modules/groups-members.js",
     "web/js/modules/guides.js",
     "web/js/modules/help-legal.js",
+    "web/js/modules/historical-finance.js",
+    "web/js/modules/instagram-integration.js",
     "web/js/modules/kombax-discovery.js",
     "web/js/modules/kombax-event-visuals.js",
     "web/js/modules/kombax-events.js",
@@ -89,6 +92,7 @@
     "web/js/modules/professional-hub.js",
     "web/js/modules/professional-operations.js",
     "web/js/modules/profile-administration.js",
+    "web/js/modules/profile-conversations.js",
     "web/js/modules/profile-operations.js",
     "web/js/modules/profile-team.js",
     "web/js/modules/public-profile.js",
@@ -115,11 +119,11 @@
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5106,
-  "covered": 4846,
-  "unresolved": 260,
-  "coverage": 94.91,
-  "skipped": 397,
+  "phrases": 5159,
+  "covered": 4900,
+  "unresolved": 259,
+  "coverage": 94.98,
+  "skipped": 403,
   "files": {
     "web/js/app.js": {
       "total": 126,
@@ -325,6 +329,12 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/meta-instagram-return.js": {
+      "total": 6,
+      "covered": 6,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/account-birth-date.js": {
       "total": 6,
       "covered": 6,
@@ -410,10 +420,10 @@
       "coverage": 100
     },
     "web/js/modules/customer-operations.js": {
-      "total": 273,
-      "covered": 210,
-      "skipped": 9,
-      "coverage": 76.92
+      "total": 275,
+      "covered": 213,
+      "skipped": 11,
+      "coverage": 77.45
     },
     "web/js/modules/dashboard-catalog.js": {
       "total": 40,
@@ -482,20 +492,20 @@
       "coverage": 100
     },
     "web/js/modules/finance.js": {
-      "total": 70,
-      "covered": 70,
+      "total": 71,
+      "covered": 71,
       "skipped": 9,
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 277,
-      "covered": 253,
+      "total": 279,
+      "covered": 255,
       "skipped": 7,
-      "coverage": 91.34
+      "coverage": 91.4
     },
     "web/js/modules/groups-members.js": {
-      "total": 182,
-      "covered": 182,
+      "total": 184,
+      "covered": 184,
       "skipped": 11,
       "coverage": 100
     },
@@ -510,6 +520,18 @@
       "covered": 325,
       "skipped": 2,
       "coverage": 99.69
+    },
+    "web/js/modules/historical-finance.js": {
+      "total": 8,
+      "covered": 8,
+      "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/modules/instagram-integration.js": {
+      "total": 21,
+      "covered": 21,
+      "skipped": 0,
+      "coverage": 100
     },
     "web/js/modules/kombax-discovery.js": {
       "total": 68,
@@ -536,10 +558,10 @@
       "coverage": 100
     },
     "web/js/modules/kombax-social.js": {
-      "total": 255,
-      "covered": 254,
-      "skipped": 6,
-      "coverage": 99.61
+      "total": 263,
+      "covered": 262,
+      "skipped": 5,
+      "coverage": 99.62
     },
     "web/js/modules/lifecycle.js": {
       "total": 12,
@@ -649,6 +671,12 @@
       "skipped": 4,
       "coverage": 100
     },
+    "web/js/modules/profile-conversations.js": {
+      "total": 2,
+      "covered": 2,
+      "skipped": 3,
+      "coverage": 100
+    },
     "web/js/modules/profile-operations.js": {
       "total": 23,
       "covered": 23,
@@ -662,10 +690,10 @@
       "coverage": 100
     },
     "web/js/modules/public-profile.js": {
-      "total": 92,
-      "covered": 88,
+      "total": 93,
+      "covered": 89,
       "skipped": 10,
-      "coverage": 95.65
+      "coverage": 95.7
     },
     "web/js/modules/resource-center.js": {
       "total": 0,
@@ -1100,10 +1128,6 @@
     {
       "file": "web/js/modules/customer-operations.js",
       "value": "Guía práctica para incorporar alumnos, cuotas y pagos al Club con autorización final. Federaciones y Marcas pueden analizar sus documentos y solicitar revisión humana."
-    },
-    {
-      "file": "web/js/modules/customer-operations.js",
-      "value": "Canal de Club, Federación y Marca para analizar archivos. La incorporación directa está disponible en Club para alumnos, cuotas y pagos tras autorización final; los demás perfiles usan revisión humana."
     },
     {
       "file": "web/js/modules/customer-operations.js",

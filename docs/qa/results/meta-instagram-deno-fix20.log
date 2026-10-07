@@ -1,0 +1,4 @@
+Check supabase/functions/meta-instagram/index.ts
+Check supabase/functions/meta-instagram-callback/index.ts
+Check supabase/functions/meta-instagram-deauthorize/index.ts
+Check supabase/functions/meta-instagram-data-deletion/index.ts

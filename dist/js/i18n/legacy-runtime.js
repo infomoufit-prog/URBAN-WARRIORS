@@ -1,4 +1,5 @@
 import {localizeR120ProfileText} from "./r120-profile-copy.js";
+import {localizeMetaInstagramText} from './meta-instagram-copy.js';
 import { resources } from './resources.js';
 import { getLocale } from './index.js';
 import { LEGACY_EN_OVERRIDES } from './legacy-copy-en.js';
@@ -147,6 +148,7 @@ export function localizeSystemText(value,locale=getLocale()){
   const raw=String(value??'');if(!raw||locale==='es')return raw;
   const leading=raw.match(/^\s*/)?.[0]||'',trailing=raw.match(/\s*$/)?.[0]||'';
   const source=normalize(raw);if(!source)return raw;
+  const metaInstagramValue=localizeMetaInstagramText(source,locale);if(metaInstagramValue)return leading+metaInstagramValue+trailing;
   const r120ProfileValue=localizeR120ProfileText(source,locale);if(r120ProfileValue)return leading+r120ProfileValue+trailing;
   const r117PilotValue=localizeR117PilotHotfixText(source,locale);if(r117PilotValue)return `${leading}${r117PilotValue}${trailing}`;
   const r116PilotValue=localizeR116PilotText(source,locale);if(r116PilotValue)return `${leading}${r116PilotValue}${trailing}`;

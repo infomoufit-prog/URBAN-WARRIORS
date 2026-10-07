@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-07",
+  "project": "poggsobhtutbuagjiydc",
+  "liveMigrations": [
+    "20261007071657",
+    "20261007072152",
+    "20261007073208",
+    "20261007073429"
+  ],
+  "edge": {
+    "name": "kombax-assist-r38",
+    "version": 16,
+    "verify_jwt": true
+  },
+  "identityRollback": {
+    "types": 4,
+    "owner": true,
+    "editor": true,
+    "revokedEditorDenied": true,
+    "foreignHintDenied": true
+  },
+  "pilotRollback": {
+    "realRegistrationRpc": true,
+    "firstFiveEnabled": true,
+    "sixthOrdinary": true,
+    "baseCapabilitiesComplete": true,
+    "workspaceCorrect": true,
+    "freeSocialRead": true,
+    "seedAccountsPersisted": 0,
+    "grantsPersisted": 0
+  },
+  "cohortAtCheck": {
+    "capacity": 5,
+    "used": 0,
+    "remaining": 5
+  },
+  "limitations": [
+    "No real IA inference or messages sent",
+    "No complete authenticated HTTP end-to-end test",
+    "No concurrent registration race test",
+    "No production web deployment",
+    "No APK/AAB compilation"
+  ]
+}
