@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T10:08:06.718Z",
+  "generated_at": "2026-10-06T22:19:45.714Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -8,6 +8,7 @@
     "web/js/core/assist-specialists.js",
     "web/js/core/backend.js",
     "web/js/core/capability-resolver.js",
+    "web/js/core/club-session-role.js",
     "web/js/core/commercial-pricing.js",
     "web/js/core/content-visibility.js",
     "web/js/core/context-isolation-20083.js",
@@ -93,6 +94,7 @@
     "web/js/modules/public-profile.js",
     "web/js/modules/resource-center.js",
     "web/js/modules/showcase-cart.js",
+    "web/js/modules/showcase-compliance.js",
     "web/js/modules/showcase.js",
     "web/js/modules/social-network.js",
     "web/js/modules/social-post-management.js",
@@ -102,6 +104,7 @@
     "web/js/modules/training.js",
     "web/js/modules/work-scopes.js",
     "web/js/public-product-overview.js",
+    "web/js/ui/account-mode-fields.js",
     "web/js/ui/analytics-reports-r77.js",
     "web/js/ui/brand-hero.js",
     "web/js/ui/components.js",
@@ -112,11 +115,11 @@
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5074,
-  "covered": 4813,
-  "unresolved": 261,
-  "coverage": 94.86,
-  "skipped": 396,
+  "phrases": 5106,
+  "covered": 4846,
+  "unresolved": 260,
+  "coverage": 94.91,
+  "skipped": 397,
   "files": {
     "web/js/app.js": {
       "total": 126,
@@ -149,12 +152,18 @@
       "coverage": 100
     },
     "web/js/core/backend.js": {
-      "total": 50,
-      "covered": 49,
+      "total": 49,
+      "covered": 48,
       "skipped": 5,
-      "coverage": 98
+      "coverage": 97.96
     },
     "web/js/core/capability-resolver.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/club-session-role.js": {
       "total": 0,
       "covered": 0,
       "skipped": 0,
@@ -329,10 +338,10 @@
       "coverage": 100
     },
     "web/js/modules/admin.js": {
-      "total": 166,
-      "covered": 163,
+      "total": 169,
+      "covered": 166,
       "skipped": 6,
-      "coverage": 98.19
+      "coverage": 98.22
     },
     "web/js/modules/auth-recovery.js": {
       "total": 18,
@@ -402,9 +411,9 @@
     },
     "web/js/modules/customer-operations.js": {
       "total": 273,
-      "covered": 209,
+      "covered": 210,
       "skipped": 9,
-      "coverage": 76.56
+      "coverage": 76.92
     },
     "web/js/modules/dashboard-catalog.js": {
       "total": 40,
@@ -563,8 +572,8 @@
       "coverage": 100
     },
     "web/js/modules/owner-content-moderation.js": {
-      "total": 2,
-      "covered": 2,
+      "total": 3,
+      "covered": 3,
       "skipped": 3,
       "coverage": 100
     },
@@ -670,6 +679,12 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/modules/showcase-compliance.js": {
+      "total": 27,
+      "covered": 27,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/showcase.js": {
       "total": 332,
       "covered": 328,
@@ -724,6 +739,12 @@
       "skipped": 3,
       "coverage": 100
     },
+    "web/js/ui/account-mode-fields.js": {
+      "total": 1,
+      "covered": 1,
+      "skipped": 1,
+      "coverage": 100
+    },
     "web/js/ui/analytics-reports-r77.js": {
       "total": 0,
       "covered": 0,
@@ -737,8 +758,8 @@
       "coverage": 100
     },
     "web/js/ui/components.js": {
-      "total": 6,
-      "covered": 6,
+      "total": 7,
+      "covered": 7,
       "skipped": 3,
       "coverage": 100
     },
@@ -1027,10 +1048,6 @@
     {
       "file": "web/js/modules/customer-operations.js",
       "value": "Assist y Migrations comparten el saldo de esta organización."
-    },
-    {
-      "file": "web/js/modules/customer-operations.js",
-      "value": "El agente identificará los datos y pedirá lo que falte. Después de tu autorización visible, los incorporará y te indicará dónde comprobarlos."
     },
     {
       "file": "web/js/modules/customer-operations.js",

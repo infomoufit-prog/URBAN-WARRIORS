@@ -639,6 +639,7 @@ export const repos={
   users:{
     members:(limit=150)=>read('miembros_club',`select=*,perfiles(id,nombre,apellidos,telefono)&${filterClub()}&rol=in.(direccion,secretaria,economia,comunicacion,monitor)&order=creado_en&limit=${Math.min(300,Math.max(30,Number(limit)||150))}`),
     teamRequests:async()=>{try{return await backend.readRpc('app_kombax_solicitudes_equipo_v109',{p_club_id:session()?.club_id});}catch{return backend.readRpc('app_kombax_solicitudes_equipo_v060',{p_club_id:session()?.club_id});}},
+    revokeTeam:(profileId)=>backend.writeRpc('app_kombax_club_team_revoke_fix16',{p_club_id:session()?.club_id,p_perfil_id:profileId}),
     changeTeamRole:(profileId,role)=>backend.writeRpc('app_kombax_club_team_role_fix14',{p_club_id:session()?.club_id,p_perfil_id:profileId,p_role:role}),
     resolveTeamRequest:(id,estado,rol=null,nota='')=>backend.writeRpc('app_kombax_solicitud_equipo_resolver_v060',{p_solicitud_id:id,p_estado:estado,p_rol:rol,p_nota:nota||null}),
     createInvitation:(tipo,email,rol=null,nombre='')=>backend.writeRpc('app_kombax_invitacion_crear_v059',{p_club_id:session()?.club_id,p_tipo:String(tipo||'').trim().toLowerCase(),p_email:String(email||'').trim().toLowerCase(),p_rol:rol?String(rol).trim().toLowerCase():null,p_nombre:String(nombre||'').trim()||null,p_expira_horas:168}),
@@ -1266,6 +1267,11 @@ export const repos={
     relationState:async(relacion_id,estado)=>{const args={p_relacion_id:relacion_id,p_estado:estado,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`};const out=await rpcWithFallback(()=>backend.globalWriteRpc('app_kombax_relation_state_v255',args),()=>kombaxGlobalMutation('app_kombax_relacion_mutate_v045','kombax.relation.state',{relacion_id,estado,club_id:session()?.club_id||null}),'app_kombax_relation_state_v255');window.dispatchEvent(new CustomEvent('uw-kombax-activity-changed'));return out;}
   },
   kombaxShowcase:{
+    reviewProductCompliance:(product_id,decision,note)=>backend.globalWriteRpc('app_kombax_compliance_owner_product_review_r630',{p_product_id:product_id,p_decision:decision,p_note:note,p_request_id:crypto.randomUUID()}),
+    complianceRules:()=>backend.globalReadRpc('app_showcase_product_rules_fix16',{}),
+    productCompliance:(product_id)=>backend.globalReadRpc('app_showcase_product_compliance_r630',{p_product_id:product_id}),
+    productComplianceEditor:(product_id)=>backend.globalReadRpc('app_showcase_product_editor_fix16',{p_product_id:product_id}),
+    saveProductCompliance:(product_id,payload)=>backend.globalWriteRpc('app_showcase_product_compliance_mutate_r630',{p_product_id:product_id,p_payload:payload,p_request_id:crypto.randomUUID()}),
     categories:()=>backend.globalReadRpc('app_kombax_showcase_categorias_v042',{}),
     list:async(query='',category='',cursor=null,limit=24)=>enrichShowcaseMedia(await backend.globalReadRpc('app_kombax_showcase_list_v054',{p_query:String(query||'').trim(),p_categoria:category||null,p_cursor:cursor?.created||null,p_cursor_id:cursor?.id||null,p_limit:Math.min(24,Math.max(1,Number(limit)||24))})),
     saved:async(limit=100)=>enrichShowcaseMedia(await backend.globalReadRpc('app_kombax_showcase_guardados_v054',{p_limit:Math.min(200,Math.max(1,Number(limit)||100))})),
@@ -1391,6 +1397,7 @@ export const repos={
     migrationFiles:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_files_v228',{p_ticket_id:ticket_id}),
     migrationPreview:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_preview_v228',{p_ticket_id:ticket_id}),
     migrationJob:(ticket_id)=>backend.globalReadRpc('app_kombax_ai_migration_job_r103',{p_ticket_id:ticket_id}),
+    migrationCatalog:(tenantRef)=>backend.globalReadRpc('app_kombax_assist_identity_context_fix16',{p_tenant_ref:tenantRef}),
     migrationRecords:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_records_v271',{p_ticket_id:ticket_id}),
     migrationImport:(ticket_id,request_id,records)=>backend.globalWriteRpc('app_kombax_migration_import_v271',{p_ticket_id:ticket_id,p_request_id:request_id,p_records:records}),
     chat:(ticket_id,message,specialty='management',client_request_id=(crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`))=>backend.invokeFunction('kombax-assist-r38',{ticket_id,message,specialty,client_request_id,user_locale:getLocale()},70000),

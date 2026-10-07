@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {PGlite} from '@electric-sql/pglite';
+const db=new PGlite();let passed=0;const ok=(v)=>{assert.ok(v);passed++;};
+const club='00000000-0000-4000-8000-000000000010',doc='00000000-0000-4000-8000-000000000020';
+const call=(id=doc,request='00000000-0000-4000-8000-000000000030')=>`select public.app_mutate_v160_v163('documento.archivar','{"club_id":"${club}","documento_id":"${id}"}','${request}')`;
+try{
+await db.exec(`create schema auth;create function auth.uid() returns uuid language sql as $$select '00000000-0000-4000-8000-000000000001'::uuid$$;
+create table app_mutation_requests(request_id uuid primary key,user_id uuid,club_id uuid,operation text,result jsonb,completed_at timestamptz);
+create table documentos_socios(id uuid primary key,club_id uuid,estado text,storage_path text,archivado_en timestamptz,archivado_por uuid,reemplazado_por uuid);
+create table auditoria(club_id uuid,usuario_id uuid,accion text,entidad text,registro_id text,datos_nuevos jsonb);
+create function es_miembro_club(uuid) returns boolean language sql as $$select $1='${club}'::uuid$$;
+create function tiene_rol_club(uuid,variadic text[]) returns boolean language sql as $$select current_setting('qa.allowed',true)='yes'$$;
+create function app_mutate_v160_legacy(text,jsonb,uuid) returns jsonb language sql as $$select '{}'::jsonb$$;
+create function guard() returns trigger language plpgsql as $$begin if (new.archivado_en,new.archivado_por) is distinct from (old.archivado_en,old.archivado_por) and coalesce(current_setting('kombax.lifecycle_gateway',true),'')<>'on' then raise exception 'LIFECYCLE_GATEWAY_REQUIRED';end if;return new;end$$;
+create trigger lifecycle before update on documentos_socios for each row execute function guard();
+insert into documentos_socios(id,club_id,estado,storage_path) values('${doc}','${club}','vigente','qa.pdf');select set_config('qa.allowed','yes',false);`);
+const source=readFileSync('supabase/migrations/019_final_deletion_media_cleanup_v163.sql','utf8');
+const fn=source.match(/create or replace function public\.app_mutate_v160\(p_operation text,p_payload jsonb,p_request_id uuid\)[\s\S]*?end; \$\$;/i)?.[0];assert.ok(fn);
+await db.exec(fn.replace('function public.app_mutate_v160(','function public.app_mutate_v160_v163('));
+await assert.rejects(db.query(call()),/LIFECYCLE_GATEWAY_REQUIRED/);passed++;
+await db.exec(readFileSync('supabase/migrations/20261006211922_document_archive_gateway_fix16.sql','utf8'));
+await db.query(call());ok((await db.query(`select estado from documentos_socios where id='${doc}'`)).rows[0].estado==='archivado');
+ok((await db.query("select coalesce(current_setting('kombax.lifecycle_gateway',true),'') v")).rows[0].v==='');
+await db.query(call());ok((await db.query('select count(*)::int n from auditoria')).rows[0].n===1);
+await assert.rejects(db.exec("update documentos_socios set archivado_en=now()+interval '1 day'"),/LIFECYCLE_GATEWAY_REQUIRED/);passed++;
+await db.exec("select set_config('qa.allowed','no',false)");await assert.rejects(db.query(call(doc,'00000000-0000-4000-8000-000000000031')),/Sin permiso/);passed++;
+await db.exec("select set_config('qa.allowed','yes',false)");await assert.rejects(db.query(call('00000000-0000-4000-8000-000000000099','00000000-0000-4000-8000-000000000032')),/Documento no encontrado/);passed++;
+ok((await db.query("select coalesce(current_setting('kombax.lifecycle_gateway',true),'') v")).rows[0].v==='');
+await db.exec(readFileSync('supabase/migrations/20261006211922_document_archive_gateway_fix16.sql','utf8'));ok(true);
+console.log('PASS '+passed+' document archive checks (real mutation branch; isolated database)');
+}finally{await db.close();}

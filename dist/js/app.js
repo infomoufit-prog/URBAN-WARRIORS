@@ -5,6 +5,7 @@ import { humanError, esc } from './core/utils.js';
 import { validateBirthDate } from './core/account-birth-date.js';
 import { has } from './core/permissions.js';
 import { createAdaptivePoller } from './core/adaptive-poller.js';
+import { bindAccountModeFields } from './ui/account-mode-fields.js';
 import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge, setKombaxNotificationBadge, setMessageBadge } from './ui/components.js';
 import { navIcon, icon } from './ui/icons.js';
 import { renderDashboard, renderCatalog } from './modules/dashboard-catalog.js';
@@ -167,7 +168,7 @@ async function hydrateSessionAvatar(){
 function stopNotificationMonitor(){if(notificationPoller){notificationPoller.stop();notificationPoller=null;}notificationPrimed=false;knownLatestNotificationId='';knownLatestNotificationAt='';}
 function startNotificationMonitor(){
   stopNotificationMonitor();
-  notificationPoller=createAdaptivePoller(()=>refreshHeaderSummary({announce:true}),{activeMs:45000,hiddenMs:0,maxMs:600000,idleMaxMs:300000,idleAfter:2,jitterRatio:.2});
+  notificationPoller=createAdaptivePoller(()=>refreshHeaderSummary({announce:true}),{activeMs:15000,hiddenMs:0,maxMs:120000,idleMaxMs:30000,idleAfter:2,jitterRatio:.1});
   notificationPoller.start({immediate:true});
 }
 
@@ -419,6 +420,7 @@ function openTeamAccessCode(prefill='',prefillRole=''){
       await backend.signOut();renderClubLogin(v.email);
     }
   });
+  bindAccountModeFields(teamModal.form);
   const grid=teamModal.form.querySelector('.form-grid');const legal=document.createElement('div');legal.className='registration-legal-links field full';legal.innerHTML='<strong>Documentos KOMBAX</strong><div class="row-actions"><a class="btn btn-ghost btn-sm" href="./terms.html" target="_blank" rel="noopener noreferrer">Condiciones KOMBAX</a><a class="btn btn-ghost btn-sm" href="./privacy.html" target="_blank" rel="noopener noreferrer">Privacidad global</a></div>';grid?.appendChild(legal);
 }
 function openPublicInstall(){

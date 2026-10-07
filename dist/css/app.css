@@ -613,3 +613,6 @@ body[class*="theme-"] .toast:not(.toast-error){background:color-mix(in srgb,var(
 .kx-stock-cost-products,.event-communication-list{display:grid;gap:10px;margin:14px 0}.kx-stock-cost-products>article,.event-communication-list>article{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:12px 14px;border:1px solid var(--border,#28303a);border-radius:12px;background:rgba(255,255,255,.025)}.event-communication-list>article{display:block}.event-communication-list p{margin:8px 0 0;white-space:pre-wrap}.event-connection-summary{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:8px 0 14px;color:var(--muted,#aab2bd)}
 .material-inventory-kpis{margin-bottom:16px}
 @media(max-width:760px){.product-cost-summary{grid-template-columns:1fr}.kx-stock-cost-products>article{align-items:flex-start;flex-direction:column}.kx-stock-cost-products .row-actions{width:100%;flex-wrap:wrap}}
+
+/* Respect conditional fields inside forms, including existing-account registration. */
+.modal .field[hidden],.modal .modal-error[hidden]{display:none!important}

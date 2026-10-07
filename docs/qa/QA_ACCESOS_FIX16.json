@@ -1,0 +1,22 @@
+{
+  "passed": 17,
+  "checks": [
+    "legacy owner coordination flag retains approval button",
+    "owner retains rejection button",
+    "owner can revoke operational teammate",
+    "owner has no revoke button for self",
+    "single confirmation before access revocation",
+    "revocation targets only selected teammate",
+    "revoked member has no further revoke button",
+    "coordinator cannot revoke team",
+    "coordinator cannot approve team",
+    "coordinator cannot invite by email",
+    "existing account hides and disables signup data",
+    "new account requires signup data",
+    "new password requires eight characters",
+    "request preserves actual network error",
+    "request preserves actual permission error",
+    "technical SQL details are absent from public message",
+    "network public message gives readable next action"
+  ]
+}

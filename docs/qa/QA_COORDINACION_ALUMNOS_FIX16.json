@@ -1,0 +1,10 @@
+{
+  "supabase_live_migration": "20261006201705_preinscription_notification_lifecycle_fix16",
+  "authenticated_coordination_student_approval": "PASS rolled back",
+  "coordination_team_approval": "DENIED as expected",
+  "gateway_restored": "PASS",
+  "persisted_qa_preinscriptions": 0,
+  "real_team_requests": "both pending",
+  "isolated_checks": 8,
+  "emails_or_real_approvals": false
+}

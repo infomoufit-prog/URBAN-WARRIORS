@@ -1,0 +1,23 @@
+{
+  "passed": 17,
+  "checks": [
+    "category must be selected",
+    "existing private document preserved in editor",
+    "non EU manufacturer requires EU responsible person",
+    "EU responsible person fields hidden when not required",
+    "unsafe documentation does not reach server",
+    "invalid link leaves form open",
+    "saves only selected product",
+    "preserves previous private document",
+    "includes new declared document",
+    "ready product publishes once",
+    "restricted category requires safety warnings",
+    "restricted product saved for review",
+    "restricted product cannot auto publish",
+    "owner review presents seller details read only",
+    "owner must explicitly review documents",
+    "owner review targets selected product",
+    "review does not publish automatically"
+  ],
+  "scope": "Browser UI with isolated mocked network, no real product published"
+}

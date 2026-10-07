@@ -60,7 +60,7 @@ Deno.serve(async(req:Request)=>{
     invite=isFederation
       ?await callerRpc(base,key,bearer,'app_kombax_federation_invitation_email_payload_v200',{p_invitation_id:invitationId})
       :await callerRpc(base,key,bearer,'app_kombax_invitacion_email_payload_v059',{p_invitacion_id:invitationId});
-  }catch(error){return json(403,{ok:false,error:'invite_not_authorized',detail:error instanceof Error?error.message:String(error)})}
+  }catch(error){return json(403,{ok:false,error:'invite_not_authorized'})}
   const inviteType=String(invite?.tipo||'');
   if(!invite||invite.estado!=='pendiente'||!['equipo','alumno','federation_team'].includes(inviteType))return json(409,{ok:false,error:'invite_not_pending'});
   const updateEmailState=async(status:string,error:string|null)=>isFederation

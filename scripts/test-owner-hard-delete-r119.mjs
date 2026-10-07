@@ -116,6 +116,15 @@ try{
  await q(`insert into public.kombax_social_media(id,storage_path,storage_bucket,tipo,creado_por,en_album) values('${mid}','${author}/social/album.jpg','kombax-public-media','foto','${author}',true);
  insert into public.kombax_social_publicaciones(id,autor_perfil_id,texto,social_media_id) values('${free}','${social}','Album compartido','${mid}')`);
  await q(act('social',free,'delete',{},'ELIMINAR'));check('album is preserved',(await q(`select count(*)::int n from public.kombax_social_media where id='${mid}'`)).rows[0].n===1);
+ // Reproduce the live drift: an over-escaped URL matcher silently skipped product files.
+ const liveFn=(await q("select pg_get_functiondef('public.app_kombax_content_action_r118(text,uuid,text,text,jsonb,text)'::regprocedure) d")).rows[0].d;
+ const goodMatcher='^https://poggsobhtutbuagjiydc'+String.fromCharCode(92)+'.supabase'+String.fromCharCode(92)+'.co/storage/v1/object/public/kombax-public-media/';
+ const badMatcher=goodMatcher.replaceAll(String.fromCharCode(92),String.fromCharCode(92).repeat(2));
+ await db.exec(liveFn.replace(goodMatcher,badMatcher));
+ await db.exec(await readFile(new URL('../supabase/migrations/20261006211717_owner_showcase_cleanup_url_fix16.sql',import.meta.url),'utf8'));
+ check('live URL drift repaired',(await q("select pg_get_functiondef('public.app_kombax_content_action_r118(text,uuid,text,text,jsonb,text)'::regprocedure) d")).rows[0].d.includes(goodMatcher));
+ await db.exec(await readFile(new URL('../supabase/migrations/20261006211717_owner_showcase_cleanup_url_fix16.sql',import.meta.url),'utf8'));
+ check('URL repair is idempotent',true);
  await q(`insert into public.kombax_showcase_elementos(id,marca_id,nombre,creado_por,imagen_url) values('${free}','${brand}','Guantes extra','${author}','https://poggsobhtutbuagjiydc.supabase.co/storage/v1/object/public/kombax-public-media/${author}/showcase/free.jpg')`);
  await q(act('showcase',free,'delete',{},'ELIMINAR'));check('unreferenced product deleted',(await q(`select count(*)::int n from public.kombax_showcase_elementos where id='${free}'`)).rows[0].n===0);
  check('owned product image queued',(await q("select count(*)::int n from kombax_moderation.media_cleanup where path like '%/showcase/free.jpg'")).rows[0].n===1);

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-06T10:07:57.970Z",
-  "candidates": 5208,
-  "covered_r79": 545,
-  "covered_r78": 1215,
-  "covered_legacy_all7": 3168,
-  "unresolved": 280,
+  "generated_at": "2026-10-06T22:19:38.199Z",
+  "candidates": 5240,
+  "covered_r79": 546,
+  "covered_r78": 1216,
+  "covered_legacy_all7": 3200,
+  "unresolved": 278,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,
-    "web/js/modules/customer-operations.js": 67,
+    "web/js/modules/customer-operations.js": 65,
     "web/js/modules/gateway.js": 31,
     "web/js/modules/plan-services.js": 31,
     "web/js/modules/professional-operations.js": 21,
@@ -916,19 +916,6 @@
     },
     {
       "file": "web/js/modules/customer-operations.js",
-      "value": "El agente identificará los datos y pedirá lo que falte. Después de tu autorización visible, los incorporará y te indicará dónde comprobarlos.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/customer-operations.js",
       "value": "Revisión e importación",
       "missing": [
         "en",
@@ -1113,18 +1100,6 @@
       "value": "0 / 12 mensajes en esta conversación",
       "missing": [
         "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/customer-operations.js",
-      "value": "Sube tus archivos. El agente identifica los datos, pregunta lo pendiente y solicita tu autorización antes de incorporarlos.",
-      "missing": [
         "fr",
         "pt",
         "it",

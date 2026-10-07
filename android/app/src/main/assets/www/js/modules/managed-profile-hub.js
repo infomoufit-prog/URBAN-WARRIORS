@@ -113,7 +113,7 @@ export async function renderManagedProfileHub(profileId,{onBack,onSocial,onShowc
     const openHome=()=>renderKombaxHome({standalone:true,contextName:profile.nombre_publico||meta.title,onBack:()=>renderManagedProfileHub(profileId,{onBack,onSocial,onShowcase,onEvents,onProfessionalOps}),onNavigate:target=>{
       if(target==='workspace')return renderManagedProfileHub(profileId,{onBack,onSocial,onShowcase,onEvents,onProfessionalOps});
       if(target==='social')return onSocial?.();
-      if(target==='showcase')return onShowcase?.();
+      if(target==='showcase')return onShowcase?.('manage',profile.id);
       if(target==='kombax-events')return onEvents?.();
       if(['guides','consulting','training'].includes(target))return renderResourceCenter({standalone:true,onBack:openHome});
     }});

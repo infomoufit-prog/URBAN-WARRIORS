@@ -1,0 +1,27 @@
+const {chromium}=require('C:/Users/Bryan Work/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('fs');
+(async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});try{
+const page=await browser.newPage({viewport:{width:390,height:844},serviceWorkers:'block'});
+await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.fulfill({status:200,body:'[]',contentType:'application/json'}));await page.goto('http://127.0.0.1:4175/');
+const checks=await page.evaluate(async()=>{
+ const {backend,client}=await import('/js/core/backend.js');const {state}=await import('/js/core/state.js');const {humanError}=await import('/js/core/utils.js');
+ const {openForm,closeModal,setAppHtml}=await import('/js/ui/components.js');const {bindAccountModeFields}=await import('/js/ui/account-mode-fields.js');const {clubSessionRole}=await import('/js/core/club-session-role.js');
+ const {setLocale}=await import('/js/i18n/index.js');setLocale('es');const checks=[],ok=(name,v)=>{if(!v)throw Error(name+" BODY "+document.body.textContent.slice(-1000));checks.push(name);};
+ const owner={rol:'direccion',coordinacion:true,perfil_id:'qa-owner',activo:true,club_id:'qa-club',perfiles:{nombre:'QA'}};
+ state.session={id:'qa-owner',club_id:'qa-club',club:{nombre:'QA'},...clubSessionRole([owner],owner)};
+ const {repos}=await import('/js/core/repositories.js');const teammate={rol:'monitor',perfil_id:'qa-teammate',activo:true,club_id:'qa-club',perfiles:{nombre:'Teammate'}};let revoked=null;repos.users.revokeTeam=async id=>{revoked=id;teammate.activo=false;};repos.users.members=async()=>[owner,teammate];repos.users.teamRequests=async()=>[{id:'qa-request',estado:'pendiente',rol_solicitado:'monitor',email:'qa@example.invalid'}];repos.accessCodes.get=async()=>({equipo:{codigo:'12345'}});
+ setAppHtml('<main id="main-view"></main>');const {renderUsers}=await import('/js/modules/admin.js');await renderUsers();ok('legacy owner coordination flag retains approval button',!!document.querySelector('.approve-team-request'));ok('owner retains rejection button',!!document.querySelector('.reject-team-request'));
+ ok('owner can revoke operational teammate',!!document.querySelector('.kx-team-access-revoke'));ok('owner has no revoke button for self',!document.querySelector('.kx-team-access-revoke[data-id="qa-owner"]'));document.querySelector('.kx-team-access-revoke').click();ok('single confirmation before access revocation',!!document.querySelector('#modal-submit'));document.querySelector('#modal-submit').click();await new Promise(r=>setTimeout(r,80));ok('revocation targets only selected teammate',revoked==='qa-teammate');ok('revoked member has no further revoke button',!document.querySelector('.kx-team-access-revoke'));state.session={...state.session,rol:'coordinacion',roles:['coordinacion']};await renderUsers();ok('coordinator cannot revoke team',!document.querySelector('.kx-team-access-revoke'));ok('coordinator cannot approve team',!document.querySelector('.approve-team-request'));ok('coordinator cannot invite by email',!document.querySelector('#invite-team-member'));
+ const modal=openForm({fields:[{name:'modo',type:'select',value:'existente',options:[{value:'existente',label:'Existente'},{value:'nueva',label:'Nueva'}]},...['nombre','apellidos','fecha_nacimiento'].map(name=>({name})),{name:'password',type:'password',required:true}],onSubmit:async()=>{}});bindAccountModeFields(modal.form);
+ ok('existing account hides and disables signup data',['nombre','apellidos','fecha_nacimiento'].every(n=>modal.form.elements[n].disabled&&modal.form.elements[n].closest('.field').hidden&&getComputedStyle(modal.form.elements[n].closest('.field')).display==='none'));
+ modal.form.elements.modo.value='nueva';modal.form.elements.modo.dispatchEvent(new Event('change'));ok('new account requires signup data',['nombre','apellidos','fecha_nacimiento'].every(n=>!modal.form.elements[n].disabled&&modal.form.elements[n].required));
+ ok('new password requires eight characters',modal.form.elements.password.minLength===8);closeModal();
+ client.session={access_token:'qa-token',user:{id:'qa-owner'}};state.session={id:'qa-owner',platform_legal_required:false};
+ const network=Object.assign(new Error('Failed to fetch'),{code:'NETWORK'});backend.globalWriteRpc=async()=>{throw network};
+ try{await backend.requestTeamAccess('qa-club','12345','qa@example.invalid','monitor');throw Error('failure swallowed');}catch(e){ok('request preserves actual network error',e===network);}
+ const denied=Object.assign(new Error('permission denied for app_kombax_private'),{code:'42501'});backend.globalWriteRpc=async()=>{throw denied};
+ try{await backend.requestTeamAccess('qa-club','12345','qa@example.invalid','monitor');throw Error('failure swallowed');}catch(e){ok('request preserves actual permission error',e===denied);}
+ ok('technical SQL details are absent from public message',!humanError(denied).includes('app_kombax'));ok('network public message gives readable next action',humanError(network).includes('conexión'));
+ return checks;
+});fs.writeFileSync('outputs/QA_ACCESOS_FIX16.json',JSON.stringify({passed:checks.length,checks},null,2));console.log(`PASS ${checks.length} access browser cases`);
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1)});

@@ -1,5 +1,6 @@
 import { SupabaseClient, AuthExpiredError } from './supabase.js';
 import { state } from './state.js';
+import { clubSessionRole } from './club-session-role.js';
 import { uuid, humanError, technicalError } from './utils.js';
 import { selectedClubSlug, selectClubSlug, clearSelectedClub } from './platform.js';
 import { invalidateCache } from './query-cache.js';
@@ -140,12 +141,13 @@ async function identityFromAuth(authUser,requestedSlug=''){
   if(requested&&!candidate)throw new Error('Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación.');
   if(candidate?.clubes?.slug)selectClubSlug(candidate.clubes.slug,candidate.clubes);
   const clubMemberships=memberships.filter(m=>m.club_id===candidate.club_id);
-  const isCoordination=clubMemberships.some(m=>m.coordinacion===true);
-  const chosen=isCoordination?(clubMemberships.find(m=>m.rol==='secretaria')||candidate):candidate;
+  const clubRole=clubSessionRole(clubMemberships,candidate);
+  const isCoordination=clubRole.coordinacion;
+  const chosen=clubRole.chosen;
   const profiles=await client.select('perfiles',`select=*&id=eq.${qs(userId)}&limit=1`).catch(()=>[]);
   const profile=profiles?.[0]||{};
-  const effectiveRole=isCoordination?'coordinacion':chosen.rol;
-  const effectiveRoles=isCoordination?['coordinacion']:[...new Set(clubMemberships.map(m=>m.rol))];
+  const effectiveRole=clubRole.rol;
+  const effectiveRoles=clubRole.roles;
   const platform=await platformContext();
   const platformLegal=await platformLegalStatus();
   const birthDate=await accountBirthDateStatusSafe();
@@ -472,7 +474,9 @@ export const backend={
     let result;
     try{result=await this.globalWriteRpc('app_kombax_equipo_solicitar_v109',{p_club_slug:clubSlug,p_codigo:String(code||'').trim(),p_rol_solicitado:requestedRole});}
     catch(error){
-      if(requestedRole)throw new Error('La invitación por rol necesita activar la actualización de equipo 109.');
+      const missing=['PGRST202','42883'].includes(String(error?.code||''))||/could not find the function|function .* does not exist/i.test(String(error?.message||''));
+      if(!missing)throw error;
+      if(requestedRole)throw error;
       result=await this.globalWriteRpc('app_kombax_equipo_solicitar_v060',{p_club_slug:clubSlug,p_codigo:String(code||'').trim()});
     }
     if(result?.ok===false)throw new Error(result.message||'Código de equipo no válido.');

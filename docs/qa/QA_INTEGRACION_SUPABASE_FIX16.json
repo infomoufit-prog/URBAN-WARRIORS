@@ -1,0 +1,32 @@
+{
+  "scope": "Live Supabase SQL, authenticated role with test JWT settings, all test transactions rolled back; not browser login E2E",
+  "passed": [
+    "club-owner CRUD of discipline/group/student/session/material/post",
+    "email team invitation creation and acceptance",
+    "wrong invitation email rejected",
+    "general code request before owner approval does not grant membership",
+    "owner approves coordinator",
+    "tutor first child registration with student code",
+    "coordinator approves student links",
+    "second child registration after family linkage approval",
+    "two disciplines and three groups per child",
+    "authorized parent reads both children",
+    "Social public post",
+    "Showcase product with structured safety profile publishes",
+    "Event draft and publication",
+    "Owner hide and delete absent from public Social/Showcase feeds",
+    "document archive owner and coordination",
+    "restricted product cannot publish before review",
+    "seller cannot approve own safety profile",
+    "Owner manual safety review",
+    "tutor registration with personal pupil invitation and two children"
+  ],
+  "not_verified": [
+    "actual email delivery",
+    "installed APK",
+    "Stripe sale, ticketing purchase and settlement",
+    "real AI response quality/latency"
+  ],
+  "test_data_persisted": false,
+  "real_payments": false
+}

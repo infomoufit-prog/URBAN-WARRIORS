@@ -82,7 +82,7 @@ export function setAppHtml(html){
       clearPersonalWorkspaceNavigation();
       const sidebar=app.querySelector('.sidebar');
       if(sidebar&&!sidebar.querySelector('[data-kx-personal-nav]')){
-        sidebar.insertAdjacentHTML('afterbegin',`<button class="nav-item nav-primary" type="button" data-kx-personal-nav="workspace">${icon('home')}<b>${esc(t('marketing.space.title'))}</b></button>`);
+        sidebar.insertAdjacentHTML('afterbegin',`<button class="nav-item nav-primary" type="button" data-kx-personal-nav="workspace">${icon('home')}<b>Gestionar mi cuenta e identidades</b></button>`);
         sidebar.insertAdjacentHTML('afterbegin','<button class="nav-item kx-workspace-selector" type="button" data-kx-workspace-select>Seleccionar identidad</button>');
       }
     }

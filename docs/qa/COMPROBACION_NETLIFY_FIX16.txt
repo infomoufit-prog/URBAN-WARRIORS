@@ -1,0 +1,8 @@
+KOMBAX public HTML, service worker and health endpoint synced to build 20178
+OK build 642 archivos · web = dist = Android
+P2 conocido, sin ocultar: scripts/i18n-r79-full-product-audit.mjs
+P2 conocido, sin ocultar: scripts/test-kombax-20130-r79-i18n-phases-6-10.mjs
+P2 conocido, sin ocultar: scripts/i18n-runtime-copy-audit.mjs
+KOMBAX Netlify pilot gate: 108 PASS, 3 P2 conocidos, 0 fallos nuevos.
+La suite estricta completa sigue disponible mediante npm test y continúa fallando hasta cerrar los P2 documentados.
+PASS compatibility · 376 JavaScript files · 901 local imports checked for Linux · build 20178 · web/dist/Android identical
