@@ -4,6 +4,7 @@ import { repos } from './core/repositories.js';
 import { humanError, esc } from './core/utils.js';
 import { validateBirthDate } from './core/account-birth-date.js';
 import { has } from './core/permissions.js';
+import { availableClubSpaces, CLUB_SPACE_LABELS } from './core/club-workspaces.js';
 import { createAdaptivePoller } from './core/adaptive-poller.js';
 import { bindAccountModeFields } from './ui/account-mode-fields.js';
 import { shell, setAppHtml, bindDismissAlerts, setError, openForm, openDetail, closeModal, toast, setNotificationBadge, setKombaxNotificationBadge, setMessageBadge } from './ui/components.js';
@@ -14,6 +15,7 @@ import { renderSessions, renderAttendance, renderTracking, renderProgress } from
 import { renderFinance, renderReminders } from './modules/finance.js';
 import { renderCommunications, renderMaterial, renderNotifications } from './modules/comms-material.js';
 import { renderUsers, renderSettings, renderProfile, renderInstall } from './modules/admin.js';
+import { initPwaInstall, requestPwaInstall } from './modules/pwa-install.js';
 import { renderPortalDashboard, renderPortalSchedule, renderPortalRequests, renderPortalProfile } from './modules/portal.js';
 import { renderDocuments } from './modules/documents.js';
 import { renderCommunity } from './modules/community.js';
@@ -46,6 +48,7 @@ installLegacyRuntimeLocalization();
 installUniversalContentTranslation();
 
 installClientTelemetry();
+initPwaInstall();
 
 // R114 · Route-level lazy loading. Keep heavy product modules out of the initial
 // authenticated startup graph while preserving the existing router contract.
@@ -71,7 +74,7 @@ const ORG_ASSIST_ROLES=new Set(['direccion','coordinacion','secretaria','economi
 const PRIVATE_SHOWCASE_ROLES=new Set(['direccion','coordinacion']);
 const canUseOrgAssist=(session=state.session)=>Boolean(session?.club_id&&ORG_ASSIST_ROLES.has(String(session?.rol||'')));
 const canManagePrivateShowcase=(session=state.session)=>Boolean(session?.club_id&&PRIVATE_SHOWCASE_ROLES.has(String(session?.rol||'')));
-const canManagePrivateEvents=(session=state.session)=>Boolean(session?.club_id&&has(session,'eventManage'));
+const canManagePrivateEvents=(session=state.session)=>Boolean(session?.club_id&&has({...session,roles:[session.rol]},'eventManage'));
 const routes={
   dashboard:()=>renderKombaxHome({onNavigate:id=>navigate(id)}),workspace:()=>isPortal()?renderPortalDashboard():renderDashboard(),resources:()=>renderResourceCenter({section:sessionStorage.getItem('kx_resource_section')||'usage'}),guides:renderGuides,consulting:renderConsulting,training:renderPrivateTraining,catalog:renderCatalog,groups:()=>isPortal()?renderPortalSchedule():renderGroups(),members:renderMembers,enrollments:renderEnrollments,
   sessions:renderSessions,attendance:renderAttendance,progress:renderProgress,finance:renderFinance,reminders:renderReminders,communications:renderCommunications,
@@ -216,6 +219,23 @@ async function navigate(id,{replace=false}={}){
   const resourceSection=(()=>{try{return sessionStorage.getItem('kx_resource_section')||'usage'}catch{return 'usage'}})();
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id&&(!b.dataset.resourceTarget||b.dataset.resourceTarget===resourceSection)));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
 }
+function openClubSpaceSelector(){
+  const session=state.session;
+  if(!session?.club_id||session.support_mode)return;
+  const roles=availableClubSpaces(session.memberships||[],session.club_id,session.club_space_facets||[]);
+  if(roles.length<2)return;
+  const {wrap}=openDetail({title:'Mis espacios en el club',subtitle:'Una sola cuenta. Elige la función desde la que quieres navegar; tus permisos siguen controlados por el club.',body:`<div class="club-context-list">${roles.map(role=>`<button type="button" data-club-space-role="${esc(role)}" class="club-context-row ${role===session.rol?'active':''}"><span>${icon(role==='familia'?'users':role==='alumno'?'user':'shieldCheck',{size:18})}</span><div><strong>${esc(CLUB_SPACE_LABELS[role]||role)}</strong><small>${role===session.rol?'Espacio actual':'Cambiar sin cerrar sesión'}</small></div>${role===session.rol?'<b>ACTUAL</b>':''}</button>`).join('')}</div>`});
+  wrap.querySelectorAll('[data-club-space-role]').forEach(button=>button.addEventListener('click',async()=>{
+    button.disabled=true;
+    try{
+      const desired=String(button.dataset.clubSpaceRole||'');
+      await backend.selectClubSpace(desired);
+      closeModal();
+      renderShell();
+      toast(`Espacio: ${CLUB_SPACE_LABELS[desired]||desired}`);
+    }catch(error){button.disabled=false;setError(error);}
+  }));
+}
 function openClubSwitcher(){
   const memberships=state.session?.memberships||[],clubs=[...new Map(memberships.filter(x=>x.club?.slug).map(x=>[x.club_id,x.club])).values()];
   if(clubs.length<2)return;
@@ -236,6 +256,7 @@ function bindShellNavigation(){
   document.getElementById('logout-btn')?.addEventListener('click',async()=>{stopNotificationMonitor();await backend.signOut();renderLogin();});
   document.getElementById('support-mode-exit')?.addEventListener('click',exitOwnerSupportMode);
   document.getElementById('club-context-button')?.addEventListener('click',openClubSwitcher);
+  document.querySelectorAll('[data-kx-club-space-select]').forEach(button=>button.addEventListener('click',()=>{setSidebarOpen(false);openClubSpaceSelector();}));
   document.getElementById('kombax-notification-button')?.addEventListener('click',openKombaxActivity);
   document.getElementById('message-button')?.addEventListener('click',()=>openSocialView('contacts'));
 }
@@ -424,7 +445,7 @@ function openTeamAccessCode(prefill='',prefillRole=''){
   const grid=teamModal.form.querySelector('.form-grid');const legal=document.createElement('div');legal.className='registration-legal-links field full';legal.innerHTML='<strong>Documentos KOMBAX</strong><div class="row-actions"><a class="btn btn-ghost btn-sm" href="./terms.html" target="_blank" rel="noopener noreferrer">Condiciones KOMBAX</a><a class="btn btn-ghost btn-sm" href="./privacy.html" target="_blank" rel="noopener noreferrer">Privacidad global</a></div>';grid?.appendChild(legal);
 }
 function openPublicInstall(){
-  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:680px"><div class="modal-head"><div><h2>Instalar KOMBAX</h2><p>Lleva tu portal de club contigo en el móvil.</p></div><button class="icon-btn" id="modal-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:24px;text-align:center"><img src="./assets/install-qr.png" alt="QR" style="width:240px;max-width:70%;background:#fff;padding:10px;border-radius:18px"><p class="muted">Escanea el QR o instala la PWA desde el navegador.</p><div class="row-actions" style="justify-content:center"><button class="btn btn-primary" id="install-now">Instalar aplicación</button></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#modal-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelector('#install-now').addEventListener('click',async()=>{if(window.__uwInstallPrompt){window.__uwInstallPrompt.prompt();await window.__uwInstallPrompt.userChoice;window.__uwInstallPrompt=null;}else toast('Usa el menú del navegador → Instalar aplicación.','error')});
+  closeModal();const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';wrap.innerHTML=`<div class="modal" style="--modal-width:680px"><div class="modal-head"><div><h2>Instalar KOMBAX</h2><p>Lleva tu portal de club contigo en el móvil.</p></div><button class="icon-btn" id="modal-close" aria-label="Cerrar">${icon('close')}</button></div><div style="padding:24px;text-align:center"><img src="./assets/install-qr.png" alt="QR" style="width:240px;max-width:70%;background:#fff;padding:10px;border-radius:18px"><p class="muted">Escanea el QR o instala la PWA desde el navegador.</p><div class="row-actions" style="justify-content:center"><button class="btn btn-primary" id="install-now">Instalar aplicación</button></div></div></div>`;document.body.appendChild(wrap);wrap.querySelector('#modal-close').addEventListener('click',closeModal);wrap.addEventListener('click',e=>{if(e.target===wrap)closeModal()});wrap.querySelector('#install-now').addEventListener('click',()=>requestPwaInstall());
 }
 
 let localeRerendering=false;
@@ -441,9 +462,9 @@ async function boot(){
   const publicEventSlug=String(entryParams.get('event')||'').trim();
   const marketingProfile=String(entryParams.get('profile')||entryParams.get('discover')||'').trim().toLowerCase();
   const marketingProfiles=new Set(['club','marca','federacion','competidor','profesional','media','espectador']);
-  if(publicEventSlug){await renderPublicKombaxEventLanding(publicEventSlug,entryParams.get('fight')||null);if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(()=>{});return;}
+  if(publicEventSlug){await renderPublicKombaxEventLanding(publicEventSlug,entryParams.get('fight')||null);if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}-pwa-r270`).catch(()=>{});return;}
   if(entryParams.get('club')){try{const slug=selectClubSlug(entryParams.get('club'));const matches=await client.rpc('app_buscar_clubes_kombax_v040',{p_query:slug,p_limit:5}).catch(()=>[]),club=(matches||[]).find(x=>x.slug===slug);if(club)selectClubSlug(slug,club);}catch(error){console.warn('Enlace de club no válido:',error)}}
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__uwInstallPrompt=e;});
+  // The shared PWA install controller registers the prompt before boot for every identity.
   window.addEventListener('uw-native-push-token',async e=>{try{if(state.session&&e.detail){await backend.mutate('push.registrar',{token:e.detail,plataforma:'android'});localStorage.setItem('uw_push_synced_token',`${state.session.id}:${e.detail}`);}}catch(error){console.warn('Push token:',error)}});
   window.addEventListener('popstate',()=>{if(state.session?.club_id)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
   window.addEventListener('hashchange',()=>{if(state.session?.club_id)navigate((location.hash||'#dashboard').slice(1),{replace:true})});
@@ -468,6 +489,6 @@ async function boot(){
     }else if(session?.scope==='kombax'){if(hasTransactionalEntry)renderGlobalHome({onBack:renderGatewayRoot});else {const pendingType=sessionStorage.getItem('kombax_pending_profile_type')||'';if(pendingType)renderDirectProfileHub({onBack:renderGatewayRoot,pendingType});else renderGlobalHome({onBack:renderGatewayRoot});}}else if(session)renderClubSessionOrLegal({startAtHome:false});else renderLogin();
     if(connectNotice||paymentNotice){history.replaceState({},'',`${location.pathname}${location.hash||''}`);setTimeout(()=>toast(connectNotice||paymentNotice,paymentEntry==='cancelled'?'error':'ok'),80);}
   }catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}`).catch(e=>console.warn('Service worker:',e));
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}-pwa-r270`).catch(e=>console.warn('Service worker:',e));
 }
 boot();

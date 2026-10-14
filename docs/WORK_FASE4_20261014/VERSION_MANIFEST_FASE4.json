@@ -1,0 +1,37 @@
+{
+  "project": "KOMBAX",
+  "phase": 4,
+  "date": "2026-10-14",
+  "source_archive": "KOMBAX_20178_R120_FIX22_FASE3_FINANZAS_FULL_CUMULATIVE.zip",
+  "source_sha256": "39e9c91d489cc17da732213b6c6a23c921bc00e52556e3dfd9b2476aee9daa84",
+  "build_internally_declared": 20178,
+  "release_note": "R120 FIX22 is the source archive name; package.json and web/config.js still declare R118",
+  "supabase_migrations_new": [],
+  "supabase_existing": [
+    "R262",
+    "R263",
+    "R264"
+  ],
+  "github_push": false,
+  "netlify_deploy": false,
+  "changed_files": [
+    "web/js/ui/managed-profile-navigation.js",
+    "web/js/modules/managed-profile-hub.js",
+    "web/css/kombax-guides-nav-r94.css",
+    "scripts/test-kombax-fase4-premium-navigation.mjs",
+    "dist/js/ui/managed-profile-navigation.js",
+    "dist/js/modules/managed-profile-hub.js",
+    "dist/css/kombax-guides-nav-r94.css",
+    "android/app/src/main/assets/www/js/ui/managed-profile-navigation.js",
+    "android/app/src/main/assets/www/js/modules/managed-profile-hub.js",
+    "android/app/src/main/assets/www/css/kombax-guides-nav-r94.css"
+  ],
+  "new_test": "scripts/test-kombax-fase4-premium-navigation.mjs",
+  "test_result": "94/94 fase4, 26/26 + 17/17 fase1, 32/32 fase2, 49/49 fase3, 52/52 inventario; E2E/pantallas pendiente",
+  "modified_sha256": {
+    "web/js/ui/managed-profile-navigation.js": "fe3bd6994b8175e5535f7c0949546e95f7a7d0d5c08ba45f313b61d09750d1ba",
+    "web/js/modules/managed-profile-hub.js": "632f3b9ba16296e558fa1df243c1035a712c3ae58c3b900a385b65c8cc714f55",
+    "web/css/kombax-guides-nav-r94.css": "037f6e4d263a363c9784123738493099b6c4cfa3cf18e42337df5012ccf61ef5",
+    "scripts/test-kombax-fase4-premium-navigation.mjs": "9e57bc1bc458eb0fe96dd039aefefd2eaca16219e6392a55e6fc53e6219d86c8"
+  }
+}

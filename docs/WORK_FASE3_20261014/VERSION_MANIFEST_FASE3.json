@@ -1,0 +1,31 @@
+{
+  "project": "KOMBAX",
+  "date": "2026-10-14",
+  "base_zip": "KOMBAX_20178_R120_FIX22.zip",
+  "phase": 3,
+  "release_internal": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "build": 20178,
+  "supabase_migrations_applied": [
+    {
+      "id": "20261014110805",
+      "name": "kombax_fee_void_audit_r264"
+    },
+    {
+      "id": "20261014111044",
+      "name": "kombax_fee_void_permission_hardening_r264"
+    }
+  ],
+  "netlify_deploy": false,
+  "github_push": false,
+  "production_cancellation_operations": 0,
+  "tests": {
+    "phase3": "49/49",
+    "phase2": "32/32",
+    "phase1_roles": "26/26",
+    "phase1_finance": "17/17",
+    "inventory": "52/52",
+    "release_metadata": "PASS",
+    "frontend_js_syntax": "PASS"
+  },
+  "validation_qualification": "no authenticated E2E; no actual financial changes; no APK/AAB build"
+}

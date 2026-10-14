@@ -659,3 +659,11 @@ img,video,canvas{max-width:100%}
 .kx-account-services>summary{cursor:pointer;padding:16px;border:1px solid rgba(104,201,245,.18);border-radius:14px;font-weight:700}
 .kx-account-services-panel{padding-top:16px}
 @media(max-width:760px){.kx-workspace-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.kx-workspace-filters{grid-template-columns:1fr}.kx-workspace-banner{height:180px}.kx-workspace-cover-actions{padding:12px}.kx-workspace-summary{padding:16px}.kx-managed-top{flex-wrap:wrap}}
+
+/* R270 · Universal PWA entry for independent identities, family and all club roles. */
+.kx-pwa-install-nav{border:1px solid #53bdd466!important;background:linear-gradient(95deg,#092837,#122437)!important;color:#e6faff!important;}
+.kx-personal-install-mobile{white-space:nowrap;flex-shrink:0;border:1px solid #53bdd455!important;color:#d5f7ff!important;}
+.kx-personal-mobile>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kx-pwa-install-help p{margin:0 0 14px;line-height:1.6;}
+@media(min-width:801px){.kx-personal-install-mobile{display:none!important}}
+@media(max-width:380px){.kx-personal-install-mobile span{display:none}.kx-personal-mobile{gap:6px;padding:8px}}

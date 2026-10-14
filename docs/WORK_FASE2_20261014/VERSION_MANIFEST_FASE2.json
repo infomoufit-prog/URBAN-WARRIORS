@@ -1,0 +1,28 @@
+{
+  "release_label": "KOMBAX_20178_R120_FIX22_FASE2_INSCRIPCIONES_LICENCIAS",
+  "base": "KOMBAX_20178_R120_FIX22_FASE1_DELIVERY",
+  "source_version": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "build": 20178,
+  "phase": 2,
+  "status": "frontend_local_completed_e2e_pending",
+  "supabase_migrations_applied_this_phase": 0,
+  "github_push": false,
+  "netlify_deploy": false,
+  "meta_published": false,
+  "files": [
+    "web/js/modules/gateway.js",
+    "web/js/modules/federation-licenses.js",
+    "web/js/core/internal-club-license.js",
+    "scripts/test-kombax-phase2-inscripciones-licenses.mjs",
+    "package.json"
+  ],
+  "tests": {
+    "phase2": "32/32",
+    "phase1_spaces": "26/26",
+    "phase1_finance": "17/17",
+    "workspace_access": "13/13",
+    "inventory": "52/52",
+    "historic_signup_pglite": "not_run_missing_dependency"
+  },
+  "next_task": "WORK_NEXT_TASK.md"
+}

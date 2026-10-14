@@ -39,3 +39,38 @@
 .kx-usage-note{margin:16px 0 0}
 @media(max-width:680px){.kx-usage-context{grid-template-columns:1fr}.kx-usage-chapter>div{padding:8px 15px 18px}}
 @media(prefers-reduced-motion:reduce){:is(.nav-primary[data-nav="social"],.kx-profile-product-social),.product-nav-accordion,.kx-sidebar-resources>summary,:is(#club-nav-accordion,.kx-profile-identity-accordion),:is(.nav-primary[data-nav="social"],.kx-profile-product-social)>span,.product-nav-accordion>summary>.club-nav-icon,.kx-sidebar-resources>summary>.kx-resources-icon,:is(#club-nav-accordion,.kx-profile-identity-accordion)>summary>.club-nav-icon{transition:none}}
+
+/* KOMBAX Fase 4 — Navegación premium contextual de identidades directas. */
+.kx-profile-context-host{width:100%;min-width:0;display:block}
+.kx-premium-profile-nav{--kx-identity-rgb:240,82,105;display:grid;gap:9px;min-width:0;padding:1px 2px 18px}
+.kx-premium-profile-nav[data-nav-type="federacion"]{--kx-identity-rgb:60,195,236}
+.kx-premium-profile-nav[data-nav-type="profesional"]{--kx-identity-rgb:73,209,171}
+.kx-premium-profile-nav[data-nav-type="competidor"]{--kx-identity-rgb:244,111,88}
+.kx-premium-profile-nav[data-nav-type="marca"]{--kx-identity-rgb:247,192,55}
+.kx-premium-profile-nav[data-nav-type="media"]{--kx-identity-rgb:185,145,240}
+.kx-premium-profile-nav[data-nav-type="espectador"]{--kx-identity-rgb:143,173,216}
+.kx-premium-nav-caption{display:grid;gap:4px;padding:13px 14px 14px;border:1px solid rgba(var(--kx-identity-rgb),.3);border-radius:15px;background:linear-gradient(120deg,rgba(var(--kx-identity-rgb),.15),rgba(11,14,22,.9) 75%);box-shadow:inset 0 0 20px rgba(var(--kx-identity-rgb),.045)}
+.kx-premium-nav-caption>span{font-size:10px;font-weight:800;letter-spacing:.13em;color:rgb(var(--kx-identity-rgb));text-transform:uppercase}
+.kx-premium-nav-caption>strong{font-size:17px;line-height:1.2;color:#fff}
+.kx-premium-nav-caption>small{font-size:12px;color:#bac6d5;overflow-wrap:anywhere}
+.kx-premium-profile-nav .kx-premium-nav-home{display:flex;align-items:center;gap:12px;padding:12px 13px;border:1px solid rgba(var(--kx-identity-rgb),.35);border-radius:13px;background:rgba(var(--kx-identity-rgb),.115);color:#fff;min-height:48px;text-align:left}
+.kx-premium-profile-nav .kx-premium-nav-home .uw-icon{color:rgb(var(--kx-identity-rgb));flex-shrink:0}
+.kx-premium-profile-nav .kx-premium-nav-group{--kx-nav-rgb:var(--kx-identity-rgb);margin:2px 0;background:#0a0e15;border:1px solid rgba(var(--kx-identity-rgb),.3);border-radius:14px;overflow:hidden}
+.kx-premium-profile-nav .kx-premium-nav-group>summary{display:flex;align-items:center;gap:8px;min-height:62px;cursor:pointer;padding:8px 10px;list-style:none;border:0;border-radius:13px;background:linear-gradient(115deg,rgba(var(--kx-identity-rgb),.09),transparent)}
+.kx-premium-profile-nav .kx-premium-nav-group>summary::-webkit-details-marker{display:none}
+.kx-premium-profile-nav .kx-premium-nav-group .club-nav-copy{min-width:0;flex:1}
+.kx-premium-profile-nav .kx-premium-nav-group .club-nav-copy b{display:block;font-size:13px;line-height:1.3;overflow-wrap:anywhere}
+.kx-premium-profile-nav .kx-premium-nav-group .club-nav-copy small{display:block;color:#a7b7cd;font-size:11px;margin-top:2px}
+.kx-premium-profile-nav .kx-premium-nav-panel{display:grid;gap:4px;padding:6px 7px 10px;background:rgba(6,11,20,.78)}
+.kx-premium-profile-nav .kx-premium-nav-link{display:flex;align-items:center;gap:11px;min-width:0;min-height:44px;width:100%;padding:8px 9px;border:1px solid transparent;border-radius:10px;text-align:left;color:#ecf1fa;background:transparent;cursor:pointer}
+.kx-premium-profile-nav .kx-premium-nav-link:hover{border-color:rgba(var(--kx-identity-rgb),.33);background:rgba(var(--kx-identity-rgb),.09)}
+.kx-premium-profile-nav .kx-premium-nav-link>span:first-child{color:rgb(var(--kx-identity-rgb));flex-shrink:0;display:flex;align-items:center}
+.kx-premium-profile-nav .kx-premium-nav-link-copy{flex:1;display:grid;gap:2px;min-width:0}
+.kx-premium-profile-nav .kx-premium-nav-link-copy b{font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+.kx-premium-profile-nav .kx-premium-nav-link-copy small{font-size:10px;color:#c6aec0}
+.kx-premium-profile-nav .kx-premium-nav-preview{opacity:.76}
+.kx-premium-profile-nav .kx-premium-nav-preview .kx-premium-nav-link-copy small{color:#afbbca}
+.kx-premium-profile-nav .kx-premium-nav-explore{display:flex;align-items:center;gap:10px;min-height:46px;padding:8px 13px;border:1px solid #33465e;border-radius:12px;background:#121a25;color:#dce7f5;text-align:left}
+.kx-premium-profile-nav button:focus-visible,.kx-premium-profile-nav summary:focus-visible{outline:2px solid rgb(var(--kx-identity-rgb));outline-offset:3px}
+@media(max-width:800px){.kx-personal-shell:has(.kx-premium-profile-nav) .kx-personal-sidebar{width:min(330px,90vw);padding:18px 12px calc(18px + env(safe-area-inset-bottom))}.kx-premium-profile-nav .kx-premium-nav-link{min-height:46px}}
+@media(prefers-reduced-motion:reduce){.kx-premium-profile-nav *{scroll-behavior:auto;transition:none!important}}

@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-14",
+  "checkpoint": "FASE5B",
+  "base_sha256": "c8a5af0035882606341aa5c090c3c7ac5b8dcce7c5546c225a141ce408cd2e65",
+  "scope": [
+    "Mi Federación filtros/CSV",
+    "Instagram preflight de post/links",
+    "Events tipos General/VIP y snapshot"
+  ],
+  "supabase_ddl_applied_this_phase": [],
+  "published_github": false,
+  "deployed_netlify": false,
+  "real_instagram_published": false,
+  "live_ticket_categories_activated": false,
+  "internal_build_preserved": 20178,
+  "qa": "static/contract regression only; E2E pending"
+}

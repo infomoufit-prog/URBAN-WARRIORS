@@ -1,0 +1,16 @@
+{
+  "name": "KOMBAX FASE5A Material & Showcase",
+  "date": "2026-10-14",
+  "source": "KOMBAX_20178_R120_FIX22_FASE4_NAV_PREMIUM_FULL_CUMULATIVE.zip",
+  "source_sha256": "d1a077d57feadad7a4f9cec6854c2ed519a377b877f4e1d9baafc1d61275c1d3",
+  "internal_version": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "internal_build": 20178,
+  "phase": "5A",
+  "migrations_applied": [
+    "20261014150538_kombax_showcase_preserve_inquiries_on_delete_r268",
+    "20261014151035_kombax_showcase_preserve_associated_history_r268b"
+  ],
+  "frontend_deployed": false,
+  "github_pushed": false,
+  "instagram_live_publishing_tested": false
+}

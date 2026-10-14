@@ -1,0 +1,37 @@
+{
+  "release_label": "KOMBAX_20178_R120_FIX22_FASE1_MULTIROLE",
+  "source_package": "KOMBAX_20178_R120_FIX22.zip + phase0 docs",
+  "internal_package_version": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "build": 20178,
+  "phase": 1,
+  "status": "implemented_local_pending_live_validation",
+  "netlify_deploy": false,
+  "github_push": false,
+  "supabase_migrations_applied_this_phase": 0,
+  "modified_paths": [
+    "web/js/core/club-workspaces.js",
+    "web/js/core/club-session-role.js",
+    "web/js/core/backend.js",
+    "web/js/core/repositories.js",
+    "web/js/core/permissions.js",
+    "web/js/core/finance-member-scope.js",
+    "web/js/ui/components.js",
+    "web/js/app.js",
+    "web/js/modules/finance.js",
+    "web/js/modules/finance-premium.js",
+    "web/js/modules/portal.js",
+    "web/css/app.css",
+    "package.json",
+    "scripts/test-kombax-phase1-multi-space.mjs",
+    "scripts/test-kombax-phase1-finance-scope.mjs"
+  ],
+  "tests": {
+    "club_spaces": "26/26",
+    "family_finance_scope": "17/17",
+    "workspace_access": "13/13",
+    "inventory": "52/52",
+    "owner": "12/12",
+    "web_js_syntax": "pass"
+  },
+  "continue_from": "WORK_NEXT_TASK.md"
+}

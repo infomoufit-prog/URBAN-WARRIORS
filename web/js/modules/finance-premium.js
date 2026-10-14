@@ -27,7 +27,7 @@ const labelReportType=x=>Object.fromEntries(REPORT_TYPES)[x]||x||'Informe financ
 const filters={year:String(new Date().getFullYear()),month:'',socio:'',grupo:'',disciplina:'',categoria:'',estado:'',regla:'',metodo:'',aging:''};
 let tab='summary',offset=0,breakdownMode='groups';
 const explorerState={payments:{query:'',status:'',scope:'active',offset:0},receipts:{query:'',status:'',scope:'active',offset:0},reports:{query:'',status:'',scope:'active',offset:0}};
-const roles=()=>state.session?.roles?.length?state.session.roles:[state.session?.rol].filter(Boolean);
+const roles=()=>state.session?.active_club_role?[state.session.rol]:(state.session?.roles?.length?state.session.roles:[state.session?.rol].filter(Boolean));
 const manager=()=>roles().some(r=>['direccion','coordinacion','secretaria','economia'].includes(r));
 const direction=()=>roles().includes('direccion');
 const monthStart=()=>`${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}-01`;

@@ -9,6 +9,11 @@ const hex=bytes=>Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('');
 const call=body=>backend.invokeFunction('meta-instagram',body,60000);
 const statusLabel={not_connected:'No conectado',connected:'Conectado',expired:'Autorización caducada',revoked:'Autorización retirada',error:'Requiere revisión'};
 const jobLabel={creating:'Preparando',processing:'Procesando en Instagram',publishing:'Enviando a Instagram',published:'Publicado en Instagram',failed:'No publicado',uncertain:'Resultado pendiente de revisión'};
+export function instagramCaptionLinks(text=''){
+ const found=String(text||'').match(/https:\/\/[^\s<>"']+/gi)||[];
+ return [...new Set(found.map(s=>s.replace(/[),.;!?]+$/g,'')))].filter(s=>{try{const u=new URL(s);return u.protocol==='https:'&&u.hostname.includes('.');}catch{return false;}}).slice(0,5);
+}
+
 
 export async function startInstagramConnection(socialId){
  if(!instagramEnabled())throw new Error('La conexión con Instagram todavía no está habilitada.');
@@ -29,10 +34,12 @@ export async function openInstagramIntegration(identity){
  try{
   const data=await call({action:'status',social_id:identity.id});
   const modal=openDetail({title:'Instagram · Redes sociales',subtitle:identity.nombre_publico,
-   body:`<p><strong>${esc(statusLabel[data.status]||'Requiere revisión')}</strong>${data.username?` · @${esc(data.username)}`:''}</p><p>Conecta una cuenta profesional vinculada a una página de Facebook. Esta conexión pertenece solo a esta identidad. Cada publicación requiere tu confirmación.</p>${(data.publications||[]).length?`<details><summary>Últimos envíos a Instagram</summary>${data.publications.map(j=>`<p>${esc(jobLabel[j.status]||'Requiere revisión')}${j.media_id?` · ${esc(j.media_id)}`:''}${j.status==='processing'?` <button class="btn btn-ghost btn-sm" data-instagram-job="${esc(j.id)}">Comprobar envío</button>`:''}</p>`).join('')}</details>`:''}`,
+   body:`<p><strong>${esc(statusLabel[data.status]||'Requiere revisión')}</strong>${data.username?` · @${esc(data.username)}`:''}</p><p>Conecta una cuenta profesional vinculada a una página de Facebook. Esta conexión pertenece solo a esta identidad. Cada publicación requiere tu confirmación.</p><p>Para subir una imagen o vincular una publicación, crea primero un post público con imagen JPEG en KOMBAX Social. Desde ese post podrás enviarlo a Instagram. Incluye los enlaces HTTPS en el texto; Instagram puede mostrarlos, pero normalmente no los convierte en enlaces clicables en el feed.</p><button class="btn btn-primary btn-sm" data-instagram-new-post type="button">Subir imagen JPG y preparar publicación</button> <button class="btn btn-ghost btn-sm" data-instagram-open-social type="button">Elegir publicación existente de Social</button>${(data.publications||[]).length?`<details><summary>Últimos envíos a Instagram</summary>${data.publications.map(j=>`<p>${esc(jobLabel[j.status]||'Requiere revisión')}${j.media_id?` · ${esc(j.media_id)}`:''}${j.status==='processing'?` <button class="btn btn-ghost btn-sm" data-instagram-job="${esc(j.id)}">Comprobar envío</button>`:''}</p>`).join('')}</details>`:''}`,
    actions:`${location.origin==='https://appassets.androidplatform.net'?'<a class="btn btn-primary" href="https://kombax.es" target="_blank" rel="noopener noreferrer">Conectar desde la web KOMBAX</a>':`<button class="btn btn-primary" data-instagram-connect>${data.status==='connected'?'Volver a conectar':'Conectar Instagram'}</button>`}${data.status==='connected'?'<button class="btn btn-ghost" data-instagram-verify>Comprobar conexión</button>':''}${data.status!=='not_connected'?'<button class="btn btn-danger" data-instagram-disconnect>Desconectar</button>':''}`});
   const run=async work=>{try{await work();}catch{toast('No se ha podido completar la operación. Inténtalo de nuevo.','error');}};
   modal.wrap.querySelector('[data-instagram-connect]')?.addEventListener('click',()=>run(()=>startInstagramConnection(identity.id)));
+  modal.wrap.querySelector('[data-instagram-new-post]')?.addEventListener('click',async()=>{closeModal();const {openInstagramPostComposer}=await import('./kombax-social.js');await openInstagramPostComposer(identity.id);});
+  modal.wrap.querySelector('[data-instagram-open-social]')?.addEventListener('click',async()=>{closeModal();const {renderKombaxSocial}=await import('./kombax-social.js');await renderKombaxSocial();});
   modal.wrap.querySelector('[data-instagram-verify]')?.addEventListener('click',()=>run(async()=>{await call({action:'verify',social_id:identity.id});toast('Conexión comprobada');closeModal();await openInstagramIntegration(identity);}));
   modal.wrap.querySelector('[data-instagram-disconnect]')?.addEventListener('click',()=>confirmDialog('Desconectar Instagram',`Se retirará la conexión de ${identity.nombre_publico}. No elimina publicaciones ya enviadas a Instagram ni afecta a otras identidades.`,()=>run(async()=>{await call({action:'disconnect',social_id:identity.id});toast('Instagram desconectado');closeModal();}),{confirmText:'Desconectar'}));
   modal.wrap.querySelectorAll('[data-instagram-job]').forEach(b=>b.addEventListener('click',()=>run(async()=>{b.disabled=true;const result=await call({action:'publication_status',social_id:identity.id,job_id:b.dataset.instagramJob});toast(jobLabel[result.job.status]||'Requiere revisión');closeModal();await openInstagramIntegration(identity);})));
@@ -44,8 +51,9 @@ export async function publishPostToInstagram(post,identity){
  try{
   const status=await call({action:'status',social_id:identity.id});
   if(status.status!=='connected'){await openInstagramIntegration(identity);return;}
+  const links=instagramCaptionLinks(post.texto);const postImage=String(post.media_url||'');
   const modal=openDetail({title:'Publicar también en Instagram',subtitle:`${identity.nombre_publico} · @${status.username}`,
-   body:`<p>${esc(post.texto||'')}</p><p>Se enviará la imagen JPEG original y este texto. La imagen debe tener un formato admitido por Instagram. El encuadre visual de KOMBAX no modifica el archivo original.</p><p>Esta acción crea una publicación externa. Retirarla después en KOMBAX no elimina la copia de Instagram.</p>`,
+   body:`${postImage?`<img src="${esc(postImage)}" alt="Imagen asociada a esta publicación de KOMBAX" style="width:100%;max-height:300px;object-fit:contain;border-radius:12px">`:''}<p>${esc(post.texto||'')}</p>${links.length?`<p><strong>Enlaces asociados:</strong> ${links.map(u=>`<code>${esc(u)}</code>`).join(' · ')}</p><p>En el feed de Instagram estos enlaces normalmente no son clicables.</p>`:''}<p>Se enviará la imagen JPEG original y este texto. La imagen debe tener un formato admitido por Instagram. El encuadre visual de KOMBAX no modifica el archivo original.</p><p>Esta acción crea una publicación externa. Retirarla después en KOMBAX no elimina la copia de Instagram.</p>`,
    actions:'<button class="btn btn-primary" data-instagram-publish>Confirmar publicación en Instagram</button>'});
   modal.wrap.querySelector('[data-instagram-publish]')?.addEventListener('click',async e=>{
    const button=e.currentTarget;button.disabled=true;

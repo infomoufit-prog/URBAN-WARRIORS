@@ -47,22 +47,30 @@ const memberBind=(members,rerender)=>document.querySelectorAll('[data-profile-id
 async function downloadPortalDocument(doc){const blob=await repos.documents.download(doc.storage_path);const href=URL.createObjectURL(blob);const a=document.createElement('a');a.href=href;a.download=doc.nombre||'documento';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1500);}
 
 async function loadPortalBase(){
-  const [members,enrollments,disciplines,grades,groups]=await Promise.all([repos.portal.visibleMembers(),repos.portal.enrollments(),repos.catalog.disciplines(),repos.catalog.grades(),repos.groups.list()]);
-  const member=activeMember(members);return {members,member,enrollments,disciplines,grades,groups};
+  const members=await repos.portal.visibleMembers();
+  const socioIds=members.map(x=>x.id);
+  const [enrollments,disciplines,grades,groups]=await Promise.all([repos.portal.enrollments({socioIds}),repos.catalog.disciplines(),repos.catalog.grades(),repos.groups.list()]);
+  const member=activeMember(members);return {members,member,socioIds,enrollments,disciplines,grades,groups};
 }
 async function loadPortalDashboard(){
   const base=await loadPortalBase();
-  const [sessions,reservations,progressRows,fees,graduations,summaryRows]=await Promise.all([repos.portal.sessions(),repos.portal.reservations(),repos.progress.list(),repos.portal.fees(),repos.portal.graduations(),repos.notifications.headerSummary().catch(()=>[])]);
+  const [sessions,reservations,rawProgress,fees,graduations,summaryRows]=await Promise.all([repos.portal.sessions(),repos.portal.reservations({socioIds:base.socioIds}),repos.progress.list(),repos.portal.fees({socioIds:base.socioIds}),repos.portal.graduations({socioIds:base.socioIds}),repos.notifications.headerSummary().catch(()=>[])]);
+  const allowed=new Set(base.socioIds.map(String));
+  const progressRows=(rawProgress||[]).filter(x=>allowed.has(String(x.socio_id)));
   const notificationSummary=Array.isArray(summaryRows)?(summaryRows[0]||{}):(summaryRows||{});
   return {...base,sessions,reservations,progressRows,fees,graduations,notificationSummary};
 }
 async function loadPortalSchedule(){
   const base=await loadPortalBase();
-  const [schedules,sessions,reservations]=await Promise.all([repos.portal.schedules(),repos.portal.sessions(),repos.portal.reservations()]);
+  const [schedules,sessions,reservations]=await Promise.all([repos.portal.schedules(),repos.portal.sessions(),repos.portal.reservations({socioIds:base.socioIds})]);
   return {...base,schedules,sessions,reservations};
 }
 async function loadPortalProfile(){
-  const [members,grades,progressRows,tracking,documents,graduations]=await Promise.all([repos.portal.visibleMembers(),repos.catalog.grades(),repos.progress.list(),repos.portal.tracking(),repos.portal.documents(),repos.portal.graduations()]);
+  const members=await repos.portal.visibleMembers();
+  const socioIds=members.map(x=>x.id);
+  const [grades,rawProgress,tracking,documents,graduations]=await Promise.all([repos.catalog.grades(),repos.progress.list(),repos.portal.tracking({socioIds}),repos.portal.documents({socioIds}),repos.portal.graduations({socioIds})]);
+  const allowed=new Set(socioIds.map(String));
+  const progressRows=(rawProgress||[]).filter(x=>allowed.has(String(x.socio_id)));
   const member=activeMember(members);return {members,member,grades,progressRows,tracking,documents,graduations};
 }
 function enrollmentSummary(d,member){
@@ -128,7 +136,9 @@ export async function renderPortalSchedule(){
 export async function renderPortalRequests(){
   setMainHtml('<div class="loading-card">Cargando solicitudes…</div>');
   try{
-    const [members,disciplines,groups,tariffs,enrollments,notifs]=await Promise.all([repos.portal.visibleMembers(),repos.catalog.disciplines(),repos.groups.list(),repos.tariffs.list(),repos.portal.enrollments(),repos.portal.notifications()]);const member=activeMember(members);const family=state.session?.roles?.includes('familia')||state.session?.rol==='familia';
+    const members=await repos.portal.visibleMembers();
+    const socioIds=members.map(x=>x.id);
+    const [disciplines,groups,tariffs,enrollments,notifs]=await Promise.all([repos.catalog.disciplines(),repos.groups.list(),repos.tariffs.list(),repos.portal.enrollments({socioIds}),repos.portal.notifications()]);const member=activeMember(members);const family=state.session?.rol==='familia';
     const active=enrollments.filter(x=>x.activa).map(x=>{const m=members.find(s=>s.id===x.socio_id);return quickRow(icon('checkCircle'),`${m?.nombre||'Alumno'} · ${disciplines.find(d=>d.id===x.disciplina_id)?.nombre||'Disciplina'}`,groups.find(g=>g.id===x.grupo_id)?.nombre||'Sin grupo',badge('Activa','ok'))}).join('');
     const requestNotifs=notifs.filter(n=>n.tipo==='inscripcion').slice(0,12).map(n=>quickRow(icon('userPlus'),n.titulo,n.cuerpo||'',badge(n.leida?'Revisada':'Nueva',n.leida?'neutral':'warn'))).join('');
     setMainHtml(`${members.length?profileSwitcher(members,member?.id):''}${pageHeader('Solicitudes','Amplía tu actividad o añade un menor',`${member?'<button class="btn btn-primary" id="request-sport">Solicitar disciplina o grupo</button>':''}${family?'<button class="btn btn-ghost" id="request-minor">Añadir menor</button>':''}`,'Mi cuenta')}${card('Matrículas activas',active||empty('Sin matrículas activas'))}${card('Estado y avisos de solicitudes',requestNotifs||empty('Sin novedades','Las resoluciones y cambios de estado de las solicitudes se muestran mediante notificaciones del club.'))}`);

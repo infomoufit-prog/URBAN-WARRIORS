@@ -252,10 +252,10 @@ async function loadIdentityAlbum(profile){
   }catch{return [];}
 }
 
-async function openPublisher(){
+async function openPublisher({preferredSocialId=null,instagramFirst=false}={}){
   const allowed=publishProfiles();
   if(!allowed.length){toast('Tu perfil está activo, pero todavía no tiene permiso para publicar en el feed.','error');return;}
-  const initial=allowed.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(allowed)||allowed[0];
+  const initial=allowed.find(x=>String(x.id)===String(preferredSocialId||activeIdentityId))||chooseDefaultIdentity(allowed)||allowed[0];
   const initialQuota=await repos.kombaxSocial.quota(initial.id).catch(()=>null);
   if(initialQuota?.active_limit_reached){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(initial,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});return;}
   if(initialQuota?.daily_limit_reached){toast('Has alcanzado el máximo de 3 publicaciones de hoy. Podrás volver a publicar mañana.','error');return;}
@@ -273,6 +273,7 @@ async function openPublisher(){
       {name:'audiencia',label:'Audiencia',type:'select',required:true,value:audienceKey(audienceOptions(initial.id)[0]),options:audienceOptions(initial.id).map(a=>({value:audienceKey(a),label:a.label})),help:'El perfil seguirá siendo público. Esta opción solo restringe esta publicación.'},
       {name:'archivo',label:'Subir foto o vídeo',type:'file',accept:'image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime',full:true,help:'Opcional. Vídeo MP4 recomendado · HD hasta 1080p · máximo 60 segundos y 100 MB. Se mostrará únicamente a la audiencia elegida para esta publicación.'},
       {name:'guardar_album',label:'Guardar también este archivo en el álbum de la identidad',type:'checkbox',value:true,full:true},
+      ...(instagramEnabled()?[{name:'enviar_instagram',label:'Tras publicar en KOMBAX, preparar envío a Instagram (confirmación adicional)',type:'checkbox',value:instagramFirst,full:true,help:'Solo para publicaciones públicas con imagen JPEG subida. Los enlaces HTTPS van en el texto; en el feed pueden no ser clicables.'}]:[]),
       {name:'media_id',label:'O elegir del álbum',type:'select',options:[],full:true,help:'Si subes un archivo nuevo, tendrá prioridad sobre esta selección.'},
       {name:'texto',label:'Contenido',type:'textarea',required:true,full:true,rows:7,maxLength:1500,help:'Máximo 1.500 caracteres. Publica solo contenido relacionado con artes marciales/deportes de contacto. No publiques teléfonos, direcciones ni datos privados de terceros.'}
     ],
@@ -282,6 +283,12 @@ async function openPublisher(){
       let socialMediaId=null,newSocialMedia=null,newClubMedia=null,newDirectMedia=null;
       const aud=parseAudience(v.audiencia);
       const restricted=aud.audiencia!=='publica';
+      if(v.enviar_instagram){
+        if(restricted)throw new Error('Instagram requiere una publicación pública de KOMBAX Social. Selecciona audiencia pública.');
+        if(v.archivo?.type!=='image/jpeg')throw new Error('Para enviar a Instagram desde este formulario, sube una nueva imagen JPG/JPEG. Para compartir una foto anterior, utiliza el botón Instagram de la publicación en Social.');
+        if(!instagramEnabled())throw new Error('Instagram no está habilitado para esta instalación.');
+      }
+      let publishedId=null;
       try{
         if(restricted&&(v.media_id||v.guardar_album===true))throw new Error('Las publicaciones restringidas no pueden reutilizar ni guardar multimedia en el álbum público. Sube un archivo nuevo o publica solo texto.');
         if(v.archivo){
@@ -306,7 +313,7 @@ async function openPublisher(){
             }
           }
         }
-        const published=await repos.kombaxSocial.publish(profile.id,v.tipo,v.texto,{comentarios_estado:v.comentarios_estado,social_media_id:socialMediaId,...aud,audiencia_club_ids:[...audienceClubIds],audiencia_excluded_club_ids:[...audienceExcludedClubIds],audiencia_profile_ids:[...audienceProfileIds],audiencia_profile_types:[...audienceProfileTypes]});const publishedId=published?.id||published?.post_id||published?.data?.id;if(publishedId)void prewarmUserContentTranslations({contentId:publishedId,contentType:'social_post',fieldName:'text',text:v.texto,visibility:aud.audiencia==='publica'?'public':'tenant'});
+        const published=await repos.kombaxSocial.publish(profile.id,v.tipo,v.texto,{comentarios_estado:v.comentarios_estado,social_media_id:socialMediaId,...aud,audiencia_club_ids:[...audienceClubIds],audiencia_excluded_club_ids:[...audienceExcludedClubIds],audiencia_profile_ids:[...audienceProfileIds],audiencia_profile_types:[...audienceProfileTypes]});publishedId=published?.id||published?.post_id||published?.data?.id;if(publishedId)void prewarmUserContentTranslations({contentId:publishedId,contentType:'social_post',fieldName:'text',text:v.texto,visibility:aud.audiencia==='publica'?'public':'tenant'});
       }catch(error){
         if(newSocialMedia)await repos.kombaxSocial.removeMedia(newSocialMedia).catch(()=>{});
         if(newClubMedia)await repos.clubPublic.removeAlbumMedia(profile.club_id,newClubMedia).catch(()=>{});
@@ -314,6 +321,12 @@ async function openPublisher(){
         throw error;
       }
       setActiveIdentity(profile.id);activeIdentityId=profile.id;toast(`Publicado como ${profile.nombre_publico}`);await refreshActiveQuota();await loadFeed(false);
+      // El formulario de KOMBAX debe cerrarse antes de abrir la confirmación externa.
+      // Publicar en KOMBAX no implica consentimiento para publicar en Instagram.
+      if(v.enviar_instagram){
+        if(!publishedId){toast('Publicación creada en KOMBAX. Abre Social para compartirla manualmente en Instagram.','warning');}
+        else setTimeout(()=>{void publishPostToInstagram({id:publishedId,autor_id:profile.id,texto:v.texto},profile);},420);
+      }
     }
   });
   const author=modal.form.elements.autor,media=modal.form.elements.media_id,audience=modal.form.elements.audiencia,album=modal.form.elements.guardar_album;
@@ -322,6 +335,16 @@ async function openPublisher(){
   const refreshMedia=()=>{const rows=mediaByProfile.get(author.value)||[];const restricted=parseAudience(audience.value).audiencia!=='publica';media.innerHTML='<option value="">Sin multimedia del álbum</option>'+rows.map(x=>`<option value="${esc(x.id)}">${x.tipo==='video'?'Vídeo':'Foto'}${x.tipo==='video'?` · ${Number(x.duration_seconds||0).toFixed(1)} s`:''}</option>`).join('');media.disabled=restricted||!rows.length;if(restricted){media.value='';album.checked=false;album.disabled=true;}else album.disabled=false;};
   author.addEventListener('change',()=>{refreshAudience();refreshMedia();});audience.addEventListener('change',refreshMedia);refreshAudience();refreshMedia();
 
+}
+
+export async function openInstagramPostComposer(socialId){
+  activeView='feed';
+  await renderKombaxSocial();
+  const permitted=publishProfiles().find(p=>String(p.id)===String(socialId));
+  if(!permitted){toast('Esta identidad no tiene permiso para publicar en KOMBAX Social.','error');return;}
+  activeIdentityId=permitted.id;
+  setActiveIdentity(permitted.id);
+  await openPublisher({preferredSocialId:permitted.id,instagramFirst:true});
 }
 
 async function activateSocial(){

@@ -6,7 +6,7 @@ const copy=(es,en)=>getLocale()==='es'?es:en;
 export function openHistoricalFinance(members,reload){
  const requestId=crypto.randomUUID();
  const modal=openForm({title:copy('Registrar histórico','Record historical entry'),
-  subtitle:copy('Registro manual. No realiza cargos bancarios. Los avisos quedan pausados.','Manual record. No bank charge is made. Reminders remain paused.'),
+  subtitle:copy('Registro manual anterior a KOMBAX. No realiza cargos bancarios. Los avisos quedan pausados. Los pagos históricos no son ingresos cobrados hoy.','Historical record predating KOMBAX. No bank charges. Reminders stay paused. Previously collected funds are not new cash income.'),
   fields:[
    {name:'socio_id',label:copy('Alumno','Student'),type:'select',required:true,options:members.map(m=>({value:m.id,label:`${m.apellidos}, ${m.nombre}`}))},
    {name:'estado',label:copy('Situación del histórico','Historical status'),type:'select',required:true,value:'pendiente',options:[{value:'pendiente',label:copy('Cuota anterior pendiente','Previous outstanding charge')},{value:'pagado',label:copy('Pago anterior ya realizado','Previous payment already made')}]},

@@ -616,3 +616,21 @@ body[class*="theme-"] .toast:not(.toast-error){background:color-mix(in srgb,var(
 
 /* Respect conditional fields inside forms, including existing-account registration. */
 .modal .field[hidden],.modal .modal-error[hidden]{display:none!important}
+
+/* Fase 1 · roles simultáneos: selector de espacios accesible en móvil y escritorio. */
+.kx-club-space-sidebar{display:flex;align-items:center;gap:8px;justify-content:flex-start;width:calc(100% - 24px);margin:8px 12px 6px;padding:10px 12px;border-radius:12px;text-align:left;min-width:0}
+.kx-club-space-sidebar span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kx-club-space-topbar{min-width:0;display:inline-flex;align-items:center;gap:6px}
+.kx-club-space-topbar span{max-width:106px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:620px){.kx-club-space-topbar{padding:8px!important;min-width:34px}.kx-club-space-topbar span{display:none}}
+
+/* R268: buzón de consultas de Showcase, preservando diálogos y permisos existentes. */
+.kx-showcase-inquiry-list{display:grid;gap:12px;padding:10px 0}
+.kx-showcase-inquiry-list>article{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:16px;border:1px solid var(--border,#5555);border-radius:14px}
+.kx-showcase-inquiry-list>article>div{display:grid;gap:6px;min-width:0}
+.kx-showcase-inquiry-list small,.kx-showcase-inquiry-thread small{opacity:.75}
+.kx-showcase-inquiry-thread{max-height:54vh;overflow:auto;display:grid;gap:12px}
+.kx-showcase-inquiry-thread article{padding:13px 16px;border-radius:12px;border:1px solid var(--border,#5555)}
+.kx-showcase-inquiry-thread article.is-own{border-inline-start:3px solid var(--accent,#18b1c5)}
+.kx-showcase-inquiry-thread p{margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:560px){.kx-showcase-inquiry-list>article>.btn{width:100%}}

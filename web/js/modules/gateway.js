@@ -271,13 +271,38 @@ async function openMemberClubLink(club,{onBack,onSelect,onAdminAccess}){
   const clubId=club.club_id||club.id;
   if(!clubId){toast('Este club todavía no admite solicitudes desde KOMBAX.','warning');return;}
   try{
-    const pending=await repos.kombaxMemberships.pending();
-    const match=(Array.isArray(pending)?pending:[]).find(row=>String(row.club_id)===String(clubId));
+    const [pending,memberships]=await Promise.all([repos.kombaxMemberships.pending(),repos.kombaxMemberships.active()]);
+    const activeRows=(Array.isArray(memberships)?memberships:[]).filter(row=>String(row.club_id)===String(clubId)&&row.estado==='activo');
+    const participantLinked=activeRows.some(row=>row.modo==='alumno');
+    const familyLinked=activeRows.some(row=>row.modo==='tutor');
+    const match=participantLinked?null:(Array.isArray(pending)?pending:[]).find(row=>String(row.club_id)===String(clubId));
     if(match){
-      confirmDialog('Solicitar vinculación',`Hemos encontrado una ficha de ${club.nombre} asociada a tu correo verificado. El club deberá aprobar la vinculación antes de activar tu acceso y tu publicación como miembro.`,async()=>{await repos.kombaxMemberships.requestClaim(match.socio_id);toast('Solicitud enviada al club para su revisión.');},{confirmText:'Solicitar vinculación'});
+      confirmDialog('Vincular mi ficha existente',`Hemos encontrado una ficha en ${club.nombre} asociada a tu correo confirmado. El club debe verificar y aprobar la vinculación. No crearemos otra ficha.`,async()=>{
+        const result=await repos.kombaxMemberships.requestClaim(match.socio_id);
+        toast(result?.already_linked?'Esta ficha ya está vinculada a tu cuenta.':result?.already_pending?'Ya existe una solicitud pendiente para esta ficha.':'Solicitud de vinculación enviada para revisión del club.');
+      },{confirmText:'Solicitar vinculación'});
       return;
     }
-    openForm({title:`Solicitar vinculación con ${club.nombre}`,subtitle:'No necesitas código. Puedes pedir al club que autorice directamente tu acceso. El código o la invitación personal siguen disponibles como vías alternativas.',fields:[{name:'request_kind',label:'Quiero vincularme como',type:'select',required:true,value:'member',options:[{value:'member',label:'Miembro / Practicante'},{value:'family',label:'Familiar / Tutor'}]},{name:'mensaje',label:'Mensaje para el club',type:'textarea',rows:4,required:true,full:true,value:'Quiero vincular mi cuenta KOMBAX con el club. ¿Podéis revisar y autorizar mi acceso?'}],submitText:'Solicitar autorización',onSubmit:async values=>{await repos.kombaxMemberships.contactClub(clubId,values.mensaje,values.request_kind||'member');toast('Solicitud enviada. El club puede autorizarla directamente; no necesitas un código.');closeModal();}});
+    const requestOptions=participantLinked
+      ?[{value:'family',label:'Familiar / Tutor (otro espacio)'}]
+      :[{value:'member',label:'Miembro / Practicante'},{value:'family',label:'Familiar / Tutor'}];
+    openForm({
+      title:participantLinked?`Añadir mi espacio familiar en ${club.nombre}`:`Solicitar vinculación con ${club.nombre}`,
+      subtitle:participantLinked
+        ?'Tu acceso como participante ya está aprobado. Puedes solicitar también un vínculo familiar para gestionar a tus hijos, sin otra cuenta.'
+        :familyLinked?'Tu relación familiar sigue activa. También puedes solicitar acceso como participante desde esta cuenta.':'No necesitas código. El club revisará tu solicitud antes de darte acceso. Si ya existe tu ficha, se vinculará sin duplicarla.',
+      fields:[
+        {name:'request_kind',label:'Quiero vincularme como',type:'select',required:true,value:requestOptions[0].value,options:requestOptions},
+        {name:'mensaje',label:'Mensaje para el club',type:'textarea',rows:4,required:true,full:true,value:participantLinked?'Ya participo en el club y solicito también acceso como padre, madre o tutor. Por favor, revisad mi relación familiar.':'Solicito vincular mi cuenta KOMBAX con el club. Por favor, revisad y autorizad mi acceso.'}
+      ],
+      submitText:'Enviar solicitud al club',
+      onSubmit:async values=>{
+        const kind=participantLinked?'family':values.request_kind||'member';
+        const result=await repos.kombaxMemberships.contactClub(clubId,values.mensaje,kind);
+        toast(result?.already_linked?'Ya tienes el acceso de participante activo.':result?.already_pending?'Ya existe una solicitud pendiente para este club.':'Solicitud recibida. El club revisará tu vinculación; no necesitas otra cuenta ni código.');
+        closeModal();
+      }
+    });
   }catch(error){setError(error);toast('No se pudo comprobar la vinculación. Revisa que tu correo esté confirmado.','error');}
 }
 

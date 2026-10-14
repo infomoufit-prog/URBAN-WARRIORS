@@ -9,7 +9,10 @@ export const PERMISSIONS = Object.freeze({
   invite:['direccion'], clubConfig:['direccion','coordinacion','secretaria','economia','comunicacion'], eventManage:['direccion','coordinacion','secretaria','monitor'], certification:['direccion']
 });
 export const has = (session, permission) => {
-  const allowed=PERMISSIONS[permission]||[]; const roles=session?.roles?.length?session.roles:[session?.rol].filter(Boolean);
+  const allowed=PERMISSIONS[permission]||[];
+  // Explicit club-space selection scopes the visible controls to that context.
+  // Supabase independently checks the authenticated user's actual assigned permissions.
+  const roles=session?.active_club_role?[session.rol]:(session?.roles?.length?session.roles:[session?.rol].filter(Boolean));
   return roles.some(r=>allowed.includes(r));
 };
 export const ROLE_LABELS=Object.freeze({direccion:'admin.roles.direction',coordinacion:'admin.roles.coordination',secretaria:'admin.roles.secretariat',economia:'admin.roles.treasury',comunicacion:'admin.roles.communications',monitor:'admin.roles.coach',familia:'admin.roles.family',alumno:'admin.roles.student'});

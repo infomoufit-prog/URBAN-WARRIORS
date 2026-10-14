@@ -1,4 +1,5 @@
 export const summarizeFinance=(rows=[])=>{
+  rows=(rows||[]).filter(row=>!['anulada','cancelada'].includes(row.estado));
   const total_generado=rows.reduce((sum,x)=>sum+Number(x.importe||0),0);
   const total_cobrado=rows.reduce((sum,x)=>sum+Math.min(Number(x.pagado_validado||0),Number(x.importe||0)),0);
   const total_pendiente=rows.reduce((sum,x)=>sum+Number(x.saldo||0),0);

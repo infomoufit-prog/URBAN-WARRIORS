@@ -1,0 +1,54 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {managedNavigationModel,managedNavigationHtml,managedIdentityNavigationTypes} from '../web/js/ui/managed-profile-navigation.js';
+let checks=0;
+const ok=(condition,description)=>{assert.ok(condition,description);checks++};
+const allow=()=>true;
+const capabilities=new Set(['preparation','my_licenses','fight_opportunities','federation_admin','federates','licenses','affiliated_clubs','federation_team','plans_services','organization_finance','professional_operations','professional_finance','discovery_availability','public_profile','conversations','social','events','showcase','seller_center','profile_team','privacy_support']);
+function html(type,modules,options={}){
+ return managedNavigationHtml({profile:{tipo:type,nombre_publico:'Perfil de prueba'},meta:{title:'Mi espacio',eyebrow:'IDENTIDAD'},modules,labels:Object.fromEntries(modules.map(m=>[m,m])),allowed:allow,actionable:capabilities, ...options});
+}
+function tabs(markup,id){return (markup.match(new RegExp(`data-module="${id}"`,'g'))||[]).length;}
+for(const type of managedIdentityNavigationTypes){
+ const s=html(type,['public_profile','social','events','showcase']);
+ ok(s.includes('kx-premium-profile-nav'),`${type}: navegación premium`);
+ ok(s.includes(`data-nav-type="${type}"`),`${type}: entorno visual propio`);
+ ok(tabs(s,'overview')===1,`${type}: inicio único`);
+ ok(tabs(s,'privacy_support')===1,`${type}: privacidad disponible`);
+ ok(tabs(s,'explore')===1,`${type}: explorar disponible`);
+ ok(tabs(s,'social')===1,`${type}: Social no duplicado`);
+ ok(tabs(s,'showcase')===1,`${type}: Showcase no duplicado`);
+ ok(tabs(s,'events')===1,`${type}: Events no duplicado`);
+ ok(tabs(s,'public_profile')===1,`${type}: acceso a perfil público`);
+}
+const competitor=html('competidor',['public_profile','preparation','fight_opportunities','my_licenses','discovery_availability','representation_requests'],{canManageTeam:true,canOpen:m=>m!=='representation_requests'});
+for(const id of ['preparation','fight_opportunities','my_licenses','discovery_availability','representation_requests','profile_team'])ok(tabs(competitor,id)===1,`Competidor: ${id}`);
+ok(competitor.includes('Actividad deportiva')&&competitor.includes('Oportunidades y equipo'),'Competidor secciones deportivas');
+ok(competitor.includes('Vista previa'),'Competidor funciones sin handler como vista previa');
+const fed=html('federacion',['federation_admin','federates','licenses','affiliated_clubs','federation_team','organization_finance','operational_planning','assist_management','plans_services'],{canManageTeam:true});
+for(const id of ['federation_admin','federates','licenses','affiliated_clubs','federation_team','organization_finance','operational_planning','assist_management','plans_services','profile_team'])ok(tabs(fed,id)===1,`Federación: ${id}`);
+ok(fed.includes('Gestión federativa')&&fed.includes('Administración y planificación'),'Federación secciones administrativas');
+const pro=html('profesional',['professional_operations','professional_finance','my_licenses','authorized_licenses','discovery_availability','conversations']);
+for(const id of ['professional_operations','professional_finance','my_licenses','authorized_licenses','discovery_availability'])ok(tabs(pro,id)===1,`Profesional: ${id}`);
+const spectator=html('espectador',['public_profile','social','events','showcase','saved'],{allowed:m=>m!=='showcase'});
+ok(spectator.includes('Según capacidades'),'Restricciones visibles sin desbloqueo');
+ok(tabs(spectator,'organization_finance')===0,'Espectador sin finanzas administrativas');
+ok(tabs(spectator,'profile_team')===0,'Espectador sin permisos de equipos');
+const xss=html('competidor',['preparation'],{profile:{tipo:'competidor',nombre_publico:'<img src=x onerror=alert(1)>'}});
+ok(!xss.includes('<img src=x onerror'),'Nombre escapado ante HTML malicioso');
+const modell=managedNavigationModel({profile:{tipo:'competidor'},modules:['preparation','preparation','events'],allowed:m=>m!=='preparation',actionable:capabilities});
+ok(modell.items.filter(x=>x.id==='preparation').length===1,'Sin entradas duplicadas');
+ok(modell.items.find(x=>x.id==='preparation').available===false,'Sin elevación de privilegios');
+ok(modell.items.find(x=>x.id==='preparation').reason==='Según capacidades','Vista previa restringida');
+const hub=fs.readFileSync(new URL('../web/js/modules/managed-profile-hub.js',import.meta.url),'utf8');
+ok(hub.includes("import { managedNavigationHtml } from '../ui/managed-profile-navigation.js';"),'Integración en Hub');
+ok(hub.includes("mod==='profile_team'"),'Acción de equipo conectada');
+ok(hub.includes('!moduleAllowed(mod,caps,profile)'), 'Validación de capacidades previa a rutas');
+ok(hub.includes('module===\'professional_finance\''),'Finance profesional condicionada');
+ok(hub.includes("const mobileIdentityTitle=document.querySelector('.kx-personal-mobile > span')"),'Cabecera móvil contextual');
+const css=fs.readFileSync(new URL('../web/css/kombax-guides-nav-r94.css',import.meta.url),'utf8');
+ok(css.includes('.kx-premium-profile-nav[data-nav-type="federacion"]'),'Paleta Federación');
+ok(css.includes('.kx-premium-profile-nav[data-nav-type="competidor"]'),'Paleta Competidor');
+ok(css.includes('.kx-premium-profile-nav[data-nav-type="profesional"]'),'Paleta Profesional');
+ok(css.includes('prefers-reduced-motion'),'Preferencia de movimiento respetada');
+console.log(`KOMBAX FASE4 premium navigation: ${checks}/${checks} verificaciones OK`);

@@ -18,6 +18,7 @@ import { t } from '../i18n/index.js';
 import { languageSelectorHtml, bindLanguageSelectors } from '../i18n/ui.js';
 import { isAutoTranslatePublicEnabled, setAutoTranslatePublicEnabled } from '../i18n/user-content-translation.js';
 import { bindClubPosterActions } from './club-poster.js';
+import { requestPwaInstall } from './pwa-install.js';
 
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
 const nativeNotificationState=()=>{try{return String(window.UrbanWarriorsNative?.getNotificationPermissionState?.()||'web')}catch{return 'web'}};
@@ -128,7 +129,7 @@ export async function renderInstall(){
     <div class="grid-2">${card('Instalación rápida',`<div style="display:grid;place-items:center;padding:10px"><img src="./assets/install-qr.png" alt="QR de instalación KOMBAX" style="width:min(260px,80%);border-radius:18px;background:#fff;padding:10px"><p class="muted">Escanea el QR desde tu móvil para abrir KOMBAX y el portal de tu club.</p></div>`)}${card('Formación y recursos',resources.join(''))}</div>
     ${canPoster?card('Cartel de descarga del club',`<div class="kx-install-poster"><img src="./assets/docs/Cartel_Descarga_KOMBAX_Club.png" alt="Cartel genérico de descarga KOMBAX para clubes"><div><strong>Listo para personalizar con el acceso del club</strong><p class="muted">El diseño es genérico y no contiene el nombre de ningún club. El espacio de QR y el código escrito están preparados para el material de recepción.</p><div class="row-actions"><a class="btn btn-ghost" href="./assets/docs/Cartel_Descarga_KOMBAX_Club.png" target="_blank" rel="noopener noreferrer">${icon('qr',{size:16})} Ver cartel</a><button class="btn btn-ghost" type="button" data-club-poster-download>Descargar</button><button class="btn btn-primary" type="button" data-club-poster-print>Imprimir A4</button></div></div></div>`):''}`);
   bindClubPosterActions(document.getElementById('main-view')||document);
-  document.getElementById('install-pwa')?.addEventListener('click',async()=>{if(window.__uwInstallPrompt){window.__uwInstallPrompt.prompt();await window.__uwInstallPrompt.userChoice;window.__uwInstallPrompt=null;}else toast('En este dispositivo usa el menú del navegador → Instalar aplicación.','error');});
+  document.getElementById('install-pwa')?.addEventListener('click',()=>requestPwaInstall());
 }
 
 export async function renderDiagnostics(){

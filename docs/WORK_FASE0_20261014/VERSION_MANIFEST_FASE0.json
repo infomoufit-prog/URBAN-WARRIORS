@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-14",
+  "stage": "FASE0_AUDITADA",
+  "project": "KOMBAX",
+  "source_zip": "KOMBAX_20178_R120_FIX22.zip",
+  "source_sha256": "abff1789dc73845d00db088674749454401a813b3179cd5e933225f26735f985",
+  "source_number_of_files": 5731,
+  "phase0_source_changes": [],
+  "phase0_documents": [
+    "AUDITORIA_FASE0.md",
+    "INFORME_QA_FASE0.md",
+    "MIGRACIONES_APLICADAS_FASE0.md",
+    "README_FASE0.md",
+    "WORK_NEXT_TASK.md",
+    "WORK_PROGRESS.md"
+  ],
+  "internal_version": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "internal_build": 20178,
+  "release_package_label": "R120_FIX22",
+  "github_main_commit": "787c809aa8f0615a26bdb9f25afb8f8371602aba",
+  "supabase_live_migrations_count_at_audit": 509,
+  "supabase_zip_sql_migration_files": 459,
+  "netlify_site": "urban01",
+  "frontend_deployed": false,
+  "github_pushed": false,
+  "supabase_modified": false,
+  "meta_posted": false
+}

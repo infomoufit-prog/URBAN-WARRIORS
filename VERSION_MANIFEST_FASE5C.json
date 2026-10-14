@@ -1,0 +1,28 @@
+{
+  "producto": "KOMBAX",
+  "phase": "5C",
+  "base": "KOMBAX_20178_R120_FIX22_FASE5B_FEDERACION_META_EVENTS_FULL_CUMULATIVE.zip",
+  "base_sha256": "990b36f464436c7b9d87ad2fd104a373c99e6f2feb548f431234d4efe8470fc1",
+  "internal_version": "2.0.0-rc.13-r118-pilot-stabilization-2",
+  "internal_build": 20178,
+  "new_migrations": [
+    "kombax_event_ticket_categories_preflight_r269",
+    "kombax_event_ticket_preflight_json_guard_r269b",
+    "kombax_event_ticket_preflight_seller_guard_r269c"
+  ],
+  "tests": {
+    "F5C": 26,
+    "F5B": 40,
+    "Showcase": 28,
+    "navigation": 94,
+    "Meta_mock": 23,
+    "Meta_runtime_mock": 8
+  },
+  "deploy": {
+    "github_push": false,
+    "netlify": false,
+    "instagram_real_posts": false,
+    "stripe_real_purchases": false
+  },
+  "live_validation": "pending"
+}

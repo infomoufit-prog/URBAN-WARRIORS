@@ -1,6 +1,7 @@
 import { SupabaseClient, AuthExpiredError } from './supabase.js';
 import { state } from './state.js';
 import { clubSessionRole } from './club-session-role.js';
+import { resolveClubSpaceRole, chooseClubSpace, readClubSpacePreference, writeClubSpacePreference } from './club-workspaces.js';
 import { uuid, humanError, technicalError } from './utils.js';
 import { selectedClubSlug, selectClubSlug, clearSelectedClub } from './platform.js';
 import { invalidateCache } from './query-cache.js';
@@ -141,12 +142,20 @@ async function identityFromAuth(authUser,requestedSlug=''){
   if(requested&&!candidate)throw new Error('Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación.');
   if(candidate?.clubes?.slug)selectClubSlug(candidate.clubes.slug,candidate.clubes);
   const clubMemberships=memberships.filter(m=>m.club_id===candidate.club_id);
+  // A participant may also be a tutor without a separate 'familia' membership row.
+  // Read only the authenticated user's own or tutored relationships; no role is inserted.
+  const [ownProfiles,tutorLinks]=await Promise.all([
+    client.select('socios',`select=id&club_id=eq.${qs(candidate.club_id)}&perfil_id=eq.${qs(userId)}&limit=1`).catch(()=>[]),
+    client.select('tutores_socios',`select=id&club_id=eq.${qs(candidate.club_id)}&tutor_perfil_id=eq.${qs(userId)}&limit=1`).catch(()=>[])
+  ]);
+  const clubSpaceFacets=[...(ownProfiles?.length?['alumno']:[]),...(tutorLinks?.length?['familia']:[])];
   const clubRole=clubSessionRole(clubMemberships,candidate);
   const isCoordination=clubRole.coordinacion;
   const chosen=clubRole.chosen;
   const profiles=await client.select('perfiles',`select=*&id=eq.${qs(userId)}&limit=1`).catch(()=>[]);
   const profile=profiles?.[0]||{};
-  const effectiveRole=clubRole.rol;
+  // The saved choice is display-only, and is revalidated against current active memberships.
+  const effectiveRole=resolveClubSpaceRole({id:userId,club_id:candidate.club_id,rol:clubRole.rol,memberships,club_space_facets:clubSpaceFacets},readClubSpacePreference(userId,candidate.club_id));
   const effectiveRoles=clubRole.roles;
   const platform=await platformContext();
   const platformLegal=await platformLegalStatus();
@@ -154,7 +163,7 @@ async function identityFromAuth(authUser,requestedSlug=''){
   return {
     id:userId,email:authUser.email||'',nombre:profile.nombre||authUser.user_metadata?.nombre||authUser.email||'',
     apellidos:profile.apellidos||authUser.user_metadata?.apellidos||'',telefono:profile.telefono||authUser.user_metadata?.telefono||'',preferred_locale:profile.preferred_locale||'',avatar_path:profile.avatar_path||'',avatar_presentation:profile.avatar_presentation||{},
-    rol:effectiveRole,roles:effectiveRoles,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,
+    rol:effectiveRole,active_club_role:effectiveRole,roles:effectiveRoles,club_space_facets:clubSpaceFacets,club_id:chosen.club_id,club:chosen.clubes||null,coordinacion:isCoordination,
     memberships:memberships.map(m=>({club_id:m.club_id,rol:m.rol,coordinacion:m.coordinacion===true,club:m.clubes||null})),platform_admin:platform.authorized===true,platform_level:platform.nivel||null,
     platform_legal_required:platformLegal?.required!==false,platform_legal:platformLegal,
     birth_date_required:birthDate?.required===true,birth_date_age:birthDate?.age??null,birth_date_source:birthDate?.source||null
@@ -509,6 +518,17 @@ export const backend={
       if(authExpired)throw new AuthExpiredError();
       return null;
     }
+  },
+  async selectClubSpace(requestedRole){
+    // Selection never changes the actual authenticated Supabase identity or grants a role.
+    const next=chooseClubSpace(state.session,String(requestedRole||''));
+    const previous=state.session;
+    if(next.rol===previous.rol)return next;
+    invalidateCache(`${previous.club_id}:${previous.id}:`);
+    state.clearTenantState();
+    persistSession(next);
+    writeClubSpacePreference(next.id,next.club_id,next.rol);
+    return next;
   },
   async accountClubs(){
     if(!client.session?.access_token||!state.session?.id)throw new AuthExpiredError();

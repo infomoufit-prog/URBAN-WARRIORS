@@ -3,6 +3,7 @@ import { getLocale } from '../i18n/index.js';
 // Contrato histórico app_kombax_perfil_mutate_v043 · legacy cerrado desde 20.044; repositorio activo usa v072.
 // Compatibilidad estática 20.044: app_kombax_mis_perfiles_v072 · app_kombax_perfil_mutate_v072. R28 enruta perfil/mutación por v196.
 import { state } from './state.js';
+import { financeMemberFilter } from './finance-member-scope.js';
 import { isoDate, monthStart } from './utils.js';
 import { optimizeImage, prepareBrandLogo, prepareVideo } from './media.js';
 import { cached, cacheValue, peekCache, invalidateCache } from './query-cache.js';
@@ -482,8 +483,9 @@ export const repos={
   },
   finance:{
     historical:async(p,requestId)=>{const out=await backend.writeRpc('app_kombax_historical_finance_fix20',{p_club_id:session()?.club_id,p_payload:p,p_request_id:requestId});invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);return out;},
-    fees:(limit=120)=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), payments:(limit=120)=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), receipts:(limit=120)=>read('recibos_cuota',`select=*&${filterClub()}&order=periodo.desc,numero.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`),
-    account:(limit=180)=>read('v_estado_cuenta_socio',`select=*&${filterClub()}&order=periodo.desc&limit=${Math.min(600,Math.max(30,Number(limit)||180))}`),
+    voidFee:async(cuota_id,motivo,requestId)=>{const result=await backend.writeRpc('app_kombax_fee_void_r264',{p_club_id:session()?.club_id,p_cuota_id:cuota_id,p_reason:motivo,p_request_id:requestId});invalidateCache(`${session()?.club_id||'public'}:${session()?.id||'anonymous'}:`);return result;},
+    fees:(limit=120,{socioIds=null}={})=>read('cuotas',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=vencimiento.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), payments:(limit=120,{socioIds=null}={})=>read('pagos',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=fecha.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`), receipts:(limit=120,{socioIds=null}={})=>read('recibos_cuota',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=periodo.desc,numero.desc&limit=${Math.min(500,Math.max(20,Number(limit)||120))}`),
+    account:(limit=180,{socioIds=null}={})=>read('v_estado_cuenta_socio',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=periodo.desc&limit=${Math.min(600,Math.max(30,Number(limit)||180))}`),
     async years(){const rows=await read('v_finanzas_metricas_anuales',`select=anio&${filterClub()}&order=anio.desc&limit=50`);return rows.map(r=>({periodo:`${r.anio}-01-01`}));},
     detail:({year,month,socio,origin,status,limit=150}={})=>read('v_finanzas_detalle',`select=*&${filterClub()}${year?`&anio=eq.${enc(year)}`:''}${month?`&mes=eq.${enc(month)}`:''}${socio?`&socio_id=eq.${enc(socio)}`:''}${origin?`&origen=eq.${enc(origin)}`:''}${status?`&estado=eq.${enc(status)}`:''}&order=periodo.desc,vencimiento.desc&limit=${Math.min(600,Math.max(30,Number(limit)||150))}`),
     metricsMonthly:(year)=>read('v_finanzas_metricas_mensuales',`select=*&${filterClub()}${year?`&anio=eq.${enc(year)}`:''}&order=anio.desc,mes.asc&limit=240`),
@@ -543,7 +545,7 @@ export const repos={
     terminalCreateIntent:(payload={})=>backend.invokeFunction('stripe-terminal',{action:'create_intent',...payload,request_id:payload.request_id||crypto.randomUUID()},35000),
     terminalWebFallback:(payload={})=>backend.invokeFunction('stripe-terminal',{action:'web_fallback',...payload,request_id:payload.request_id||crypto.randomUUID()},35000),
     terminalSales:(subject_type,subject_id,limit=50)=>backend.globalReadRpc('app_stripe_terminal_sales_r81',{p_subject_type:subject_type,p_subject_id:subject_id,p_limit:Math.min(200,Math.max(1,Number(limit)||50))}),
-    checkout:(kind,reference_id,quantity=1)=>backend.invokeFunction('stripe-checkout',{kind,reference_id,quantity,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
+    checkout:(kind,reference_id,quantity=1,options={})=>backend.invokeFunction('stripe-checkout',{kind,reference_id,quantity,...(kind==='event_ticket'&&options?.ticket_category_id?{ticket_category_id:String(options.ticket_category_id)}:{}),user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
     checkoutCart:(items)=>backend.invokeFunction('stripe-checkout',{kind:'showcase_cart',items:(Array.isArray(items)?items:[]).map(x=>({product_id:x.product_id,quantity:Number(x.quantity||1),variant:x.variant||null})),user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},35000),
     refund:(payload={})=>backend.invokeFunction('stripe-refund',{action:'single',...payload,user_locale:payload.user_locale||getLocale(),request_id:payload.request_id||crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},45000),
     refundEventBatch:(event_id,reason='')=>backend.invokeFunction('stripe-refund',{action:'event_batch',event_id,reason,user_locale:getLocale(),request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`},90000),
@@ -684,18 +686,27 @@ export const repos={
     }
   },
   portal:{
-    visibleMembers:()=>read('socios',`select=*&${filterClub()}&order=apellidos,nombre&limit=200`),
-    enrollments:()=>read('socio_disciplinas',`select=*&${filterClub()}&order=fecha_inicio.desc&limit=400`),
-    graduations:()=>read('graduaciones',`select=*&${filterClub()}&order=fecha.desc&limit=200`),
+    async visibleMembers(){
+      const current=session();if(!current?.id||!current?.club_id)return [];
+      const [own,links]=await Promise.all([
+        read('socios',`select=*&${filterClub()}&perfil_id=eq.${enc(current.id)}&order=apellidos,nombre&limit=50`),
+        read('tutores_socios',`select=socio_id&${filterClub()}&tutor_perfil_id=eq.${enc(current.id)}&limit=200`)
+      ]);
+      const ids=[...new Set((links||[]).map(row=>row.socio_id).filter(Boolean))];
+      const tutored=ids.length?await read('socios',`select=*&${filterClub()}&id=in.(${ids.map(enc).join(',')})&order=apellidos,nombre&limit=200`):[];
+      return [...new Map([...(own||[]),...(tutored||[])].map(row=>[String(row.id),row])).values()];
+    },
+    enrollments:({socioIds=null}={})=>read('socio_disciplinas',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=fecha_inicio.desc&limit=400`),
+    graduations:({socioIds=null}={})=>read('graduaciones',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=fecha.desc&limit=200`),
     schedules:()=>read('horarios_grupo',`select=*&${filterClub()}&order=dia_semana,hora_inicio`),
     sessions:()=>read('sesiones_entrenamiento',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=fecha.desc,hora_inicio.desc&limit=180`),
-    reservations:()=>read('reservas_sesion',`select=*&${filterClub()}&order=creado_en.desc&limit=400`),
-    attendance:()=>read('asistencias',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=registrado_en.desc&limit=400`),
-    tracking:()=>read('seguimiento',`select=*&${filterClub()}&ciclo_estado=eq.activo&order=fecha.desc,creado_en.desc&limit=200`),
-    documents:()=>read('documentos_socios',`select=*&${filterClub()}&ciclo_estado=eq.activo&visible_familia=eq.true&order=creado_en.desc&limit=150`),
-    fees:()=>read('cuotas',`select=*&${filterClub()}&order=vencimiento.desc&limit=180`),
-    payments:()=>read('pagos',`select=*&${filterClub()}&order=fecha.desc&limit=180`),
-    receipts:()=>read('recibos_cuota',`select=*&${filterClub()}&order=periodo.desc,numero.desc&limit=180`),
+    reservations:({socioIds=null}={})=>read('reservas_sesion',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=creado_en.desc&limit=400`),
+    attendance:({socioIds=null}={})=>read('asistencias',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&ciclo_estado=eq.activo&order=registrado_en.desc&limit=400`),
+    tracking:({socioIds=null}={})=>read('seguimiento',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&ciclo_estado=eq.activo&order=fecha.desc,creado_en.desc&limit=200`),
+    documents:({socioIds=null}={})=>read('documentos_socios',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&ciclo_estado=eq.activo&visible_familia=eq.true&order=creado_en.desc&limit=150`),
+    fees:({socioIds=null}={})=>read('cuotas',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=vencimiento.desc&limit=180`),
+    payments:({socioIds=null}={})=>read('pagos',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=fecha.desc&limit=180`),
+    receipts:({socioIds=null}={})=>read('recibos_cuota',`select=*&${filterClub()}${financeMemberFilter(socioIds)}&order=periodo.desc,numero.desc&limit=180`),
     communications:()=>read('comunicaciones',`select=*&${filterClub()}&ciclo_estado=eq.activo&estado=in.(publicada,programada)&order=publicada_en.desc,creado_en.desc&limit=200`),
     notifications:()=>notificationList(300),
     requestMinor:(p)=>mutation('preinscripcion.crear',{tipo_solicitud:'menor',nombre:p.nombre,apellidos:p.apellidos,fecha_nacimiento:p.fecha_nacimiento||null,tutor_nombre:p.tutor_nombre||'',tutor_email:p.tutor_email||'',telefono:p.telefono||'',disciplina_id:p.disciplina_id||null,grupo_id:p.grupo_id||null,tarifa_id:p.tarifa_id||null,parentesco:p.parentesco||null,observaciones:p.observaciones||null}),
@@ -847,6 +858,16 @@ export const repos={
     reputationReport:(target_type,target_id,reason,detail='')=>backend.globalWriteRpc('app_kombax_reputation_report_r72',{p_target_type:target_type,p_target_id:target_id,p_reason:String(reason||''),p_detail:String(detail||'')}),
     invitations:()=>session()?.club_id?backend.globalReadRpc('app_kombax_eventos_invitaciones_contexto_v172',{p_club_id:session().club_id}):backend.globalReadRpc('app_kombax_eventos_invitaciones_v160',{}),
     ticketingPublic:(event_ids=[])=>backend.publicRpc('app_kombax_event_ticketing_public_r625',{p_event_ids:event_ids}),
+    ticketCategoriesPublic:(event_id)=>backend.publicRpc('app_kombax_event_ticket_categories_public_r266',{p_event_id:event_id}),
+    ticketCategoriesManage:(event_id)=>backend.globalReadRpc('app_kombax_event_ticket_categories_r265',{p_event_id:event_id}),
+    ticketCategoryPreflight:(event_id)=>backend.globalReadRpc('app_kombax_event_ticket_categories_preflight_r269',{p_event_id:event_id}),
+    ticketCategorySave:(event_id,values={})=>backend.globalWriteRpc('app_kombax_event_ticket_category_save_r265',{
+      p_event_id:event_id,p_category_id:values.id||null,p_label:values.label,p_description:values.description||'',
+      p_price_minor:values.unit_price_minor,p_capacity:values.capacity,p_color:values.color||'cyan',
+      p_entry_point:values.entry_point||'',p_instructions:values.instructions||'',p_active:values.is_active!==false,
+      p_request_id:crypto.randomUUID()
+    }),
+
     ticketingManageStatus:(event_id)=>backend.globalReadRpc('app_kombax_event_ticketing_manage_status_r6253',{p_event_id:event_id}),
     ticketingSave:(event_id,payload={})=>backend.globalWriteRpc('app_kombax_event_ticketing_mutate_r6253',{p_event_id:event_id,p_payload:payload,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
     ticketingServiceRequest:(event_id)=>backend.globalWriteRpc('app_kombax_event_ticketing_service_request_r628',{p_event_id:event_id,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
