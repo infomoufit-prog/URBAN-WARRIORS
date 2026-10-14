@@ -1,0 +1,16 @@
+{
+  "passed": 10,
+  "checks": [
+    "390: default member selected",
+    "390: current request button",
+    "390: no invitation code required",
+    "390: no horizontal overflow",
+    "390: correct club and family intent submitted",
+    "1280: default member selected",
+    "1280: current request button",
+    "1280: no invitation code required",
+    "1280: no horizontal overflow",
+    "1280: correct club and family intent submitted"
+  ],
+  "transport": "mocked; no real accounts, requests or payments"
+}

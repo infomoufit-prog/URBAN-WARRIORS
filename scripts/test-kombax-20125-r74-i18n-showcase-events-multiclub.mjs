@@ -50,7 +50,7 @@ ok(!/11111111-1111-4111-8111-111111111111/.test(m261)&&!/urban.?warriors/i.test(
 ok(/listForPublic:[\s\S]*app_kombax_event_connections_for_public_v261/.test(repos)&&/participants:[\s\S]*app_kombax_event_connection_participants_v261/.test(repos),'repositorio expone gestión pública y participantes autorizados');
 ok(/openPublicEventConnectionManager/.test(kxEvents)&&/events\.actions\.clubConnections/.test(kxEvents),'Centro del Evento expone conexiones de clubes al organizador');
 ok(/authorization\.set/.test(connections)&&/participants\.sync/.test(connections)&&/publicOrganizerRule/.test(connections),'UI exige autorización y sincronización explícita');
-ok(/has\(session,'eventManage'\)/.test(app),'Mis eventos usa permiso canónico, no lista de roles hardcodeada');
+ok(/const canManagePrivateEvents=.*session\?\.club_id.*has\(\{\.\.\.session,roles:\[session\.rol\]\},'eventManage'\)/.test(app)&&app.includes('if(canManagePrivateEvents(session))'),'Mis eventos usa permiso canónico para el rol seleccionado del club');
 ok(/admin\.roles\.direction/.test(perms)&&/admin\.roles\.coordination/.test(perms),'etiquetas de rol salen de i18n');
 ok(!/Pasar asistencia|Gestor de la app · Panel global|Todo el gimnasio, en una sola app\.|pendientes de revisar|Sin monitor asignado|Sin grupos activos|Sin sesiones próximas/.test(dash),'dashboard ya no contiene los textos españoles detectados');
 ok(/idx_event_connections_requested_by_v261/.test(m263)&&/idx_event_connections_authorized_by_v261/.test(m263)&&/idx_event_connection_participant_internal_v261/.test(m263)&&/idx_event_connection_participant_shared_by_v261/.test(m263),'hardening cubre FKs nuevas de R74');

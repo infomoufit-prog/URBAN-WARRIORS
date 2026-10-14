@@ -20,7 +20,7 @@ const demoFixtureExact=new Set([
 ]);
 const codeFragment=/(?:\$\{\[|\.includes\(context\.|=>|===|!==|\?\.|&&|\|\||\.dataset\b|filters\.|entity_type|entity_id|stateTarget|\breturn\b|\bthrow Error\b|\bexport\b|\bfunction\b|\bconst\b|\blet\b|\bif\s*\(|\btry\s*\{|\bcatch\s*\(|\$\{badge|openShowcaseCommercialPlans|pageHeader\(|setMainHtml\(|humanError\()/;
 const technicalKey=/^[a-z][a-z0-9_-]*(?:\.[a-z0-9_-]+){1,}$/i;
-function shouldSkipAudit(value){return likelyTechnical.test(value)||userFixture.test(value)||demoFixtureExact.has(value)||codeFragment.test(value)||technicalKey.test(value)||/^[^\s]+@kombax\.es$/i.test(value)||/\.(?:nombre|fecha)\b/.test(value)||/^String\(/.test(value)||/^\.[a-z0-9_-]+[,[]/i.test(value)||/\[aria-label=/.test(value);}
+function shouldSkipAudit(value){return /^\[data-[a-z0-9_-]+\]$/i.test(value)||/^,(?:alumno|role)\s*[:=]$/.test(value)||/registerGlobalAccount\(\{email,password,nombre=/.test(value)||/fields:\[\{name:$/.test(value)||/^\{VAR\}\)\}\s/.test(value)||likelyTechnical.test(value)||userFixture.test(value)||demoFixtureExact.has(value)||codeFragment.test(value)||technicalKey.test(value)||/^[^\s]+@kombax\.es$/i.test(value)||/\.(?:nombre|fecha)\b/.test(value)||/^String\(/.test(value)||/^\.[a-z0-9_-]+[,[]/i.test(value)||/\[aria-label=/.test(value);}
 function probeValue(value){return String(value).replace(/^(?:\{VAR\}\)\}\s*)+/,'').replace(/\{VAR\}/g,'2');}
 function extract(file){
  const txt=fs.readFileSync(path.join(root,file),'utf8');const out=[];

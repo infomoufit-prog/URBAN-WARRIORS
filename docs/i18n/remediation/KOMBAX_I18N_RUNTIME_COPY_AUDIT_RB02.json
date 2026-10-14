@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T21:25:17.447Z",
+  "generated_at": "2026-10-14T21:25:33.309Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -9,14 +9,18 @@
     "web/js/core/backend.js",
     "web/js/core/capability-resolver.js",
     "web/js/core/club-session-role.js",
+    "web/js/core/club-workspaces.js",
     "web/js/core/commercial-pricing.js",
     "web/js/core/content-visibility.js",
     "web/js/core/context-isolation-20083.js",
     "web/js/core/demo-directory.js",
     "web/js/core/demo-showcase.js",
     "web/js/core/finance-adapter.js",
+    "web/js/core/finance-corrections.js",
     "web/js/core/finance-math.js",
+    "web/js/core/finance-member-scope.js",
     "web/js/core/identity-context.js",
+    "web/js/core/internal-club-license.js",
     "web/js/core/invitations.js",
     "web/js/core/media.js",
     "web/js/core/member-enrollment.js",
@@ -96,6 +100,7 @@
     "web/js/modules/profile-operations.js",
     "web/js/modules/profile-team.js",
     "web/js/modules/public-profile.js",
+    "web/js/modules/pwa-install.js",
     "web/js/modules/resource-center.js",
     "web/js/modules/showcase-cart.js",
     "web/js/modules/showcase-compliance.js",
@@ -114,20 +119,21 @@
     "web/js/ui/components.js",
     "web/js/ui/conversation-ui.js",
     "web/js/ui/icons.js",
+    "web/js/ui/managed-profile-navigation.js",
     "web/js/ui/media-framing.js",
     "web/js/ui/member-enrollment-picker.js",
     "web/js/ui/personal-navigation.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5159,
-  "covered": 4900,
-  "unresolved": 259,
-  "coverage": 94.98,
-  "skipped": 403,
+  "phrases": 5120,
+  "covered": 4862,
+  "unresolved": 258,
+  "coverage": 94.96,
+  "skipped": 472,
   "files": {
     "web/js/app.js": {
-      "total": 126,
-      "covered": 126,
+      "total": 127,
+      "covered": 127,
       "skipped": 7,
       "coverage": 100
     },
@@ -156,10 +162,10 @@
       "coverage": 100
     },
     "web/js/core/backend.js": {
-      "total": 49,
-      "covered": 48,
+      "total": 6,
+      "covered": 5,
       "skipped": 5,
-      "coverage": 97.96
+      "coverage": 83.33
     },
     "web/js/core/capability-resolver.js": {
       "total": 0,
@@ -171,6 +177,12 @@
       "total": 0,
       "covered": 0,
       "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/club-workspaces.js": {
+      "total": 8,
+      "covered": 8,
+      "skipped": 1,
       "coverage": 100
     },
     "web/js/core/commercial-pricing.js": {
@@ -209,9 +221,21 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/core/finance-corrections.js": {
+      "total": 1,
+      "covered": 1,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/core/finance-math.js": {
       "total": 0,
       "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/finance-member-scope.js": {
+      "total": 2,
+      "covered": 2,
       "skipped": 0,
       "coverage": 100
     },
@@ -219,6 +243,12 @@
       "total": 5,
       "covered": 5,
       "skipped": 2,
+      "coverage": 100
+    },
+    "web/js/core/internal-club-license.js": {
+      "total": 2,
+      "covered": 2,
+      "skipped": 0,
       "coverage": 100
     },
     "web/js/core/invitations.js": {
@@ -248,7 +278,7 @@
     "web/js/core/permissions.js": {
       "total": 0,
       "covered": 0,
-      "skipped": 0,
+      "skipped": 1,
       "coverage": 100
     },
     "web/js/core/personal-space.js": {
@@ -348,10 +378,10 @@
       "coverage": 100
     },
     "web/js/modules/admin.js": {
-      "total": 169,
-      "covered": 166,
-      "skipped": 6,
-      "coverage": 98.22
+      "total": 167,
+      "covered": 165,
+      "skipped": 7,
+      "coverage": 98.8
     },
     "web/js/modules/auth-recovery.js": {
       "total": 18,
@@ -384,21 +414,21 @@
       "coverage": 0
     },
     "web/js/modules/club-profile.js": {
-      "total": 57,
-      "covered": 56,
-      "skipped": 0,
-      "coverage": 98.25
+      "total": 54,
+      "covered": 53,
+      "skipped": 3,
+      "coverage": 98.15
     },
     "web/js/modules/comms-material.js": {
       "total": 88,
       "covered": 87,
-      "skipped": 11,
+      "skipped": 17,
       "coverage": 98.86
     },
     "web/js/modules/community.js": {
-      "total": 77,
-      "covered": 77,
-      "skipped": 1,
+      "total": 74,
+      "covered": 74,
+      "skipped": 4,
       "coverage": 100
     },
     "web/js/modules/competition-preparation.js": {
@@ -432,9 +462,9 @@
       "coverage": 100
     },
     "web/js/modules/documents.js": {
-      "total": 40,
-      "covered": 40,
-      "skipped": 5,
+      "total": 38,
+      "covered": 38,
+      "skipped": 7,
       "coverage": 100
     },
     "web/js/modules/event-connections.js": {
@@ -444,9 +474,9 @@
       "coverage": 100
     },
     "web/js/modules/events.js": {
-      "total": 80,
-      "covered": 80,
-      "skipped": 17,
+      "total": 77,
+      "covered": 77,
+      "skipped": 20,
       "coverage": 100
     },
     "web/js/modules/federation-hub.js": {
@@ -456,8 +486,8 @@
       "coverage": 100
     },
     "web/js/modules/federation-licenses.js": {
-      "total": 99,
-      "covered": 99,
+      "total": 46,
+      "covered": 46,
       "skipped": 1,
       "coverage": 100
     },
@@ -474,10 +504,10 @@
       "coverage": 100
     },
     "web/js/modules/finance-guide.js": {
-      "total": 7,
-      "covered": 2,
-      "skipped": 0,
-      "coverage": 28.57
+      "total": 5,
+      "covered": 0,
+      "skipped": 2,
+      "coverage": 0
     },
     "web/js/modules/finance-premium-bootstrap.js": {
       "total": 3,
@@ -492,21 +522,21 @@
       "coverage": 100
     },
     "web/js/modules/finance.js": {
-      "total": 71,
-      "covered": 71,
+      "total": 79,
+      "covered": 79,
       "skipped": 9,
       "coverage": 100
     },
     "web/js/modules/gateway.js": {
-      "total": 279,
-      "covered": 255,
+      "total": 287,
+      "covered": 263,
       "skipped": 7,
-      "coverage": 91.4
+      "coverage": 91.64
     },
     "web/js/modules/groups-members.js": {
-      "total": 184,
-      "covered": 184,
-      "skipped": 11,
+      "total": 182,
+      "covered": 182,
+      "skipped": 13,
       "coverage": 100
     },
     "web/js/modules/guides.js": {
@@ -516,20 +546,20 @@
       "coverage": 0
     },
     "web/js/modules/help-legal.js": {
-      "total": 326,
-      "covered": 325,
-      "skipped": 2,
+      "total": 324,
+      "covered": 323,
+      "skipped": 4,
       "coverage": 99.69
     },
     "web/js/modules/historical-finance.js": {
-      "total": 8,
-      "covered": 8,
+      "total": 9,
+      "covered": 9,
       "skipped": 2,
       "coverage": 100
     },
     "web/js/modules/instagram-integration.js": {
-      "total": 21,
-      "covered": 21,
+      "total": 14,
+      "covered": 14,
       "skipped": 0,
       "coverage": 100
     },
@@ -546,21 +576,21 @@
       "coverage": 100
     },
     "web/js/modules/kombax-events.js": {
-      "total": 816,
-      "covered": 816,
-      "skipped": 49,
+      "total": 844,
+      "covered": 844,
+      "skipped": 68,
       "coverage": 100
     },
     "web/js/modules/kombax-home.js": {
-      "total": 3,
-      "covered": 3,
-      "skipped": 0,
+      "total": 2,
+      "covered": 2,
+      "skipped": 1,
       "coverage": 100
     },
     "web/js/modules/kombax-social.js": {
-      "total": 263,
-      "covered": 262,
-      "skipped": 5,
+      "total": 262,
+      "covered": 261,
+      "skipped": 14,
       "coverage": 99.62
     },
     "web/js/modules/lifecycle.js": {
@@ -570,16 +600,16 @@
       "coverage": 100
     },
     "web/js/modules/managed-profile-hub.js": {
-      "total": 53,
-      "covered": 43,
+      "total": 51,
+      "covered": 41,
       "skipped": 3,
-      "coverage": 81.13
+      "coverage": 80.39
     },
     "web/js/modules/media-content-center.js": {
-      "total": 19,
-      "covered": 8,
-      "skipped": 0,
-      "coverage": 42.11
+      "total": 17,
+      "covered": 6,
+      "skipped": 2,
+      "coverage": 35.29
     },
     "web/js/modules/moderation-notices.js": {
       "total": 0,
@@ -630,9 +660,9 @@
       "coverage": 100
     },
     "web/js/modules/portal.js": {
-      "total": 107,
-      "covered": 107,
-      "skipped": 9,
+      "total": 105,
+      "covered": 105,
+      "skipped": 11,
       "coverage": 100
     },
     "web/js/modules/private-training.js": {
@@ -695,6 +725,12 @@
       "skipped": 10,
       "coverage": 95.7
     },
+    "web/js/modules/pwa-install.js": {
+      "total": 18,
+      "covered": 18,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/modules/resource-center.js": {
       "total": 0,
       "covered": 0,
@@ -714,10 +750,10 @@
       "coverage": 100
     },
     "web/js/modules/showcase.js": {
-      "total": 332,
-      "covered": 328,
-      "skipped": 10,
-      "coverage": 98.8
+      "total": 340,
+      "covered": 336,
+      "skipped": 16,
+      "coverage": 98.82
     },
     "web/js/modules/social-network.js": {
       "total": 0,
@@ -726,9 +762,9 @@
       "coverage": 100
     },
     "web/js/modules/social-post-management.js": {
-      "total": 14,
-      "covered": 14,
-      "skipped": 1,
+      "total": 13,
+      "covered": 13,
+      "skipped": 2,
       "coverage": 100
     },
     "web/js/modules/spectator-hub.js": {
@@ -744,9 +780,9 @@
       "coverage": 100
     },
     "web/js/modules/support-privacy.js": {
-      "total": 40,
-      "covered": 40,
-      "skipped": 1,
+      "total": 39,
+      "covered": 39,
+      "skipped": 2,
       "coverage": 100
     },
     "web/js/modules/training.js": {
@@ -786,9 +822,9 @@
       "coverage": 100
     },
     "web/js/ui/components.js": {
-      "total": 7,
-      "covered": 7,
-      "skipped": 3,
+      "total": 5,
+      "covered": 5,
+      "skipped": 5,
       "coverage": 100
     },
     "web/js/ui/conversation-ui.js": {
@@ -800,6 +836,12 @@
     "web/js/ui/icons.js": {
       "total": 0,
       "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/managed-profile-navigation.js": {
+      "total": 10,
+      "covered": 10,
       "skipped": 0,
       "coverage": 100
     },
@@ -868,10 +910,6 @@
     {
       "file": "web/js/modules/admin.js",
       "value": "Cambiar logo en perfil público"
-    },
-    {
-      "file": "web/js/modules/admin.js",
-      "value": "{VAR})} Ver cartel"
     },
     {
       "file": "web/js/modules/admin.js",

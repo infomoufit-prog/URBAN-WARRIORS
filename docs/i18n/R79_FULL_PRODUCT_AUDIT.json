@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-07T21:25:11.716Z",
-  "candidates": 5296,
-  "covered_r79": 546,
-  "covered_r78": 1217,
-  "covered_legacy_all7": 3256,
-  "unresolved": 277,
+  "generated_at": "2026-10-14T21:25:30.520Z",
+  "candidates": 5320,
+  "covered_r79": 541,
+  "covered_r78": 1215,
+  "covered_legacy_all7": 3289,
+  "unresolved": 275,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 64,
-    "web/js/modules/gateway.js": 31,
     "web/js/modules/plan-services.js": 31,
+    "web/js/modules/gateway.js": 30,
     "web/js/modules/professional-operations.js": 21,
     "web/js/modules/media-content-center.js": 12,
     "web/js/modules/managed-profile-hub.js": 10,
@@ -18,9 +18,9 @@
     "web/js/core/utils.js": 4,
     "web/js/modules/admin.js": 4,
     "web/js/modules/showcase.js": 4,
-    "web/js/core/backend.js": 3,
     "web/js/modules/club-poster.js": 3,
     "web/js/modules/public-profile.js": 3,
+    "web/js/core/backend.js": 2,
     "web/js/modules/club-profile.js": 2,
     "web/js/core/media.js": 1,
     "web/js/modules/comms-material.js": 1,
@@ -47,18 +47,6 @@
       "value": "Esta cuenta no está vinculada a este club. Vuelve a KOMBAX para localizar tu club o solicita la vinculación.",
       "missing": [
         "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/core/backend.js",
-      "value": "Solicitud enviada al club. Tu acceso está pendiente de aprobación.",
-      "missing": [
         "fr",
         "pt",
         "it",
@@ -1279,18 +1267,6 @@
       "value": "Solicitar vinculación",
       "missing": [
         "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/gateway.js",
-      "value": "Solicitud enviada al club para su revisión.",
-      "missing": [
         "fr",
         "pt",
         "it",

@@ -22,7 +22,14 @@ ok(m305.includes('app_kombax_club_link_request_r117')&&m305.includes('app_kombax
 ok(m305.includes('app_kombax_social_network_actor_allowed_v255')&&m305.includes('app_kombax_social_mis_perfiles_r117'),'Elite Social network actor independent of feed publish');
 ok(m306.includes('Universal basic Elite Social public profiles')&&m306.includes("d.tipo in ('marca','federacion','media')")&&m306.includes('KOMBAX_SPECTATOR_ALBUM_DISABLED')===false,'universal basic Elite Social visibility keeps spectator album rule in prior guard');
 ok(repos.includes('app_kombax_club_link_request_r117')&&repos.includes('resolveClubLink'),'frontend repositories linking');
-ok(gateway.includes("value:'family'")&&gateway.includes('Solicitar autorización'),'member/family no-code request UX');
+// R270 renamed the request action and supports member + family access on one account.
+// Verify the no-code request contract rather than a superseded button label.
+ok(gateway.includes("value:'member'")&&gateway.includes("value:'family'")
+  &&gateway.includes("name:'request_kind'")
+  &&gateway.includes("submitText:'Enviar solicitud al club'")
+  &&gateway.includes('repos.kombaxMemberships.contactClub(clubId,values.mensaje,kind)')
+  &&gateway.includes('No necesitas código. El club revisará tu solicitud'),
+  'member/family no-code request UX');
 ok(members.includes('Autorizar miembro')&&members.includes('Autorizar acceso familiar'),'club approval UX');
 ok(social.includes('publication_enabled')&&social.includes('publishProfiles'),'read/network profiles do not become feed publishers');
 ok(gateway.includes("name:'fecha_nacimiento'")&&gateway.includes('fecha_nacimiento:v.fecha_nacimiento')&&repos.includes('activateMember:({fecha_nacimiento=null')&&repos.includes('fecha_nacimiento:fecha_nacimiento||null'),'private DOB age gate for member chat');
