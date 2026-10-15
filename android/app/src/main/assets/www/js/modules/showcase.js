@@ -1,3 +1,4 @@
+import {productViewToolbar,bindProductView} from '../ui/product-catalog-view.js';
 import {openProductCompliance} from './showcase-compliance.js';
 import { getLocale as kxGetLocale, t } from '../i18n/index.js';
 import { localeTag as kxLocaleTag } from '../i18n/formatters.js';
@@ -323,7 +324,8 @@ function bindCatalog(){
 
 function renderCatalog(){
   const headActions=`<div class="row-actions">${hasPrivateClubShowcaseRoute()?'<button type="button" class="btn btn-showcase" id="showcase-manage">'+icon('shoppingBag',{size:17})+' Mi Showcase</button>':''}<button type="button" class="btn btn-showcase" id="showcase-cart">${cartBadgeHtml()}</button><button type="button" class="btn btn-ghost" id="showcase-orders">Mis pedidos</button><button type="button" class="btn btn-ghost" id="showcase-inquiries">${icon('message',{size:16})} Mis consultas</button><button type="button" class="btn btn-ghost" id="showcase-saved">${icon('bookmark',{size:17})} Guardados</button></div>`;
-  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader(t('showcase.page.title'),t('showcase.page.subtitle'),headActions,'KOMBAX Showcase')}${clubFoundersPromo()}${controls()}${items.length?`<div class="showcase-grid">${items.map(cardHtml).join('')}</div>${done?'':`<button class="btn btn-ghost showcase-more" id="showcase-more">${t('showcase.actions.loadMore')}</button>`}`:empty(t('showcase.empty.catalogTitle'),t('showcase.empty.catalogBody'))}</div>`);bindCatalog();
+  setMainHtml(`<div class="kombax-showcase-page">${showcaseBrand()}${pageHeader(t('showcase.page.title'),t('showcase.page.subtitle'),headActions,'KOMBAX Showcase')}${clubFoundersPromo()}${controls()}${productViewToolbar('showcase',state.session)}${items.length?`<div class="showcase-grid" data-catalog-area="showcase">${items.map(cardHtml).join('')}</div>${done?'':`<button class="btn btn-ghost showcase-more" id="showcase-more">${t('showcase.actions.loadMore')}</button>`}`:empty(t('showcase.empty.catalogTitle'),t('showcase.empty.catalogBody'))}</div>`);bindCatalog();
+  bindProductView('showcase',state.session);
   if(state.session)items.forEach(item=>repos.kombaxShowcase.track('product_impression',{provider_id:item?.marca_id||null,product_id:item?.id||null,source:'showcase_catalog'}).catch(()=>{}));
 }
 

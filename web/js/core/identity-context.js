@@ -1,10 +1,11 @@
 import { backend } from './backend.js';
 import { state } from './state.js';
+import {resolveIdentity} from './social-identity-resolution.js';
 
 const STORAGE_PREFIX='kombax_active_identity';
 export const identityTypeLabel={club:'Club',miembro:'Miembro',competidor:'Competidor',marca:'Marca',federacion:'Federación',profesional:'Profesional / Representante',media:'Media / Creador',espectador:'Espectador'};
 
-function key(){return `${STORAGE_PREFIX}:${state.session?.id||'guest'}:${state.session?.club_id||'global'}`;}
+function key(){return `${STORAGE_PREFIX}:${state.session?.id||'guest'}:${state.session?.club_id||'global'}:${state.session?.rol||'global'}`;}
 export function resolveIdentityMedia(identity,kind='avatar'){
   const url=kind==='banner'?identity?.banner_url:identity?.avatar_url;
   const path=kind==='banner'?identity?.banner_path:identity?.avatar_path;
@@ -12,6 +13,7 @@ export function resolveIdentityMedia(identity,kind='avatar'){
 }
 export function identityLabel(identity){
   if(!identity)return 'Identidad KOMBAX';
+  if(identity.is_personal===true){const types=identity.facet_types||[identity.perfil_tipo||identity.sujeto_tipo];return `${identity.nombre_publico||'Perfil'} · ${types.map(x=>identityTypeLabel[x]||x).join(' / ')}`;}
   if(identity.identity_label)return identity.identity_label;
   const type=identity.perfil_tipo||identity.sujeto_tipo;
   if(type==='miembro')return `${identity.nombre_publico||'Miembro'}${identity.club_nombre?` · Miembro de ${identity.club_nombre}`:' · Miembro'}`;
@@ -19,15 +21,8 @@ export function identityLabel(identity){
   return `${identity.nombre_publico||'Perfil'} · ${identityTypeLabel[type]||type||'KOMBAX'}`;
 }
 export function chooseDefaultIdentity(profiles=[]){
-  if(!profiles.length)return null;
-  const stored=localStorage.getItem(key());
-  const saved=profiles.find(p=>String(p.id)===String(stored));
-  if(saved)return saved;
-  if(state.session?.club_id&&['direccion','coordinacion'].includes(state.session?.rol)){
-    const club=profiles.find(p=>p.sujeto_tipo==='club'&&String(p.club_id)===String(state.session.club_id));
-    if(club)return club;
-  }
-  return profiles[0];
+  let storedId='';try{storedId=localStorage.getItem(key())||'';}catch{}
+  return resolveIdentity(profiles,{storedId,clubId:state.session?.club_id,role:state.session?.rol});
 }
 export function setActiveIdentity(id){if(id)localStorage.setItem(key(),String(id));else localStorage.removeItem(key());if(typeof window!=='undefined')window.dispatchEvent(new CustomEvent('kombax-identity-changed',{detail:{id:id||null}}));}
 export function getActiveIdentity(profiles=[]){return chooseDefaultIdentity(profiles);}

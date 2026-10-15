@@ -195,3 +195,8 @@
   .kx-discovery-slot-list article{align-items:flex-start;flex-direction:column}
 }
 @media(prefers-reduced-motion:reduce){.kx-discovery-card,.kx-discovery-filters input,.kx-discovery-filters select{transition:none!important}.kx-discovery-card:hover{transform:none}}
+.kx-identity-context{max-width:100%;min-width:0;flex-wrap:wrap}
+.kx-identity-context>div,.kx-identity-context>label{min-width:0;max-width:100%}
+.kx-identity-context div{min-width:0;max-width:100%}
+.kx-identity-context strong{display:block;white-space:normal;overflow-wrap:anywhere;max-width:100%}
+.kx-identity-context select{min-width:0;width:100%;max-width:100%;box-sizing:border-box}

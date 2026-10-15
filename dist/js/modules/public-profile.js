@@ -131,13 +131,14 @@ function profileArticle(p,{usage=null}={}){
     <div class="kx-public-profile-hero">${banner?`<img class="kx-public-banner" src="${esc(banner)}" alt="" style="${esc(bannerPositionStyle(p))}">`:'<div class="kx-public-banner fallback"></div>'}${verification==='competitor'?`<span class="kx-competitor-hero-badge" aria-label="${esc(t('profile.public.verifiedBy',{type:identityTypeLabel[type]||type}))}">${icon('shieldCheck',{size:17})}<span>${esc(t('profile.public.verifiedBy',{type:identityTypeLabel[type]||type}))}</span></span>`:''}${p.own?`<button type="button" class="kx-profile-manage-trigger" id="kx-public-manage-profile" aria-label="${esc(t('profile.public.manageProfile'))}">${icon('settings',{size:17})}<span>${t('profile.public.manage')}</span></button>`:''}<div class="kx-public-avatar">${avatar(p)}</div></div>
     <div class="kx-public-title"><div><span class="page-kicker">${esc(identityTypeLabel[type]||type||'KOMBAX')}</span><h3>${esc(p.nombre_publico)}</h3>${verification==='organization'?`<span class="kx-organization-verified">${icon('shieldCheck',{size:15})}${esc(t('profile.public.verifiedBy',{type:identityTypeLabel[type]||type}))}</span>`:''}${p.bio?`<p ${contentTranslationAttrs({contentId:p.id,contentType:'public_profile_bio',fieldName:'bio',sourceLocale:p.source_locale||p.idioma||'',visibility:'public'})}>${esc(p.bio)}</p>`:''}</div></div>
     ${core(p)}
+    ${p.member_variant&&type!=='miembro'?core({...p.member_variant,album:p.album}):''}
     ${personFacetsSection(p)}
     ${type==='marca'?`<section><h4>${t('profile.public.brandAndCollaborations')}</h4>${brandBusinessPublic(p)}</section>`:''}
-    ${type==='miembro'?`<section><h4>${t('profile.public.sportsInformation')}</h4>${sportsFacts(p)}</section>`:''}
-    ${['competidor','profesional'].includes(type)?`<section><h4>${t('profile.public.availabilityDiscovery')}</h4>${discoveryAvailability(p)||`<div class="empty compact"><strong>${t('profile.public.discoveryNotConfigured')}</strong><p>${t('profile.public.discoveryNotConfiguredBody')}</p></div>`}</section>`:''}
+    ${p.member_variant||type==='miembro'?`<section><h4>${t('profile.public.sportsInformation')}</h4>${sportsFacts(p.member_variant||p)}</section>`:''}
+    ${arr(p.capability_profiles).map(v=>`<section><h4>${esc(identityTypeLabel[v.perfil_tipo])} · ${t('profile.public.availabilityDiscovery')}</h4>${discoveryAvailability({...v,own:false})||`<div class="empty compact"><strong>${t('profile.public.discoveryNotConfigured')}</strong><p>${t('profile.public.discoveryNotConfiguredBody')}</p></div>`}</section>`).join('')}
     ${type!=='espectador'?`<section><h4>${t('profile.public.album')}</h4>${gallery(p)}</section>`:''}
     <section><h4>Actividad KOMBAX</h4>${posts(p,usage)}</section>
-    ${type==='competidor'?`<section><h4>Historial KOMBAX Eventos</h4>${eventHistory(p)}</section>`:''}
+    ${arr(p.capability_profiles).filter(v=>v.perfil_tipo==='competidor').map(v=>`<section><h4>Historial KOMBAX Eventos</h4>${eventHistory(v)}</section>`).join('')}
     <section><h4>Showcase</h4>${showcase(p)}</section>
   </article>`;
 }
@@ -273,6 +274,12 @@ function bindProfilePostMedia(root){
   root.querySelectorAll('[data-kx-profile-post-media]').forEach(b=>{if(b.dataset.kxBound==='1')return;b.dataset.kxBound='1';b.addEventListener('click',()=>openImmersiveMedia({src:b.dataset.kxMediaSrc||'',type:b.dataset.kxMediaType==='video'?'video':'image',poster:b.dataset.kxMediaPoster||'',alt:'Contenido de la publicación KOMBAX'}));});
 }
 function bindPublicAlbum(root,p){
+  const variants=arr(p.identity_variants).filter(v=>v.id!==p.id);
+  const manage=root.querySelector('.kx-profile-manage-grid')||root.querySelector('.kx-person-facets');
+  if(manage)for(const variant of variants.filter(v=>v.own)){
+    const button=document.createElement('button');button.type='button';button.className='btn btn-ghost btn-sm';button.textContent=`Gestionar ${identityTypeLabel[variant.perfil_tipo||variant.sujeto_tipo]||'capacidad'}`;
+    button.addEventListener('click',()=>openProfileManagement(variant,{onRefresh:()=>openKombaxPublicProfile(p.id)}));manage.appendChild(button);
+  }
   const facets=arr(p?.person_facets?.facets).filter(f=>f.type==='profesional'&&f.profile_id);
   const section=root.querySelector('.kx-person-facets');
   if(section)for(const facet of facets){
@@ -318,12 +325,19 @@ function bindProfileActions(root,p,{onRefresh,legal=false}={}){
   root.querySelector('#kx-public-club-manage')?.addEventListener('click',()=>openClubPublicProfile(p.club_id));
 }
 
+async function enrichPersonalCapabilities(p){
+  const variants=arr(p.identity_variants).length?p.identity_variants:[p];
+  p.capability_profiles=await Promise.all(variants.filter(v=>['competidor','profesional'].includes(v.perfil_tipo||v.sujeto_tipo)).map(async v=>({...v,
+    discovery:await repos.discovery.publicProfile(v.id).catch(()=>null),
+    event_history:v.perfil_tipo==='competidor'?await repos.kombaxEvents.history(v.id,60).catch(()=>[]):[]
+  })));
+  const own=p.capability_profiles.find(v=>v.id===p.id);if(own){p.discovery=own.discovery;p.event_history=own.event_history;}
+}
 export async function openKombaxPublicProfile(socialId){
   try{
     const p=await repos.kombaxSocial.publicProfile(socialId);if(!p?.id)throw new Error('El perfil público no está disponible.');const type=p.perfil_tipo||p.sujeto_tipo;const usage=p.own?await repos.kombaxSocial.quota(p.id).catch(()=>null):null;
     p.person_facets=await repos.discovery.personFacets(p.id).catch(()=>null);
-    if(['competidor','profesional'].includes(type))p.discovery=await repos.discovery.publicProfile(p.id).catch(()=>null);
-    if(type==='competidor')p.event_history=await repos.kombaxEvents.history(p.id,60).catch(()=>[]);
+    await enrichPersonalCapabilities(p);
     if(type==='marca'&&p.perfil_directo_id)p.brand_business=await repos.brandBusiness.publicProfile(p.perfil_directo_id).catch(()=>null);
     const modal=openDetail({title:p.nombre_publico,subtitle:`Perfil público KOMBAX · ${identityTypeLabel[type]||type}`,body:profileArticle(p,{usage}),actions:profileActions(p),width:'980px',className:'kx-public-profile-modal'});
     bindProfileActions(modal.wrap,p,{onRefresh:async()=>{modal.close?.();setTimeout(()=>openKombaxPublicProfile(p.id),120);}});return p;
@@ -334,8 +348,7 @@ export async function renderOwnKombaxProfilePage(socialId,{extraHtml='',bindExtr
   try{
     const p=await repos.kombaxSocial.publicProfile(socialId);if(!p?.id)throw new Error('Tu perfil KOMBAX no está disponible.');const usage=await repos.kombaxSocial.quota(p.id).catch(()=>null);const type=p.perfil_tipo||p.sujeto_tipo;
     p.person_facets=await repos.discovery.personFacets(p.id).catch(()=>null);
-    if(['competidor','profesional'].includes(type))p.discovery=await repos.discovery.publicProfile(p.id).catch(()=>null);
-    if(type==='competidor')p.event_history=await repos.kombaxEvents.history(p.id,60).catch(()=>[]);
+    await enrichPersonalCapabilities(p);
     if(type==='marca'&&p.perfil_directo_id)p.brand_business=await repos.brandBusiness.publicProfile(p.perfil_directo_id).catch(()=>null);
     const refresh=()=>renderOwnKombaxProfilePage(p.id,{extraHtml,bindExtra});
     setMainHtml(`${profileArticle(p,{usage})}${extraHtml}`);

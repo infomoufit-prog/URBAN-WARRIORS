@@ -6,6 +6,7 @@ import { KOMBAX_BRAND } from '../core/platform.js';
 import { pageHeader, empty, badge, openForm, openDetail, openImmersiveMedia, closeModal, confirmDialog, toast, setError, setMainHtml, subviewActions, bindSubviewActions, goBackOrFallback } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { chooseDefaultIdentity, setActiveIdentity, identityLabel } from '../core/identity-context.js';
+import {identityIsActive,identityChoices,publicationIdentity,identityGroupId,combineIdentityRecords} from '../core/social-identity-resolution.js';
 import { openKombaxPublicProfile } from './public-profile.js';
 import { openKombaxPostManager, socialQuotaMarkup } from './social-post-management.js';
 import { createAdaptivePoller } from '../core/adaptive-poller.js';
@@ -83,12 +84,13 @@ function tabBar(){
 }
 
 function activeIdentity(){return ownProfiles.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(ownProfiles)||null;}
-const publishProfiles=()=>ownProfiles.filter(p=>p.publication_enabled===true&&(p.perfil_tipo||p.sujeto_tipo)!=='espectador');
-function activePublishIdentity(){const rows=publishProfiles();return rows.find(x=>String(x.id)===String(activeIdentityId))||chooseDefaultIdentity(rows)||null;}
+const publishProfiles=()=>identityChoices(ownProfiles.filter(p=>p.publication_enabled===true&&(p.perfil_tipo||p.sujeto_tipo)!=='espectador'),activeIdentityId);
+function activePublishIdentity(){return publicationIdentity(ownProfiles,activeIdentity()?.id);}
 function identitySwitcher(){
   if(!ownProfiles.length)return '';
   const current=activeIdentity();
-  return `<section class="kx-identity-context" data-legacy-label="ACTUAR COMO"><div>${icon('idCard',{size:22})}<div><small>${t('social.identity.active')}</small><strong>${esc(identityLabel(current))}</strong></div></div>${ownProfiles.length>1?`<label><span>${t('social.identity.change')}</span><select id="kx-active-identity">${ownProfiles.map(x=>`<option value="${esc(x.id)}" ${x.id===current?.id?'selected':''}>${esc(identityLabel(x))}</option>`).join('')}</select></label>`:''}</section>`;
+  const choices=identityChoices(ownProfiles,current?.id);
+  return `<section class="kx-identity-context" data-legacy-label="ACTUAR COMO"><div>${icon('idCard',{size:22})}<div><small>${t('social.identity.active')}</small><strong>${esc(identityLabel(current))}</strong></div></div>${choices.length>1?`<label><span>${t('social.identity.change')}</span><select id="kx-active-identity">${choices.map(x=>`<option value="${esc(x.id)}" ${x.id===current?.id?'selected':''}>${esc(identityLabel(x))}</option>`).join('')}</select></label>`:''}</section>`;
 }
 function socialInfoTrigger(){
   return `<button type="button" class="icon-btn kx-social-info-trigger" id="kx-social-info" aria-label="${esc(t('social.info.title'))}" title="${esc(t('social.info.title'))}">${icon('info',{size:20})}</button>`;
@@ -99,14 +101,14 @@ function openSocialInfoPanel(){
   modal.wrap.querySelector('#kx-active-identity')?.addEventListener('change',e=>{activeIdentityId=e.target.value;setActiveIdentity(activeIdentityId);closeModal();renderKombaxSocial();});
   if(activeIdentity()){
     const button=document.createElement('button');button.type='button';button.className='btn btn-ghost';button.textContent='Instagram · Conexión de esta identidad';
-    button.addEventListener('click',()=>openInstagramIntegration(activeIdentity()));modal.wrap.querySelector('.kx-social-info-panel')?.append(button);
+    button.addEventListener('click',()=>openInstagramIntegration(activePublishIdentity()||activeIdentity()));modal.wrap.querySelector('.kx-social-info-panel')?.append(button);
   }
 }
 
 function activationPanel(){
   if(!ownProfiles.length)return `<section class="kombax-social-notice" data-public-profile-invitation><div>${icon('identity',{size:28})}</div><div><strong>Tu cuenta aún no tiene un perfil público</strong><p>Puedes explorar Social, Showcase y Events y comprar con tu cuenta gratuita. Crea voluntariamente tu perfil público Espectador para comentar, dar «me gusta» y guardar. Es gratuito y no permite publicar. Los demás perfiles necesitan su validación para publicar; Miembro requiere vinculación aprobada a un club.</p><button type="button" class="btn btn-primary btn-sm" id="kx-social-create-profile">Crear o gestionar mi perfil</button></div></section>`;
   if((activeIdentity()?.perfil_tipo||activeIdentity()?.sujeto_tipo)==='espectador')return '';
-  if(socialStatus?.status==='activa')return '';
+  if(identityIsActive(activeIdentity(),socialStatus))return '';
   const eligible=socialStatus?.eligible===true;
   return `<section class="kombax-social-notice"><div>${icon('shieldCheck',{size:28})}</div><div><strong>${eligible?t('social.activation.eligible'):t('social.activation.unavailable')}</strong><p>${esc(socialStatus?.reason||t('social.activation.defaultReason'))}</p>${eligible?`<button type="button" class="btn btn-primary btn-sm" id="kombax-social-activate">${t('social.actions.reviewActivate')}</button>`:''}</div></section>`;
 }
@@ -255,7 +257,9 @@ async function loadIdentityAlbum(profile){
 async function openPublisher({preferredSocialId=null,instagramFirst=false}={}){
   const allowed=publishProfiles();
   if(!allowed.length){toast('Tu perfil está activo, pero todavía no tiene permiso para publicar en el feed.','error');return;}
-  const initial=allowed.find(x=>String(x.id)===String(preferredSocialId||activeIdentityId))||chooseDefaultIdentity(allowed)||allowed[0];
+  const requested=publicationIdentity(ownProfiles,preferredSocialId||activeIdentity()?.id);
+  const initial=allowed.find(x=>String(x.id)===String(requested?.id));
+  if(!initial){toast('Esta identidad no tiene permiso para publicar. Selecciona otra identidad si deseas actuar en su nombre.','warning');return;}
   const initialQuota=await repos.kombaxSocial.quota(initial.id).catch(()=>null);
   if(initialQuota?.active_limit_reached){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(initial,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});return;}
   if(initialQuota?.daily_limit_reached){toast('Has alcanzado el máximo de 3 publicaciones de hoy. Podrás volver a publicar mañana.','error');return;}
@@ -355,7 +359,7 @@ async function activateSocial(){
 }
 
 async function openContact(targetId,targetName){
-  const senders=ownProfiles.filter(p=>p.contacto_habilitado);const preferred=activeIdentity();if(preferred){senders.sort((a,b)=>a.id===preferred.id?-1:b.id===preferred.id?1:0);}
+  const senders=identityChoices(ownProfiles.filter(p=>p.contacto_habilitado),activeIdentityId);const preferred=activeIdentity();if(preferred){senders.sort((a,b)=>a.id===preferred.id?-1:b.id===preferred.id?1:0);}
   if(!senders.length){toast('No tienes un perfil habilitado para contacto. Los perfiles personales menores de 18 años no pueden usar esta función.','error');return;}
   try{
     const existing=(await repos.kombaxSocial.contacts()).find(c=>{
@@ -501,7 +505,7 @@ async function renderInlineComments(postId,replyParentId=null){
     const replies=new Map();rows.filter(x=>x.parent_id).forEach(x=>{const arr=replies.get(x.parent_id)||[];arr.push(x);replies.set(x.parent_id,arr);});
     const roots=rows.filter(x=>!x.parent_id);
     const replyTarget=replyParentId?rows.find(x=>String(x.id)===String(replyParentId)):null;
-    const allowedProfiles=post.comentarios_estado==='verified_only'?ownProfiles.filter(p=>p.verificado===true):ownProfiles;
+    const allowedProfiles=identityChoices((post.comentarios_estado==='verified_only'?ownProfiles.filter(p=>p.verificado===true):ownProfiles).filter(p=>p.network_enabled===true),activeIdentityId);
     const one=c=>`<article class="kx-comment ${c.parent_id?'reply':''}"><button type="button" class="kombax-social-avatar kx-comment-author-open" data-social-profile-open="${esc(c.autor_id)}" aria-label="Ver perfil público de ${esc(c.autor_nombre)}">${c.autor_avatar_url||c.autor_avatar_path?`<img src="${esc(c.autor_avatar_url||mediaUrl(c.autor_avatar_path))}" alt="">`:`<span>${esc(initials(c.autor_nombre))}</span>`}</button><div><header><button type="button" class="kx-comment-author-name" data-social-profile-open="${esc(c.autor_id)}">${esc(c.autor_nombre)} ${verified(c.autor_verificado,c.autor_tipo)}</button><small>${dtFmt(c.creado_en)}</small></header><p ${contentTranslationAttrs({contentId:c.id,contentType:'social_comment',fieldName:'text',sourceLocale:c.source_locale||c.idioma||'',visibility:'public'})}>${esc(c.texto)}</p><footer>${!c.parent_id&&post.comentarios_estado!=='closed'&&allowedProfiles.length?`<button class="btn btn-ghost btn-sm" data-kx-reply="${esc(c.id)}">Responder</button>`:''}${c.propio?`<button class="btn btn-ghost btn-sm" data-kx-comment-remove="${esc(c.id)}">Eliminar</button>`:`<button class="btn btn-ghost btn-sm" data-kx-comment-report="${esc(c.id)}">${icon('alert',{size:14})} Denunciar</button>`}</footer></div></article>`;
     const body=roots.map(c=>`${one(c)}${(replies.get(c.id)||[]).map(one).join('')}`).join('')||'<div class="empty"><strong>Sin comentarios</strong><p>Sé el primero en participar respetando las normas.</p></div>';
     let composer='';
@@ -631,11 +635,12 @@ async function loadFeed(append=false){
 }
 
 function renderFeedView(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',socialHeaderActions(publishProfiles().length?'<button type="button" class="btn btn-primary" id="kombax-social-publish">+ Publicar con multimedia</button>':''),'KOMBAX Social')}${tabBar()}${competitorFoundersPromo()}${activationPanel()}${quickComposer()}${feedCards()}</div>`);bindCommon();bindFeed();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',socialHeaderActions(activePublishIdentity()?'<button type="button" class="btn btn-primary" id="kombax-social-publish">+ Publicar con multimedia</button>':''),'KOMBAX Social')}${identitySwitcher()}${tabBar()}${competitorFoundersPromo()}${activationPanel()}${quickComposer()}${feedCards()}</div>`);bindCommon();bindFeed();
+  document.getElementById('kx-active-identity')?.addEventListener('change',e=>{activeIdentityId=e.target.value;setActiveIdentity(activeIdentityId);renderKombaxSocial().catch(setError);});
 }
 
 async function renderProfiles(){
-  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Perfiles públicos','Miembro muestra su comunidad y afiliación al club. Competidor es una identidad deportiva distinta, con verificación y Discovery. Media / Creador publica desde su espacio de contenido.',socialHeaderActions('<button type="button" class="btn btn-ghost" id="kx-social-discovery-open">Descubrir competidores y profesionales</button>'),'KOMBAX Social')}${tabBar()}<div class="kombax-social-search"><input id="kombax-profile-query" type="search" placeholder="Buscar por nombre, club o presentación"><button class="btn btn-primary" id="kombax-profile-search">Buscar</button></div><div id="kombax-profile-results"><div class="loading-card">Buscando perfiles…</div></div></div>`);bindCommon();
+  setMainHtml(`<div class="kombax-social-page">${socialHeader()}${pageHeader('Perfiles públicos','Tu perfil personal reúne tus capacidades. Clubes, marcas, federaciones y medios conservan su identidad pública independiente.',socialHeaderActions('<button type="button" class="btn btn-ghost" id="kx-social-discovery-open">Descubrir competidores y profesionales</button>'),'KOMBAX Social')}${tabBar()}<div class="kombax-social-search"><input id="kombax-profile-query" type="search" placeholder="Buscar por nombre, club o presentación"><button class="btn btn-primary" id="kombax-profile-search">Buscar</button></div><div id="kombax-profile-results"><div class="loading-card">Buscando perfiles…</div></div></div>`);bindCommon();
   const run=async()=>{const box=document.getElementById('kombax-profile-results'),q=document.getElementById('kombax-profile-query')?.value||'';try{const rows=await repos.kombaxSocial.directory(q,40);box.innerHTML=rows.length?`<div class="kombax-profile-grid">${rows.map(p=>`<article class="kx-profile-card" data-social-profile-open="${esc(p.id)}" tabindex="0" role="button"><div class="kombax-social-avatar large">${profileAvatar(p)}</div><div><strong>${esc(p.nombre_publico)} ${verified(p.verificado,p.perfil_tipo||p.sujeto_tipo)}</strong><small>${esc(PUBLIC_TYPE_LABEL[p.perfil_tipo]||PROFILE_LABEL[p.sujeto_tipo]||p.sujeto_tipo)}</small>${affiliationChip(p)}</div><p>${esc(p.bio||(p.perfil_tipo==='miembro'?'Miembro de la comunidad KOMBAX':'Perfil público KOMBAX'))}</p><div class="row-actions">${p.contactable&&!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-contact="${esc(p.id)}" data-social-name="${esc(p.nombre_publico)}">Contactar</button>`:''}${!isOwn(p.id)&&ownProfiles.some(x=>possibleRelations(x.perfil_tipo||x.sujeto_tipo,p.perfil_tipo||p.sujeto_tipo).length)?`<button class="btn btn-ghost btn-sm" data-social-relation="${esc(p.id)}">Añadir a mi red</button>`:''}${!isOwn(p.id)?`<button class="btn btn-ghost btn-sm" data-social-report-profile="${esc(p.id)}">Denunciar</button>`:''}</div></article>`).join('')}</div>`:empty('Sin coincidencias','Prueba con otro término.');
     box.querySelectorAll('[data-social-profile-open]').forEach(card=>{const open=()=>openKombaxPublicProfile(card.dataset.socialProfileOpen);card.addEventListener('click',e=>{if(e.target.closest('button,a'))return;open();});card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});
     box.querySelectorAll('[data-social-affiliation-club]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(b.dataset.socialAffiliationClub)openKombaxPublicProfile(b.dataset.socialAffiliationClub);}));
@@ -660,8 +665,9 @@ async function renderContacts({standalone=false,context={}}={}){
   if(standalone){bindConversationChannelTabs(document,{context,onSocial:context.onSocial||(()=>{contactFilter='social';renderContacts({standalone:true,context})}),onShowcase:context.onShowcase||(()=>{contactFilter='showcase';renderContacts({standalone:true,context})}),onAssist:context.onAssist,onMigrations:context.onMigrations});bindSubviewActions(document,{backId:'kx-conversations-back',closeId:'kx-conversations-close',onBack:context.onBack||(()=>goBackOrFallback('#social')),onClose:context.onBack||(()=>{location.hash='#dashboard';})});}else bindCommon();
   const box=document.getElementById('kombax-contact-list');
   try{
-    const rows=context.profileId?await repos.kombaxSocial.profileContacts(context.socialId,contactLimit):await repos.kombaxSocial.contacts(contactLimit);
-    const visible=rows.filter(c=>(!context.profileId||[c.remitente_id,c.destinatario_id].includes(context.socialId))&&(contactFilter==='all'||String(c.canal||'social')===contactFilter));
+    const actorIds=context.profileId?ownProfiles.filter(p=>p.network_enabled===true).map(p=>p.id):[];
+    const rows=context.profileId?combineIdentityRecords((await Promise.all(actorIds.map(id=>repos.kombaxSocial.profileContacts(id,contactLimit)))).flat(),contactLimit):await repos.kombaxSocial.contacts(contactLimit);
+    const visible=rows.filter(c=>(!context.profileId||actorIds.some(id=>[c.remitente_id,c.destinatario_id].includes(id)))&&(contactFilter==='all'||String(c.canal||'social')===contactFilter));
     box.innerHTML=(visible.length?`<div class="kombax-contact-list">${visible.map(c=>{const showcase=String(c.canal||'social')==='showcase';return `<article class="kx-message-card ${showcase?'showcase':'social'}"><header><div><span class="page-kicker">${showcase?'SHOWCASE':esc(c.direccion==='recibida'?'SOCIAL · RECIBIDA':c.direccion==='enviada'?'SOCIAL · ENVIADA':'SOCIAL')} ${showcase&&c.showcase_marca_nombre?`· ${esc(c.showcase_marca_nombre)}`:`· ${esc(CONTACT_LABEL[c.motivo]||c.motivo)}`}</span><strong>${esc(c.remitente_nombre)} → ${esc(c.destinatario_nombre)}</strong></div>${badge(c.estado,c.estado==='aceptada'?'ok':c.estado==='rechazada'||c.estado==='cerrada'?'warn':'neutral')}</header>${showcase?`<div class="kx-message-product">${c.showcase_producto_imagen_url?`<img src="${esc(c.showcase_producto_imagen_url)}" alt="">`:`<span>${icon('shoppingBag',{size:20})}</span>`}<div><small>Producto / servicio</small><strong>${esc(c.showcase_producto_nombre||'Ficha Showcase')}</strong></div></div>`:''}<p>${esc(c.ultimo_mensaje||'Solicitud de contacto')}</p><div class="kx-contact-meta"><small>${dtFmt(c.ultimo_mensaje_en||c.creado_en)}</small><span>${c.estado==='aceptada'?'Conversación abierta':c.estado==='pendiente'?'Pendiente de aceptación':'Conversación finalizada'}</span>${Number(c.no_leidos||0)>0?`<b>${Number(c.no_leidos)} nuevo${Number(c.no_leidos)===1?'':'s'}</b>`:''}</div><div class="row-actions">${c.gestionable?`<button class="btn btn-primary btn-sm" data-contact-state="aceptada" data-contact-id="${esc(c.id)}">Aceptar</button><button class="btn btn-ghost btn-sm" data-contact-state="rechazada" data-contact-id="${esc(c.id)}">Rechazar</button>`:''}<button class="btn btn-ghost btn-sm" data-contact-open="${esc(c.id)}">Abrir conversación</button><button class="btn btn-danger btn-sm" data-contact-delete="${esc(c.id)}">${icon('trash',{size:14})} Eliminar</button></div></article>`;}).join('')}</div>`:empty(contactFilter==='all'?'Sin mensajes':`Sin mensajes ${contactFilter==='showcase'?'Showcase':'Social'}`,contactFilter==='showcase'?'Las consultas iniciadas desde una ficha de Showcase aparecerán aquí con la imagen y el producto asociado.':'Las conversaciones iniciadas desde KOMBAX Social aparecerán aquí.'))+`${rows.length>=contactLimit&&contactLimit<200?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-contacts">Cargar conversaciones anteriores</button></div>':''}`;
     document.getElementById('load-more-contacts')?.addEventListener('click',()=>{contactLimit=Math.min(200,contactLimit+50);renderContacts({standalone,context});});
     document.querySelectorAll('[data-message-filter]').forEach(b=>b.addEventListener('click',()=>{contactFilter=b.dataset.messageFilter||'social';try{sessionStorage.setItem('kombax_conversation_channel',contactFilter)}catch{};renderContacts({standalone,context});}));
@@ -674,7 +680,7 @@ async function renderContacts({standalone=false,context={}}={}){
 
 export async function renderKombaxConversations({context={},channel=null}={}){
   setMainHtml('<div class="loading-card">Abriendo Conversaciones KOMBAX…</div>');
-  try{[socialStatus,ownProfiles]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles()]);if(context.profileId){ownProfiles=ownProfiles.filter(p=>p.id===context.socialId);if(!context.socialId)throw new Error('Esta identidad aún no tiene perfil Social.');}const preferred=chooseDefaultIdentity(ownProfiles);activeIdentityId=context.profileId?context.socialId:(preferred?.id||activeIdentityId||'');}catch(error){setMainHtml(`${pageHeader('Conversaciones KOMBAX')}<div class="empty-card"><strong>No se pudieron cargar las conversaciones</strong><p>${esc(humanError(error)||'Revisa la conexión.')}</p></div>`);return;}
+  try{[socialStatus,ownProfiles]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles()]);if(context.profileId){const requested=ownProfiles.find(p=>p.id===context.socialId);if(!requested)throw new Error('Esta identidad aún no tiene perfil Social.');ownProfiles=ownProfiles.filter(p=>identityGroupId(p)===identityGroupId(requested));}const preferred=chooseDefaultIdentity(ownProfiles);activeIdentityId=context.profileId?context.socialId:(preferred?.id||activeIdentityId||'');}catch(error){setMainHtml(`${pageHeader('Conversaciones KOMBAX')}<div class="empty-card"><strong>No se pudieron cargar las conversaciones</strong><p>${esc(humanError(error)||'Revisa la conexión.')}</p></div>`);return;}
   if(channel){contactFilter=channel;sessionStorage.setItem('kombax_conversation_channel',channel);}return renderContacts({standalone:true,context});
 }
 
@@ -696,8 +702,10 @@ async function renderRelations(selectedProfileId=''){
   if(!networkProfiles.length){box.innerHTML=empty('Sin identidad de red disponible','Tu perfil Social debe estar activo para gestionar Mi red. Si acabas de verificar tu afiliación, vuelve a entrar en Social.');return;}
   const selected=networkProfiles.find(x=>String(x.id)===String(selectedProfileId))||networkProfiles.find(x=>String(x.id)===String(activeIdentityId))||networkProfiles[0];
   try{
-    const rows=await repos.kombaxSocial.relations(selected.id,relationLimit);
-    const identityChoice=networkProfiles.length>1?`<div class="kx-network-identities" role="group" aria-label="Identidad para Mi red">${networkProfiles.map(x=>`<button type="button" class="${x.id===selected.id?'active':''}" data-kx-network-profile="${esc(x.id)}">${esc(x.nombre_publico)}</button>`).join('')}</div>`:'';
+    const aliases=networkProfiles.filter(p=>identityGroupId(p)===identityGroupId(selected));
+    const rows=combineIdentityRecords((await Promise.all(aliases.map(p=>repos.kombaxSocial.relations(p.id,relationLimit)))).flat(),relationLimit);
+    const choices=identityChoices(networkProfiles,selected.id);
+    const identityChoice=choices.length>1?`<div class="kx-network-identities" role="group" aria-label="Identidad para Mi red">${choices.map(x=>`<button type="button" class="${x.id===selected.id?'active':''}" data-kx-network-profile="${esc(x.id)}">${esc(identityLabel(x))}</button>`).join('')}</div>`:'';
     box.innerHTML=`${identityChoice}<div class="kx-relations-toolbar"><button type="button" class="btn btn-ghost btn-sm" id="kx-add-network-inline">${icon('plus',{size:14})} Buscar contactos</button></div>${rows.length?`<div class="kx-relations-list">${rows.map(r=>`<article><header><div><span class="page-kicker">${esc(RELATION_LABEL[r.tipo]||r.tipo)}</span><strong>${esc(r.origen_nombre)} ↔ ${esc(r.destino_nombre)}</strong></div>${badge(r.estado,r.estado==='confirmed'?'ok':r.estado==='rejected'||r.estado==='suspended'?'warn':'neutral')}</header>${r.nota?`<p>${esc(r.nota)}</p>`:''}<small>Solicitud ${dtFmt(r.creado_en)}${r.confirmado_en?` · aceptada ${dtFmt(r.confirmado_en)}`:''}</small><div class="row-actions">${r.gestionable?`<button class="btn btn-primary btn-sm" data-kx-relation-state="confirmed" data-kx-relation-id="${esc(r.id)}">Aceptar en mi red</button><button class="btn btn-ghost btn-sm" data-kx-relation-state="rejected" data-kx-relation-id="${esc(r.id)}">Rechazar</button>`:''}${r.estado==='confirmed'?`<button class="btn btn-ghost btn-sm" data-kx-relation-state="ended" data-kx-relation-id="${esc(r.id)}">Eliminar de mi red</button>`:''}</div></article>`).join('')}</div>`:empty('Tu red está vacía','Las solicitudes y conexiones aceptadas aparecerán aquí de forma privada.')}${rows.length>=relationLimit&&relationLimit<150?'<div class="load-more-wrap"><button class="btn btn-ghost" id="load-more-relations">Cargar relaciones anteriores</button></div>':''}`;
     document.getElementById('load-more-relations')?.addEventListener('click',()=>{relationLimit=Math.min(150,relationLimit+50);renderRelations(selected.id);});
     document.getElementById('kx-add-network-inline')?.addEventListener('click',async()=>{activeView='profiles';await renderProfiles();setTimeout(()=>document.getElementById('kombax-profile-query')?.focus(),0);});

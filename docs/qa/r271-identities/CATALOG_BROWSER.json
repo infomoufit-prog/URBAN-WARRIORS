@@ -1,0 +1,126 @@
+{
+  "fixture": "Local UI with real modules, simulated products; public demo image in Showcase. No purchases or production data changes.",
+  "passed": 12,
+  "checks": [
+    {
+      "area": "material",
+      "mode": "compact",
+      "viewport": 1265,
+      "width": 187.525,
+      "height": 187.525,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "material",
+      "mode": "large",
+      "viewport": 1265,
+      "width": 289.1,
+      "height": 289.1,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "material",
+      "mode": "list",
+      "viewport": 1265,
+      "width": 108,
+      "height": 108,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "showcase",
+      "mode": "compact",
+      "viewport": 1265,
+      "width": 187.525,
+      "height": 187.525,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "showcase",
+      "mode": "large",
+      "viewport": 1265,
+      "width": 289.1,
+      "height": 289.1,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "showcase",
+      "mode": "list",
+      "viewport": 1265,
+      "width": 108,
+      "height": 108,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "showcase",
+      "mode": "compact",
+      "viewport": 375,
+      "width": 169,
+      "height": 169,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "showcase",
+      "mode": "large",
+      "viewport": 375,
+      "width": 349.6,
+      "height": 349.6,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "showcase",
+      "mode": "list",
+      "viewport": 375,
+      "width": 84,
+      "height": 84,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "material",
+      "mode": "compact",
+      "viewport": 375,
+      "width": 169,
+      "height": 169,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "material",
+      "mode": "large",
+      "viewport": 375,
+      "width": 349.6,
+      "height": 349.6,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    },
+    {
+      "area": "material",
+      "mode": "list",
+      "viewport": 375,
+      "width": 84,
+      "height": 84,
+      "count": 8,
+      "image_loaded": true,
+      "horizontal_overflow": false
+    }
+  ]
+}

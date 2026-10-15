@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-14T21:25:30.520Z",
-  "candidates": 5320,
+  "generated_at": "2026-10-15T06:26:16.104Z",
+  "candidates": 5324,
   "covered_r79": 541,
   "covered_r78": 1215,
-  "covered_legacy_all7": 3289,
-  "unresolved": 275,
+  "covered_legacy_all7": 3294,
+  "unresolved": 274,
   "by_file": {
     "web/js/modules/platform-admin.js": 70,
     "web/js/modules/customer-operations.js": 64,
@@ -26,8 +26,7 @@
     "web/js/modules/comms-material.js": 1,
     "web/js/modules/guides.js": 1,
     "web/js/modules/help-legal.js": 1,
-    "web/js/modules/kombax-discovery.js": 1,
-    "web/js/modules/kombax-social.js": 1
+    "web/js/modules/kombax-discovery.js": 1
   },
   "unresolved_rows": [
     {
@@ -1590,19 +1589,6 @@
     {
       "file": "web/js/modules/kombax-discovery.js",
       "value": "Médico / Sanitario",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/kombax-social.js",
-      "value": "Miembro muestra su comunidad y afiliación al club. Competidor es una identidad deportiva distinta, con verificación y Discovery. Media / Creador publica desde su espacio de contenido.",
       "missing": [
         "en",
         "fr",

@@ -1,6 +1,12 @@
 // R270 pilot: Spanish source; English fallback for non-Spanish locales, as in R120.
 // Native translations of this added copy remain pending. No user content is translated here.
 export const R270_PILOT_COPY=Object.freeze({
+  "Lista": "List",
+  "Cuadrícula compacta": "Compact grid",
+  "Cuadrícula grande": "Large grid",
+  "Vista del catálogo": "Catalog view",
+  "Tu perfil personal reúne tus capacidades. Clubes, marcas, federaciones y medios conservan su identidad pública independiente.": "Your personal profile brings your capabilities together. Clubs, brands, federations and media retain their own public identity.",
+  "Esta identidad no tiene permiso para publicar. Selecciona otra identidad si deseas actuar en su nombre.": "This identity cannot publish. Select another identity if you wish to act on its behalf.",
   "+ Añadir tipo de entrada": "+ Add ticket type",
   ", si está disponible.": ", if available.",
   ", toca el menú": ", tap the menu",

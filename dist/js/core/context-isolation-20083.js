@@ -1,6 +1,7 @@
 import { backend } from './backend.js';
 import { state } from './state.js';
 import { repos } from './repositories.js';
+import {chooseDefaultIdentity} from './identity-context.js';
 
 // KOMBAX 20.083 — private workspace isolation.
 // Public feed/directory stay global by product design. Private identities, network and chat become club-context scoped.
@@ -24,9 +25,8 @@ const original={
 
 const isClubWorkspace=()=>Boolean(state.session?.club_id)&&state.session?.scope!=='kombax'&&state.session?.scope!=='platform-admin';
 const clubId=()=>state.session?.club_id||null;
-const storageKey=()=>`kombax_active_identity:${state.session?.id||'guest'}:${clubId()||'global'}`;
 let profileCache={token:'',rows:[],at:0};
-const token=()=>`${state.session?.id||'guest'}:${clubId()||'global'}:${state.session?.scope||'club'}`;
+const token=()=>`${state.session?.id||'guest'}:${clubId()||'global'}:${state.session?.scope||'club'}:${state.session?.rol||''}`;
 const selectedSocioKey=()=>`uw2_selected_socio:${state.session?.id||'guest'}:${clubId()||'global'}`;
 
 // 20.083: the previously global selected-student key could survive logout/club changes.
@@ -59,7 +59,7 @@ async function workspaceProfiles({force=false}={}){
   if(!isClubWorkspace())return original.myProfiles();
   const t=token();
   if(!force&&profileCache.token===t&&Date.now()-profileCache.at<15000)return profileCache.rows;
-  const rows=await backend.readRpc('app_kombax_workspace_social_profiles_v147',{p_club_id:clubId()});
+  const rows=await repos.kombaxSocial.identityCatalog(clubId(),true);
   profileCache={token:t,rows:Array.isArray(rows)?rows:[],at:Date.now()};
   return profileCache.rows;
 }
@@ -67,14 +67,7 @@ async function workspaceProfiles({force=false}={}){
 async function workspaceActorId(){
   const rows=await workspaceProfiles();
   if(!rows.length)return null;
-  let stored='';try{stored=localStorage.getItem(storageKey())||'';}catch{}
-  const saved=rows.find(p=>String(p.id)===String(stored));
-  if(saved)return saved.id;
-  if(stored){try{localStorage.removeItem(storageKey());}catch{}}
-  const roles=state.session?.roles?.length?state.session.roles:[state.session?.rol];
-  const managerial=state.session?.support_mode===true||roles.some(r=>['direccion','coordinacion'].includes(r));
-  const preferred=(managerial?rows.find(p=>p.sujeto_tipo==='club'&&String(p.club_id)===String(clubId())):null)
-    ||rows.find(p=>p.sujeto_tipo==='miembro')||rows[0];
+  const preferred=chooseDefaultIdentity(rows);
   return preferred?.id||null;
 }
 

@@ -8,6 +8,7 @@ import { isoDate, monthStart } from './utils.js';
 import { optimizeImage, prepareBrandLogo, prepareVideo } from './media.js';
 import { cached, cacheValue, peekCache, invalidateCache } from './query-cache.js';
 import { tenantKey } from './platform.js';
+import {combineIdentityRecords} from './social-identity-resolution.js';
 
 const enc=(v)=>encodeURIComponent(String(v??''));
 const session=()=>state.session;
@@ -736,7 +737,7 @@ export const repos={
     albumUrl:(path)=>backend.publicUrl('kombax-public-media',path),
     uploadAlbumMedia:(club_id,type,file)=>uploadKombaxClubMedia(club_id,type,file),
     setVideoCover:(club_id,media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('club_media',media.id,file,{bucket:'kombax-public-media',pathPrefix:`${session()?.id}/club/${club_id}/${media.id}`,presentation,mode,time}),
-    removeAlbumMedia:async(club_id,media)=>{const out=await kombaxGlobalMutation('app_kombax_club_media_mutate_v046','kombax.club.media.remove',{club_id,media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');return out;}
+    removeAlbumMedia:async(club_id,media)=>{const out=await kombaxGlobalMutation('app_kombax_club_media_mutate_v046','kombax.club.media.remove',{club_id,media_id:media.id});if(out?.cleanup_allowed===true){if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');}return out;}
   },
   publicIdentity:{
     search:(query='')=>backend.readRpc('app_buscar_identidades_publicas_v035',{p_club_id:session()?.club_id,p_query:query||'',p_limit:60})
@@ -1111,7 +1112,7 @@ export const repos={
     setManager:(profileId,perfilId,rol='editor',estado='activo')=>kombaxGlobalMutation('app_kombax_profile_manager_mutate_v070',estado==='revocado'?'kombax.profile.manager.remove':'kombax.profile.manager.add',{perfil_directo_id:profileId,perfil_id:perfilId,rol,estado}),
     uploadMedia:uploadKombaxProfileMedia,
     setVideoCover:(profileId,media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('profile_media',media.id,file,{bucket:'kombax-public-media',pathPrefix:`${session()?.id}/${profileId}/${media.id}`,presentation,mode,time}),
-    removeMedia:async(media)=>{const out=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.remove',{media_id:media.id});if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');return out;},
+    removeMedia:async(media)=>{const out=await kombaxGlobalMutation('app_kombax_media_mutate_v072','kombax.media.remove',{media_id:media.id});if(out?.cleanup_allowed===true){if(out?.storage_path)await backend.remove('kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,'kombax-public-media');}return out;},
     uploadVerificationDocument:uploadKombaxVerificationDocument
   },
   kombaxMemberships:{
@@ -1164,8 +1165,9 @@ export const repos={
   },
   kombaxSocial:{
     status:()=>backend.globalReadRpc('app_kombax_social_estado_v124',{p_club_id:session()?.club_id||null}),
-    myProfiles:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_r117',{p_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),'app_kombax_social_mis_perfiles_r117'),
-    networkProfiles:()=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_network_profiles_v255',{p_club_id:session()?.club_id||null}),()=>backend.globalReadRpc('app_kombax_social_mis_perfiles_v051',{p_club_id:session()?.club_id||null}),'app_kombax_social_network_profiles_v255'),
+    identityCatalog:(club_id=null,workspace=false)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_identity_catalog_r271',{p_club_id:club_id,p_workspace:workspace}),()=>backend.globalReadRpc(workspace?'app_kombax_workspace_social_profiles_v147':'app_kombax_social_mis_perfiles_r117',{p_club_id:club_id}),'app_kombax_social_identity_catalog_r271'),
+    myProfiles:()=>repos.kombaxSocial.identityCatalog(session()?.club_id||null,false),
+    networkProfiles:async()=>{const rows=await repos.kombaxSocial.myProfiles();return rows.filter(p=>p.network_enabled===true);},
     promotions:async(limit=2)=>{try{return await backend.globalReadRpc('app_kombax_social_promotions_r64',{p_limit:Math.min(2,Math.max(1,Number(limit)||2))});}catch(error){if(!isMissingRpc(error,'app_kombax_social_promotions_r64'))console.warn('Social promotions R64:',error);return [];}},
     promotionImpression:(campaign_id)=>backend.globalWriteRpc('app_kombax_social_promotion_impression_r64',{p_campaign_id:campaign_id,p_request_id:crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}),
     feed:async(cursor=null,limit=20)=>{
@@ -1188,10 +1190,21 @@ export const repos={
         return {...x,event_link:map.get(String(x.id))||null,social_media_id:x.social_media_id||(isSocialMedia?x.media_id:null),media_presentation:resolveMediaPresentation(x.media_presentation,socialMediaMap.get(resolvedId),profileMediaMap.get(resolvedId))};
       });
     },
-    directory:(query='',limit=30)=>backend.globalReadRpc('app_kombax_social_directorio_v072',{p_query:String(query||'').trim(),p_limit:Math.min(50,Math.max(1,Number(limit)||30))}),
+    directory:(query='',limit=30)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_directory_r271',{p_query:String(query||'').trim(),p_limit:Math.min(50,Math.max(1,Number(limit)||30))}),()=>backend.globalReadRpc('app_kombax_social_directorio_v072',{p_query:String(query||'').trim(),p_limit:Math.min(50,Math.max(1,Number(limit)||30))}),'app_kombax_social_directory_r271'),
     clubDirectory:(query='',limit=100)=>backend.globalReadRpc('app_kombax_club_social_directory_v095',{p_club_id:session()?.club_id||null,p_query:String(query||'').trim(),p_limit:Math.min(200,Math.max(1,Number(limit)||100))}),
     // Compatibilidad contractual de regresiones históricas: app_kombax_perfil_publico_v068 · app_kombax_perfil_publico_v072 · app_kombax_social_feed_v065 · app_kombax_social_feed_v072 · app_kombax_social_directorio_v065 · app_kombax_social_comentarios_v053
+    identityBundle:(social_id)=>rpcWithFallback(()=>backend.globalReadRpc('app_kombax_social_identity_bundle_r271',{p_social_id:social_id}),async()=>null,'app_kombax_social_identity_bundle_r271'),
     publicProfile:async(social_id)=>{
+      const bundle=await repos.kombaxSocial.identityBundle(social_id);
+      if(!bundle)return repos.kombaxSocial.publicProfileVariant(social_id);
+      const variants=(await Promise.all((bundle.variants||[]).map(p=>repos.kombaxSocial.publicProfileVariant(p.id)))).filter(Boolean);
+      const root=variants.find(p=>String(p.id)===String(bundle.canonical_social_id))||variants[0];if(!root)return null;
+      const member=variants.find(p=>p.sujeto_tipo==='miembro');
+      return {...root,canonical_social_id:root.id,personal_aliases:variants.map(p=>p.id),is_personal:bundle.is_personal===true,facet_types:bundle.facet_types||[],identity_variants:variants,member_variant:member||null,affiliation:member?.affiliation||root.affiliation,
+        album:combineIdentityRecords(variants.flatMap(p=>(p.album||[]).map(m=>({...m,source_social_id:p.id})))),
+        posts:combineIdentityRecords(variants.flatMap(p=>p.posts||[]),5),showcase:combineIdentityRecords(variants.flatMap(p=>p.showcase||[]))};
+    },
+    publicProfileVariant:async(social_id)=>{
       const profile=await backend.globalReadRpc('app_kombax_perfil_publico_v094',{p_social_id:social_id});
       if(!profile?.id)return profile;
       const type=profile.perfil_tipo||profile.sujeto_tipo;
@@ -1215,7 +1228,12 @@ export const repos={
       return profile;
     },
     quota:(social_id)=>backend.globalReadRpc('app_kombax_social_cupo_v099',{p_social_id:social_id}),
-    profilePosts:(social_id,cursor=null,limit=10)=>readSocialProfilePosts(social_id,cursor,limit),
+    profilePosts:async(social_id,cursor=null,limit=10)=>{
+      const bundle=await repos.kombaxSocial.identityBundle(social_id);
+      const ids=bundle?.personal_aliases?.length?bundle.personal_aliases:[social_id];
+      const pages=await Promise.all(ids.map(id=>readSocialProfilePosts(id,cursor,limit)));
+      return combineIdentityRecords(pages.flat(),limit);
+    },
     headerActivity:()=>backend.globalReadRpc('app_kombax_header_activity_v106',{}),
     profileContacts:(socialId,limit=50)=>backend.globalReadRpc('app_kombax_profile_contacts_fix18',{p_social_id:socialId,p_limit:Math.min(200,Math.max(20,Number(limit)||50))}),
     contacts:(limit=50)=>rpcWithFallback(
@@ -1251,7 +1269,7 @@ export const repos={
       }
       return out;
     },
-    removeMedia:async(media)=>{const out=await kombaxSocialMutation('kombax.social.media.remove',{media_id:media.id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||media.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});await removeMediaCover(media?.media_presentation,media?.storage_bucket||'kombax-public-media');return out;},
+    removeMedia:async(media)=>{const out=await kombaxSocialMutation('kombax.social.media.remove',{media_id:media.id});if(out?.storage_path&&String(out.storage_path).startsWith(`${session()?.id}/social/`))await backend.remove(out.storage_bucket||media.storage_bucket||'kombax-public-media',out.storage_path).catch(()=>{});if(out?.cleanup_allowed!==false)await removeMediaCover(media?.media_presentation,media?.storage_bucket||'kombax-public-media');return out;},
     mediaUrl:(path)=>backend.publicUrl('kombax-public-media',path),
     mediaAccessUrl:(path,bucket='kombax-public-media')=>bucket==='kombax-restricted-media'?backend.signedUrl('kombax-restricted-media',path,600):Promise.resolve(backend.publicUrl('kombax-public-media',path)),
     setVideoCover:(media,file,{presentation={},mode='upload',time=0}={})=>storeMediaCover('social_media',media.id,file,{bucket:media.storage_bucket||'kombax-public-media',pathPrefix:`${session()?.id}/social/${media.social_profile_id||media.autor_id||'media'}/${media.id}`,presentation,mode,time}),

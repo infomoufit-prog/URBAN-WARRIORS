@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T21:25:33.309Z",
+  "generated_at": "2026-10-15T06:26:21.507Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -32,6 +32,7 @@
     "web/js/core/query-cache.js",
     "web/js/core/repositories.js",
     "web/js/core/security-go-live-20084.js",
+    "web/js/core/social-identity-resolution.js",
     "web/js/core/state.js",
     "web/js/core/supabase.js",
     "web/js/core/telemetry.js",
@@ -123,13 +124,14 @@
     "web/js/ui/media-framing.js",
     "web/js/ui/member-enrollment-picker.js",
     "web/js/ui/personal-navigation.js",
+    "web/js/ui/product-catalog-view.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5120,
-  "covered": 4862,
-  "unresolved": 258,
-  "coverage": 94.96,
-  "skipped": 472,
+  "phrases": 5124,
+  "covered": 4867,
+  "unresolved": 257,
+  "coverage": 94.98,
+  "skipped": 471,
   "files": {
     "web/js/app.js": {
       "total": 127,
@@ -198,8 +200,8 @@
       "coverage": 100
     },
     "web/js/core/context-isolation-20083.js": {
-      "total": 1,
-      "covered": 1,
+      "total": 0,
+      "covered": 0,
       "skipped": 1,
       "coverage": 100
     },
@@ -314,6 +316,12 @@
     "web/js/core/security-go-live-20084.js": {
       "total": 7,
       "covered": 7,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/social-identity-resolution.js": {
+      "total": 1,
+      "covered": 1,
       "skipped": 0,
       "coverage": 100
     },
@@ -588,10 +596,10 @@
       "coverage": 100
     },
     "web/js/modules/kombax-social.js": {
-      "total": 262,
-      "covered": 261,
-      "skipped": 14,
-      "coverage": 99.62
+      "total": 263,
+      "covered": 263,
+      "skipped": 13,
+      "coverage": 100
     },
     "web/js/modules/lifecycle.js": {
       "total": 12,
@@ -860,6 +868,12 @@
     "web/js/ui/personal-navigation.js": {
       "total": 2,
       "covered": 2,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/product-catalog-view.js": {
+      "total": 3,
+      "covered": 3,
       "skipped": 0,
       "coverage": 100
     },
@@ -1310,10 +1324,6 @@
     {
       "file": "web/js/modules/kombax-discovery.js",
       "value": "Médico / Sanitario"
-    },
-    {
-      "file": "web/js/modules/kombax-social.js",
-      "value": "Miembro muestra su comunidad y afiliación al club. Competidor es una identidad deportiva distinta, con verificación y Discovery. Media / Creador publica desde su espacio de contenido."
     },
     {
       "file": "web/js/modules/managed-profile-hub.js",

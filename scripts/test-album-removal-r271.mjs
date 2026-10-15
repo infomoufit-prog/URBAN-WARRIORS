@@ -1,0 +1,54 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {PGlite} from '@electric-sql/pglite';
+const db=new PGlite(); let checks=0;
+const check=(name,fn)=>{fn();checks++;};
+await db.exec(`create role anon;create role authenticated;create schema auth;create schema private;
+create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
+create table kombax_social_media(id uuid,social_profile_id uuid,storage_path text,estado text,en_album boolean,actualizado_en timestamptz);
+create table kombax_social_publicaciones(id uuid,social_media_id uuid);
+create table kombax_club_media(storage_path text,estado text);
+create table kombax_perfil_media(storage_path text,estado text);
+create table kombax_social_perfiles(id uuid,owner_id uuid,avatar_path text,banner_path text,actualizado_en timestamptz);
+create function app_kombax_social_puede_gestionar_perfil_publico_r117(s uuid) returns boolean language sql as $$select coalesce((select owner_id=auth.uid() from public.kombax_social_perfiles where id=s),false)$$;
+create function app_kombax_social_mutate_v053(p_operation text,p_payload jsonb,p_request_id uuid) returns jsonb language plpgsql as $$
+declare v_media_id uuid;v_result jsonb;v_payload jsonb:=p_payload;
+begin
+ if p_operation='other' then v_result:='{"other":true}';
+ elsif p_operation='kombax.social.media.remove' then v_result:='{}';
+ elsif p_operation='kombax.social.publicar' then v_result:='{"publish":true}';
+ end if;return v_result;end $$;
+insert into kombax_social_perfiles values('00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000002',null,null,now());
+select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000002',false);`);
+await db.exec(readFileSync(new URL('../supabase/migrations/20261014231510_social_album_shared_media_r271.sql',import.meta.url),'utf8'));
+const id='00000000-0000-0000-0000-000000000003',profile='00000000-0000-0000-0000-000000000001';
+const seed=async()=>{await db.exec(`truncate kombax_social_media,kombax_social_publicaciones,kombax_club_media,kombax_perfil_media;
+insert into kombax_social_media values('${id}','${profile}','owner/social/photo','active',true,now());`);};
+const remove=async()=> (await db.query(`select app_kombax_social_mutate_v053('kombax.social.media.remove','{"media_id":"${id}"}',null) as data`)).rows[0].data;
+await seed();let out=await remove();
+check('unused album media eligible for cleanup',()=>assert.equal(out.cleanup_allowed,true));
+check('unused media removed',()=>assert.equal(out.estado,'removed'));
+await seed();await db.exec(`insert into kombax_social_publicaciones values('${id}','${id}');`);out=await remove();
+check('post retains active media',()=>assert.equal(out.estado,'active'));
+check('post original and cover protected',()=>assert.equal(out.cleanup_allowed,false));
+check('shared storage not returned for deletion',()=>assert.equal(out.storage_path,null));
+check('album membership removed',()=>assert.equal(out.en_album,false));
+check('post relation unchanged',()=>assert.equal(out.media_retained,true));
+const visible=(await db.query("select count(*)::int as count from kombax_social_media where en_album and estado='active'")).rows[0].count;
+check('album query excludes removed membership',()=>assert.equal(visible,0));
+await seed();await db.exec("insert into kombax_club_media values('owner/social/photo','active');");out=await remove();
+check('club album reference protected',()=>assert.equal(out.cleanup_allowed,false));
+await seed();await db.exec("insert into kombax_perfil_media values('owner/social/photo','active');");out=await remove();
+check('direct profile reference protected',()=>assert.equal(out.cleanup_allowed,false));
+await seed();await db.exec("select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000004',false)");
+await assert.rejects(remove(),/KOMBAX_SOCIAL_MEDIA_NOT_OWNED/);checks++;
+await db.exec("select set_config('request.jwt.claim.sub','',false)");await assert.rejects(remove(),/AUTH_REQUIRED/);checks++;
+const other=(await db.query("select app_kombax_social_mutate_v053('other','{}',null) as data")).rows[0].data;
+check('other mutation unchanged',()=>assert.equal(other.other,true));
+const grants=(await db.query("select has_function_privilege('authenticated','private.kombax_social_album_remove_r271(uuid)','execute') as allowed")).rows[0].allowed;
+check('private helper not callable by authenticated clients',()=>assert.equal(grants,false));
+const repo=readFileSync(new URL('../web/js/core/repositories.js',import.meta.url),'utf8');
+check('frontend cover cleanup respects backend preservation',()=>assert.ok(repo.includes("if(out?.cleanup_allowed!==false)await removeMediaCover")));
+await db.close();console.log(`PASS ${checks} album removal, shared media and authorization checks`);
+
+
