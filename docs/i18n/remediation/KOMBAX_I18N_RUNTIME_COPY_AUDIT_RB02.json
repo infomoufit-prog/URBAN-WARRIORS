@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T06:26:21.507Z",
+  "generated_at": "2026-10-15T17:32:11.483Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -8,6 +8,7 @@
     "web/js/core/assist-specialists.js",
     "web/js/core/backend.js",
     "web/js/core/capability-resolver.js",
+    "web/js/core/club-navigation.js",
     "web/js/core/club-session-role.js",
     "web/js/core/club-workspaces.js",
     "web/js/core/commercial-pricing.js",
@@ -36,6 +37,7 @@
     "web/js/core/state.js",
     "web/js/core/supabase.js",
     "web/js/core/telemetry.js",
+    "web/js/core/usage-help-knowledge.js",
     "web/js/core/utils.js",
     "web/js/core/verification-visual.js",
     "web/js/core/workspace-access.js",
@@ -117,6 +119,7 @@
     "web/js/ui/account-mode-fields.js",
     "web/js/ui/analytics-reports-r77.js",
     "web/js/ui/brand-hero.js",
+    "web/js/ui/club-area-navigation.js",
     "web/js/ui/components.js",
     "web/js/ui/conversation-ui.js",
     "web/js/ui/icons.js",
@@ -125,13 +128,14 @@
     "web/js/ui/member-enrollment-picker.js",
     "web/js/ui/personal-navigation.js",
     "web/js/ui/product-catalog-view.js",
+    "web/js/ui/usage-help.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5124,
-  "covered": 4867,
+  "phrases": 5154,
+  "covered": 4897,
   "unresolved": 257,
-  "coverage": 94.98,
-  "skipped": 471,
+  "coverage": 95.01,
+  "skipped": 477,
   "files": {
     "web/js/app.js": {
       "total": 127,
@@ -172,6 +176,12 @@
     "web/js/core/capability-resolver.js": {
       "total": 0,
       "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/club-navigation.js": {
+      "total": 2,
+      "covered": 2,
       "skipped": 0,
       "coverage": 100
     },
@@ -341,6 +351,12 @@
       "total": 0,
       "covered": 0,
       "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/usage-help-knowledge.js": {
+      "total": 1,
+      "covered": 1,
+      "skipped": 4,
       "coverage": 100
     },
     "web/js/core/utils.js": {
@@ -829,6 +845,12 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/ui/club-area-navigation.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/ui/components.js": {
       "total": 5,
       "covered": 5,
@@ -875,6 +897,12 @@
       "total": 3,
       "covered": 3,
       "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/ui/usage-help.js": {
+      "total": 27,
+      "covered": 27,
+      "skipped": 2,
       "coverage": 100
     },
     "web/js/ui/video-cover.js": {

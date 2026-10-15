@@ -1,0 +1,1527 @@
+{
+  "version": "r272",
+  "guides": [
+    {
+      "id": "start",
+      "title": "Inicio y panel del club",
+      "summary": "Resumen diario, métricas, accesos rápidos y contexto del club.",
+      "route": "dashboard",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "inicio dashboard métricas resumen portal club",
+      "steps": [
+        "Comprueba el club activo y tu identidad en la cabecera.",
+        "Revisa avisos, próximos eventos, sesiones y acciones pendientes.",
+        "Usa las tarjetas y navegación para entrar directamente en cada área."
+      ],
+      "rules": [
+        "El contenido del panel cambia según el rol y sus permisos.",
+        "Un Monitor ve únicamente sus ámbitos asignados cuando tiene alcance restringido."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "profile",
+      "title": "Perfil del club y perfil público",
+      "summary": "Logo, portada, información pública, álbum y presencia de tu club en KOMBAX.",
+      "route": "profile",
+      "roles": [
+        "direccion",
+        "coordinacion"
+      ],
+      "keywords": "perfil club público logo portada album identidad actuar como club",
+      "steps": [
+        "Entra en Mi perfil desde una cuenta de Gestor o Coordinación.",
+        "Actualiza la información pública, imágenes y datos visibles.",
+        "Usa “Ver como público” para comprobar cómo lo verá la comunidad."
+      ],
+      "rules": [
+        "La identidad del Club es distinta de la cuenta personal del Gestor.",
+        "El actor real se conserva para auditoría aunque publiques como Club."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "access",
+      "title": "Códigos del club e invitaciones",
+      "summary": "Dos códigos cortos reutilizables: alumnos/familias y equipo.",
+      "route": "members",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "keywords": "código qr invitación alumnos familias equipo alta cartel",
+      "steps": [
+        "Desde Alumnos consulta o cambia el código de alumnos/familias.",
+        "Desde Equipo consulta o cambia el código de miembros del equipo.",
+        "Coloca el código de alumnos junto al QR del cartel de descarga."
+      ],
+      "rules": [
+        "Los códigos admiten 4 o 5 dígitos y pueden rotarse cuando el club quiera.",
+        "El código de equipo nunca concede permisos sensibles automáticamente: crea una solicitud pendiente.",
+        "El autorregistro de alumno independiente requiere 16 años o más; los menores de 16 se gestionan mediante tutor autorizado."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "enrollments",
+      "title": "Solicitudes de inscripción",
+      "summary": "Revisa y valida las solicitudes nuevas antes de convertirlas en alumnos activos.",
+      "route": "enrollments",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "keywords": "solicitudes alta inscripción alumno aprobar rechazar",
+      "steps": [
+        "Abre Solicitudes y revisa los datos enviados.",
+        "Comprueba identidad, contacto y datos deportivos requeridos.",
+        "Aprueba o rechaza según el procedimiento del club."
+      ],
+      "rules": [
+        "La solicitud no equivale automáticamente a una membresía activa.",
+        "La información de menores debe seguir el flujo de tutor/club."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "students",
+      "title": "Alumnos y fichas",
+      "summary": "Gestiona altas, ficha personal, datos deportivos, relación familiar y estado.",
+      "route": "members",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "alumnos ficha socio datos perfil menor tutor",
+      "steps": [
+        "Busca al alumno por nombre o grupo.",
+        "Abre su ficha para consultar datos y contexto deportivo.",
+        "Edita únicamente los campos permitidos por tu rol."
+      ],
+      "rules": [
+        "Los monitores restringidos solo pueden ver alumnos de sus grupos/cartera asignados.",
+        "Los datos familiares, administrativos y económicos están separados por permisos."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "team",
+      "title": "Equipo del club, roles y solicitudes",
+      "summary": "Gestiona personal, solicitudes del código de equipo y roles operativos.",
+      "route": "users",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "keywords": "equipo roles monitor secretaria tesoreria comunicación coordinación solicitud",
+      "steps": [
+        "Revisa las solicitudes pendientes de acceso del equipo.",
+        "Aprueba la persona y asigna el rol operativo correspondiente.",
+        "Comprueba después sus ámbitos de trabajo si es Monitor."
+      ],
+      "rules": [
+        "El código de equipo no asigna un rol por sí solo.",
+        "Los permisos dependen del rol y del ámbito asignado.",
+        "La elevación a Coordinación/Gestor permanece protegida por reglas específicas."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "scopes",
+      "title": "Ámbitos y privacidad de monitores",
+      "summary": "Asigna grupos, alumnos y capacidades concretas a cada monitor.",
+      "route": "scopes",
+      "roles": [
+        "direccion",
+        "coordinacion"
+      ],
+      "keywords": "monitor ámbito privacidad cartera grupo alumno permisos finanzas",
+      "steps": [
+        "Selecciona un Monitor.",
+        "Asigna los grupos y/o alumnos que debe gestionar.",
+        "Define el alcance financiero permitido cuando corresponda."
+      ],
+      "rules": [
+        "La relación es muchos-a-muchos: un alumno puede estar en más de un grupo y tener más de un monitor autorizado.",
+        "Un monitor restringido no debe poder consultar alumnos fuera de su ámbito."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "catalog",
+      "title": "Disciplinas y grados",
+      "summary": "Configura disciplinas, niveles y estructura deportiva del club.",
+      "route": "catalog",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "keywords": "disciplinas grados cinturones niveles catálogo deporte",
+      "steps": [
+        "Crea o revisa las disciplinas activas.",
+        "Configura los grados/niveles de cada disciplina.",
+        "Utiliza esta estructura en grupos, alumnos y progreso."
+      ],
+      "rules": [
+        "La edición de disciplinas está reservada a roles autorizados.",
+        "Los monitores pueden trabajar con grados cuando su permiso lo permite."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "groups",
+      "title": "Grupos",
+      "summary": "Crea grupos, organiza alumnos y define la estructura de entrenamiento.",
+      "route": "groups",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "grupos clases alumnos horarios grupo compartido",
+      "steps": [
+        "Crea el grupo con su nombre y disciplina.",
+        "Añade o revisa los alumnos vinculados.",
+        "Relaciona el grupo con las sesiones de entrenamiento."
+      ],
+      "rules": [
+        "Un alumno puede participar en varios grupos cuando el modelo del club lo requiera.",
+        "El Monitor solo opera sobre grupos asignados si está restringido."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "sessions",
+      "title": "Sesiones y recurrencia",
+      "summary": "Programa clases puntuales o recurrentes, cambios, sustituciones y cancelaciones.",
+      "route": "sessions",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "sesiones clases recurrencia calendario sustitución cancelar horario",
+      "steps": [
+        "Selecciona el grupo y crea la serie o sesión.",
+        "Define fecha, hora y recurrencia cuando proceda.",
+        "Registra excepciones, cambios o finalización de series desde la propia sesión."
+      ],
+      "rules": [
+        "Los cambios de una sesión no deben alterar indebidamente toda la serie.",
+        "Los monitores restringidos solo modifican sesiones dentro de sus grupos autorizados."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "attendance",
+      "title": "Asistencia y check-in",
+      "summary": "Registra presencia/ausencia por sesión y consulta el historial.",
+      "route": "attendance",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "asistencia presencia ausencia checkin clase sesión",
+      "steps": [
+        "Abre Asistencia y selecciona la sesión correspondiente.",
+        "Marca la presencia de los alumnos autorizados.",
+        "Guarda y revisa el resultado antes de salir."
+      ],
+      "rules": [
+        "La asistencia está vinculada a sesiones y alumnos reales.",
+        "El historial alimenta seguimiento y métricas del club."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "tracking",
+      "title": "Seguimiento",
+      "summary": "Añade observaciones y seguimiento del alumno dentro del ámbito autorizado.",
+      "route": "tracking",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "seguimiento observaciones alumno monitor notas progreso",
+      "steps": [
+        "Busca al alumno autorizado.",
+        "Registra la observación o seguimiento pertinente.",
+        "Consulta el histórico para mantener continuidad entre sesiones."
+      ],
+      "rules": [
+        "El seguimiento no debe exponer datos a monitores fuera del ámbito del alumno.",
+        "Utiliza información necesaria y profesional, evitando datos irrelevantes."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "progress",
+      "title": "Progreso y evaluaciones",
+      "summary": "Consulta y actualiza la evolución deportiva, grados y resultados.",
+      "route": "progress",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "progreso evaluación grado cinturón resultado deportivo",
+      "steps": [
+        "Entra en Progreso y selecciona alumno/grupo.",
+        "Revisa el nivel actual y evolución registrada.",
+        "Actualiza la evaluación cuando tengas permiso."
+      ],
+      "rules": [
+        "El progreso deportivo es independiente de la información financiera.",
+        "Respeta el alcance de grupos/alumnos del Monitor."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "finance",
+      "title": "Finanzas, cuotas y cobros",
+      "summary": "Gestiona cuotas, estados de pago y operaciones económicas del club.",
+      "route": "finance",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia",
+        "monitor",
+        "familia",
+        "alumno"
+      ],
+      "keywords": "finanzas cuotas pagos cobros cartera tesorería mensualidad",
+      "steps": [
+        "Filtra por periodo, alumno o estado.",
+        "Registra o revisa el cobro según tu permiso.",
+        "Comprueba que el estado final coincide con el movimiento realizado."
+      ],
+      "rules": [
+        "Los roles ven distinta profundidad financiera.",
+        "Un Monitor puede tener alcance ninguno/estado/cartera/cobro/recibos según configuración.",
+        "Familias y alumnos solo ven la información económica que les corresponde."
+      ],
+      "scope": "club",
+      "memberOnly": false,
+      "category": "finance"
+    },
+    {
+      "id": "receipts",
+      "title": "Recibos y justificantes",
+      "summary": "Consulta recibos generados y abre el justificante completo para imprimir o compartir.",
+      "route": "finance",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia",
+        "monitor",
+        "familia",
+        "alumno"
+      ],
+      "keywords": "recibo justificante imprimir pago cobro logo",
+      "steps": [
+        "Localiza el cobro o mensualidad correspondiente.",
+        "Abre el recibo completo desde la acción disponible.",
+        "Imprime o conserva el justificante desde la vista preparada."
+      ],
+      "rules": [
+        "El recibo debe corresponder a un cobro real y mantener trazabilidad.",
+        "La visibilidad depende del rol y relación con el alumno."
+      ],
+      "scope": "club",
+      "memberOnly": false,
+      "category": "finance"
+    },
+    {
+      "id": "reminders",
+      "title": "Avisos de cobro",
+      "summary": "Gestiona recordatorios de mensualidades y pagos pendientes.",
+      "route": "reminders",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia"
+      ],
+      "keywords": "avisos cobro recordatorio deuda pendiente mensualidad",
+      "steps": [
+        "Filtra los pagos pendientes.",
+        "Revisa destinatario y contexto antes de enviar.",
+        "Registra el aviso y consulta su estado."
+      ],
+      "rules": [
+        "Los avisos deben partir de información económica vigente.",
+        "Evita duplicar comunicaciones innecesarias."
+      ],
+      "scope": "club",
+      "memberOnly": false,
+      "category": "finance"
+    },
+    {
+      "id": "communications",
+      "title": "Comunicaciones y avisos",
+      "summary": "Publica información oficial del club para los destinatarios adecuados.",
+      "route": "communications",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "comunicacion"
+      ],
+      "keywords": "comunicaciones avisos noticia anuncio club",
+      "steps": [
+        "Crea la comunicación y define el contenido.",
+        "Selecciona audiencia o contexto cuando corresponda.",
+        "Publica y comprueba la notificación resultante."
+      ],
+      "rules": [
+        "Diferencia comunicaciones oficiales de publicaciones sociales.",
+        "Utiliza los canales internos para información operativa del club."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "events",
+      "title": "Eventos",
+      "summary": "Crea y gestiona eventos, actividades, competiciones y comunicaciones asociadas.",
+      "route": "events",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "monitor"
+      ],
+      "keywords": "eventos competición actividad fecha inscripción recordatorio",
+      "steps": [
+        "Crea el evento con fecha y descripción.",
+        "Configura los datos de participación disponibles.",
+        "Publica y revisa su visibilidad en el portal."
+      ],
+      "rules": [
+        "Los eventos son contenido del club; no sustituyen a las sesiones de entrenamiento.",
+        "Los permisos de gestión varían según rol."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "community",
+      "title": "Comunidad del Club",
+      "summary": "Capa interna del club para publicaciones, imágenes/vídeos y comunicación comunitaria.",
+      "route": "community",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "comunidad club publicación imagen video interna portada",
+      "steps": [
+        "Acepta las Normas de Comunidad del Club si vas a publicar.",
+        "Crea una publicación con el contenido permitido.",
+        "Consulta el feed interno y las publicaciones vigentes."
+      ],
+      "rules": [
+        "Es distinta de KOMBAX Social: esta comunidad está vinculada al club.",
+        "Publicar requiere aceptación vigente de las normas.",
+        "Se aplican límites de contenido y ciclo de vida configurados."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "social",
+      "title": "KOMBAX Social",
+      "summary": "Red social temática de combate: publicar, Me gusta público, interés privado, comentarios, guardados y perfiles públicos.",
+      "route": "social",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "kombax social like corazón comentario foto video publicación perfil público guardar",
+      "steps": [
+        "Activa una identidad Social elegible y selecciona con quién actúas.",
+        "Publica únicamente contenido relacionado con artes marciales y deportes de contacto; añade foto/vídeo o contenido del álbum si quieres.",
+        "Usa el corazón para Me gusta público; Me interesa/No me interesa es una preferencia privada para personalizar tu feed. Comenta, responde, guarda y abre perfiles desde nombre/avatar."
+      ],
+      "rules": [
+        "KOMBAX Social está dedicado a artes marciales y deportes de contacto; el contenido claramente fuera de temática puede ser retirado por moderación.",
+        "Miembro de club no se convierte automáticamente en Competidor.",
+        "El acceso Social de miembros requiere edad mínima verificada y activación voluntaria.",
+        "Los comentarios pueden estar abiertos, solo verificados o cerrados según la publicación.",
+        "Nombre y avatar del autor son navegables hacia su perfil público."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "showcase",
+      "title": "Showcase",
+      "summary": "Marketplace y escaparate profesional: productos de vendedores autorizados, servicios de contacto, compras, pedidos y seguimiento.",
+      "route": "showcase",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "showcase escaparate producto servicio marca club imagen guardar compartir tienda web contacto",
+      "steps": [
+        "Explora fichas publicadas o abre el espacio de tu Club/Marca autorizado.",
+        "Crea una ficha con imagen, descripción y CTA cuando puedas gestionarlo.",
+        "Publica, comparte o guarda los elementos de interés."
+      ],
+      "rules": [
+        "Los productos comerciales pueden usar checkout Stripe y pedidos; el vendedor identificado es quien vende, prepara, entrega y atiende la posventa. KOMBAX proporciona la plataforma tecnológica.",
+        "Los comentarios y corazones pertenecen a Social, no a Showcase."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "material",
+      "title": "Material",
+      "summary": "Gestiona el catálogo/material interno y las solicitudes relacionadas.",
+      "route": "material",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia",
+        "familia",
+        "alumno"
+      ],
+      "keywords": "material equipamiento solicitud catálogo tienda interna",
+      "steps": [
+        "Consulta los materiales disponibles.",
+        "Gestiona artículos o solicitudes según tu rol.",
+        "Revisa el estado de cada solicitud."
+      ],
+      "rules": [
+        "La gestión de material del club es independiente del Showcase público."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "documents",
+      "title": "Archivo documental",
+      "summary": "Guarda y consulta documentos internos autorizados del club.",
+      "route": "documents",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "keywords": "documentos archivo fichero secretaria carpeta",
+      "steps": [
+        "Abre Archivo documental.",
+        "Sube o localiza el archivo correspondiente.",
+        "Comprueba que solo tenga acceso quien realmente lo necesita."
+      ],
+      "rules": [
+        "El acceso documental está restringido a roles administrativos autorizados."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "archive",
+      "title": "Archivo y papelera",
+      "summary": "Consulta elementos antiguos, archivados o candidatos a limpieza.",
+      "route": "archive",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "keywords": "archivo papelera borrar antiguos eventos notas cobros limpieza",
+      "steps": [
+        "Entra en Archivo y papelera.",
+        "Filtra por tipo y antigüedad.",
+        "Archiva, restaura o limpia solo cuando la acción sea segura."
+      ],
+      "rules": [
+        "Los registros económicos/legales no deben borrarse si existe obligación de conservación."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "notifications",
+      "title": "Centro de notificaciones",
+      "summary": "Gestiona avisos informativos y acciones pendientes sin perder tareas importantes.",
+      "route": "notifications",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "notificaciones contador leído marcar todo acción pendiente push",
+      "steps": [
+        "Abre Notificaciones y revisa los grupos de avisos.",
+        "Marca como leídos los informativos que ya hayas revisado.",
+        "Abre individualmente los avisos que requieren acción."
+      ],
+      "rules": [
+        "“Marcar todo como leído” no debe ocultar notificaciones que requieren una acción real.",
+        "Las notificaciones push dependen también del permiso del dispositivo."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "settings",
+      "title": "Configuración, branding y temas",
+      "summary": "Datos del club, logo, portada y cuatro temas premium con acentos de neón sutil.",
+      "route": "settings",
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia",
+        "comunicacion"
+      ],
+      "keywords": "configuración branding logo portada tema color neon combat dark blue gold dojo",
+      "steps": [
+        "Abre Configuración y revisa los datos del club.",
+        "Selecciona el tema premium y comprueba la vista previa.",
+        "Publica la personalización para aplicarla al portal y perfil público."
+      ],
+      "rules": [
+        "Los cuatro temas son Combat Dark Neon, Electric Blue Pro, Gold Luxe y Dojo Heritage Glow.",
+        "El neón se usa como acento, no como fondo saturado.",
+        "El perfil público del club recibe también su theme_id."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "install",
+      "title": "Instalación, PWA y cartel de descarga",
+      "summary": "Instala KOMBAX y utiliza el cartel genérico del club con QR y código de invitación.",
+      "route": "install",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "instalar pwa android cartel qr código descarga app club",
+      "steps": [
+        "Abre Instalar app.",
+        "Instala la PWA desde el navegador compatible o utiliza el canal Android del club.",
+        "Gestor/Coordinación/Secretaría pueden abrir el cartel genérico y completar QR/código cuando proceda."
+      ],
+      "rules": [
+        "El cartel es genérico para cualquier club y no contiene nombres fijos de un tenant.",
+        "El QR debe resolver el club; el código corto valida el canal de alta."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "privacy",
+      "title": "Privacidad, condiciones y eliminación",
+      "summary": "Consulta textos legales, consentimientos y solicita eliminación de cuenta.",
+      "route": "help",
+      "roles": [
+        "todos"
+      ],
+      "keywords": "privacidad condiciones derechos imagen consentimiento eliminar cuenta normas legales",
+      "steps": [
+        "Baja hasta Condiciones y privacidad en esta misma pantalla.",
+        "Lee la versión vigente antes de aceptar o retirar un consentimiento.",
+        "Usa el centro de eliminación si necesitas iniciar el cierre de tu cuenta."
+      ],
+      "rules": [
+        "Autorización de imagen y normas de comunidad son consentimientos diferenciados.",
+        "Eliminar cuenta no equivale a borrar trazabilidad económica/legal que deba conservarse."
+      ],
+      "scope": "club",
+      "memberOnly": false
+    },
+    {
+      "id": "member-start",
+      "title": "Mi inicio",
+      "summary": "Tu resumen personal: próximas clases, avisos y accesos principales.",
+      "route": "dashboard",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "inicio alumno miembro resumen clases avisos panel",
+      "steps": [
+        "Entra en Inicio al abrir KOMBAX.",
+        "Revisa tus próximas clases, avisos y situación general.",
+        "Usa los accesos directos para ir a la función que necesites."
+      ],
+      "rules": [
+        "Solo ves información relacionada con tu cuenta y tu club.",
+        "Las funciones administrativas del club no forman parte del perfil Miembro."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-schedule",
+      "title": "Horarios, sesiones y check-in",
+      "summary": "Consulta tus horarios y próximas sesiones; confirma asistencia cuando esté habilitado.",
+      "route": "groups",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "horario clase sesión reservar asistencia checkin entrenamiento",
+      "steps": [
+        "Abre Horarios para consultar tus grupos y clases.",
+        "Revisa la próxima sesión y, si está disponible, confirma o cancela tu asistencia.",
+        "El día de la clase utiliza Check-in cuando el club lo tenga habilitado."
+      ],
+      "rules": [
+        "Solo aparecen grupos y sesiones vinculados a tu ficha.",
+        "Una reserva o check-in no modifica el horario creado por el club."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-finance",
+      "title": "Mis cuotas, pagos y recibos",
+      "summary": "Consulta tus mensualidades, estado de pago y justificantes disponibles.",
+      "route": "finance",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "cuota pago recibo mensualidad deuda justificante finanzas",
+      "steps": [
+        "Entra en Cuotas.",
+        "Comprueba el periodo y el estado de cada mensualidad.",
+        "Abre el recibo o justificante cuando exista un cobro registrado."
+      ],
+      "rules": [
+        "Solo puedes consultar información económica asociada a tu propia ficha.",
+        "Un recibo aparece cuando existe un cobro real registrado por el club."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-comms",
+      "title": "Comunicaciones del club",
+      "summary": "Lee avisos e información oficial que el club dirige a sus miembros.",
+      "route": "communications",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "comunicación aviso noticia anuncio club información",
+      "steps": [
+        "Abre Comunicaciones.",
+        "Revisa los avisos nuevos y su fecha.",
+        "Consulta el contenido completo cuando necesites más detalle."
+      ],
+      "rules": [
+        "Las comunicaciones oficiales son distintas de las publicaciones sociales.",
+        "La visibilidad depende de la audiencia definida por el club."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-events",
+      "title": "Eventos y actividades",
+      "summary": "Consulta eventos, actividades y competiciones publicadas para tu entorno.",
+      "route": "events",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "evento actividad competición fecha participación club",
+      "steps": [
+        "Abre Eventos.",
+        "Consulta fecha, descripción y detalles disponibles.",
+        "Sigue las indicaciones del club cuando el evento requiera una acción o participación."
+      ],
+      "rules": [
+        "Un evento no sustituye al horario habitual de clases.",
+        "Las acciones disponibles dependen de cómo el club haya configurado el evento."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-material",
+      "title": "Material y solicitudes",
+      "summary": "Consulta material disponible y gestiona tus solicitudes al club.",
+      "route": "material",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "material equipamiento guantes solicitud pedido catálogo club",
+      "steps": [
+        "Abre Material.",
+        "Consulta los artículos disponibles y sus variantes cuando existan.",
+        "Envía una solicitud y revisa posteriormente su estado."
+      ],
+      "rules": [
+        "Material es un servicio interno del club.",
+        "KOMBAX Showcase es un escaparate público diferente y no gestiona pedidos del club."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-community",
+      "title": "Comunidad del Club",
+      "summary": "Participa en el espacio interno de publicaciones de tu propio club.",
+      "route": "community",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "comunidad club publicación foto video interna comentar contenido",
+      "steps": [
+        "Lee y acepta las Normas de Comunidad del Club antes de publicar.",
+        "Consulta el feed interno y crea contenido cuando tu cuenta lo permita.",
+        "Revisa tus publicaciones y la actividad disponible."
+      ],
+      "rules": [
+        "La Comunidad del Club es interna y diferente de KOMBAX Social.",
+        "Publicar requiere mantener vigentes las normas y límites de contenido aplicables."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-social",
+      "title": "KOMBAX Social",
+      "summary": "Activa, si eres elegible, tu identidad social pública y participa en la comunidad global.",
+      "route": "social",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "kombax social perfil público like corazón comentario guardar identidad",
+      "steps": [
+        "Desde Mi perfil comprueba si puedes activar KOMBAX Social.",
+        "Acepta sus normas específicas y crea tu identidad pública voluntariamente.",
+        "En Social puedes publicar, reaccionar, comentar, guardar y abrir perfiles públicos."
+      ],
+      "rules": [
+        "El acceso de miembros requiere la edad mínima verificada por el club y activación voluntaria.",
+        "Ser Miembro no te convierte automáticamente en Competidor verificado.",
+        "Tu expediente privado del club permanece separado de la identidad pública Social."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-showcase",
+      "title": "KOMBAX Showcase",
+      "summary": "Explora productos, servicios y perfiles profesionales publicados en KOMBAX Showcase.",
+      "route": "showcase",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "showcase escaparate marca club producto servicio guardar compartir",
+      "steps": [
+        "Abre KOMBAX Showcase.",
+        "Explora fichas públicas de clubes, marcas y elementos destacados.",
+        "Guarda o comparte contenido cuando la ficha ofrezca esa acción."
+      ],
+      "rules": [
+        "Algunos productos permiten compra y pedido mediante Stripe. Las compras están reservadas a mayores de 18 años; los servicios profesionales siguen siendo de contacto.",
+        "Las funciones de gestión de Showcase pertenecen a perfiles autorizados, no al Miembro."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-notifications",
+      "title": "Mis notificaciones",
+      "summary": "Revisa avisos informativos y tareas que necesitan tu atención.",
+      "route": "notifications",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "notificaciones aviso leído acción pendiente push contador",
+      "steps": [
+        "Abre Notificaciones.",
+        "Marca como leídos los avisos informativos que ya hayas revisado.",
+        "Abre individualmente cualquier notificación que requiera una acción."
+      ],
+      "rules": [
+        "“Marcar todo como leído” no elimina las acciones pendientes importantes.",
+        "Las notificaciones push dependen también de los permisos del dispositivo."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-requests",
+      "title": "Mis solicitudes deportivas",
+      "summary": "Consulta o envía solicitudes relacionadas con tu inscripción deportiva.",
+      "route": "requests",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "solicitud deportiva inscripción disciplina grupo tarifa alta",
+      "steps": [
+        "Abre Solicitudes.",
+        "Revisa tus relaciones deportivas activas y solicitudes anteriores.",
+        "Envía una nueva solicitud de disciplina/grupo cuando necesites un cambio o alta."
+      ],
+      "rules": [
+        "La solicitud queda pendiente hasta que el club la revise.",
+        "Enviar una solicitud no modifica por sí solo tu inscripción activa."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-profile",
+      "title": "Mi perfil KOMBAX",
+      "summary": "Gestiona tu única identidad pública: banner, avatar, presentación, información deportiva, álbum y actividad Social.",
+      "route": "profile",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "perfil kombax banner avatar bio evolución deportiva álbum social identidad alumno",
+      "steps": [
+        "Abre Mi perfil.",
+        "Si KOMBAX Social aún no está activo, completa la activación voluntaria cuando seas elegible.",
+        "Edita desde la misma ficha tu banner, avatar, presentación e información deportiva pública.",
+        "Gestiona tu álbum y comprueba la parte privada del club separada debajo de tu ficha pública."
+      ],
+      "rules": [
+        "Mi perfil y tu perfil KOMBAX Social son la misma identidad pública; no existe un segundo perfil deportivo visible.",
+        "La foto privada de acceso, documentos, cuotas, asistencia y expediente del club permanecen en una capa privada separada.",
+        "Ser Miembro no equivale a Competidor verificado ni concede una insignia KOMBAX."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "member-install",
+      "title": "Instalar KOMBAX",
+      "summary": "Instala la aplicación para acceder más rápido desde tu móvil o dispositivo.",
+      "route": "install",
+      "roles": [
+        "alumno"
+      ],
+      "keywords": "instalar app pwa android móvil acceso directo",
+      "steps": [
+        "Abre Instalar app.",
+        "Sigue la opción disponible para tu dispositivo o navegador.",
+        "Una vez instalada, entra con la misma cuenta de tu club."
+      ],
+      "rules": [
+        "La instalación no crea una cuenta nueva ni cambia tus permisos.",
+        "El acceso sigue dependiendo de tu cuenta y del club seleccionado."
+      ],
+      "scope": "club",
+      "memberOnly": true
+    },
+    {
+      "id": "account-create",
+      "title": "Crear una cuenta gratuita",
+      "summary": "Crear una cuenta gratuita",
+      "keywords": "registro cuenta nueva alta correo contraseña",
+      "steps": [
+        "Pulsa Acceder a mi cuenta y elige Crear cuenta gratuita.",
+        "Completa los datos solicitados y las aceptaciones obligatorias.",
+        "Confirma tu correo cuando se solicite y accede a tu cuenta.",
+        "Después puedes crear una identidad pública o vincularte a un club."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "public",
+      "module": null,
+      "route": null,
+      "types": []
+    },
+    {
+      "id": "account-login",
+      "title": "Entrar y recuperar la contraseña",
+      "summary": "Entrar y recuperar la contraseña",
+      "keywords": "acceder entrar iniciar sesión olvido contraseña password",
+      "steps": [
+        "Abre Acceder a mi cuenta.",
+        "Introduce el correo y tu contraseña.",
+        "Si no la recuerdas, pulsa He olvidado mi contraseña y sigue el correo de recuperación.",
+        "No compartas tu contraseña con el asistente."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "public",
+      "module": null,
+      "route": null,
+      "types": []
+    },
+    {
+      "id": "identity-choose",
+      "title": "Seleccionar mi identidad",
+      "summary": "Seleccionar mi identidad",
+      "keywords": "cambiar identidad varios perfiles cuenta espacio marca club federación",
+      "steps": [
+        "Abre Seleccionar identidad o Gestionar mi cuenta e identidades.",
+        "Elige el club, la marca, la federación o tu identidad personal.",
+        "Comprueba el nombre del espacio antes de realizar una acción.",
+        "Cada identidad conserva sus permisos, equipo y servicios."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "public",
+      "module": null,
+      "route": null,
+      "types": []
+    },
+    {
+      "id": "service-activate",
+      "title": "Consultar y activar servicios",
+      "summary": "Consultar y activar servicios",
+      "keywords": "activar contratar plan servicio suscripción precio premium prueba trial ticketing vender",
+      "steps": [
+        "Entra en el espacio de la identidad que utilizará el servicio.",
+        "Para Marca o Federación consulta Plan y servicios; para una activación puntual abre Events o Mi Showcase.",
+        "Completa la verificación que se solicite para ese servicio.",
+        "Revisa y confirma las condiciones en su formulario. La contratación pública puede seguir bloqueada durante el piloto."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "plans_services",
+      "route": null,
+      "types": [
+        "marca",
+        "federacion",
+        "profesional",
+        "competidor"
+      ]
+    },
+    {
+      "id": "profile-public",
+      "title": "Editar foto, banner y perfil público",
+      "summary": "Editar foto, banner y perfil público",
+      "keywords": "foto logo banner portada editar perfil público imagen",
+      "steps": [
+        "Entra en la identidad correcta y abre Perfil público.",
+        "Pulsa Editar y selecciona la foto de perfil o el banner, según corresponda.",
+        "Guarda y revisa la vista pública.",
+        "Añadir una foto al álbum es una acción distinta de cambiar la foto principal."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "public_profile",
+      "route": null,
+      "types": []
+    },
+    {
+      "id": "profile-showcase",
+      "title": "Catálogo y activación como vendedor",
+      "summary": "Catálogo y activación como vendedor",
+      "keywords": "showcase tienda vendedor productos catálogo ecommerce vender comprar",
+      "steps": [
+        "Abre Mi Showcase desde esta identidad.",
+        "Revisa la solicitud de vendedor y los requisitos comerciales.",
+        "Prepara la ficha y su documentación de seguridad cuando corresponda.",
+        "Publicar, vender y cobrar dependen de la verificación y del servicio activo."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "seller_center",
+      "route": null,
+      "types": []
+    },
+    {
+      "id": "profile-events",
+      "title": "Eventos y ticketing",
+      "summary": "Eventos y ticketing",
+      "keywords": "crear evento seminario entradas ticketing aforo organizar promotor",
+      "steps": [
+        "Abre la gestión de eventos de tu identidad.",
+        "Prepara el evento, fechas y aforo.",
+        "Consulta la activación puntual y los requisitos del ticketing.",
+        "Completa los requisitos comerciales antes de publicar o cobrar entradas."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "organizer_events",
+      "route": null,
+      "types": []
+    },
+    {
+      "id": "profile-brand",
+      "title": "Campañas y colaboraciones de marca",
+      "summary": "Campañas y colaboraciones de marca",
+      "keywords": "marca campañas colaboración patrocinio marketing",
+      "steps": [
+        "En Mi Marca abre Negocio y catálogo.",
+        "Elige Campañas o Colaboraciones.",
+        "Revisa las capacidades del plan y prepara la propuesta.",
+        "La ayuda no publica campañas ni confirma acuerdos."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "brand_business",
+      "route": null,
+      "types": [
+        "marca"
+      ]
+    },
+    {
+      "id": "profile-federation",
+      "title": "Gestión de federación y licencias",
+      "summary": "Gestión de federación y licencias",
+      "keywords": "federación federados licencias clubes vencimientos",
+      "steps": [
+        "Entra en Mi Federación.",
+        "Abre Gestión federativa y selecciona Federados, Licencias o Clubes relacionados.",
+        "Revisa las solicitudes y documentación antes de validarlas.",
+        "Las decisiones reservadas al titular conservan su autorización."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "federation_admin",
+      "route": null,
+      "types": [
+        "federacion"
+      ]
+    },
+    {
+      "id": "profile-documents",
+      "title": "Verificación y acreditaciones profesionales",
+      "summary": "Verificación y acreditaciones profesionales",
+      "keywords": "profesional competidor verificado diploma acreditación licencia",
+      "steps": [
+        "Abre el perfil público de la identidad correspondiente.",
+        "Completa los datos y aporta la documentación que solicite la verificación.",
+        "Para servicios específicos pueden exigirse acreditaciones adicionales.",
+        "Subir un documento no concede automáticamente una verificación."
+      ],
+      "rules": [],
+      "roles": [
+        "todos"
+      ],
+      "scope": "profile",
+      "module": "public_profile",
+      "route": null,
+      "types": [
+        "profesional",
+        "competidor"
+      ]
+    },
+    {
+      "id": "charge-create",
+      "title": "Crear un cargo manual",
+      "summary": "Crear un cargo manual",
+      "route": "finance",
+      "scope": "club",
+      "keywords": "cargo cuota finanzas generar cobrar",
+      "steps": [
+        "Abre Finanzas y pulsa + Nuevo cargo, si tu rol dispone de esa acción.",
+        "Escoge categoría y concepto; selecciona los alumnos, un grupo, una disciplina o todos los activos.",
+        "Indica importe, periodo y vencimiento; añade observaciones si hacen falta.",
+        "Revisa los destinatarios y el total antes de pulsar Crear cargos.",
+        "Comprueba el cargo en Cargos. Crear un cargo registra deuda; no ejecuta un cobro bancario."
+      ],
+      "source": {
+        "file": "web/js/modules/finance-premium.js",
+        "screen": "Nuevo cargo"
+      },
+      "roles": [
+        "direccion",
+        "secretaria",
+        "economia"
+      ],
+      "memberOnly": false,
+      "module": null,
+      "category": "finance"
+    },
+    {
+      "id": "payment-record",
+      "title": "Registrar un pago o cobro parcial",
+      "summary": "Registrar un pago o cobro parcial",
+      "route": "finance",
+      "scope": "club",
+      "keywords": "pago cobrar parcial efectivo transferencia finanzas",
+      "steps": [
+        "En Finanzas, localiza el cargo pendiente del alumno y abre su detalle.",
+        "Utiliza la acción de cobro o registro de pago que tengas autorizada.",
+        "Indica importe, fecha y método. Para un pago parcial, registra solo lo recibido.",
+        "Confirma una sola vez y comprueba el saldo restante y el estado del pago.",
+        "Si el pago está pendiente de validación, aún no cuenta como cobrado. Revisa Pagos por validar."
+      ],
+      "source": {
+        "file": "web/js/modules/finance-premium.js",
+        "screen": "Pagos"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia"
+      ],
+      "memberOnly": false,
+      "module": null,
+      "category": "finance"
+    },
+    {
+      "id": "tariff-change",
+      "title": "Crear o cambiar la tarifa de un alumno",
+      "summary": "Crear o cambiar la tarifa de un alumno",
+      "route": "finance",
+      "scope": "club",
+      "keywords": "tarifa precio alumno finanzas cambiar mensualidad",
+      "steps": [
+        "En la vista que muestra Tarifas, pulsa Nueva tarifa o edita la tarifa disponible.",
+        "Revisa importe, periodicidad y matrícula antes de guardar.",
+        "Asigna la tarifa correspondiente desde la ficha del alumno cuando esa opción esté disponible.",
+        "El cambio de tarifa no modifica por sí solo los cargos ya emitidos.",
+        "Para un cargo erróneo, revisa si puede anularse sin pagos y crea el correcto; conserva los movimientos ya cobrados."
+      ],
+      "source": {
+        "file": "web/js/modules/finance-premium.js",
+        "screen": "Tarifas"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia"
+      ],
+      "memberOnly": false,
+      "module": null,
+      "category": "finance"
+    },
+    {
+      "id": "payment-validate",
+      "title": "Validar pagos comunicados",
+      "summary": "Validar pagos comunicados",
+      "route": "finance",
+      "scope": "club",
+      "keywords": "validar pago comunicado pendiente aprobar finanzas",
+      "steps": [
+        "Abre Finanzas y pulsa Pagos por validar.",
+        "Localiza al alumno y comprueba importe, cargo y justificante cuando exista.",
+        "Valida solo si el cobro está comprobado; si no corresponde, recházalo indicando el motivo.",
+        "Comprueba el nuevo estado y el saldo. No registres otra vez el mismo pago."
+      ],
+      "source": {
+        "file": "web/js/modules/finance-premium.js",
+        "screen": "Pagos por validar"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia"
+      ],
+      "memberOnly": false,
+      "module": null,
+      "category": "finance"
+    },
+    {
+      "id": "finance-report",
+      "title": "Generar un informe financiero PDF",
+      "summary": "Generar un informe financiero PDF",
+      "route": "finance",
+      "scope": "club",
+      "keywords": "informe pdf finanzas tesoreria deuda estado cuenta",
+      "steps": [
+        "En Finanzas, abre Informes o pulsa Generar informe.",
+        "Escoge el tipo de informe y los filtros de periodo, alumno, grupo o disciplina que necesites.",
+        "Revisa los datos incluidos y genera el informe con tu permiso autorizado.",
+        "Abre el PDF generado y comprueba periodo, importes y datos del club antes de compartirlo."
+      ],
+      "source": {
+        "file": "web/js/modules/finance-premium.js",
+        "screen": "Informes"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia"
+      ],
+      "memberOnly": false,
+      "module": null,
+      "category": "finance"
+    },
+    {
+      "id": "automation-prepare",
+      "title": "Preparar una automatización de cuotas",
+      "summary": "Preparar una automatización de cuotas",
+      "route": "finance",
+      "scope": "club",
+      "keywords": "automatizacion regla cuotas mensual recurrente finanzas",
+      "steps": [
+        "En Finanzas, pulsa Nueva automatización.",
+        "Completa nombre, categoría, concepto, importe, periodicidad, fechas y destinatarios.",
+        "Guarda la regla en pausa durante el piloto; preparar la regla no cobra al alumno.",
+        "La generación automática exige comprobaciones y autorización del titular. Las automatizaciones de cobro siguen desactivadas.",
+        "Para operar ahora, utiliza Nuevo cargo manual y revisa los destinatarios antes de confirmar."
+      ],
+      "source": {
+        "file": "web/js/modules/finance-premium.js",
+        "screen": "Automatizaciones"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria",
+        "economia"
+      ],
+      "memberOnly": false,
+      "module": null,
+      "category": "finance",
+      "requiredTerms": [
+        "automatizacion",
+        "automatizaciones",
+        "regla",
+        "reglas",
+        "recurrente",
+        "automation"
+      ]
+    },
+    {
+      "id": "social-explore",
+      "title": "Explorar Social e interactuar",
+      "summary": "Explorar Social e interactuar",
+      "route": "social",
+      "scope": "public",
+      "keywords": "social explorar comentar guardar like comunidad",
+      "steps": [
+        "Abre KOMBAX Social desde la navegación.",
+        "Explora publicaciones y perfiles públicos; inicia sesión para las interacciones que lo requieran.",
+        "Puedes usar las acciones visibles de comentar, dar me gusta o guardar según tu cuenta.",
+        "Para publicar necesitas una identidad con autorización. Un perfil espectador no obtiene permiso de publicar."
+      ],
+      "source": {
+        "file": "web/js/modules/kombax-social.js",
+        "screen": "KOMBAX Social"
+      },
+      "module": "social"
+    },
+    {
+      "id": "social-publish",
+      "title": "Publicar en KOMBAX Social",
+      "summary": "Publicar en KOMBAX Social",
+      "route": "social",
+      "scope": "public",
+      "keywords": "social publicar foto video post publicacion",
+      "steps": [
+        "Abre KOMBAX Social y comprueba la identidad desde la que vas a publicar.",
+        "Utiliza Crear publicación si esa identidad tiene publicación habilitada.",
+        "Completa el contenido y adjunta el material admitido; revisa la vista previa.",
+        "Publica y comprueba que aparece con el autor correcto.",
+        "Si está bloqueado, revisa la verificación o la vinculación al club. No cambies de identidad para eludir el bloqueo."
+      ],
+      "source": {
+        "file": "web/js/modules/kombax-social.js",
+        "screen": "KOMBAX Social"
+      },
+      "module": "social"
+    },
+    {
+      "id": "social-media",
+      "title": "Editar foto, banner y álbum",
+      "summary": "Editar foto, banner y álbum",
+      "route": "profile",
+      "scope": "public",
+      "keywords": "album foto banner logo imagen eliminar",
+      "steps": [
+        "Abre el perfil público de la identidad que quieres modificar.",
+        "Usa el control específico de foto o logo para cambiar la imagen de perfil, y el de banner para la portada.",
+        "Para añadir fotografías al álbum utiliza la sección Álbum, que es independiente del logo.",
+        "Para retirar una fotografía propia, usa su acción de eliminar cuando esté disponible y confirma la selección.",
+        "Comprueba el resultado en ese mismo perfil; los archivos compartidos por otro contenido pueden conservarse mientras sigan en uso."
+      ],
+      "source": {
+        "file": "web/js/modules/public-profile.js",
+        "screen": "Perfil público"
+      },
+      "module": "public_profile"
+    },
+    {
+      "id": "showcase-explore",
+      "title": "Explorar productos en Showcase",
+      "summary": "Explorar productos en Showcase",
+      "route": "showcase",
+      "scope": "public",
+      "keywords": "showcase producto tienda explorar cuadricula lista compacta",
+      "steps": [
+        "Abre KOMBAX Showcase; explorar está disponible para las cuentas gratuitas.",
+        "Utiliza los filtros y la vista de cuadrícula grande, compacta o lista cuando estén disponibles.",
+        "Abre un producto para revisar imágenes, descripción y vendedor.",
+        "Comprar, publicar un catálogo y vender son funciones distintas; revisar productos no te convierte en vendedor autorizado."
+      ],
+      "source": {
+        "file": "web/js/modules/managed-profile-hub.js",
+        "screen": "KOMBAX Showcase"
+      },
+      "module": "showcase"
+    },
+    {
+      "id": "showcase-publish",
+      "title": "Publicar o retirar un producto",
+      "summary": "Publicar o retirar un producto",
+      "route": "my-showcase",
+      "scope": "public",
+      "keywords": "showcase producto material vender publicar eliminar catalogo",
+      "steps": [
+        "Entra en Mi Showcase de la identidad propietaria del catálogo.",
+        "Comprueba que la verificación y el servicio correspondiente están habilitados para esa operación.",
+        "Crea o edita el producto con sus imágenes, precio y disponibilidad; revisa antes de publicar.",
+        "Para retirarlo utiliza la acción disponible sobre ese producto. La eliminación depende de tus permisos y de sus operaciones asociadas.",
+        "Un perfil público gratuito no habilita por sí solo la venta ni el cobro."
+      ],
+      "source": {
+        "file": "web/js/modules/managed-profile-hub.js",
+        "screen": "Mi Showcase"
+      },
+      "module": "seller_center"
+    },
+    {
+      "id": "events-explore",
+      "title": "Descubrir eventos y consultar entradas",
+      "summary": "Descubrir eventos y consultar entradas",
+      "route": "kombax-events",
+      "scope": "public",
+      "keywords": "events evento seminario ticket entrada comprar explorar",
+      "steps": [
+        "Abre KOMBAX Events y busca el evento o seminario.",
+        "Revisa organizador, lugar, fecha, condiciones y entradas disponibles.",
+        "Si hay ticketing activo, selecciona la entrada y sigue el proceso de compra mostrado.",
+        "Conserva la confirmación y consulta tus entradas desde el acceso disponible en tu cuenta."
+      ],
+      "source": {
+        "file": "web/js/modules/kombax-events.js",
+        "screen": "KOMBAX Events"
+      },
+      "module": "events"
+    },
+    {
+      "id": "events-create",
+      "title": "Preparar un evento y su ticketing",
+      "summary": "Preparar un evento y su ticketing",
+      "route": "my-events",
+      "scope": "public",
+      "keywords": "events evento crear organizar seminario ticketing logo entrada",
+      "steps": [
+        "Entra en Mis eventos de la identidad organizadora autorizada.",
+        "Prepara título, descripción, fechas, ubicación e imágenes y revisa la información del organizador.",
+        "La publicación del evento y el ticketing requieren sus capacidades o activaciones correspondientes.",
+        "Configura aforo, entradas y el logo del ticket cuando la función esté habilitada; revisa la vista previa.",
+        "Publicar un evento no activa automáticamente los cobros: comprueba el estado del vendedor u organizador y de Stripe."
+      ],
+      "source": {
+        "file": "web/js/modules/managed-profile-hub.js",
+        "screen": "Mis eventos"
+      },
+      "module": "organizer_events"
+    },
+    {
+      "id": "assist-data",
+      "title": "Consultar datos con Assist",
+      "summary": "Consultar datos con Assist",
+      "route": "assist",
+      "scope": "club",
+      "keywords": "assist deuda alumno cuanto debe proximo evento informacion datos",
+      "steps": [
+        "Abre Administración y selecciona KOMBAX Assist.",
+        "Pregunta directamente por el dato que necesitas, por ejemplo el saldo de un alumno o los próximos eventos.",
+        "Assist utiliza el contexto autorizado de tu club; comprueba que estás en el espacio correcto.",
+        "Para aprender un procedimiento usa ¿Necesitas ayuda?; para importar archivos usa Migrations.",
+        "Las consultas IA mantienen el cupo y los créditos de tu plan. Una respuesta no equivale a haber ejecutado un cobro o una modificación."
+      ],
+      "source": {
+        "file": "web/js/modules/managed-profile-hub.js",
+        "screen": "KOMBAX Assist"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "memberOnly": false,
+      "module": null
+    },
+    {
+      "id": "migrations-import",
+      "title": "Importar datos con Migrations",
+      "summary": "Importar datos con Migrations",
+      "route": "migrations",
+      "scope": "club",
+      "keywords": "migrations importar excel csv archivo datos alumnos migracion",
+      "steps": [
+        "Abre Administración y selecciona Migrations.",
+        "Indica qué quieres importar y adjunta el archivo admitido con los datos que puedes gestionar.",
+        "Revisa la identificación de columnas, posibles duplicados y datos pendientes.",
+        "Corrige las incidencias y revisa la propuesta antes de confirmar la importación.",
+        "Comprueba el resultado en el módulo de destino. No envíes contraseñas ni archivos ajenos al trámite."
+      ],
+      "source": {
+        "file": "web/js/modules/managed-profile-hub.js",
+        "screen": "Migrations"
+      },
+      "roles": [
+        "direccion",
+        "coordinacion",
+        "secretaria"
+      ],
+      "memberOnly": false,
+      "module": null
+    },
+    {
+      "id": "identity-create",
+      "title": "Crear una identidad o perfil público",
+      "summary": "Una cuenta puede gestionar varias identidades; cada organización conserva su espacio.",
+      "scope": "public",
+      "keywords": "identidad perfil crear alta profesional competidor espectador marca federacion club",
+      "steps": [
+        "Accede a tu cuenta y abre Crear o gestionar mi perfil o Gestionar mi cuenta e identidades.",
+        "Elige Añadir capacidad o vinculación y el tipo de perfil que necesitas.",
+        "Completa la presentación y guarda el borrador; revisa las condiciones y los datos requeridos.",
+        "Solicita la verificación cuando corresponda. Crear un perfil no activa una suscripción ni la publicación automáticamente.",
+        "Club, Marca y Federación tienen sus propios perfiles públicos; las capacidades de una persona se gestionan desde su identidad personal."
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import {clubAreasHtml,clubAreaNavigationHtml,bindClubAreaNavigation} from './club-area-navigation.js';
 import { personalNavigationHtml, bindPersonalNavigation, clearPersonalWorkspaceNavigation } from './personal-navigation.js';
 import {watchContentVisibility} from '../core/content-visibility.js';
 import { esc, humanError, fullName } from '../core/utils.js';
@@ -12,6 +13,7 @@ import { localizeHtmlString, localizeSystemText } from '../i18n/legacy-runtime.j
 
 const BODY_THEME_CLASSES=Object.freeze(['theme-combat-dark','theme-performance-pro','theme-champion-gold','theme-dojo-heritage']);
 const modalStack=[];
+let currentClubNavItems=[];
 const SUBVIEW_HEADER_SELECTORS=[
   '.gateway-directory-top','.kx-managed-top','.kx-fed-top','.kx-global-module-top',
   '.kx-admin-console-top','.kx-prep-hero','.kx-professional-finance-top','.kx-showcase-detail-top',
@@ -73,7 +75,7 @@ function syncBodyTheme(app){
 }
 export function setAppHtml(html){
   const app=document.getElementById('app');if(!app)return;
-  app.innerHTML=localizeHtmlString(html);syncBodyTheme(app);app.classList.remove('app-view-enter');
+  app.innerHTML=localizeHtmlString(html);if(!app.querySelector('.app-shell'))currentClubNavItems=[];syncBodyTheme(app);app.classList.remove('app-view-enter');
   const signedIn=Boolean(state.session?.id)&&!state.session.support_mode;
   const excluded=app.querySelector('[data-kombax-view="gateway"],[data-kombax-view="platform-legal-required"],[data-kombax-view="profiles"],.kx-admin-console');
   if(signedIn&&!excluded){
@@ -94,7 +96,7 @@ export function setAppHtml(html){
 let stopContentVisibility=()=>{};
 export function setMainHtml(html){
   const el=document.getElementById('main-view');if(!el)return;
-  stopContentVisibility();el.classList.remove('view-enter');el.innerHTML=localizeHtmlString(html);
+  stopContentVisibility();el.classList.remove('view-enter');el.innerHTML=clubAreaNavigationHtml(currentClubNavItems,state.route)+localizeHtmlString(html);bindClubAreaNavigation(el);
   stopContentVisibility=el.querySelector('[data-content-channel]')?watchContentVisibility(el):()=>{};
   requestAnimationFrame(()=>{el.classList.add('view-enter');enhanceSubviewExitControls(el);});
 }
@@ -162,8 +164,8 @@ export function shell(navItems,active,mobileItems=[]){
   const globalHtml=`${directGlobalHtml}${eventsAccordion}${showcaseAccordion}`;
   const excluded=new Set([...globalIds,'notifications','platform-admin']);
   const clubItems=navItems.filter(n=>!excluded.has(n.id)).sort((a,b)=>{const sa=sections[a.id]||'myAccount',sb=sections[b.id]||'myAccount';const ds=sectionOrder.indexOf(sa)-sectionOrder.indexOf(sb);return ds||Number(itemOrder[a.id]||999)-Number(itemOrder[b.id]||999);});
-  let last='';
-  const clubHtml=clubItems.map(n=>{const sec=sections[n.id]||'myAccount';const head=sec!==last?`<div class="nav-subsection">${esc(t(`navigation.sections.${sec}`))}</div>`:'';last=sec;return `${head}<button type="button" class="nav-item nav-club-item ${active===n.id?'active':''}" data-nav="${esc(n.id)}"><span>${n.icon}</span><b>${esc(n.label)}</b></button>`}).join('');
+  currentClubNavItems=clubItems;
+  const clubHtml=clubAreasHtml(clubItems,active);
   const mobileClubActive=clubItems.some(x=>x.id===active)||active==='notifications';
   const mobile=mobileItems.map(n=>`<button type="button" class="${active===n.id||(n.id==='more'&&mobileClubActive)?'active':''}" ${n.id==='more'?'id="mobile-more"':`data-nav="${esc(n.id)}"`}><span>${n.icon}</span>${esc(n.label)}</button>`).join('');
   const logo=safeClubLogo(s?.club);const cover=safeOptionalImage(s?.club?.portada_url);const primary=safeColor(s?.club?.color_primario,'#ffffff');const secondary=safeColor(s?.club?.color_secundario,'#050608');const shellBrand=String(KOMBAX_BRAND.symbolWhite||KOMBAX_BRAND.symbol||'./assets/brand/kombax-symbol-white.png');
@@ -197,7 +199,7 @@ export function shell(navItems,active,mobileItems=[]){
           <div class="club-nav-panel">${clubHtml}</div>
         </details>
         </nav>
-      <div class="sidebar-foot"><div class="user-avatar session-avatar" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="${esc(t('common.accessibility.profilePhoto'))}" hidden></div><span>${esc(`${s?.nombre||''} ${s?.apellidos||''}`.trim())}</span><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small><button type="button" class="btn btn-ghost btn-sm" id="logout-btn">${icon('logOut',{size:15})} Cerrar sesión</button></div>
+      <div class="sidebar-foot"><div class="user-avatar session-avatar" data-session-avatar><span>${esc(initials(`${s?.nombre||''} ${s?.apellidos||''}`))}</span><img alt="${esc(t('common.accessibility.profilePhoto'))}" hidden></div><span>${esc(`${s?.nombre||''} ${s?.apellidos||''}`.trim())}</span><small>${esc(rolesLabel(s?.roles||[s?.rol]))}</small>${byId.has('install')?`<button type="button" class="btn btn-ghost btn-sm" data-nav="install">${esc(byId.get('install').label)}</button>`:''}<button type="button" class="btn btn-ghost btn-sm" id="logout-btn">${icon('logOut',{size:15})} Cerrar sesión</button></div>
     </aside>
     <button type="button" class="sidebar-scrim" id="sidebar-scrim" aria-label="${esc(t('common.accessibility.closeMenu'))}" tabindex="-1"></button>
     <section class="content-shell">
@@ -261,9 +263,9 @@ function fieldHtml(f,val){
   return `<div class="field ${f.full?'full':''}">${label}<input id="f-${name}" name="${name}" type="${esc(f.type||'text')}" value="${esc(value)}" ${req} ${disabled} ${f.min!=null?`min="${esc(f.min)}"`:''} ${f.max!=null?`max="${esc(f.max)}"`:''} ${f.step!=null?`step="${esc(f.step)}"`:''} ${f.minLength!=null?`minlength="${esc(f.minLength)}"`:''} ${f.maxLength!=null?`maxlength="${esc(f.maxLength)}"`:''} placeholder="${esc(f.placeholder||'')}">${f.help?`<small>${esc(f.help)}</small>`:''}</div>`;
 }
 
-export function openForm({title,subtitle='',fields=[],initial={},submitText=t('common.actions.save'),onSubmit,width='720px'}){
+export function openForm({title,subtitle='',fields=[],initial={},submitText=t('common.actions.save'),onSubmit,width='720px',usageHelpInitial=false}){
   suspendActiveModal();
-  const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';
+  const wrap=document.createElement('div');wrap.className='modal-layer';wrap.id='modal-layer';if(usageHelpInitial)wrap.dataset.kxUsageHelpInitial='true';
   wrap.innerHTML=`<div class="modal" style="--modal-width:${esc(width)}"><div class="modal-head"><div><h2>${esc(title)}</h2>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div><div class="modal-head-actions"><button type="button" class="btn btn-ghost btn-sm modal-back" id="modal-back">${icon('chevronLeft',{size:15})}<span>${esc(t('common.actions.back'))}</span></button><button type="button" class="icon-btn" id="modal-close" aria-label="${esc(t('common.actions.close'))}">${icon('close')}</button></div></div><form id="modal-form" novalidate><div class="modal-error" id="modal-error" hidden></div><div class="form-grid">${fields.map(f=>fieldHtml(f,initial[f.name])).join('')}</div><div class="modal-actions"><button type="button" class="btn btn-ghost" id="modal-cancel">${esc(t('common.actions.cancel'))}</button><button type="submit" class="btn btn-primary" id="modal-submit">${esc(submitText)}</button></div></form></div>`;
   document.body.appendChild(wrap);
   const form=wrap.querySelector('#modal-form'),button=wrap.querySelector('#modal-submit'),errorBox=wrap.querySelector('#modal-error');

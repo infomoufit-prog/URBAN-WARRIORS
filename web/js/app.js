@@ -1,3 +1,4 @@
+import {installUsageHelp} from './ui/usage-help.js';
 import { backend, client } from './core/backend.js';
 import { state } from './core/state.js';
 import { repos } from './core/repositories.js';
@@ -217,7 +218,7 @@ async function navigate(id,{replace=false}={}){
   if(!routes[id])id='dashboard';const allowed=new Set(navFor(state.session).map(x=>x.id));['conversations','support','workspace','resources','guides','consulting','training'].forEach(x=>allowed.add(x));if(['direccion','coordinacion'].includes(state.session?.rol))allowed.add('personal-profile');if(!allowed.has(id))id='dashboard';if(state.route&&state.route!==id)closeModal();state.route=id;
   if(replace)history.replaceState({route:id},'',`#${id}`);else if(location.hash!==`#${id}`)history.pushState({route:id},'',`#${id}`);
   const resourceSection=(()=>{try{return sessionStorage.getItem('kx_resource_section')||'usage'}catch{return 'usage'}})();
-  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id&&(!b.dataset.resourceTarget||b.dataset.resourceTarget===resourceSection)));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',(b.dataset.clubRoutes?b.dataset.clubRoutes.split(' ').includes(id):b.dataset.nav===id)&&(!b.dataset.resourceTarget||b.dataset.resourceTarget===resourceSection)));state.clearError();const alerts=document.getElementById('global-alerts');if(alerts)alerts.innerHTML='';await routes[id]();
 }
 function openClubSpaceSelector(){
   const session=state.session;
@@ -491,4 +492,6 @@ async function boot(){
   }catch(e){console.error(e);renderLogin();if(e?.code==='AUTH_EXPIRED')toast(humanError(e),'error');}
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!=='appassets.androidplatform.net')navigator.serviceWorker.register(`./service-worker.js?v=${window.UW_CONFIG.release.build}-pwa-r270`).catch(e=>console.warn('Service worker:',e));
 }
+window.addEventListener('kx-club-route',event=>{if(document.querySelector('.app-shell')&&state.session?.club_id&&!state.session.platform_legal_required&&!state.session.birth_date_required&&typeof event.detail?.route==='string')navigate(event.detail.route).catch(setError);});
+installUsageHelp({clubRoutes:()=>document.querySelector('.app-shell')&&state.session?.club_id&&!state.session.platform_legal_required&&!state.session.birth_date_required?navFor(state.session).map(x=>x.id):[]});
 boot();

@@ -160,7 +160,7 @@ export async function renderManagedProfileHub(profileId,{onBack,onSocial,onShowc
     };
     document.querySelectorAll('.kx-managed-hub [data-module]').forEach(button=>button.addEventListener('click',()=>openModule(button.dataset.module)));
     const group=document.querySelector('.kx-profile-context-nav');
-    setPersonalWorkspaceNavigation({profileId:profile.id,name:profile.nombre_publico,title:meta.title,avatar:presentation.avatar,navigationHtml:group?.outerHTML||'',onModule:openModule,onSelect:()=>import('./gateway.js').then(m=>m.openWorkspaceIdentitySelector()).catch(setError)});
+    setPersonalWorkspaceNavigation({profileId:profile.id,profileType:profile.tipo,verified:profile.verificacion_estado==='verificado',helpModules:modules.filter(m=>moduleAllowed(m,caps,profile)),name:profile.nombre_publico,title:meta.title,avatar:presentation.avatar,navigationHtml:group?.outerHTML||'',onModule:openModule,onSelect:()=>import('./gateway.js').then(m=>m.openWorkspaceIdentitySelector()).catch(setError)});
     bindWorkspaceNavigation(document.getElementById('app'));
   }catch(error){clearPersonalWorkspaceNavigation();setError(error);onBack?.();}
 }

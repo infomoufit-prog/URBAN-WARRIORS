@@ -59,3 +59,6 @@ export function bindPersonalNavigation(root){
     else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
   });
 }
+
+export function usageWorkspaceContext(){const w=activeWorkspace();return w?{profileId:w.profileId,type:w.profileType,name:w.name,verified:w.verified===true,modules:w.helpModules||[]}:null;}
+export function openUsageWorkspaceModule(id){const w=activeWorkspace();if(w&&(w.helpModules||[]).includes(id))return w.onModule?.(id);}

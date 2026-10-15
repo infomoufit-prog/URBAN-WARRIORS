@@ -179,7 +179,7 @@ async function openMemberPublicProfileSetup({onBack}={}){
     const existing=await repos.kombaxIdentity.memberPublicProfile().catch(()=>({}));
     if(existing?.id){openKombaxPublicProfile(existing.id);return;}
     openForm({
-      title:'Crear mi perfil público',
+      usageHelpInitial:true,title:'Crear mi perfil público',
       subtitle:'No necesitas pertenecer a un club. El perfil y el álbum son independientes del permiso para publicar en el feed.',
       width:'720px',
       fields:[
@@ -410,7 +410,7 @@ async function openPilotClubActivation({onBack}={}){
 
 export function openGlobalAuth({onBack,pendingType='',mode='login',onAuthenticated=null}={}){
   if(mode==='register'){
-    const registerModal=openForm({
+    const registerModal=openForm({usageHelpInitial:true,
       title:t('marketing.gateway.auth.registerTitle'),subtitle:t('marketing.accountAccess.freeNote'),
       width:'720px',
       fields:[
@@ -441,7 +441,7 @@ export function openGlobalAuth({onBack,pendingType='',mode='login',onAuthenticat
     const legal=document.createElement('div');legal.className='registration-legal-links field full';legal.innerHTML=`<strong>${t('marketing.gateway.auth.readBefore')}</strong><div class="row-actions"><a class="btn btn-ghost btn-sm" href="./terms.html" target="_blank" rel="noopener noreferrer">${t('marketing.gateway.auth.terms')}</a><a class="btn btn-ghost btn-sm" href="./privacy.html" target="_blank" rel="noopener noreferrer">${t('marketing.gateway.auth.privacy')}</a></div><small>${t('marketing.gateway.auth.privacyNote')}</small>`;grid?.appendChild(legal);
     return;
   }
-  const authModal=openForm({
+  const authModal=openForm({usageHelpInitial:true,
     title:t('marketing.accountAccess.login'),subtitle:t('marketing.gateway.auth.loginSubtitle'),
     fields:[
       {name:'email',label:'Email',type:'email',required:true},
@@ -585,7 +585,7 @@ async function saveAndSubmitApplication(type,{profile=null,application=null,onBa
 function profileEditor(type,{profile=null,onBack,memberProfiles=[],onSaved=null}={}){
   if(!profile&&!requireProfileChoice(type))return;
   openForm({
-    title:profile?'Editar perfil KOMBAX':`Preparar solicitud ${TYPE_LABEL[type]||type}`,
+    usageHelpInitial:!profile,title:profile?'Editar perfil KOMBAX':`Preparar solicitud ${TYPE_LABEL[type]||type}`,
     subtitle:type==='competidor'?'Tu cuenta personal puede solicitar Competidor de forma autónoma. No necesitas un Club; si ya eres Miembro puedes conservar publicaciones y Mi red. La habilitación requiere revisión o autorización de piloto; se mantienen las condiciones de Social.':type==='espectador'?'Perfil público básico 16+. Puede usar foto y banner; no dispone de álbum ni publica en el feed Social.':type==='profesional'?'Actividad profesional 18+. La especialidad define elegibilidad; la verificación habilita capacidades sensibles.':type==='media'?'Canal, medio o creador de contenido. La verificación habilita únicamente Social, Showcase y su identidad pública.':'Primero preparas la identidad. La verificación y el servicio se activan por separado.',
     width:'840px',initial:profile||{},fields:profileFields(type,profile||{},memberProfiles),submitText:'Guardar borrador',
     onSubmit:async v=>{

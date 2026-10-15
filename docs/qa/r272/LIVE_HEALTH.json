@@ -1,0 +1,11 @@
+{
+  "unauthenticated_post": 401,
+  "health_status": 200,
+  "health": {
+    "ok": true,
+    "configured": true,
+    "ai_configured": true,
+    "version": "fix16-context-single-confirmation"
+  },
+  "model_invoked": false
+}
