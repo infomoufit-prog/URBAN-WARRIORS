@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {helpSmallTalk,selectHelpTopics,helpQueryTokens,usageHelpAiEligible} from '../web/js/core/usage-help-knowledge.js';
+const guides=JSON.parse(readFileSync(new URL('../web/assets/guides/usage-help-r272.json',import.meta.url),'utf8')).guides;
+const context={kind:'club',type:'club',role:'direccion',paid:true,premium:true,userId:'test'};
+let n=0;const check=(name,fn)=>{fn();n++;};
+check('transposed spelling finds fees',()=>assert.equal(selectHelpTopics(guides,'cuoats',context)[0].id,'charge-create'));
+check('session typo finds session creation',()=>assert.equal(selectHelpTopics(guides,'crear sesoin',context)[0].id,'sessions'));
+check('photo typo keeps public profile instructions',()=>assert.equal(selectHelpTopics(guides,'subir fotto perfil',context)[0].id,'social-media'));
+check('exact tariff intent remains correct',()=>assert.equal(selectHelpTopics(guides,'cambiar tarifa',context)[0].id,'tariff-change'));
+check('nonsense never fabricates a guide',()=>assert.deepEqual(selectHelpTopics(guides,'zzzzzzzzzzzz',context),[]));
+check('fuzzy matching never exposes club-only sources in onboarding',()=>assert.ok(selectHelpTopics(guides,'sesoin cuoats',{kind:'public'},20).every(x=>x.scope==='public')));
+check('long input stays bounded',()=>assert.ok(helpQueryTokens(guides,'x'.repeat(10000)).join('').length<=1500));
+check('public help does not gain model access through spelling recovery',()=>assert.equal(usageHelpAiEligible({kind:'public',initial:true}),false));
+check('greetings and thanks are answered locally',()=>{assert.ok(helpSmallTalk('hola'));assert.ok(helpSmallTalk('muchas gracias'));assert.equal(helpSmallTalk('hola quiero crear cuotas'),'')});
+console.log(`PASS ${n} typo recovery, source scope and free guidance checks`);

@@ -20,6 +20,10 @@ for(const type of managedIdentityNavigationTypes){
  ok(tabs(s,'showcase')===1,`${type}: Showcase no duplicado`);
  ok(tabs(s,'events')===1,`${type}: Events no duplicado`);
  ok(tabs(s,'public_profile')===1,`${type}: acceso a perfil público`);
+ ok(s.indexOf('data-module="public_profile"')<s.indexOf('data-module="social"'),`${type}: perfil antes de Social`);
+ ok(s.indexOf('kx-sidebar-resources')<s.indexOf('kx-premium-nav-caption'),`${type}: productos y recursos antes del área propia`);
+ ok(!/kx-premium-nav-group[^>]*\sopen(?:\s|>)/.test(s),`${type}: herramientas plegadas inicialmente`);
+ ok(s.includes('Explorar Showcase'),`${type}: catálogo público diferenciado de vendedor`);
 }
 const competitor=html('competidor',['public_profile','preparation','fight_opportunities','my_licenses','discovery_availability','representation_requests'],{canManageTeam:true,canOpen:m=>m!=='representation_requests'});
 for(const id of ['preparation','fight_opportunities','my_licenses','discovery_availability','representation_requests','profile_team'])ok(tabs(competitor,id)===1,`Competidor: ${id}`);
@@ -45,6 +49,8 @@ ok(hub.includes("import { managedNavigationHtml } from '../ui/managed-profile-na
 ok(hub.includes("mod==='profile_team'"),'Acción de equipo conectada');
 ok(hub.includes('!moduleAllowed(mod,caps,profile)'), 'Validación de capacidades previa a rutas');
 ok(hub.includes('module===\'professional_finance\''),'Finance profesional condicionada');
+ok(hub.includes("onShowcase('explore',profile.id)"),'Showcase público abre exploración, no la tienda de gestión');
+ok(hub.includes('openProfileSellerCenter(profile.id)'),'Vendedor conserva identidad y acceso separado');
 ok(hub.includes("const mobileIdentityTitle=document.querySelector('.kx-personal-mobile > span')"),'Cabecera móvil contextual');
 const css=fs.readFileSync(new URL('../web/css/kombax-guides-nav-r94.css',import.meta.url),'utf8');
 ok(css.includes('.kx-premium-profile-nav[data-nav-type="federacion"]'),'Paleta Federación');

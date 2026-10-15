@@ -98,7 +98,8 @@ Deno.serve(async(req:Request)=>{
   let body:any={};try{body=await req.json()}catch{return json(400,{ok:false,error:'invalid_json'})}
   if(body?.action==='usage_status'){
     const access=await rpc(base,publishable,bearer,'app_kombax_usage_help_access_r272',{p_tenant_ref:safeText(body?.tenant_ref,100),p_ticket_id:null}).catch(()=>({ai_allowed:false}));
-    return json(200,{ok:true,usage_help:'r272',ai_configured:Boolean(openai),ai_allowed:access?.ai_allowed===true,max_usage_output_tokens:600});
+    const audience=await rpc(base,publishable,bearer,'app_usage_help_audience_r274',{p_tenant_ref:safeText(body?.tenant_ref,100),p_ticket_id:null}).catch(()=>({kind:'public',paid:false}));
+    return json(200,{ok:true,usage_help:'r272',ai_configured:Boolean(openai),ai_allowed:access?.ai_allowed===true,audience,max_usage_output_tokens:600});
   }
   const ticketId=safeText(body?.ticket_id,40).trim(),message=safeText(body?.message,4000).trim(),requestId=safeText(body?.client_request_id,120).trim();
   const userLocale=normalizeLocale(body?.user_locale);
@@ -106,9 +107,12 @@ Deno.serve(async(req:Request)=>{
   const requestedSpecialty=safeText(body?.specialty,40).trim().toLowerCase();
   const specialty=ALLOWED_SPECIALTIES.has(requestedSpecialty)?requestedSpecialty:'management';
   if(specialty==='usage'&&message.length>1500)return json(400,{ok:false,error:'usage_message_too_long'});
+  let usageAudience:any={};
   if(specialty==='usage'){
     const access=await rpc(base,publishable,bearer,'app_kombax_usage_help_access_r272',{p_tenant_ref:null,p_ticket_id:ticketId}).catch(()=>({ai_allowed:false}));
     if(access?.ai_allowed!==true)return json(403,{ok:false,error:'usage_help_entitlement_required'});
+    usageAudience=await rpc(base,publishable,bearer,'app_usage_help_audience_r274',{p_tenant_ref:null,p_ticket_id:ticketId}).catch(()=>({}));
+    if(usageAudience?.paid!==true)return json(403,{ok:false,error:'usage_help_audience_required'});
   }
   let reserved:any;
   try{reserved=await rpc(base,publishable,bearer,'app_kombax_assist_turn_reserve_v227',{p_ticket_id:ticketId,p_message:message,p_client_request_id:requestId});}
@@ -143,7 +147,7 @@ Deno.serve(async(req:Request)=>{
     }));
     content.push(...preparedFiles);
   }catch(error){await rpc(base,secret,`Bearer ${secret}`,'app_kombax_assist_turn_fail_v227',{p_turn_id:turnId,p_error_code:'FILE_READ_ERROR'}).catch(()=>{});return json(422,{ok:false,error:'file_read_error'});}
-  if(usageHelp){content.splice(0,content.length,...usageHelpContent(message,ctx?.identity_context||{},userLocale));}
+  if(usageHelp){content.splice(0,content.length,...usageHelpContent(message,ctx?.identity_context||{},userLocale,usageAudience));}
   const baseInstructions=usageHelp?USAGE_HELP_INSTRUCTIONS:migration?`${MIGRATION_INSTRUCTIONS}\n\n${MIGRATION_FOLLOWUP_INSTRUCTIONS}`:management?`${MANAGEMENT_INSTRUCTIONS}\n\n${SPECIALTY_INSTRUCTIONS[specialty]}`:SUPPORT_GUIDED_INSTRUCTIONS;
   const instructions=`${baseInstructions}\n\n${HUMAN_LANGUAGE_GUIDE}\n\n${migration?MIGRATION_DOCUMENT_GUIDE:''}\n\n${!usageHelp&&(management||migration)?PLATFORM_WORKFLOW_FIX16:''}\n\n${migration?MIGRATION_FAST_FLOW_FIX16:''}\n\n${personalMigration?'PREPARACIÓN DOCUMENTAL PERSONAL: analiza trayectoria, experiencia, diplomas y acreditaciones de la identidad autorizada. No conviertas documentos personales en alumnos, cargos o pagos de un club. Devuelve preview.records=[], detected_records=0 y field_updates=[]. Puedes resumir los documentos y señalar datos ilegibles; no concedas verificaciones ni acreditaciones. Explica que este canal prepara y revisa documentación, sin importación automática.':''}\n\n${localeInstruction(userLocale,migration)}`;
   // Migration responses contain structured rows for several files. The ordinary

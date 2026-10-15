@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-15T17:32:17.520Z",
+  "generated_at": "2026-10-15T22:21:30.713Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
   "files_scanned": 148,
-  "system_ui_candidates": 2896,
+  "system_ui_candidates": 2895,
   "target_block_1_system_ui_candidates": 590,
   "target_files": [
     "web/js/modules/gateway.js",
@@ -216,8 +216,8 @@
       "target_block_1": false
     },
     "web/js/core/usage-help-knowledge.js": {
-      "system_ui": 3,
-      "technical": 4,
+      "system_ui": 5,
+      "technical": 3,
       "user_content": 0,
       "target_block_1": false
     },
@@ -648,9 +648,9 @@
       "target_block_1": false
     },
     "web/js/ui/usage-help.js": {
-      "system_ui": 11,
+      "system_ui": 8,
       "technical": 1,
-      "user_content": 5,
+      "user_content": 8,
       "target_block_1": false
     },
     "web/js/ui/video-cover.js": {
@@ -4045,105 +4045,105 @@
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1449,
+      "line": 1451,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const allowed=new Set(Object.values(mimeByExt));const input=[...(files||[])];if(!input.length)throw new Error('Selecciona al menos un archivo para la migración.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1453,
+      "line": 1455,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!mime)throw new Error(`Formato no admitido: ${file?.name||'archivo'}.`);if(!file?.size||file.size>10*1024*1024)throw new Error(`El archivo ${file?.name||''} supera el límite de 10 MB.`);"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1481,
+      "line": 1483,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reviewApplication:(solicitud_id,estado,motivo='')=>kombaxGlobalMutation('app_kombax_perfil_mutate_v196','kombax.application.review',{solicitud_id,estado,motivo}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1483,
+      "line": 1485,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "setProfileService:(perfil_directo_id,plan_codigo,estado='activa')=>kombaxGlobalMutation('app_kombax_subscription_mutate_v071','kombax.subscription.set',{perfil_directo_id,plan_codigo,estado}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1495,
+      "line": 1497,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un documento.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1500,
+      "line": 1502,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const uid=String(session()?.id||'');if(!uid)throw new Error('La sesión Owner ha caducado.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1521,
+      "line": 1523,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "entityStatus:(entity_session_id,payload)=>kombaxGlobalMutation('app_kombax_platform_entity_mutate_v114',payload?.estado?'kombax.admin.entity.moderation.set':'kombax.admin.entity.status.set',{...payload,entity_session_id}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1522,
+      "line": 1524,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "deletionQueue:(estado=null,limit=50)=>backend.globalReadRpc('app_kombax_deletion_queue_v119',{p_estado:estado,p_limit:limit}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1523,
+      "line": 1525,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "reviewDeletion:(solicitud_id,estado,resolucion='',nota_retencion='')=>kombaxGlobalMutation('app_kombax_eliminacion_mutate_v047','kombax.deletion.review',{solicitud_id,estado,resolucion,nota_retencion}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1555,
+      "line": 1557,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "accept:(tipo,version='2.0.0',aceptado=true,socio_id=null)=>mutation('legal.aceptar',{tipo,version,aceptado,socio_id,user_agent:navigator.userAgent}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1561,
+      "line": 1563,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!file||!file.size)throw new Error('Selecciona un archivo.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1562,
+      "line": 1564,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(file.size>10*1024*1024)throw new Error('El archivo supera el límite de 10 MB.');"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1571,
+      "line": 1573,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(meta.reemplaza_id){await mutation('documento.archivar',{documento_id:meta.reemplaza_id,estado:'sustituido',reemplazado_por:created.id});}"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1576,
+      "line": 1578,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "archive:(documento_id,estado='archivado',reemplazado_por=null)=>mutation('documento.archivar',{documento_id,estado,reemplazado_por}),"
     },
     {
       "file": "web/js/core/repositories.js",
-      "line": 1577,
+      "line": 1579,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "async delete(documento_id){const out=await mutation('documento.eliminar',{documento_id});if(out?.storage_path)await backend.remove('member-documents',out.storage_path).catch(()=>{});return out;},"
@@ -4381,35 +4381,42 @@
     },
     {
       "file": "web/js/core/usage-help-knowledge.js",
-      "line": 6,
+      "line": 8,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hello|hi)$/.test(value))return 'Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.';"
+    },
+    {
+      "file": "web/js/core/usage-help-knowledge.js",
+      "line": 9,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/^(gracias|muchas gracias|perfecto gracias|thanks|thank you)$/.test(value))return 'De nada. Si necesitas otra cosa, seguimos por aquí.';"
+    },
+    {
+      "file": "web/js/core/usage-help-knowledge.js",
+      "line": 28,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const role=context.role==='familia'?'alumno':context.role;"
     },
     {
       "file": "web/js/core/usage-help-knowledge.js",
-      "line": 11,
+      "line": 47,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const broadFinance=context.kind==='club'&&!['alumno','familia'].includes(context.role)&&/\\b(finanza|finanzas|finance|finances)\\b/.test(normalizeHelpText(query))&&!/\\b(cargo|pago|tarifa|recibo|informe|automatizacion|deuda|charge|payment|report|receipt)\\b/.test(normalizeHelpText(query));"
     },
     {
       "file": "web/js/core/usage-help-knowledge.js",
-      "line": 18,
+      "line": 54,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "if(g.scope==='club'&&g.memberOnly!==undefined&&g.memberOnly!==['alumno','familia'].includes(context.role))return false;"
     },
     {
       "file": "web/js/core/usage-help-knowledge.js",
-      "line": 27,
-      "classification": "TECHNICAL_OR_DIAGNOSTIC",
-      "target_block_1": false,
-      "sample": "return context.kind==='profile'&&['marca','federacion'].includes(context.type);"
-    },
-    {
-      "file": "web/js/core/usage-help-knowledge.js",
-      "line": 33,
+      "line": 64,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "return context.kind==='profile'&&['marca','federacion'].includes(context.type);"
@@ -22462,7 +22469,7 @@
     },
     {
       "file": "web/js/ui/managed-profile-navigation.js",
-      "line": 91,
+      "line": 97,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "<div class=\"kx-premium-nav-caption\"><span>${esc(meta.eyebrow||'MI ESPACIO')}</span><strong>${esc(meta.title||'Mi perfil')}</strong><small>${esc(profile.nombre_publico||meta.title||'')}</small></div>"
@@ -22595,98 +22602,98 @@
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 38,
+      "line": 39,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "message(L('¿Qué necesitas hacer? Te explico los pasos.'),'assistant');suggest();quotaLine();"
+      "sample": "message(L('Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.'),'assistant');suggest();quotaLine();"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 42,
+      "line": 43,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "article.innerHTML=`<small>${esc(role==='user'?L('Tú'):L('Ayuda KOMBAX'))}</small><div>${esc(text)}</div>${html}`;thread.appendChild(article);thread.scrollTop=thread.scrollHeight;"
+      "sample": "article.innerHTML=`<small>${esc(role==='user'?L('Tú'):L('Ayuda KOMBAX'))}</small><div>${esc(text)}</div>${html}`;thread.appendChild(article);thread.scrollTop=thread.scrollHeight;return article;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 46,
+      "line": 47,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
-      "sample": "const queries=context.kind==='club'?(['alumno','familia'].includes(context.role)?['Mis clases','Mis cuotas','Comunicaciones del club']:['Crear una sesión','Añadir un alumno','Registrar un cargo']):context.kind==='profile'?['Editar foto y banner','Activar servicios','Showcase y vendedor']:['Crear una cuenta','Recuperar "
+      "sample": "const queries=context.kind==='club'?(['alumno','familia'].includes(context.role)?['Mis clases','Mis cuotas','Comunicaciones del club']:['Crear una sesión','Añadir un alumno','Registrar un cargo']):context.kind==='profile'?(['marca','federacion'].includes(context.type)?['Editar foto y banner','Activar servicios','Showca"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 57,
+      "line": 59,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "message(`${L(topic.title)}\\n${steps}${!helpTopicAllowed(topic,context)?'\\n'+L('Esta función requiere otro rol. Consulta con la administración.'):''}`,'assistant',allowed?`<button type=\"button\" class=\"btn btn-ghost btn-sm\" data-help-open=\"${esc(topic.id)}\">${esc(L('Abrir esta función'))}</button>`:'');"
+      "sample": "const article=message(L(topic.title),'assistant',`<ol data-guide-full>${steps}</ol><div data-guide-tutorial hidden></div><button type=\"button\" class=\"btn btn-ghost btn-sm\" data-guide-mode>${esc(L('Guiarme paso a paso'))}</button>${!helpTopicAllowed(topic,context)?`<p>${esc(L('Esta función requiere otro rol. Consulta co"
     },
     {
       "file": "web/js/ui/usage-help.js",
       "line": 62,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "message(L('También puedo explicarte estas tareas:'),'assistant',`<div class=\"kx-help-choices\">${topics.map(topic=>`<button type=\"button\" class=\"btn btn-ghost btn-sm\" data-help-topic=\"${esc(topic.id)}\">${esc(L(topic.title))}</button>`).join('')}</div>`);"
+      "sample": "const draw=()=>{full.hidden=guided;tutorial.hidden=!guided;mode.textContent=L(guided?'Ver guía completa':'Guiarme paso a paso');if(!guided)return;tutorial.innerHTML=`<small>${esc(L('Paso'))} ${step+1} ${esc(L('de'))} ${topic.steps.length}</small><p>${esc(L(topic.steps[step]))}</p><div><button type=\"button\" class=\"btn b"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 69,
+      "line": 64,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "if(topics.length){showTopic(topics[0]);showChoices(topics.slice(1,7).filter(topic=>helpTopicAllowed(topic,context)));}else message(L('No encuentro una guía exacta. Prueba con el nombre de la tarea o contacta con Soporte.'));"
+      "sample": "const button=[...root.querySelectorAll(`[data-help-open=\"${topic.id}\"]`)].at(-1);button?.addEventListener('click',()=>{if(!guideAction(topic))return;close();if(context.kind==='club')window.dispatchEvent(new CustomEvent('kx-club-route',{detail:{route:topic.route}}));else Promise.resolve(openUsageWorkspaceModule(topic.mo"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 79,
+      "line": 89,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": false,
+      "sample": "message(L('No encuentro todavía un procedimiento que encaje con tu pregunta. ¿Te refieres a alumnos, cuotas, eventos, Social o Showcase? Dime qué estás intentando hacer; también puedes contactar con Soporte.'));"
+    },
+    {
+      "file": "web/js/ui/usage-help.js",
+      "line": 91,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": false,
+      "sample": "}catch{if(captured===epoch)message(L('No he podido cargar la guía ahora. Tu pregunta sigue aquí; puedes volver a intentarlo o escribir a Soporte.'));}"
+    },
+    {
+      "file": "web/js/ui/usage-help.js",
+      "line": 116,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "label.textContent=L('Las guías rápidas no consumen tokens ni asistencias.');"
+      "sample": "balance.innerHTML=`<summary>${esc(L('Créditos del mes'))}: ${esc(String(available))} ${esc(L('disponibles'))}</summary><p>${Number.isFinite(monthly)?`${esc(L('Asignación mensual'))}: ${esc(String(monthly))}. `:''}${esc(L('Saldo compartido entre Ayuda, Assist y Migrations de este espacio.'))}</p>`;balance.open=expanded;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 81,
-      "classification": "SYSTEM_UI_CANDIDATE",
+      "line": 129,
+      "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "if(eligible&&quota&&!quota.unavailable&&Number.isFinite(remaining))label.textContent+=` ${L('Asistencias compartidas restantes')}: ${remaining}. ${L('Una conversación IA usa el cupo y los créditos vigentes de tu identidad.')}`;"
+      "sample": "if(captured!==epoch)return;message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));pending=null;await loadQuota();return;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 82,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(eligible&&quota?.unavailable)label.textContent+=' '+L('No se pudo comprobar el cupo de IA. Las guías siguen disponibles.');"
-    },
-    {
-      "file": "web/js/ui/usage-help.js",
-      "line": 83,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": false,
-      "sample": "if(credits?.trial)label.textContent+=' '+L('La prueba de IA mantiene sus consultas de demostración; puedes seguir usando las guías.');"
-    },
-    {
-      "file": "web/js/ui/usage-help.js",
-      "line": 93,
+      "line": 132,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!ticketId){const created=await repos.customerOps.createTicket({category:'MANAGEMENT',subject:`Ayuda KOMBAX · ${context.name||context.type}`,module:'assist',tenant_ref:ref});if(captured!==epoch)return;ticketId=created.ticket_id;if(!ticketId)throw Error('case_unavailable');}"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 96,
+      "line": 135,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "if(captured!==epoch)return;message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));pending=null;await loadQuota();"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 97,
+      "line": 136,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "}catch{if(captured===epoch)message(L('No se pudo completar la consulta IA. Revisa el cupo o inténtalo de nuevo; las guías siguen disponibles.'));}"
+      "sample": "}catch(error){if(captured===epoch){if(channel==='free'&&error?.status===502)pending=null;message(L('Ahora mismo no puedo ampliar la respuesta. Puedes seguir con la guía, volver a intentarlo o escribir a Soporte. Tu pregunta sigue aquí.'));}}"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 102,
+      "line": 141,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const start=()=>{sync();const observer=new MutationObserver(records=>{if(records.every(r=>r.target.closest?.('#kx-usage-help-root')))return;requestAnimationFrame(sync);});const app=document.getElementById('app');if(app)observer.observe(document.body,{childList:true,subtree:true});window.addEventListener('hashchange',()"

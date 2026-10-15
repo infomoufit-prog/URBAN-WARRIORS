@@ -2,12 +2,48 @@ export function normalizeHelpText(text=''){return String(text).normalize('NFD').
 const stop=new Set(Object.keys({como:true,que:true,puedo:true,quiero:true,necesito:true,hacer:true,crear:true,dar:true,una:true,unos:true,unas:true,para:true,por:true,con:true,del:true,desde:true,donde:true,los:true,las:true,mis:true,esta:true,este:true,tengo:true,hay:true,cual:true,paso:true,pasos:true,activar:true,consultar:true,registrar:true,anadir:true,add:true,create:true,ver:true}));
 const aliases={contratar:'contratacion',servicios:'servicio',planes:'plan',session:'sesion',sessions:'sesion',students:'alumno',student:'alumno',charge:'cargo',charges:'cargo',fees:'cargo',photo:'foto',account:'cuenta',seller:'seller',vendedor:'seller',products:'product',product:'product',producto:'product',subscription:'suscripcion',services:'servicio',event:'evento',events:'evento',sesiones:'sesion',clases:'sesion',clase:'sesion',alumnos:'alumno',socios:'alumno',socio:'alumno',nino:'alumno',ninos:'alumno',hijos:'familia',hijo:'familia',cuotas:'cargo',cuota:'cargo',cobro:'cargo',cobros:'cargo',cobrar:'cargo',cargos:'cargo',pagos:'pago',licencias:'licencia',grupos:'grupo',productos:'product',vender:'seller',perfiles:'perfil',marcas:'marca',federaciones:'federacion',sesion:'sesion',fotografia:'foto',fotografias:'foto',fotos:'foto',contrasena:'password'};
 const words=text=>[...new Set(normalizeHelpText(text).split(' ').filter(x=>x.length>2&&!stop.has(x)).map(x=>aliases[x]||x))];
+const vocabularies=new WeakMap();
+export function helpSmallTalk(text){
+ const value=normalizeHelpText(text);
+ if(/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hello|hi)$/.test(value))return 'Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.';
+ if(/^(gracias|muchas gracias|perfecto gracias|thanks|thank you)$/.test(value))return 'De nada. Si necesitas otra cosa, seguimos por aquí.';
+ return '';
+}
+function editDistance(a,b){
+ const d=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
+ for(let i=0;i<=a.length;i++)d[i][0]=i;for(let j=0;j<=b.length;j++)d[0][j]=j;
+ for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);}
+ return d[a.length][b.length];
+}
+export function helpQueryTokens(guides,query){
+ let vocabulary=vocabularies.get(guides);if(!vocabulary){vocabulary=new Set(guides.flatMap(g=>normalizeHelpText(`${g.title} ${g.keywords}`).split(' ')).concat(Object.keys(aliases)));vocabularies.set(guides,vocabulary);}
+ return [...new Set(normalizeHelpText(String(query).slice(0,1500)).split(' ').filter(x=>x.length>2&&!stop.has(x)).map(token=>{
+  if(vocabulary.has(token)||token.length<4)return aliases[token]||token;
+  let best=token,distance=token.length>=8?2:1,tied=false;
+  for(const candidate of vocabulary){if(Math.abs(candidate.length-token.length)>distance)continue;const next=editDistance(token,candidate);if(next<distance){best=candidate;distance=next;tied=false;}else if(next===distance){if(best===token){best=candidate;tied=false;}else if(candidate!==best)tied=true;}}
+  const resolved=tied?token:best;return aliases[resolved]||resolved;
+ }))];
+}
 export function helpTopicAllowed(topic,context={}){
  const role=context.role==='familia'?'alumno':context.role;
  return !topic.roles?.length||topic.roles.includes('todos')||topic.roles.includes(role);
 }
+const genericHelp=new Set(['account-create','account-login','identity-choose','social-explore','showcase-explore','events-explore']);
+export function helpAudienceAllowed(topic,context={}){
+ if(!helpTopicAllowed(topic,context))return false;
+ if(genericHelp.has(topic.id))return true;
+ if(topic.id==='identity-create')return Boolean(context.userId);
+ if(!context.userId||context.kind==='public')return false;
+ if(['finance-report','automation-prepare'].includes(topic.id))return context.premium===true;
+ if(topic.id==='social-publish')return context.verified===true;
+ if(['showcase-publish','events-create','profile-events','profile-showcase'].includes(topic.id))return context.verified===true&&context.paid===true;
+ if(topic.scope==='club'&&topic.memberOnly!==true&&!['social','showcase','community','notifications','install','privacy'].includes(topic.id))return context.paid===true;
+ if(['profile-brand','profile-federation','assist-data','migrations-import'].includes(topic.id))return context.paid===true;
+ return true;
+}
 export function selectHelpTopics(guides=[],query='',context={},limit=3){
- const tokens=words(String(query).slice(0,1500));if(!tokens.length)return [];
+ guides=guides.filter(g=>helpAudienceAllowed(g,context));
+ const tokens=helpQueryTokens(guides,query);if(!tokens.length)return [];
  const broadFinance=context.kind==='club'&&!['alumno','familia'].includes(context.role)&&/\b(finanza|finanzas|finance|finances)\b/.test(normalizeHelpText(query))&&!/\b(cargo|pago|tarifa|recibo|informe|automatizacion|deuda|charge|payment|report|receipt)\b/.test(normalizeHelpText(query));
  if(broadFinance){const priority=['finance','charge-create','payment-record','tariff-change','receipts','finance-report','automation-prepare','payment-validate','reminders'];return guides.filter(g=>g.category==='finance'&&helpTopicAllowed(g,context)&&g.memberOnly!==true).sort((a,b)=>priority.indexOf(a.id)-priority.indexOf(b.id)).slice(0,limit);}
  return guides.filter(g=>{
@@ -20,12 +56,7 @@ export function selectHelpTopics(guides=[],query='',context={},limit=3){
  }).map(g=>{const title=words(g.title),primary=words(`${g.title} ${g.keywords}`),secondary=words(`${g.summary} ${(g.steps||[]).join(' ')}`);const score=tokens.reduce((n,t)=>n+(title.includes(t)?8:primary.includes(t)?4:secondary.includes(t)?1:0),0);return {topic:g,score:score?score+(g.scope===context.kind?0.25:0):0};})
  .filter(x=>x.score>=4).sort((a,b)=>b.score-a.score||a.topic.id.localeCompare(b.topic.id)).slice(0,limit).map(x=>x.topic);
 }
-export function usageHelpVisible(context={}){
- if(context.initial===true)return true;
- if(!context.userId)return false;
- if(context.kind==='club')return ['direccion','coordinacion','secretaria','economia','comunicacion','monitor'].includes(context.role);
- return context.kind==='profile'&&['marca','federacion'].includes(context.type);
-}
+export function usageHelpVisible(){return true;}
 export function usageHelpAiEligible(context={}){
  if(!usageHelpVisible(context))return false;
  if(!context.userId)return false;

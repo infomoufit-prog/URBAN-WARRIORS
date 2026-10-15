@@ -1423,6 +1423,8 @@ export const repos={
     evidenceUrl:(path)=>backend.signedUrl('competition-weight-evidence',path,900)
   },
   customerOps:{
+    freeHelpStatus:(tenant_ref)=>backend.invokeFunction('kombax-usage-help',{action:'status',tenant_ref},15000),
+    freeHelpChat:(message,request_id,tenant_ref)=>backend.invokeFunction('kombax-usage-help',{message,request_id,tenant_ref,locale:getLocale()},65000),
     usageHelpStatus:(tenant_ref)=>backend.invokeFunction('kombax-assist-r38',{action:'usage_status',tenant_ref},15000),
     tickets:(tenant_ref=null,limit=50)=>backend.globalReadRpc('app_kombax_customer_ops_tickets_r60',{p_tenant_ref:tenant_ref,p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
     supportTickets:(limit=50)=>backend.globalReadRpc('app_kombax_customer_ops_tickets_v211',{p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),

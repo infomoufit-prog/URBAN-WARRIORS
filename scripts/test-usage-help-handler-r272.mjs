@@ -9,6 +9,7 @@ const context=()=>({category,identity_context:{entity_type:entityType,entity_nam
 const fetch=async(url,options={})=>{
  calls.push({url,body:options.body?JSON.parse(options.body):null});
  if(url.endsWith('/app_kombax_usage_help_access_r272'))return Response.json({ai_allowed:paid});
+ if(url.endsWith('/app_usage_help_audience_r274'))return Response.json({kind:'club',type:'club',role:'direccion',userId:'qa-user',paid:true,premium:true});
  if(url.endsWith('/auth/v1/user'))return Response.json({id:'qa-user'},{status:auth?200:401});
  if(url.endsWith('/app_kombax_assist_turn_reserve_v227'))return Response.json(reserve?{ok:true,turn_id:'qa-turn',reused}:{ok:false,reason:'allowance_limit'});
  if(url.endsWith('/app_kombax_ai_turn_result_r103'))return Response.json({status:'COMPLETED',message:'Previously metered help'});

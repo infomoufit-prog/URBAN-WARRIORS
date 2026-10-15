@@ -676,3 +676,28 @@ body[class*="theme-"] .toast:not(.toast-error){background:color-mix(in srgb,var(
 @media(prefers-reduced-motion:reduce){.kx-usage-help *{scroll-behavior:auto!important;transition:none!important}}
 
 .kx-help-choices{display:flex;flex-direction:column;align-items:stretch;gap:5px}.kx-help-choices .btn{white-space:normal;text-align:left;margin-top:0}
+
+/* R273: a quiet conversation; optional controls stay collapsed. */
+.kx-help-status{margin:0;padding:8px 14px;color:#c4c9d8;font-size:12px}.kx-help-status::before{content:'…';margin-right:8px;color:#ff628c}.kx-help-usage{padding:4px 12px;font-size:11px;color:#adb3c2}.kx-help-usage summary,.kx-help-related summary,.kx-help-notes summary{cursor:pointer;padding:6px 0}.kx-help-usage .kx-help-quota{padding:5px 0;border:0}.kx-help-message ol,.kx-help-message ul{padding-left:20px;margin:9px 0;font-size:14px;line-height:1.55}.kx-help-message li+li{margin-top:7px}.kx-help-message.assistant>small{display:none}.kx-help-message.assistant>div{font-weight:400}.kx-help-related,.kx-help-notes{margin-top:8px;border-top:1px solid #ffffff12;font-size:12px;color:#c7ccda}.kx-help-related .kx-help-choices{padding:5px 0}.kx-usage-help-panel #kx-help-keyboard{display:block;font-size:10px;margin-top:4px;color:#979ead}.kx-help-thread{min-height:120px}
+
+/* R274: a quiet conversation, with workspace balance kept secondary. */
+.kx-usage-help-panel{border-color:#754054;background:linear-gradient(155deg,#181a24,#0e1017 65%);box-shadow:0 24px 70px #000b,0 0 28px #ed255a10}
+.kx-usage-help-panel header{padding:15px 16px;background:linear-gradient(100deg,#ffffff05,transparent);border-bottom-color:#ffffff0c}
+.kx-usage-help-panel header strong{letter-spacing:.015em;font-size:15px}
+.kx-usage-help-panel header small{font-size:11px;margin-top:3px;color:#aeb5c6}
+.kx-help-thread{padding:16px;scrollbar-width:thin;scrollbar-color:#694151 transparent}
+.kx-help-message{padding:13px 14px;margin-bottom:14px;border-color:#ffffff0b;background:#ffffff04;border-radius:14px}
+.kx-help-message.user{background:linear-gradient(135deg,#49243588,#2c1b2888);border-color:#e84c7528;margin-left:36px}
+.kx-help-message.user small{font-size:10px;color:#e4b1c2;margin-bottom:5px;display:block}
+.kx-help-message ol{margin-top:12px}.kx-help-message li+li{margin-top:10px}
+.kx-help-related summary,.kx-help-notes summary{font-size:11px;color:#b5bfd1}
+.kx-usage-help-panel [data-help-balance]{margin:2px 14px 7px;padding:4px 10px;border:1px solid #ffffff0c;border-radius:10px;background:#ffffff03;flex-shrink:0}
+.kx-usage-help-panel [data-help-balance] p{font-size:11px;line-height:1.5;margin:5px 0 8px}
+.kx-usage-help-panel form{border-top:1px solid #ffffff0c;padding-top:11px}
+.kx-usage-help-panel textarea{border-color:#ffffff24;background:#090b11;padding:11px 12px;line-height:1.45;border-radius:12px}
+.kx-usage-help-panel textarea:focus{outline:2px solid #db436e66;outline-offset:1px}
+.kx-usage-help-panel footer{padding-top:7px;color:#a7afbf}
+.kx-usage-help-panel footer a,.kx-usage-help-panel footer button{color:#aeb6c7}
+@media(max-width:700px){.kx-help-thread{padding:12px}.kx-help-message{padding:11px 12px}.kx-usage-help-panel{height:min(600px,calc(100dvh - 180px))}.kx-help-message.user{margin-left:24px}}
+.kx-usage-help-panel{max-width:calc(100vw - 40px)}
+body:has(.kx-personal-shell.menu-open) .kx-usage-help,body:has(.app-shell.sidebar-open) .kx-usage-help{visibility:hidden;pointer-events:none}

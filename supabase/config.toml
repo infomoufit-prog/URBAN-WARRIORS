@@ -62,3 +62,6 @@ verify_jwt = false
 
 [functions.meta-instagram-data-deletion]
 verify_jwt = false
+
+[functions.kombax-usage-help]
+verify_jwt = true
