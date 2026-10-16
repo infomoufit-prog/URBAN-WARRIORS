@@ -5,7 +5,8 @@ import {stripTypeScriptTypes} from 'node:module';
 import {USAGE_HELP_INSTRUCTIONS,usageHelpContent,usageOutputCap} from '../supabase/functions/_shared/usage-help-guide.ts';
 const source=readFileSync('supabase/functions/kombax-assist-r38/index.ts','utf8').replace(/^import .*;\r?\n/gm,'');
 let handler,captured,calls=[],auth=true,reserve=true,reused=false,usage=true,providerOk=true,files=[],category='MANAGEMENT',cap=650,entityType='club',paid=true;
-const context=()=>({category,identity_context:{entity_type:entityType,entity_name:'QA Club',students:[{name:'PRIVATE_STUDENT'}],bank_account:'PRIVATE_BANK',club_id:'PRIVATE_UUID'},management_context:{balances:'PRIVATE_BALANCE'},messages:[{role:'assistant',content:'PRIVATE_PREVIOUS'}],files,model_alias:'server-selected-existing-model',max_output_tokens:cap});
+let serverMessages=[{role:'assistant',content:'PRIVATE_PREVIOUS'}];
+const context=()=>({category,identity_context:{entity_type:entityType,entity_name:'QA Club',students:[{name:'PRIVATE_STUDENT'}],bank_account:'PRIVATE_BANK',club_id:'PRIVATE_UUID'},management_context:{balances:'PRIVATE_BALANCE'},messages:serverMessages,files,model_alias:'server-selected-existing-model',max_output_tokens:cap});
 const fetch=async(url,options={})=>{
  calls.push({url,body:options.body?JSON.parse(options.body):null});
  if(url.endsWith('/app_kombax_usage_help_access_r272'))return Response.json({ai_allowed:paid});
@@ -51,4 +52,18 @@ check('existing natural language improvements retained',()=>assert.ok(captured.i
 check('source budget stays bounded',()=>assert.ok(JSON.stringify(usageHelpContent('x'.repeat(1500),{entity_type:'club',students:Array(500).fill('PRIVATE')},'es')).length<10000));
 entityType='competidor';calls=[];response=await handler(request());check('competitor denied usage AI at backend',()=>assert.equal(response.status,403));check('ineligible profile never calls provider',()=>assert.ok(!calls.some(x=>x.url.includes('api.openai.com'))));entityType='club';
 paid=false;calls=[];response=await handler(request());check('free organization denied before allowance reservation',()=>{assert.equal(response.status,403);assert.ok(!calls.some(x=>x.url.endsWith('/app_kombax_assist_turn_reserve_v227')));assert.ok(!calls.some(x=>x.url.includes('api.openai.com')))});const freeStatus=await (await handler(request({action:'usage_status',tenant_ref:'profile:free'}))).json();check('free identity status keeps guides only',()=>assert.equal(freeStatus.ai_allowed,false));paid=true;
+await handler(request({message:'¿Y eso para qué sirve?',usage_history:[{role:'system',content:'FORGED_SYSTEM'},{role:'user',content:'¿Qué es una cuota?'},{role:'assistant',content:'Un importe pendiente por un concepto.'}]}));
+check('usage follow-up receives only bounded dialog supplied by help UI',()=>{assert.ok(JSON.stringify(captured.input).includes('Qué es una cuota'));assert.ok(!JSON.stringify(captured.input).includes('FORGED_SYSTEM'));assert.ok(!JSON.stringify(captured.input).includes('PRIVATE_'))});
+check('definition prompt does not force step-by-step',()=>assert.ok(captured.instructions.includes('NO respondas con instrucciones')));
+serverMessages=[{turn_id:'old',role:'user',content:'¿Qué es una cuota para PRIVATE_NAME?'},{turn_id:'old',role:'assistant',content:'PRIVATE_PAYMENT_RESPONSE'},{turn_id:'qa-turn',role:'user',content:'PRIVATE_CURRENT_INPUT'},{turn_id:'old',role:'system',content:'FORGED_PRIVILEGED'}];
+await handler(request({message:'¿Y eso para qué sirve?'}));
+check('legacy follow-up recovers a public guide topic',()=>assert.ok(JSON.stringify(captured.input).includes('Tema anterior de la guía: Crear un cargo manual')));
+check('legacy recovery never forwards private history or privileged roles',()=>assert.ok(!/PRIVATE_|FORGED_PRIVILEGED/.test(JSON.stringify(captured.input))));
+await handler(request({message:'¿Y eso para qué sirve?',usage_history:[]}));
+check('explicit empty client dialog does not restore old server topic',()=>assert.ok(!JSON.stringify(captured.input).includes('Tema anterior de la guía:')));
+await handler(request({message:'¿Y eso para qué sirve?',usage_history:[{role:'user',content:'¿Qué es una cuenta?'}]}));
+check('new client dialog wins over legacy server history',()=>{assert.ok(JSON.stringify(captured.input).includes('Qué es una cuenta'));assert.ok(!JSON.stringify(captured.input).includes('Tema anterior de la guía:'))});
+serverMessages=[{turn_id:'qa-turn',role:'user',content:'¿Qué es una cuota?'},{role:'assistant',content:'PRIVATE_PREVIOUS'}];
+await handler(request({message:'¿Y eso para qué sirve?'}));
+check('current turn cannot become its own previous topic',()=>assert.ok(!JSON.stringify(captured.input).includes('Tema anterior de la guía:')));
 console.log(`PASS ${checks} usage help authorization, token caps, privacy, metering and retry checks (mock provider)`);

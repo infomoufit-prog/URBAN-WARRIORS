@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {socialProfileInvitation} from '../web/js/ui/social-profile-invitation.js';
+let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};
+const html=socialProfileInvitation([],{signedIn:true});
+ok(html.includes('Crear mi perfil público'),'clear create-public-profile action');
+ok(html.includes('nombre y tu foto')&&html.includes('tu espacio en Social'),'explains purpose');
+ok(html.includes('seguir explorando'),'exploration remains open');
+ok(html.includes('no habilita automáticamente')&&html.includes('vinculación aprobada'),'posting gate remains explicit');
+ok(html.includes('<details>')&&html.includes('Espectador es gratuito'),'extra information is optional');
+for(const type of ['club','marca','federacion','miembro','competidor','profesional','espectador','media'])for(const state of ['activo','limitado','suspendido','archivado'])ok(socialProfileInvitation([{id:'existing',perfil_tipo:type,profile_state:state}],{signedIn:true})==='','no duplicate invitation '+type+' '+state);
+ok(socialProfileInvitation([],{signedIn:false})==='','no assumed existing account for anonymous visitor');
+ok(socialProfileInvitation(null,{signedIn:true})==='','unavailable profile query does not become empty account');
+const module=readFileSync('web/js/modules/kombax-social.js','utf8');
+ok(module.includes("document.getElementById('kx-social-create-profile')")&&module.includes('openProfilePicker:true'),'existing profile selection flow preserved');
+ok(module.includes('if(identityIsActive(activeIdentity(),socialStatus))return'),'existing identity activation remains separate');
+console.log('PASS '+n+' Social invitation cases: empty account, existing identities, inactive profiles, guest, unavailable lookup and publication rules');

@@ -1424,7 +1424,7 @@ export const repos={
   },
   customerOps:{
     freeHelpStatus:(tenant_ref)=>backend.invokeFunction('kombax-usage-help',{action:'status',tenant_ref},15000),
-    freeHelpChat:(message,request_id,tenant_ref)=>backend.invokeFunction('kombax-usage-help',{message,request_id,tenant_ref,locale:getLocale()},65000),
+    freeHelpChat:(message,request_id,tenant_ref,usage_history=[])=>backend.invokeFunction('kombax-usage-help',{message,request_id,tenant_ref,usage_history,locale:getLocale()},65000),
     usageHelpStatus:(tenant_ref)=>backend.invokeFunction('kombax-assist-r38',{action:'usage_status',tenant_ref},15000),
     tickets:(tenant_ref=null,limit=50)=>backend.globalReadRpc('app_kombax_customer_ops_tickets_r60',{p_tenant_ref:tenant_ref,p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
     supportTickets:(limit=50)=>backend.globalReadRpc('app_kombax_customer_ops_tickets_v211',{p_limit:Math.min(100,Math.max(1,Number(limit)||50))}),
@@ -1444,7 +1444,7 @@ export const repos={
     migrationCatalog:(tenantRef)=>backend.globalReadRpc('app_kombax_assist_identity_context_fix16',{p_tenant_ref:tenantRef}),
     migrationRecords:(ticket_id)=>backend.globalReadRpc('app_kombax_migration_records_v271',{p_ticket_id:ticket_id}),
     migrationImport:(ticket_id,request_id,records)=>backend.globalWriteRpc('app_kombax_migration_import_v271',{p_ticket_id:ticket_id,p_request_id:request_id,p_records:records}),
-    chat:(ticket_id,message,specialty='management',client_request_id=(crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`))=>backend.invokeFunction('kombax-assist-r38',{ticket_id,message,specialty,client_request_id,user_locale:getLocale()},70000),
+    chat:(ticket_id,message,specialty='management',client_request_id=(crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`),usage_history=[])=>backend.invokeFunction('kombax-assist-r38',{ticket_id,message,specialty,client_request_id,user_locale:getLocale(),...(specialty==='usage'?{usage_history}:{})},70000),
     async stageMigrationFiles(ticket_id,files=[],onProgress=null){
       const uid=session()?.id;if(!uid)throw new Error('AUTH_REQUIRED');
       const mimeByExt={pdf:'application/pdf',csv:'text/csv',xls:'application/vnd.ms-excel',xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp'};

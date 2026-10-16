@@ -5,7 +5,7 @@ const words=text=>[...new Set(normalizeHelpText(text).split(' ').filter(x=>x.len
 const vocabularies=new WeakMap();
 export function helpSmallTalk(text){
  const value=normalizeHelpText(text);
- if(/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hello|hi)$/.test(value))return 'Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.';
+ if(/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hello|hi)$/.test(value))return 'Hola. ¿Qué te gustaría saber sobre KOMBAX?';
  if(/^(gracias|muchas gracias|perfecto gracias|thanks|thank you)$/.test(value))return 'De nada. Si necesitas otra cosa, seguimos por aquí.';
  return '';
 }
@@ -65,6 +65,26 @@ export function usageHelpAiEligible(context={}){
 }
 export function usageHelpContextKey(context={}){return [context.userId||'guest',context.tenantRef||'public',context.role||'',context.type||'',context.verified===true?'verified':'',context.initial===true?'initial':''].join(':');}
 export function usageOutputCap(planLimit){const value=Number(planLimit);return Math.min(600,Number.isFinite(value)&&value>0?Math.floor(value):500);}
+
+export function helpQuestionIntent(text=''){
+ const q=normalizeHelpText(text);
+ if(/^(?:y )?(?:(?:eso|esto|esa|ese) )?(?:para que|que utilidad|de que sirve|what is .+ for)/.test(q))return 'purpose';
+ if(/^(?:y )?(?:que es|que son|que significa|a que se refiere|what is|what are|what does)/.test(q))return 'definition';
+ if(/\b(diferencia|diferencias|comparar|versus|vs|difference)\b/.test(q))return 'comparison';
+ if(/^(?:y )?(?:como|pasos|guiame|ensename|quiero crear|quiero anadir|crear|registrar|anadir|how)/.test(q))return 'procedure';
+ return 'conversation';
+}
+export function helpSafeHistory(history){
+ return (Array.isArray(history)?history:[]).slice(-4).filter(x=>x&&['user','assistant'].includes(x.role)&&typeof x.content==='string').map(x=>({role:x.role,content:x.content.replace(/\u0000/g,'').slice(0,600)}));
+}
+export function helpConversationTopics(guides,message,context,history=[],limit=4){
+ if(helpIsFollowup(message))for(const previous of helpSafeHistory(history).filter(x=>x.role==='user').reverse()){
+  const topic=selectHelpTopics(guides,previous.content,context,1)[0];
+  if(topic)return selectHelpTopics(guides,`${message} ${topic.title}`,context,limit);
+ }
+ return selectHelpTopics(guides,message,context,limit);
+}
+export function helpIsFollowup(message=''){return /\b(eso|esto|esa|ese|lo anterior|it|that|this)\b/.test(normalizeHelpText(message))||/^(?:necesito mas ayuda|mas ayuda|no (?:lo )?entiendo|no (?:me )?queda claro|explicamelo|i need more help|i do not understand)$/.test(normalizeHelpText(message));}
 
 export function resolveUsageHelpContext(session,workspace,route='',initial=false){
  if(!session?.id)return {kind:'public',initial:true,route};

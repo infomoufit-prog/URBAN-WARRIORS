@@ -89,7 +89,9 @@
         "La información de menores debe seguir el flujo de tutor/club."
       ],
       "scope": "club",
-      "memberOnly": false
+      "memberOnly": false,
+      "concept": "Una inscripción vincula al alumno con una actividad del club. Una misma persona puede tener varias disciplinas o grupos sin necesitar otra cuenta por cada uno.",
+      "purpose": "Sirve para organizar en qué actividades participa cada alumno."
     },
     {
       "id": "students",
@@ -206,7 +208,9 @@
         "El Monitor solo opera sobre grupos asignados si está restringido."
       ],
       "scope": "club",
-      "memberOnly": false
+      "memberOnly": false,
+      "concept": "Un grupo reúne alumnos para organizar una actividad o entrenamiento del club. Un alumno puede formar parte de varios grupos y disciplinas.",
+      "purpose": "Sirve para organizar horarios, sesiones y el seguimiento del alumnado."
     },
     {
       "id": "sessions",
@@ -230,7 +234,9 @@
         "Los monitores restringidos solo modifican sesiones dentro de sus grupos autorizados."
       ],
       "scope": "club",
-      "memberOnly": false
+      "memberOnly": false,
+      "concept": "Una sesión es una clase o entrenamiento situado en una fecha y horario, asociado al grupo correspondiente. Puede ser puntual o formar parte de una serie recurrente.",
+      "purpose": "Sirve para organizar el calendario y dar seguimiento a las clases del club."
     },
     {
       "id": "attendance",
@@ -331,7 +337,9 @@
       ],
       "scope": "club",
       "memberOnly": false,
-      "category": "finance"
+      "category": "finance",
+      "concept": "Las finanzas del club reúnen las cuotas, los cargos y los pagos que puedes consultar o gestionar según tu rol. Un importe pendiente y un pago recibido son cosas diferentes.",
+      "purpose": "Sirven para revisar lo pendiente y lo cobrado sin mezclar los cargos con los movimientos de dinero."
     },
     {
       "id": "receipts",
@@ -720,7 +728,9 @@
         "Un recibo aparece cuando existe un cobro real registrado por el club."
       ],
       "scope": "club",
-      "memberOnly": true
+      "memberOnly": true,
+      "concept": "Mis cuotas muestra la información económica que corresponde a tu ficha o a los hijos que tienes vinculados. Un cargo pendiente es una cantidad por pagar; no confirma que se haya hecho un cobro.",
+      "purpose": "Te permite consultar tus importes y estados de pago dentro del club."
     },
     {
       "id": "member-comms",
@@ -953,7 +963,9 @@
       "scope": "public",
       "module": null,
       "route": null,
-      "types": []
+      "types": [],
+      "concept": "La cuenta gratuita es tu acceso a KOMBAX con un correo y contraseña. La cuenta y el perfil público son cosas diferentes: después puedes crear una identidad o vincularte a un club.",
+      "purpose": "Sirve para acceder a la plataforma y gestionar tus identidades desde una misma cuenta."
     },
     {
       "id": "account-login",
@@ -1172,7 +1184,9 @@
       ],
       "memberOnly": false,
       "module": null,
-      "category": "finance"
+      "category": "finance",
+      "concept": "Un cargo es un importe que el club registra a nombre de un alumno o familia por una cuota, matrícula u otro concepto. Crearlo no mueve dinero ni significa que ya esté pagado.",
+      "purpose": "Sirve para saber qué importe corresponde pagar, por qué concepto y en qué fecha."
     },
     {
       "id": "payment-record",
@@ -1200,7 +1214,9 @@
       ],
       "memberOnly": false,
       "module": null,
-      "category": "finance"
+      "category": "finance",
+      "concept": "Registrar un pago deja constancia del dinero recibido y de su relación con un cargo. No es lo mismo que crear el cargo ni implica por sí solo un cobro bancario.",
+      "purpose": "Sirve para que el club pueda revisar y conciliar lo recibido con lo que estaba pendiente."
     },
     {
       "id": "tariff-change",
@@ -1228,7 +1244,9 @@
       ],
       "memberOnly": false,
       "module": null,
-      "category": "finance"
+      "category": "finance",
+      "concept": "Una tarifa define el precio y la periodicidad que se aplican al alumno. Un cargo es un importe ya emitido; cambiar la tarifa no modifica por sí solo los cargos anteriores.",
+      "purpose": "Sirve para establecer las condiciones económicas del alumno para las cuotas correspondientes."
     },
     {
       "id": "payment-validate",
@@ -1337,7 +1355,9 @@
         "file": "web/js/modules/kombax-social.js",
         "screen": "KOMBAX Social"
       },
-      "module": "social"
+      "module": "social",
+      "concept": "KOMBAX Social es el espacio para descubrir perfiles y contenido de la comunidad. Explorar y publicar tienen requisitos distintos; crear una cuenta no concede automáticamente permiso para publicar.",
+      "purpose": "Sirve para descubrir y relacionarte con la comunidad, según las capacidades de tu perfil."
     },
     {
       "id": "social-publish",
@@ -1396,7 +1416,9 @@
         "file": "web/js/modules/managed-profile-hub.js",
         "screen": "KOMBAX Showcase"
       },
-      "module": "showcase"
+      "module": "showcase",
+      "concept": "KOMBAX Showcase es el catálogo donde puedes explorar productos y servicios de la comunidad. Explorar o comprar no te convierte en vendedor autorizado.",
+      "purpose": "Sirve para descubrir productos y servicios y revisar su información y vendedor."
     },
     {
       "id": "showcase-publish",
@@ -1435,7 +1457,9 @@
         "file": "web/js/modules/kombax-events.js",
         "screen": "KOMBAX Events"
       },
-      "module": "events"
+      "module": "events",
+      "concept": "KOMBAX Events es el espacio para descubrir eventos, consultar su información y acceder a las opciones disponibles de participación o entradas. Organizar y vender entradas requieren sus propias activaciones.",
+      "purpose": "Sirve para encontrar actividades y eventos de la comunidad."
     },
     {
       "id": "events-create",
@@ -1481,7 +1505,9 @@
         "secretaria"
       ],
       "memberOnly": false,
-      "module": null
+      "module": null,
+      "concept": "KOMBAX Assist es el copiloto de gestión que puede ayudarte a interpretar información autorizada de tu espacio. Ayuda KOMBAX explica cómo funciona la plataforma; son funciones distintas.",
+      "purpose": "Sirve para revisar información y prioridades que tu rol tenga permitido consultar."
     },
     {
       "id": "migrations-import",
@@ -1507,7 +1533,9 @@
         "secretaria"
       ],
       "memberOnly": false,
-      "module": null
+      "module": null,
+      "concept": "KOMBAX Migrations ayuda a preparar la incorporación de datos de documentos y archivos. Analiza y presenta una vista previa; la incorporación requiere la confirmación del flujo autorizado.",
+      "purpose": "Sirve para preparar datos existentes sin introducirlos todos manualmente."
     },
     {
       "id": "identity-create",
@@ -1521,7 +1549,9 @@
         "Completa la presentación y guarda el borrador; revisa las condiciones y los datos requeridos.",
         "Solicita la verificación cuando corresponda. Crear un perfil no activa una suscripción ni la publicación automáticamente.",
         "Club, Marca y Federación tienen sus propios perfiles públicos; las capacidades de una persona se gestionan desde su identidad personal."
-      ]
+      ],
+      "concept": "Una identidad indica desde qué perfil participas o gestionas KOMBAX. Una cuenta puede reunir varias identidades, conservando separados los espacios y permisos correspondientes.",
+      "purpose": "Sirve para elegir con qué perfil te presentas y qué espacio de gestión utilizas."
     }
   ]
 }

@@ -3,17 +3,17 @@ import {repos} from '../core/repositories.js';
 import {esc} from '../core/utils.js';
 import {getLocale} from '../i18n/index.js';
 import {localizeSystemText} from '../i18n/legacy-runtime.js';
-import {resolveUsageHelpContext,helpSmallTalk,selectHelpTopics,helpTopicAllowed,usageHelpVisible,usageHelpAiEligible,usageHelpContextKey} from '../core/usage-help-knowledge.js';
+import {resolveUsageHelpContext,helpSmallTalk,helpQuestionIntent,helpSafeHistory,helpConversationTopics,helpAudienceAllowed,selectHelpTopics,helpTopicAllowed,usageHelpVisible,usageHelpAiEligible,usageHelpContextKey} from '../core/usage-help-knowledge.js';
 import {usageWorkspaceContext,openUsageWorkspaceModule} from './personal-navigation.js';
 const L=value=>localizeSystemText(value,getLocale());
 const avatar='./assets/assist/assistant-avatar.webp';
-let installed=false,root=null,context={},key='',epoch=0,opened=false,catalog=null,quota=null,credits=null,ticketId='',question='',pending=null,busy=false,channel='',getClubRoutes=()=>[];
+let installed=false,root=null,context={},key='',epoch=0,opened=false,catalog=null,quota=null,credits=null,ticketId='',question='',pending=null,busy=false,channel='',conversation=[],questionHistory=[],getClubRoutes=()=>[];
 
 function current(){const initial=Boolean(document.querySelector('[data-kx-usage-help-initial],.kx-type-picker,[data-kombax-view="profiles"],[data-kombax-view="identity-intro"],[data-kombax-view="member-family-intro"]'));return resolveUsageHelpContext(state.session,usageWorkspaceContext(),state.route,initial);}
 function sync(){
  const next=current(),nextKey=usageHelpContextKey(next);context=next;
  if(!usageHelpVisible(context))opened=false;
- if(nextKey!==key){key=nextKey;epoch++;quota=null;credits=null;channel='';ticketId='';question='';pending=null;busy=false;if(opened){renderPanel();loadQuota();}}
+ if(nextKey!==key){key=nextKey;epoch++;quota=null;credits=null;channel='';conversation=[];questionHistory=[];ticketId='';question='';pending=null;busy=false;if(opened){renderPanel();loadQuota();}}
  if(!document.getElementById('kx-usage-help-root'))mount();
  root.hidden=!usageHelpVisible(context);
  if(!opened){root.querySelector('#kx-usage-help-panel').hidden=true;root.querySelector('.kx-usage-help-launcher').setAttribute('aria-expanded','false');}
@@ -26,19 +26,20 @@ function mount(){
 }
 function close(){opened=false;root.querySelector('#kx-usage-help-panel').hidden=true;const button=root.querySelector('.kx-usage-help-launcher');button.setAttribute('aria-expanded','false');button.focus();}
 async function open(){sync();if(!usageHelpVisible(context))return;opened=true;const panel=root.querySelector('#kx-usage-help-panel');if(panel.dataset.helpEpoch!==String(epoch))renderPanel();else panel.hidden=false;root.querySelector('.kx-usage-help-launcher').setAttribute('aria-expanded','true');const captured=epoch;quotaLine();
- try{if(!catalog){const response=await fetch('./assets/guides/usage-help-r272.json');if(!response.ok)throw Error('guide_unavailable');catalog=(await response.json()).guides;}if(captured===epoch){suggest();root.querySelector('textarea')?.focus();}}catch{if(captured===epoch)message(L('No se pudo cargar la guía. Puedes contactar con Soporte.'),'assistant');}
+ try{if(!catalog){const response=await fetch('./assets/guides/usage-help-r272.json?v=r275-natural');if(!response.ok)throw Error('guide_unavailable');catalog=(await response.json()).guides;}if(captured===epoch){suggest();root.querySelector('textarea')?.focus();}}catch{if(captured===epoch)message(L('No se pudo cargar la guía. Puedes contactar con Soporte.'),'assistant');}
  loadQuota();
 }
 function renderPanel(){
  const panel=root?.querySelector('#kx-usage-help-panel');if(!panel)return;
- panel.dataset.helpEpoch=String(epoch);panel.hidden=false;panel.innerHTML=`<header><img src="${avatar}" alt=""><div><strong>${esc(L('Ayuda KOMBAX'))}</strong><small>${esc(context.name||'KOMBAX')} · ${esc(L('Guía de uso'))}</small></div><button type="button" class="icon-btn" data-help-close aria-label="${esc(L('Cerrar'))}">×</button></header><div class="kx-help-thread" role="log" aria-live="polite" aria-relevant="additions"></div><p class="kx-help-status" data-help-status role="status" aria-live="polite" hidden></p><div class="kx-help-suggestions"></div><form><label for="kx-help-question">${esc(L('¿Qué necesitas hacer?'))}</label><textarea id="kx-help-question" rows="2" maxlength="1500" enterkeyhint="send" aria-describedby="kx-help-keyboard" required placeholder="${esc(L('Por ejemplo: cómo crear una sesión'))}"></textarea><small id="kx-help-keyboard">${esc(L('Enter para enviar · Mayús+Enter para otra línea'))}</small><div><button type="submit" class="btn btn-primary">${esc(L('Enviar'))}</button><button type="button" class="btn btn-ghost" data-help-ai hidden>${esc(L('Necesito más ayuda'))}</button></div></form><footer><button type="button" data-help-new>${esc(L('Nueva conversación'))}</button><a href="mailto:soporte@kombax.es">${esc(L('Contactar con Soporte'))}</a></footer>`;
+ panel.dataset.helpEpoch=String(epoch);panel.hidden=false;panel.innerHTML=`<header><img src="${avatar}" alt=""><div><strong>${esc(L('Ayuda KOMBAX'))}</strong><small>${esc(context.name||'KOMBAX')} · ${esc(L('Tu ayuda en KOMBAX'))}</small></div><button type="button" class="icon-btn" data-help-close aria-label="${esc(L('Cerrar'))}">×</button></header><div class="kx-help-thread" role="log" aria-live="polite" aria-relevant="additions"></div><p class="kx-help-status" data-help-status role="status" aria-live="polite" hidden></p><div class="kx-help-suggestions"></div><form><label for="kx-help-question">${esc(L('Escribe tu pregunta'))}</label><textarea id="kx-help-question" rows="2" maxlength="1500" enterkeyhint="send" aria-describedby="kx-help-keyboard" required placeholder="${esc(L('Por ejemplo: ¿qué es una cuota?'))}"></textarea><small id="kx-help-keyboard">${esc(L('Enter para enviar · Mayús+Enter para otra línea'))}</small><small class="kx-help-followup-hint">${esc(L('¿Te falta algo? Dime qué parte necesitas aclarar o escribe «necesito más ayuda».'))}</small><div><button type="submit" class="btn btn-primary">${esc(L('Enviar'))}</button></div></form><footer><button type="button" data-help-new>${esc(L('Nueva conversación'))}</button><a href="mailto:soporte@kombax.es">${esc(L('Contactar con Soporte'))}</a></footer>`;
  panel.querySelector('[data-help-close]').addEventListener('click',close);panel.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();close();}};
  panel.querySelector('textarea').addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing&&event.keyCode!==229){event.preventDefault();if(!busy)panel.querySelector('form').requestSubmit();}});
- panel.querySelector('form').addEventListener('submit',e=>{e.preventDefault();answer();});panel.querySelector('[data-help-ai]').addEventListener('click',askAi);
- panel.querySelector('[data-help-new]').addEventListener('click',()=>{if(busy)return;ticketId='';pending=null;question='';renderPanel();suggest();quotaLine();});
- message(L('Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.'),'assistant');suggest();quotaLine();
+ panel.querySelector('form').addEventListener('submit',e=>{e.preventDefault();answer();});
+ panel.querySelector('[data-help-new]').addEventListener('click',()=>{if(busy)return;ticketId='';pending=null;question='';conversation=[];questionHistory=[];renderPanel();suggest();quotaLine();});
+ message(L('Hola. ¿Qué te gustaría saber sobre KOMBAX?'),'assistant');suggest();quotaLine();
 }
 function message(text,role='assistant',html=''){
+ conversation=helpSafeHistory([...conversation,{role,content:String(text)}]);
  const thread=root.querySelector('.kx-help-thread'),article=document.createElement('article');article.className=`kx-help-message ${role}`;
  article.innerHTML=`<small>${esc(role==='user'?L('Tú'):L('Ayuda KOMBAX'))}</small><div>${esc(text)}</div>${html}`;thread.appendChild(article);thread.scrollTop=thread.scrollHeight;return article;
 }
@@ -69,26 +70,35 @@ function showChoices(topics){
  article.insertAdjacentHTML('beforeend',`<details class="kx-help-related"><summary>${esc(L('Otras opciones relacionadas'))}</summary><div class="kx-help-choices">${topics.slice(0,3).map(topic=>`<button type="button" class="btn btn-ghost btn-sm" data-help-topic="${esc(topic.id)}">${esc(L(topic.title))}</button>`).join('')}</div></details>`);
  article.querySelectorAll('[data-help-topic]').forEach(button=>button.addEventListener('click',()=>{const topic=topics.find(x=>x.id===button.dataset.helpTopic);if(!topic||busy)return;question=topic.title;message(L(topic.title),'user');showTopic(topic);quotaLine();}));
 }
+function audienceContext(){return {...context,...(quota?.audience||{}),paid:channel==='paid',premium:channel==='paid'&&quota?.audience?.premium===true};}
+function relatedGuide(article,topics){
+ const topic=topics.find(t=>helpAudienceAllowed(t,audienceContext()));if(!topic)return;
+ const button=document.createElement('button');button.type='button';button.className='btn btn-ghost btn-sm';button.textContent=L('Ver guía relacionada');
+ button.addEventListener('click',()=>{if(busy||!helpAudienceAllowed(topic,audienceContext()))return;button.disabled=true;showTopic(topic);});article.appendChild(button);
+}
+function localReply(text,topics){
+ const intent=helpQuestionIntent(text),topic=topics[0];
+ if(!topic){message(L('Cuéntame un poco más sobre tu duda para poder orientarte.'));return;}
+ if(intent==='procedure'){showTopic(topic);return;}
+ const explanation=intent==='purpose'?(topic.purpose||topic.concept):topic.concept;
+ const reply=message(explanation?L(explanation):L('La guía recoge la información disponible sobre esta función. Puedes abrirla aquí para revisarla.'));
+ relatedGuide(reply,topics);
+}
 async function answer(){
  sync();if(busy)return;const input=root.querySelector('textarea'),text=String(input?.value||'').trim().slice(0,1500);if(!text)return;
- const captured=epoch;question=text;message(question,'user');input.value='';root.querySelector('.kx-help-suggestions').hidden=true;busy=true;quotaLine();
+ const captured=epoch;questionHistory=helpSafeHistory(conversation);question=text;message(question,'user');input.value='';root.querySelector('.kx-help-suggestions').hidden=true;busy=true;quotaLine();
  try{
   await new Promise(resolve=>requestAnimationFrame(resolve));
   const greeting=helpSmallTalk(question);if(greeting){if(captured===epoch)message(L(greeting));return;}
-  if(!catalog){const response=await fetch('./assets/guides/usage-help-r272.json');if(!response.ok)throw Error('guide_unavailable');catalog=(await response.json()).guides;}
+  // Resolve entitlement before choosing AI or guide. A catalog hit no longer bypasses conversation.
+  if(context.userId)await loadQuota();if(captured!==epoch)return;
+  if(!catalog){try{const response=await fetch('./assets/guides/usage-help-r272.json?v=r275-natural');if(response.ok)catalog=(await response.json()).guides;}catch{}}
   if(captured!==epoch)return;
-  if(context.userId&&!quota)await loadQuota();if(captured!==epoch)return;
-  const audience={...context,...(quota?.audience||{}),paid:channel==='paid',premium:channel==='paid'&&quota?.audience?.premium===true};
-  const topics=selectHelpTopics(catalog,question,audience,4);
-  if(topics.length){showTopic(topics[0]);showChoices(topics.slice(1).filter(topic=>helpTopicAllowed(topic,context)));}
-  else {
-   if(!quota)await loadQuota();
-   if(captured!==epoch)return;
-   busy=false;quotaLine();
-   if(!root.querySelector('[data-help-ai]').disabled){await askAi();return;}
-   message(L('No encuentro todavía un procedimiento que encaje con tu pregunta. ¿Te refieres a alumnos, cuotas, eventos, Social o Showcase? Dime qué estás intentando hacer; también puedes contactar con Soporte.'));
-  }
- }catch{if(captured===epoch)message(L('No he podido cargar la guía ahora. Tu pregunta sigue aquí; puedes volver a intentarlo o escribir a Soporte.'));}
+  const topics=helpConversationTopics(catalog||[],question,audienceContext(),questionHistory,4);
+  busy=false;quotaLine();
+  if(canUseAi()){const answered=await askAi({quiet:true});if(captured!==epoch||answered)return;}
+  localReply(question,topics);
+ }catch{if(captured===epoch)message(L('No he podido consultar la información ahora. Tu pregunta sigue aquí; puedes intentarlo de nuevo.'));}
  finally{if(captured===epoch){busy=false;quotaLine();}}
 }
 async function loadQuota(){
@@ -104,36 +114,40 @@ async function loadQuota(){
   channel='free';quota=free?.version==='r274'&&free.configured===true?{allowance_remaining:free.remaining,audience:free.audience}:{unavailable:true};credits=null;quotaLine();
  }catch{if(captured===epoch){quota={unavailable:true};quotaLine();}}
 }
+function canUseAi(){
+ const remaining=Number(quota?.allowance_remaining),available=Number(credits?.available);
+ return Boolean(context.userId)&&Boolean(quota)&&!quota.unavailable&&(channel==='free'?remaining>0:channel==='paid'&&credits?.trial!==true&&(Boolean(ticketId)||remaining>0)&&available>0);
+}
 function quotaLine(){
  if(!root||!opened)return;
- const ai=root.querySelector('[data-help-ai]'),remaining=Number(quota?.allowance_remaining),available=Number(credits?.available);
+ const available=Number(credits?.available);
  const status=root.querySelector('[data-help-status]');status.hidden=!busy;status.textContent=busy?L('Preparando respuesta…'):'';root.querySelector('.kx-help-thread').setAttribute('aria-busy',String(busy));
- const canAsk=Boolean(context.userId)&&Boolean(quota)&&!quota.unavailable&&(channel==='free'?remaining>0:channel==='paid'&&credits?.trial!==true&&(Boolean(ticketId)||remaining>0)&&available>0);
+
  let balance=root.querySelector('[data-help-balance]');
  if(channel==='paid'&&credits&&Number.isFinite(available)){
   if(!balance){balance=document.createElement('details');balance.dataset.helpBalance='';balance.className='kx-help-notes';root.querySelector('footer').before(balance);}
   const expanded=balance.open,monthly=Number(credits.plan_total);
   balance.innerHTML=`<summary>${esc(L('Créditos del mes'))}: ${esc(String(available))} ${esc(L('disponibles'))}</summary><p>${Number.isFinite(monthly)?`${esc(L('Asignación mensual'))}: ${esc(String(monthly))}. `:''}${esc(L('Saldo compartido entre Ayuda, Assist y Migrations de este espacio.'))}</p>`;balance.open=expanded;
  }else balance?.remove();
- ai.hidden=!question||!canAsk;ai.disabled=busy||!canAsk;
+
  root.querySelector('form button[type="submit"]').disabled=busy;root.querySelector('[data-help-new]').disabled=busy;
 }
-async function askAi(){
+async function askAi({quiet=false}={}){
  if(busy||!question||!context.userId)return;
- const ai=root.querySelector('[data-help-ai]');if(ai.disabled)return;
+ if(!canUseAi())return false;
  const captured=epoch,ref=context.tenantRef,requestQuestion=question;busy=true;quotaLine();
  try{
   if(!pending||pending.question!==requestQuestion)pending={question:requestQuestion,id:crypto.randomUUID()};
   if(channel==='free'){
-   const response=await repos.customerOps.freeHelpChat(requestQuestion,pending.id,ref);
-   if(captured!==epoch)return;message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));pending=null;await loadQuota();return;
+   const response=await repos.customerOps.freeHelpChat(requestQuestion,pending.id,ref,questionHistory);
+   if(captured!==epoch)return;const reply=message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));relatedGuide(reply,helpConversationTopics(catalog||[],requestQuestion,audienceContext(),questionHistory,2));pending=null;await loadQuota();return true;
   }
   if(channel!=='paid')return;
   if(!ticketId){const created=await repos.customerOps.createTicket({category:'MANAGEMENT',subject:`Ayuda KOMBAX · ${context.name||context.type}`,module:'assist',tenant_ref:ref});if(captured!==epoch)return;ticketId=created.ticket_id;if(!ticketId)throw Error('case_unavailable');}
   if(!pending||pending.question!==requestQuestion)pending={question:requestQuestion,id:crypto.randomUUID()};
-  const response=await repos.customerOps.chat(ticketId,requestQuestion,'usage',pending.id);
-  if(captured!==epoch)return;message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));pending=null;await loadQuota();
- }catch(error){if(captured===epoch){if(channel==='free'&&error?.status===502)pending=null;message(L('Ahora mismo no puedo ampliar la respuesta. Puedes seguir con la guía, volver a intentarlo o escribir a Soporte. Tu pregunta sigue aquí.'));}}
+  const response=await repos.customerOps.chat(ticketId,requestQuestion,'usage',pending.id,questionHistory);
+  if(captured!==epoch)return;const reply=message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));relatedGuide(reply,helpConversationTopics(catalog||[],requestQuestion,audienceContext(),questionHistory,2));pending=null;await loadQuota();return true;
+ }catch(error){if(captured===epoch){if(error?.status===502||(error?.status===409&&error.message==='turn_retry_required'))pending=null;if(!quiet)message(L('Ahora mismo no puedo ampliar la respuesta. Puedes seguir con la guía, volver a intentarlo o escribir a Soporte. Tu pregunta sigue aquí.'));}}
  finally{if(captured===epoch){busy=false;quotaLine();}}
 }
 export function installUsageHelp({clubRoutes=()=>[]}={}){

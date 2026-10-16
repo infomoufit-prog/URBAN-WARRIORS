@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-15T22:21:30.713Z",
+  "generated_at": "2026-10-16T15:39:54.289Z",
   "policy": "All KOMBAX-generated visible copy must use i18n. User-created content remains original and may be translated on demand in a later feature.",
-  "files_scanned": 148,
-  "system_ui_candidates": 2895,
-  "target_block_1_system_ui_candidates": 590,
+  "files_scanned": 149,
+  "system_ui_candidates": 2897,
+  "target_block_1_system_ui_candidates": 589,
   "target_files": [
     "web/js/modules/gateway.js",
     "web/js/public-product-overview.js",
@@ -216,9 +216,9 @@
       "target_block_1": false
     },
     "web/js/core/usage-help-knowledge.js": {
-      "system_ui": 5,
+      "system_ui": 6,
       "technical": 3,
-      "user_content": 0,
+      "user_content": 1,
       "target_block_1": false
     },
     "web/js/core/utils.js": {
@@ -444,7 +444,7 @@
       "target_block_1": false
     },
     "web/js/modules/kombax-social.js": {
-      "system_ui": 123,
+      "system_ui": 122,
       "technical": 10,
       "user_content": 8,
       "target_block_1": true
@@ -647,10 +647,16 @@
       "user_content": 0,
       "target_block_1": false
     },
+    "web/js/ui/social-profile-invitation.js": {
+      "system_ui": 1,
+      "technical": 0,
+      "user_content": 0,
+      "target_block_1": false
+    },
     "web/js/ui/usage-help.js": {
-      "system_ui": 8,
+      "system_ui": 9,
       "technical": 1,
-      "user_content": 8,
+      "user_content": 9,
       "target_block_1": false
     },
     "web/js/ui/video-cover.js": {
@@ -4384,7 +4390,7 @@
       "line": 8,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "if(/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hello|hi)$/.test(value))return 'Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.';"
+      "sample": "if(/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hello|hi)$/.test(value))return 'Hola. ¿Qué te gustaría saber sobre KOMBAX?';"
     },
     {
       "file": "web/js/core/usage-help-knowledge.js",
@@ -4420,6 +4426,20 @@
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "return context.kind==='profile'&&['marca','federacion'].includes(context.type);"
+    },
+    {
+      "file": "web/js/core/usage-help-knowledge.js",
+      "line": 74,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "if(/^(?:y )?(?:como|pasos|guiame|ensename|quiero crear|quiero anadir|crear|registrar|anadir|how)/.test(q))return 'procedure';"
+    },
+    {
+      "file": "web/js/core/usage-help-knowledge.js",
+      "line": 87,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": false,
+      "sample": "export function helpIsFollowup(message=''){return /\\b(eso|esto|esa|ese|lo anterior|it|that|this)\\b/.test(normalizeHelpText(message))||/^(?:necesito mas ayuda|mas ayuda|no (?:lo )?entiendo|no (?:me )?queda claro|explicamelo|i need more help|i do not understand)$/.test(normalizeHelpText(message));}"
     },
     {
       "file": "web/js/core/utils.js",
@@ -16113,987 +16133,980 @@
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 25,
+      "line": 26,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const TYPE_LABEL={actualizacion:t('social.types.update'),resultado:t('social.types.result'),evento:t('social.types.event'),oportunidad:t('social.types.opportunity')};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 26,
+      "line": 27,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const PROFILE_LABEL={club:t('social.profiles.club'),miembro:t('social.profiles.member'),perfil_directo:t('social.profiles.kombaxProfile')};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 27,
+      "line": 28,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const PUBLIC_TYPE_LABEL={club:t('social.profiles.club'),miembro:t('social.profiles.member'),competidor:t('social.types.fighter'),marca:t('social.types.brand'),federacion:t('social.types.federation'),profesional:t('social.types.professional'),media:'Media / Creador',espectador:t('social.types.spectator')};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 28,
+      "line": 29,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const AUDIENCE_PROFILE_TYPES=[['miembro',t('social.profiles.member')],['club',t('social.profiles.clubs')],['competidor',t('social.profiles.fighters')],['federacion',t('social.profiles.federations')],['marca',t('social.profiles.brands')],['profesional',t('social.profiles.professionals')],['espectador',t('social.profiles"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 32,
+      "line": 33,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const CONTACT_LABEL={entrenamiento:t('social.contact.training'),competicion:t('social.contact.competition'),evento:t('social.contact.event'),colaboracion:t('social.contact.collaboration'),patrocinio:t('social.contact.sponsorship'),informacion:t('social.contact.information'),otro:t('social.contact.other')};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 103,
+      "line": 104,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const button=document.createElement('button');button.type='button';button.className='btn btn-ghost';button.textContent='Instagram · Conexión de esta identidad';"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 109,
-      "classification": "SYSTEM_UI_CANDIDATE",
-      "target_block_1": true,
-      "sample": "if(!ownProfiles.length)return `<section class=\"kombax-social-notice\" data-public-profile-invitation><div>${icon('identity',{size:28})}</div><div><strong>Tu cuenta aún no tiene un perfil público</strong><p>Puedes explorar Social, Showcase y Events y comprar con tu cuenta gratuita. Crea voluntariamente tu perfil público "
-    },
-    {
-      "file": "web/js/modules/kombax-social.js",
-      "line": 120,
+      "line": 121,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const pendingMine=mine.find(x=>x.estado==='pending');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 121,
+      "line": 122,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const approvedMine=mine.find(x=>x.estado==='approved');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 125,
+      "line": 126,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(approvals.length)html+=`<section class=\"kx-social-guardian-approvals\"><div><span class=\"page-kicker\">CONTROL ADULTO</span><h3>Solicitudes de menores vinculados</h3><p>Aprueba solo si eres su padre, madre o tutor responsable y entiendes que KOMBAX Social crea una identidad pública deportiva.</p></div>${approvals.map("
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 126,
+      "line": 127,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const approvedManaged=managed.filter(x=>x.estado==='approved');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 127,
+      "line": 128,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(approvedManaged.length)html+=`<section class=\"kx-social-guardian-approvals\"><div><span class=\"page-kicker\">CONTROL ADULTO ACTIVO</span><h3>Menores con Social autorizado</h3><p>Puedes retirar la autorización en cualquier momento. La retirada oculta el perfil y bloquea nuevas publicaciones hasta una nueva autorización"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 134,
+      "line": 135,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const caption=`${post?.autor_nombre||'KOMBAX'} · ${TYPE_LABEL[post?.tipo]||post?.tipo||'Publicación'}`;"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 141,
+      "line": 142,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "? `<div class=\"kombax-post-media kx-social-video\" data-kx-media-shell=\"video\"><video ${mediaFrameAttrs(p.media_presentation,\"social\")} src=\"${esc(url)}\" ${p.media_cover_url?`poster=\"${esc(p.media_cover_url)}\"`:''} controls preload=\"metadata\" playsinline data-kx-orientation-source=\"video\"></video><button type=\"button\" c"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 142,
+      "line": 143,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": ": `<button type=\"button\" class=\"kombax-post-media kx-social-image-button\" data-kx-media-shell=\"image\" data-social-media-open=\"${esc(p.id)}\" aria-label=\"Ver imagen a pantalla completa\"><img ${mediaFrameAttrs(p.media_presentation,\"social\")} data-kx-orientation-source=\"image\" src=\"${esc(url)}\" alt=\"Multimedia de la public"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 145,
+      "line": 146,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "return `<section class=\"kx-social-rules-card\"><div class=\"kx-social-rules-summary\"><div>${icon('info',{size:22})}<div><strong>Cómo funciona KOMBAX Social</strong><span>Norma general actual para Miembro, Competidor, Club, Federación y Marca.</span></div></div><details><summary>Ver normas de publicación</summary><ul><li>"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 149,
+      "line": 150,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "return `<section class=\"kx-social-topic-policy\" role=\"note\" aria-label=\"Política temática de KOMBAX Social\"><div class=\"kx-social-topic-policy-icon\">${icon('shieldCheck',{size:24})}</div><div><span>KOMBAX SOCIAL · COMUNIDAD TEMÁTICA</span><strong>Mantén el contenido dentro del mundo del combate.</strong><p>Publica arte"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 153,
+      "line": 154,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "return `<section class=\"kx-founders-promo competitor\" aria-label=\"Competidores fundadores\"><div class=\"kx-founders-promo-mark\">${icon('fighter',{size:28})}</div><div><span>KOMBAX SOCIAL · COMUNIDAD</span><strong>COMPETIDORES FUNDADORES</strong><p>Construye tu perfil deportivo, muestra tu trayectoria y forma parte de lo"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 159,
+      "line": 160,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "return `${socialQuotaMarkup(activeQuota,{compact:true})}${atLimit?'<button type=\"button\" class=\"btn btn-ghost btn-sm\" id=\"kx-social-manage-posts\">Gestionar publicaciones</button>':''}`;"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 169,
+      "line": 170,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "return `<section class=\"kx-social-composer kx-social-readonly\"><div class=\"kx-social-composer-head\"><div>${icon('shieldCheck',{size:24})}</div><div><small>${spectator?'PERFIL ESPECTADOR':'VALIDACIÓN PARA PUBLICAR'}</small><strong>Explora e interactúa con tu comunidad</strong></div></div><p class=\"muted\">${spectator?'Co"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 172,
+      "line": 173,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"kx-social-composer-head\"><div class=\"kombax-social-avatar\">${profileAvatar(current)}</div><div><small>PUBLICAR EN KOMBAX</small><strong>${esc(identityLabel(current))}</strong></div></div>"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 175,
+      "line": 176,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"kx-social-publish-topic-hint\">${icon('fighter',{size:15})}<span><b>Solo contenido de combate.</b> Artes marciales, deportes de contacto, clubes, peleadores, eventos, entrenamiento y cultura deportiva.</span></div>"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 185,
+      "line": 186,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "grid.insertAdjacentHTML('beforeend',`<section class=\"kx-audience-club-picker\" id=\"kx-audience-club-picker\" hidden><div class=\"kx-audience-picker-head\"><div><strong id=\"kx-audience-club-title\">Clubes</strong><small id=\"kx-audience-club-help\">Selecciona los clubes de esta publicación.</small></div><span id=\"kx-audience-s"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 186,
+      "line": 187,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-audience-club-picker\" id=\"kx-audience-profile-picker\" hidden><div class=\"kx-audience-picker-head\"><div><strong>Perfiles concretos</strong><small>Selecciona identidades KOMBAX concretas. Máximo 50.</small></div><span id=\"kx-audience-profile-count\">0 seleccionados</span></div><label class=\"field full\">"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 187,
+      "line": 188,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-audience-club-picker\" id=\"kx-audience-type-picker\" hidden><div class=\"kx-audience-picker-head\"><div><strong>Tipos de perfil</strong><small>Solo las identidades de los tipos seleccionados podrán ver esta publicación.</small></div><span id=\"kx-audience-type-count\">0 seleccionados</span></div><div class"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 192,
+      "line": 193,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const profileLabels=new Map((initialProfiles||[]).map(x=>[String(x.id),{name:String(x.name||'Perfil KOMBAX'),type:String(x.type||'')}]))"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 196,
+      "line": 197,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const renderClubResults=(rows=[])=>{const set=activeClubSet();const normalized=[];for(const x of rows){if(x?.perfil_tipo==='club'&&x.club_id){clubLabels.set(String(x.club_id),x.nombre_publico||'Club KOMBAX');normalized.push({id:String(x.club_id),name:x.nombre_publico||'Club KOMBAX',verified:x.verificado===true});}}for("
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 197,
+      "line": 198,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const renderProfileResults=(rows=[])=>{const normalized=[];for(const x of rows){if(x?.id&&!isOwn(x.id)){profileLabels.set(String(x.id),{name:x.nombre_publico||'Perfil KOMBAX',type:x.perfil_tipo||x.sujeto_tipo||''});normalized.push({id:String(x.id),name:x.nombre_publico||'Perfil KOMBAX',type:x.perfil_tipo||x.sujeto_tipo"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 198,
+      "line": 199,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "let clubTimer=null;clubQuery?.addEventListener('input',()=>{clearTimeout(clubTimer);clubTimer=setTimeout(async()=>{const q=clubQuery.value.trim();if(q.length<2){renderClubResults([]);return;}clubResults.innerHTML='<p>Buscando clubes…</p>';renderClubResults(await repos.kombaxSocial.directory(q,50).catch(()=>[]));},250);"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 199,
+      "line": 200,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "let profileTimer=null;profileQuery?.addEventListener('input',()=>{clearTimeout(profileTimer);profileTimer=setTimeout(async()=>{const q=profileQuery.value.trim();if(q.length<2){renderProfileResults([]);return;}profileResults.innerHTML='<p>Buscando perfiles…</p>';renderProfileResults(await repos.kombaxSocial.directory(q,"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 201,
+      "line": 202,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const refresh=()=>{const m=mode(),showClubs=['clubes_seleccionados','kombax_excepto'].includes(m);clubPicker.hidden=!showClubs;profilePicker.hidden=m!=='perfiles_seleccionados';typePicker.hidden=m!=='tipos_perfil';if(showClubs){clubTitle.textContent=m==='kombax_excepto'?'Excluir estos clubes':'Visible para estos clubes"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 227,
+      "line": 228,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!posts.length)return `${empty('Todavía no hay publicaciones','Los clubes, miembros y perfiles KOMBAX autorizados pueden compartir aquí su actividad pública.')}${done?'':'<span id=\"kombax-social-sentinel\" class=\"kx-feed-sentinel\" aria-hidden=\"true\"></span>'}`;"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 229,
+      "line": 230,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<header class=\"kx-social-post-head\"><div class=\"kx-social-author-open\" data-social-profile-open=\"${esc(p.autor_id)}\" tabindex=\"0\" role=\"button\" aria-label=\"Ver perfil público de ${esc(p.autor_nombre)}\"><div class=\"kombax-social-avatar\">${profileAvatar(p)}</div><div class=\"kx-social-author-copy\"><strong>${esc(p.autor_no"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 230,
+      "line": 231,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<button type=\"button\" data-social-save=\"${esc(p.id)}\" data-active=\"${p.saved_by_me?'true':'false'}\">${icon('archive',{size:16})} ${p.saved_by_me?'Quitar de guardados':'Guardar publicación'}</button>"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 231,
+      "line": 232,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${instagramEnabled()&&isOwn(p.autor_id)&&p.audiencia==='publica'&&p.media_path&&p.media_tipo!=='video'?`<button type=\"button\" data-instagram-post=\"${esc(p.id)}\">Publicar también en Instagram</button>`:''}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 233,
+      "line": 234,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${isOwn(p.autor_id)&&p.social_media_id?`<button type=\"button\" data-social-frame=\"${esc(p.id)}\">${icon('image',{size:16})} Ajustar encuadre</button>`:''}${isOwn(p.autor_id)&&p.social_media_id&&p.media_tipo==='video'?`<button type=\"button\" data-social-cover=\"${esc(p.id)}\">${icon('image',{size:16})} Elegir portada del víd"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 234,
+      "line": 235,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${!isOwn(p.autor_id)?`<button type=\"button\" data-social-report-post=\"${esc(p.id)}\">${icon('alert',{size:16})} Denunciar</button><button type=\"button\" data-social-block=\"${esc(p.autor_id)}\" data-social-name=\"${esc(p.autor_nombre)}\">${icon('shield',{size:16})} Bloquear perfil</button>`:`<button type=\"button\" data-social-"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 238,
+      "line": 239,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<div class=\"kx-social-engagement-summary\"><span class=\"kx-social-like-count\">${icon('heart',{size:14})}<b>${Number(p.likes_count||0)}</b> ${Number(p.likes_count||0)===1?'Me gusta':'Me gusta'}</span><button type=\"button\" data-social-comments=\"${esc(p.id)}\" aria-expanded=\"${expandedCommentPostId===String(p.id)?'true':'fa"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 241,
+      "line": 242,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<details class=\"kx-interest-control\"><summary class=\"${Number(p.interest_by_me||0)===1?'positive':Number(p.interest_by_me||0)===-1?'negative':''}\" aria-label=\"Preferencia privada de contenido\">${icon(Number(p.interest_by_me||0)===-1?'thumbsDown':'thumbsUp',{size:19})}<span>${Number(p.interest_by_me||0)===-1?'No me inte"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 243,
+      "line": 244,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "${p.audiencia==='publica'?`<button type=\"button\" data-social-share=\"${esc(p.id)}\" data-social-share-text=\"${esc(`${p.autor_nombre}: ${p.texto}`)}\">${icon('arrowUpRight',{size:19})}<span>Compartir</span></button>`:'<span class=\"kx-action-disabled\">'+icon('lock',{size:18})+' Restringida</span>'}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 245,
+      "line": 246,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "<section class=\"kx-inline-comments\" data-kx-comments-panel=\"${esc(p.id)}\" ${expandedCommentPostId===String(p.id)?'':'hidden'}><div class=\"loading-card\">Cargando comentarios…</div></section>"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 246,
+      "line": 247,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "</article>${index===1&&socialPromotions[0]?socialPromotionCard(socialPromotions[0]):index===5&&socialPromotions[1]?socialPromotionCard(socialPromotions[1]):''}`).join('')}</div>${done?'':'<div class=\"kx-feed-more\"><button type=\"button\" class=\"btn btn-ghost kombax-load-more\" id=\"kombax-social-more\">Cargar más</button><s"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 251,
+      "line": 252,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "if(profile.sujeto_tipo==='club')return (await repos.clubPublic.album(profile.club_id)).filter(x=>x.estado==='active'&&['photo','video'].includes(x.tipo)).map(x=>({...x,_source_type:'club'}));"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 252,
+      "line": 253,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "if(profile.sujeto_tipo==='perfil_directo')return (await repos.kombaxProfiles.album(profile.perfil_directo_id)).filter(x=>x.estado==='active'&&['photo','video'].includes(x.tipo)).map(x=>({...x,_source_type:'perfil_directo'}));"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 253,
+      "line": 254,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "return (await repos.kombaxSocial.media(profile.id)).filter(x=>x.estado==='active'&&x.en_album&&['photo','video'].includes(x.tipo)).map(x=>({...x,_source_type:'social'}));"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 259,
+      "line": 260,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!allowed.length){toast('Tu perfil está activo, pero todavía no tiene permiso para publicar en el feed.','error');return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 262,
+      "line": 263,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!initial){toast('Esta identidad no tiene permiso para publicar. Selecciona otra identidad si deseas actuar en su nombre.','warning');return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 264,
+      "line": 265,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(initialQuota?.active_limit_reached){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(initial,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 265,
+      "line": 266,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(initialQuota?.daily_limit_reached){toast('Has alcanzado el máximo de 3 publicaciones de hoy. Podrás volver a publicar mañana.','error');return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 270,
+      "line": 271,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "title:'Publicar en KOMBAX Social',"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 271,
+      "line": 272,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "subtitle:'Elige identidad y audiencia. KOMBAX Social es exclusivo de artes marciales y deportes de contacto; el contenido fuera de temática puede ser retirado por moderación.',"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 274,
+      "line": 275,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'autor',label:'Publicar como',type:'select',required:true,value:initial.id,options:allowed.map(p=>({value:p.id,label:identityLabel(p)}))},"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 276,
+      "line": 277,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'comentarios_estado',label:'Comentarios',type:'select',required:true,value:'open',options:[{value:'open',label:'Abiertos'},{value:'verified_only',label:'Solo perfiles verificados'},{value:'closed',label:'Cerrados'}]},"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 277,
+      "line": 278,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'audiencia',label:'Audiencia',type:'select',required:true,value:audienceKey(audienceOptions(initial.id)[0]),options:audienceOptions(initial.id).map(a=>({value:audienceKey(a),label:a.label})),help:'El perfil seguirá siendo público. Esta opción solo restringe esta publicación.'},"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 278,
+      "line": 279,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'archivo',label:'Subir foto o vídeo',type:'file',accept:'image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime',full:true,help:'Opcional. Vídeo MP4 recomendado · HD hasta 1080p · máximo 60 segundos y 100 MB. Se mostrará únicamente a la audiencia elegida para esta publicación.'},"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 279,
+      "line": 280,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'guardar_album',label:'Guardar también este archivo en el álbum de la identidad',type:'checkbox',value:true,full:true},"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 280,
+      "line": 281,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "...(instagramEnabled()?[{name:'enviar_instagram',label:'Tras publicar en KOMBAX, preparar envío a Instagram (confirmación adicional)',type:'checkbox',value:instagramFirst,full:true,help:'Solo para publicaciones públicas con imagen JPEG subida. Los enlaces HTTPS van en el texto; en el feed pueden no ser clicables.'}]:[]"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 281,
+      "line": 282,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'media_id',label:'O elegir del álbum',type:'select',options:[],full:true,help:'Si subes un archivo nuevo, tendrá prioridad sobre esta selección.'},"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 282,
+      "line": 283,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{name:'texto',label:'Contenido',type:'textarea',required:true,full:true,rows:7,maxLength:1500,help:'Máximo 1.500 caracteres. Publica solo contenido relacionado con artes marciales/deportes de contacto. No publiques teléfonos, direcciones ni datos privados de terceros.'}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 284,
+      "line": 285,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "submitText:'Publicar',"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 286,
+      "line": 287,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const profile=allowed.find(x=>x.id===v.autor);if(!profile)throw new Error('La identidad seleccionada ya no está disponible.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 291,
+      "line": 292,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(restricted)throw new Error('Instagram requiere una publicación pública de KOMBAX Social. Selecciona audiencia pública.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 292,
+      "line": 293,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(v.archivo?.type!=='image/jpeg')throw new Error('Para enviar a Instagram desde este formulario, sube una nueva imagen JPG/JPEG. Para compartir una foto anterior, utiliza el botón Instagram de la publicación en Social.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 293,
+      "line": 294,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!instagramEnabled())throw new Error('Instagram no está habilitado para esta instalación.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 297,
+      "line": 298,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "if(restricted&&(v.media_id||v.guardar_album===true))throw new Error('Las publicaciones restringidas no pueden reutilizar ni guardar multimedia en el álbum público. Sube un archivo nuevo o publica solo texto.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 314,
+      "line": 315,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const alreadyAttached=(await repos.kombaxSocial.media(profile.id)).find(x=>x.estado==='active'&&x.storage_path===source.storage_path);"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 331,
+      "line": 332,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!publishedId){toast('Publicación creada en KOMBAX. Abre Social para compartirla manualmente en Instagram.','warning');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 339,
+      "line": 340,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const refreshMedia=()=>{const rows=mediaByProfile.get(author.value)||[];const restricted=parseAudience(audience.value).audiencia!=='publica';media.innerHTML='<option value=\"\">Sin multimedia del álbum</option>'+rows.map(x=>`<option value=\"${esc(x.id)}\">${x.tipo==='video'?'Vídeo':'Foto'}${x.tipo==='video'?` · ${Number(x."
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 348,
+      "line": 349,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!permitted){toast('Esta identidad no tiene permiso para publicar en KOMBAX Social.','error');return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 356,
+      "line": 357,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const minorSafety=socialStatus?.minor===true?`<div class=\"alert alert-warning\"><strong>Seguridad para menores</strong><span>No compartas teléfono, dirección, centro educativo, documentos, contraseñas ni ubicación en tiempo real. No quedes a solas con personas conocidas únicamente por Internet sin conocimiento de un adu"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 357,
+      "line": 358,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const {wrap}=openDetail({title:'Activar KOMBAX Social',subtitle:`Normas ${esc(rules?.version||'1.1.0')} · Perfil público opcional`,body:`<div class=\"legal-document\"><p>${esc(rules?.cuerpo||'Lee y acepta las normas de KOMBAX Social.').replace(/\\n\\n/g,'</p><p>').replace(/\\n/g,'<br>')}</p></div>${minorSafety}<label class="
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 358,
+      "line": 359,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "wrap.querySelector('#social-activate-confirm')?.addEventListener('click',async()=>{const button=wrap.querySelector('#social-activate-confirm');const safetyOk=socialStatus?.minor!==true||wrap.querySelector('#social-minor-safety-ok')?.checked;if(!wrap.querySelector('#social-rules-ok')?.checked||!wrap.querySelector('#soci"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 363,
+      "line": 364,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!senders.length){toast('No tienes un perfil habilitado para contacto. Los perfiles personales menores de 18 años no pueden usar esta función.','error');return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 369,
+      "line": 370,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "return mine&&other&&['pendiente','aceptada'].includes(String(c.estado));"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 372,
+      "line": 373,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(existing.estado==='aceptada')toast('Ya tenéis un chat abierto.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 373,
+      "line": 374,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "else toast('La solicitud de contacto sigue pendiente.');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 377,
+      "line": 378,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "openForm({title:`Contactar con ${targetName}`,subtitle:'Indica el motivo y un primer mensaje. La otra persona debe aceptar la solicitud antes de que se habilite el chat.',fields:[{name:'remitente',label:'Enviar como',type:'select',required:true,value:senders[0].id,options:senders.map(p=>({value:p.id,label:p.nombre_publ"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 387,
+      "line": 388,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const modal=openDetail({title:`${isShowcase()?'Showcase':'Chat KOMBAX'} · ${otherName()}`,subtitle:isShowcase()?`${current.showcase_marca_nombre||'KOMBAX Showcase'} · conversación vinculada al producto`:`${CONTACT_LABEL[current.motivo]||current.motivo} · mensajería Social`,body:'<div id=\"kx-contact-thread-root\"><div cl"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 390,
+      "line": 391,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const receiptState=m=>m?.leido_en?{state:'read',label:'✓✓ Leído',title:`Leído ${dtFmt(m.leido_en)}`}:{state:'sent',label:'✓ Enviado',title:'Enviado'};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 392,
+      "line": 393,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const msgHtml=m=>{const report=!m.propio&&!/^\\[Mensaje retirado/.test(String(m.texto||''))?(isShowcase()?`<button type=\"button\" class=\"kx-message-report kx-message-options\" data-kx-message-report=\"${esc(m.id)}\" aria-label=\"Opciones del mensaje\" title=\"Opciones del mensaje\">${icon('more',{size:16})}</button>`:`<button t"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 399,
+      "line": 400,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "const submit=async()=>{const text=area?.value.trim()||'';if(!text){toast('Escribe un mensaje.','error');return;}if(!sender||!send)return;send.disabled=true;area.disabled=true;try{await repos.kombaxSocial.sendContactMessage(current.id,sender.id,text);area.value='';syncPoller?.markActive();syncState('Mensaje enviado · si"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 405,
+      "line": 406,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const sender=senderFor();const chatOpen=current.estado==='aceptada'&&!!sender&&current.puede_chat!==false;"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 406,
+      "line": 407,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const product=isShowcase()?`<section class=\"kx-showcase-chat-product\">${current.showcase_producto_imagen_url?`<img src=\"${esc(current.showcase_producto_imagen_url)}\" alt=\"${esc(current.showcase_producto_nombre||'Producto Showcase')}\">`:`<div class=\"kx-showcase-chat-product-fallback\">${icon('shoppingBag',{size:24})}</di"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 407,
+      "line": 408,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.innerHTML=`<section class=\"kx-contact-thread ${isShowcase()?'showcase-channel':'social-channel'}\">${product}<header><div><span class=\"page-kicker\">${isShowcase()?'SHOWCASE':esc(String(current.estado||'').toUpperCase())} · ${esc(isShowcase()?'Consulta de producto':CONTACT_LABEL[current.motivo]||current.motivo)}</sp"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 409,
+      "line": 410,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "root.querySelectorAll('[data-kx-message-report]').forEach(b=>b.addEventListener('click',()=>openForm({title:'Denunciar mensaje',subtitle:'Moderación recibirá únicamente este mensaje y el contexto que añadas, no acceso general a tu conversación.',fields:[{name:'motivo',label:'Motivo',type:'select',required:true,value:'a"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 425,
+      "line": 426,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){if(button?.isConnected)button.disabled=false;toast(humanError(error)||'No se pudieron cargar mensajes anteriores.','error');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 466,
+      "line": 467,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const beforeState=String(current.estado);await refreshMeta();"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 467,
+      "line": 468,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(beforeState!==String(current.estado)){activity=true;renderThread(true);}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 469,
+      "line": 470,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "syncState(activity?'Actividad sincronizada':'Actualización automática','ok');"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 470,
+      "line": 471,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){ok=false;syncState(navigator.onLine?'Reintentando sincronización…':'Sin conexión · reintentando','warn');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 482,
+      "line": 483,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){root.innerHTML=empty('No se pudo abrir el chat',humanError(error)||'Revisa la conexión.');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 488,
+      "line": 489,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "modal.wrap.querySelector('#kx-contact-delete-thread')?.addEventListener('click',()=>{const actor=senderFor();if(!actor){toast('No se puede identificar la copia de esta conversación.','error');return;}confirmDialog('Eliminar conversación','Desaparecerá de esta identidad y el hilo quedará cerrado. La otra persona conserv"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 493,
+      "line": 494,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const reasons=[...(type==='publicacion'?[{value:'fuera_tematica',label:'Contenido fuera de temática · no relacionado con deportes de contacto'}]:[]),{value:'acoso',label:'Acoso'},{value:'odio_discriminacion',label:'Odio o discriminación'},{value:'violencia',label:'Violencia ilícita'},{value:'sexual_menores',label:'Ries"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 494,
+      "line": 495,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "openForm({title:'Denunciar en KOMBAX Social',subtitle:type==='publicacion'?'Moderación revisará también si el contenido respeta la temática exclusiva de artes marciales y deportes de contacto.':'La denuncia será revisada por moderación global.',fields:[{name:'motivo',label:'Motivo',type:'select',required:true,value:typ"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 500,
+      "line": 501,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "panel.hidden=false;panel.innerHTML='<div class=\"loading-card\">Cargando comentarios…</div>';"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 509,
+      "line": 510,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const one=c=>`<article class=\"kx-comment ${c.parent_id?'reply':''}\"><button type=\"button\" class=\"kombax-social-avatar kx-comment-author-open\" data-social-profile-open=\"${esc(c.autor_id)}\" aria-label=\"Ver perfil público de ${esc(c.autor_nombre)}\">${c.autor_avatar_url||c.autor_avatar_path?`<img src=\"${esc(c.autor_avatar_"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 510,
+      "line": 511,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const body=roots.map(c=>`${one(c)}${(replies.get(c.id)||[]).map(one).join('')}`).join('')||'<div class=\"empty\"><strong>Sin comentarios</strong><p>Sé el primero en participar respetando las normas.</p></div>';"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 512,
+      "line": 513,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "if(post.comentarios_estado==='closed')composer='<div class=\"kx-inline-comment-locked\">Comentarios cerrados por el autor.</div>';"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 513,
+      "line": 514,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "else if(!allowedProfiles.length)composer=`<div class=\"kx-inline-comment-locked\">${post.comentarios_estado==='verified_only'?'Esta publicación solo admite comentarios de perfiles verificados.':'Necesitas un perfil autorizado para comentar.'}</div>`;"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 514,
+      "line": 515,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "else composer=`<form class=\"kx-inline-comment-composer\" data-kx-comment-form=\"${esc(postId)}\" data-parent-id=\"${esc(replyParentId||'')}\"><div class=\"kx-inline-comment-context\">${replyTarget?`<span>Respondiendo a <strong>${esc(replyTarget.autor_nombre)}</strong></span><button type=\"button\" class=\"btn btn-ghost btn-sm\" d"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 515,
+      "line": 516,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "panel.innerHTML=`<div class=\"kx-inline-comments-head\"><strong>Comentarios</strong><button type=\"button\" class=\"btn btn-ghost btn-sm\" data-kx-comments-collapse>Cerrar</button></div><div class=\"kx-comments\">${body}</div>${composer}`;"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 520,
+      "line": 521,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "panel.querySelectorAll('[data-kx-comment-report]').forEach(b=>b.addEventListener('click',()=>openReport('comentario',b.dataset.kxCommentReport)));"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 521,
+      "line": 522,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "panel.querySelectorAll('[data-kx-comment-remove]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar comentario','Se retirará del contenido visible conservando trazabilidad.',async()=>{await repos.kombaxSocial.removeComment(b.dataset.kxCommentRemove);toast('Comentario retirado');await renderInlineCommen"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 522,
+      "line": 523,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": true,
       "sample": "panel.querySelector('[data-kx-comment-form]')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button[type=\"submit\"]'),text=String(form.elements.texto?.value||'').trim(),author=form.elements.autor?.value;if(!text||!author)return;button.disabled=true;try{const"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 523,
+      "line": 524,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){panel.innerHTML=empty('No se pudieron cargar los comentarios',humanError(error)||'Revisa la conexión.');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 554,
+      "line": 555,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "const modal=openForm({title:'Visibilidad de la publicación',subtitle:'Decide quién puede ver este contenido. Cambiar la audiencia no elimina relaciones, mensajes ni participación en Events.',width:'760px',fields:[{name:'audiencia',label:'Visible para',type:'select',required:true,value:audienceKey(current),options:rows."
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 571,
+      "line": 572,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "catch(error){const msg=String(humanError(error)||'');if(msg.includes('KOMBAX_POST_ACTIVE_LIMIT_30')){toast('Has alcanzado tus 30 publicaciones activas. Elimina una para poder publicar otra.','error');openKombaxPostManager(profile,{onChanged:async()=>{await refreshActiveQuota();await loadFeed(false);}});}else if(msg.inc"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 577,
+      "line": 578,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "function socialUnavailable(error){return isBackendVersionMismatch(error)?'<div class=\"alert alert-danger\"><strong>KOMBAX Social pendiente de sincronización</strong><span>La interfaz y el backend no están en la misma versión. El acceso Social queda bloqueado para evitar mezclar identidades o clubes hasta completar la ac"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 593,
+      "line": 594,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-social-frame]').forEach(b=>b.addEventListener('click',()=>{const post=posts.find(x=>String(x.id)===String(b.dataset.socialFrame));if(!post?.social_media_id)return;const src=post.media_url||mediaUrl(post.media_path);const mediaType=post.media_tipo==='video'?'video':'image';openMediaFrami"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 594,
+      "line": 595,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-social-cover]').forEach(b=>b.addEventListener('click',()=>{const post=posts.find(x=>String(x.id)===String(b.dataset.socialCover));if(!post?.social_media_id||post.media_tipo!=='video')return;const src=post.media_url||mediaUrl(post.media_path);openVideoCoverEditor({src,initial:post.media_"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 597,
+      "line": 598,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-social-preference]').forEach(b=>b.addEventListener('click',async()=>{if(b.disabled)return;b.disabled=true;try{await repos.kombaxSocial.preference(b.dataset.socialPreference,Number(b.dataset.value));toast(Number(b.dataset.value)===1?'Me interesa · señal privada guardada para mejorar tu f"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 606,
+      "line": 607,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-social-block]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Bloquear perfil',`Dejarás de ver el contenido de ${b.dataset.socialName}.`,async()=>{await repos.kombaxSocial.block(b.dataset.socialBlock,true);toast('Perfil bloqueado');await loadFeed(false);},{confirmText:'Bloque"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 607,
+      "line": 608,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-social-delete]').forEach(b=>b.addEventListener('click',()=>confirmDialog('Eliminar publicación','Se eliminarán la publicación y sus interacciones. Si la foto o vídeo fue subido solo para esta publicación y no pertenece al álbum, también se eliminará del almacenamiento.',async()=>{await "
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 634,
+      "line": 635,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){setError(error);setMainHtml(`${socialHeader()}${pageHeader('KOMBAX Social','No se pudo cargar KOMBAX Social.','','Red profesional global')}<section class=\"card\">${socialUnavailable(error)}</section>`);}finally{loading=false;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 638,
+      "line": 639,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"kombax-social-page\">${socialHeader()}${pageHeader('Actualidad profesional','Los perfiles son públicos. Las publicaciones son públicas por defecto y, si el autor lo elige, pueden limitarse a su club o federación sin convertir el perfil en privado.',socialHeaderActions(activePublishIdentity()?'<b"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 643,
+      "line": 644,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"kombax-social-page\">${socialHeader()}${pageHeader('Perfiles públicos','Tu perfil personal reúne tus capacidades. Clubes, marcas, federaciones y medios conservan su identidad pública independiente.',socialHeaderActions('<button type=\"button\" class=\"btn btn-ghost\" id=\"kx-social-discovery-open\">De"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 644,
+      "line": 645,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const run=async()=>{const box=document.getElementById('kombax-profile-results'),q=document.getElementById('kombax-profile-query')?.value||'';try{const rows=await repos.kombaxSocial.directory(q,40);box.innerHTML=rows.length?`<div class=\"kombax-profile-grid\">${rows.map(p=>`<article class=\"kx-profile-card\" data-social-pro"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 649,
+      "line": 650,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-social-report-profile]').forEach(b=>b.addEventListener('click',()=>openReport('perfil',b.dataset.socialReportProfile)));"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 650,
+      "line": 651,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){box.innerHTML=empty('No se pudo buscar',humanError(error)||'Revisa la conexión.');}};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 662,
+      "line": 663,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const head=standalone?`${pageHeader('Conversaciones KOMBAX','Mensajes y asistencia en una capa propia. Cada canal conserva sus permisos y su contexto.',subviewActions({backId:'kx-conversations-back',closeId:'kx-conversations-close',backLabel:'Volver'}),'Conversaciones')}${conversationChannelTabs(contactFilter,{showAssi"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 663,
+      "line": 664,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const filterTabs=standalone?'':`<div class=\"kx-message-filters\" role=\"tablist\" aria-label=\"Filtrar mensajes\"><button type=\"button\" data-message-filter=\"social\" class=\"${contactFilter==='social'?'active':''}\">${icon('users',{size:15})} Social</button><button type=\"button\" data-message-filter=\"showcase\" class=\"${contactF"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 664,
+      "line": 665,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"${standalone?'kx-conversations-page':'kombax-social-page'}\">${head}${filterTabs}<div id=\"kombax-contact-list\"><div class=\"loading-card\">Cargando mensajes…</div></div></div>`);"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 671,
+      "line": 672,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.innerHTML=(visible.length?`<div class=\"kombax-contact-list\">${visible.map(c=>{const showcase=String(c.canal||'social')==='showcase';return `<article class=\"kx-message-card ${showcase?'showcase':'social'}\"><header><div><span class=\"page-kicker\">${showcase?'SHOWCASE':esc(c.direccion==='recibida'?'SOCIAL · RECIBIDA':c"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 674,
+      "line": 675,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-contact-state]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.contactStatus(b.dataset.contactId,b.dataset.contactState);toast(b.dataset.contactState==='aceptada'?'Solicitud aceptada · contacto abierto':'Solicitud rechazada');await renderContact"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 676,
+      "line": 677,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.querySelectorAll('[data-contact-delete]').forEach(b=>b.addEventListener('click',()=>{const c=visible.find(x=>String(x.id)===String(b.dataset.contactDelete));if(!c)return;const actor=ownProfiles.find(p=>p.id===c.remitente_id||p.id===c.destinatario_id);if(!actor){toast('No se puede identificar tu identidad en esta co"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 678,
+      "line": 679,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){box.innerHTML=empty('No se pudieron cargar los contactos',humanError(error)||'Revisa la conexión.');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 683,
+      "line": 684,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "try{[socialStatus,ownProfiles]=await Promise.all([repos.kombaxSocial.status(),repos.kombaxSocial.myProfiles()]);if(context.profileId){const requested=ownProfiles.find(p=>p.id===context.socialId);if(!requested)throw new Error('Esta identidad aún no tiene perfil Social.');ownProfiles=ownProfiles.filter(p=>identityGroupId"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 688,
+      "line": 689,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"kombax-social-page\">${socialHeader()}${pageHeader('Guardados','Colección privada: solo tú puedes ver lo que has guardado.',socialHeaderActions(),'KOMBAX Social')}${tabBar()}<div id=\"kombax-saved-list\"><div class=\"loading-card\">Cargando guardados…</div></div></div>`);bindCommon();"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 692,
+      "line": 693,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.innerHTML=rows.length?`<div class=\"kombax-saved-list\">${rows.map(x=>`<article><div><span class=\"page-kicker\">${esc(TYPE_LABEL[x.tipo]||x.tipo)} · ${dtFmt(x.creado_en)} · ${esc(x.audiencia_label||'Público')}</span><button type=\"button\" class=\"kx-saved-author\" data-social-profile-open=\"${esc(x.autor_id)}\">${esc(x.aut"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 695,
+      "line": 696,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){box.innerHTML=empty('No se pudieron cargar los guardados',humanError(error)||'Revisa la conexión.');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 699,
+      "line": 700,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"kombax-social-page\">${socialHeader()}${pageHeader('Mi red','Contactos y conexiones KOMBAX. Tu red es privada: solo tú y las identidades que gestionas ven esta lista. Ni tu red ni su tamaño se muestran públicamente.',socialHeaderActions(`<button type=\"button\" class=\"btn btn-primary\" id=\"kx-add-n"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 702,
+      "line": 703,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "if(!networkProfiles.length){box.innerHTML=empty('Sin identidad de red disponible','Tu perfil Social debe estar activo para gestionar Mi red. Si acabas de verificar tu afiliación, vuelve a entrar en Social.');return;}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 709,
+      "line": 710,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "box.innerHTML=`${identityChoice}<div class=\"kx-relations-toolbar\"><button type=\"button\" class=\"btn btn-ghost btn-sm\" id=\"kx-add-network-inline\">${icon('plus',{size:14})} Buscar contactos</button></div>${rows.length?`<div class=\"kx-relations-list\">${rows.map(r=>`<article><header><div><span class=\"page-kicker\">${esc(RELA"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 714,
+      "line": 715,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "b.dataset.kxRelationState==='confirmed'?'Aceptar en mi red':b.dataset.kxRelationState==='rejected'?'Rechazar solicitud':'Eliminar de mi red',"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 717,
+      "line": 718,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "{confirmText:b.dataset.kxRelationState==='confirmed'?'Aceptar':'Continuar',danger:b.dataset.kxRelationState!=='confirmed'}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 719,
+      "line": 720,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "}catch(error){box.innerHTML=empty('No se pudo cargar tu red',humanError(error)||'No se pudo comprobar esta conexión.');}"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 723,
+      "line": 724,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "const labels={allowed:'Permitir / restaurar',review:'Mantener en revisión',hidden:'Ocultar contenido',warning:'Registrar advertencia',suspended:'Suspender perfil',escalated:'Escalar al Owner'};"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 724,
+      "line": 725,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "openForm({title:labels[decision]||'Decisión de moderación',subtitle:`${report.objetivo_tipo} · ${report.motivo}. La decisión queda registrada con motivo, evidencia y nivel de confianza.`,fields:[{name:'reason_code',label:'Código de motivo',required:true,value:report.motivo||'policy_review',help:'Minúsculas y guion bajo"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 728,
+      "line": 729,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "setMainHtml(`<div class=\"kombax-social-page\">${socialHeader()}${pageHeader(t('social.safety.title'),t('social.safety.subtitle'),socialHeaderActions(),'KOMBAX Social')}${tabBar()}${guardianConsentPanel()}<div class=\"kombax-safety-grid\"><article>${icon('shieldCheck',{size:30})}<strong>${t('social.safety.separation')}</st"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 729,
+      "line": 730,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": true,
       "sample": "document.querySelectorAll('[data-kx-minor-consent]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;try{await repos.kombaxSocial.decideMinorConsent(b.dataset.consentId,b.dataset.kxMinorConsent);toast(b.dataset.kxMinorConsent==='approved'?'Acceso Social autorizado':'Solicitud rechazada');await renderKom"
     },
     {
       "file": "web/js/modules/kombax-social.js",
-      "line": 734,
+      "line": 735,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": true,
       "sample": "consoleBox.innerHTML=`<div class=\"kx-moderation-head\"><div><span class=\"page-kicker\">MODERACIÓN KOMBAX</span><h3>${t('social.safety.queue')}</h3><p>Rol separado del Owner: puede moderar contenido, pero no Finanzas, documentos privados, roles críticos ni configuración.</p></div>${badge(String(reports.length),reports.len"
@@ -22580,6 +22593,13 @@
       "sample": "return `<div class=\"kx-catalog-view-controls\" role=\"group\" aria-label=\"Vista del catálogo\">${Object.entries(LABELS).map(([value,label])=>`<button type=\"button\" class=\"btn btn-ghost btn-sm\" data-catalog-view-area=\"${scope}\" data-catalog-view=\"${value}\" aria-pressed=\"${mode===value}\">${label}</button>`).join('')}</div>`;"
     },
     {
+      "file": "web/js/ui/social-profile-invitation.js",
+      "line": 5,
+      "classification": "SYSTEM_UI_CANDIDATE",
+      "target_block_1": false,
+      "sample": "return `<section class=\"kombax-social-notice kx-social-profile-invitation\" data-public-profile-invitation aria-labelledby=\"kx-create-social-title\"><div><span class=\"page-kicker\">TU PRESENCIA EN KOMBAX</span><h2 id=\"kx-create-social-title\">Tu cuenta es el comienzo. Dale tu identidad.</h2><p>Crea tu perfil público para p"
+    },
+    {
       "file": "web/js/ui/usage-help.js",
       "line": 23,
       "classification": "SYSTEM_UI_CANDIDATE",
@@ -22591,109 +22611,123 @@
       "line": 29,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "try{if(!catalog){const response=await fetch('./assets/guides/usage-help-r272.json');if(!response.ok)throw Error('guide_unavailable');catalog=(await response.json()).guides;}if(captured===epoch){suggest();root.querySelector('textarea')?.focus();}}catch{if(captured===epoch)message(L('No se pudo cargar la guía. Puedes con"
+      "sample": "try{if(!catalog){const response=await fetch('./assets/guides/usage-help-r272.json?v=r275-natural');if(!response.ok)throw Error('guide_unavailable');catalog=(await response.json()).guides;}if(captured===epoch){suggest();root.querySelector('textarea')?.focus();}}catch{if(captured===epoch)message(L('No se pudo cargar la g"
     },
     {
       "file": "web/js/ui/usage-help.js",
       "line": 34,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "panel.dataset.helpEpoch=String(epoch);panel.hidden=false;panel.innerHTML=`<header><img src=\"${avatar}\" alt=\"\"><div><strong>${esc(L('Ayuda KOMBAX'))}</strong><small>${esc(context.name||'KOMBAX')} · ${esc(L('Guía de uso'))}</small></div><button type=\"button\" class=\"icon-btn\" data-help-close aria-label=\"${esc(L('Cerrar'))"
+      "sample": "panel.dataset.helpEpoch=String(epoch);panel.hidden=false;panel.innerHTML=`<header><img src=\"${avatar}\" alt=\"\"><div><strong>${esc(L('Ayuda KOMBAX'))}</strong><small>${esc(context.name||'KOMBAX')} · ${esc(L('Tu ayuda en KOMBAX'))}</small></div><button type=\"button\" class=\"icon-btn\" data-help-close aria-label=\"${esc(L('Ce"
     },
     {
       "file": "web/js/ui/usage-help.js",
       "line": 39,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "message(L('Hola. Cuéntame qué quieres hacer y te ayudaré paso a paso.'),'assistant');suggest();quotaLine();"
+      "sample": "message(L('Hola. ¿Qué te gustaría saber sobre KOMBAX?'),'assistant');suggest();quotaLine();"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 43,
+      "line": 44,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "article.innerHTML=`<small>${esc(role==='user'?L('Tú'):L('Ayuda KOMBAX'))}</small><div>${esc(text)}</div>${html}`;thread.appendChild(article);thread.scrollTop=thread.scrollHeight;return article;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 47,
+      "line": 48,
       "classification": "TECHNICAL_OR_DIAGNOSTIC",
       "target_block_1": false,
       "sample": "const queries=context.kind==='club'?(['alumno','familia'].includes(context.role)?['Mis clases','Mis cuotas','Comunicaciones del club']:['Crear una sesión','Añadir un alumno','Registrar un cargo']):context.kind==='profile'?(['marca','federacion'].includes(context.type)?['Editar foto y banner','Activar servicios','Showca"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 59,
+      "line": 60,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const article=message(L(topic.title),'assistant',`<ol data-guide-full>${steps}</ol><div data-guide-tutorial hidden></div><button type=\"button\" class=\"btn btn-ghost btn-sm\" data-guide-mode>${esc(L('Guiarme paso a paso'))}</button>${!helpTopicAllowed(topic,context)?`<p>${esc(L('Esta función requiere otro rol. Consulta co"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 62,
+      "line": 63,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const draw=()=>{full.hidden=guided;tutorial.hidden=!guided;mode.textContent=L(guided?'Ver guía completa':'Guiarme paso a paso');if(!guided)return;tutorial.innerHTML=`<small>${esc(L('Paso'))} ${step+1} ${esc(L('de'))} ${topic.steps.length}</small><p>${esc(L(topic.steps[step]))}</p><div><button type=\"button\" class=\"btn b"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 64,
+      "line": 65,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
       "sample": "const button=[...root.querySelectorAll(`[data-help-open=\"${topic.id}\"]`)].at(-1);button?.addEventListener('click',()=>{if(!guideAction(topic))return;close();if(context.kind==='club')window.dispatchEvent(new CustomEvent('kx-club-route',{detail:{route:topic.route}}));else Promise.resolve(openUsageWorkspaceModule(topic.mo"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 89,
-      "classification": "USER_CONTENT_BOUNDARY",
+      "line": 76,
+      "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
-      "sample": "message(L('No encuentro todavía un procedimiento que encaje con tu pregunta. ¿Te refieres a alumnos, cuotas, eventos, Social o Showcase? Dime qué estás intentando hacer; también puedes contactar con Soporte.'));"
+      "sample": "const button=document.createElement('button');button.type='button';button.className='btn btn-ghost btn-sm';button.textContent=L('Ver guía relacionada');"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 91,
+      "line": 81,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "}catch{if(captured===epoch)message(L('No he podido cargar la guía ahora. Tu pregunta sigue aquí; puedes volver a intentarlo o escribir a Soporte.'));}"
+      "sample": "if(!topic){message(L('Cuéntame un poco más sobre tu duda para poder orientarte.'));return;}"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 116,
+      "line": 84,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": false,
+      "sample": "const reply=message(explanation?L(explanation):L('La guía recoge la información disponible sobre esta función. Puedes abrirla aquí para revisarla.'));"
+    },
+    {
+      "file": "web/js/ui/usage-help.js",
+      "line": 101,
+      "classification": "USER_CONTENT_BOUNDARY",
+      "target_block_1": false,
+      "sample": "}catch{if(captured===epoch)message(L('No he podido consultar la información ahora. Tu pregunta sigue aquí; puedes intentarlo de nuevo.'));}"
+    },
+    {
+      "file": "web/js/ui/usage-help.js",
+      "line": 130,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "balance.innerHTML=`<summary>${esc(L('Créditos del mes'))}: ${esc(String(available))} ${esc(L('disponibles'))}</summary><p>${Number.isFinite(monthly)?`${esc(L('Asignación mensual'))}: ${esc(String(monthly))}. `:''}${esc(L('Saldo compartido entre Ayuda, Assist y Migrations de este espacio.'))}</p>`;balance.open=expanded;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 129,
+      "line": 143,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "if(captured!==epoch)return;message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));pending=null;await loadQuota();return;"
+      "sample": "if(captured!==epoch)return;const reply=message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));relatedGuide(reply,helpConversationTopics(catalog||[],requestQuestion,audienceContext(),questionHistory,2));pending=null;await loadQuota();return true;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 132,
+      "line": 146,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "if(!ticketId){const created=await repos.customerOps.createTicket({category:'MANAGEMENT',subject:`Ayuda KOMBAX · ${context.name||context.type}`,module:'assist',tenant_ref:ref});if(captured!==epoch)return;ticketId=created.ticket_id;if(!ticketId)throw Error('case_unavailable');}"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 135,
+      "line": 149,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "if(captured!==epoch)return;message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));pending=null;await loadQuota();"
+      "sample": "if(captured!==epoch)return;const reply=message(response.message||L('No hay respuesta disponible. Contacta con Soporte.'));relatedGuide(reply,helpConversationTopics(catalog||[],requestQuestion,audienceContext(),questionHistory,2));pending=null;await loadQuota();return true;"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 136,
+      "line": 150,
       "classification": "USER_CONTENT_BOUNDARY",
       "target_block_1": false,
-      "sample": "}catch(error){if(captured===epoch){if(channel==='free'&&error?.status===502)pending=null;message(L('Ahora mismo no puedo ampliar la respuesta. Puedes seguir con la guía, volver a intentarlo o escribir a Soporte. Tu pregunta sigue aquí.'));}}"
+      "sample": "}catch(error){if(captured===epoch){if(error?.status===502||(error?.status===409&&error.message==='turn_retry_required'))pending=null;if(!quiet)message(L('Ahora mismo no puedo ampliar la respuesta. Puedes seguir con la guía, volver a intentarlo o escribir a Soporte. Tu pregunta sigue aquí.'));}}"
     },
     {
       "file": "web/js/ui/usage-help.js",
-      "line": 141,
+      "line": 155,
       "classification": "SYSTEM_UI_CANDIDATE",
       "target_block_1": false,
       "sample": "const start=()=>{sync();const observer=new MutationObserver(records=>{if(records.every(r=>r.target.closest?.('#kx-usage-help-root')))return;requestAnimationFrame(sync);});const app=document.getElementById('app');if(app)observer.observe(document.body,{childList:true,subtree:true});window.addEventListener('hashchange',()"

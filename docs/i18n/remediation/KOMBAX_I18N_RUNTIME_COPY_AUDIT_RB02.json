@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T17:32:11.483Z",
+  "generated_at": "2026-10-16T15:39:48.242Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -128,14 +128,15 @@
     "web/js/ui/member-enrollment-picker.js",
     "web/js/ui/personal-navigation.js",
     "web/js/ui/product-catalog-view.js",
+    "web/js/ui/social-profile-invitation.js",
     "web/js/ui/usage-help.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5154,
-  "covered": 4897,
+  "phrases": 5165,
+  "covered": 4908,
   "unresolved": 257,
-  "coverage": 95.01,
-  "skipped": 477,
+  "coverage": 95.02,
+  "skipped": 480,
   "files": {
     "web/js/app.js": {
       "total": 127,
@@ -354,8 +355,8 @@
       "coverage": 100
     },
     "web/js/core/usage-help-knowledge.js": {
-      "total": 1,
-      "covered": 1,
+      "total": 3,
+      "covered": 3,
       "skipped": 4,
       "coverage": 100
     },
@@ -612,8 +613,8 @@
       "coverage": 100
     },
     "web/js/modules/kombax-social.js": {
-      "total": 263,
-      "covered": 263,
+      "total": 261,
+      "covered": 261,
       "skipped": 13,
       "coverage": 100
     },
@@ -899,10 +900,16 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/ui/social-profile-invitation.js": {
+      "total": 5,
+      "covered": 5,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/ui/usage-help.js": {
-      "total": 27,
-      "covered": 27,
-      "skipped": 2,
+      "total": 33,
+      "covered": 33,
+      "skipped": 5,
       "coverage": 100
     },
     "web/js/ui/video-cover.js": {

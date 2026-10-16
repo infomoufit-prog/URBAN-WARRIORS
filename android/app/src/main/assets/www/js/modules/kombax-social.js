@@ -7,6 +7,7 @@ import { pageHeader, empty, badge, openForm, openDetail, openImmersiveMedia, clo
 import { icon } from '../ui/icons.js';
 import { chooseDefaultIdentity, setActiveIdentity, identityLabel } from '../core/identity-context.js';
 import {identityIsActive,identityChoices,publicationIdentity,identityGroupId,combineIdentityRecords} from '../core/social-identity-resolution.js';
+import {socialProfileInvitation} from '../ui/social-profile-invitation.js';
 import { openKombaxPublicProfile } from './public-profile.js';
 import { openKombaxPostManager, socialQuotaMarkup } from './social-post-management.js';
 import { createAdaptivePoller } from '../core/adaptive-poller.js';
@@ -106,7 +107,7 @@ function openSocialInfoPanel(){
 }
 
 function activationPanel(){
-  if(!ownProfiles.length)return `<section class="kombax-social-notice" data-public-profile-invitation><div>${icon('identity',{size:28})}</div><div><strong>Tu cuenta aún no tiene un perfil público</strong><p>Puedes explorar Social, Showcase y Events y comprar con tu cuenta gratuita. Crea voluntariamente tu perfil público Espectador para comentar, dar «me gusta» y guardar. Es gratuito y no permite publicar. Los demás perfiles necesitan su validación para publicar; Miembro requiere vinculación aprobada a un club.</p><button type="button" class="btn btn-primary btn-sm" id="kx-social-create-profile">Crear o gestionar mi perfil</button></div></section>`;
+  if(!ownProfiles.length)return socialProfileInvitation(ownProfiles,{signedIn:Boolean(state.session?.id)});
   if((activeIdentity()?.perfil_tipo||activeIdentity()?.sujeto_tipo)==='espectador')return '';
   if(identityIsActive(activeIdentity(),socialStatus))return '';
   const eligible=socialStatus?.eligible===true;

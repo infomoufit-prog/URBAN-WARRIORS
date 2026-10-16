@@ -1,0 +1,108 @@
+{
+  "functions": [
+    {
+      "name": "kombax-usage-help",
+      "version": 4,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "files": [
+        {
+          "name": "kombax-usage-help/index.ts",
+          "identical": true
+        },
+        {
+          "name": "_shared/usage-help-guide.ts",
+          "identical": true
+        },
+        {
+          "name": "_shared/usage-help-catalog.json",
+          "identical": true
+        },
+        {
+          "name": "_shared/usage-help-knowledge.js",
+          "identical": true
+        },
+        {
+          "name": "kombax-usage-help/deno.json",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "name": "kombax-assist-r38",
+      "version": 25,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "files": [
+        {
+          "name": "kombax-assist-r38/index.ts",
+          "identical": true
+        },
+        {
+          "name": "_shared/usage-help-guide.ts",
+          "identical": true
+        },
+        {
+          "name": "_shared/usage-help-catalog.json",
+          "identical": true
+        },
+        {
+          "name": "_shared/usage-help-knowledge.js",
+          "identical": true
+        },
+        {
+          "name": "kombax-assist-r38/deno.json",
+          "identical": true
+        }
+      ]
+    }
+  ],
+  "security": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 239,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "count": 61,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 660,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "performance": [
+    {
+      "name": "unindexed_foreign_keys",
+      "level": "INFO",
+      "count": 259,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys"
+    },
+    {
+      "name": "unused_index",
+      "level": "INFO",
+      "count": 297,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+    },
+    {
+      "name": "duplicate_index",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0009_duplicate_index"
+    }
+  ],
+  "newDatabaseMigration": false,
+  "realModelInferenceTested": false
+}

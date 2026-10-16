@@ -1,0 +1,1807 @@
+{
+  "version": "r277",
+  "status": "curated",
+  "count": 200,
+  "entries": [
+    {
+      "id": "faq-001",
+      "guide_id": "start",
+      "question": "¿Para qué sirve el inicio de mi club?",
+      "intent": "definition",
+      "answer": "Inicio reúne un resumen de la actividad del club y accesos a las tareas que permite tu rol.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-002",
+      "guide_id": "start",
+      "question": "¿Cómo consulto el resumen diario del club?",
+      "intent": "procedure",
+      "answer": "1. Comprueba el club activo y tu identidad en la cabecera. 2. Revisa avisos, próximos eventos, sesiones y acciones pendientes. 3. Usa las tarjetas y navegación para entrar directamente en cada área.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-003",
+      "guide_id": "start",
+      "question": "¿Todos los roles ven los mismos datos en Inicio?",
+      "intent": "constraint",
+      "answer": "El contenido del panel cambia según el rol y sus permisos. Un Monitor ve únicamente sus ámbitos asignados cuando tiene alcance restringido.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-004",
+      "guide_id": "profile",
+      "question": "¿Qué es el perfil público de mi club?",
+      "intent": "definition",
+      "answer": "El perfil público es la presentación del club ante la comunidad: su nombre, imagen, información y publicaciones. No es la cuenta personal de quien lo administra.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-005",
+      "guide_id": "profile",
+      "question": "¿Cómo actualizo la presentación pública del club?",
+      "intent": "procedure",
+      "answer": "1. Entra en Mi perfil desde una cuenta de Gestor o Coordinación. 2. Actualiza la información pública, imágenes y datos visibles. 3. Usa “Ver como público” para comprobar cómo lo verá la comunidad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-006",
+      "guide_id": "profile",
+      "question": "¿El perfil del club es el mismo que mi cuenta personal?",
+      "intent": "constraint",
+      "answer": "La identidad del Club es distinta de la cuenta personal del Gestor. El actor real se conserva para auditoría aunque publiques como Club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-007",
+      "guide_id": "access",
+      "question": "¿Para qué sirven los códigos del club?",
+      "intent": "definition",
+      "answer": "El código permite localizar el club y solicitar acceso por el canal de alumnos o por el de equipo. Solicitar acceso y recibir autorización son pasos distintos.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-008",
+      "guide_id": "access",
+      "question": "¿Cómo se solicita acceso con un código?",
+      "intent": "procedure",
+      "answer": "1. Desde Alumnos consulta o cambia el código de alumnos/familias. 2. Desde Equipo consulta o cambia el código de miembros del equipo. 3. Coloca el código de alumnos junto al QR del cartel de descarga.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-009",
+      "guide_id": "access",
+      "question": "¿El código del equipo concede permisos automáticamente?",
+      "intent": "constraint",
+      "answer": "Los códigos admiten 4 o 5 dígitos y pueden rotarse cuando el club quiera. El código de equipo nunca concede permisos sensibles automáticamente: crea una solicitud pendiente. El autorregistro de alumno independiente requiere 16 años o más; los menores de 16 se gestionan mediante tutor autorizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-010",
+      "guide_id": "enrollments",
+      "question": "¿Qué es una inscripción?",
+      "intent": "definition",
+      "answer": "Una inscripción vincula al alumno con una actividad del club. Una misma persona puede tener varias disciplinas o grupos sin necesitar otra cuenta por cada uno.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-011",
+      "guide_id": "enrollments",
+      "question": "¿Cómo reviso una solicitud de inscripción?",
+      "intent": "procedure",
+      "answer": "1. Abre Solicitudes y revisa los datos enviados. 2. Comprueba identidad, contacto y datos deportivos requeridos. 3. Aprueba o rechaza según el procedimiento del club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-012",
+      "guide_id": "enrollments",
+      "question": "¿Enviar una solicitud activa ya la membresía?",
+      "intent": "constraint",
+      "answer": "La solicitud no equivale automáticamente a una membresía activa. La información de menores debe seguir el flujo de tutor/club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-013",
+      "guide_id": "students",
+      "question": "¿Qué información reúne la ficha de un alumno?",
+      "intent": "definition",
+      "answer": "La ficha reúne la información personal y deportiva del alumno y sus vínculos con disciplinas, grupos y familia. Cada rol accede solo a los datos que le corresponden.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-014",
+      "guide_id": "students",
+      "question": "¿Cómo gestiono la ficha de un alumno del club?",
+      "intent": "procedure",
+      "answer": "1. Busca al alumno por nombre o grupo. 2. Abre su ficha para consultar datos y contexto deportivo. 3. Edita únicamente los campos permitidos por tu rol.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-015",
+      "guide_id": "students",
+      "question": "¿Un monitor puede ver alumnos de otros grupos?",
+      "intent": "constraint",
+      "answer": "Los monitores restringidos solo pueden ver alumnos de sus grupos/cartera asignados. Los datos familiares, administrativos y económicos están separados por permisos.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-016",
+      "guide_id": "team",
+      "question": "¿Qué diferencia hay entre el equipo y los alumnos?",
+      "intent": "definition",
+      "answer": "El equipo reúne a quienes colaboran en la gestión o enseñanza del club. Sus roles y ámbitos determinan lo que pueden consultar o gestionar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-017",
+      "guide_id": "team",
+      "question": "¿Cómo reviso las solicitudes del equipo?",
+      "intent": "procedure",
+      "answer": "1. Revisa las solicitudes pendientes de acceso del equipo. 2. Aprueba la persona y asigna el rol operativo correspondiente. 3. Comprueba después sus ámbitos de trabajo si es Monitor.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-018",
+      "guide_id": "team",
+      "question": "¿Quién controla los permisos de las personas del equipo?",
+      "intent": "constraint",
+      "answer": "El código de equipo no asigna un rol por sí solo. Los permisos dependen del rol y del ámbito asignado. La elevación a Coordinación/Gestor permanece protegida por reglas específicas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-019",
+      "guide_id": "scopes",
+      "question": "¿Qué es el ámbito de un monitor?",
+      "intent": "definition",
+      "answer": "Un ámbito delimita los grupos, alumnos y capacidades a los que puede acceder una persona del equipo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-020",
+      "guide_id": "scopes",
+      "question": "¿Cómo se asigna el ámbito de trabajo del equipo?",
+      "intent": "procedure",
+      "answer": "1. Selecciona un Monitor. 2. Asigna los grupos y/o alumnos que debe gestionar. 3. Define el alcance financiero permitido cuando corresponda.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-021",
+      "guide_id": "scopes",
+      "question": "¿Un alumno puede tener más de un monitor autorizado?",
+      "intent": "constraint",
+      "answer": "La relación es muchos-a-muchos: un alumno puede estar en más de un grupo y tener más de un monitor autorizado. Un monitor restringido no debe poder consultar alumnos fuera de su ámbito.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-022",
+      "guide_id": "catalog",
+      "question": "¿Qué son las disciplinas y los grados?",
+      "intent": "definition",
+      "answer": "La disciplina identifica la actividad deportiva; sus grados o niveles permiten registrar la evolución del alumno dentro de esa actividad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-023",
+      "guide_id": "catalog",
+      "question": "¿Cómo configuro los grados de una disciplina?",
+      "intent": "procedure",
+      "answer": "1. Crea o revisa las disciplinas activas. 2. Configura los grados/niveles de cada disciplina. 3. Utiliza esta estructura en grupos, alumnos y progreso.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-024",
+      "guide_id": "catalog",
+      "question": "¿Cualquier miembro del club puede editar las disciplinas?",
+      "intent": "constraint",
+      "answer": "La edición de disciplinas está reservada a roles autorizados. Los monitores pueden trabajar con grados cuando su permiso lo permite.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-025",
+      "guide_id": "groups",
+      "question": "¿Qué es un grupo de entrenamiento?",
+      "intent": "definition",
+      "answer": "Un grupo reúne alumnos para organizar una actividad o entrenamiento del club. Un alumno puede formar parte de varios grupos y disciplinas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-026",
+      "guide_id": "groups",
+      "question": "¿Cómo organizo los grupos del club?",
+      "intent": "procedure",
+      "answer": "1. Crea el grupo con su nombre y disciplina. 2. Añade o revisa los alumnos vinculados. 3. Relaciona el grupo con las sesiones de entrenamiento.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-027",
+      "guide_id": "groups",
+      "question": "¿Un alumno puede estar en varios grupos?",
+      "intent": "constraint",
+      "answer": "Un alumno puede participar en varios grupos cuando el modelo del club lo requiera. El Monitor solo opera sobre grupos asignados si está restringido.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-028",
+      "guide_id": "sessions",
+      "question": "¿Qué es una sesión recurrente?",
+      "intent": "definition",
+      "answer": "Una sesión es una clase o entrenamiento situado en una fecha y horario, asociado al grupo correspondiente. Puede ser puntual o formar parte de una serie recurrente.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-029",
+      "guide_id": "sessions",
+      "question": "¿Cómo programo una clase del club?",
+      "intent": "procedure",
+      "answer": "1. Selecciona el grupo y crea la serie o sesión. 2. Define fecha, hora y recurrencia cuando proceda. 3. Registra excepciones, cambios o finalización de series desde la propia sesión.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-030",
+      "guide_id": "sessions",
+      "question": "¿Cambiar una sesión modifica toda la serie?",
+      "intent": "constraint",
+      "answer": "Los cambios de una sesión no deben alterar indebidamente toda la serie. Los monitores restringidos solo modifican sesiones dentro de sus grupos autorizados.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-031",
+      "guide_id": "attendance",
+      "question": "¿Para qué sirve registrar la asistencia?",
+      "intent": "definition",
+      "answer": "La asistencia deja constancia de la presencia o ausencia de cada alumno en una sesión. No es una evaluación de su nivel deportivo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-032",
+      "guide_id": "attendance",
+      "question": "¿Cómo registro la asistencia a una sesión?",
+      "intent": "procedure",
+      "answer": "1. Abre Asistencia y selecciona la sesión correspondiente. 2. Marca la presencia de los alumnos autorizados. 3. Guarda y revisa el resultado antes de salir.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-033",
+      "guide_id": "attendance",
+      "question": "¿La asistencia debe estar vinculada a una sesión real?",
+      "intent": "constraint",
+      "answer": "La asistencia está vinculada a sesiones y alumnos reales. El historial alimenta seguimiento y métricas del club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-034",
+      "guide_id": "tracking",
+      "question": "¿Qué es el seguimiento de un alumno?",
+      "intent": "definition",
+      "answer": "El seguimiento reúne observaciones profesionales relevantes sobre el alumno dentro del ámbito autorizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-035",
+      "guide_id": "tracking",
+      "question": "¿Cómo añado observaciones de seguimiento?",
+      "intent": "procedure",
+      "answer": "1. Busca al alumno autorizado. 2. Registra la observación o seguimiento pertinente. 3. Consulta el histórico para mantener continuidad entre sesiones.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-036",
+      "guide_id": "tracking",
+      "question": "¿Puede consultar el seguimiento un monitor ajeno al alumno?",
+      "intent": "constraint",
+      "answer": "El seguimiento no debe exponer datos a monitores fuera del ámbito del alumno. Utiliza información necesaria y profesional, evitando datos irrelevantes.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-037",
+      "guide_id": "progress",
+      "question": "¿Qué diferencia hay entre progreso y asistencia?",
+      "intent": "definition",
+      "answer": "El progreso refleja la evolución deportiva, los grados y las evaluaciones. La asistencia refleja si se ha acudido a una sesión.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-038",
+      "guide_id": "progress",
+      "question": "¿Cómo consulto la evolución deportiva de un alumno?",
+      "intent": "procedure",
+      "answer": "1. Entra en Progreso y selecciona alumno/grupo. 2. Revisa el nivel actual y evolución registrada. 3. Actualiza la evaluación cuando tengas permiso.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-039",
+      "guide_id": "progress",
+      "question": "¿El progreso deportivo muestra las finanzas del alumno?",
+      "intent": "constraint",
+      "answer": "El progreso deportivo es independiente de la información financiera. Respeta el alcance de grupos/alumnos del Monitor.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-040",
+      "guide_id": "finance",
+      "question": "¿Qué diferencia hay entre una cuota pendiente y un pago?",
+      "intent": "definition",
+      "answer": "Las finanzas del club reúnen las cuotas, los cargos y los pagos que puedes consultar o gestionar según tu rol. Un importe pendiente y un pago recibido son cosas diferentes.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-041",
+      "guide_id": "finance",
+      "question": "¿Cómo reviso las finanzas del club?",
+      "intent": "procedure",
+      "answer": "1. Filtra por periodo, alumno o estado. 2. Registra o revisa el cobro según tu permiso. 3. Comprueba que el estado final coincide con el movimiento realizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-042",
+      "guide_id": "finance",
+      "question": "¿Todos los roles tienen el mismo acceso financiero?",
+      "intent": "constraint",
+      "answer": "Los roles ven distinta profundidad financiera. Un Monitor puede tener alcance ninguno/estado/cartera/cobro/recibos según configuración. Familias y alumnos solo ven la información económica que les corresponde.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-043",
+      "guide_id": "receipts",
+      "question": "¿Qué es un recibo o justificante?",
+      "intent": "definition",
+      "answer": "Un recibo o justificante documenta un pago registrado y permite consultar su trazabilidad. Un cargo pendiente no acredita que se haya recibido dinero.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-044",
+      "guide_id": "receipts",
+      "question": "¿Cómo consulto un recibo del club?",
+      "intent": "procedure",
+      "answer": "1. Localiza el cobro o mensualidad correspondiente. 2. Abre el recibo completo desde la acción disponible. 3. Imprime o conserva el justificante desde la vista preparada.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-045",
+      "guide_id": "receipts",
+      "question": "¿Se puede considerar recibo de pago un cargo sin cobrar?",
+      "intent": "constraint",
+      "answer": "El recibo debe corresponder a un cobro real y mantener trazabilidad. La visibilidad depende del rol y relación con el alumno.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-046",
+      "guide_id": "reminders",
+      "question": "¿Para qué sirve un aviso de cobro?",
+      "intent": "definition",
+      "answer": "Un aviso de cobro recuerda un importe pendiente. No mueve dinero ni confirma por sí mismo un pago.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-047",
+      "guide_id": "reminders",
+      "question": "¿Cómo preparo un recordatorio de una cuota?",
+      "intent": "procedure",
+      "answer": "1. Filtra los pagos pendientes. 2. Revisa destinatario y contexto antes de enviar. 3. Registra el aviso y consulta su estado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-048",
+      "guide_id": "reminders",
+      "question": "¿Qué debo revisar antes de recordar un pago pendiente?",
+      "intent": "constraint",
+      "answer": "Los avisos deben partir de información económica vigente. Evita duplicar comunicaciones innecesarias.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-049",
+      "guide_id": "communications",
+      "question": "¿Qué son las comunicaciones oficiales del club?",
+      "intent": "definition",
+      "answer": "Las comunicaciones oficiales transmiten información del club a los destinatarios seleccionados y se diferencian de la actividad pública en Social.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-050",
+      "guide_id": "communications",
+      "question": "¿Cómo publico un aviso interno del club?",
+      "intent": "procedure",
+      "answer": "1. Crea la comunicación y define el contenido. 2. Selecciona audiencia o contexto cuando corresponda. 3. Publica y comprueba la notificación resultante.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-051",
+      "guide_id": "communications",
+      "question": "¿Una comunicación oficial es una publicación de Social?",
+      "intent": "constraint",
+      "answer": "Diferencia comunicaciones oficiales de publicaciones sociales. Utiliza los canales internos para información operativa del club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-052",
+      "guide_id": "events",
+      "question": "¿Qué diferencia hay entre un evento y una clase?",
+      "intent": "definition",
+      "answer": "Un evento es una actividad con su propia información y organización; no sustituye automáticamente a las sesiones habituales de entrenamiento.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-053",
+      "guide_id": "events",
+      "question": "¿Cómo gestiono un evento del club?",
+      "intent": "procedure",
+      "answer": "1. Crea el evento con fecha y descripción. 2. Configura los datos de participación disponibles. 3. Publica y revisa su visibilidad en el portal.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-054",
+      "guide_id": "events",
+      "question": "¿Un evento sustituye las sesiones de entrenamiento?",
+      "intent": "constraint",
+      "answer": "Los eventos son contenido del club; no sustituyen a las sesiones de entrenamiento. Los permisos de gestión varían según rol.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-055",
+      "guide_id": "community",
+      "question": "¿Qué es la Comunidad del Club?",
+      "intent": "definition",
+      "answer": "La Comunidad del Club es su espacio interno de participación y publicaciones. KOMBAX Social es el entorno público de la comunidad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-056",
+      "guide_id": "community",
+      "question": "¿Cómo participo en la comunidad interna del club?",
+      "intent": "procedure",
+      "answer": "1. Acepta las Normas de Comunidad del Club si vas a publicar. 2. Crea una publicación con el contenido permitido. 3. Consulta el feed interno y las publicaciones vigentes.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-057",
+      "guide_id": "community",
+      "question": "¿La comunidad del club es lo mismo que KOMBAX Social?",
+      "intent": "constraint",
+      "answer": "Es distinta de KOMBAX Social: esta comunidad está vinculada al club. Publicar requiere aceptación vigente de las normas. Se aplican límites de contenido y ciclo de vida configurados.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-058",
+      "guide_id": "social",
+      "question": "¿Para qué sirve KOMBAX Social al club?",
+      "intent": "definition",
+      "answer": "KOMBAX Social permite descubrir perfiles y publicaciones relacionadas con artes marciales y deportes de contacto. El permiso de publicar depende de la identidad y su validación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-059",
+      "guide_id": "social",
+      "question": "¿Cómo accedo a Social desde el club?",
+      "intent": "procedure",
+      "answer": "1. Activa una identidad Social elegible y selecciona con quién actúas. 2. Publica únicamente contenido relacionado con artes marciales y deportes de contacto; añade foto/vídeo o contenido del álbum si quieres. 3. Usa el corazón para Me gusta público; Me interesa/No me interesa es una preferencia privada para personalizar tu feed. Comenta, responde, guarda y abre perfiles desde nombre/avatar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-060",
+      "guide_id": "social",
+      "question": "¿Qué tipo de contenido admite KOMBAX Social?",
+      "intent": "constraint",
+      "answer": "KOMBAX Social está dedicado a artes marciales y deportes de contacto; el contenido claramente fuera de temática puede ser retirado por moderación. Miembro de club no se convierte automáticamente en Competidor. El acceso Social de miembros requiere edad mínima verificada y activación voluntaria. Los comentarios pueden estar abiertos, solo verificados o cerrados según la publicación. Nombre y avatar del autor son navegables hacia su perfil público.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-061",
+      "guide_id": "showcase",
+      "question": "¿Qué diferencia hay entre Showcase y Social?",
+      "intent": "definition",
+      "answer": "Showcase es el escaparate de productos y servicios. Social es el espacio de publicaciones e interacción de la comunidad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-062",
+      "guide_id": "showcase",
+      "question": "¿Cómo entro al escaparate de KOMBAX?",
+      "intent": "procedure",
+      "answer": "1. Explora fichas publicadas o abre el espacio de tu Club/Marca autorizado. 2. Crea una ficha con imagen, descripción y CTA cuando puedas gestionarlo. 3. Publica, comparte o guarda los elementos de interés.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-063",
+      "guide_id": "showcase",
+      "question": "¿Quién es responsable de entregar un producto vendido?",
+      "intent": "constraint",
+      "answer": "Los productos comerciales pueden usar checkout Stripe y pedidos; el vendedor identificado es quien vende, prepara, entrega y atiende la posventa. KOMBAX proporciona la plataforma tecnológica. Los comentarios y corazones pertenecen a Social, no a Showcase.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-064",
+      "guide_id": "material",
+      "question": "¿Qué es el material interno del club?",
+      "intent": "definition",
+      "answer": "Material es el catálogo o la gestión interna del club y sus solicitudes. No se confunde con el escaparate público de Showcase.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-065",
+      "guide_id": "material",
+      "question": "¿Cómo gestiono el material del club?",
+      "intent": "procedure",
+      "answer": "1. Consulta los materiales disponibles. 2. Gestiona artículos o solicitudes según tu rol. 3. Revisa el estado de cada solicitud.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-066",
+      "guide_id": "material",
+      "question": "¿El material del club y Showcase son el mismo catálogo?",
+      "intent": "constraint",
+      "answer": "La gestión de material del club es independiente del Showcase público.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-067",
+      "guide_id": "documents",
+      "question": "¿Qué es el archivo documental del club?",
+      "intent": "definition",
+      "answer": "El archivo documental reúne los documentos internos que pueden consultar los roles autorizados.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-068",
+      "guide_id": "documents",
+      "question": "¿Cómo consulto los documentos internos?",
+      "intent": "procedure",
+      "answer": "1. Abre Archivo documental. 2. Sube o localiza el archivo correspondiente. 3. Comprueba que solo tenga acceso quien realmente lo necesita.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-069",
+      "guide_id": "documents",
+      "question": "¿Cualquier alumno puede acceder a documentos administrativos?",
+      "intent": "constraint",
+      "answer": "El acceso documental está restringido a roles administrativos autorizados.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-070",
+      "guide_id": "archive",
+      "question": "¿Qué diferencia hay entre archivar y eliminar?",
+      "intent": "definition",
+      "answer": "Archivar conserva un elemento para consultarlo o recuperarlo según el flujo disponible. Eliminar tiene efectos distintos y puede estar limitado por obligaciones de conservación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-071",
+      "guide_id": "archive",
+      "question": "¿Cómo consulto los elementos archivados?",
+      "intent": "procedure",
+      "answer": "1. Entra en Archivo y papelera. 2. Filtra por tipo y antigüedad. 3. Archiva, restaura o limpia solo cuando la acción sea segura.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-072",
+      "guide_id": "archive",
+      "question": "¿Puedo borrar registros económicos que deben conservarse?",
+      "intent": "constraint",
+      "answer": "Los registros económicos/legales no deben borrarse si existe obligación de conservación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-073",
+      "guide_id": "notifications",
+      "question": "¿Qué diferencia hay entre un aviso y una tarea pendiente?",
+      "intent": "definition",
+      "answer": "Una notificación puede informar de algo o señalar una acción pendiente. Leerla no equivale necesariamente a resolver la tarea.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-074",
+      "guide_id": "notifications",
+      "question": "¿Cómo reviso las notificaciones del club?",
+      "intent": "procedure",
+      "answer": "1. Abre Notificaciones y revisa los grupos de avisos. 2. Marca como leídos los informativos que ya hayas revisado. 3. Abre individualmente los avisos que requieren acción.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-075",
+      "guide_id": "notifications",
+      "question": "¿Marcar todo como leído resuelve las acciones pendientes?",
+      "intent": "constraint",
+      "answer": "“Marcar todo como leído” no debe ocultar notificaciones que requieren una acción real. Las notificaciones push dependen también del permiso del dispositivo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-076",
+      "guide_id": "settings",
+      "question": "¿Para qué sirve la configuración visual del club?",
+      "intent": "definition",
+      "answer": "La configuración permite adaptar datos e imagen del espacio del club dentro de las opciones disponibles para tu rol.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-077",
+      "guide_id": "settings",
+      "question": "¿Cómo personalizo la imagen administrativa del club?",
+      "intent": "procedure",
+      "answer": "1. Abre Configuración y revisa los datos del club. 2. Selecciona el tema premium y comprueba la vista previa. 3. Publica la personalización para aplicarla al portal y perfil público.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-078",
+      "guide_id": "settings",
+      "question": "¿Qué temas visuales aparecen en la guía del club?",
+      "intent": "constraint",
+      "answer": "Los cuatro temas son Combat Dark Neon, Electric Blue Pro, Gold Luxe y Dojo Heritage Glow. El neón se usa como acento, no como fondo saturado. El perfil público del club recibe también su theme_id.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-079",
+      "guide_id": "install",
+      "question": "¿Qué significa instalar KOMBAX como aplicación web?",
+      "intent": "definition",
+      "answer": "La aplicación web instalada ofrece acceso desde el dispositivo usando la misma cuenta. Instalarla no cambia tus permisos ni crea otra identidad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-080",
+      "guide_id": "install",
+      "question": "¿Cómo utilizo el cartel de acceso y el QR del club?",
+      "intent": "procedure",
+      "answer": "1. Abre Instalar app. 2. Instala la PWA desde el navegador compatible o utiliza el canal Android del club. 3. Gestor/Coordinación/Secretaría pueden abrir el cartel genérico y completar QR/código cuando proceda.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-081",
+      "guide_id": "privacy",
+      "question": "¿Qué son los consentimientos de KOMBAX?",
+      "intent": "definition",
+      "answer": "Los consentimientos recogen autorizaciones concretas, como el uso de imagen o la participación en la comunidad. No deben confundirse entre sí.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-082",
+      "guide_id": "privacy",
+      "question": "¿Cómo consulto la privacidad o solicito eliminar mi cuenta?",
+      "intent": "procedure",
+      "answer": "1. Baja hasta Condiciones y privacidad en esta misma pantalla. 2. Lee la versión vigente antes de aceptar o retirar un consentimiento. 3. Usa el centro de eliminación si necesitas iniciar el cierre de tu cuenta.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-083",
+      "guide_id": "privacy",
+      "question": "¿Eliminar la cuenta borra todo el historial económico?",
+      "intent": "constraint",
+      "answer": "Autorización de imagen y normas de comunidad son consentimientos diferenciados. Eliminar cuenta no equivale a borrar trazabilidad económica/legal que deba conservarse.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-084",
+      "guide_id": "member-start",
+      "question": "¿Qué aparece en Mi inicio como alumno?",
+      "intent": "definition",
+      "answer": "Mi inicio reúne las próximas clases, avisos y accesos relacionados con tu condición de miembro del club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-085",
+      "guide_id": "member-start",
+      "question": "¿Cómo veo mis accesos principales como miembro?",
+      "intent": "procedure",
+      "answer": "1. Entra en Inicio al abrir KOMBAX. 2. Revisa tus próximas clases, avisos y situación general. 3. Usa los accesos directos para ir a la función que necesites.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-086",
+      "guide_id": "member-start",
+      "question": "¿Mi cuenta de alumno incluye la administración del club?",
+      "intent": "constraint",
+      "answer": "Solo ves información relacionada con tu cuenta y tu club. Las funciones administrativas del club no forman parte del perfil Miembro.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-087",
+      "guide_id": "member-schedule",
+      "question": "¿Qué son Mis clases y horarios?",
+      "intent": "definition",
+      "answer": "Mis clases y horarios muestra las sesiones y grupos vinculados a tu ficha y las acciones de asistencia habilitadas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-088",
+      "guide_id": "member-schedule",
+      "question": "¿Cómo consulto mis próximas clases?",
+      "intent": "procedure",
+      "answer": "1. Abre Horarios para consultar tus grupos y clases. 2. Revisa la próxima sesión y, si está disponible, confirma o cancela tu asistencia. 3. El día de la clase utiliza Check-in cuando el club lo tenga habilitado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-089",
+      "guide_id": "member-schedule",
+      "question": "¿Puedo cambiar el horario del club al hacer check-in?",
+      "intent": "constraint",
+      "answer": "Solo aparecen grupos y sesiones vinculados a tu ficha. Una reserva o check-in no modifica el horario creado por el club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-090",
+      "guide_id": "member-finance",
+      "question": "¿Qué son Mis cuotas como miembro?",
+      "intent": "definition",
+      "answer": "Mis cuotas muestra la información económica que corresponde a tu ficha o a los hijos que tienes vinculados. Un cargo pendiente es una cantidad por pagar; no confirma que se haya hecho un cobro.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-091",
+      "guide_id": "member-finance",
+      "question": "¿Cómo veo mis pagos y recibos como alumno?",
+      "intent": "procedure",
+      "answer": "1. Entra en Cuotas. 2. Comprueba el periodo y el estado de cada mensualidad. 3. Abre el recibo o justificante cuando exista un cobro registrado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-092",
+      "guide_id": "member-finance",
+      "question": "¿Puedo consultar las cuotas de otras familias?",
+      "intent": "constraint",
+      "answer": "Solo puedes consultar información económica asociada a tu propia ficha. Un recibo aparece cuando existe un cobro real registrado por el club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-093",
+      "guide_id": "member-comms",
+      "question": "¿Dónde leo los avisos oficiales dirigidos a mí?",
+      "intent": "definition",
+      "answer": "Los avisos oficiales son comunicaciones que el club dirige a los miembros seleccionados. No todos los avisos están destinados a todas las personas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-094",
+      "guide_id": "member-comms",
+      "question": "¿Cómo consulto las comunicaciones como miembro?",
+      "intent": "procedure",
+      "answer": "1. Abre Comunicaciones. 2. Revisa los avisos nuevos y su fecha. 3. Consulta el contenido completo cuando necesites más detalle.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-095",
+      "guide_id": "member-comms",
+      "question": "¿Quién decide qué miembros ven un aviso del club?",
+      "intent": "constraint",
+      "answer": "Las comunicaciones oficiales son distintas de las publicaciones sociales. La visibilidad depende de la audiencia definida por el club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-096",
+      "guide_id": "member-events",
+      "question": "¿Qué actividades puedo consultar como miembro?",
+      "intent": "definition",
+      "answer": "Como miembro puedes consultar las actividades que estén disponibles para tu entorno y las acciones que permita cada evento.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-097",
+      "guide_id": "member-events",
+      "question": "¿Cómo entro a los eventos desde mi cuenta de alumno?",
+      "intent": "procedure",
+      "answer": "1. Abre Eventos. 2. Consulta fecha, descripción y detalles disponibles. 3. Sigue las indicaciones del club cuando el evento requiera una acción o participación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-098",
+      "guide_id": "member-events",
+      "question": "¿Consultar un evento cambia mi horario habitual?",
+      "intent": "constraint",
+      "answer": "Un evento no sustituye al horario habitual de clases. Las acciones disponibles dependen de cómo el club haya configurado el evento.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-099",
+      "guide_id": "member-material",
+      "question": "¿Para qué sirven las solicitudes de material de un alumno?",
+      "intent": "definition",
+      "answer": "Las solicitudes de material sirven para comunicar al club lo que necesitas de su catálogo interno.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-100",
+      "guide_id": "member-material",
+      "question": "¿Cómo solicito material a mi club?",
+      "intent": "procedure",
+      "answer": "1. Abre Material. 2. Consulta los artículos disponibles y sus variantes cuando existan. 3. Envía una solicitud y revisa posteriormente su estado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-101",
+      "guide_id": "member-material",
+      "question": "¿Una solicitud de material es un pedido en Showcase?",
+      "intent": "constraint",
+      "answer": "Material es un servicio interno del club. KOMBAX Showcase es un escaparate público diferente y no gestiona pedidos del club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-102",
+      "guide_id": "member-community",
+      "question": "¿Qué diferencia hay entre mi comunidad interna y Social?",
+      "intent": "definition",
+      "answer": "La comunidad interna corresponde al club al que perteneces; Social permite participar en el entorno público de KOMBAX según los requisitos de tu identidad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-103",
+      "guide_id": "member-community",
+      "question": "¿Cómo publico en la comunidad de mi club si estoy autorizado?",
+      "intent": "procedure",
+      "answer": "1. Lee y acepta las Normas de Comunidad del Club antes de publicar. 2. Consulta el feed interno y crea contenido cuando tu cuenta lo permita. 3. Revisa tus publicaciones y la actividad disponible.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-104",
+      "guide_id": "member-community",
+      "question": "¿Tengo que aceptar normas para participar en la comunidad?",
+      "intent": "constraint",
+      "answer": "La Comunidad del Club es interna y diferente de KOMBAX Social. Publicar requiere mantener vigentes las normas y límites de contenido aplicables.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-105",
+      "guide_id": "member-social",
+      "question": "¿Qué es la identidad social de un miembro?",
+      "intent": "definition",
+      "answer": "La identidad social es tu presentación pública en la comunidad. El expediente privado del alumno permanece separado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-106",
+      "guide_id": "member-social",
+      "question": "¿Cómo accedo a mi perfil Social como miembro?",
+      "intent": "procedure",
+      "answer": "1. Desde Mi perfil comprueba si puedes activar KOMBAX Social. 2. Acepta sus normas específicas y crea tu identidad pública voluntariamente. 3. En Social puedes publicar, reaccionar, comentar, guardar y abrir perfiles públicos.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-107",
+      "guide_id": "member-social",
+      "question": "¿Ser miembro me convierte en competidor verificado?",
+      "intent": "constraint",
+      "answer": "El acceso de miembros requiere la edad mínima verificada por el club y activación voluntaria. Ser Miembro no te convierte automáticamente en Competidor verificado. Tu expediente privado del club permanece separado de la identidad pública Social.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-108",
+      "guide_id": "member-showcase",
+      "question": "¿Qué puedo hacer en Showcase como miembro?",
+      "intent": "definition",
+      "answer": "Como miembro puedes explorar los productos y servicios publicados en Showcase; eso no te concede permisos de vendedor.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-109",
+      "guide_id": "member-showcase",
+      "question": "¿Cómo exploro productos y servicios como alumno?",
+      "intent": "procedure",
+      "answer": "1. Abre KOMBAX Showcase. 2. Explora fichas públicas de clubes, marcas y elementos destacados. 3. Guarda o comparte contenido cuando la ficha ofrezca esa acción.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-110",
+      "guide_id": "member-showcase",
+      "question": "¿Qué edad exige la guía para comprar productos?",
+      "intent": "constraint",
+      "answer": "Algunos productos permiten compra y pedido mediante Stripe. Las compras están reservadas a mayores de 18 años; los servicios profesionales siguen siendo de contacto. Las funciones de gestión de Showcase pertenecen a perfiles autorizados, no al Miembro.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-111",
+      "guide_id": "member-notifications",
+      "question": "¿Qué notificaciones puedo recibir como alumno?",
+      "intent": "definition",
+      "answer": "Tus notificaciones reúnen avisos y tareas vinculados a tu cuenta. Los permisos del dispositivo también influyen en la recepción de avisos push.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-112",
+      "guide_id": "member-notifications",
+      "question": "¿Cómo reviso mis avisos personales?",
+      "intent": "procedure",
+      "answer": "1. Abre Notificaciones. 2. Marca como leídos los avisos informativos que ya hayas revisado. 3. Abre individualmente cualquier notificación que requiera una acción.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-113",
+      "guide_id": "member-notifications",
+      "question": "¿Marcar mis avisos como leídos elimina las tareas pendientes?",
+      "intent": "constraint",
+      "answer": "“Marcar todo como leído” no elimina las acciones pendientes importantes. Las notificaciones push dependen también de los permisos del dispositivo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-114",
+      "guide_id": "member-requests",
+      "question": "¿Qué son mis solicitudes deportivas?",
+      "intent": "definition",
+      "answer": "Una solicitud deportiva comunica al club una petición relacionada con tu inscripción. Necesita la revisión correspondiente antes de modificar la inscripción activa.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-115",
+      "guide_id": "member-requests",
+      "question": "¿Cómo envío una solicitud sobre mi inscripción?",
+      "intent": "procedure",
+      "answer": "1. Abre Solicitudes. 2. Revisa tus relaciones deportivas activas y solicitudes anteriores. 3. Envía una nueva solicitud de disciplina/grupo cuando necesites un cambio o alta.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-116",
+      "guide_id": "member-requests",
+      "question": "¿Mi inscripción cambia al enviar una solicitud deportiva?",
+      "intent": "constraint",
+      "answer": "La solicitud queda pendiente hasta que el club la revise. Enviar una solicitud no modifica por sí solo tu inscripción activa.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-117",
+      "guide_id": "member-profile",
+      "question": "¿Mi perfil de miembro y mi perfil Social son dos perfiles?",
+      "intent": "definition",
+      "answer": "Mi perfil y el perfil Social de esa identidad son la misma presentación pública. Los documentos, cuotas y expediente privado del club pertenecen a otra capa.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-118",
+      "guide_id": "member-profile",
+      "question": "¿Cómo edito mi identidad pública como miembro?",
+      "intent": "procedure",
+      "answer": "1. Abre Mi perfil. 2. Si KOMBAX Social aún no está activo, completa la activación voluntaria cuando seas elegible. 3. Edita desde la misma ficha tu banner, avatar, presentación e información deportiva pública. 4. Gestiona tu álbum y comprueba la parte privada del club separada debajo de tu ficha pública.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-119",
+      "guide_id": "member-profile",
+      "question": "¿Mis cuotas y documentos privados aparecen en Social?",
+      "intent": "constraint",
+      "answer": "Mi perfil y tu perfil KOMBAX Social son la misma identidad pública; no existe un segundo perfil deportivo visible. La foto privada de acceso, documentos, cuotas, asistencia y expediente del club permanecen en una capa privada separada. Ser Miembro no equivale a Competidor verificado ni concede una insignia KOMBAX.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-120",
+      "guide_id": "member-install",
+      "question": "¿Instalar la app cambia mi cuenta de alumno?",
+      "intent": "definition",
+      "answer": "Instalar KOMBAX permite abrirlo desde el dispositivo con tu cuenta habitual, sin dar de alta otra cuenta de alumno.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-121",
+      "guide_id": "member-install",
+      "question": "¿Cómo instalo KOMBAX para entrar como miembro?",
+      "intent": "procedure",
+      "answer": "1. Abre Instalar app. 2. Sigue la opción disponible para tu dispositivo o navegador. 3. Una vez instalada, entra con la misma cuenta de tu club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-122",
+      "guide_id": "member-install",
+      "question": "¿Necesito otra cuenta al instalar KOMBAX?",
+      "intent": "constraint",
+      "answer": "La instalación no crea una cuenta nueva ni cambia tus permisos. El acceso sigue dependiendo de tu cuenta y del club seleccionado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-123",
+      "guide_id": "account-create",
+      "question": "¿Qué es una cuenta gratuita?",
+      "intent": "definition",
+      "answer": "La cuenta gratuita es tu acceso a KOMBAX con un correo y contraseña. La cuenta y el perfil público son cosas diferentes: después puedes crear una identidad o vincularte a un club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-124",
+      "guide_id": "account-create",
+      "question": "¿Cómo creo una cuenta en KOMBAX?",
+      "intent": "procedure",
+      "answer": "1. Pulsa Acceder a mi cuenta y elige Crear cuenta gratuita. 2. Completa los datos solicitados y las aceptaciones obligatorias. 3. Confirma tu correo cuando se solicite y accede a tu cuenta. 4. Después puedes crear una identidad pública o vincularte a un club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-125",
+      "guide_id": "account-create",
+      "question": "¿Qué reviso después de registrar mi cuenta gratuita?",
+      "intent": "constraint",
+      "answer": "Después puedes crear una identidad pública o vincularte a un club.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-126",
+      "guide_id": "account-login",
+      "question": "¿Qué diferencia hay entre entrar y registrarme?",
+      "intent": "definition",
+      "answer": "Entrar utiliza una cuenta existente; registrarte crea una cuenta nueva. Recuperar la contraseña permite restablecer el acceso a la cuenta existente.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-127",
+      "guide_id": "account-login",
+      "question": "¿Cómo recupero mi contraseña de KOMBAX?",
+      "intent": "procedure",
+      "answer": "1. Abre Acceder a mi cuenta. 2. Introduce el correo y tu contraseña. 3. Si no la recuerdas, pulsa He olvidado mi contraseña y sigue el correo de recuperación. 4. No compartas tu contraseña con el asistente.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-128",
+      "guide_id": "account-login",
+      "question": "¿Qué hago después de solicitar la recuperación de acceso?",
+      "intent": "constraint",
+      "answer": "No compartas tu contraseña con el asistente.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-129",
+      "guide_id": "identity-choose",
+      "question": "¿Qué significa seleccionar una identidad?",
+      "intent": "definition",
+      "answer": "La identidad seleccionada determina desde qué perfil o espacio trabajas. Cambiarla no mezcla los permisos de tus organizaciones.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-130",
+      "guide_id": "identity-choose",
+      "question": "¿Cómo cambio a otra identidad de mi cuenta?",
+      "intent": "procedure",
+      "answer": "1. Abre Seleccionar identidad o Gestionar mi cuenta e identidades. 2. Elige el club, la marca, la federación o tu identidad personal. 3. Comprueba el nombre del espacio antes de realizar una acción. 4. Cada identidad conserva sus permisos, equipo y servicios.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-131",
+      "guide_id": "identity-choose",
+      "question": "¿Qué compruebo al entrar en el espacio seleccionado?",
+      "intent": "constraint",
+      "answer": "Cada identidad conserva sus permisos, equipo y servicios.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-132",
+      "guide_id": "service-activate",
+      "question": "¿Qué significa activar un servicio?",
+      "intent": "definition",
+      "answer": "Activar un servicio habilita capacidades concretas para la identidad seleccionada cuando cumple sus requisitos; no todas las identidades incluyen todos los servicios.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-133",
+      "guide_id": "service-activate",
+      "question": "¿Cómo consulto los servicios disponibles para mi perfil?",
+      "intent": "procedure",
+      "answer": "1. Entra en el espacio de la identidad que utilizará el servicio. 2. Para Marca o Federación consulta Plan y servicios; para una activación puntual abre Events o Mi Showcase. 3. Completa la verificación que se solicite para ese servicio. 4. Revisa y confirma las condiciones en su formulario. La contratación pública puede seguir bloqueada durante el piloto.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-134",
+      "guide_id": "service-activate",
+      "question": "¿Qué reviso antes de contratar o activar un servicio?",
+      "intent": "constraint",
+      "answer": "Revisa y confirma las condiciones en su formulario. La contratación pública puede seguir bloqueada durante el piloto.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-135",
+      "guide_id": "profile-public",
+      "question": "¿Qué diferencia hay entre avatar y banner públicos?",
+      "intent": "definition",
+      "answer": "El avatar o logo identifica el perfil; el banner es su imagen de portada. El álbum contiene fotografías y no sustituye automáticamente al avatar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-136",
+      "guide_id": "profile-public",
+      "question": "¿Cómo cambio la foto y el banner de mi perfil público?",
+      "intent": "procedure",
+      "answer": "1. Entra en la identidad correcta y abre Perfil público. 2. Pulsa Editar y selecciona la foto de perfil o el banner, según corresponda. 3. Guarda y revisa la vista pública. 4. Añadir una foto al álbum es una acción distinta de cambiar la foto principal.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-137",
+      "guide_id": "profile-public",
+      "question": "¿Qué compruebo después de guardar mi perfil público?",
+      "intent": "constraint",
+      "answer": "Añadir una foto al álbum es una acción distinta de cambiar la foto principal.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-138",
+      "guide_id": "profile-showcase",
+      "question": "¿Qué significa ser vendedor autorizado?",
+      "intent": "definition",
+      "answer": "Ser vendedor autorizado requiere la revisión y activación comercial correspondientes. Tener un perfil público no habilita por sí solo ventas ni cobros.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-139",
+      "guide_id": "profile-showcase",
+      "question": "¿Cómo preparo la solicitud de vendedor de mi identidad?",
+      "intent": "procedure",
+      "answer": "1. Abre Mi Showcase desde esta identidad. 2. Revisa la solicitud de vendedor y los requisitos comerciales. 3. Prepara la ficha y su documentación de seguridad cuando corresponda. 4. Publicar, vender y cobrar dependen de la verificación y del servicio activo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-140",
+      "guide_id": "profile-showcase",
+      "question": "¿Qué requisitos debo revisar antes de vender desde mi perfil?",
+      "intent": "constraint",
+      "answer": "Publicar, vender y cobrar dependen de la verificación y del servicio activo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-141",
+      "guide_id": "profile-events",
+      "question": "¿Qué es el ticketing de un evento?",
+      "intent": "definition",
+      "answer": "El ticketing reúne las funciones de entradas de un evento. Organizar un evento y habilitar venta de entradas tienen requisitos propios.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-142",
+      "guide_id": "profile-events",
+      "question": "¿Cómo consulto la activación de eventos de mi perfil?",
+      "intent": "procedure",
+      "answer": "1. Abre la gestión de eventos de tu identidad. 2. Prepara el evento, fechas y aforo. 3. Consulta la activación puntual y los requisitos del ticketing. 4. Completa los requisitos comerciales antes de publicar o cobrar entradas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-143",
+      "guide_id": "profile-events",
+      "question": "¿Qué reviso antes de publicar un evento de mi identidad?",
+      "intent": "constraint",
+      "answer": "Completa los requisitos comerciales antes de publicar o cobrar entradas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-144",
+      "guide_id": "profile-brand",
+      "question": "¿Para qué sirven las campañas y colaboraciones de marca?",
+      "intent": "definition",
+      "answer": "El espacio de marca organiza su presentación, campañas y colaboraciones y los servicios disponibles según su activación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-145",
+      "guide_id": "profile-brand",
+      "question": "¿Cómo accedo al espacio de trabajo de mi marca?",
+      "intent": "procedure",
+      "answer": "1. En Mi Marca abre Negocio y catálogo. 2. Elige Campañas o Colaboraciones. 3. Revisa las capacidades del plan y prepara la propuesta. 4. La ayuda no publica campañas ni confirma acuerdos.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-146",
+      "guide_id": "profile-brand",
+      "question": "¿Qué compruebo al preparar una campaña de mi marca?",
+      "intent": "constraint",
+      "answer": "La ayuda no publica campañas ni confirma acuerdos.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-147",
+      "guide_id": "profile-federation",
+      "question": "¿Qué incluye el espacio administrativo de una federación?",
+      "intent": "definition",
+      "answer": "El espacio administrativo de federación permite organizar la gestión de su red, federados y licencias dentro de las capacidades habilitadas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-148",
+      "guide_id": "profile-federation",
+      "question": "¿Cómo reviso las funciones de mi federación?",
+      "intent": "procedure",
+      "answer": "1. Entra en Mi Federación. 2. Abre Gestión federativa y selecciona Federados, Licencias o Clubes relacionados. 3. Revisa las solicitudes y documentación antes de validarlas. 4. Las decisiones reservadas al titular conservan su autorización.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-149",
+      "guide_id": "profile-federation",
+      "question": "¿Qué reviso antes de realizar una gestión federativa?",
+      "intent": "constraint",
+      "answer": "Las decisiones reservadas al titular conservan su autorización.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-150",
+      "guide_id": "profile-documents",
+      "question": "¿Qué diferencia hay entre verificación y acreditación?",
+      "intent": "definition",
+      "answer": "La verificación valida la identidad o condición correspondiente; una acreditación respalda una cualificación o autorización específica. Aportar un archivo no equivale a su aprobación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-151",
+      "guide_id": "profile-documents",
+      "question": "¿Cómo aporto documentación profesional?",
+      "intent": "procedure",
+      "answer": "1. Abre el perfil público de la identidad correspondiente. 2. Completa los datos y aporta la documentación que solicite la verificación. 3. Para servicios específicos pueden exigirse acreditaciones adicionales. 4. Subir un documento no concede automáticamente una verificación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-152",
+      "guide_id": "profile-documents",
+      "question": "¿Qué debo comprobar después de enviar una acreditación?",
+      "intent": "constraint",
+      "answer": "Subir un documento no concede automáticamente una verificación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-153",
+      "guide_id": "charge-create",
+      "question": "¿Qué es un cargo manual?",
+      "intent": "definition",
+      "answer": "Un cargo es un importe que el club registra a nombre de un alumno o familia por una cuota, matrícula u otro concepto. Crearlo no mueve dinero ni significa que ya esté pagado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-154",
+      "guide_id": "charge-create",
+      "question": "¿Cómo creo un cargo para uno o varios alumnos?",
+      "intent": "procedure",
+      "answer": "1. Abre Finanzas y pulsa + Nuevo cargo, si tu rol dispone de esa acción. 2. Escoge categoría y concepto; selecciona los alumnos, un grupo, una disciplina o todos los activos. 3. Indica importe, periodo y vencimiento; añade observaciones si hacen falta. 4. Revisa los destinatarios y el total antes de pulsar Crear cargos. 5. Comprueba el cargo en Cargos. Crear un cargo registra deuda; no ejecuta un cobro bancario.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-155",
+      "guide_id": "charge-create",
+      "question": "¿Qué compruebo después de crear un cargo manual?",
+      "intent": "constraint",
+      "answer": "Comprueba el cargo en Cargos. Crear un cargo registra deuda; no ejecuta un cobro bancario.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-156",
+      "guide_id": "payment-record",
+      "question": "¿Qué diferencia hay entre registrar y ejecutar un pago?",
+      "intent": "definition",
+      "answer": "Registrar un pago deja constancia del dinero recibido y de su relación con un cargo. No es lo mismo que crear el cargo ni implica por sí solo un cobro bancario.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-157",
+      "guide_id": "payment-record",
+      "question": "¿Cómo registro un pago parcial de una cuota?",
+      "intent": "procedure",
+      "answer": "1. En Finanzas, localiza el cargo pendiente del alumno y abre su detalle. 2. Utiliza la acción de cobro o registro de pago que tengas autorizada. 3. Indica importe, fecha y método. Para un pago parcial, registra solo lo recibido. 4. Confirma una sola vez y comprueba el saldo restante y el estado del pago. 5. Si el pago está pendiente de validación, aún no cuenta como cobrado. Revisa Pagos por validar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-158",
+      "guide_id": "payment-record",
+      "question": "¿Qué compruebo al terminar de registrar un pago?",
+      "intent": "constraint",
+      "answer": "Si el pago está pendiente de validación, aún no cuenta como cobrado. Revisa Pagos por validar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-159",
+      "guide_id": "tariff-change",
+      "question": "¿Qué diferencia hay entre tarifa y cargo emitido?",
+      "intent": "definition",
+      "answer": "Una tarifa define el precio y la periodicidad que se aplican al alumno. Un cargo es un importe ya emitido; cambiar la tarifa no modifica por sí solo los cargos anteriores.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-160",
+      "guide_id": "tariff-change",
+      "question": "¿Cómo cambio la tarifa de un alumno?",
+      "intent": "procedure",
+      "answer": "1. En la vista que muestra Tarifas, pulsa Nueva tarifa o edita la tarifa disponible. 2. Revisa importe, periodicidad y matrícula antes de guardar. 3. Asigna la tarifa correspondiente desde la ficha del alumno cuando esa opción esté disponible. 4. El cambio de tarifa no modifica por sí solo los cargos ya emitidos. 5. Para un cargo erróneo, revisa si puede anularse sin pagos y crea el correcto; conserva los movimientos ya cobrados.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-161",
+      "guide_id": "tariff-change",
+      "question": "¿Qué debo revisar después de cambiar una tarifa?",
+      "intent": "constraint",
+      "answer": "Para un cargo erróneo, revisa si puede anularse sin pagos y crea el correcto; conserva los movimientos ya cobrados.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-162",
+      "guide_id": "payment-validate",
+      "question": "¿Qué significa validar un pago comunicado?",
+      "intent": "definition",
+      "answer": "Validar un pago comunicado consiste en revisar la información aportada y confirmar su registro cuando corresponde. Un aviso de pago no es prueba automática de recepción.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-163",
+      "guide_id": "payment-validate",
+      "question": "¿Cómo reviso un pago que ha comunicado una familia?",
+      "intent": "procedure",
+      "answer": "1. Abre Finanzas y pulsa Pagos por validar. 2. Localiza al alumno y comprueba importe, cargo y justificante cuando exista. 3. Valida solo si el cobro está comprobado; si no corresponde, recházalo indicando el motivo. 4. Comprueba el nuevo estado y el saldo. No registres otra vez el mismo pago.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-164",
+      "guide_id": "payment-validate",
+      "question": "¿Qué compruebo después de validar un pago?",
+      "intent": "constraint",
+      "answer": "Comprueba el nuevo estado y el saldo. No registres otra vez el mismo pago.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-165",
+      "guide_id": "finance-report",
+      "question": "¿Qué es un informe financiero PDF?",
+      "intent": "definition",
+      "answer": "Un informe financiero PDF reúne la información autorizada para el periodo y selección elegidos. Debe revisarse antes de compartirlo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-166",
+      "guide_id": "finance-report",
+      "question": "¿Cómo preparo un informe financiero del club?",
+      "intent": "procedure",
+      "answer": "1. En Finanzas, abre Informes o pulsa Generar informe. 2. Escoge el tipo de informe y los filtros de periodo, alumno, grupo o disciplina que necesites. 3. Revisa los datos incluidos y genera el informe con tu permiso autorizado. 4. Abre el PDF generado y comprueba periodo, importes y datos del club antes de compartirlo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-167",
+      "guide_id": "finance-report",
+      "question": "¿Qué debo revisar antes de compartir un informe financiero?",
+      "intent": "constraint",
+      "answer": "Abre el PDF generado y comprueba periodo, importes y datos del club antes de compartirlo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-168",
+      "guide_id": "automation-prepare",
+      "question": "¿Qué es una automatización de cuotas?",
+      "intent": "definition",
+      "answer": "Una automatización prepara reglas para cuotas periódicas. Preparar una regla no significa que se haya activado ni que se haya cobrado dinero.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-169",
+      "guide_id": "automation-prepare",
+      "question": "¿Cómo preparo una regla de cuotas periódicas?",
+      "intent": "procedure",
+      "answer": "1. En Finanzas, pulsa Nueva automatización. 2. Completa nombre, categoría, concepto, importe, periodicidad, fechas y destinatarios. 3. Guarda la regla en pausa durante el piloto; preparar la regla no cobra al alumno. 4. La generación automática exige comprobaciones y autorización del titular. Las automatizaciones de cobro siguen desactivadas. 5. Para operar ahora, utiliza Nuevo cargo manual y revisa los destinatarios antes de confirmar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-170",
+      "guide_id": "automation-prepare",
+      "question": "¿Qué debo comprobar antes de activar una automatización?",
+      "intent": "constraint",
+      "answer": "Para operar ahora, utiliza Nuevo cargo manual y revisa los destinatarios antes de confirmar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-171",
+      "guide_id": "social-explore",
+      "question": "¿Puedo explorar Social con una cuenta gratuita?",
+      "intent": "definition",
+      "answer": "KOMBAX Social es el espacio para descubrir perfiles y contenido de la comunidad. Explorar y publicar tienen requisitos distintos; crear una cuenta no concede automáticamente permiso para publicar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-172",
+      "guide_id": "social-explore",
+      "question": "¿Cómo descubro perfiles y publicaciones en Social?",
+      "intent": "procedure",
+      "answer": "1. Abre KOMBAX Social desde la navegación. 2. Explora publicaciones y perfiles públicos; inicia sesión para las interacciones que lo requieran. 3. Puedes usar las acciones visibles de comentar, dar me gusta o guardar según tu cuenta. 4. Para publicar necesitas una identidad con autorización. Un perfil espectador no obtiene permiso de publicar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-173",
+      "guide_id": "social-explore",
+      "question": "¿Qué puedo hacer sin permiso para publicar en Social?",
+      "intent": "constraint",
+      "answer": "Para publicar necesitas una identidad con autorización. Un perfil espectador no obtiene permiso de publicar.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-174",
+      "guide_id": "social-publish",
+      "question": "¿Qué significa publicar con la identidad activa?",
+      "intent": "definition",
+      "answer": "Publicar con una identidad significa que la publicación se atribuye a ese perfil público. No se debe cambiar de identidad para evitar un bloqueo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-175",
+      "guide_id": "social-publish",
+      "question": "¿Cómo preparo una publicación en KOMBAX Social?",
+      "intent": "procedure",
+      "answer": "1. Abre KOMBAX Social y comprueba la identidad desde la que vas a publicar. 2. Utiliza Crear publicación si esa identidad tiene publicación habilitada. 3. Completa el contenido y adjunta el material admitido; revisa la vista previa. 4. Publica y comprueba que aparece con el autor correcto. 5. Si está bloqueado, revisa la verificación o la vinculación al club. No cambies de identidad para eludir el bloqueo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-176",
+      "guide_id": "social-publish",
+      "question": "¿Qué reviso antes de publicar en Social?",
+      "intent": "constraint",
+      "answer": "Si está bloqueado, revisa la verificación o la vinculación al club. No cambies de identidad para eludir el bloqueo.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-177",
+      "guide_id": "social-media",
+      "question": "¿Qué diferencia hay entre el álbum y la foto de perfil?",
+      "intent": "definition",
+      "answer": "La foto de perfil identifica tu presencia pública y el banner es su portada. El álbum guarda otras imágenes de esa identidad.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-178",
+      "guide_id": "social-media",
+      "question": "¿Cómo gestiono las fotos del álbum de mi perfil?",
+      "intent": "procedure",
+      "answer": "1. Abre el perfil público de la identidad que quieres modificar. 2. Usa el control específico de foto o logo para cambiar la imagen de perfil, y el de banner para la portada. 3. Para añadir fotografías al álbum utiliza la sección Álbum, que es independiente del logo. 4. Para retirar una fotografía propia, usa su acción de eliminar cuando esté disponible y confirma la selección. 5. Comprueba el resultado en ese mismo perfil; los archivos compartidos por otro contenido pueden conservarse mientras sigan en uso.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-179",
+      "guide_id": "social-media",
+      "question": "¿Qué compruebo después de cambiar mi imagen pública?",
+      "intent": "constraint",
+      "answer": "Comprueba el resultado en ese mismo perfil; los archivos compartidos por otro contenido pueden conservarse mientras sigan en uso.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-180",
+      "guide_id": "showcase-explore",
+      "question": "¿Explorar Showcase me convierte en vendedor?",
+      "intent": "definition",
+      "answer": "KOMBAX Showcase es el catálogo donde puedes explorar productos y servicios de la comunidad. Explorar o comprar no te convierte en vendedor autorizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-181",
+      "guide_id": "showcase-explore",
+      "question": "¿Cómo busco productos en Showcase?",
+      "intent": "procedure",
+      "answer": "1. Abre KOMBAX Showcase; explorar está disponible para las cuentas gratuitas. 2. Utiliza los filtros y la vista de cuadrícula grande, compacta o lista cuando estén disponibles. 3. Abre un producto para revisar imágenes, descripción y vendedor. 4. Comprar, publicar un catálogo y vender son funciones distintas; revisar productos no te convierte en vendedor autorizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-182",
+      "guide_id": "showcase-explore",
+      "question": "¿Qué debo revisar antes de comprar un producto en Showcase?",
+      "intent": "constraint",
+      "answer": "Comprar, publicar un catálogo y vender son funciones distintas; revisar productos no te convierte en vendedor autorizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-183",
+      "guide_id": "showcase-publish",
+      "question": "¿Qué diferencia hay entre publicar y retirar un producto?",
+      "intent": "definition",
+      "answer": "Publicar hace visible una oferta comercial cuando se cumplen sus requisitos; retirarla deja de ofrecerla según el flujo autorizado, sin borrar indiscriminadamente pedidos o historial.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-184",
+      "guide_id": "showcase-publish",
+      "question": "¿Cómo gestiono una publicación comercial en Showcase?",
+      "intent": "procedure",
+      "answer": "1. Entra en Mi Showcase de la identidad propietaria del catálogo. 2. Comprueba que la verificación y el servicio correspondiente están habilitados para esa operación. 3. Crea o edita el producto con sus imágenes, precio y disponibilidad; revisa antes de publicar. 4. Para retirarlo utiliza la acción disponible sobre ese producto. La eliminación depende de tus permisos y de sus operaciones asociadas. 5. Un perfil público gratuito no habilita por sí solo la venta ni el cobro.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-185",
+      "guide_id": "showcase-publish",
+      "question": "¿Qué reviso después de retirar un producto?",
+      "intent": "constraint",
+      "answer": "Un perfil público gratuito no habilita por sí solo la venta ni el cobro.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-186",
+      "guide_id": "events-explore",
+      "question": "¿Puedo consultar Events sin organizar eventos?",
+      "intent": "definition",
+      "answer": "KOMBAX Events es el espacio para descubrir eventos, consultar su información y acceder a las opciones disponibles de participación o entradas. Organizar y vender entradas requieren sus propias activaciones.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-187",
+      "guide_id": "events-explore",
+      "question": "¿Cómo descubro eventos y consulto mis entradas?",
+      "intent": "procedure",
+      "answer": "1. Abre KOMBAX Events y busca el evento o seminario. 2. Revisa organizador, lugar, fecha, condiciones y entradas disponibles. 3. Si hay ticketing activo, selecciona la entrada y sigue el proceso de compra mostrado. 4. Conserva la confirmación y consulta tus entradas desde el acceso disponible en tu cuenta.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-188",
+      "guide_id": "events-explore",
+      "question": "¿Qué compruebo antes de participar en un evento?",
+      "intent": "constraint",
+      "answer": "Conserva la confirmación y consulta tus entradas desde el acceso disponible en tu cuenta.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-189",
+      "guide_id": "events-create",
+      "question": "¿Qué diferencia hay entre crear un evento y vender entradas?",
+      "intent": "definition",
+      "answer": "Crear un evento prepara su información y organización. La venta de entradas requiere además sus activaciones y condiciones comerciales.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-190",
+      "guide_id": "events-create",
+      "question": "¿Cómo preparo un evento con ticketing?",
+      "intent": "procedure",
+      "answer": "1. Entra en Mis eventos de la identidad organizadora autorizada. 2. Prepara título, descripción, fechas, ubicación e imágenes y revisa la información del organizador. 3. La publicación del evento y el ticketing requieren sus capacidades o activaciones correspondientes. 4. Configura aforo, entradas y el logo del ticket cuando la función esté habilitada; revisa la vista previa. 5. Publicar un evento no activa automáticamente los cobros: comprueba el estado del vendedor u organizador y de Stripe.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-191",
+      "guide_id": "events-create",
+      "question": "¿Qué reviso antes de habilitar la venta de entradas?",
+      "intent": "constraint",
+      "answer": "Publicar un evento no activa automáticamente los cobros: comprueba el estado del vendedor u organizador y de Stripe.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-192",
+      "guide_id": "assist-data",
+      "question": "¿Para qué sirve KOMBAX Assist?",
+      "intent": "definition",
+      "answer": "KOMBAX Assist es el copiloto de gestión que puede ayudarte a interpretar información autorizada de tu espacio. Ayuda KOMBAX explica cómo funciona la plataforma; son funciones distintas.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-193",
+      "guide_id": "assist-data",
+      "question": "¿Cómo consulto la gestión de mi club con Assist?",
+      "intent": "procedure",
+      "answer": "1. Abre Administración y selecciona KOMBAX Assist. 2. Pregunta directamente por el dato que necesitas, por ejemplo el saldo de un alumno o los próximos eventos. 3. Assist utiliza el contexto autorizado de tu club; comprueba que estás en el espacio correcto. 4. Para aprender un procedimiento usa ¿Necesitas ayuda?; para importar archivos usa Migrations. 5. Las consultas IA mantienen el cupo y los créditos de tu plan. Una respuesta no equivale a haber ejecutado un cobro o una modificación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-194",
+      "guide_id": "assist-data",
+      "question": "¿Qué límites tiene Assist al responder sobre mi gestión?",
+      "intent": "constraint",
+      "answer": "Las consultas IA mantienen el cupo y los créditos de tu plan. Una respuesta no equivale a haber ejecutado un cobro o una modificación.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-195",
+      "guide_id": "migrations-import",
+      "question": "¿Para qué sirve KOMBAX Migrations?",
+      "intent": "definition",
+      "answer": "KOMBAX Migrations ayuda a preparar la incorporación de datos de documentos y archivos. Analiza y presenta una vista previa; la incorporación requiere la confirmación del flujo autorizado.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-196",
+      "guide_id": "migrations-import",
+      "question": "¿Cómo preparo la importación de un archivo?",
+      "intent": "procedure",
+      "answer": "1. Abre Administración y selecciona Migrations. 2. Indica qué quieres importar y adjunta el archivo admitido con los datos que puedes gestionar. 3. Revisa la identificación de columnas, posibles duplicados y datos pendientes. 4. Corrige las incidencias y revisa la propuesta antes de confirmar la importación. 5. Comprueba el resultado en el módulo de destino. No envíes contraseñas ni archivos ajenos al trámite.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-197",
+      "guide_id": "migrations-import",
+      "question": "¿Qué debo comprobar antes de incorporar un lote?",
+      "intent": "constraint",
+      "answer": "Comprueba el resultado en el módulo de destino. No envíes contraseñas ni archivos ajenos al trámite.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-198",
+      "guide_id": "identity-create",
+      "question": "¿Qué diferencia hay entre cuenta y perfil público?",
+      "intent": "definition",
+      "answer": "Una identidad indica desde qué perfil participas o gestionas KOMBAX. Una cuenta puede reunir varias identidades, conservando separados los espacios y permisos correspondientes.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-199",
+      "guide_id": "identity-create",
+      "question": "¿Cómo creo otra identidad en mi cuenta?",
+      "intent": "procedure",
+      "answer": "1. Accede a tu cuenta y abre Crear o gestionar mi perfil o Gestionar mi cuenta e identidades. 2. Elige Añadir capacidad o vinculación y el tipo de perfil que necesitas. 3. Completa la presentación y guarda el borrador; revisa las condiciones y los datos requeridos. 4. Solicita la verificación cuando corresponda. Crear un perfil no activa una suscripción ni la publicación automáticamente. 5. Club, Marca y Federación tienen sus propios perfiles públicos; las capacidades de una persona se gestionan desde su identidad personal.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    },
+    {
+      "id": "faq-200",
+      "guide_id": "identity-create",
+      "question": "¿Qué reviso después de crear una identidad adicional?",
+      "intent": "constraint",
+      "answer": "Club, Marca y Federación tienen sus propios perfiles públicos; las capacidades de una persona se gestionan desde su identidad personal.",
+      "source": "usage-help-r272",
+      "review_status": "curated"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {stripTypeScriptTypes} from 'node:module';
 import {selectHelpTopics,helpAudienceAllowed} from '../web/js/core/usage-help-knowledge.js';
-import {USAGE_HELP_INSTRUCTIONS} from '../supabase/functions/_shared/usage-help-guide.ts';
+import {USAGE_HELP_INSTRUCTIONS,usageHelpContent} from '../supabase/functions/_shared/usage-help-guide.ts';
 const catalog=JSON.parse(readFileSync('web/assets/guides/usage-help-r272.json','utf8'));
 const source=readFileSync('supabase/functions/kombax-usage-help/index.ts','utf8').replace(/^import .*;\r?\n/gm,'');
 let handler,calls=[],audience={kind:'public',userId:'qa',paid:false},auth=true,reserved=true,reused=false,provider=true,measurement=true,finish=true,captured;
@@ -17,12 +17,13 @@ const fetch=async(url,options={})=>{
  if(url.includes('api.openai.com')){captured=body;return Response.json({id:'qa-provider',output_text:'Consulta las opciones de tu cuenta.',usage:measurement?{input_tokens:100,output_tokens:20}:null},{status:provider?200:503});}
  throw Error('Unexpected network call');
 };
-vm.runInNewContext(stripTypeScriptTypes(source),{USAGE_HELP_INSTRUCTIONS,catalog,selectHelpTopics,Deno:{env:{get:k=>({SUPABASE_URL:'https://qa.invalid',SUPABASE_ANON_KEY:'mock-anon',SUPABASE_SERVICE_ROLE_KEY:'mock-service',OPENAI_API_KEY:'mock-provider'}[k])},serve:fn=>handler=fn},fetch,Response,Request,AbortSignal,console});
+vm.runInNewContext(stripTypeScriptTypes(source),{USAGE_HELP_INSTRUCTIONS,usageHelpContent,catalog,selectHelpTopics,Deno:{env:{get:k=>({SUPABASE_URL:'https://qa.invalid',SUPABASE_ANON_KEY:'mock-anon',SUPABASE_SERVICE_ROLE_KEY:'mock-service',OPENAI_API_KEY:'mock-provider'}[k])},serve:fn=>handler=fn},fetch,Response,Request,AbortSignal,console});
 const request=(extra={})=>new Request('https://qa.invalid',{method:'POST',headers:{authorization:'Bearer mock-user'},body:JSON.stringify({message:'Crear una cuenta',request_id:'12345678-1234-4123-8123-123456789012',...extra})});
 let n=0;const check=(name,fn)=>{fn();n++};
 let r=await handler(request({action:'status'}));check('status authenticated, no model or reservation',()=>{assert.equal(r.status,200);assert.ok(!calls.some(x=>/reserve|api.openai/.test(x.url)))});
 r=await handler(request());check('free question gets metered answer',()=>assert.equal(r.status,200));
 check('fixed server model and capped output',()=>{assert.equal(captured.model,'gpt-6-luna');assert.equal(captured.max_output_tokens,500);assert.equal(captured.store,false)});
+check('free model receives actual help instructions, not stringified helper code',()=>{assert.ok(captured.instructions.startsWith(USAGE_HELP_INSTRUCTIONS));assert.ok(!captured.instructions.includes('function usageHelpContent'))});
 check('real provider usage saved with service-only finish',()=>assert.equal(calls.find(x=>x.url.endsWith('/app_usage_help_finish_r274')).body.p_input_tokens,100));
 check('unidentified account sees generic sources only',()=>{assert.ok(JSON.stringify(captured).includes('Crear una cuenta'));assert.ok(!JSON.stringify(captured).includes('Registrar un cargo'))});
 auth=false;calls=[];r=await handler(request());check('invalid session cannot reserve or infer',()=>{assert.equal(r.status,401);assert.equal(calls.length,1)});auth=true;

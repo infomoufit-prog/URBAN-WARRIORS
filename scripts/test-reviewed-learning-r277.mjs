@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import {PGlite} from '@electric-sql/pglite';
+import {readFileSync} from 'node:fs';
+const db=new PGlite();let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++};
+const uid='00000000-0000-4000-8000-000000000001',paid='00000000-0000-4000-8000-000000000002',free='00000000-0000-4000-8000-000000000003';
+const q=async(sql,args=[])=> (await db.query(sql,args)).rows;
+const denied=async(sql,args=[])=>{await assert.rejects(db.query(sql,args));checks++};
+try{
+ await db.exec(`create role anon;create role authenticated;create role service_role;create schema auth;grant usage on schema auth to authenticated;create function auth.uid() returns uuid language sql as $$select nullif(current_setting('qa.uid',true),'')::uuid$$;create function public.app_kombax_es_platform_admin_v055() returns boolean language sql as $$select coalesce(current_setting('qa.owner',true),'false')='true'$$;create schema kombax_ai_ops;create table kombax_ai_ops.assistance_turns(turn_id uuid,status text,category text);create table kombax_ai_ops.usage_help_turns_r274(id uuid,status text);`);
+ await db.exec(readFileSync('supabase/migrations/20261016150256_help_reviewed_knowledge_r277.sql','utf8'));
+ ok((await q('select count(*) n from kombax_help_knowledge.guide_sources_r277'))[0].n===67,'all sources seeded');
+ ok((await q("select count(*) n from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='kombax_help_knowledge' and c.relrowsecurity"))[0].n===3,'RLS on every knowledge table');
+ await db.exec('set role anon');await denied('select public.app_kombax_help_knowledge_read_r277($1)',['{finance}']);await denied('select * from kombax_help_knowledge.lessons_r277');await db.exec('reset role');
+ await q("select set_config('qa.uid',$1,false)",[uid]);await db.exec('set role authenticated');
+ await denied('select public.app_kombax_help_knowledge_owner_r277()');
+ await denied("select public.app_kombax_help_knowledge_review_r277('draft',null,$1)",[{guide_id:'finance',question:'¿Qué es un cargo?',answer:'Un cargo registra un importe pendiente.',source_ref:'guide:finance'}]);
+ await denied('select public.app_kombax_help_learning_observe_r277($1,$2,$3,$4)',[paid,'paid','{finance}','faq_gap']);
+ await db.exec('reset role');await q("select set_config('qa.owner','true',false)");await db.exec('set role authenticated');
+ const payload={guide_id:'finance',question:'¿Qué es un cargo?',answer:'Un cargo registra un importe pendiente. No ejecuta un cobro.',source_ref:'guide:finance'};
+ const lesson=(await q("select public.app_kombax_help_knowledge_review_r277('draft',null,$1) r",[payload]))[0].r.id;ok(Boolean(lesson),'Owner can create a draft');
+ await denied("select public.app_kombax_help_knowledge_review_r277('publish',$1)",[lesson]);
+ await db.exec('reset role;set role service_role');ok((await q('select public.app_kombax_help_knowledge_read_r277($1) r',['{finance}']))[0].r.length===0,'draft never reaches model');
+ await db.exec('reset role;set role authenticated');
+ await q("select public.app_kombax_help_knowledge_review_r277('publish',$1,'{}','PUBLICAR CONOCIMIENTO GENERAL SIN DATOS PERSONALES')",[lesson]);
+ await db.exec('reset role;set role service_role');ok((await q('select public.app_kombax_help_knowledge_read_r277($1) r',['{finance}']))[0].r[0].question===payload.question,'only published lesson retrieved');
+ ok((await q('select public.app_kombax_help_knowledge_read_r277($1) r',['{team}']))[0].r.length===0,'other source scope excluded');
+ await denied('select public.app_kombax_help_learning_observe_r277($1,$2,$3,$4)',[paid,'paid','{finance}','faq_gap']);
+ await db.exec('reset role');await q('insert into kombax_ai_ops.assistance_turns values($1,$2,$3)',[paid,'COMPLETED','MANAGEMENT']);await q('insert into kombax_ai_ops.usage_help_turns_r274 values($1,$2)',[free,'COMPLETED']);await db.exec('set role service_role');
+ const record=async(id,channel)=> (await q('select public.app_kombax_help_learning_observe_r277($1,$2,$3,$4) r',[id,channel,'{finance,NOT_A_SOURCE}','correction']))[0].r;
+ ok((await record(paid,'paid')).recorded,'completed paid turn recorded');ok(!(await record(paid,'paid')).recorded,'retry idempotent');ok((await record(free,'free')).recorded,'completed free turn recorded');
+ await db.exec('reset role');const observations=await q('select * from kombax_help_knowledge.observations_r277');ok(observations.length===2,'one metadata observation per completed turn');ok(observations.every(o=>o.guide_ids.length===1&&o.guide_ids[0]==='finance'),'unknown source ids excluded');
+ const cols=(await q("select column_name from information_schema.columns where table_schema='kombax_help_knowledge' and table_name='observations_r277'" )).map(x=>x.column_name);ok(!cols.includes('question')&&!cols.includes('answer')&&!cols.includes('user_id'),'review queue copies no chat or user fields');
+ await db.exec('set role authenticated');await q("select public.app_kombax_help_knowledge_review_r277('draft',$1,$2)",[lesson,{...payload,answer:'Una corrección revisada requiere nueva publicación.'}]);await db.exec('reset role;set role service_role');ok((await q('select public.app_kombax_help_knowledge_read_r277($1) r',['{finance}']))[0].r.length===0,'editing a published lesson removes it until new review');
+ await db.exec('reset role;set role authenticated');ok((await q('select public.app_kombax_help_knowledge_owner_r277() r'))[0].r.observations.length===2,'Owner can inspect review metadata');
+ await denied("select public.app_kombax_help_knowledge_review_r277('draft',null,$1)",[{...payload,guide_id:'NOT_A_SOURCE'}]);
+ await db.exec('reset role');await q("select set_config('qa.owner','false',false)");await db.exec('set role authenticated');await denied("select public.app_kombax_help_knowledge_review_r277('reject',$1)",[lesson]);
+ console.log('PASS '+checks+' isolated learning DB checks: private RLS, roles, drafts, explicit publication, source isolation, no copied chats, idempotency and revocation');
+}finally{await db.close()}

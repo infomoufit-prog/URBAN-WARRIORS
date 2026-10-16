@@ -1,11 +1,6 @@
-import {USAGE_HELP_INSTRUCTIONS} from '../_shared/usage-help-guide.ts';
+import {USAGE_HELP_INSTRUCTIONS,usageHelpContent} from '../_shared/usage-help-guide.ts';
 import catalog from '../_shared/usage-help-catalog.json' with {type:'json'};
 import {selectHelpTopics} from '../_shared/usage-help-knowledge.js';
-
-function publicSources(question:string,audience:any){
- const selected=selectHelpTopics(catalog.guides,question,audience,5);
- return JSON.stringify([...new Map(selected.map(g=>[g.id,g])).values()].slice(0,8).map(g=>({title:g.title,scope:g.scope,roles:g.roles,steps:g.steps,rules:g.rules}))).slice(0,12000);
-}
 
 const headers={'access-control-allow-origin':'*','access-control-allow-headers':'authorization, apikey, content-type, x-client-info','access-control-allow-methods':'POST, OPTIONS','content-type':'application/json','cache-control':'no-store'};
 const reply=(status:number,body:unknown)=>new Response(JSON.stringify(body),{status,headers});
@@ -18,8 +13,8 @@ Deno.serve(async(req:Request)=>{
  if(!base||!anon||!secret)return reply(503,{error:'unavailable'});
  const bearer=req.headers.get('authorization')||'';
  if(!/^Bearer .+/i.test(bearer))return reply(401,{error:'authentication_required'});
- const rpc=async(name:string,body:unknown,internal=false)=>{
-  const r=await fetch(`${base}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:internal?secret:anon,authorization:internal?`Bearer ${secret}`:bearer,'content-type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(10000)});
+ const rpc=async(name:string,body:unknown,internal=false,timeout=10000)=>{
+  const r=await fetch(`${base}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:internal?secret:anon,authorization:internal?`Bearer ${secret}`:bearer,'content-type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(timeout)});
   if(!r.ok)throw Error('rpc_unavailable');return r.json();
  };
  let turn='';
@@ -40,14 +35,19 @@ Deno.serve(async(req:Request)=>{
   if(!reservation.ok)return reply(reservation.reason==='in_progress'?409:429,{error:reservation.reason});
   if(reservation.reused)return reply(200,{message:reservation.answer,reused:true});
   turn=reservation.turn_id;
-  // No caller identity, model, files, history or private data enter the prompt.
+  // Audience is resolved on the server. Only bounded dialog supplied by this help channel is added; no operational records.
   const locale=['es','en','fr','pt','it','de','th','fil'].includes(body.locale)?body.locale:'es';
-  const response=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{authorization:`Bearer ${key}`,'content-type':'application/json'},signal:AbortSignal.timeout(45000),body:JSON.stringify({model:'gpt-6-luna',instructions:`${USAGE_HELP_INSTRUCTIONS}\nResponde en el idioma ${locale}. Limítate a la capa autorizada: ${JSON.stringify({kind:audience.kind,type:audience.type,role:audience.role,paid:audience.paid})}. Sin identidad solo orientación genérica. No expliques procedimientos de otros perfiles ni funciones de pago ausentes de las fuentes. Si faltan fuentes, explica qué falta y ofrece soporte.`,input:[{role:'user',content:[{type:'input_text',text:`Guías publicadas: ${publicSources(question,audience)}\nConsulta: ${question}`}]}],max_output_tokens:500,store:false})});
+  const learning:any={};
+  let helpContent=usageHelpContent(question,{entity_type:audience.type||'public'},locale,audience,body.usage_history,[],[],learning);
+  const lessons=learning.guide_ids?.length?await rpc('app_kombax_help_knowledge_read_r277',{p_guide_ids:learning.guide_ids},true,1200).catch(()=>[]):[];
+  if(Array.isArray(lessons)&&lessons.length)helpContent=usageHelpContent(question,{entity_type:audience.type||'public'},locale,audience,body.usage_history,[],lessons);
+  const response=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{authorization:`Bearer ${key}`,'content-type':'application/json'},signal:AbortSignal.timeout(45000),body:JSON.stringify({model:'gpt-6-luna',instructions:`${USAGE_HELP_INSTRUCTIONS}\nResponde en el idioma ${locale}. Limítate a la capa autorizada: ${JSON.stringify({kind:audience.kind,type:audience.type,role:audience.role,paid:audience.paid})}. Sin identidad solo orientación genérica. No expliques procedimientos de otros perfiles ni funciones de pago ausentes de las fuentes. Si faltan fuentes, explica qué falta y ofrece soporte.`,input:[{role:'user',content:helpContent}],max_output_tokens:500,store:false})});
   if(!response.ok)throw Error('provider_unavailable');
   const data=await response.json(),answer=textOf(data),usage=data.usage;
   if(!data.id||!answer||answer.length>12000||!Number.isSafeInteger(usage?.input_tokens)||!Number.isSafeInteger(usage?.output_tokens)||usage.input_tokens<0||usage.output_tokens<0)throw Error('invalid_measurement');
   const saved=await rpc('app_usage_help_finish_r274',{p_turn_id:turn,p_answer:answer,p_input_tokens:usage.input_tokens,p_output_tokens:usage.output_tokens,p_success:true},true);
   if(saved!==true)throw Error('accounting_unavailable');
+  if(['faq_gap','correction'].includes(learning.reason))await rpc('app_kombax_help_learning_observe_r277',{p_turn_id:turn,p_channel:'free',p_guide_ids:learning.guide_ids||[],p_reason:learning.reason},true,1200).catch(()=>{});
   turn='';return reply(200,{message:answer});
  }catch{
   if(turn)await rpc('app_usage_help_finish_r274',{p_turn_id:turn,p_answer:null,p_input_tokens:0,p_output_tokens:0,p_success:false},true).catch(()=>{});
