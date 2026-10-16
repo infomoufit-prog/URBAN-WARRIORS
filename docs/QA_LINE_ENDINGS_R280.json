@@ -1,0 +1,15 @@
+[
+  {
+    "checkout": "LF",
+    "passed": true,
+    "output": "PASS 1302 master knowledge checks: sources, freshness, 112 topics, six audience layers, Owner isolation, retrieval and bounded context"
+  },
+  {
+    "checkout": "CRLF",
+    "passed": true,
+    "output": "PASS 1302 master knowledge checks: sources, freshness, 112 topics, six audience layers, Owner isolation, retrieval and bounded context"
+  },
+  {
+    "modified_source_rejected": true
+  }
+]

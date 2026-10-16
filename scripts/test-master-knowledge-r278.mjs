@@ -1,13 +1,17 @@
 import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+import {sourceFingerprint} from './source-fingerprint.mjs';
 import master from '../supabase/functions/_shared/usage-help-master-r278.json' with {type:'json'};
 import supplements from '../supabase/functions/_shared/usage-help-supplements-r278.json' with {type:'json'};
 import catalog from '../supabase/functions/_shared/usage-help-catalog.json' with {type:'json'};
 import {usageHelpContent} from '../supabase/functions/_shared/usage-help-guide.ts';import {helpAudienceAllowed,helpQuestionIntent} from '../web/js/core/usage-help-knowledge.js';
 let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};const ids=new Map(catalog.guides.map(g=>[g.id,g]));
 ok(master.articles.length===67&&supplements.articles.length===45,'67 core topics plus 45 specialized cases');
+ok(sourceFingerprint('const n=1;\r\n')===sourceFingerprint('const n=1;\n'),'Git checkout line endings do not invalidate reviewed sources');
+ok(sourceFingerprint('const n=1;\n')!==sourceFingerprint('const n=2;\n'),'functional edits still invalidate reviewed sources');
+ok(sourceFingerprint('const n=1;\n')!==sourceFingerprint('const n=1; \n'),'no trimming hides other source changes');
 for(const a of [...master.articles,...supplements.articles]){
  ok(ids.has(a.guide_id),'existing permission parent '+a.title);ok(a.review_status==='source_reviewed','review flag '+a.title);
- for(const s of a.sources){const file=readFileSync(s.path);ok(createHash('sha256').update(file).digest('hex')===s.sha256,'source freshness '+s.path);ok(s.line>0&&s.line<=file.toString().split('\n').length,'source line '+s.path);}
+ for(const s of a.sources){const file=readFileSync(s.path);ok(sourceFingerprint(file)===s.sha256,'source freshness '+s.path);ok(s.line>0&&s.line<=file.toString().split('\n').length,'source line '+s.path);}
 }
 const contexts=[{}, {kind:'public',userId:'qa'}, {kind:'profile',type:'espectador',verified:false,paid:false,userId:'qa'}, {kind:'profile',type:'marca',verified:true,paid:true,premium:true,userId:'qa'}, {kind:'club',type:'club',role:'alumno',paid:false,userId:'qa'}, {kind:'club',type:'club',role:'direccion',paid:true,premium:true,userId:'qa'}];
 for(const c of contexts)for(const a of supplements.articles){const text=usageHelpContent(a.title,{},'es',c,[])[0].text;const raw=text.split('Guías publicadas: ')[1].split('\nHilo reciente')[0];const sources=JSON.parse(raw);ok(raw.length<=7000,'bounded valid JSON');if(!helpAudienceAllowed(ids.get(a.guide_id),c))ok(!sources.some(s=>s.title===a.title),'no inherited permission bypass '+a.title);ok(!text.includes('Owner Operations')&&!text.includes('Pilot Intelligence'),'private Owner corpus absent');}

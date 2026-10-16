@@ -54,7 +54,7 @@ for file in sorted((root/'web/js/modules').glob('*.js')):
  exports=[{'name':m.group(1),'line':text[:m.start()].count('\n')+1} for m in re.finditer(r'export\s+(?:async\s+)?function\s+(\w+)',text)]
  imports=re.findall(r"(?:from\s*|import\()['\"]([^'\"]+)['\"]",text)
  actions=sorted(set(re.findall(r'repos\.([\w]+\.[\w]+)',text)))
- inventory.append({'path':rel,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'lines':len(text.splitlines()),'exports':exports,'repositories':actions,'imports':imports,'guide_ids':[g for g,mods in module_map.items() if file.stem in mods], 'review':'source_indexed_not_live_certification'})
+ inventory.append({'path':rel,'sha256':hashlib.sha256(file.read_bytes().replace(b'\r\n',b'\n')).hexdigest(),'lines':len(text.splitlines()),'exports':exports,'repositories':actions,'imports':imports,'guide_ids':[g for g,mods in module_map.items() if file.stem in mods], 'review':'source_indexed_not_live_certification'})
 articles=[]
 for g in guides:
  gid=g['id']; mods=module_map[gid]; sources=[]
@@ -83,7 +83,7 @@ supplements=[]
 for i,row in enumerate(SourceFileLoader('supplements',str(root/'scripts/master-supplements-r278.py')).load_module().SUPPLEMENTS,1):
  gid,title,keywords,module,meaning,steps,check,term=row
  path='web/js/modules/'+module+'.js';text=(root/path).read_text(encoding='utf-8');assert term.lower() in text.lower(),title
- supplements.append({'id':f'supplement-{i:03}','guide_id':gid,'title':title,'keywords':keywords,'meaning':meaning,'steps':steps.split(';'),'checks':[check],'sources':[{'path':path,'line':text[:text.lower().index(term.lower())].count('\n')+1,'sha256':hashlib.sha256((root/path).read_bytes()).hexdigest()}],'review_status':'source_reviewed'})
+ supplements.append({'id':f'supplement-{i:03}','guide_id':gid,'title':title,'keywords':keywords,'meaning':meaning,'steps':steps.split(';'),'checks':[check],'sources':[{'path':path,'line':text[:text.lower().index(term.lower())].count('\n')+1,'sha256':hashlib.sha256((root/path).read_bytes().replace(b'\r\n',b'\n')).hexdigest()}],'review_status':'source_reviewed'})
 (root/'supabase/functions/_shared/usage-help-supplements-r278.json').write_text(json.dumps({'version':'r278','articles':supplements},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 public_guides=[]
 for g in guides:
