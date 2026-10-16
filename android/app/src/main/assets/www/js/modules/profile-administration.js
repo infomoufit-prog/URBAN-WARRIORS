@@ -2,13 +2,14 @@ import { repos } from '../core/repositories.js';
 import { esc, humanError } from '../core/utils.js';
 import { openDetail, openForm, closeModal, confirmDialog, toast, setError } from '../ui/components.js';
 import { resolveIdentityMedia } from '../core/identity-context.js';
+import { WORKSPACE_DEFAULT_BANNER } from '../core/workspace-visuals.js';
 
 export async function workspacePresentation(profile){
   const rows=await repos.kombaxProfiles.workspaceSettings(profile.id);
   const prefs=rows?.find(x=>x.profile_id===profile.id)||{};
   const [avatar,banner]=await Promise.all(['avatar','banner'].map(async kind=>prefs[`${kind}_path`]
     ?repos.kombaxProfiles.workspaceMediaUrl(prefs[`${kind}_path`]):resolveIdentityMedia(profile,kind)));
-  return {...prefs,avatar,banner};
+  return {...prefs,avatar,banner:banner||WORKSPACE_DEFAULT_BANNER,defaultBanner:!banner};
 }
 
 export function editWorkspacePresentation(profile,{onRefresh}={}){

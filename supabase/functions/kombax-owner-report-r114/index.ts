@@ -1,70 +1,128 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.112.3'
-import { PDFDocument, StandardFonts, rgb } from 'npm:pdf-lib@1.17.1'
+import { PDFDocument, StandardFonts, rgb } from 'npm:pdf-lib@1.17.1';
+import {OWNER_REPORT_TYPES,ownerReportKind,ownerInsightSections} from '../_shared/owner-insights-r278.js';
 
-const cors={'access-control-allow-origin':'*','access-control-allow-headers':'authorization, x-client-info, apikey, content-type','access-control-allow-methods':'POST, OPTIONS'}
-const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'content-type':'application/json; charset=utf-8'}})
-const safe=(v:unknown)=>String(v??'').replace(/[\u0000-\u001f]/g,' ').slice(0,180)
-const number=(v:unknown)=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(Number(v||0))
-const money=(v:unknown)=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(Number(v||0))
-const bytes=(v:unknown)=>{let n=Number(v||0),i=0;const u=['B','KB','MB','GB','TB'];while(n>=1024&&i<u.length-1){n/=1024;i++}return `${n.toLocaleString('es-ES',{maximumFractionDigits:i<2?0:2})} ${u[i]}`}
-const serviceKey=()=>Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||Deno.env.get('SERVICE_ROLE_KEY')||''
-
-async function buildPdf(payload:any){
-  const pdf=await PDFDocument.create(),regular=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold)
-  const metrics=payload.metrics||{},latest=metrics.latest||{},tot=metrics.period_totals||{},alerts=payload.owner_alerts||{},agents=payload.agents||{}
-  const page=pdf.addPage([595.28,841.89]);let y=792;const left=44
-  const draw=(text:string,x:number,size=9,font=regular,color=rgb(.18,.2,.24))=>{page.drawText(safe(text),{x,y,size,font,color});y-=size+7}
-  page.drawText('KOMBAX',{x:left,y,size:18,font:bold,color:rgb(.06,.55,.72)});y-=27
-  page.drawText('Owner Command Center · Informe ejecutivo',{x:left,y,size:16,font:bold,color:rgb(.08,.1,.14)});y-=25
-  draw(`Generado: ${new Date(payload.generated_at||Date.now()).toLocaleString('es-ES')} · Periodo: ${number(payload.days)} días`,left,8)
-  y-=6
-  const sections:[string,Array<[string,string]>][]=[
-    ['Plataforma', [['Clubes activos',number(latest.active_clubs)],['Cuentas',number(latest.accounts_total)],['Alumnos activos',number(latest.active_students)],['Storage',bytes(latest.storage_bytes)]]],
-    ['Actividad', [['Nuevas cuentas',number(tot.new_accounts)],['Sesiones',number(tot.sessions)],['Asistencias',number(tot.attendance)],['Pagos validados',`${number(tot.payments)} · ${money(tot.payment_amount)}`],['Mensajes Social',number(tot.social_messages)],['Push enviados',number(tot.push_sent)]]],
-    ['Owner', [['Alertas sin leer',number(alerts.unread)],['Requieren acción',number(alerts.action_required)],['Críticas',number(alerts.critical)],['Warnings',number(alerts.warnings)]]],
-    ['Agentes SaaS', [['Ejecuciones',number(agents.total)],['Completadas',number(agents.completed)],['Fallidas',number(agents.failed)],['Riesgo alto/crítico',number(agents.high_risk)],['Owner Operations',number(agents.operations)],['Pilot Intelligence',number(agents.pilot_intelligence)]]]
-  ]
-  for(const [title,rows] of sections){y-=8;page.drawText(title,{x:left,y,size:11,font:bold,color:rgb(.08,.1,.14)});y-=18;for(const [label,value] of rows){page.drawText(label,{x:left+6,y,size:8.5,font:regular,color:rgb(.32,.35,.4)});page.drawText(value,{x:330,y,size:9,font:bold,color:rgb(.08,.1,.14)});y-=16}}
-  y-=10;page.drawLine({start:{x:left,y},end:{x:551,y},thickness:.6,color:rgb(.78,.8,.84)});y-=18
-  draw('Informe privado de administración. No contiene detalle identificativo de miembros.',left,7)
-
-  const page2=pdf.addPage([595.28,841.89]),daily=Array.isArray(metrics.daily)?metrics.daily:[],top=Array.isArray(metrics.top_clubs)?metrics.top_clubs:[]
-  page2.drawText('Tendencia y actividad por club',{x:left,y:792,size:15,font:bold,color:rgb(.08,.1,.14)})
-  const chart={x:left,y:522,w:507,h:220},series=daily.map((row:any)=>({label:String(row.metric_date||''),value:Number(row.sessions||0)})),max=Math.max(1,...series.map((row:any)=>row.value))
-  page2.drawText('Sesiones por día',{x:left,y:760,size:10,font:bold,color:rgb(.18,.2,.24)})
-  page2.drawLine({start:{x:chart.x,y:chart.y},end:{x:chart.x+chart.w,y:chart.y},thickness:.7,color:rgb(.68,.71,.76)})
-  page2.drawLine({start:{x:chart.x,y:chart.y},end:{x:chart.x,y:chart.y+chart.h},thickness:.7,color:rgb(.68,.71,.76)})
-  if(series.length){
-    const step=series.length>1?chart.w/(series.length-1):0;let prev:any=null
-    series.forEach((row:any,index:number)=>{const point={x:chart.x+index*step,y:chart.y+(row.value/max)*chart.h};if(prev)page2.drawLine({start:prev,end:point,thickness:1.5,color:rgb(.06,.55,.72)});prev=point})
-    page2.drawText(`Máx. ${number(max)}`,{x:chart.x+4,y:chart.y+chart.h+8,size:7,font:regular,color:rgb(.32,.35,.4)})
-    page2.drawText(safe(series[0]?.label),{x:chart.x,y:chart.y-14,size:7,font:regular,color:rgb(.32,.35,.4)})
-    const last=safe(series.at(-1)?.label);page2.drawText(last,{x:chart.x+chart.w-Math.min(80,last.length*4),y:chart.y-14,size:7,font:regular,color:rgb(.32,.35,.4)})
-  }else page2.drawText('Sin datos diarios para el periodo.',{x:chart.x+12,y:chart.y+100,size:8,font:regular,color:rgb(.32,.35,.4)})
-
-  let ty=474;page2.drawText('Clubes con mayor actividad',{x:left,y:ty,size:10,font:bold,color:rgb(.18,.2,.24)});ty-=20
-  const cols=[left,left+215,left+295,left+370,left+445]
-  ;[['Club',cols[0]],['Alumnos',cols[1]],['Sesiones',cols[2]],['Asistencia',cols[3]],['Actividad',cols[4]]].forEach(([label,x]:any)=>page2.drawText(String(label),{x:Number(x),y:ty,size:7.5,font:bold,color:rgb(.32,.35,.4)}));ty-=14
-  for(const row of top.slice(0,10)){
-    page2.drawText(safe(row.nombre||'Club').slice(0,34),{x:cols[0],y:ty,size:7.5,font:regular,color:rgb(.12,.14,.18)})
-    page2.drawText(number(row.active_students),{x:cols[1],y:ty,size:7.5,font:regular,color:rgb(.12,.14,.18)})
-    page2.drawText(number(row.sessions),{x:cols[2],y:ty,size:7.5,font:regular,color:rgb(.12,.14,.18)})
-    page2.drawText(number(row.attendance),{x:cols[3],y:ty,size:7.5,font:regular,color:rgb(.12,.14,.18)})
-    page2.drawText(number(row.activity_score),{x:cols[4],y:ty,size:7.5,font:regular,color:rgb(.12,.14,.18)});ty-=18
-  }
-  page2.drawText('Los gráficos y tablas usan agregaciones server-side; no se exporta el dataset completo de miembros al navegador.',{x:left,y:54,size:7,font:regular,color:rgb(.32,.35,.4)})
-  return new Uint8Array(await pdf.save())
+const CORS={'access-control-allow-origin':'*','access-control-allow-headers':'authorization, x-client-info, apikey, content-type','access-control-allow-methods':'POST, OPTIONS'};
+const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...CORS,'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
+const safe=(v:unknown,max=500)=>String(v??'').replace(/[\u0000-\u001f]/g,' ').slice(0,max);
+function keyFromMap(raw:string|undefined,name='default'){if(!raw)return '';try{const v=JSON.parse(raw);return String(v?.[name]||Object.values(v||{})[0]||'');}catch{return '';}}
+function env(){const serviceRole=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||Deno.env.get('SERVICE_ROLE_KEY')||'';return {
+  url:(Deno.env.get('SUPABASE_URL')||'').replace(/\/+$/,''),
+  pub:keyFromMap(Deno.env.get('SUPABASE_PUBLISHABLE_KEYS'))||Deno.env.get('SUPABASE_ANON_KEY')||Deno.env.get('SUPABASE_PUBLISHABLE_KEY')||'',
+  secret:keyFromMap(Deno.env.get('SUPABASE_SECRET_KEYS'))||serviceRole,
+  serviceRole
+};}
+function adminHeaders(secret:string,extra:Record<string,string>={}){const h:Record<string,string>={apikey:secret,...extra};if(secret.split('.').length===3)h.authorization=`Bearer ${secret}`;return h;}
+async function rpc(url:string,key:string,bearer:string,name:string,payload:Record<string,unknown>){
+  const h:Record<string,string>={apikey:key,'content-type':'application/json'};if(bearer)h.authorization=bearer;
+  const r=await fetch(`${url}/rest/v1/rpc/${name}`,{method:'POST',headers:h,body:JSON.stringify(payload),signal:AbortSignal.timeout(12000)});
+  const raw=await r.text();let data:any=null;try{data=raw?JSON.parse(raw):null}catch{data=raw}
+  if(!r.ok)throw new Error(typeof data==='object'&&data?.message?data.message:`RPC_${name}_${r.status}`);
+  return data;
 }
+const nf=(v:unknown)=>v===null||v===undefined||!Number.isFinite(Number(v))?'No disponible':new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(Number(v));
+const euro=(v:unknown)=>v===null||v===undefined||!Number.isFinite(Number(v))?'No disponible':new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(Number(v));
 
-Deno.serve(async req=>{const requestId=crypto.randomUUID();try{
-  if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});if(req.method!=='POST')return json({error:'METHOD_NOT_ALLOWED',request_id:requestId},405)
-  const auth=req.headers.get('authorization')||'';if(!/^Bearer\s+.+/i.test(auth))return json({error:'AUTH_REQUIRED',request_id:requestId},401)
-  const body=await req.json().catch(()=>({})),days=Math.min(365,Math.max(7,Number(body.days||90))),url=Deno.env.get('SUPABASE_URL')!,anon=Deno.env.get('SUPABASE_ANON_KEY')||Deno.env.get('SUPABASE_PUBLISHABLE_KEY')!
-  const user=createClient(url,anon,{global:{headers:{Authorization:auth}},auth:{persistSession:false,autoRefreshToken:false}})
-  const {data:payload,error}=await user.rpc('app_kombax_owner_report_payload_r114',{p_days:days});if(error||!payload?.ok)return json({error:'OWNER_REPORT_FORBIDDEN',detail:error?.message,request_id:requestId},403)
-  const pdf=await buildPdf(payload);const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',pdf)),sha=[...digest].map(x=>x.toString(16).padStart(2,'0')).join('')
-  const key=serviceKey();if(!key)throw new Error('SERVICE_ROLE_KEY_MISSING');const service=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}})
-  const date=new Date().toISOString().slice(0,10),path=`owner/${date}/owner-command-center-${crypto.randomUUID()}.pdf`,up=await service.storage.from('kombax-reports').upload(path,pdf,{contentType:'application/pdf',upsert:false,cacheControl:'private, max-age=0'});if(up.error)throw up.error
-  const signed=await service.storage.from('kombax-reports').createSignedUrl(path,600);if(signed.error||!signed.data?.signedUrl)throw signed.error||new Error('SIGNED_URL_FAILED')
-  return json({ok:true,url:signed.data.signedUrl,path,filename:`KOMBAX-Owner-Command-Center-${date}.pdf`,bytes:pdf.byteLength,sha256:sha,period_days:days,expires_in:600,request_id:requestId})
-}catch(error){console.error(`[kombax-owner-report-r114 ${requestId}]`,error);return json({error:'OWNER_REPORT_FAILED',request_id:requestId},500)}})
+
+const PW=595.28,PH=841.89,PM=38;
+const PC={ink:rgb(.055,.075,.105),paper:rgb(.975,.98,.985),white:rgb(1,1,1),muted:rgb(.42,.46,.52),line:rgb(.86,.88,.91),cyan:rgb(.08,.82,.98),red:rgb(1,.12,.28),gold:rgb(1,.73,.25),green:rgb(.20,.82,.57),purple:rgb(.55,.39,1),blue:rgb(.18,.45,.96)};
+const pmb=(v:any)=>v===null||v===undefined?'No disponible':nf(Number(v)/1048576)+' MB';
+function phead(p:any,bold:any,reg:any,title:string,sub:string,no:number,total:number){p.drawRectangle({x:0,y:PH-70,width:PW,height:70,color:PC.ink});p.drawRectangle({x:0,y:PH-70,width:7,height:70,color:PC.cyan});p.drawText('KOMBAX',{x:PM,y:PH-42,size:18,font:bold,color:PC.white});p.drawText(title,{x:150,y:PH-38,size:11,font:bold,color:PC.white});p.drawText(sub,{x:150,y:PH-54,size:7.2,font:reg,color:rgb(.68,.73,.79)});p.drawText(no+'/'+total,{x:PW-PM-28,y:PH-45,size:8,font:bold,color:PC.cyan});}
+function pfoot(p:any,reg:any){p.drawLine({start:{x:PM,y:32},end:{x:PW-PM,y:32},thickness:.6,color:PC.line});p.drawText('Documento privado Owner - KOMBAX',{x:PM,y:18,size:6.5,font:reg,color:PC.muted});}
+function pkpi(p:any,reg:any,bold:any,x:number,y:number,w:number,label:string,value:string,accent:any,detail=''){p.drawRectangle({x,y,width:w,height:70,color:PC.white,borderColor:PC.line,borderWidth:.7});p.drawRectangle({x,y,width:4,height:70,color:accent});p.drawText(label,{x:x+13,y:y+49,size:7,font:reg,color:PC.muted});p.drawText(value,{x:x+13,y:y+22,size:Math.min(17,Math.max(7,(w-26)/Math.max(1,bold.widthOfTextAtSize(value,1)))),font:bold,color:PC.ink});if(detail)p.drawText(detail,{x:x+13,y:y+9,size:6.2,font:reg,color:PC.muted});}
+function pchart(p:any,reg:any,bold:any,x:number,y:number,w:number,h:number,title:string,data:any[],series:any[]){p.drawRectangle({x,y,width:w,height:h,color:PC.white,borderColor:PC.line,borderWidth:.7});p.drawText(title,{x:x+12,y:y+h-20,size:9,font:bold,color:PC.ink});const ax=x+34,ay=y+24,aw=w-50,ah=h-58;let mx=1;for(const r of data)for(const s of series)mx=Math.max(mx,Number(r?.[s.key]||0));for(let g=0;g<5;g++){const gy=ay+ah*g/4;p.drawLine({start:{x:ax,y:gy},end:{x:ax+aw,y:gy},thickness:.4,color:rgb(.91,.92,.94)});}for(const s of series){let prev=null;data.forEach((r:any,i:number)=>{const px=ax+(data.length<2?0:aw*i/(data.length-1)),py=ay+ah*Number(r?.[s.key]||0)/mx;if(prev)p.drawLine({start:prev,end:{x:px,y:py},thickness:1.5,color:s.color});p.drawCircle({x:px,y:py,size:1.4,color:s.color});prev={x:px,y:py};});}let lx=x+12;for(const s of series){p.drawRectangle({x:lx,y:y+9,width:7,height:3,color:s.color});p.drawText(s.label,{x:lx+10,y:y+6,size:6,font:reg,color:PC.muted});lx+=65;}}
+function ptable(p:any,reg:any,bold:any,x:number,y:number,widths:number[],headers:string[],rows:string[][]){const factor=Math.min(1,(PW-x-PM)/widths.reduce((a,b)=>a+b,0));widths=widths.map(w=>w*factor);let xx=x;headers.forEach((h,i)=>{p.drawRectangle({x:xx,y:y-20,width:widths[i],height:20,color:PC.ink});p.drawText(h,{x:xx+4,y:y-14,size:6,font:bold,color:PC.white});xx+=widths[i];});let yy=y-20;rows.forEach((row,ri)=>{yy-=20;xx=x;row.forEach((c,i)=>{p.drawRectangle({x:xx,y:yy,width:widths[i],height:20,color:ri%2?rgb(.965,.972,.98):PC.white,borderColor:PC.line,borderWidth:.3});let cell=safe(c,38);while(cell.length&&reg.widthOfTextAtSize(cell,6)>widths[i]-8)cell=cell.slice(0,-1);p.drawText(cell,{x:xx+4,y:yy+7,size:6,font:reg,color:PC.ink});xx+=widths[i];});});return yy;}
+
+async function buildCommandPdf(payload:any){
+  const pdf=await PDFDocument.create(),reg=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold),italic=await pdf.embedFont(StandardFonts.HelveticaOblique);
+  const m=payload?.metrics||{},latest=m.latest||{},tot=m.period_totals||{},daily=Array.isArray(m.daily)?m.daily:[],top=Array.isArray(m.top_clubs)?m.top_clubs:[];
+  const ag=payload?.agents||{},turns=Array.isArray(ag.turns)?ag.turns:[],reports=Array.isArray(ag.reports)?ag.reports:[],docs=Array.isArray(ag.documents)?ag.documents:[];
+  const recent=daily.slice(-30),last12=daily.slice(-12),period=Number(payload?.days||m.days||90),done=turns.filter((x:any)=>x.status==='completed').length,failed=turns.filter((x:any)=>x.status==='failed').length;
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.ink});p.drawRectangle({x:0,y:0,width:PW,height:10,color:PC.cyan});p.drawRectangle({x:0,y:10,width:PW*.6,height:4,color:PC.red});p.drawRectangle({x:0,y:14,width:PW*.32,height:3,color:PC.gold});
+   p.drawText('KOMBAX',{x:PM,y:PH-90,size:29,font:bold,color:PC.white});p.drawText('OWNER COMMAND CENTER',{x:PM,y:PH-124,size:10,font:bold,color:PC.cyan});p.drawText('Informe ejecutivo premium',{x:PM,y:PH-205,size:27,font:bold,color:PC.white});p.drawText('Plataforma, actividad, comunidad, comercio e IA',{x:PM,y:PH-235,size:10,font:reg,color:rgb(.72,.76,.82)});
+   p.drawRectangle({x:PM,y:PH-352,width:PW-2*PM,height:92,color:rgb(.085,.11,.15)});p.drawText('Snapshot actual',{x:PM+18,y:PH-286,size:8,font:bold,color:PC.cyan});p.drawText(nf(latest.active_clubs)+' clubes   |   '+nf(latest.accounts_total)+' cuentas   |   '+nf(latest.active_students)+' alumnos',{x:PM+18,y:PH-322,size:16,font:bold,color:PC.white});
+   const cs=[['Sesiones',nf(tot.sessions),PC.cyan],['Asistencias',nf(tot.attendance),PC.green],['Cobros',euro(tot.payment_amount),PC.gold],['Social',nf(Number(tot.social_posts||0)+Number(tot.social_messages||0)),PC.red]];cs.forEach((c,i)=>{const x=PM+i*130;p.drawRectangle({x,y:PH-475,width:120,height:78,color:rgb(.075,.1,.14),borderColor:rgb(.17,.21,.27),borderWidth:.7});p.drawRectangle({x,y:PH-475,width:3,height:78,color:c[2] as any});p.drawText(c[0] as string,{x:x+12,y:PH-417,size:7,font:reg,color:rgb(.55,.6,.67)});p.drawText(c[1] as string,{x:x+12,y:PH-447,size:15,font:bold,color:PC.white});});
+   p.drawText('Periodo: '+period+' días  |  Generado: '+new Date(payload.generated_at||Date.now()).toLocaleString('es-ES'),{x:PM,y:52,size:7,font:italic,color:rgb(.55,.6,.67)});p.drawText('PRIVADO - OWNER',{x:PW-PM-104,y:52,size:7,font:bold,color:PC.red});}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Resumen ejecutivo','KPIs y evolución agregada',2,5);pfoot(p,reg);const gap=10,cw=(PW-2*PM-gap*2)/3;
+   const cards=[['Clubes activos',nf(latest.active_clubs),'último snapshot',PC.cyan],['Cuentas',nf(latest.accounts_total),'+'+nf(tot.new_accounts)+' en periodo',PC.purple],['Alumnos activos',nf(latest.active_students),'base activa',PC.green],['Sesiones',nf(tot.sessions),nf(tot.attendance)+' asistencias',PC.blue],['Pagos',nf(tot.payments),euro(tot.payment_amount),PC.gold],['Storage',pmb(latest.storage_bytes),nf(latest.storage_objects)+' objetos',PC.red]];
+   cards.forEach((c,i)=>pkpi(p,reg,bold,PM+(i%3)*(cw+gap),PH-188-Math.floor(i/3)*80,cw,c[0] as string,c[1] as string,c[3],c[2] as string));
+   pchart(p,reg,bold,PM,330,(PW-2*PM-10)/2,240,'Actividad',recent,[{key:'sessions',label:'Sesiones',color:PC.cyan},{key:'attendance_records',label:'Asist.',color:PC.green}]);pchart(p,reg,bold,PM+(PW-2*PM-10)/2+10,330,(PW-2*PM-10)/2,240,'Altas y pagos',recent,[{key:'new_accounts',label:'Altas',color:PC.purple},{key:'payments_validated',label:'Pagos',color:PC.gold}]);
+   p.drawRectangle({x:PM,y:92,width:PW-2*PM,height:190,color:PC.white,borderColor:PC.line,borderWidth:.7});p.drawText('Lectura ejecutiva',{x:PM+16,y:254,size:10,font:bold,color:PC.ink});const notes=['Actividad: '+nf(tot.sessions)+' sesiones y '+nf(tot.attendance)+' asistencias.','Comercio: '+nf(tot.payments)+' pagos validados por '+euro(tot.payment_amount)+'.','Social: '+nf(tot.social_posts)+' posts, '+nf(tot.social_comments)+' comentarios, '+nf(tot.social_likes)+' likes y '+nf(tot.social_messages)+' mensajes.','Showcase: '+nf(tot.showcase_leads)+' leads. Notificaciones: '+nf(tot.notifications)+'.'];let yy=226;for(const n of notes){p.drawRectangle({x:PM+17,y:yy+2,width:5,height:5,color:PC.cyan});p.drawText(n,{x:PM+31,y:yy,size:7.5,font:reg,color:PC.ink});yy-=32;}}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Actividad y comunidad','Tendencias diarias y adopción',3,5);pfoot(p,reg);
+   pchart(p,reg,bold,PM,500,PW-2*PM,250,'Actividad social',recent,[{key:'social_posts',label:'Posts',color:PC.red},{key:'social_comments',label:'Comentarios',color:PC.gold},{key:'social_messages',label:'Mensajes',color:PC.cyan}]);
+   const g=10,cw=(PW-2*PM-g*3)/4;[['Posts',nf(tot.social_posts),PC.red],['Comentarios',nf(tot.social_comments),PC.gold],['Likes',nf(tot.social_likes),PC.purple],['Mensajes',nf(tot.social_messages),PC.cyan]].forEach((c,i)=>pkpi(p,reg,bold,PM+i*(cw+g),410,cw,c[0] as string,c[1] as string,c[2]));
+   p.drawText('Detalle diario - últimos 12 registros',{x:PM,y:372,size:11,font:bold,color:PC.ink});const rows=last12.slice().reverse().map((r:any)=>[safe(r.metric_date,10),nf(r.new_accounts),nf(r.sessions),nf(r.attendance_records),nf(r.social_posts),nf(r.social_messages),nf(r.showcase_leads)]);ptable(p,reg,bold,PM,352,[66,58,58,67,67,76,72],['Fecha','Altas','Ses.','Asist.','Posts','Msg','Leads'],rows);}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Comercio y clubes','Pagos, Showcase y ranking operativo',4,5);pfoot(p,reg);
+   const gap=10,cw=(PW-2*PM-gap*3)/4;[['Pagos',nf(tot.payments),PC.gold],['Importe',euro(tot.payment_amount),PC.green],['Leads',nf(tot.showcase_leads),PC.cyan],['Invitaciones',nf(tot.invitations),PC.purple]].forEach((c,i)=>pkpi(p,reg,bold,PM+i*(cw+gap),PH-185,cw,c[0] as string,c[1] as string,c[2]));
+   pchart(p,reg,bold,PM,425,PW-2*PM,220,'Evolución económica',recent,[{key:'payments_validated',label:'Pagos',color:PC.gold},{key:'payments_amount',label:'Importe',color:PC.green}]);
+   p.drawText('Ranking de clubes',{x:PM,y:385,size:11,font:bold,color:PC.ink});const rows=top.slice(0,10).map((r:any)=>[safe(r.nombre,22),nf(r.active_students),nf(r.sessions),nf(r.attendance),nf(r.payments),euro(r.payment_amount),nf(r.messages),nf(r.showcase_leads)]);ptable(p,reg,bold,PM,365,[112,48,50,58,48,74,60,66],['Club','Alum.','Ses.','Asist.','Pagos','Importe','Msg','Leads'],rows);}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Owner e IA','Trazabilidad, informes y gobernanza',5,5);pfoot(p,reg);
+   const gap=10,cw=(PW-2*PM-gap*3)/4;[['Turnos IA',nf(turns.length),PC.cyan],['Completados',nf(done),PC.green],['Fallidos',nf(failed),PC.red],['Informes',nf(reports.length),PC.gold]].forEach((c,i)=>pkpi(p,reg,bold,PM+i*(cw+gap),PH-185,cw,c[0] as string,c[1] as string,c[2]));
+   p.drawText('Últimas ejecuciones',{x:PM,y:605,size:11,font:bold,color:PC.ink});const rows=turns.slice(0,12).map((t:any)=>[new Date(t.created_at).toLocaleDateString('es-ES'),t.agent==='pilot_intelligence'?'Pilot':'Owner',safe(t.status,12),safe(t.risk_level||'-',10),safe(t.message,48)]);ptable(p,reg,bold,PM,585,[72,62,64,58,267],['Fecha','Agente','Estado','Riesgo','Solicitud'],rows);
+   p.drawRectangle({x:PM,y:102,width:PW-2*PM,height:150,color:PC.ink});p.drawText('Gobernanza y calidad',{x:PM+18,y:222,size:11,font:bold,color:PC.white});p.drawText('Documentos Owner: '+nf(docs.length)+'   |   PDF preparados: '+nf(reports.filter((r:any)=>r.pdf_ready).length),{x:PM+18,y:190,size:9,font:reg,color:PC.cyan});p.drawText('Contexto autorizado, RLS, trazabilidad de turnos, almacenamiento privado y revisión humana en acciones sensibles.',{x:PM+18,y:160,size:7.2,font:reg,color:rgb(.75,.79,.84)});p.drawText('Los KPIs son operativos; los importes deben conciliarse con Stripe y contabilidad para cierre financiero.',{x:PM+18,y:137,size:7.2,font:reg,color:rgb(.75,.79,.84)});}
+  return new Uint8Array(await pdf.save({useObjectStreams:false}));
+}
+async function buildPilotPdf(report:any){
+  const pdf=await PDFDocument.create(),reg=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold),italic=await pdf.embedFont(StandardFonts.HelveticaOblique);
+  const findings=Array.isArray(report.sections)?report.sections:[],counts:any={P0:0,P1:0,P2:0,P3:0};for(const f of findings){const k=String(f.priority||'P2');counts[k]=(counts[k]||0)+1;}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.ink});p.drawRectangle({x:0,y:0,width:PW,height:9,color:PC.gold});p.drawRectangle({x:0,y:9,width:PW*.62,height:4,color:PC.cyan});
+   p.drawText('KOMBAX',{x:PM,y:PH-90,size:28,font:bold,color:PC.white});p.drawText('PILOT INTELLIGENCE',{x:PM,y:PH-124,size:10,font:bold,color:PC.gold});p.drawText(safe(report.title||'Informe del piloto',80),{x:PM,y:PH-205,size:24,font:bold,color:PC.white});p.drawText(safe(report.report_type||'pilot',25)+'  |  '+safe(report.period_start,20)+' - '+safe(report.period_end,20),{x:PM,y:PH-236,size:9,font:reg,color:rgb(.72,.76,.82)});
+   p.drawRectangle({x:PM,y:PH-420,width:PW-2*PM,height:128,color:rgb(.085,.11,.15)});p.drawText('Resumen ejecutivo',{x:PM+18,y:PH-320,size:9,font:bold,color:PC.gold});let yy=PH-346;const words=safe(report.executive_summary||'Sin resumen.',2000).split(/\s+/);let line='';for(const w of words){const test=(line+' '+w).trim();if(reg.widthOfTextAtSize(test,9)<PW-2*PM-36)line=test;else{p.drawText(line,{x:PM+18,y:yy,size:9,font:reg,color:PC.white});yy-=15;line=w;if(yy<PH-402)break;}}if(line&&yy>=PH-402)p.drawText(line,{x:PM+18,y:yy,size:9,font:reg,color:PC.white});
+   p.drawText('PRIVADO - OWNER REVIEW',{x:PM,y:50,size:7,font:bold,color:PC.red});}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Mapa de riesgo','Prioridades y categorías detectadas',2,4);pfoot(p,reg);
+   const gap=10,cw=(PW-2*PM-gap*3)/4;[['P0',nf(counts.P0),PC.red],['P1',nf(counts.P1),PC.gold],['P2',nf(counts.P2),PC.cyan],['P3',nf(counts.P3),PC.green]].forEach((c,i)=>pkpi(p,reg,bold,PM+i*(cw+gap),PH-185,cw,c[0] as string,c[1] as string,c[2]));
+   p.drawText('Hallazgos priorizados',{x:PM,y:610,size:11,font:bold,color:PC.ink});let y=585;for(const f of findings.slice(0,9)){if(y<100)break;const color=String(f.priority)==='P0'?PC.red:String(f.priority)==='P1'?PC.gold:String(f.priority)==='P3'?PC.green:PC.cyan;p.drawRectangle({x:PM,y:y-48,width:PW-2*PM,height:54,color:PC.white,borderColor:PC.line,borderWidth:.6});p.drawRectangle({x:PM,y:y-48,width:4,height:54,color});p.drawText(safe(f.priority||'P2',5)+'  '+safe(f.category||'HALLAZGO',24),{x:PM+12,y:y-12,size:7,font:bold,color});p.drawText(safe(f.title||'Hallazgo',74),{x:PM+12,y:y-28,size:8.4,font:bold,color:PC.ink});p.drawText(safe(f.detail||'',100),{x:PM+12,y:y-42,size:6.6,font:reg,color:PC.muted});y-=62;}}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Evidencias y lectura','Detalle verificable para revisión Owner',3,4);pfoot(p,reg);
+   p.drawText('Tabla de hallazgos',{x:PM,y:720,size:11,font:bold,color:PC.ink});const rows=findings.slice(0,12).map((f:any)=>[safe(f.priority||'P2',5),safe(f.category||'-',18),safe(f.title||'-',30),safe(f.evidence||'NO VERIFICADO',42)]);ptable(p,reg,bold,PM,700,[48,90,150,231],['Pri.','Categoría','Hallazgo','Evidencia'],rows);
+   p.drawRectangle({x:PM,y:110,width:PW-2*PM,height:150,color:PC.white,borderColor:PC.line,borderWidth:.7});p.drawText('Criterio de lectura',{x:PM+16,y:232,size:10,font:bold,color:PC.ink});p.drawText('Los hallazgos provienen del snapshot autorizado y de la respuesta estructurada del agente.',{x:PM+16,y:204,size:7.3,font:reg,color:PC.muted});p.drawText('NO VERIFICADO indica que falta evidencia suficiente para una conclusión operativa.',{x:PM+16,y:180,size:7.3,font:reg,color:PC.muted});p.drawText('El informe no ejecuta cambios ni sustituye la revisión humana en decisiones sensibles.',{x:PM+16,y:156,size:7.3,font:reg,color:PC.muted});}
+  {const p=pdf.addPage([PW,PH]);p.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(p,bold,reg,'Plan de seguimiento','Acciones recomendadas y cierre',4,4);pfoot(p,reg);
+   p.drawText('Próximas acciones',{x:PM,y:720,size:11,font:bold,color:PC.ink});let y=690;const authored=Array.isArray(report?.source_snapshot?.next_steps)?report.source_snapshot.next_steps.filter((x:any)=>typeof x==='string'&&x.trim()):[];const steps=(authored.length?authored:findings.slice(0,8).map((f:any)=>f.detail||f.title).filter(Boolean));(steps.length?steps:['Revisar hallazgos y validar los puntos NO VERIFICADOS.']).slice(0,8).forEach((s:any,i)=>{p.drawRectangle({x:PM,y:y-42,width:PW-2*PM,height:48,color:PC.white,borderColor:PC.line,borderWidth:.6});p.drawCircle({x:PM+19,y:y-17,size:10,color:PC.ink});p.drawText(String(i+1),{x:PM+16,y:y-20,size:7,font:bold,color:PC.white});const rawLine=safe(s,260).replace(/\s+/g,' ').trim(),maxWidth=PW-2*PM-60;let words=rawLine.split(' '),first='',second='';for(const word of words){const next=first?first+' '+word:word;if(!second&&reg.widthOfTextAtSize(next,7.4)<=maxWidth)first=next;else{const more=second?second+' '+word:word;if(reg.widthOfTextAtSize(more,7.4)<=maxWidth)second=more;else break;}}p.drawText(first,{x:PM+40,y:y-18,size:7.4,font:reg,color:PC.ink});if(second)p.drawText(second,{x:PM+40,y:y-30,size:7.4,font:reg,color:PC.ink});y-=58;});
+   p.drawRectangle({x:PM,y:95,width:PW-2*PM,height:135,color:PC.ink});p.drawText('Release / Pilot Gate',{x:PM+18,y:198,size:11,font:bold,color:PC.white});p.drawText('Este documento es un borrador interno. Revisar antes de compartir, cerrar incidencias o validar un release.',{x:PM+18,y:170,size:7.3,font:reg,color:rgb(.75,.79,.84)});p.drawText('Generado: '+new Date(report.created_at||Date.now()).toLocaleString('es-ES'),{x:PM+18,y:142,size:7,font:reg,color:PC.cyan});p.drawText('Clasificación: PRIVADO',{x:PM+18,y:118,size:7,font:bold,color:PC.red});}
+  return new Uint8Array(await pdf.save({useObjectStreams:false}));
+}
+async function uploadPdf(url:string,secret:string,path:string,pdf:Uint8Array){
+  const encoded=path.split('/').map(encodeURIComponent).join('/');
+  const up=await fetch(`${url}/storage/v1/object/kombax-reports/${encoded}`,{method:'POST',headers:adminHeaders(secret,{'content-type':'application/pdf','x-upsert':'false','cache-control':'private, max-age=0'}),body:pdf,signal:AbortSignal.timeout(20000)});
+  if(!up.ok)throw new Error(`OWNER_REPORT_UPLOAD_${up.status}`);
+  const sign=await fetch(`${url}/storage/v1/object/sign/kombax-reports/${encoded}`,{method:'POST',headers:adminHeaders(secret,{'content-type':'application/json'}),body:JSON.stringify({expiresIn:600}),signal:AbortSignal.timeout(10000)});
+  const body=await sign.json().catch(()=>null);if(!sign.ok||!body?.signedURL)throw new Error(`OWNER_REPORT_SIGN_${sign.status}`);
+  const signed=String(body.signedURL).startsWith('http')?body.signedURL:`${url}/storage/v1${body.signedURL}`;
+  return signed;
+}
+async function appendInsightPdf(bytes:Uint8Array,insights:any,kind:string){
+ const pdf=await PDFDocument.load(bytes),reg=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+ const title=OWNER_REPORT_TYPES.find(([id])=>id===kind)?.[1]||'Ejecutivo';let page:any,y=0;
+ const fresh=()=>{page=pdf.addPage([PW,PH]);page.drawRectangle({x:0,y:0,width:PW,height:PH,color:PC.paper});phead(page,bold,reg,'Informe '+title,'Datos agregados · acceso privado Owner',1,1);pfoot(page,reg);y=738;};
+ const line=(text:string,heading=false)=>{const font=heading?bold:reg,size=heading?10:9;const raw=safe(text,2000).replace(/[^\x20-\x7e\xa0-\xff]/g,' ');let current='';
+  const emit=()=>{if(!page||y<65)fresh();page.drawText(current,{x:PM,y,size,font,color:PC.ink});y-=heading?21:15;current='';};
+  for(const char of raw){if(font.widthOfTextAtSize(current+char,size)>PW-2*PM)emit();current+=char;}if(current)emit();
+ };
+ fresh();line('Generado: '+String(insights?.generated_at||new Date().toISOString()));line('Periodo: '+String(insights?.days||'No disponible')+' días. Totales actuales y registros del periodo se distinguen.');y-=12;
+ for(const section of ownerInsightSections(insights,kind)){if(y<110)fresh();line(section.title,true);for(const value of section.lines.length?section.lines:['Sin registros para esta sección.'])line(value);y-=14;}
+ line('Documento de análisis. No envía campañas, no autoriza cobros y no cambia perfiles.');
+ const pages=pdf.getPages();pages.forEach((p,i)=>{p.drawRectangle({x:PW-PM-40,y:PH-50,width:42,height:17,color:PC.ink});p.drawText(`${i+1}/${pages.length}`,{x:PW-PM-34,y:PH-45,size:8,font:bold,color:PC.cyan});});
+ return new Uint8Array(await pdf.save());
+}
+Deno.serve(async(req:Request)=>{
+  const requestId=crypto.randomUUID();
+  try{
+    if(req.method==='OPTIONS')return new Response(null,{status:204,headers:CORS});
+    if(req.method!=='POST')return json({error:'METHOD_NOT_ALLOWED',request_id:requestId},405);
+    const bearer=req.headers.get('authorization')||'';if(!/^Bearer\s+.+/i.test(bearer))return json({error:'AUTH_REQUIRED',request_id:requestId},401);
+    const {url,pub,secret,serviceRole}=env();if(!url||!pub||!secret||!serviceRole)return json({error:'BACKEND_NOT_CONFIGURED',request_id:requestId},503);
+    const body=await req.json().catch(()=>({}));const pilotId=body?.pilot_report_id?String(body.pilot_report_id):'';
+    const kind=ownerReportKind(body?.report_kind);const days=Math.min(365,Math.max(7,Number(body?.days||90)||90));
+    let pdf:Uint8Array,path:string,filename:string,meta:any={};
+    if(pilotId){
+      const report=await rpc(url,pub,bearer,'app_kombax_owner_pilot_report_payload_r117',{p_report_id:pilotId});
+      pdf=await buildPilotPdf(report);const date=new Date().toISOString().slice(0,10);path=`owner/pilot/${date}/pilot-${pilotId}.pdf`;filename=`KOMBAX-${safe(report.report_type||'pilot',30)}-${date}.pdf`;
+      meta={pilot_report_id:pilotId,report_type:report.report_type};
+    }else{
+      const payload=await rpc(url,pub,bearer,'app_kombax_owner_report_payload_r114',{p_days:days});
+      pdf=kind==='executive'?await buildCommandPdf(payload):new Uint8Array(await (await PDFDocument.create()).save({addDefaultPage:false}));const date=new Date().toISOString().slice(0,10);path=`owner/${date}/owner-command-center-${crypto.randomUUID()}.pdf`;filename=`KOMBAX-Owner-${kind}-${date}.pdf`;meta={period_days:days};
+    }
+    const insights=await rpc(url,pub,bearer,'app_kombax_owner_insights_r278',{p_days:days}).catch(()=>({ok:false}));
+    pdf=await appendInsightPdf(pdf,insights,kind);meta={...meta,report_kind:kind,extended_data_available:insights?.ok===true};
+    const signed=await uploadPdf(url,secret,path,pdf);if(pilotId)await rpc(url,secret,`Bearer ${serviceRole}`,'app_kombax_owner_pilot_report_pdf_mark_r117',{p_report_id:pilotId,p_storage_path:path});const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',pdf));const sha=[...digest].map(x=>x.toString(16).padStart(2,'0')).join('');
+    return json({ok:true,url:signed,path,filename,bytes:pdf.byteLength,sha256:sha,expires_in:600,request_id:requestId,...meta});
+  }catch(error){const message=String(error instanceof Error?error.message:error);console.error(JSON.stringify({event:'owner_report_failed',request_id:requestId,error:safe(message,180)}));return json({error:'OWNER_REPORT_FAILED',request_id:requestId},/PLATFORM_ADMIN_REQUIRED|OWNER_REPORT_FORBIDDEN/.test(message)?403:500);}
+});

@@ -6,6 +6,7 @@ import { pageHeader, hero, metric, progress, quickRow, card, table, empty, badge
 import { icon } from '../ui/icons.js';
 import { migrationAssistBanner, openMigrationPreparation } from './customer-operations.js';
 import { t } from '../i18n/index.js';
+import { WORKSPACE_DEFAULT_BANNER } from '../core/workspace-visuals.js';
 
 const btn=(id,label,cls='btn btn-ghost btn-sm')=>`<button type="button" class="${cls}" data-id="${esc(id)}">${esc(label)}</button>`;
 const bind=(selector,fn)=>document.querySelectorAll(selector).forEach(el=>el.addEventListener('click',()=>fn(el.dataset.id,el)));
@@ -42,6 +43,8 @@ export async function renderDashboard(){
         <div class="grid-2">${card(t('admin.dashboard.pendingActions'),actionItems.map(x=>quickRow(x.icon,x.title,x.sub,`<button class="btn ${x.count?'btn-primary':'btn-ghost'} btn-sm" data-nav="${x.nav}">${esc(t('admin.dashboard.open'))}</button>`)).join(''))}${card(t('admin.dashboard.classesOccupancy'),occupancy.length?occupancy.slice(0,7).map(g=>`<div class="occupancy"><div><small>${Number(g.orden)||1}</small><strong>${esc(g.nombre)}</strong><small>${esc(g.monitor_nombre||t('admin.dashboard.unassignedCoach'))}</small></div><span>${g.enrolled}/${g.plazas||'—'}</span>${progress(g.pct)}</div>`).join(''):empty(t('admin.dashboard.noActiveGroups')))}</div>
         ${card(t('admin.dashboard.upcomingSessions'),future.length?future.slice(0,8).map(x=>quickRow(String(x.fecha).slice(8,10),activeGroups.find(g=>g.id===x.grupo_id)?.nombre||'Clase',`${dateFmt(x.fecha)} · ${String(x.hora_inicio||'').slice(0,5)} · ${x.estado}`,badge(x.estado,x.estado==='completada'?'ok':x.estado==='cancelada'?'danger':'neutral'))).join(''):empty(t('admin.dashboard.noUpcomingSessions')))}`);
     }
+    const clubBanner=state.session?.club?.banner_url||WORKSPACE_DEFAULT_BANNER;
+    document.querySelector('#main-view .hero')?.insertAdjacentHTML('beforebegin',`<section class="kx-workspace-cover ${clubBanner===WORKSPACE_DEFAULT_BANNER?'is-kombax-default':''}"><img class="kx-workspace-banner" src="${esc(clubBanner)}" alt="" decoding="async"></section>`);
     if(!['familia','alumno'].includes(role)){
       const heroNode=document.querySelector('#main-view .hero');
       heroNode?.insertAdjacentHTML('afterend',migrationAssistBanner({title:'¿Vienes de otro programa, Excel o fichas en papel?',body:'KOMBAX Migrations te ayuda a trasladar alumnos, grupos, cuotas y documentación mediante chat directo y subida de archivos, con revisión antes de importar.'}));

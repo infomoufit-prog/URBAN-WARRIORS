@@ -67,7 +67,8 @@ export function usageHelpContextKey(context={}){return [context.userId||'guest',
 export function usageOutputCap(planLimit){const value=Number(planLimit);return Math.min(600,Number.isFinite(value)&&value>0?Math.floor(value):500);}
 
 export function helpQuestionIntent(text=''){
- const q=normalizeHelpText(text);
+ const q=normalizeHelpText(text).replace(/^(?:hola|buenas|buenos dias|buenas tardes)\s+/,'').replace(/^(?:(?:me puedes|puedes|podrias) (?:explicar|decir|contar)|(?:quiero|queria|necesito|me gustaria) (?:saber|entender)|explicame)\s+/,'');
+ if(/\b(no (?:me )?(?:deja|puedo|funciona|guarda|aparece|llega|responde)|error|fallo|falla|atascad[oa]|bloquead[oa]|can t|cannot|not working)\b/.test(q))return 'troubleshooting';
  if(/^(?:y )?(?:(?:eso|esto|esa|ese) )?(?:para que|que utilidad|de que sirve|what is .+ for)/.test(q))return 'purpose';
  if(/^(?:y )?(?:que es|que son|que significa|a que se refiere|what is|what are|what does)/.test(q))return 'definition';
  if(/\b(diferencia|diferencias|comparar|versus|vs|difference)\b/.test(q))return 'comparison';

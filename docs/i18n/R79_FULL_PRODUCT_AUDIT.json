@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-15T06:26:16.104Z",
-  "candidates": 5324,
-  "covered_r79": 541,
-  "covered_r78": 1215,
-  "covered_legacy_all7": 3294,
-  "unresolved": 274,
+  "generated_at": "2026-10-16T22:29:04.233Z",
+  "candidates": 5387,
+  "covered_r79": 542,
+  "covered_r78": 1217,
+  "covered_legacy_all7": 3355,
+  "unresolved": 273,
   "by_file": {
-    "web/js/modules/platform-admin.js": 70,
+    "web/js/modules/platform-admin.js": 69,
     "web/js/modules/customer-operations.js": 64,
     "web/js/modules/plan-services.js": 31,
     "web/js/modules/gateway.js": 30,
@@ -2898,19 +2898,6 @@
     {
       "file": "web/js/modules/platform-admin.js",
       "value": "Los documentos entrantes quedarán clasificados aquí.",
-      "missing": [
-        "en",
-        "fr",
-        "pt",
-        "it",
-        "de",
-        "th",
-        "fil"
-      ]
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "GPT-6 Luna · autonomía controlada",
       "missing": [
         "en",
         "fr",

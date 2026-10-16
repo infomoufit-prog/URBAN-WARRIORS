@@ -26,7 +26,7 @@ function mount(){
 }
 function close(){opened=false;root.querySelector('#kx-usage-help-panel').hidden=true;const button=root.querySelector('.kx-usage-help-launcher');button.setAttribute('aria-expanded','false');button.focus();}
 async function open(){sync();if(!usageHelpVisible(context))return;opened=true;const panel=root.querySelector('#kx-usage-help-panel');if(panel.dataset.helpEpoch!==String(epoch))renderPanel();else panel.hidden=false;root.querySelector('.kx-usage-help-launcher').setAttribute('aria-expanded','true');const captured=epoch;quotaLine();
- try{if(!catalog){const response=await fetch('./assets/guides/usage-help-r272.json?v=r275-natural');if(!response.ok)throw Error('guide_unavailable');catalog=(await response.json()).guides;}if(captured===epoch){suggest();root.querySelector('textarea')?.focus();}}catch{if(captured===epoch)message(L('No se pudo cargar la guía. Puedes contactar con Soporte.'),'assistant');}
+ try{if(!catalog)catalog=await loadGuideCatalog();if(captured===epoch){suggest();root.querySelector('textarea')?.focus();}}catch{if(captured===epoch)message(L('No se pudo cargar la guía. Puedes contactar con Soporte.'),'assistant');}
  loadQuota();
 }
 function renderPanel(){
@@ -77,12 +77,19 @@ function relatedGuide(article,topics){
  button.addEventListener('click',()=>{if(busy||!helpAudienceAllowed(topic,audienceContext()))return;button.disabled=true;showTopic(topic);});article.appendChild(button);
 }
 function localReply(text,topics){
- const intent=helpQuestionIntent(text),topic=topics[0];
+ const intent=helpQuestionIntent(text);let topic=topics[0];
  if(!topic){message(L('Cuéntame un poco más sobre tu duda para poder orientarte.'));return;}
+ const detail=selectHelpTopics((topic.explanations||[]).map(x=>({...topic,title:x.title,keywords:x.keywords,concept:x.meaning,steps:x.steps,rules:[...(topic.rules||[]),...x.checks]})),text,audienceContext(),1)[0];
+ if(detail)topic=detail;
  if(intent==='procedure'){showTopic(topic);return;}
  const explanation=intent==='purpose'?(topic.purpose||topic.concept):topic.concept;
  const reply=message(explanation?L(explanation):L('La guía recoge la información disponible sobre esta función. Puedes abrirla aquí para revisarla.'));
- relatedGuide(reply,topics);
+ relatedGuide(reply,[topic,...topics.slice(1)]);
+}
+async function loadGuideCatalog(){
+ let response=await fetch('./assets/guides/usage-help-master-r278.json?v=r278');
+ if(!response.ok)response=await fetch('./assets/guides/usage-help-r272.json?v=r275-natural');
+ if(!response.ok)throw Error('guide_unavailable');return (await response.json()).guides;
 }
 async function answer(){
  sync();if(busy)return;const input=root.querySelector('textarea'),text=String(input?.value||'').trim().slice(0,1500);if(!text)return;
@@ -92,7 +99,7 @@ async function answer(){
   const greeting=helpSmallTalk(question);if(greeting){if(captured===epoch)message(L(greeting));return;}
   // Resolve entitlement before choosing AI or guide. A catalog hit no longer bypasses conversation.
   if(context.userId)await loadQuota();if(captured!==epoch)return;
-  if(!catalog){try{const response=await fetch('./assets/guides/usage-help-r272.json?v=r275-natural');if(response.ok)catalog=(await response.json()).guides;}catch{}}
+  if(!catalog){try{catalog=await loadGuideCatalog();}catch{}}
   if(captured!==epoch)return;
   const topics=helpConversationTopics(catalog||[],question,audienceContext(),questionHistory,4);
   busy=false;quotaLine();

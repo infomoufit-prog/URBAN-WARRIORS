@@ -1,0 +1,2945 @@
+{
+  "version": "r278",
+  "review_date": "2026-10-16",
+  "articles": [
+    {
+      "guide_id": "start",
+      "title": "Inicio y panel del club",
+      "meaning": "Resumen diario, métricas, accesos rápidos y contexto del club.",
+      "prerequisites": [
+        "El contenido del panel cambia según el rol y sus permisos.",
+        "Un Monitor ve únicamente sus ámbitos asignados cuando tiene alcance restringido."
+      ],
+      "steps": [
+        "Comprueba el club activo y tu identidad en la cabecera.",
+        "Revisa avisos, próximos eventos, sesiones y acciones pendientes.",
+        "Usa las tarjetas y navegación para entrar directamente en cada área."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de inicio y panel del club, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El contenido del panel cambia según el rol y sus permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en inicio y panel del club?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/dashboard-catalog.js",
+          "sha256": "0028d6999f9c3c31d40fa375948961f809176ab6fa1a7ca22a95da770f1ffc1d",
+          "line": 14
+        },
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        },
+        {
+          "path": "web/js/modules/resource-center.js",
+          "sha256": "226498d9aa45c632116f2d57cfb16cff46fb7b87faa148342053707e57a94957",
+          "line": 101
+        },
+        {
+          "path": "web/js/modules/guides.js",
+          "sha256": "0ee9b836b0e997bf616c246c0465ec6d69fe659fb435aad271e5c4f323e8f455",
+          "line": 20
+        },
+        {
+          "path": "web/js/modules/consulting.js",
+          "sha256": "b63ecebcfc3fc1cd72ca6115c4569318a36cf870c763d376df2bbb06616350c9",
+          "line": 12
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "start"
+    },
+    {
+      "guide_id": "profile",
+      "title": "Perfil del club y perfil público",
+      "meaning": "Logo, portada, información pública, álbum y presencia de tu club en KOMBAX.",
+      "prerequisites": [
+        "La identidad del Club es distinta de la cuenta personal del Gestor.",
+        "El actor real se conserva para auditoría aunque publiques como Club."
+      ],
+      "steps": [
+        "Entra en Mi perfil desde una cuenta de Gestor o Coordinación.",
+        "Actualiza la información pública, imágenes y datos visibles.",
+        "Usa “Ver como público” para comprobar cómo lo verá la comunidad."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de perfil del club y perfil público, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La identidad del Club es distinta de la cuenta personal del Gestor."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en perfil del club y perfil público?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/club-profile.js",
+          "sha256": "d1ed805e21f8b29b71ddbb73cc39570af9be56769328b539345774b4f073bef9",
+          "line": 37
+        },
+        {
+          "path": "web/js/modules/club-kombax-hub.js",
+          "sha256": "4743d3f478deb7ee5f13e6cf7716a6ee212bfb38a645a4bc35d21caa12ec7bba",
+          "line": 32
+        },
+        {
+          "path": "web/js/modules/public-profile.js",
+          "sha256": "fd5b8b736fbd9d51f66b9fdaf283e02ccba96182194cce0176afd8d852cd7f94",
+          "line": 221
+        },
+        {
+          "path": "web/js/modules/club-poster.js",
+          "sha256": "4dc54609280809b0b6bc77d3f8d07f80e5bb878ecc976faddcc2782d3936cfcd",
+          "line": 5
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile"
+    },
+    {
+      "guide_id": "access",
+      "title": "Códigos del club e invitaciones",
+      "meaning": "Dos códigos cortos reutilizables: alumnos/familias y equipo.",
+      "prerequisites": [
+        "Los códigos admiten 4 o 5 dígitos y pueden rotarse cuando el club quiera.",
+        "El código de equipo nunca concede permisos sensibles automáticamente: crea una solicitud pendiente.",
+        "El autorregistro de alumno independiente requiere 16 años o más; los menores de 16 se gestionan mediante tutor autorizado."
+      ],
+      "steps": [
+        "Desde Alumnos consulta o cambia el código de alumnos/familias.",
+        "Desde Equipo consulta o cambia el código de miembros del equipo.",
+        "Coloca el código de alumnos junto al QR del cartel de descarga."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de códigos del club e invitaciones, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los códigos admiten 4 o 5 dígitos y pueden rotarse cuando el club quiera."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en códigos del club e invitaciones?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26",
+          "line": 113
+        },
+        {
+          "path": "web/js/modules/auth-recovery.js",
+          "sha256": "a2f64ab619cbd1293089e41e38f7bea44d78a57adf83b7bd89c7507405c79c98",
+          "line": 41
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "access"
+    },
+    {
+      "guide_id": "enrollments",
+      "title": "Solicitudes de inscripción",
+      "meaning": "Crear una cuenta no confirma por sí solo la pertenencia a un club. Solicitud, aprobación y aceptación son pasos distintos según la vía de alta.",
+      "prerequisites": [
+        "La solicitud no equivale automáticamente a una membresía activa.",
+        "La información de menores debe seguir el flujo de tutor/club."
+      ],
+      "steps": [
+        "Abre Solicitudes y revisa los datos enviados.",
+        "Comprueba identidad, contacto y datos deportivos requeridos.",
+        "Aprueba o rechaza según el procedimiento del club."
+      ],
+      "checks": [
+        "Comprueba si la persona ya tiene cuenta antes de crear otra.",
+        "Revisa el club, la modalidad de acceso y el destinatario de la invitación.",
+        "Una solicitud pendiente debe resolverse desde la cuenta con permiso, sin reutilizar códigos de otro club.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de solicitudes de inscripción, ¿qué reviso?",
+          "answer": "Comprueba si la persona ya tiene cuenta antes de crear otra. La solicitud no equivale automáticamente a una membresía activa."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en solicitudes de inscripción?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/groups-members.js",
+          "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397",
+          "line": 30
+        },
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "enrollments"
+    },
+    {
+      "guide_id": "students",
+      "title": "Alumnos y fichas",
+      "meaning": "Una cuenta de acceso, una ficha de alumno y una identidad pública no son lo mismo. La ficha pertenece al club; un tutor puede relacionarse con varios hijos sin convertirlos en una sola persona.",
+      "prerequisites": [
+        "Los monitores restringidos solo pueden ver alumnos de sus grupos/cartera asignados.",
+        "Los datos familiares, administrativos y económicos están separados por permisos."
+      ],
+      "steps": [
+        "Busca al alumno por nombre o grupo.",
+        "Abre su ficha para consultar datos y contexto deportivo.",
+        "Edita únicamente los campos permitidos por tu rol."
+      ],
+      "checks": [
+        "Busca primero la ficha del alumno para evitar duplicados.",
+        "Revisa por separado las disciplinas y grupos asignados; no sustituyas la ficha para añadir otra actividad.",
+        "Comprueba la autorización del tutor y selecciona el hijo correcto antes de modificar sus datos.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de alumnos y fichas, ¿qué reviso?",
+          "answer": "Busca primero la ficha del alumno para evitar duplicados. Los monitores restringidos solo pueden ver alumnos de sus grupos/cartera asignados."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en alumnos y fichas?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/groups-members.js",
+          "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397",
+          "line": 30
+        },
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "students"
+    },
+    {
+      "guide_id": "team",
+      "title": "Equipo del club, roles y solicitudes",
+      "meaning": "El titular es responsable de la suscripción y de los accesos del equipo. Se admiten varias personas con el mismo rol; una coordinación no sustituye la propiedad.",
+      "prerequisites": [
+        "El código de equipo no asigna un rol por sí solo.",
+        "Los permisos dependen del rol y del ámbito asignado.",
+        "La elevación a Coordinación/Gestor permanece protegida por reglas específicas."
+      ],
+      "steps": [
+        "Revisa las solicitudes pendientes de acceso del equipo.",
+        "Aprueba la persona y asigna el rol operativo correspondiente.",
+        "Comprueba después sus ámbitos de trabajo si es Monitor."
+      ],
+      "checks": [
+        "Distingue una solicitud al equipo de una matrícula de alumno.",
+        "El titular gestiona aprobación, cambio de rol y revocación del equipo.",
+        "Después de revocar, comprueba que el miembro ya no dispone del acceso; no elimines su cuenta global.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de equipo del club, roles y solicitudes, ¿qué reviso?",
+          "answer": "Distingue una solicitud al equipo de una matrícula de alumno. El código de equipo no asigna un rol por sí solo."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en equipo del club, roles y solicitudes?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/profile-team.js",
+          "sha256": "10e33bed8b1275170ec59bd9b75086faa31236f868b208d3f2ee278f78fba5fc",
+          "line": 9
+        },
+        {
+          "path": "web/js/modules/admin.js",
+          "sha256": "2737de285874cd379b0cf243399c201b414496be254fa299ab6d8c1c950ff53b",
+          "line": 26
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "team"
+    },
+    {
+      "guide_id": "scopes",
+      "title": "Ámbitos y privacidad de monitores",
+      "meaning": "Asigna grupos, alumnos y capacidades concretas a cada monitor.",
+      "prerequisites": [
+        "La relación es muchos-a-muchos: un alumno puede estar en más de un grupo y tener más de un monitor autorizado.",
+        "Un monitor restringido no debe poder consultar alumnos fuera de su ámbito."
+      ],
+      "steps": [
+        "Selecciona un Monitor.",
+        "Asigna los grupos y/o alumnos que debe gestionar.",
+        "Define el alcance financiero permitido cuando corresponda."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de ámbitos y privacidad de monitores, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La relación es muchos-a-muchos: un alumno puede estar en más de un grupo y tener más de un monitor autorizado."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en ámbitos y privacidad de monitores?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/work-scopes.js",
+          "sha256": "bd7f52f48b40e6765f674aeed9b2c446808eabff57d976cfbc45b89320727a5c",
+          "line": 11
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "scopes"
+    },
+    {
+      "guide_id": "catalog",
+      "title": "Disciplinas y grados",
+      "meaning": "Cada disciplina tiene su propio catálogo de grados. Un grado debe interpretarse dentro de la disciplina correspondiente.",
+      "prerequisites": [
+        "La edición de disciplinas está reservada a roles autorizados.",
+        "Los monitores pueden trabajar con grados cuando su permiso lo permite."
+      ],
+      "steps": [
+        "Crea o revisa las disciplinas activas.",
+        "Configura los grados/niveles de cada disciplina.",
+        "Utiliza esta estructura en grupos, alumnos y progreso."
+      ],
+      "checks": [
+        "Revisa la disciplina seleccionada antes de editar sus grados.",
+        "Comprueba el nombre, orden y color cuando el formulario los admita.",
+        "No apliques a otra disciplina un grado solo por compartir el mismo color.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de disciplinas y grados, ¿qué reviso?",
+          "answer": "Revisa la disciplina seleccionada antes de editar sus grados. La edición de disciplinas está reservada a roles autorizados."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en disciplinas y grados?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/dashboard-catalog.js",
+          "sha256": "0028d6999f9c3c31d40fa375948961f809176ab6fa1a7ca22a95da770f1ffc1d",
+          "line": 14
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "catalog"
+    },
+    {
+      "guide_id": "groups",
+      "title": "Grupos",
+      "meaning": "Un alumno puede entrenar en varias disciplinas y en varios grupos. La disciplina y el grupo representan relaciones distintas; el horario no cambia su identidad.",
+      "prerequisites": [
+        "Un alumno puede participar en varios grupos cuando el modelo del club lo requiera.",
+        "El Monitor solo opera sobre grupos asignados si está restringido."
+      ],
+      "steps": [
+        "Crea el grupo con su nombre y disciplina.",
+        "Añade o revisa los alumnos vinculados.",
+        "Relaciona el grupo con las sesiones de entrenamiento."
+      ],
+      "checks": [
+        "Comprueba que las disciplinas existen en el club.",
+        "Comprueba cada grupo y su disciplina antes de guardar.",
+        "Después, vuelve a abrir la ficha y verifica todas las asignaciones.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de grupos, ¿qué reviso?",
+          "answer": "Comprueba que las disciplinas existen en el club. Un alumno puede participar en varios grupos cuando el modelo del club lo requiera."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en grupos?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/groups-members.js",
+          "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397",
+          "line": 30
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "groups"
+    },
+    {
+      "guide_id": "sessions",
+      "title": "Sesiones y recurrencia",
+      "meaning": "Una sesión es una clase o entrenamiento situado en una fecha y horario, asociado al grupo correspondiente. Puede ser puntual o formar parte de una serie recurrente.",
+      "prerequisites": [
+        "Los cambios de una sesión no deben alterar indebidamente toda la serie.",
+        "Los monitores restringidos solo modifican sesiones dentro de sus grupos autorizados."
+      ],
+      "steps": [
+        "Selecciona el grupo y crea la serie o sesión.",
+        "Define fecha, hora y recurrencia cuando proceda.",
+        "Registra excepciones, cambios o finalización de series desde la propia sesión."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de sesiones y recurrencia, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los cambios de una sesión no deben alterar indebidamente toda la serie."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en sesiones y recurrencia?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/training.js",
+          "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f",
+          "line": 13
+        },
+        {
+          "path": "web/js/modules/private-training.js",
+          "sha256": "dbca42c91e769d3632dd2e92de370bea5c78036ff55c1638d813c3e11b33fc4d",
+          "line": 8
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "sessions"
+    },
+    {
+      "guide_id": "attendance",
+      "title": "Asistencia y check-in",
+      "meaning": "Registra presencia/ausencia por sesión y consulta el historial.",
+      "prerequisites": [
+        "La asistencia está vinculada a sesiones y alumnos reales.",
+        "El historial alimenta seguimiento y métricas del club."
+      ],
+      "steps": [
+        "Abre Asistencia y selecciona la sesión correspondiente.",
+        "Marca la presencia de los alumnos autorizados.",
+        "Guarda y revisa el resultado antes de salir."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de asistencia y check-in, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La asistencia está vinculada a sesiones y alumnos reales."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en asistencia y check-in?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/training.js",
+          "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f",
+          "line": 13
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "attendance"
+    },
+    {
+      "guide_id": "tracking",
+      "title": "Seguimiento",
+      "meaning": "Añade observaciones y seguimiento del alumno dentro del ámbito autorizado.",
+      "prerequisites": [
+        "El seguimiento no debe exponer datos a monitores fuera del ámbito del alumno.",
+        "Utiliza información necesaria y profesional, evitando datos irrelevantes."
+      ],
+      "steps": [
+        "Busca al alumno autorizado.",
+        "Registra la observación o seguimiento pertinente.",
+        "Consulta el histórico para mantener continuidad entre sesiones."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de seguimiento, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El seguimiento no debe exponer datos a monitores fuera del ámbito del alumno."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en seguimiento?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/training.js",
+          "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f",
+          "line": 13
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "tracking"
+    },
+    {
+      "guide_id": "progress",
+      "title": "Progreso y evaluaciones",
+      "meaning": "Consulta y actualiza la evolución deportiva, grados y resultados.",
+      "prerequisites": [
+        "El progreso deportivo es independiente de la información financiera.",
+        "Respeta el alcance de grupos/alumnos del Monitor."
+      ],
+      "steps": [
+        "Entra en Progreso y selecciona alumno/grupo.",
+        "Revisa el nivel actual y evolución registrada.",
+        "Actualiza la evaluación cuando tengas permiso."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de progreso y evaluaciones, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El progreso deportivo es independiente de la información financiera."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en progreso y evaluaciones?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/training.js",
+          "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f",
+          "line": 13
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "progress"
+    },
+    {
+      "guide_id": "finance",
+      "title": "Finanzas, cuotas y cobros",
+      "meaning": "Las finanzas del club reúnen las cuotas, los cargos y los pagos que puedes consultar o gestionar según tu rol. Un importe pendiente y un pago recibido son cosas diferentes.",
+      "prerequisites": [
+        "Los roles ven distinta profundidad financiera.",
+        "Un Monitor puede tener alcance ninguno/estado/cartera/cobro/recibos según configuración.",
+        "Familias y alumnos solo ven la información económica que les corresponde."
+      ],
+      "steps": [
+        "Filtra por periodo, alumno o estado.",
+        "Registra o revisa el cobro según tu permiso.",
+        "Comprueba que el estado final coincide con el movimiento realizado."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de finanzas, cuotas y cobros, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los roles ven distinta profundidad financiera."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en finanzas, cuotas y cobros?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        },
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        },
+        {
+          "path": "web/js/modules/historical-finance.js",
+          "sha256": "d9ff891d2a74cf1924c91191f48cd7b33aeb0e66c915e9cfcef743e216f86274",
+          "line": 6
+        },
+        {
+          "path": "web/js/modules/finance-context.js",
+          "sha256": "89f0cd840787fbebe82461b54ff070ff6a955a892fc7225c66db71e7d853e5f5",
+          "line": 12
+        },
+        {
+          "path": "web/js/modules/finance-guide.js",
+          "sha256": "0ceabf4740ef793403718f07b398e1246977bb9a8cb568167c607b20b4efde70",
+          "line": 19
+        },
+        {
+          "path": "web/js/modules/finance-premium-bootstrap.js",
+          "sha256": "3388ca75466f8f467397e335e264d18d20c53708f87b3c94cc1f9ff92c911ef0",
+          "line": 1
+        },
+        {
+          "path": "web/js/modules/payments-center.js",
+          "sha256": "35f97cae0923f9628e42246e972be4f00bec39593104185a76e5f941e53913de",
+          "line": 52
+        },
+        {
+          "path": "web/js/modules/professional-finance.js",
+          "sha256": "6e6792979dfec71ef482cf9d930350c233cc7154e643008e2acf534f8f1035a5",
+          "line": 24
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "finance"
+    },
+    {
+      "guide_id": "receipts",
+      "title": "Recibos y justificantes",
+      "meaning": "Consulta recibos generados y abre el justificante completo para imprimir o compartir.",
+      "prerequisites": [
+        "El recibo debe corresponder a un cobro real y mantener trazabilidad.",
+        "La visibilidad depende del rol y relación con el alumno."
+      ],
+      "steps": [
+        "Localiza el cobro o mensualidad correspondiente.",
+        "Abre el recibo completo desde la acción disponible.",
+        "Imprime o conserva el justificante desde la vista preparada."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de recibos y justificantes, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El recibo debe corresponder a un cobro real y mantener trazabilidad."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en recibos y justificantes?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        },
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "receipts"
+    },
+    {
+      "guide_id": "reminders",
+      "title": "Avisos de cobro",
+      "meaning": "Gestiona recordatorios de mensualidades y pagos pendientes.",
+      "prerequisites": [
+        "Los avisos deben partir de información económica vigente.",
+        "Evita duplicar comunicaciones innecesarias."
+      ],
+      "steps": [
+        "Filtra los pagos pendientes.",
+        "Revisa destinatario y contexto antes de enviar.",
+        "Registra el aviso y consulta su estado."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de avisos de cobro, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los avisos deben partir de información económica vigente."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en avisos de cobro?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/comms-material.js",
+          "sha256": "709213915b09334f15bed61c5a4323430b1e2635bc2d75c7a8cef23e7a96784a",
+          "line": 67
+        },
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "reminders"
+    },
+    {
+      "guide_id": "communications",
+      "title": "Comunicaciones y avisos",
+      "meaning": "Publica información oficial del club para los destinatarios adecuados.",
+      "prerequisites": [
+        "Diferencia comunicaciones oficiales de publicaciones sociales.",
+        "Utiliza los canales internos para información operativa del club."
+      ],
+      "steps": [
+        "Crea la comunicación y define el contenido.",
+        "Selecciona audiencia o contexto cuando corresponda.",
+        "Publica y comprueba la notificación resultante."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de comunicaciones y avisos, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Diferencia comunicaciones oficiales de publicaciones sociales."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en comunicaciones y avisos?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/comms-material.js",
+          "sha256": "709213915b09334f15bed61c5a4323430b1e2635bc2d75c7a8cef23e7a96784a",
+          "line": 67
+        },
+        {
+          "path": "web/js/modules/profile-conversations.js",
+          "sha256": "65d6fee641495c8fb7bbd44c0094a4efd1af7f6c5367929031ba2b62aa6b6183",
+          "line": 8
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "communications"
+    },
+    {
+      "guide_id": "events",
+      "title": "Eventos",
+      "meaning": "Crea y gestiona eventos, actividades, competiciones y comunicaciones asociadas.",
+      "prerequisites": [
+        "Los eventos son contenido del club; no sustituyen a las sesiones de entrenamiento.",
+        "Los permisos de gestión varían según rol."
+      ],
+      "steps": [
+        "Crea el evento con fecha y descripción.",
+        "Configura los datos de participación disponibles.",
+        "Publica y revisa su visibilidad en el portal."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de eventos, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los eventos son contenido del club; no sustituyen a las sesiones de entrenamiento."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en eventos?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/events.js",
+          "sha256": "efdc31e020203e8ffebe217ce51980f44880d9950be35f202f72231e803f407d",
+          "line": 146
+        },
+        {
+          "path": "web/js/modules/kombax-events.js",
+          "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61",
+          "line": 803
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "events"
+    },
+    {
+      "guide_id": "community",
+      "title": "Comunidad del Club",
+      "meaning": "Capa interna del club para publicaciones, imágenes/vídeos y comunicación comunitaria.",
+      "prerequisites": [
+        "Es distinta de KOMBAX Social: esta comunidad está vinculada al club.",
+        "Publicar requiere aceptación vigente de las normas.",
+        "Se aplican límites de contenido y ciclo de vida configurados."
+      ],
+      "steps": [
+        "Acepta las Normas de Comunidad del Club si vas a publicar.",
+        "Crea una publicación con el contenido permitido.",
+        "Consulta el feed interno y las publicaciones vigentes."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de comunidad del club, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Es distinta de KOMBAX Social: esta comunidad está vinculada al club."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en comunidad del club?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/community.js",
+          "sha256": "e6cf36da06bdd47d7b0e84ec310a49dd3847a6c521238cdbe1ba67a474c3a108",
+          "line": 106
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "community"
+    },
+    {
+      "guide_id": "social",
+      "title": "KOMBAX Social",
+      "meaning": "Red social temática de combate: publicar, Me gusta público, interés privado, comentarios, guardados y perfiles públicos.",
+      "prerequisites": [
+        "KOMBAX Social está dedicado a artes marciales y deportes de contacto; el contenido claramente fuera de temática puede ser retirado por moderación.",
+        "Miembro de club no se convierte automáticamente en Competidor.",
+        "El acceso Social de miembros requiere edad mínima verificada y activación voluntaria.",
+        "Los comentarios pueden estar abiertos, solo verificados o cerrados según la publicación.",
+        "Nombre y avatar del autor son navegables hacia su perfil público."
+      ],
+      "steps": [
+        "Activa una identidad Social elegible y selecciona con quién actúas.",
+        "Publica únicamente contenido relacionado con artes marciales y deportes de contacto; añade foto/vídeo o contenido del álbum si quieres.",
+        "Usa el corazón para Me gusta público; Me interesa/No me interesa es una preferencia privada para personalizar tu feed. Comenta, responde, guarda y abre perfiles desde nombre/avatar."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de kombax social, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. KOMBAX Social está dedicado a artes marciales y deportes de contacto; el contenido claramente fuera de temática puede ser retirado por moderación."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en kombax social?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664",
+          "line": 345
+        },
+        {
+          "path": "web/js/modules/social-network.js",
+          "sha256": "1771c530aec06358037f57fcc442b988b33638042ab07e5acf7948dbc79117aa",
+          "line": 17
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "social"
+    },
+    {
+      "guide_id": "showcase",
+      "title": "Showcase",
+      "meaning": "Marketplace y escaparate profesional: productos de vendedores autorizados, servicios de contacto, compras, pedidos y seguimiento.",
+      "prerequisites": [
+        "Los productos comerciales pueden usar checkout Stripe y pedidos; el vendedor identificado es quien vende, prepara, entrega y atiende la posventa. KOMBAX proporciona la plataforma tecnológica.",
+        "Los comentarios y corazones pertenecen a Social, no a Showcase."
+      ],
+      "steps": [
+        "Explora fichas publicadas o abre el espacio de tu Club/Marca autorizado.",
+        "Crea una ficha con imagen, descripción y CTA cuando puedas gestionarlo.",
+        "Publica, comparte o guarda los elementos de interés."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de showcase, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los productos comerciales pueden usar checkout Stripe y pedidos; el vendedor identificado es quien vende, prepara, entrega y atiende la posventa. KOMBAX proporciona la plataforma tecnológica."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en showcase?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+          "line": 83
+        },
+        {
+          "path": "web/js/modules/showcase-compliance.js",
+          "sha256": "7917a3463389951b97f3ce4561443ca7b01949bcd3e46094df4afbbdbfc5c613",
+          "line": 4
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "showcase"
+    },
+    {
+      "guide_id": "material",
+      "title": "Material",
+      "meaning": "Gestiona el catálogo/material interno y las solicitudes relacionadas.",
+      "prerequisites": [
+        "La gestión de material del club es independiente del Showcase público."
+      ],
+      "steps": [
+        "Consulta los materiales disponibles.",
+        "Gestiona artículos o solicitudes según tu rol.",
+        "Revisa el estado de cada solicitud."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de material, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La gestión de material del club es independiente del Showcase público."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en material?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/comms-material.js",
+          "sha256": "709213915b09334f15bed61c5a4323430b1e2635bc2d75c7a8cef23e7a96784a",
+          "line": 67
+        },
+        {
+          "path": "web/js/modules/showcase.js",
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+          "line": 83
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "material"
+    },
+    {
+      "guide_id": "documents",
+      "title": "Archivo documental",
+      "meaning": "Guarda y consulta documentos internos autorizados del club.",
+      "prerequisites": [
+        "El acceso documental está restringido a roles administrativos autorizados."
+      ],
+      "steps": [
+        "Abre Archivo documental.",
+        "Sube o localiza el archivo correspondiente.",
+        "Comprueba que solo tenga acceso quien realmente lo necesita."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de archivo documental, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso documental está restringido a roles administrativos autorizados."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en archivo documental?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/documents.js",
+          "sha256": "40e0337d728fce5550245f733bcc253d9c08e64212b5309cb611d7a261daba02",
+          "line": 36
+        },
+        {
+          "path": "web/js/modules/professional-documents.js",
+          "sha256": "e9aa86bb92ae2c2f8dcf0d8e25a7be6a400106bd0e95068bcac36deba22daab4",
+          "line": 6
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "documents"
+    },
+    {
+      "guide_id": "archive",
+      "title": "Archivo y papelera",
+      "meaning": "Consulta elementos antiguos, archivados o candidatos a limpieza.",
+      "prerequisites": [
+        "Los registros económicos/legales no deben borrarse si existe obligación de conservación."
+      ],
+      "steps": [
+        "Entra en Archivo y papelera.",
+        "Filtra por tipo y antigüedad.",
+        "Archiva, restaura o limpia solo cuando la acción sea segura."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de archivo y papelera, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los registros económicos/legales no deben borrarse si existe obligación de conservación."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en archivo y papelera?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/lifecycle.js",
+          "sha256": "1787e54f34cd77c0954b84bbf2dbf34d5879d5ca6f518e6267cecaf1385615ff",
+          "line": 43
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "archive"
+    },
+    {
+      "guide_id": "notifications",
+      "title": "Centro de notificaciones",
+      "meaning": "Gestiona avisos informativos y acciones pendientes sin perder tareas importantes.",
+      "prerequisites": [
+        "“Marcar todo como leído” no debe ocultar notificaciones que requieren una acción real.",
+        "Las notificaciones push dependen también del permiso del dispositivo."
+      ],
+      "steps": [
+        "Abre Notificaciones y revisa los grupos de avisos.",
+        "Marca como leídos los informativos que ya hayas revisado.",
+        "Abre individualmente los avisos que requieren acción."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de centro de notificaciones, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. “Marcar todo como leído” no debe ocultar notificaciones que requieren una acción real."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en centro de notificaciones?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "notifications"
+    },
+    {
+      "guide_id": "settings",
+      "title": "Configuración, branding y temas",
+      "meaning": "Datos del club, logo, portada y cuatro temas premium con acentos de neón sutil.",
+      "prerequisites": [
+        "Los cuatro temas son Combat Dark Neon, Electric Blue Pro, Gold Luxe y Dojo Heritage Glow.",
+        "El neón se usa como acento, no como fondo saturado.",
+        "El perfil público del club recibe también su theme_id."
+      ],
+      "steps": [
+        "Abre Configuración y revisa los datos del club.",
+        "Selecciona el tema premium y comprueba la vista previa.",
+        "Publica la personalización para aplicarla al portal y perfil público."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de configuración, branding y temas, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Los cuatro temas son Combat Dark Neon, Electric Blue Pro, Gold Luxe y Dojo Heritage Glow."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en configuración, branding y temas?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/admin.js",
+          "sha256": "2737de285874cd379b0cf243399c201b414496be254fa299ab6d8c1c950ff53b",
+          "line": 26
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "settings"
+    },
+    {
+      "guide_id": "install",
+      "title": "Instalación, PWA y cartel de descarga",
+      "meaning": "Instala KOMBAX y utiliza el cartel genérico del club con QR y código de invitación.",
+      "prerequisites": [
+        "El cartel es genérico para cualquier club y no contiene nombres fijos de un tenant.",
+        "El QR debe resolver el club; el código corto valida el canal de alta."
+      ],
+      "steps": [
+        "Abre Instalar app.",
+        "Instala la PWA desde el navegador compatible o utiliza el canal Android del club.",
+        "Gestor/Coordinación/Secretaría pueden abrir el cartel genérico y completar QR/código cuando proceda."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de instalación, pwa y cartel de descarga, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El cartel es genérico para cualquier club y no contiene nombres fijos de un tenant."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en instalación, pwa y cartel de descarga?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/pwa-install.js",
+          "sha256": "229278656b76dbde7ce83f4ac6455fbc4f8fb24aba8446a7f7ace180c71d93ad",
+          "line": 8
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "install"
+    },
+    {
+      "guide_id": "privacy",
+      "title": "Privacidad, condiciones y eliminación",
+      "meaning": "Consulta textos legales, consentimientos y solicita eliminación de cuenta.",
+      "prerequisites": [
+        "Autorización de imagen y normas de comunidad son consentimientos diferenciados.",
+        "Eliminar cuenta no equivale a borrar trazabilidad económica/legal que deba conservarse."
+      ],
+      "steps": [
+        "Baja hasta Condiciones y privacidad en esta misma pantalla.",
+        "Lee la versión vigente antes de aceptar o retirar un consentimiento.",
+        "Usa el centro de eliminación si necesitas iniciar el cierre de tu cuenta."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de privacidad, condiciones y eliminación, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Autorización de imagen y normas de comunidad son consentimientos diferenciados."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en privacidad, condiciones y eliminación?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/support-privacy.js",
+          "sha256": "db69a91b6670c2a7f67a714b02a8f9ebf5022ab319a84caa22caa42a743d3579",
+          "line": 21
+        },
+        {
+          "path": "web/js/modules/account-security.js",
+          "sha256": "de3a7bbe974c9cfd7d50d23c1c223f1abe0859f3754fb88acb426fc353706c82",
+          "line": 4
+        },
+        {
+          "path": "web/js/modules/help-legal.js",
+          "sha256": "ae620359d7c3727bce8d29a4fdea5b494510383dc711e177d6987272dadaabb6",
+          "line": 90
+        },
+        {
+          "path": "web/js/modules/moderation-notices.js",
+          "sha256": "3b192d15a87f7246c8fdf4e40101feb14d1fb22006500a95f6adb4e8732340c8",
+          "line": 5
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "privacy"
+    },
+    {
+      "guide_id": "member-start",
+      "title": "Mi inicio",
+      "meaning": "Tu resumen personal: próximas clases, avisos y accesos principales.",
+      "prerequisites": [
+        "Solo ves información relacionada con tu cuenta y tu club.",
+        "Las funciones administrativas del club no forman parte del perfil Miembro."
+      ],
+      "steps": [
+        "Entra en Inicio al abrir KOMBAX.",
+        "Revisa tus próximas clases, avisos y situación general.",
+        "Usa los accesos directos para ir a la función que necesites."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de mi inicio, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Solo ves información relacionada con tu cuenta y tu club."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en mi inicio?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-start"
+    },
+    {
+      "guide_id": "member-schedule",
+      "title": "Horarios, sesiones y check-in",
+      "meaning": "Consulta tus horarios y próximas sesiones; confirma asistencia cuando esté habilitado.",
+      "prerequisites": [
+        "Solo aparecen grupos y sesiones vinculados a tu ficha.",
+        "Una reserva o check-in no modifica el horario creado por el club."
+      ],
+      "steps": [
+        "Abre Horarios para consultar tus grupos y clases.",
+        "Revisa la próxima sesión y, si está disponible, confirma o cancela tu asistencia.",
+        "El día de la clase utiliza Check-in cuando el club lo tenga habilitado."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de horarios, sesiones y check-in, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Solo aparecen grupos y sesiones vinculados a tu ficha."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en horarios, sesiones y check-in?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-schedule"
+    },
+    {
+      "guide_id": "member-finance",
+      "title": "Mis cuotas, pagos y recibos",
+      "meaning": "Mis cuotas muestra la información económica que corresponde a tu ficha o a los hijos que tienes vinculados. Un cargo pendiente es una cantidad por pagar; no confirma que se haya hecho un cobro.",
+      "prerequisites": [
+        "Solo puedes consultar información económica asociada a tu propia ficha.",
+        "Un recibo aparece cuando existe un cobro real registrado por el club."
+      ],
+      "steps": [
+        "Entra en Cuotas.",
+        "Comprueba el periodo y el estado de cada mensualidad.",
+        "Abre el recibo o justificante cuando exista un cobro registrado."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de mis cuotas, pagos y recibos, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Solo puedes consultar información económica asociada a tu propia ficha."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en mis cuotas, pagos y recibos?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-finance"
+    },
+    {
+      "guide_id": "member-comms",
+      "title": "Comunicaciones del club",
+      "meaning": "Lee avisos e información oficial que el club dirige a sus miembros.",
+      "prerequisites": [
+        "Las comunicaciones oficiales son distintas de las publicaciones sociales.",
+        "La visibilidad depende de la audiencia definida por el club."
+      ],
+      "steps": [
+        "Abre Comunicaciones.",
+        "Revisa los avisos nuevos y su fecha.",
+        "Consulta el contenido completo cuando necesites más detalle."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de comunicaciones del club, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Las comunicaciones oficiales son distintas de las publicaciones sociales."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en comunicaciones del club?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/comms-material.js",
+          "sha256": "709213915b09334f15bed61c5a4323430b1e2635bc2d75c7a8cef23e7a96784a",
+          "line": 67
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-comms"
+    },
+    {
+      "guide_id": "member-events",
+      "title": "Eventos y actividades",
+      "meaning": "Consulta eventos, actividades y competiciones publicadas para tu entorno.",
+      "prerequisites": [
+        "Un evento no sustituye al horario habitual de clases.",
+        "Las acciones disponibles dependen de cómo el club haya configurado el evento."
+      ],
+      "steps": [
+        "Abre Eventos.",
+        "Consulta fecha, descripción y detalles disponibles.",
+        "Sigue las indicaciones del club cuando el evento requiera una acción o participación."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de eventos y actividades, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Un evento no sustituye al horario habitual de clases."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en eventos y actividades?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/events.js",
+          "sha256": "efdc31e020203e8ffebe217ce51980f44880d9950be35f202f72231e803f407d",
+          "line": 146
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-events"
+    },
+    {
+      "guide_id": "member-material",
+      "title": "Material y solicitudes",
+      "meaning": "Consulta material disponible y gestiona tus solicitudes al club.",
+      "prerequisites": [
+        "Material es un servicio interno del club.",
+        "KOMBAX Showcase es un escaparate público diferente y no gestiona pedidos del club."
+      ],
+      "steps": [
+        "Abre Material.",
+        "Consulta los artículos disponibles y sus variantes cuando existan.",
+        "Envía una solicitud y revisa posteriormente su estado."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de material y solicitudes, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Material es un servicio interno del club."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en material y solicitudes?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/comms-material.js",
+          "sha256": "709213915b09334f15bed61c5a4323430b1e2635bc2d75c7a8cef23e7a96784a",
+          "line": 67
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-material"
+    },
+    {
+      "guide_id": "member-community",
+      "title": "Comunidad del Club",
+      "meaning": "Participa en el espacio interno de publicaciones de tu propio club.",
+      "prerequisites": [
+        "La Comunidad del Club es interna y diferente de KOMBAX Social.",
+        "Publicar requiere mantener vigentes las normas y límites de contenido aplicables."
+      ],
+      "steps": [
+        "Lee y acepta las Normas de Comunidad del Club antes de publicar.",
+        "Consulta el feed interno y crea contenido cuando tu cuenta lo permita.",
+        "Revisa tus publicaciones y la actividad disponible."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de comunidad del club, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La Comunidad del Club es interna y diferente de KOMBAX Social."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en comunidad del club?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/community.js",
+          "sha256": "e6cf36da06bdd47d7b0e84ec310a49dd3847a6c521238cdbe1ba67a474c3a108",
+          "line": 106
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-community"
+    },
+    {
+      "guide_id": "member-social",
+      "title": "KOMBAX Social",
+      "meaning": "Activa, si eres elegible, tu identidad social pública y participa en la comunidad global.",
+      "prerequisites": [
+        "El acceso de miembros requiere la edad mínima verificada por el club y activación voluntaria.",
+        "Ser Miembro no te convierte automáticamente en Competidor verificado.",
+        "Tu expediente privado del club permanece separado de la identidad pública Social."
+      ],
+      "steps": [
+        "Desde Mi perfil comprueba si puedes activar KOMBAX Social.",
+        "Acepta sus normas específicas y crea tu identidad pública voluntariamente.",
+        "En Social puedes publicar, reaccionar, comentar, guardar y abrir perfiles públicos."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de kombax social, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso de miembros requiere la edad mínima verificada por el club y activación voluntaria."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en kombax social?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664",
+          "line": 345
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-social"
+    },
+    {
+      "guide_id": "member-showcase",
+      "title": "KOMBAX Showcase",
+      "meaning": "Explora productos, servicios y perfiles profesionales publicados en KOMBAX Showcase.",
+      "prerequisites": [
+        "Algunos productos permiten compra y pedido mediante Stripe. Las compras están reservadas a mayores de 18 años; los servicios profesionales siguen siendo de contacto.",
+        "Las funciones de gestión de Showcase pertenecen a perfiles autorizados, no al Miembro."
+      ],
+      "steps": [
+        "Abre KOMBAX Showcase.",
+        "Explora fichas públicas de clubes, marcas y elementos destacados.",
+        "Guarda o comparte contenido cuando la ficha ofrezca esa acción."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de kombax showcase, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Algunos productos permiten compra y pedido mediante Stripe. Las compras están reservadas a mayores de 18 años; los servicios profesionales siguen siendo de contacto."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en kombax showcase?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+          "line": 83
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-showcase"
+    },
+    {
+      "guide_id": "member-notifications",
+      "title": "Mis notificaciones",
+      "meaning": "Revisa avisos informativos y tareas que necesitan tu atención.",
+      "prerequisites": [
+        "“Marcar todo como leído” no elimina las acciones pendientes importantes.",
+        "Las notificaciones push dependen también de los permisos del dispositivo."
+      ],
+      "steps": [
+        "Abre Notificaciones.",
+        "Marca como leídos los avisos informativos que ya hayas revisado.",
+        "Abre individualmente cualquier notificación que requiera una acción."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de mis notificaciones, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. “Marcar todo como leído” no elimina las acciones pendientes importantes."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en mis notificaciones?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-notifications"
+    },
+    {
+      "guide_id": "member-requests",
+      "title": "Mis solicitudes deportivas",
+      "meaning": "Consulta o envía solicitudes relacionadas con tu inscripción deportiva.",
+      "prerequisites": [
+        "La solicitud queda pendiente hasta que el club la revise.",
+        "Enviar una solicitud no modifica por sí solo tu inscripción activa."
+      ],
+      "steps": [
+        "Abre Solicitudes.",
+        "Revisa tus relaciones deportivas activas y solicitudes anteriores.",
+        "Envía una nueva solicitud de disciplina/grupo cuando necesites un cambio o alta."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de mis solicitudes deportivas, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La solicitud queda pendiente hasta que el club la revise."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en mis solicitudes deportivas?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+          "line": 86
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-requests"
+    },
+    {
+      "guide_id": "member-profile",
+      "title": "Mi perfil KOMBAX",
+      "meaning": "Gestiona tu única identidad pública: banner, avatar, presentación, información deportiva, álbum y actividad Social.",
+      "prerequisites": [
+        "Mi perfil y tu perfil KOMBAX Social son la misma identidad pública; no existe un segundo perfil deportivo visible.",
+        "La foto privada de acceso, documentos, cuotas, asistencia y expediente del club permanecen en una capa privada separada.",
+        "Ser Miembro no equivale a Competidor verificado ni concede una insignia KOMBAX."
+      ],
+      "steps": [
+        "Abre Mi perfil.",
+        "Si KOMBAX Social aún no está activo, completa la activación voluntaria cuando seas elegible.",
+        "Edita desde la misma ficha tu banner, avatar, presentación e información deportiva pública.",
+        "Gestiona tu álbum y comprueba la parte privada del club separada debajo de tu ficha pública."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de mi perfil kombax, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. Mi perfil y tu perfil KOMBAX Social son la misma identidad pública; no existe un segundo perfil deportivo visible."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en mi perfil kombax?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/public-profile.js",
+          "sha256": "fd5b8b736fbd9d51f66b9fdaf283e02ccba96182194cce0176afd8d852cd7f94",
+          "line": 221
+        },
+        {
+          "path": "web/js/modules/sports-profile.js",
+          "sha256": "c69c2962ef3fb33eb3ba931cd4134f0efba08044a4791d26aa4161d0b8efef09",
+          "line": 21
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-profile"
+    },
+    {
+      "guide_id": "member-install",
+      "title": "Instalar KOMBAX",
+      "meaning": "Instala la aplicación para acceder más rápido desde tu móvil o dispositivo.",
+      "prerequisites": [
+        "La instalación no crea una cuenta nueva ni cambia tus permisos.",
+        "El acceso sigue dependiendo de tu cuenta y del club seleccionado."
+      ],
+      "steps": [
+        "Abre Instalar app.",
+        "Sigue la opción disponible para tu dispositivo o navegador.",
+        "Una vez instalada, entra con la misma cuenta de tu club."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de instalar kombax, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. La instalación no crea una cuenta nueva ni cambia tus permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en instalar kombax?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/pwa-install.js",
+          "sha256": "229278656b76dbde7ce83f4ac6455fbc4f8fb24aba8446a7f7ace180c71d93ad",
+          "line": 8
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "member-install"
+    },
+    {
+      "guide_id": "account-create",
+      "title": "Crear una cuenta gratuita",
+      "meaning": "La cuenta gratuita es tu acceso a KOMBAX con un correo y contraseña. La cuenta y el perfil público son cosas diferentes: después puedes crear una identidad o vincularte a un club.",
+      "prerequisites": [],
+      "steps": [
+        "Pulsa Acceder a mi cuenta y elige Crear cuenta gratuita.",
+        "Completa los datos solicitados y las aceptaciones obligatorias.",
+        "Confirma tu correo cuando se solicite y accede a tu cuenta.",
+        "Después puedes crear una identidad pública o vincularte a un club."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de crear una cuenta gratuita, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en crear una cuenta gratuita?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26",
+          "line": 113
+        },
+        {
+          "path": "web/js/modules/account-birth-date.js",
+          "sha256": "a2950bab4ac8569565725fe745b7414c0fffd603de194e7c7c0046176c19aa0c",
+          "line": 8
+        },
+        {
+          "path": "web/js/modules/platform-legal.js",
+          "sha256": "ddb3ae8b2418d75aa8a986396c5ff4c6ac6ea3d806b3818674cdcc983936fa53",
+          "line": 5
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "account-create"
+    },
+    {
+      "guide_id": "account-login",
+      "title": "Entrar y recuperar la contraseña",
+      "meaning": "Entrar y recuperar la contraseña",
+      "prerequisites": [],
+      "steps": [
+        "Abre Acceder a mi cuenta.",
+        "Introduce el correo y tu contraseña.",
+        "Si no la recuerdas, pulsa He olvidado mi contraseña y sigue el correo de recuperación.",
+        "No compartas tu contraseña con el asistente."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de entrar y recuperar la contraseña, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en entrar y recuperar la contraseña?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26",
+          "line": 113
+        },
+        {
+          "path": "web/js/modules/auth-recovery.js",
+          "sha256": "a2f64ab619cbd1293089e41e38f7bea44d78a57adf83b7bd89c7507405c79c98",
+          "line": 41
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "account-login"
+    },
+    {
+      "guide_id": "identity-choose",
+      "title": "Seleccionar mi identidad",
+      "meaning": "Una cuenta puede administrar identidades personales y organizaciones separadas. Club, Marca y Federación conservan su perfil público y espacio propios.",
+      "prerequisites": [],
+      "steps": [
+        "Abre Seleccionar identidad o Gestionar mi cuenta e identidades.",
+        "Elige el club, la marca, la federación o tu identidad personal.",
+        "Comprueba el nombre del espacio antes de realizar una acción.",
+        "Cada identidad conserva sus permisos, equipo y servicios."
+      ],
+      "checks": [
+        "Comprueba la identidad activa antes de publicar o contratar.",
+        "Archivar una identidad administrativamente no cancela una suscripción ni retira automáticamente su contenido público.",
+        "Una capacidad personal adicional no debe generar otra persona duplicada."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de seleccionar mi identidad, ¿qué reviso?",
+          "answer": "Comprueba la identidad activa antes de publicar o contratar. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en seleccionar mi identidad?",
+          "answer": "Una capacidad personal adicional no debe generar otra persona duplicada."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26",
+          "line": 113
+        },
+        {
+          "path": "web/js/modules/managed-profile-hub.js",
+          "sha256": "657df483a35408f789533a3698d0d26d515a8d00ac35f3491f9c6eba258f4e1a",
+          "line": 79
+        },
+        {
+          "path": "web/js/modules/kombax-home.js",
+          "sha256": "b75fe48c712ea03fe337eb979a8859cf15ce9d73a7b7f30ebe5d1ce2a05f9078",
+          "line": 40
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "identity-choose"
+    },
+    {
+      "guide_id": "service-activate",
+      "title": "Consultar y activar servicios",
+      "meaning": "El perfil público y un servicio de pago son cosas distintas. Un perfil gratuito no incluye automáticamente venta, ticketing o todas las funciones de gestión.",
+      "prerequisites": [],
+      "steps": [
+        "Entra en el espacio de la identidad que utilizará el servicio.",
+        "Para Marca o Federación consulta Plan y servicios; para una activación puntual abre Events o Mi Showcase.",
+        "Completa la verificación que se solicite para ese servicio.",
+        "Revisa y confirma las condiciones en su formulario. La contratación pública puede seguir bloqueada durante el piloto."
+      ],
+      "checks": [
+        "Consulta el catálogo vigente y la identidad a la que se aplicará.",
+        "La contratación pública nueva de Marca y Federación sigue bloqueada durante el piloto.",
+        "Una prueba de 30 días necesita los requisitos y la confirmación que indique el flujo; no inventes precios ni fechas de renovación."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de consultar y activar servicios, ¿qué reviso?",
+          "answer": "Consulta el catálogo vigente y la identidad a la que se aplicará. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en consultar y activar servicios?",
+          "answer": "Una prueba de 30 días necesita los requisitos y la confirmación que indique el flujo; no inventes precios ni fechas de renovación."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/plan-services.js",
+          "sha256": "9142bb0da1f93408e0bd523edca4dee07e3ed962a572c983bc315ff7e57d6a5b",
+          "line": 90
+        },
+        {
+          "path": "web/js/modules/organization-billing.js",
+          "sha256": "84d4d14d9d2fc0f225bd2e8b62bcd6a1e1d530723e25b9c408f984acdd836b7c",
+          "line": 6
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "service-activate"
+    },
+    {
+      "guide_id": "profile-public",
+      "title": "Editar foto, banner y perfil público",
+      "meaning": "Editar foto, banner y perfil público",
+      "prerequisites": [],
+      "steps": [
+        "Entra en la identidad correcta y abre Perfil público.",
+        "Pulsa Editar y selecciona la foto de perfil o el banner, según corresponda.",
+        "Guarda y revisa la vista pública.",
+        "Añadir una foto al álbum es una acción distinta de cambiar la foto principal."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de editar foto, banner y perfil público, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en editar foto, banner y perfil público?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/public-profile.js",
+          "sha256": "fd5b8b736fbd9d51f66b9fdaf283e02ccba96182194cce0176afd8d852cd7f94",
+          "line": 221
+        },
+        {
+          "path": "web/js/modules/profile-administration.js",
+          "sha256": "645305c6253fa77dd5d5287ff7f7ccee89a1657860a9ba2d77ba5e6c620079e4",
+          "line": 7
+        },
+        {
+          "path": "web/js/modules/competitor-hub.js",
+          "sha256": "c472b4edb67f1df9fb6fab5702a6b6b7fc73b3dbcbda2aa01fa3b213cd09fd74",
+          "line": 2
+        },
+        {
+          "path": "web/js/modules/professional-hub.js",
+          "sha256": "0a1cf526baaf73ff4ce770e7627f788e9ab63d747edfe195631623c4ac76b89d",
+          "line": 2
+        },
+        {
+          "path": "web/js/modules/spectator-hub.js",
+          "sha256": "d1280a7c9df9d470eab52d2045cf8f9ea69bbf6c5bd977140bab9a25ccc47d0e",
+          "line": 2
+        },
+        {
+          "path": "web/js/modules/fighter-discovery.js",
+          "sha256": "8b44f01c4677a7c4803e0fef6658d0f4daebc4cb01dec4ca2529b31505285f6d",
+          "line": 24
+        },
+        {
+          "path": "web/js/modules/kombax-discovery.js",
+          "sha256": "279102e04c1581eb058058338a407f5d82dd4d696f733f27523a0746dadb1e39",
+          "line": 84
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile-public"
+    },
+    {
+      "guide_id": "profile-showcase",
+      "title": "Catálogo y activación como vendedor",
+      "meaning": "Catálogo y activación como vendedor",
+      "prerequisites": [],
+      "steps": [
+        "Abre Mi Showcase desde esta identidad.",
+        "Revisa la solicitud de vendedor y los requisitos comerciales.",
+        "Prepara la ficha y su documentación de seguridad cuando corresponda.",
+        "Publicar, vender y cobrar dependen de la verificación y del servicio activo."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de catálogo y activación como vendedor, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en catálogo y activación como vendedor?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+          "line": 83
+        },
+        {
+          "path": "web/js/modules/profile-operations.js",
+          "sha256": "5466009d52565c80096af2b34af1e26872609c087c052b3249ed701a713a948e",
+          "line": 11
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile-showcase"
+    },
+    {
+      "guide_id": "profile-events",
+      "title": "Eventos y ticketing",
+      "meaning": "Eventos y ticketing",
+      "prerequisites": [],
+      "steps": [
+        "Abre la gestión de eventos de tu identidad.",
+        "Prepara el evento, fechas y aforo.",
+        "Consulta la activación puntual y los requisitos del ticketing.",
+        "Completa los requisitos comerciales antes de publicar o cobrar entradas."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de eventos y ticketing, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en eventos y ticketing?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-events.js",
+          "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61",
+          "line": 803
+        },
+        {
+          "path": "web/js/modules/professional-operations.js",
+          "sha256": "0bffca81daffd68120785e8b5d83c6b490c1dda29971cdaecd47deb8f4ee8042",
+          "line": 34
+        },
+        {
+          "path": "web/js/modules/competition-preparation.js",
+          "sha256": "dc2513ff481ac6c5d85767aef1ffd7cd0782f49c90dca8a33951d83e9c1c5631",
+          "line": 73
+        },
+        {
+          "path": "web/js/modules/kombax-event-visuals.js",
+          "sha256": "f5017eed7e952f8778a7501623ce2cd71e26489c83ac66c98fd0cb716b858243",
+          "line": 17
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile-events"
+    },
+    {
+      "guide_id": "profile-brand",
+      "title": "Campañas y colaboraciones de marca",
+      "meaning": "Campañas y colaboraciones de marca",
+      "prerequisites": [],
+      "steps": [
+        "En Mi Marca abre Negocio y catálogo.",
+        "Elige Campañas o Colaboraciones.",
+        "Revisa las capacidades del plan y prepara la propuesta.",
+        "La ayuda no publica campañas ni confirma acuerdos."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de campañas y colaboraciones de marca, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en campañas y colaboraciones de marca?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/brand-hub.js",
+          "sha256": "e3faeb87110dcfb541b5eb73c455750412b087a1de393da3136262d6380304f9",
+          "line": 2
+        },
+        {
+          "path": "web/js/modules/brand-business.js",
+          "sha256": "d318405912e2fa527253b3c3e8aefcbe2d6d80e92dc492835f962c2ffcb9a339",
+          "line": 55
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile-brand"
+    },
+    {
+      "guide_id": "profile-federation",
+      "title": "Gestión de federación y licencias",
+      "meaning": "Gestión de federación y licencias",
+      "prerequisites": [],
+      "steps": [
+        "Entra en Mi Federación.",
+        "Abre Gestión federativa y selecciona Federados, Licencias o Clubes relacionados.",
+        "Revisa las solicitudes y documentación antes de validarlas.",
+        "Las decisiones reservadas al titular conservan su autorización."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de gestión de federación y licencias, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en gestión de federación y licencias?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/federation-hub.js",
+          "sha256": "b7d955d9aeaa0c194e5070d02d9adc145fd13ce28cebb5acae5d070864972ae7",
+          "line": 2
+        },
+        {
+          "path": "web/js/modules/federation-licenses.js",
+          "sha256": "19b62b1a25715cefc2816fc81ed0607d1c9486e760634e6daa23d963baade21f",
+          "line": 34
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile-federation"
+    },
+    {
+      "guide_id": "profile-documents",
+      "title": "Verificación y acreditaciones profesionales",
+      "meaning": "Verificación y acreditaciones profesionales",
+      "prerequisites": [],
+      "steps": [
+        "Abre el perfil público de la identidad correspondiente.",
+        "Completa los datos y aporta la documentación que solicite la verificación.",
+        "Para servicios específicos pueden exigirse acreditaciones adicionales.",
+        "Subir un documento no concede automáticamente una verificación."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de verificación y acreditaciones profesionales, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en verificación y acreditaciones profesionales?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/professional-documents.js",
+          "sha256": "e9aa86bb92ae2c2f8dcf0d8e25a7be6a400106bd0e95068bcac36deba22daab4",
+          "line": 6
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "profile-documents"
+    },
+    {
+      "guide_id": "charge-create",
+      "title": "Crear un cargo manual",
+      "meaning": "Un cargo registra un importe que corresponde pagar. Crearlo no mueve dinero; registrar un pago y ejecutar un cobro bancario son operaciones diferentes.",
+      "prerequisites": [],
+      "steps": [
+        "Abre Finanzas y pulsa + Nuevo cargo, si tu rol dispone de esa acción.",
+        "Escoge categoría y concepto; selecciona los alumnos, un grupo, una disciplina o todos los activos.",
+        "Indica importe, periodo y vencimiento; añade observaciones si hacen falta.",
+        "Revisa los destinatarios y el total antes de pulsar Crear cargos.",
+        "Comprueba el cargo en Cargos. Crear un cargo registra deuda; no ejecuta un cobro bancario."
+      ],
+      "checks": [
+        "Revisa alumno o familia destinatarios, concepto, importe y fecha antes de confirmar.",
+        "Si se pierde la conexión, comprueba primero si el cargo ya existe antes de repetirlo.",
+        "Conserva el histórico; no cambies un cargo pagado para corregir una tarifa futura.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de crear un cargo manual, ¿qué reviso?",
+          "answer": "Revisa alumno o familia destinatarios, concepto, importe y fecha antes de confirmar. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en crear un cargo manual?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        },
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "charge-create"
+    },
+    {
+      "guide_id": "payment-record",
+      "title": "Registrar un pago o cobro parcial",
+      "meaning": "Registrar un pago deja constancia del dinero recibido y de su relación con un cargo. No es lo mismo que crear el cargo ni implica por sí solo un cobro bancario.",
+      "prerequisites": [],
+      "steps": [
+        "En Finanzas, localiza el cargo pendiente del alumno y abre su detalle.",
+        "Utiliza la acción de cobro o registro de pago que tengas autorizada.",
+        "Indica importe, fecha y método. Para un pago parcial, registra solo lo recibido.",
+        "Confirma una sola vez y comprueba el saldo restante y el estado del pago.",
+        "Si el pago está pendiente de validación, aún no cuenta como cobrado. Revisa Pagos por validar."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de registrar un pago o cobro parcial, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en registrar un pago o cobro parcial?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        },
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "payment-record"
+    },
+    {
+      "guide_id": "tariff-change",
+      "title": "Crear o cambiar la tarifa de un alumno",
+      "meaning": "Cambiar una tarifa afecta a la configuración que corresponda; no debe confundirse con corregir cargos ya emitidos ni con devolver dinero.",
+      "prerequisites": [],
+      "steps": [
+        "En la vista que muestra Tarifas, pulsa Nueva tarifa o edita la tarifa disponible.",
+        "Revisa importe, periodicidad y matrícula antes de guardar.",
+        "Asigna la tarifa correspondiente desde la ficha del alumno cuando esa opción esté disponible.",
+        "El cambio de tarifa no modifica por sí solo los cargos ya emitidos.",
+        "Para un cargo erróneo, revisa si puede anularse sin pagos y crea el correcto; conserva los movimientos ya cobrados."
+      ],
+      "checks": [
+        "Identifica si quieres cambiar el precio futuro o un cargo concreto.",
+        "Revisa el estado del cargo y los permisos antes de proponer una corrección.",
+        "Si está pagado o conciliado, utiliza el procedimiento autorizado y conserva la trazabilidad.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de crear o cambiar la tarifa de un alumno, ¿qué reviso?",
+          "answer": "Identifica si quieres cambiar el precio futuro o un cargo concreto. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en crear o cambiar la tarifa de un alumno?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        },
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "tariff-change"
+    },
+    {
+      "guide_id": "payment-validate",
+      "title": "Validar pagos comunicados",
+      "meaning": "Validar pagos comunicados",
+      "prerequisites": [],
+      "steps": [
+        "Abre Finanzas y pulsa Pagos por validar.",
+        "Localiza al alumno y comprueba importe, cargo y justificante cuando exista.",
+        "Valida solo si el cobro está comprobado; si no corresponde, recházalo indicando el motivo.",
+        "Comprueba el nuevo estado y el saldo. No registres otra vez el mismo pago."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de validar pagos comunicados, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en validar pagos comunicados?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        },
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "payment-validate"
+    },
+    {
+      "guide_id": "finance-report",
+      "title": "Generar un informe financiero PDF",
+      "meaning": "Generar un informe financiero PDF",
+      "prerequisites": [],
+      "steps": [
+        "En Finanzas, abre Informes o pulsa Generar informe.",
+        "Escoge el tipo de informe y los filtros de periodo, alumno, grupo o disciplina que necesites.",
+        "Revisa los datos incluidos y genera el informe con tu permiso autorizado.",
+        "Abre el PDF generado y comprueba periodo, importes y datos del club antes de compartirlo."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de generar un informe financiero pdf, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en generar un informe financiero pdf?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        },
+        {
+          "path": "web/js/modules/finance.js",
+          "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+          "line": 99
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "finance-report"
+    },
+    {
+      "guide_id": "automation-prepare",
+      "title": "Preparar una automatización de cuotas",
+      "meaning": "Una regla de cuotas puede prepararse, pero no implica que las automatizaciones de cobro estén activas en el piloto.",
+      "prerequisites": [],
+      "steps": [
+        "En Finanzas, pulsa Nueva automatización.",
+        "Completa nombre, categoría, concepto, importe, periodicidad, fechas y destinatarios.",
+        "Guarda la regla en pausa durante el piloto; preparar la regla no cobra al alumno.",
+        "La generación automática exige comprobaciones y autorización del titular. Las automatizaciones de cobro siguen desactivadas.",
+        "Para operar ahora, utiliza Nuevo cargo manual y revisa los destinatarios antes de confirmar."
+      ],
+      "checks": [
+        "Mantén la regla en pausa durante el piloto.",
+        "Crear cargos manuales no habilita por sí mismo domiciliaciones ni reintentos automáticos.",
+        "No asegures que se cobrará en una fecha si no hay una activación confirmada.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de preparar una automatización de cuotas, ¿qué reviso?",
+          "answer": "Mantén la regla en pausa durante el piloto. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en preparar una automatización de cuotas?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+          "line": 60
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "automation-prepare"
+    },
+    {
+      "guide_id": "social-explore",
+      "title": "Explorar Social e interactuar",
+      "meaning": "KOMBAX Social es el espacio para descubrir perfiles y contenido de la comunidad. Explorar y publicar tienen requisitos distintos; crear una cuenta no concede automáticamente permiso para publicar.",
+      "prerequisites": [],
+      "steps": [
+        "Abre KOMBAX Social desde la navegación.",
+        "Explora publicaciones y perfiles públicos; inicia sesión para las interacciones que lo requieran.",
+        "Puedes usar las acciones visibles de comentar, dar me gusta o guardar según tu cuenta.",
+        "Para publicar necesitas una identidad con autorización. Un perfil espectador no obtiene permiso de publicar."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de explorar social e interactuar, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en explorar social e interactuar?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664",
+          "line": 345
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "social-explore"
+    },
+    {
+      "guide_id": "social-publish",
+      "title": "Publicar en KOMBAX Social",
+      "meaning": "Explorar Social y publicar tienen requisitos distintos. La identidad elegida se conserva; no se cambia a Club o Marca para esquivar un bloqueo de otra identidad.",
+      "prerequisites": [],
+      "steps": [
+        "Abre KOMBAX Social y comprueba la identidad desde la que vas a publicar.",
+        "Utiliza Crear publicación si esa identidad tiene publicación habilitada.",
+        "Completa el contenido y adjunta el material admitido; revisa la vista previa.",
+        "Publica y comprueba que aparece con el autor correcto.",
+        "Si está bloqueado, revisa la verificación o la vinculación al club. No cambies de identidad para eludir el bloqueo."
+      ],
+      "checks": [
+        "Comprueba qué perfil aparece como autor.",
+        "Un Espectador interactúa pero no obtiene publicación por crear la cuenta.",
+        "Un Miembro necesita una vinculación aprobada al club; el resto de perfiles debe cumplir su validación correspondiente."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de publicar en kombax social, ¿qué reviso?",
+          "answer": "Comprueba qué perfil aparece como autor. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en publicar en kombax social?",
+          "answer": "Un Miembro necesita una vinculación aprobada al club; el resto de perfiles debe cumplir su validación correspondiente."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664",
+          "line": 345
+        },
+        {
+          "path": "web/js/modules/social-post-management.js",
+          "sha256": "7dc1dbf3781bf63b7fe17ef1d509156d11a34b0c20a2d75ff154dc0b54b6a73b",
+          "line": 10
+        },
+        {
+          "path": "web/js/modules/instagram-integration.js",
+          "sha256": "7cd7c17e192489c709d8e0959bab6979ebd76ff89df2a45267ee2522eb5f76d5",
+          "line": 12
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "social-publish"
+    },
+    {
+      "guide_id": "social-media",
+      "title": "Editar foto, banner y álbum",
+      "meaning": "Foto de perfil, banner y álbum son destinos distintos. Una imagen subida al álbum no se convierte automáticamente en el avatar.",
+      "prerequisites": [],
+      "steps": [
+        "Abre el perfil público de la identidad que quieres modificar.",
+        "Usa el control específico de foto o logo para cambiar la imagen de perfil, y el de banner para la portada.",
+        "Para añadir fotografías al álbum utiliza la sección Álbum, que es independiente del logo.",
+        "Para retirar una fotografía propia, usa su acción de eliminar cuando esté disponible y confirma la selección.",
+        "Comprueba el resultado en ese mismo perfil; los archivos compartidos por otro contenido pueden conservarse mientras sigan en uso."
+      ],
+      "checks": [
+        "Selecciona específicamente la acción de foto de perfil o banner.",
+        "Revisa formato y tamaño indicados en el formulario.",
+        "Comprueba el perfil público después de guardar y que no hayas cambiado solo la imagen administrativa."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de editar foto, banner y álbum, ¿qué reviso?",
+          "answer": "Selecciona específicamente la acción de foto de perfil o banner. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en editar foto, banner y álbum?",
+          "answer": "Comprueba el perfil público después de guardar y que no hayas cambiado solo la imagen administrativa."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/public-profile.js",
+          "sha256": "fd5b8b736fbd9d51f66b9fdaf283e02ccba96182194cce0176afd8d852cd7f94",
+          "line": 221
+        },
+        {
+          "path": "web/js/modules/social-post-management.js",
+          "sha256": "7dc1dbf3781bf63b7fe17ef1d509156d11a34b0c20a2d75ff154dc0b54b6a73b",
+          "line": 10
+        },
+        {
+          "path": "web/js/modules/media-content-center.js",
+          "sha256": "ffaccf778e3bf74865f93a9008ba52a3c0d05a35797798845a480155bbc22e0f",
+          "line": 9
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "social-media"
+    },
+    {
+      "guide_id": "showcase-explore",
+      "title": "Explorar productos en Showcase",
+      "meaning": "KOMBAX Showcase es el catálogo donde puedes explorar productos y servicios de la comunidad. Explorar o comprar no te convierte en vendedor autorizado.",
+      "prerequisites": [],
+      "steps": [
+        "Abre KOMBAX Showcase; explorar está disponible para las cuentas gratuitas.",
+        "Utiliza los filtros y la vista de cuadrícula grande, compacta o lista cuando estén disponibles.",
+        "Abre un producto para revisar imágenes, descripción y vendedor.",
+        "Comprar, publicar un catálogo y vender son funciones distintas; revisar productos no te convierte en vendedor autorizado."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de explorar productos en showcase, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en explorar productos en showcase?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+          "line": 83
+        },
+        {
+          "path": "web/js/modules/showcase-cart.js",
+          "sha256": "815bb1fd66a629729f434d4512e4c3c2baa46fd6dd2b7a9e8173097938280e61",
+          "line": 19
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "showcase-explore"
+    },
+    {
+      "guide_id": "showcase-publish",
+      "title": "Publicar o retirar un producto",
+      "meaning": "Explorar y comprar en Showcase no convierte una cuenta en vendedor. Publicar, vender y cobrar tienen sus propios requisitos.",
+      "prerequisites": [],
+      "steps": [
+        "Entra en Mi Showcase de la identidad propietaria del catálogo.",
+        "Comprueba que la verificación y el servicio correspondiente están habilitados para esa operación.",
+        "Crea o edita el producto con sus imágenes, precio y disponibilidad; revisa antes de publicar.",
+        "Para retirarlo utiliza la acción disponible sobre ese producto. La eliminación depende de tus permisos y de sus operaciones asociadas.",
+        "Un perfil público gratuito no habilita por sí solo la venta ni el cobro."
+      ],
+      "checks": [
+        "Comprueba la identidad vendedora seleccionada.",
+        "Preparar una solicitud no sustituye su verificación ni la activación comercial.",
+        "Un permiso de publicación promocional no demuestra que Stripe esté habilitado para cobrar."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de publicar o retirar un producto, ¿qué reviso?",
+          "answer": "Comprueba la identidad vendedora seleccionada. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en publicar o retirar un producto?",
+          "answer": "Un permiso de publicación promocional no demuestra que Stripe esté habilitado para cobrar."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+          "line": 83
+        },
+        {
+          "path": "web/js/modules/showcase-compliance.js",
+          "sha256": "7917a3463389951b97f3ce4561443ca7b01949bcd3e46094df4afbbdbfc5c613",
+          "line": 4
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "showcase-publish"
+    },
+    {
+      "guide_id": "events-explore",
+      "title": "Descubrir eventos y consultar entradas",
+      "meaning": "KOMBAX Events es el espacio para descubrir eventos, consultar su información y acceder a las opciones disponibles de participación o entradas. Organizar y vender entradas requieren sus propias activaciones.",
+      "prerequisites": [],
+      "steps": [
+        "Abre KOMBAX Events y busca el evento o seminario.",
+        "Revisa organizador, lugar, fecha, condiciones y entradas disponibles.",
+        "Si hay ticketing activo, selecciona la entrada y sigue el proceso de compra mostrado.",
+        "Conserva la confirmación y consulta tus entradas desde el acceso disponible en tu cuenta."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de descubrir eventos y consultar entradas, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en descubrir eventos y consultar entradas?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-events.js",
+          "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61",
+          "line": 803
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "events-explore"
+    },
+    {
+      "guide_id": "events-create",
+      "title": "Preparar un evento y su ticketing",
+      "meaning": "Crear o preparar un evento, publicarlo, activar ticketing y cobrar entradas son pasos distintos.",
+      "prerequisites": [],
+      "steps": [
+        "Entra en Mis eventos de la identidad organizadora autorizada.",
+        "Prepara título, descripción, fechas, ubicación e imágenes y revisa la información del organizador.",
+        "La publicación del evento y el ticketing requieren sus capacidades o activaciones correspondientes.",
+        "Configura aforo, entradas y el logo del ticket cuando la función esté habilitada; revisa la vista previa.",
+        "Publicar un evento no activa automáticamente los cobros: comprueba el estado del vendedor u organizador y de Stripe."
+      ],
+      "checks": [
+        "Revisa organizador, fechas, aforo y las activaciones que correspondan.",
+        "Selecciona el logo del ticket en el flujo disponible, sin confundirlo con el logo público de la entidad.",
+        "No anuncies venta habilitada hasta que el estado de activación lo confirme."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de preparar un evento y su ticketing, ¿qué reviso?",
+          "answer": "Revisa organizador, fechas, aforo y las activaciones que correspondan. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en preparar un evento y su ticketing?",
+          "answer": "No anuncies venta habilitada hasta que el estado de activación lo confirme."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-events.js",
+          "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61",
+          "line": 803
+        },
+        {
+          "path": "web/js/modules/event-connections.js",
+          "sha256": "c66bdd71705b4db7390599ea16cbb77e5032cd9332e4b7cafa87667e9241300b",
+          "line": 67
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "events-create"
+    },
+    {
+      "guide_id": "assist-data",
+      "title": "Consultar datos con Assist",
+      "meaning": "Assist interpreta información autorizada del espacio activo; Ayuda explica la plataforma y Migrations prepara incorporaciones de archivos.",
+      "prerequisites": [],
+      "steps": [
+        "Abre Administración y selecciona KOMBAX Assist.",
+        "Pregunta directamente por el dato que necesitas, por ejemplo el saldo de un alumno o los próximos eventos.",
+        "Assist utiliza el contexto autorizado de tu club; comprueba que estás en el espacio correcto.",
+        "Para aprender un procedimiento usa ¿Necesitas ayuda?; para importar archivos usa Migrations.",
+        "Las consultas IA mantienen el cupo y los créditos de tu plan. Una respuesta no equivale a haber ejecutado un cobro o una modificación."
+      ],
+      "checks": [
+        "No interpretes datos ausentes como deuda cero.",
+        "No pidas datos bancarios ni secretos por el chat.",
+        "El saldo de IA de pago se comparte con los canales que corresponden al mismo espacio.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de consultar datos con assist, ¿qué reviso?",
+          "answer": "No interpretes datos ausentes como deuda cero. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en consultar datos con assist?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/customer-operations.js",
+          "sha256": "6a2c70af5696a758adcc10605365e7724186e282bbbcf16418100be64ec394ed",
+          "line": 316
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "assist-data"
+    },
+    {
+      "guide_id": "migrations-import",
+      "title": "Importar datos con Migrations",
+      "meaning": "Migrations prepara datos de archivos para revisión; una vista previa no demuestra que ya estén incorporados.",
+      "prerequisites": [],
+      "steps": [
+        "Abre Administración y selecciona Migrations.",
+        "Indica qué quieres importar y adjunta el archivo admitido con los datos que puedes gestionar.",
+        "Revisa la identificación de columnas, posibles duplicados y datos pendientes.",
+        "Corrige las incidencias y revisa la propuesta antes de confirmar la importación.",
+        "Comprueba el resultado en el módulo de destino. No envíes contraseñas ni archivos ajenos al trámite."
+      ],
+      "checks": [
+        "Comprueba columnas, disciplinas, grupos y registros duplicados antes de confirmar.",
+        "Verifica la entidad y el tipo de dato antes de aplicar una importación.",
+        "Los documentos personales no deben transformarse en fichas del club sin el flujo autorizado.",
+        "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de importar datos con migrations, ¿qué reviso?",
+          "answer": "Comprueba columnas, disciplinas, grupos y registros duplicados antes de confirmar. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en importar datos con migrations?",
+          "answer": "Si el acceso corresponde a un tutor, comprueba el alumno seleccionado y el vínculo autorizado antes de mostrar o cambiar datos."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/customer-operations.js",
+          "sha256": "6a2c70af5696a758adcc10605365e7724186e282bbbcf16418100be64ec394ed",
+          "line": 316
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "migrations-import"
+    },
+    {
+      "guide_id": "identity-create",
+      "title": "Crear una identidad o perfil público",
+      "meaning": "Una identidad indica desde qué perfil participas o gestionas KOMBAX. Una cuenta puede reunir varias identidades, conservando separados los espacios y permisos correspondientes.",
+      "prerequisites": [],
+      "steps": [
+        "Accede a tu cuenta y abre Crear o gestionar mi perfil o Gestionar mi cuenta e identidades.",
+        "Elige Añadir capacidad o vinculación y el tipo de perfil que necesitas.",
+        "Completa la presentación y guarda el borrador; revisa las condiciones y los datos requeridos.",
+        "Solicita la verificación cuando corresponda. Crear un perfil no activa una suscripción ni la publicación automáticamente.",
+        "Club, Marca y Federación tienen sus propios perfiles públicos; las capacidades de una persona se gestionan desde su identidad personal."
+      ],
+      "checks": [
+        "Comprueba la cuenta, el espacio y la identidad activos.",
+        "Comprueba que tu rol tenga acceso a la opción y revisa los requisitos indicados.",
+        "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+      ],
+      "troubleshooting": [
+        {
+          "question": "No encuentro la opción de crear una identidad o perfil público, ¿qué reviso?",
+          "answer": "Comprueba la cuenta, el espacio y la identidad activos. El acceso depende del contexto y los permisos."
+        },
+        {
+          "question": "¿Cómo compruebo el resultado en crear una identidad o perfil público?",
+          "answer": "Vuelve a abrir el registro después de guardar para confirmar el resultado; un mensaje enviado no demuestra que una operación haya terminado."
+        }
+      ],
+      "escalation": "Pide ayuda humana si persiste el fallo después de comprobar el contexto o si exige una decisión sensible. Facilita fecha, pantalla y un resumen sin contraseñas, tokens ni datos de menores. No hagas repetir información ya disponible.",
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26",
+          "line": 113
+        },
+        {
+          "path": "web/js/modules/professional-documents.js",
+          "sha256": "e9aa86bb92ae2c2f8dcf0d8e25a7be6a400106bd0e95068bcac36deba22daab4",
+          "line": 6
+        }
+      ],
+      "review_status": "source_reviewed",
+      "audience_from": "identity-create"
+    }
+  ]
+}

@@ -1,0 +1,3205 @@
+{
+  "version": "r278",
+  "modules": [
+    {
+      "path": "web/js/modules/account-birth-date.js",
+      "sha256": "a2950bab4ac8569565725fe745b7414c0fffd603de194e7c7c0046176c19aa0c",
+      "lines": 32,
+      "exports": [
+        {
+          "name": "promptMissingAccountBirthDate",
+          "line": 8
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/backend.js",
+        "../core/state.js",
+        "../core/account-birth-date.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "account-create"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/account-security.js",
+      "sha256": "de3a7bbe974c9cfd7d50d23c1c223f1abe0859f3754fb88acb426fc353706c82",
+      "lines": 32,
+      "exports": [
+        {
+          "name": "openAuthenticatedPasswordChange",
+          "line": 4
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/backend.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "privacy"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/admin.js",
+      "sha256": "2737de285874cd379b0cf243399c201b414496be254fa299ab6d8c1c950ff53b",
+      "lines": 200,
+      "exports": [
+        {
+          "name": "renderUsers",
+          "line": 26
+        },
+        {
+          "name": "renderSettings",
+          "line": 66
+        },
+        {
+          "name": "renderProfile",
+          "line": 95
+        },
+        {
+          "name": "renderInstall",
+          "line": 123
+        },
+        {
+          "name": "renderDiagnostics",
+          "line": 135
+        },
+        {
+          "name": "renderCertification",
+          "line": 153
+        }
+      ],
+      "repositories": [
+        "accessCodes.get",
+        "accessCodes.rotate",
+        "catalog.forceDeleteDiscipline",
+        "catalog.forceDeleteGrade",
+        "catalog.saveDiscipline",
+        "catalog.saveGrade",
+        "clubPublic.one",
+        "communications.delete",
+        "communications.save",
+        "communications.uploadImage",
+        "community.delete",
+        "community.publish",
+        "community.upload",
+        "documents.upload",
+        "documents.url",
+        "groups.delete",
+        "groups.forceDelete",
+        "groups.save",
+        "kombaxSocial.myProfiles",
+        "kombaxSocial.syncPrivateAvatar",
+        "kombaxSocial.uploadMedia",
+        "material.forceDelete",
+        "material.save",
+        "material.saveVariant",
+        "mediaFraming.set",
+        "members.forceDelete",
+        "members.save",
+        "preenrollments.cancel",
+        "preenrollments.create",
+        "preenrollments.delete",
+        "sessions.delete",
+        "sessions.reserve",
+        "sessions.save",
+        "sessions.saveAttendance",
+        "sessions.saveSeries",
+        "settings.avatarUrl",
+        "settings.brandingHistory",
+        "settings.club",
+        "settings.config",
+        "settings.profile",
+        "settings.publishBranding",
+        "settings.removeAvatar",
+        "settings.removeBrandImage",
+        "settings.restoreBranding",
+        "settings.saveClub",
+        "settings.uploadAvatar",
+        "settings.uploadBrandImage",
+        "tariffs.forceDelete",
+        "tariffs.save",
+        "tracking.save",
+        "users.changeTeamRole",
+        "users.createTeamInvitation",
+        "users.members",
+        "users.resolveTeamRequest",
+        "users.revokeTeam",
+        "users.sendTeamInvitation",
+        "users.teamRequests"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "./club-profile.js",
+        "../core/backend.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/platform.js",
+        "../core/query-cache.js",
+        "./public-profile.js",
+        "./help-legal.js",
+        "./account-security.js",
+        "../core/invitations.js",
+        "../ui/media-framing.js",
+        "./support-privacy.js",
+        "../i18n/index.js",
+        "../i18n/ui.js",
+        "../i18n/user-content-translation.js",
+        "./club-poster.js",
+        "./pwa-install.js"
+      ],
+      "guide_ids": [
+        "team",
+        "settings"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/auth-recovery.js",
+      "sha256": "a2f64ab619cbd1293089e41e38f7bea44d78a57adf83b7bd89c7507405c79c98",
+      "lines": 55,
+      "exports": [
+        {
+          "name": "openPasswordRecovery",
+          "line": 41
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/utils.js",
+        "../core/backend.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "access",
+        "account-login"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/brand-business.js",
+      "sha256": "d318405912e2fa527253b3c3e8aefcbe2d6d80e92dc492835f962c2ffcb9a339",
+      "lines": 113,
+      "exports": [
+        {
+          "name": "openBrandBusinessHub",
+          "line": 55
+        },
+        {
+          "name": "openBrandCollaborationCenter",
+          "line": 92
+        },
+        {
+          "name": "openClubBrandCollaborationSettings",
+          "line": 95
+        },
+        {
+          "name": "openEventBrandSponsorshipSettings",
+          "line": 105
+        }
+      ],
+      "repositories": [
+        "brandBusiness.discovery",
+        "brandBusiness.inbox",
+        "brandBusiness.mutate",
+        "brandBusiness.openCampaigns",
+        "brandBusiness.preferences",
+        "brandBusiness.saveTargetPreferences",
+        "brandBusiness.targetPreferences",
+        "brandBusiness.workspace",
+        "kombaxProfiles.managers"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../i18n/user-content-translation.js"
+      ],
+      "guide_ids": [
+        "profile-brand"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/brand-hub.js",
+      "sha256": "e3faeb87110dcfb541b5eb73c455750412b087a1de393da3136262d6380304f9",
+      "lines": 2,
+      "exports": [
+        {
+          "name": "renderBrandHub",
+          "line": 2
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "./managed-profile-hub.js"
+      ],
+      "guide_ids": [
+        "profile-brand"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/club-kombax-hub.js",
+      "sha256": "4743d3f478deb7ee5f13e6cf7716a6ee212bfb38a645a4bc35d21caa12ec7bba",
+      "lines": 86,
+      "exports": [
+        {
+          "name": "renderClubKombaxHub",
+          "line": 32
+        }
+      ],
+      "repositories": [
+        "clubPublic.album",
+        "clubPublic.one",
+        "kombaxIdentity.setTeamPermission",
+        "kombaxIdentity.team",
+        "kombaxSocial.myProfiles"
+      ],
+      "imports": [
+        "../core/state.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./club-profile.js",
+        "./public-profile.js",
+        "./account-security.js",
+        "./federation-licenses.js",
+        "./competition-preparation.js",
+        "./customer-operations.js",
+        "./brand-business.js",
+        "../i18n/user-content-translation.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "profile"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/club-poster.js",
+      "sha256": "4dc54609280809b0b6bc77d3f8d07f80e5bb878ecc976faddcc2782d3936cfcd",
+      "lines": 23,
+      "exports": [
+        {
+          "name": "downloadClubPoster",
+          "line": 5
+        },
+        {
+          "name": "printClubPoster",
+          "line": 12
+        },
+        {
+          "name": "bindClubPosterActions",
+          "line": 20
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "profile"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/club-profile.js",
+      "sha256": "d1ed805e21f8b29b71ddbb73cc39570af9be56769328b539345774b4f073bef9",
+      "lines": 113,
+      "exports": [
+        {
+          "name": "openClubPublicProfile",
+          "line": 37
+        },
+        {
+          "name": "openClubAlbum",
+          "line": 51
+        },
+        {
+          "name": "editClubPublicProfile",
+          "line": 68
+        },
+        {
+          "name": "openPublicDirectory",
+          "line": 98
+        }
+      ],
+      "repositories": [
+        "clubPublic.album",
+        "clubPublic.albumUrl",
+        "clubPublic.one",
+        "clubPublic.removeAlbumMedia",
+        "clubPublic.removeImage",
+        "clubPublic.save",
+        "clubPublic.setVideoCover",
+        "clubPublic.uploadAlbumMedia",
+        "clubPublic.uploadImage",
+        "kombaxSocial.clubDirectory",
+        "mediaFraming.set"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/platform.js",
+        "../ui/media-framing.js",
+        "../ui/video-cover.js",
+        "../i18n/user-content-translation.js",
+        "./public-profile.js"
+      ],
+      "guide_ids": [
+        "profile"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/comms-material.js",
+      "sha256": "709213915b09334f15bed61c5a4323430b1e2635bc2d75c7a8cef23e7a96784a",
+      "lines": 216,
+      "exports": [
+        {
+          "name": "renderCommunications",
+          "line": 67
+        },
+        {
+          "name": "renderMaterial",
+          "line": 157
+        },
+        {
+          "name": "renderNotifications",
+          "line": 180
+        }
+      ],
+      "repositories": [
+        "catalog.disciplines",
+        "communications.delete",
+        "communications.list",
+        "communications.removeImage",
+        "communications.save",
+        "communications.uploadImage",
+        "lifecycle.action",
+        "material.delete",
+        "material.inventory",
+        "material.inventoryMutate",
+        "material.list",
+        "material.movements",
+        "material.orderStatus",
+        "material.orders",
+        "material.removeImage",
+        "material.request",
+        "material.save",
+        "material.saveVariant",
+        "material.uploadImage",
+        "material.variants",
+        "mediaFraming.set",
+        "members.list",
+        "notifications.invalidate",
+        "notifications.list",
+        "notifications.markGroup",
+        "notifications.markInformative",
+        "notifications.markRead"
+      ],
+      "imports": [
+        "../ui/product-catalog-view.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../ui/media-framing.js",
+        "../i18n/legacy-runtime.js",
+        "../i18n/index.js",
+        "../i18n/user-content-translation.js"
+      ],
+      "guide_ids": [
+        "reminders",
+        "communications",
+        "material",
+        "member-comms",
+        "member-material"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/community.js",
+      "sha256": "e6cf36da06bdd47d7b0e84ec310a49dd3847a6c521238cdbe1ba67a474c3a108",
+      "lines": 151,
+      "exports": [
+        {
+          "name": "renderCommunity",
+          "line": 106
+        }
+      ],
+      "repositories": [
+        "community.block",
+        "community.blocked",
+        "community.changeCover",
+        "community.delete",
+        "community.like",
+        "community.listPage",
+        "community.mediaUrl",
+        "community.moderate",
+        "community.publish",
+        "community.quota",
+        "community.removePath",
+        "community.report",
+        "community.reportStatus",
+        "community.reports",
+        "community.upload",
+        "kombaxSocial.clubDirectory",
+        "legal.accept",
+        "legal.acceptances",
+        "legal.docs",
+        "mediaFraming.set",
+        "settings.avatarUrl",
+        "socialGeneral.moderateAccess"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/media.js",
+        "./public-profile.js",
+        "./club-profile.js",
+        "../ui/media-framing.js",
+        "../i18n/user-content-translation.js"
+      ],
+      "guide_ids": [
+        "community",
+        "member-community"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/competition-preparation.js",
+      "sha256": "dc2513ff481ac6c5d85767aef1ffd7cd0782f49c90dca8a33951d83e9c1c5631",
+      "lines": 120,
+      "exports": [
+        {
+          "name": "registerOfficialWeighIn",
+          "line": 73
+        },
+        {
+          "name": "renderCompetitionPreparation",
+          "line": 87
+        },
+        {
+          "name": "migrationAssistBanner",
+          "line": 120
+        }
+      ],
+      "repositories": [
+        "competitionPreparation.candidates",
+        "competitionPreparation.eventRoster",
+        "competitionPreparation.evidenceUrl",
+        "competitionPreparation.list",
+        "competitionPreparation.measurements",
+        "competitionPreparation.mutate",
+        "competitionPreparation.registrationMutate",
+        "competitionPreparation.uploadEvidence"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js"
+      ],
+      "guide_ids": [
+        "profile-events"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/competitor-hub.js",
+      "sha256": "c472b4edb67f1df9fb6fab5702a6b6b7fc73b3dbcbda2aa01fa3b213cd09fd74",
+      "lines": 2,
+      "exports": [
+        {
+          "name": "renderCompetitorHub",
+          "line": 2
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "./managed-profile-hub.js"
+      ],
+      "guide_ids": [
+        "profile-public"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/consulting.js",
+      "sha256": "b63ecebcfc3fc1cd72ca6115c4569318a36cf870c763d376df2bbb06616350c9",
+      "lines": 21,
+      "exports": [
+        {
+          "name": "renderConsulting",
+          "line": 12
+        }
+      ],
+      "repositories": [
+        "consulting.acceptQuote",
+        "consulting.create",
+        "consulting.mine",
+        "consulting.uploadDocument"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "start"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/customer-operations.js",
+      "sha256": "6a2c70af5696a758adcc10605365e7724186e282bbbcf16418100be64ec394ed",
+      "lines": 556,
+      "exports": [
+        {
+          "name": "openMigrationGuide",
+          "line": 316
+        },
+        {
+          "name": "openKombaxAssist",
+          "line": 374
+        },
+        {
+          "name": "openKombaxMigrations",
+          "line": 411
+        },
+        {
+          "name": "openMigrationPreparation",
+          "line": 466
+        },
+        {
+          "name": "openCustomerOperationsCenter",
+          "line": 473
+        },
+        {
+          "name": "renderKombaxSupportHome",
+          "line": 479
+        },
+        {
+          "name": "openKombaxSupportChat",
+          "line": 495
+        },
+        {
+          "name": "renderKombaxAssistHome",
+          "line": 530
+        },
+        {
+          "name": "renderKombaxMigrationsHome",
+          "line": 544
+        },
+        {
+          "name": "migrationAssistBanner",
+          "line": 553
+        },
+        {
+          "name": "managementAssistBanner",
+          "line": 554
+        },
+        {
+          "name": "bindMigrationAssist",
+          "line": 555
+        }
+      ],
+      "repositories": [
+        "customerOps.aiCredits",
+        "customerOps.chat",
+        "customerOps.createTicket",
+        "customerOps.dashboard",
+        "customerOps.deleteHistory",
+        "customerOps.downloadGuide",
+        "customerOps.guideAccess",
+        "customerOps.messages",
+        "customerOps.migrationCatalog",
+        "customerOps.migrationImport",
+        "customerOps.migrationJob",
+        "customerOps.migrationPreview",
+        "customerOps.migrationRecords",
+        "customerOps.requestHuman",
+        "customerOps.stageMigrationFiles",
+        "customerOps.supportGuidedStatus",
+        "customerOps.supportTickets",
+        "customerOps.tickets",
+        "payments.connectOnboarding"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/conversation-ui.js",
+        "../core/assist-specialists.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "assist-data",
+        "migrations-import"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/dashboard-catalog.js",
+      "sha256": "0028d6999f9c3c31d40fa375948961f809176ab6fa1a7ca22a95da770f1ffc1d",
+      "lines": 82,
+      "exports": [
+        {
+          "name": "renderDashboard",
+          "line": 14
+        },
+        {
+          "name": "renderCatalog",
+          "line": 68
+        }
+      ],
+      "repositories": [
+        "catalog.deleteDiscipline",
+        "catalog.deleteGrade",
+        "catalog.disciplines",
+        "catalog.grades",
+        "catalog.saveDiscipline",
+        "catalog.saveGrade",
+        "dashboard.load"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./customer-operations.js",
+        "../i18n/index.js",
+        "../core/workspace-visuals.js"
+      ],
+      "guide_ids": [
+        "start",
+        "catalog"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/documents.js",
+      "sha256": "40e0337d728fce5550245f733bcc253d9c08e64212b5309cb611d7a261daba02",
+      "lines": 76,
+      "exports": [
+        {
+          "name": "renderDocuments",
+          "line": 36
+        }
+      ],
+      "repositories": [
+        "documents.archive",
+        "documents.delete",
+        "documents.download",
+        "documents.list",
+        "documents.update",
+        "documents.upload",
+        "documents.url",
+        "members.list"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./customer-operations.js",
+        "../i18n/user-content-translation.js"
+      ],
+      "guide_ids": [
+        "documents"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/event-connections.js",
+      "sha256": "c66bdd71705b4db7390599ea16cbb77e5032cd9332e4b7cafa87667e9241300b",
+      "lines": 105,
+      "exports": [
+        {
+          "name": "openEventConnectionManager",
+          "line": 67
+        },
+        {
+          "name": "openPublicEventConnectionManager",
+          "line": 89
+        },
+        {
+          "name": "eventConnectionBadge",
+          "line": 103
+        }
+      ],
+      "repositories": [
+        "eventConnections.get",
+        "eventConnections.listForPublic",
+        "eventConnections.mutate",
+        "eventConnections.participants",
+        "kombaxEvents.list"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js"
+      ],
+      "guide_ids": [
+        "events-create"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/events.js",
+      "sha256": "efdc31e020203e8ffebe217ce51980f44880d9950be35f202f72231e803f407d",
+      "lines": 164,
+      "exports": [
+        {
+          "name": "renderEvents",
+          "line": 146
+        }
+      ],
+      "repositories": [
+        "catalog.disciplines",
+        "communications.save",
+        "competitionPreparation.eventRoster",
+        "eventConnections.get",
+        "events.communications",
+        "events.deleteFight",
+        "events.fights",
+        "events.linkCommunication",
+        "events.listState",
+        "events.participants",
+        "events.requestRegistration",
+        "events.save",
+        "events.saveExternal",
+        "events.saveFight",
+        "events.setRegistrationStatus",
+        "events.withdraw",
+        "lifecycle.action",
+        "lifecycle.deleteForever",
+        "lifecycle.previewDelete",
+        "members.list",
+        "portal.visibleMembers"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./competition-preparation.js",
+        "./event-connections.js"
+      ],
+      "guide_ids": [
+        "events",
+        "member-events"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/federation-hub.js",
+      "sha256": "b7d955d9aeaa0c194e5070d02d9adc145fd13ce28cebb5acae5d070864972ae7",
+      "lines": 2,
+      "exports": [
+        {
+          "name": "renderFederationHub",
+          "line": 2
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "./managed-profile-hub.js"
+      ],
+      "guide_ids": [
+        "profile-federation"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/federation-licenses.js",
+      "sha256": "19b62b1a25715cefc2816fc81ed0607d1c9486e760634e6daa23d963baade21f",
+      "lines": 188,
+      "exports": [
+        {
+          "name": "federationCsvCell",
+          "line": 34
+        },
+        {
+          "name": "federationLicenseCsv",
+          "line": 39
+        },
+        {
+          "name": "renderFederationAdmin",
+          "line": 60
+        },
+        {
+          "name": "renderClubFederationAdmin",
+          "line": 105
+        },
+        {
+          "name": "renderSelfLicenses",
+          "line": 166
+        },
+        {
+          "name": "renderProfessionalLicenses",
+          "line": 180
+        },
+        {
+          "name": "renderPendingFederationInvitations",
+          "line": 185
+        }
+      ],
+      "repositories": [
+        "federationLicenses.clubContext",
+        "federationLicenses.directory",
+        "federationLicenses.documentUrl",
+        "federationLicenses.documents",
+        "federationLicenses.federationContext",
+        "federationLicenses.mutate",
+        "federationLicenses.pendingInvitations",
+        "federationLicenses.professional",
+        "federationLicenses.saveRelationship",
+        "federationLicenses.self",
+        "federationLicenses.sendInvitation",
+        "federationLicenses.uploadDocument"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./customer-operations.js",
+        "../core/internal-club-license.js",
+        ",label:"
+      ],
+      "guide_ids": [
+        "profile-federation"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/fighter-discovery.js",
+      "sha256": "8b44f01c4677a7c4803e0fef6658d0f4daebc4cb01dec4ca2529b31505285f6d",
+      "lines": 47,
+      "exports": [
+        {
+          "name": "openFighterDiscovery",
+          "line": 24
+        },
+        {
+          "name": "openFighterOpportunityCenter",
+          "line": 33
+        },
+        {
+          "name": "openFighterAvailabilityEditor",
+          "line": 44
+        }
+      ],
+      "repositories": [
+        "fighterDiscovery.invitations",
+        "fighterDiscovery.invite",
+        "fighterDiscovery.respond",
+        "fighterDiscovery.search"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./public-profile.js",
+        "../i18n/user-content-translation.js",
+        "../i18n/index.js",
+        "./kombax-discovery.js"
+      ],
+      "guide_ids": [
+        "profile-public"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/finance-context.js",
+      "sha256": "89f0cd840787fbebe82461b54ff070ff6a955a892fc7225c66db71e7d853e5f5",
+      "lines": 37,
+      "exports": [
+        {
+          "name": "openFinanceContext",
+          "line": 12
+        }
+      ],
+      "repositories": [
+        "financeContext.get",
+        "financeContext.inventory"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "finance"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/finance-guide.js",
+      "sha256": "0ceabf4740ef793403718f07b398e1246977bb9a8cb568167c607b20b4efde70",
+      "lines": 22,
+      "exports": [
+        {
+          "name": "openFinanceGuide",
+          "line": 19
+        },
+        {
+          "name": "downloadFinanceGuide",
+          "line": 20
+        },
+        {
+          "name": "financeGuideHtml",
+          "line": 21
+        },
+        {
+          "name": "mountFinanceGuide",
+          "line": 22
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../ui/icons.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "finance"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/finance-premium-bootstrap.js",
+      "sha256": "3388ca75466f8f467397e335e264d18d20c53708f87b3c94cc1f9ff92c911ef0",
+      "lines": 39,
+      "exports": [],
+      "repositories": [],
+      "imports": [
+        "./finance-premium.js"
+      ],
+      "guide_ids": [
+        "finance"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/finance-premium.js",
+      "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca",
+      "lines": 223,
+      "exports": [
+        {
+          "name": "shouldUseFinancePremium",
+          "line": 60
+        },
+        {
+          "name": "renderFinancePremium",
+          "line": 171
+        }
+      ],
+      "repositories": [
+        "finance.adminPayment",
+        "finance.validate",
+        "payments.connectOnboarding",
+        "payments.paymentMethodsStatus"
+      ],
+      "imports": [
+        "./historical-finance.js",
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/backend.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "./finance.js",
+        "./payments-center.js",
+        "./finance-guide.js"
+      ],
+      "guide_ids": [
+        "finance",
+        "receipts",
+        "charge-create",
+        "payment-record",
+        "tariff-change",
+        "payment-validate",
+        "finance-report",
+        "automation-prepare"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/finance.js",
+      "sha256": "525fd03ae9d259975bf63b834ad5dc2f5bde0f908372b38564eb2435be5b9de6",
+      "lines": 229,
+      "exports": [
+        {
+          "name": "renderFinance",
+          "line": 99
+        },
+        {
+          "name": "renderReminders",
+          "line": 217
+        }
+      ],
+      "repositories": [
+        "finance.account",
+        "finance.adminPayment",
+        "finance.annulReceipt",
+        "finance.communicatePayment",
+        "finance.detail",
+        "finance.fees",
+        "finance.generate",
+        "finance.metricsAnnual",
+        "finance.pause",
+        "finance.payments",
+        "finance.proofUrl",
+        "finance.receipts",
+        "finance.resume",
+        "finance.uploadProof",
+        "finance.validate",
+        "finance.voidFee",
+        "finance.years",
+        "members.list",
+        "payments.checkout",
+        "payments.payerOptions",
+        "payments.paymentMethodsStatus",
+        "payments.sepaChargeFee",
+        "payments.sepaSetup",
+        "portal.visibleMembers",
+        "reminders.history",
+        "reminders.load",
+        "reminders.process",
+        "reminders.save",
+        "scopes.collect",
+        "scopes.context",
+        "scopes.finance",
+        "tariffs.delete",
+        "tariffs.list",
+        "tariffs.save"
+      ],
+      "imports": [
+        "./historical-finance.js",
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../core/finance-math.js",
+        "../core/finance-corrections.js",
+        "./customer-operations.js",
+        "../i18n/user-content-translation.js",
+        "./payments-center.js",
+        "./finance-context.js",
+        "./finance-guide.js"
+      ],
+      "guide_ids": [
+        "finance",
+        "receipts",
+        "reminders",
+        "charge-create",
+        "payment-record",
+        "tariff-change",
+        "payment-validate",
+        "finance-report"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/gateway.js",
+      "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26",
+      "lines": 939,
+      "exports": [
+        {
+          "name": "renderIdentityPresentation",
+          "line": 113
+        },
+        {
+          "name": "renderMemberFamilyPresentation",
+          "line": 155
+        },
+        {
+          "name": "renderKombaxGateway",
+          "line": 202
+        },
+        {
+          "name": "renderClubDirectory",
+          "line": 309
+        },
+        {
+          "name": "openMyAccount",
+          "line": 342
+        },
+        {
+          "name": "openGlobalAuth",
+          "line": 411
+        },
+        {
+          "name": "renderGlobalHome",
+          "line": 655
+        },
+        {
+          "name": "renderDirectProfileHub",
+          "line": 679
+        },
+        {
+          "name": "renderDirectProfiles",
+          "line": 835
+        },
+        {
+          "name": "finishAccountEntry",
+          "line": 856
+        },
+        {
+          "name": "enterWorkspaceTarget",
+          "line": 869
+        },
+        {
+          "name": "openManagedIdentity",
+          "line": 875
+        },
+        {
+          "name": "openManagedIdentityMedia",
+          "line": 884
+        },
+        {
+          "name": "editManagedIdentity",
+          "line": 890
+        },
+        {
+          "name": "openWorkspaceIdentitySelector",
+          "line": 896
+        }
+      ],
+      "repositories": [
+        "accountDeletion.cancel",
+        "accountDeletion.list",
+        "accountDeletion.request",
+        "kombaxIdentity.activateMember",
+        "kombaxIdentity.memberPublicProfile",
+        "kombaxMemberships.active",
+        "kombaxMemberships.contactClub",
+        "kombaxMemberships.pending",
+        "kombaxMemberships.requestClaim",
+        "kombaxProfiles.album",
+        "kombaxProfiles.applications",
+        "kombaxProfiles.clubs",
+        "kombaxProfiles.mine",
+        "kombaxProfiles.removeMedia",
+        "kombaxProfiles.saveApplication",
+        "kombaxProfiles.saveProfile",
+        "kombaxProfiles.setVideoCover",
+        "kombaxProfiles.submitApplication",
+        "kombaxProfiles.uploadMedia",
+        "kombaxProfiles.uploadVerificationDocument",
+        "kombaxProfiles.withdrawApplication",
+        "kombaxProfiles.workspaceSettings",
+        "kombaxSocial.myProfiles",
+        "mediaFraming.set",
+        "pilot.activateClub",
+        "pilot.window"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/ui.js",
+        "../core/backend.js",
+        "../core/demo-directory.js",
+        "../core/platform.js",
+        "../core/utils.js",
+        "../core/account-birth-date.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../ui/media-framing.js",
+        "../ui/video-cover.js",
+        "./managed-profile-hub.js",
+        "../ui/personal-navigation.js",
+        "../core/workspace-access.js",
+        "./profile-administration.js",
+        "./professional-operations.js",
+        "./federation-licenses.js",
+        "./auth-recovery.js",
+        "./account-security.js",
+        "./public-profile.js",
+        "./platform-legal.js",
+        "./account-birth-date.js",
+        "./support-privacy.js",
+        "../core/profile-registry.js",
+        "../core/account-profile-policy.js",
+        "../core/commercial-pricing.js",
+        "./plan-services.js",
+        "./resource-center.js",
+        "./kombax-home.js",
+        "../core/personal-space.js"
+      ],
+      "guide_ids": [
+        "access",
+        "account-create",
+        "account-login",
+        "identity-choose",
+        "identity-create"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/groups-members.js",
+      "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397",
+      "lines": 139,
+      "exports": [
+        {
+          "name": "renderGroups",
+          "line": 30
+        },
+        {
+          "name": "renderMembers",
+          "line": 71
+        },
+        {
+          "name": "renderEnrollments",
+          "line": 123
+        }
+      ],
+      "repositories": [
+        "accessCodes.get",
+        "accessCodes.rotate",
+        "catalog.disciplines",
+        "catalog.grades",
+        "documents.list",
+        "documents.upload",
+        "groups.delete",
+        "groups.list",
+        "groups.save",
+        "groups.schedules",
+        "kombaxMemberships.resolveClubLink",
+        "members.archive",
+        "members.claims",
+        "members.deactivateEnrollment",
+        "members.delete",
+        "members.enrollments",
+        "members.graduation",
+        "members.interests",
+        "members.inviteAccess",
+        "members.list",
+        "members.resolveClaim",
+        "members.saveBatch",
+        "preenrollments.approve",
+        "preenrollments.cancel",
+        "preenrollments.create",
+        "preenrollments.delete",
+        "preenrollments.list",
+        "preenrollments.reject",
+        "preenrollments.wait",
+        "scopes.students",
+        "tariffs.list",
+        "users.createStudentInvitation",
+        "users.sendStudentInvitation"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/invitations.js",
+        "./customer-operations.js",
+        "../ui/member-enrollment-picker.js",
+        "../core/member-enrollment.js"
+      ],
+      "guide_ids": [
+        "enrollments",
+        "students",
+        "groups"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/guides.js",
+      "sha256": "0ee9b836b0e997bf616c246c0465ec6d69fe659fb435aad271e5c4f323e8f455",
+      "lines": 38,
+      "exports": [
+        {
+          "name": "renderGuides",
+          "line": 20
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "start"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/help-legal.js",
+      "sha256": "ae620359d7c3727bce8d29a4fdea5b494510383dc711e177d6987272dadaabb6",
+      "lines": 133,
+      "exports": [
+        {
+          "name": "openPrivacyConditions",
+          "line": 90
+        },
+        {
+          "name": "renderHelpLegal",
+          "line": 112
+        }
+      ],
+      "repositories": [
+        "accountDeletion.cancel",
+        "accountDeletion.list",
+        "accountDeletion.request",
+        "legal.accept",
+        "legal.acceptances",
+        "legal.docs"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/permissions.js",
+        "../core/platform.js",
+        "./club-poster.js"
+      ],
+      "guide_ids": [
+        "privacy"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/historical-finance.js",
+      "sha256": "d9ff891d2a74cf1924c91191f48cd7b33aeb0e66c915e9cfcef743e216f86274",
+      "lines": 29,
+      "exports": [
+        {
+          "name": "openHistoricalFinance",
+          "line": 6
+        }
+      ],
+      "repositories": [
+        "finance.historical"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../i18n/index.js",
+        "../core/utils.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "finance"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/instagram-integration.js",
+      "sha256": "7cd7c17e192489c709d8e0959bab6979ebd76ff89df2a45267ee2522eb5f76d5",
+      "lines": 64,
+      "exports": [
+        {
+          "name": "instagramCaptionLinks",
+          "line": 12
+        },
+        {
+          "name": "startInstagramConnection",
+          "line": 18
+        },
+        {
+          "name": "openInstagramIntegration",
+          "line": 31
+        },
+        {
+          "name": "publishPostToInstagram",
+          "line": 49
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/backend.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "./kombax-social.js",
+        "./kombax-social.js"
+      ],
+      "guide_ids": [
+        "social-publish"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/kombax-discovery.js",
+      "sha256": "279102e04c1581eb058058338a407f5d82dd4d696f733f27523a0746dadb1e39",
+      "lines": 111,
+      "exports": [
+        {
+          "name": "renderKombaxDiscovery",
+          "line": 84
+        },
+        {
+          "name": "openKombaxDiscovery",
+          "line": 85
+        },
+        {
+          "name": "openDiscoveryAvailabilityEditor",
+          "line": 100
+        },
+        {
+          "name": "openDiscoverySlotsEditor",
+          "line": 108
+        }
+      ],
+      "repositories": [
+        "discovery.deleteSlot",
+        "discovery.profile",
+        "discovery.save",
+        "discovery.saveSlot",
+        "discovery.search",
+        "discovery.slots",
+        "kombaxSocial.contact",
+        "kombaxSocial.myProfiles"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./public-profile.js",
+        " type=",
+        ",label:",
+        ")?new Date(value(",
+        ")).toISOString():"
+      ],
+      "guide_ids": [
+        "profile-public"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/kombax-event-visuals.js",
+      "sha256": "f5017eed7e952f8778a7501623ce2cd71e26489c83ac66c98fd0cb716b858243",
+      "lines": 54,
+      "exports": [
+        {
+          "name": "qrMatrix",
+          "line": 17
+        },
+        {
+          "name": "qrSvg",
+          "line": 30
+        },
+        {
+          "name": "shareUrl",
+          "line": 31
+        },
+        {
+          "name": "generateEventGraphic",
+          "line": 37
+        },
+        {
+          "name": "shareGraphic",
+          "line": 54
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js"
+      ],
+      "guide_ids": [
+        "profile-events"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/kombax-events.js",
+      "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61",
+      "lines": 1534,
+      "exports": [
+        {
+          "name": "openEventTicketCategories",
+          "line": 803
+        },
+        {
+          "name": "renderMyEventsCenter",
+          "line": 945
+        },
+        {
+          "name": "renderPublicKombaxEventLanding",
+          "line": 1514
+        },
+        {
+          "name": "renderKombaxEvents",
+          "line": 1529
+        }
+      ],
+      "repositories": [
+        "commercial.requestActivation",
+        "commercial.requestPromotion",
+        "commercialCompliance.cancelEventPlan",
+        "commercialCompliance.purchaseEligibility",
+        "commercialCompliance.report",
+        "competitionPreparation.eventRoster",
+        "kombaxEvents.addEntity",
+        "kombaxEvents.addMediaReference",
+        "kombaxEvents.analytics",
+        "kombaxEvents.analyticsRange",
+        "kombaxEvents.attendeeMessage",
+        "kombaxEvents.businessIntelligence",
+        "kombaxEvents.checkinHistory",
+        "kombaxEvents.comment",
+        "kombaxEvents.commentWithdraw",
+        "kombaxEvents.communications",
+        "kombaxEvents.community",
+        "kombaxEvents.communityManage",
+        "kombaxEvents.demoAssetFile",
+        "kombaxEvents.detail",
+        "kombaxEvents.detailBySlug",
+        "kombaxEvents.engagement",
+        "kombaxEvents.finance",
+        "kombaxEvents.invitations",
+        "kombaxEvents.linkSocial",
+        "kombaxEvents.listPage",
+        "kombaxEvents.media",
+        "kombaxEvents.mediaQuota",
+        "kombaxEvents.mediaUrl",
+        "kombaxEvents.myManagedEvents",
+        "kombaxEvents.myTickets",
+        "kombaxEvents.organizerContexts",
+        "kombaxEvents.participantsPage",
+        "kombaxEvents.promoted",
+        "kombaxEvents.reactionSet",
+        "kombaxEvents.registerExternalVideo",
+        "kombaxEvents.removeEntity",
+        "kombaxEvents.removeFight",
+        "kombaxEvents.removeMedia",
+        "kombaxEvents.report",
+        "kombaxEvents.reportPayload",
+        "kombaxEvents.reputationReport",
+        "kombaxEvents.respondInvitation",
+        "kombaxEvents.reviewRespond",
+        "kombaxEvents.reviewUpsert",
+        "kombaxEvents.reviewWithdraw",
+        "kombaxEvents.save",
+        "kombaxEvents.saveFight",
+        "kombaxEvents.seedDemoEvent",
+        "kombaxEvents.seedUrbanWarriorsJiuJitsuDemoEvent",
+        "kombaxEvents.setFightResult",
+        "kombaxEvents.setInterest",
+        "kombaxEvents.setParticipantStatus",
+        "kombaxEvents.setVideoCover",
+        "kombaxEvents.setVisibility",
+        "kombaxEvents.submitParticipant",
+        "kombaxEvents.ticketAccessStatus",
+        "kombaxEvents.ticketCategoriesManage",
+        "kombaxEvents.ticketCategoriesPublic",
+        "kombaxEvents.ticketCategoryPreflight",
+        "kombaxEvents.ticketCategorySave",
+        "kombaxEvents.ticketCheckin",
+        "kombaxEvents.ticketDashboard",
+        "kombaxEvents.ticketSales",
+        "kombaxEvents.ticketStaff",
+        "kombaxEvents.ticketStaffMutate",
+        "kombaxEvents.ticketingContractAccept",
+        "kombaxEvents.ticketingManageStatus",
+        "kombaxEvents.ticketingSave",
+        "kombaxEvents.ticketingServiceRequest",
+        "kombaxEvents.track",
+        "kombaxEvents.updateParticipant",
+        "kombaxEvents.uploadCommunityMedia",
+        "kombaxEvents.uploadDemoMedia",
+        "kombaxEvents.uploadMedia",
+        "kombaxEvents.uploadParticipantPhoto",
+        "kombaxEvents.uploadVisual",
+        "kombaxEvents.visibility",
+        "kombaxSocial.directory",
+        "kombaxSocial.myProfiles",
+        "kombaxSocial.publish",
+        "kombaxSocial.uploadMedia",
+        "mediaFraming.coverPath",
+        "mediaFraming.set",
+        "payments.accountFinance",
+        "payments.checkout",
+        "payments.refund",
+        "payments.refundEventBatch"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../ui/brand-hero.js",
+        "../core/platform.js",
+        "./public-profile.js",
+        "../core/state.js",
+        "./kombax-event-visuals.js",
+        "../ui/media-framing.js",
+        "../ui/video-cover.js",
+        "./competition-preparation.js",
+        "./fighter-discovery.js",
+        "./kombax-discovery.js",
+        "./brand-business.js",
+        "./plan-services.js",
+        "./event-connections.js",
+        "../i18n/user-content-translation.js",
+        "../ui/analytics-reports-r77.js",
+        "./payments-center.js",
+        "./finance-context.js",
+        ")} ${esc(eur(event.ticket_precio_desde))}`:",
+        ")} ${esc(eur(event.inscripcion_precio_desde))}`:"
+      ],
+      "guide_ids": [
+        "events",
+        "profile-events",
+        "events-explore",
+        "events-create"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/kombax-home.js",
+      "sha256": "b75fe48c712ea03fe337eb979a8859cf15ce9d73a7b7f30ebe5d1ce2a05f9078",
+      "lines": 69,
+      "exports": [
+        {
+          "name": "renderKombaxHome",
+          "line": 40
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/platform.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "identity-choose"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/kombax-social.js",
+      "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664",
+      "lines": 752,
+      "exports": [
+        {
+          "name": "openInstagramPostComposer",
+          "line": 345
+        },
+        {
+          "name": "renderKombaxConversations",
+          "line": 682
+        },
+        {
+          "name": "renderKombaxSocial",
+          "line": 740
+        }
+      ],
+      "repositories": [
+        "clubPublic.album",
+        "clubPublic.removeAlbumMedia",
+        "clubPublic.uploadAlbumMedia",
+        "kombaxIdentity.activateMember",
+        "kombaxProfiles.album",
+        "kombaxProfiles.removeMedia",
+        "kombaxProfiles.uploadMedia",
+        "kombaxSocial.activateDirect",
+        "kombaxSocial.attachAlbumMedia",
+        "kombaxSocial.audiences",
+        "kombaxSocial.block",
+        "kombaxSocial.comment",
+        "kombaxSocial.comments",
+        "kombaxSocial.contact",
+        "kombaxSocial.contactMessages",
+        "kombaxSocial.contactStatus",
+        "kombaxSocial.contacts",
+        "kombaxSocial.decideMinorConsent",
+        "kombaxSocial.deleteContact",
+        "kombaxSocial.deletePost",
+        "kombaxSocial.directory",
+        "kombaxSocial.feed",
+        "kombaxSocial.like",
+        "kombaxSocial.markContactRead",
+        "kombaxSocial.media",
+        "kombaxSocial.mediaAccessUrl",
+        "kombaxSocial.minorConsentStatus",
+        "kombaxSocial.moderationDecide",
+        "kombaxSocial.moderationQueue",
+        "kombaxSocial.myProfiles",
+        "kombaxSocial.networkProfiles",
+        "kombaxSocial.preference",
+        "kombaxSocial.profileContacts",
+        "kombaxSocial.promotionImpression",
+        "kombaxSocial.promotions",
+        "kombaxSocial.publish",
+        "kombaxSocial.quota",
+        "kombaxSocial.relationState",
+        "kombaxSocial.relations",
+        "kombaxSocial.removeComment",
+        "kombaxSocial.removeMedia",
+        "kombaxSocial.report",
+        "kombaxSocial.reportMessage",
+        "kombaxSocial.reportOffTopic",
+        "kombaxSocial.requestMinorConsent",
+        "kombaxSocial.save",
+        "kombaxSocial.saved",
+        "kombaxSocial.sendContactMessage",
+        "kombaxSocial.setVideoCover",
+        "kombaxSocial.setVisibility",
+        "kombaxSocial.status",
+        "kombaxSocial.uploadMedia",
+        "kombaxSocial.visibilityConfig",
+        "mediaFraming.set",
+        "socialGeneral.rules"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/backend.js",
+        "../core/utils.js",
+        "../core/platform.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/identity-context.js",
+        "../core/social-identity-resolution.js",
+        "../ui/social-profile-invitation.js",
+        "./public-profile.js",
+        "./social-post-management.js",
+        "../core/adaptive-poller.js",
+        "../ui/brand-hero.js",
+        "../ui/media-framing.js",
+        "../ui/video-cover.js",
+        "./kombax-discovery.js",
+        "./social-network.js",
+        "../ui/conversation-ui.js",
+        "../i18n/index.js",
+        "../i18n/user-content-translation.js",
+        "../core/verification-visual.js",
+        "./instagram-integration.js",
+        "./gateway.js",
+        "./owner-content-moderation.js"
+      ],
+      "guide_ids": [
+        "social",
+        "member-social",
+        "social-explore",
+        "social-publish"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/lifecycle.js",
+      "sha256": "1787e54f34cd77c0954b84bbf2dbf34d5879d5ca6f518e6267cecaf1385615ff",
+      "lines": 46,
+      "exports": [
+        {
+          "name": "renderLifecycle",
+          "line": 43
+        }
+      ],
+      "repositories": [
+        "lifecycle.action",
+        "lifecycle.deleteForever",
+        "lifecycle.listPage",
+        "lifecycle.previewDelete"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js",
+        " type=",
+        ").value;filters.hasta=document.getElementById("
+      ],
+      "guide_ids": [
+        "archive"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/managed-profile-hub.js",
+      "sha256": "657df483a35408f789533a3698d0d26d515a8d00ac35f3491f9c6eba258f4e1a",
+      "lines": 170,
+      "exports": [
+        {
+          "name": "renderManagedProfileHub",
+          "line": 79
+        },
+        {
+          "name": "managedHubTitle",
+          "line": 168
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.workspace",
+        "payments.paymentMethodsStatus"
+      ],
+      "imports": [
+        "./profile-conversations.js",
+        "../i18n/index.js",
+        "../ui/personal-navigation.js",
+        "../core/identity-context.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../ui/managed-profile-navigation.js",
+        "./support-privacy.js",
+        "./professional-finance.js",
+        "./federation-licenses.js",
+        "./competition-preparation.js",
+        "./customer-operations.js",
+        "./fighter-discovery.js",
+        "./brand-business.js",
+        "./kombax-discovery.js",
+        "./plan-services.js",
+        "./payments-center.js",
+        "./resource-center.js",
+        "./kombax-home.js",
+        "./media-content-center.js",
+        "./public-profile.js",
+        "./profile-team.js",
+        "./profile-operations.js",
+        "./profile-administration.js",
+        "./kombax-events.js",
+        "./showcase.js",
+        "./gateway.js"
+      ],
+      "guide_ids": [
+        "identity-choose"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/media-content-center.js",
+      "sha256": "ffaccf778e3bf74865f93a9008ba52a3c0d05a35797798845a480155bbc22e0f",
+      "lines": 36,
+      "exports": [
+        {
+          "name": "renderMediaContentCenter",
+          "line": 9
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.album",
+        "kombaxSocial.myProfiles",
+        "kombaxSocial.profilePosts"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./public-profile.js"
+      ],
+      "guide_ids": [
+        "social-media"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/moderation-notices.js",
+      "sha256": "3b192d15a87f7246c8fdf4e40101feb14d1fb22006500a95f6adb4e8732340c8",
+      "lines": 11,
+      "exports": [
+        {
+          "name": "openModerationNotices",
+          "line": 5
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/backend.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "privacy"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/organization-billing.js",
+      "sha256": "84d4d14d9d2fc0f225bd2e8b62bcd6a1e1d530723e25b9c408f984acdd836b7c",
+      "lines": 28,
+      "exports": [
+        {
+          "name": "openOrganizationBilling",
+          "line": 6
+        },
+        {
+          "name": "mountOwnedBilling",
+          "line": 19
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/backend.js",
+        "../ui/components.js",
+        "../core/utils.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "service-activate"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/owner-content-moderation.js",
+      "sha256": "2c5bc1d24ff11344cb512c5d4027db8d86c7b416e3d556422f370a77b62761e5",
+      "lines": 64,
+      "exports": [
+        {
+          "name": "safeModerationUrl",
+          "line": 10
+        },
+        {
+          "name": "moderationGallery",
+          "line": 13
+        },
+        {
+          "name": "renderOwnerContentModeration",
+          "line": 22
+        }
+      ],
+      "repositories": [
+        "kombaxSocial.mediaAccessUrl"
+      ],
+      "imports": [
+        "./showcase-compliance.js",
+        "../core/moderation-filters.js",
+        "../core/backend.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js",
+        "../core/content-visibility.js"
+      ],
+      "guide_ids": [],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/payments-center.js",
+      "sha256": "35f97cae0923f9628e42246e972be4f00bec39593104185a76e5f941e53913de",
+      "lines": 118,
+      "exports": [
+        {
+          "name": "paymentCenterSummaryHtml",
+          "line": 52
+        },
+        {
+          "name": "loadPaymentCenterStatus",
+          "line": 63
+        },
+        {
+          "name": "openInPersonPayment",
+          "line": 92
+        },
+        {
+          "name": "bindPaymentCenter",
+          "line": 103
+        },
+        {
+          "name": "openPaymentCenter",
+          "line": 112
+        }
+      ],
+      "repositories": [
+        "payments.connectOnboarding",
+        "payments.paymentMethodToggle",
+        "payments.paymentMethodsStatus",
+        "payments.terminalConnectionToken",
+        "payments.terminalCreateIntent",
+        "payments.terminalEnsureLocation",
+        "payments.terminalToggle",
+        "payments.terminalWebFallback"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "./customer-operations.js"
+      ],
+      "guide_ids": [
+        "finance"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/plan-services.js",
+      "sha256": "9142bb0da1f93408e0bd523edca4dee07e3ed962a572c983bc315ff7e57d6a5b",
+      "lines": 160,
+      "exports": [
+        {
+          "name": "commercialPlanSummary",
+          "line": 90
+        },
+        {
+          "name": "renderCommercialDiscovery",
+          "line": 97
+        },
+        {
+          "name": "renderPlanServices",
+          "line": 114
+        }
+      ],
+      "repositories": [
+        "commercial.catalog",
+        "commercial.context",
+        "commercial.offers",
+        "commercial.requestActivation",
+        "commercial.requestPlan"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../core/commercial-pricing.js"
+      ],
+      "guide_ids": [
+        "service-activate"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/platform-admin-access.js",
+      "sha256": "08dfaab1e684099c168c862bc4d145bc48f14909a0c5e711fb08c84f427d7169",
+      "lines": 68,
+      "exports": [
+        {
+          "name": "renderPlatformAdminAccess",
+          "line": 44
+        },
+        {
+          "name": "renderPlatformAdminConsole",
+          "line": 56
+        }
+      ],
+      "repositories": [
+        "platformAdmin.context",
+        "platformAdmin.releaseContract"
+      ],
+      "imports": [
+        "../core/backend.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../core/platform.js",
+        "../core/repositories.js",
+        "../i18n/index.js",
+        "./platform-admin.js",
+        "./owner-content-moderation.js"
+      ],
+      "guide_ids": [],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/platform-admin.js",
+      "sha256": "393322ae3e8f804a620a76884ca07c05c4c928ae0015a748596d49decf74d388",
+      "lines": 468,
+      "exports": [
+        {
+          "name": "renderPlatformAdmin",
+          "line": 397
+        }
+      ],
+      "repositories": [
+        "commercial.requestPlan",
+        "kombaxSocial.moderate",
+        "platformAdmin.activateCommercialPlan",
+        "platformAdmin.aiCreditGrant",
+        "platformAdmin.aiMetrics",
+        "platformAdmin.application",
+        "platformAdmin.clientIncidents",
+        "platformAdmin.club",
+        "platformAdmin.commercialRequests",
+        "platformAdmin.commercialServiceReview",
+        "platformAdmin.commercialServices",
+        "platformAdmin.createClub",
+        "platformAdmin.dashboard",
+        "platformAdmin.decideCommercialEntitlement",
+        "platformAdmin.deletionQueue",
+        "platformAdmin.entities",
+        "platformAdmin.entityDetail",
+        "platformAdmin.entitySessionEnd",
+        "platformAdmin.entitySessionStart",
+        "platformAdmin.entityStatus",
+        "platformAdmin.executeDeletion",
+        "platformAdmin.founderBenefit",
+        "platformAdmin.marketplace",
+        "platformAdmin.marketplaceBuyerDetail",
+        "platformAdmin.marketplaceBuyerReview",
+        "platformAdmin.marketplaceSellerReview",
+        "platformAdmin.metrics",
+        "platformAdmin.ownerAgentChat",
+        "platformAdmin.ownerAgentConversation",
+        "platformAdmin.ownerAgentConversations",
+        "platformAdmin.ownerAgentDocumentUpload",
+        "platformAdmin.ownerAgents",
+        "platformAdmin.ownerAlerts",
+        "platformAdmin.ownerInsights",
+        "platformAdmin.ownerReport",
+        "platformAdmin.pilotAssign",
+        "platformAdmin.pilotMetrics",
+        "platformAdmin.pilotReadiness",
+        "platformAdmin.pilotRequests",
+        "platformAdmin.professionalCredentialQueue",
+        "platformAdmin.professionalCredentialReview",
+        "platformAdmin.profiles",
+        "platformAdmin.rejectCommercialPlan",
+        "platformAdmin.releaseContract",
+        "platformAdmin.reviewApplication",
+        "platformAdmin.reviewDeletion",
+        "platformAdmin.setModerator",
+        "platformAdmin.setPilotReadiness",
+        "platformAdmin.setProfileService",
+        "platformAdmin.setTeamPermission",
+        "platformAdmin.setVerifier",
+        "platformAdmin.supportAudit",
+        "platformAdmin.verificationDocumentUrl"
+      ],
+      "imports": [
+        "../core/owner-insights-r278.js",
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/backend.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./public-profile.js"
+      ],
+      "guide_ids": [],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/platform-legal.js",
+      "sha256": "ddb3ae8b2418d75aa8a986396c5ff4c6ac6ea3d806b3818674cdcc983936fa53",
+      "lines": 33,
+      "exports": [
+        {
+          "name": "showPlatformLegalGate",
+          "line": 5
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/backend.js",
+        "../core/state.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "account-create"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/portal.js",
+      "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7",
+      "lines": 197,
+      "exports": [
+        {
+          "name": "renderPortalDashboard",
+          "line": 86
+        },
+        {
+          "name": "renderPortalSchedule",
+          "line": 113
+        },
+        {
+          "name": "renderPortalRequests",
+          "line": 136
+        },
+        {
+          "name": "renderPortalProfile",
+          "line": 159
+        }
+      ],
+      "repositories": [
+        "catalog.disciplines",
+        "catalog.grades",
+        "documents.download",
+        "documents.upload",
+        "documents.url",
+        "groups.list",
+        "mediaFraming.set",
+        "notifications.headerSummary",
+        "portal.cancelSessionReservation",
+        "portal.checkin",
+        "portal.documents",
+        "portal.enrollments",
+        "portal.fees",
+        "portal.graduations",
+        "portal.notifications",
+        "portal.requestEnrollmentBatch",
+        "portal.requestMinor",
+        "portal.reservations",
+        "portal.reserveSession",
+        "portal.schedules",
+        "portal.sessions",
+        "portal.tracking",
+        "portal.visibleMembers",
+        "progress.list",
+        "settings.avatarUrl",
+        "settings.removeAvatar",
+        "settings.uploadAvatar",
+        "socialGeneral.activate",
+        "socialGeneral.rules",
+        "socialGeneral.status",
+        "tariffs.list"
+      ],
+      "imports": [
+        "../ui/member-enrollment-picker.js",
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./public-profile.js",
+        "./account-security.js",
+        "../ui/media-framing.js",
+        "./competition-preparation.js",
+        "../core/member-enrollment.js"
+      ],
+      "guide_ids": [
+        "start",
+        "enrollments",
+        "students",
+        "notifications",
+        "member-start",
+        "member-schedule",
+        "member-finance",
+        "member-notifications",
+        "member-requests"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/private-training.js",
+      "sha256": "dbca42c91e769d3632dd2e92de370bea5c78036ff55c1638d813c3e11b33fc4d",
+      "lines": 14,
+      "exports": [
+        {
+          "name": "renderPrivateTraining",
+          "line": 8
+        }
+      ],
+      "repositories": [
+        "privateTraining.status"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "sessions"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/professional-documents.js",
+      "sha256": "e9aa86bb92ae2c2f8dcf0d8e25a7be6a400106bd0e95068bcac36deba22daab4",
+      "lines": 27,
+      "exports": [
+        {
+          "name": "publishProfessionalDocument",
+          "line": 6
+        },
+        {
+          "name": "openProfessionalDocuments",
+          "line": 9
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.professionalPublicDocuments",
+        "kombaxProfiles.publishProfessionalDocument"
+      ],
+      "imports": [
+        "../core/backend.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "documents",
+        "profile-documents",
+        "identity-create"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/professional-finance.js",
+      "sha256": "6e6792979dfec71ef482cf9d930350c233cc7154e643008e2acf534f8f1035a5",
+      "lines": 51,
+      "exports": [
+        {
+          "name": "renderProfessionalFinance",
+          "line": 24
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.professionalFinance",
+        "kombaxProfiles.professionalFinanceMutate",
+        "kombaxProfiles.professionalFinanceNotifications",
+        "kombaxProfiles.professionalWorkspace",
+        "kombaxProfiles.workspace"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/finance-adapter.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../i18n/user-content-translation.js"
+      ],
+      "guide_ids": [
+        "finance"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/professional-hub.js",
+      "sha256": "0a1cf526baaf73ff4ce770e7627f788e9ab63d747edfe195631623c4ac76b89d",
+      "lines": 2,
+      "exports": [
+        {
+          "name": "renderProfessionalHub",
+          "line": 2
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "./managed-profile-hub.js"
+      ],
+      "guide_ids": [
+        "profile-public"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/professional-operations.js",
+      "sha256": "0bffca81daffd68120785e8b5d83c6b490c1dda29971cdaecd47deb8f4ee8042",
+      "lines": 94,
+      "exports": [
+        {
+          "name": "renderProfessionalOperations",
+          "line": 34
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.professionalCredentialMutate",
+        "kombaxProfiles.professionalMutate",
+        "kombaxProfiles.professionalWorkspace",
+        "kombaxProfiles.uploadProfessionalCredentialEvidence",
+        "kombaxProfiles.workspace"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./professional-documents.js"
+      ],
+      "guide_ids": [
+        "profile-events"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/profile-administration.js",
+      "sha256": "645305c6253fa77dd5d5287ff7f7ccee89a1657860a9ba2d77ba5e6c620079e4",
+      "lines": 63,
+      "exports": [
+        {
+          "name": "workspacePresentation",
+          "line": 7
+        },
+        {
+          "name": "editWorkspacePresentation",
+          "line": 15
+        },
+        {
+          "name": "openProfileAdministration",
+          "line": 22
+        },
+        {
+          "name": "loadWorkspaceSummary",
+          "line": 40
+        },
+        {
+          "name": "workspaceSummaryHtml",
+          "line": 61
+        }
+      ],
+      "repositories": [
+        "accountDeletion.cancel",
+        "accountDeletion.list",
+        "accountDeletion.request",
+        "brandBusiness.workspace",
+        "federationLicenses.federationContext",
+        "kombaxProfiles.professionalWorkspace",
+        "kombaxProfiles.saveWorkspace",
+        "kombaxProfiles.uploadWorkspaceMedia",
+        "kombaxProfiles.workspaceMediaUrl",
+        "kombaxProfiles.workspaceSettings"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../core/identity-context.js",
+        "../core/workspace-visuals.js"
+      ],
+      "guide_ids": [
+        "profile-public"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/profile-conversations.js",
+      "sha256": "65d6fee641495c8fb7bbd44c0094a4efd1af7f6c5367929031ba2b62aa6b6183",
+      "lines": 23,
+      "exports": [
+        {
+          "name": "renderProfileConversations",
+          "line": 8
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.workspace"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/identity-context.js",
+        "../ui/components.js",
+        "./kombax-social.js",
+        "./customer-operations.js"
+      ],
+      "guide_ids": [
+        "communications"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/profile-operations.js",
+      "sha256": "5466009d52565c80096af2b34af1e26872609c087c052b3249ed701a713a948e",
+      "lines": 48,
+      "exports": [
+        {
+          "name": "openProfileOperations",
+          "line": 11
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.operationsMutate",
+        "kombaxProfiles.operationsWorkspace"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "./finance-context.js"
+      ],
+      "guide_ids": [
+        "profile-showcase"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/profile-team.js",
+      "sha256": "10e33bed8b1275170ec59bd9b75086faa31236f868b208d3f2ee278f78fba5fc",
+      "lines": 51,
+      "exports": [
+        {
+          "name": "openProfileTeamInbox",
+          "line": 9
+        },
+        {
+          "name": "openProfileTeam",
+          "line": 29
+        }
+      ],
+      "repositories": [
+        "kombaxProfiles.setManager",
+        "kombaxProfiles.teamInbox",
+        "kombaxProfiles.teamMutate",
+        "kombaxProfiles.teamWorkspace"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "team"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/public-profile.js",
+      "sha256": "fd5b8b736fbd9d51f66b9fdaf283e02ccba96182194cce0176afd8d852cd7f94",
+      "lines": 357,
+      "exports": [
+        {
+          "name": "openBannerPositionEditor",
+          "line": 221
+        },
+        {
+          "name": "openKombaxPublicProfile",
+          "line": 336
+        },
+        {
+          "name": "renderOwnKombaxProfilePage",
+          "line": 347
+        }
+      ],
+      "repositories": [
+        "brandBusiness.publicProfile",
+        "discovery.personFacets",
+        "discovery.publicProfile",
+        "kombaxEvents.history",
+        "kombaxIdentity.updateMemberProfile",
+        "kombaxSocial.contact",
+        "kombaxSocial.media",
+        "kombaxSocial.mediaUrl",
+        "kombaxSocial.myProfiles",
+        "kombaxSocial.profilePosts",
+        "kombaxSocial.publicProfile",
+        "kombaxSocial.quota",
+        "kombaxSocial.removeMedia",
+        "kombaxSocial.report",
+        "kombaxSocial.setAffiliationVisibility",
+        "kombaxSocial.setBannerPosition",
+        "kombaxSocial.setVideoCover",
+        "kombaxSocial.shareAffiliation",
+        "kombaxSocial.uploadMedia",
+        "mediaFraming.set"
+      ],
+      "imports": [
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../core/identity-context.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./club-profile.js",
+        "../core/platform.js",
+        "./help-legal.js",
+        "./account-security.js",
+        "./social-post-management.js",
+        "../ui/media-framing.js",
+        "../ui/video-cover.js",
+        "./social-network.js",
+        "../i18n/user-content-translation.js",
+        "../core/verification-visual.js",
+        ",label:",
+        "./professional-documents.js",
+        "./gateway.js",
+        "./gateway.js",
+        "./kombax-discovery.js"
+      ],
+      "guide_ids": [
+        "profile",
+        "member-profile",
+        "profile-public",
+        "social-media"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/pwa-install.js",
+      "sha256": "229278656b76dbde7ce83f4ac6455fbc4f8fb24aba8446a7f7ace180c71d93ad",
+      "lines": 85,
+      "exports": [
+        {
+          "name": "classifyPwaEnvironment",
+          "line": 8
+        },
+        {
+          "name": "initPwaInstall",
+          "line": 19
+        },
+        {
+          "name": "pwaInstallState",
+          "line": 36
+        },
+        {
+          "name": "openPwaInstallInstructions",
+          "line": 51
+        },
+        {
+          "name": "requestPwaInstall",
+          "line": 61
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../ui/components.js",
+        "../ui/components.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "install",
+        "member-install"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/resource-center.js",
+      "sha256": "226498d9aa45c632116f2d57cfb16cff46fb7b87faa148342053707e57a94957",
+      "lines": 145,
+      "exports": [
+        {
+          "name": "renderResourceCenter",
+          "line": 101
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./consulting.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "start"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/showcase-cart.js",
+      "sha256": "815bb1fd66a629729f434d4512e4c3c2baa46fd6dd2b7a9e8173097938280e61",
+      "lines": 72,
+      "exports": [
+        {
+          "name": "productVariants",
+          "line": 19
+        },
+        {
+          "name": "variantOptionsHtml",
+          "line": 20
+        },
+        {
+          "name": "cartRows",
+          "line": 32
+        },
+        {
+          "name": "cartCount",
+          "line": 33
+        },
+        {
+          "name": "clearShowcaseCart",
+          "line": 34
+        },
+        {
+          "name": "purchaseSelection",
+          "line": 35
+        },
+        {
+          "name": "addShowcaseCartItem",
+          "line": 43
+        },
+        {
+          "name": "cartBadgeHtml",
+          "line": 55
+        },
+        {
+          "name": "openShowcaseCart",
+          "line": 57
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "../i18n/index.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js"
+      ],
+      "guide_ids": [
+        "showcase-explore"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/showcase-compliance.js",
+      "sha256": "7917a3463389951b97f3ce4561443ca7b01949bcd3e46094df4afbbdbfc5c613",
+      "lines": 50,
+      "exports": [
+        {
+          "name": "reviewProductCompliance",
+          "line": 4
+        },
+        {
+          "name": "openProductCompliance",
+          "line": 19
+        }
+      ],
+      "repositories": [
+        "kombaxShowcase.complianceRules",
+        "kombaxShowcase.itemState",
+        "kombaxShowcase.productComplianceEditor",
+        "kombaxShowcase.reviewProductCompliance",
+        "kombaxShowcase.saveProductCompliance"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "showcase",
+        "showcase-publish"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/showcase.js",
+      "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731",
+      "lines": 671,
+      "exports": [
+        {
+          "name": "openSellerCenter",
+          "line": 83
+        },
+        {
+          "name": "openProfileSellerCenter",
+          "line": 627
+        },
+        {
+          "name": "renderMyShowcase",
+          "line": 632
+        },
+        {
+          "name": "renderShowcase",
+          "line": 660
+        }
+      ],
+      "repositories": [
+        "commercial.context",
+        "commercial.requestActivation",
+        "commercial.requestPromotion",
+        "commercialCompliance.purchaseEligibility",
+        "commercialCompliance.report",
+        "financeContext.inventory",
+        "kombaxEvents.reputationReport",
+        "kombaxProfiles.sellerEntry",
+        "kombaxShowcase.analytics",
+        "kombaxShowcase.analyticsRange",
+        "kombaxShowcase.businessIntelligence",
+        "kombaxShowcase.capacity",
+        "kombaxShowcase.categories",
+        "kombaxShowcase.communications",
+        "kombaxShowcase.deleteItem",
+        "kombaxShowcase.finance",
+        "kombaxShowcase.inquiryMessages",
+        "kombaxShowcase.inquiryRequest",
+        "kombaxShowcase.inquirySend",
+        "kombaxShowcase.inventoryCost",
+        "kombaxShowcase.inventoryMutate",
+        "kombaxShowcase.itemState",
+        "kombaxShowcase.list",
+        "kombaxShowcase.myBrands",
+        "kombaxShowcase.myInquiries",
+        "kombaxShowcase.myItems",
+        "kombaxShowcase.productComplianceEditor",
+        "kombaxShowcase.providerInquiries",
+        "kombaxShowcase.removeOwnedImages",
+        "kombaxShowcase.removeUploadedImage",
+        "kombaxShowcase.report",
+        "kombaxShowcase.reviewRespond",
+        "kombaxShowcase.reviewUpsert",
+        "kombaxShowcase.reviewWithdraw",
+        "kombaxShowcase.reviews",
+        "kombaxShowcase.saveCommerce",
+        "kombaxShowcase.saveItem",
+        "kombaxShowcase.saveListingMeta",
+        "kombaxShowcase.saved",
+        "kombaxShowcase.sellerDashboard",
+        "kombaxShowcase.sellerReviews",
+        "kombaxShowcase.stockAdjust",
+        "kombaxShowcase.toggleSaved",
+        "kombaxShowcase.track",
+        "kombaxShowcase.uploadImage",
+        "kombaxShowcase.uploadReviewMedia",
+        "marketplace.acceptBuyerPolicy",
+        "marketplace.acceptSellerPolicy",
+        "marketplace.buyerIdentitySubmit",
+        "marketplace.buyerTrust",
+        "marketplace.sellerApplication",
+        "marketplace.sellerCenter",
+        "marketplace.uploadBuyerIdentityDocument",
+        "mediaFraming.set",
+        "payments.accountFinance",
+        "payments.checkoutCart",
+        "payments.myOrders",
+        "payments.orderMutate",
+        "payments.paymentMethodsStatus",
+        "payments.refund",
+        "payments.sellerOrders"
+      ],
+      "imports": [
+        "../ui/product-catalog-view.js",
+        "./showcase-compliance.js",
+        "../i18n/index.js",
+        "../i18n/formatters.js",
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../core/platform.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./public-profile.js",
+        "../ui/brand-hero.js",
+        "../ui/media-framing.js",
+        "../core/state.js",
+        "./plan-services.js",
+        "../i18n/user-content-translation.js",
+        "./payments-center.js",
+        "../ui/analytics-reports-r77.js",
+        "./showcase-cart.js",
+        "./finance-context.js"
+      ],
+      "guide_ids": [
+        "showcase",
+        "material",
+        "member-showcase",
+        "profile-showcase",
+        "showcase-explore",
+        "showcase-publish"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/social-network.js",
+      "sha256": "1771c530aec06358037f57fcc442b988b33638042ab07e5acf7948dbc79117aa",
+      "lines": 75,
+      "exports": [
+        {
+          "name": "possibleRelations",
+          "line": 17
+        },
+        {
+          "name": "requestNetworkConnection",
+          "line": 42
+        }
+      ],
+      "repositories": [
+        "kombaxSocial.networkProfiles",
+        "kombaxSocial.relations",
+        "kombaxSocial.requestRelation"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "social"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/social-post-management.js",
+      "sha256": "7dc1dbf3781bf63b7fe17ef1d509156d11a34b0c20a2d75ff154dc0b54b6a73b",
+      "lines": 64,
+      "exports": [
+        {
+          "name": "socialQuotaMarkup",
+          "line": 10
+        },
+        {
+          "name": "openKombaxPostManager",
+          "line": 28
+        }
+      ],
+      "repositories": [
+        "kombaxSocial.deletePost",
+        "kombaxSocial.profilePosts",
+        "kombaxSocial.quota"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "social-publish",
+        "social-media"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/spectator-hub.js",
+      "sha256": "d1280a7c9df9d470eab52d2045cf8f9ea69bbf6c5bd977140bab9a25ccc47d0e",
+      "lines": 2,
+      "exports": [
+        {
+          "name": "renderSpectatorHub",
+          "line": 2
+        }
+      ],
+      "repositories": [],
+      "imports": [
+        "./managed-profile-hub.js"
+      ],
+      "guide_ids": [
+        "profile-public"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/sports-profile.js",
+      "sha256": "c69c2962ef3fb33eb3ba931cd4134f0efba08044a4791d26aa4161d0b8efef09",
+      "lines": 102,
+      "exports": [
+        {
+          "name": "loadSportsProfile",
+          "line": 21
+        },
+        {
+          "name": "loadSportsProfiles",
+          "line": 25
+        },
+        {
+          "name": "sportsProfileCompactHtml",
+          "line": 30
+        },
+        {
+          "name": "openSportsProfile",
+          "line": 54
+        },
+        {
+          "name": "editSportsProfile",
+          "line": 72
+        },
+        {
+          "name": "openSportsPhotoEditor",
+          "line": 87
+        },
+        {
+          "name": "openMembersDirectory",
+          "line": 95
+        }
+      ],
+      "repositories": [
+        "mediaFraming.set",
+        "sportsProfiles.list",
+        "sportsProfiles.moderate",
+        "sportsProfiles.one",
+        "sportsProfiles.photoUrl",
+        "sportsProfiles.removePhoto",
+        "sportsProfiles.save",
+        "sportsProfiles.uploadPhoto"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "../ui/media-framing.js",
+        "../i18n/index.js"
+      ],
+      "guide_ids": [
+        "member-profile"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/support-privacy.js",
+      "sha256": "db69a91b6670c2a7f67a714b02a8f9ebf5022ab319a84caa22caa42a743d3579",
+      "lines": 75,
+      "exports": [
+        {
+          "name": "supportContactMarkup",
+          "line": 21
+        },
+        {
+          "name": "openSupportPrivacyCenter",
+          "line": 35
+        },
+        {
+          "name": "supportQuickRow",
+          "line": 72
+        }
+      ],
+      "repositories": [
+        "supportPrivacy.create",
+        "supportPrivacy.list",
+        "supportPrivacy.revoke"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../ui/icons.js",
+        "./customer-operations.js"
+      ],
+      "guide_ids": [
+        "privacy"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/training.js",
+      "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f",
+      "lines": 99,
+      "exports": [
+        {
+          "name": "renderSessions",
+          "line": 13
+        },
+        {
+          "name": "renderAttendance",
+          "line": 55
+        },
+        {
+          "name": "renderTracking",
+          "line": 76
+        },
+        {
+          "name": "renderProgress",
+          "line": 88
+        }
+      ],
+      "repositories": [
+        "groups.list",
+        "members.enrollments",
+        "members.list",
+        "progress.list",
+        "sessions.attendance",
+        "sessions.checkin",
+        "sessions.delete",
+        "sessions.endSeries",
+        "sessions.exception",
+        "sessions.list",
+        "sessions.reservations",
+        "sessions.save",
+        "sessions.saveAttendance",
+        "sessions.saveSeries",
+        "sessions.series",
+        "tracking.list",
+        "tracking.save"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/permissions.js",
+        "../core/utils.js",
+        "../ui/components.js"
+      ],
+      "guide_ids": [
+        "sessions",
+        "attendance",
+        "tracking",
+        "progress"
+      ],
+      "review": "source_indexed_not_live_certification"
+    },
+    {
+      "path": "web/js/modules/work-scopes.js",
+      "sha256": "bd7f52f48b40e6765f674aeed9b2c446808eabff57d976cfbc45b89320727a5c",
+      "lines": 53,
+      "exports": [
+        {
+          "name": "renderWorkScopes",
+          "line": 11
+        }
+      ],
+      "repositories": [
+        "groups.list",
+        "members.list",
+        "scopes.context",
+        "scopes.list",
+        "scopes.mutate",
+        "users.members"
+      ],
+      "imports": [
+        "../core/repositories.js",
+        "../core/state.js",
+        "../core/utils.js",
+        "../ui/components.js",
+        "../i18n/user-content-translation.js"
+      ],
+      "guide_ids": [
+        "scopes"
+      ],
+      "review": "source_indexed_not_live_certification"
+    }
+  ]
+}

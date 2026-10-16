@@ -12,7 +12,13 @@ test('Global Owner push does not require club_id',()=>assert.ok(dispatch.include
 test('Owner alerts are global and idempotent',()=>assert.ok(migration.includes('uq_notificaciones_global_perfil_clave_r114')&&migration.includes("'owner:verification:'")&&migration.includes("'owner:agent:'")));
 test('Agent automation remains attention-oriented, not autonomous',()=>assert.ok(migration.includes("new.status='failed'")&&migration.includes("new.risk_level in ('high','critical')")&&!migration.includes('execute proposed_action')));
 test('Owner analytics supports period, chart, CSV and PDF',()=>assert.ok(owner.includes('kx-owner-metrics-period')&&owner.includes('kx-owner-trend-chart')&&owner.includes('kx-owner-metrics-csv')&&owner.includes('kx-owner-metrics-pdf')));
-test('Owner report stays aggregated and private',()=>assert.ok(report.includes('app_kombax_owner_report_payload_r114')&&report.includes("storage.from('kombax-reports')")&&report.includes('Informe privado de administración')));
+test('Owner report stays aggregated and private',()=>{
+ assert.ok(report.includes('app_kombax_owner_report_payload_r114'));
+ // The active backend uses Storage REST, rather than the former client SDK.
+ assert.ok(report.includes('/storage/v1/object/kombax-reports/')&&report.includes('/storage/v1/object/sign/kombax-reports/'));
+ assert.ok(report.includes('expiresIn:600')&&report.includes('private, max-age=0')&&report.includes('Documento privado Owner'));
+ assert.ok(!report.includes('/storage/v1/object/public/'));
+});
 test('Owner repository exposes alerts and report',()=>assert.ok(repos.includes('ownerAlerts:')&&repos.includes("ownerReport:")&&repos.includes("kombax-owner-report-r114")));
 test('R113 profile save fix remains cumulative',()=>assert.ok(gateway.includes('saveProfile({perfil_directo_id:profile?.id||null,tipo:type,nombre_publico:v.nombre_publico')));
 console.log(`R114 Owner Command Center / performance QA: ${pass}/12 PASS`);

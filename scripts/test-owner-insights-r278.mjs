@@ -1,0 +1,30 @@
+import {PGlite} from '@electric-sql/pglite';
+import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+const db=new PGlite();let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};const q=async(s,a=[])=>(await db.query(s,a)).rows;const denied=async(s)=>{await assert.rejects(db.query(s));n++};
+try{
+ await db.exec(`create role anon;create role authenticated;create role service_role;create schema auth;grant usage on schema auth to authenticated;create function auth.uid() returns uuid language sql as $$select nullif(current_setting('qa.uid',true),'')::uuid$$;create function public.app_kombax_es_platform_admin_v055() returns boolean language sql as $$select coalesce(current_setting('qa.owner',true),'false')='true'$$;create schema kombax_owner_ai;create schema kombax_customer_ops;create schema kombax_ai_ops;create schema kombax_help_knowledge;
+ create table public.notificaciones(club_id uuid,perfil_id uuid,subject_type text,subject_id uuid,tipo text, constraint notificaciones_subject_scope_v199 check(club_id is not null or subject_type='direct_profile' and subject_id is not null or subject_type='moderation' and subject_id is not null and perfil_id is not null));
+ create function public.app_kombax_pilot_metrics_r97() returns jsonb language sql as $$select jsonb_build_object('credits_used_total',(select sum((x->>'used')::integer) from jsonb_array_elements('[{"used":1.378}]'::jsonb) x))$$;
+ create table public.perfiles(id uuid,creado_en timestamptz);
+ create table public.perfiles_kombax_directos(perfil_id uuid,creado_en timestamptz,estado text,tipo text);
+ create table public.kombax_social_perfiles(visible boolean,verificado boolean,publicar_habilitado boolean);
+ create table kombax_help_knowledge.observations_r277(review_state text);`);
+ await denied('select public.app_kombax_pilot_metrics_r97()');
+ await db.exec(readFileSync('supabase/migrations/20261016175613_owner_knowledge_reports_r278.sql','utf8'));
+ ok(Number((await q('select public.app_kombax_pilot_metrics_r97() r'))[0].r.credits_used_total)===1.378,'fractional credits preserved');
+ await db.exec('set role anon');await denied('select public.app_kombax_owner_insights_r278()');await db.exec('reset role;set role authenticated');await denied('select public.app_kombax_owner_insights_r278()');await db.exec('reset role');
+ await q("select set_config('qa.uid','00000000-0000-4000-8000-000000000001',false),set_config('qa.owner','true',false)");
+ await db.exec("insert into public.perfiles values('00000000-0000-4000-8000-000000000002',now());insert into public.perfiles_kombax_directos values('00000000-0000-4000-8000-000000000002',now(),'active','marca');insert into public.kombax_social_perfiles values(true,false,false);");
+ await db.exec('set role authenticated');let r=(await q('select public.app_kombax_owner_insights_r278(30) r'))[0].r;
+ ok(r.accounts.available&&r.accounts.period===1,'real counts with date range');ok(r.marketing.cohorts[0].accounts_with_identity===1,'cohort counts accounts once');ok(r.identities.by_type[0].label==='marca','identity segmentation');ok(!r.support.available&&r.support.total===undefined,'missing source is unavailable, not zero');ok(!r.marketing.contact_export_enabled&&!r.marketing.consent_register_available,'no implicit mailing list');ok(!JSON.stringify(r).includes('00000000-'),'no individual IDs in aggregates');
+ await denied("select kombax_owner_ai.metric_r278('public','perfiles','creado_en',null,null,30)");
+ await db.exec('reset role');
+ const id="'00000000-0000-4000-8000-000000000002'";
+ await q(`insert into public.notificaciones values(null,${id},'owner_agent_turn',${id},'owner_agent')`);n++;
+ await q(`insert into public.notificaciones values(null,${id},'verification',${id},'owner_action')`);n++;
+ await denied(`insert into public.notificaciones values(null,null,'owner_agent_turn',${id},'owner_agent')`);
+ await denied(`insert into public.notificaciones values(null,${id},'owner_agent_turn',${id},'other')`);
+ await denied(`insert into public.notificaciones values(null,${id},'unscoped',${id},'owner_agent')`);
+ await q("select set_config('qa.owner','false',false)");await db.exec('set role authenticated');await denied('select public.app_kombax_owner_insights_r278()');
+ console.log(`PASS ${n} Owner DB checks: decimal regression, recipient-bound notices, real aggregates, missing data, segmentation and authorization`);
+}finally{await db.close()}

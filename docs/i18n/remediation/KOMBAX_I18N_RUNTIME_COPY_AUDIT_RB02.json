@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T15:39:48.242Z",
+  "generated_at": "2026-10-16T22:29:05.584Z",
   "targets": [
     "web/js/app.js",
     "web/js/core/account-birth-date.js",
@@ -26,6 +26,7 @@
     "web/js/core/media.js",
     "web/js/core/member-enrollment.js",
     "web/js/core/moderation-filters.js",
+    "web/js/core/owner-insights-r278.js",
     "web/js/core/permissions.js",
     "web/js/core/personal-space.js",
     "web/js/core/platform.js",
@@ -41,6 +42,7 @@
     "web/js/core/utils.js",
     "web/js/core/verification-visual.js",
     "web/js/core/workspace-access.js",
+    "web/js/core/workspace-visuals.js",
     "web/js/delete-account.js",
     "web/js/meta-instagram-return.js",
     "web/js/modules/account-birth-date.js",
@@ -132,10 +134,10 @@
     "web/js/ui/usage-help.js",
     "web/js/ui/video-cover.js"
   ],
-  "phrases": 5165,
-  "covered": 4908,
-  "unresolved": 257,
-  "coverage": 95.02,
+  "phrases": 5186,
+  "covered": 4930,
+  "unresolved": 256,
+  "coverage": 95.06,
   "skipped": 480,
   "files": {
     "web/js/app.js": {
@@ -288,6 +290,12 @@
       "skipped": 0,
       "coverage": 100
     },
+    "web/js/core/owner-insights-r278.js": {
+      "total": 18,
+      "covered": 18,
+      "skipped": 0,
+      "coverage": 100
+    },
     "web/js/core/permissions.js": {
       "total": 0,
       "covered": 0,
@@ -373,6 +381,12 @@
       "coverage": 100
     },
     "web/js/core/workspace-access.js": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "coverage": 100
+    },
+    "web/js/core/workspace-visuals.js": {
       "total": 0,
       "covered": 0,
       "skipped": 0,
@@ -673,10 +687,10 @@
       "coverage": 100
     },
     "web/js/modules/platform-admin.js": {
-      "total": 214,
-      "covered": 146,
+      "total": 217,
+      "covered": 150,
       "skipped": 15,
-      "coverage": 68.22
+      "coverage": 69.12
     },
     "web/js/modules/platform-legal.js": {
       "total": 9,
@@ -1755,10 +1769,6 @@
     {
       "file": "web/js/modules/platform-admin.js",
       "value": "Los documentos entrantes quedarán clasificados aquí."
-    },
-    {
-      "file": "web/js/modules/platform-admin.js",
-      "value": "GPT-6 Luna · autonomía controlada"
     },
     {
       "file": "web/js/modules/platform-admin.js",

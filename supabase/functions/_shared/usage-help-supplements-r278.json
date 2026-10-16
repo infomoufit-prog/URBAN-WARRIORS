@@ -1,0 +1,995 @@
+{
+  "version": "r278",
+  "articles": [
+    {
+      "id": "supplement-001",
+      "guide_id": "account-create",
+      "title": "Cuenta gratuita y perfil público",
+      "keywords": "cuenta gratis explorar espectador",
+      "meaning": "Crear la cuenta permite acceder y explorar. El perfil público representa tu identidad en la comunidad; son dos pasos diferentes.",
+      "steps": [
+        "Crea o accede a tu cuenta.",
+        "Desde la gestión de identidades, elige el tipo de perfil que te corresponde."
+      ],
+      "checks": [
+        "No crees otra cuenta solo para añadir una identidad."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "line": 48,
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-002",
+      "guide_id": "account-login",
+      "title": "Acceder con una cuenta ya creada",
+      "keywords": "ya tengo cuenta contraseña email",
+      "meaning": "Si ya tienes cuenta, utiliza su correo y contraseña. Los datos exclusivos de una cuenta nueva no deben obligarte a duplicarla.",
+      "steps": [
+        "Selecciona la opción de cuenta existente.",
+        "Si no recuerdas la contraseña, utiliza su recuperación."
+      ],
+      "checks": [
+        "No compartas la contraseña con el club ni con el chatbot."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/gateway.js",
+          "line": 725,
+          "sha256": "d4c8d562e0cd0dd93b9a42ec9776c10023813a0706d12713c5be17fe01673c26"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-003",
+      "guide_id": "identity-choose",
+      "title": "Un correo y varias identidades",
+      "keywords": "varios perfiles misma cuenta marca club personal",
+      "meaning": "Club, Marca y Federación son identidades separadas con sus espacios y perfiles públicos propios. La cuenta puede administrarlas juntas.",
+      "steps": [
+        "Abre la selección de identidad.",
+        "Comprueba el nombre antes de publicar, editar o activar servicios."
+      ],
+      "checks": [
+        "No cambies de identidad para esquivar una limitación."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/managed-profile-hub.js",
+          "line": 1,
+          "sha256": "657df483a35408f789533a3698d0d26d515a8d00ac35f3491f9c6eba258f4e1a"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-004",
+      "guide_id": "identity-choose",
+      "title": "Archivar o eliminar una identidad",
+      "keywords": "archivar recuperar eliminar identidad suscripción",
+      "meaning": "Archivar es una organización administrativa reversible. Solicitar la eliminación de una identidad sigue su trámite; no equivale a borrar toda la cuenta.",
+      "steps": [
+        "Abre la administración de esa identidad.",
+        "Revisa el alcance antes de archivar o solicitar su eliminación."
+      ],
+      "checks": [
+        "El archivo no cancela suscripciones ni retira automáticamente contenido público."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/profile-administration.js",
+          "line": 18,
+          "sha256": "645305c6253fa77dd5d5287ff7f7ccee89a1657860a9ba2d77ba5e6c620079e4"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-005",
+      "guide_id": "enrollments",
+      "title": "Solicitud para entrar a un club",
+      "keywords": "alta miembro sin código solicitud club cuenta existente",
+      "meaning": "Pedir acceso, recibir aprobación y quedar vinculado al club son estados distintos. Tener una cuenta no confirma la membresía.",
+      "steps": [
+        "Selecciona el club y la vía de solicitud disponible.",
+        "Comprueba el estado de la solicitud antes de repetirla."
+      ],
+      "checks": [
+        "No utilices una solicitud de equipo para entrar como alumno."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/portal.js",
+          "line": 89,
+          "sha256": "bfed392135265961290fb8b5c7aadb324ba6dea241124d30109af93b2a41ffb7"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-006",
+      "guide_id": "students",
+      "title": "Una familia con varios hijos",
+      "keywords": "madre padre tutor hermanos varios hijos",
+      "meaning": "Cada hijo mantiene su propia ficha y relaciones deportivas. El adulto se vincula como familiar o tutor autorizado, sin fusionar las fichas.",
+      "steps": [
+        "Busca o crea por separado la ficha de cada hijo.",
+        "Comprueba qué hijo tienes seleccionado antes de revisar su actividad o sus cuotas."
+      ],
+      "checks": [
+        "No uses la cuenta de un hermano para modificar los datos de otro."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/groups-members.js",
+          "line": 13,
+          "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-007",
+      "guide_id": "groups",
+      "title": "Varias disciplinas para el mismo alumno",
+      "keywords": "karate kickboxing varias disciplinas multideporte",
+      "meaning": "Una misma ficha puede relacionarse con varias disciplinas y grupos. No necesitas duplicar al alumno para cada deporte.",
+      "steps": [
+        "Abre la ficha del alumno en el club.",
+        "Añade las relaciones de disciplina y grupo que correspondan."
+      ],
+      "checks": [
+        "Vuelve a abrir la ficha para confirmar que se han conservado las relaciones anteriores."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/groups-members.js",
+          "line": 21,
+          "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-008",
+      "guide_id": "groups",
+      "title": "Grupos de mañana y tarde",
+      "keywords": "varios grupos horarios mañana tarde",
+      "meaning": "El grupo organiza entrenamiento y horario; pertenecer a dos grupos no exige tener dos identidades.",
+      "steps": [
+        "Revisa la disciplina y los grupos disponibles.",
+        "Comprueba por separado las asignaciones del alumno."
+      ],
+      "checks": [
+        "No sustituyas involuntariamente la asignación anterior al añadir otra."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/groups-members.js",
+          "line": 23,
+          "sha256": "2ea38e45fb9122585793d8068720e8d95794e3fe01eca0876ced5baee1093397"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-009",
+      "guide_id": "catalog",
+      "title": "Grados y colores por disciplina",
+      "keywords": "cinturón grado blanco naranja nivel color",
+      "meaning": "Cada disciplina tiene su propia lista de grados. El color o nombre de un grado no demuestra equivalencia entre disciplinas.",
+      "steps": [
+        "Selecciona la disciplina.",
+        "Revisa sus grados y asigna el que corresponda al alumno."
+      ],
+      "checks": [
+        "Comprueba la disciplina antes de cambiar un grado."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/dashboard-catalog.js",
+          "line": 64,
+          "sha256": "0028d6999f9c3c31d40fa375948961f809176ab6fa1a7ca22a95da770f1ffc1d"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-010",
+      "guide_id": "team",
+      "title": "Varios coordinadores y secretarios",
+      "keywords": "duplicar roles cuatro coordinadores secretarios",
+      "meaning": "Varias personas pueden compartir un rol del equipo. El titular conserva la propiedad y las decisiones reservadas de la cuenta del club.",
+      "steps": [
+        "Gestiona cada solicitud o invitación de forma individual.",
+        "El titular asigna el rol correspondiente a cada persona."
+      ],
+      "checks": [
+        "Compartir el rol no significa compartir contraseñas."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/admin.js",
+          "line": 29,
+          "sha256": "2737de285874cd379b0cf243399c201b414496be254fa299ab6d8c1c950ff53b"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-011",
+      "guide_id": "team",
+      "title": "Cambiar el rol o revocar a un miembro del equipo",
+      "keywords": "monitor coordinación secretaría retirar revocar equipo",
+      "meaning": "El titular puede gestionar roles y retirar el acceso de un miembro del equipo. Eso no elimina la cuenta global de esa persona.",
+      "steps": [
+        "Abre Equipo desde la administración titular.",
+        "Selecciona al miembro y revisa el cambio o revocación disponible."
+      ],
+      "checks": [
+        "Coordinación no adquiere permiso para cambiar planes o administrar roles del equipo."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/admin.js",
+          "line": 5,
+          "sha256": "2737de285874cd379b0cf243399c201b414496be254fa299ab6d8c1c950ff53b"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-012",
+      "guide_id": "scopes",
+      "title": "Permisos del monitor y ámbitos asignados",
+      "keywords": "monitor solo sus grupos ámbitos acceso restringido",
+      "meaning": "Un rol y su ámbito son cosas diferentes: un monitor puede estar limitado a ciertos grupos o disciplinas.",
+      "steps": [
+        "Revisa la asignación del miembro del equipo.",
+        "Comprueba sus ámbitos además del nombre del rol."
+      ],
+      "checks": [
+        "No amplíes el acceso como solución automática a un error."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/work-scopes.js",
+          "line": 11,
+          "sha256": "bd7f52f48b40e6765f674aeed9b2c446808eabff57d976cfbc45b89320727a5c"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-013",
+      "guide_id": "sessions",
+      "title": "Sesiones, clases y recurrencia",
+      "keywords": "clases repetidas sesión recurrente calendario",
+      "meaning": "Una sesión es una actividad programada. La recurrencia prepara repeticiones según el flujo disponible; no es un cobro recurrente.",
+      "steps": [
+        "Selecciona el grupo o disciplina y las fechas.",
+        "Revisa las sesiones creadas antes de repetir el proceso."
+      ],
+      "checks": [
+        "Comprueba si ya existe la sesión para evitar duplicados."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/training.js",
+          "line": 14,
+          "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-014",
+      "guide_id": "attendance",
+      "title": "Registrar asistencia al alumno correcto",
+      "keywords": "asistencia ausencias lista alumnos sesión",
+      "meaning": "La asistencia relaciona al alumno con una sesión concreta; no sustituye su matrícula o su asignación al grupo.",
+      "steps": [
+        "Abre la sesión correcta.",
+        "Revisa su lista antes de marcar asistencias."
+      ],
+      "checks": [
+        "Comprueba fecha, grupo y alumno si no aparece alguien."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/training.js",
+          "line": 51,
+          "sha256": "eca934821a7ac3b0f2527b18bf124e4acb0a59ee79f5a52c6f9d27376d460e0f"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-015",
+      "guide_id": "charge-create",
+      "title": "Varias cuotas o cargos para una familia",
+      "keywords": "varios cargos cuotas alumno familia conceptos",
+      "meaning": "Un alumno o familia puede tener cargos por distintos conceptos. Cada cargo conserva su importe, vencimiento y estado.",
+      "steps": [
+        "Revisa los cargos existentes antes de crear otro.",
+        "Comprueba concepto y destinatarios en Nuevo cargo."
+      ],
+      "checks": [
+        "No repitas el cargo si el fallo fue solo de conexión sin revisar primero el listado."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "line": 67,
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-016",
+      "guide_id": "payment-record",
+      "title": "Pagos parciales y saldo pendiente",
+      "keywords": "pago parcial varios pagos importe pendiente",
+      "meaning": "Un cargo y los pagos asociados se revisan por separado. Un estado parcial indica que no todo el importe figura pagado.",
+      "steps": [
+        "Abre el cargo y revisa sus pagos.",
+        "Registra solo el importe recibido por el método disponible."
+      ],
+      "checks": [
+        "No registres como recibido un dinero que todavía no se ha cobrado."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "line": 17,
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-017",
+      "guide_id": "tariff-change",
+      "title": "Cambiar una tarifa o un cargo ya emitido",
+      "keywords": "cambiar tarifa modificar cargo emitido pagado",
+      "meaning": "La tarifa configura condiciones económicas; un cargo emitido ya tiene su propio historial. Cambiar una no corrige automáticamente el otro.",
+      "steps": [
+        "Identifica si el cambio es para próximas cuotas o para un cargo existente.",
+        "Revisa el estado y las acciones autorizadas del cargo."
+      ],
+      "checks": [
+        "Un cargo pagado requiere conservar la trazabilidad; no borres el pago para ocultar una corrección."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "line": 22,
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-018",
+      "guide_id": "finance",
+      "title": "Antigüedad del alumno y cobros anteriores",
+      "keywords": "antigüedad fecha ingreso histórico cargos antiguos",
+      "meaning": "La antigüedad deportiva o de alta y los movimientos históricos son datos distintos. Registrar un histórico no ejecuta un cobro nuevo.",
+      "steps": [
+        "Revisa las fechas y los conceptos históricos.",
+        "Comprueba si se trata de deuda pendiente o de un pago ya recibido."
+      ],
+      "checks": [
+        "No dupliques un movimiento que ya está registrado en el periodo actual."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/historical-finance.js",
+          "line": 6,
+          "sha256": "d9ff891d2a74cf1924c91191f48cd7b33aeb0e66c915e9cfcef743e216f86274"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-019",
+      "guide_id": "receipts",
+      "title": "Recibos y logo del club",
+      "keywords": "recibo personalizado logo PDF club",
+      "meaning": "El recibo debe corresponder al movimiento y al club correctos. La imagen del recibo no sustituye la comprobación de que el pago exista.",
+      "steps": [
+        "Revisa el cargo y su pago asociado.",
+        "Genera el recibo desde el flujo del club."
+      ],
+      "checks": [
+        "Comprueba el documento generado antes de enviarlo a la familia."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "line": 93,
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-020",
+      "guide_id": "automation-prepare",
+      "title": "Una automatización no equivale a cobrar",
+      "keywords": "automatización regla pausa generar cobrar",
+      "meaning": "Preparar una regla y tener cobros automáticos activos son cosas diferentes. Las automatizaciones de cobro del piloto permanecen desactivadas.",
+      "steps": [
+        "Prepara y revisa la regla en pausa.",
+        "Utiliza los cargos manuales autorizados para la operativa actual."
+      ],
+      "checks": [
+        "No prometas una domiciliación automática por haber guardado una regla."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/finance-premium.js",
+          "line": 94,
+          "sha256": "02047cca3bea61979a24fae772916f4ea54144e302856d9ee30c08ccb05876ca"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-021",
+      "guide_id": "social-explore",
+      "title": "Explorar Social sin tener perfil público",
+      "keywords": "explorar social cuenta sin perfil crear",
+      "meaning": "Puedes explorar con tu cuenta. El perfil público te presenta ante la comunidad; si no lo tienes, se ofrece su creación sin impedir seguir explorando.",
+      "steps": [
+        "Explora el contenido disponible.",
+        "Usa Crear mi perfil público cuando quieras completar tu presencia."
+      ],
+      "checks": [
+        "Crear un perfil no habilita automáticamente publicar."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "line": 27,
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-022",
+      "guide_id": "social-publish",
+      "title": "Publicar como club o como persona",
+      "keywords": "autor publicación identidad club miembro",
+      "meaning": "La publicación pertenece a la identidad seleccionada. El Club tiene su perfil propio y no debe confundirse con la identidad personal del administrador.",
+      "steps": [
+        "Comprueba el autor visible en el formulario.",
+        "Publica solo si esa identidad tiene la capacidad habilitada."
+      ],
+      "checks": [
+        "No se debe cambiar automáticamente a otra identidad para saltar un bloqueo."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "line": 8,
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-023",
+      "guide_id": "social-publish",
+      "title": "El Espectador y el Miembro en Social",
+      "keywords": "espectador likes comentarios guardar miembro verificado",
+      "meaning": "El Espectador puede interactuar según los permisos disponibles. Para publicar como Miembro se necesita la vinculación aprobada al club.",
+      "steps": [
+        "Selecciona tu perfil público.",
+        "Comprueba la vinculación o verificación que indique el formulario."
+      ],
+      "checks": [
+        "Tener una cuenta gratuita no concede por sí solo publicación."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-social.js",
+          "line": 9,
+          "sha256": "521707804f97733a5a7c216821ec28983e1f0bc49e2fa3d983d9c063deb6c664"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-024",
+      "guide_id": "social-media",
+      "title": "Foto de perfil, banner o foto del álbum",
+      "keywords": "avatar logo foto album banner portada",
+      "meaning": "Avatar, portada y álbum son imágenes con destinos distintos. Subir una imagen al álbum no cambia por sí solo la foto de perfil.",
+      "steps": [
+        "Elige la acción específica de editar foto o banner.",
+        "Guarda y comprueba la vista pública del perfil correcto."
+      ],
+      "checks": [
+        "La imagen del espacio administrativo puede ser distinta de la del perfil público."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/public-profile.js",
+          "line": 32,
+          "sha256": "fd5b8b736fbd9d51f66b9fdaf283e02ccba96182194cce0176afd8d852cd7f94"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-025",
+      "guide_id": "social-media",
+      "title": "Eliminar una imagen del álbum propio",
+      "keywords": "borrar foto álbum eliminar multimedia",
+      "meaning": "La capacidad de eliminar se comprueba sobre el contenido y el perfil autorizado. Retirar una publicación no equivale necesariamente a borrar el archivo asociado.",
+      "steps": [
+        "Abre el contenido desde su perfil o álbum.",
+        "Utiliza la acción de gestión que corresponda y revisa el resultado."
+      ],
+      "checks": [
+        "No afirmes que un archivo se ha eliminado definitivamente hasta que el sistema lo confirme."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/social-post-management.js",
+          "line": 24,
+          "sha256": "7dc1dbf3781bf63b7fe17ef1d509156d11a34b0c20a2d75ff154dc0b54b6a73b"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-026",
+      "guide_id": "showcase-explore",
+      "title": "Vistas compacta, grande y lista",
+      "keywords": "cuadricula compacta grande lista 1x1 catálogo",
+      "meaning": "Las vistas permiten comparar más productos o ver más detalle. Cambiar la vista no cambia el producto ni concede permiso de edición.",
+      "steps": [
+        "Utiliza el selector de vista del catálogo.",
+        "Combínalo con búsqueda y categorías."
+      ],
+      "checks": [
+        "Si falta una imagen, revisa la ficha del producto; no es un permiso de vendedor."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "line": 1,
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-027",
+      "guide_id": "showcase-publish",
+      "title": "Preparar una solicitud de vendedor",
+      "keywords": "vendedor autorizado verificación solicitud ecommerce",
+      "meaning": "La solicitud puede prepararse antes de tener venta habilitada. La autorización de vendedor y la activación comercial siguen siendo necesarias para vender y cobrar.",
+      "steps": [
+        "Abre el trámite desde la identidad correcta.",
+        "Completa los requisitos y revisa el estado de la solicitud."
+      ],
+      "checks": [
+        "Explorar Showcase no es un plan de vendedor gratuito."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/showcase-compliance.js",
+          "line": 36,
+          "sha256": "7917a3463389951b97f3ce4561443ca7b01949bcd3e46094df4afbbdbfc5c613"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-028",
+      "guide_id": "showcase-publish",
+      "title": "Dos marcas y dos tiendas separadas",
+      "keywords": "dos marcas tienda identidad seleccionada productos",
+      "meaning": "Cada tienda debe abrirse con el contexto de la entidad seleccionada. No debe usarse por defecto la primera marca de la cuenta.",
+      "steps": [
+        "Selecciona la Marca o Club.",
+        "Comprueba qué entidad figura en Mi Showcase antes de editar."
+      ],
+      "checks": [
+        "No muevas productos entre identidades para sortear una activación pendiente."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/showcase.js",
+          "line": 23,
+          "sha256": "6bf9257f5ed69b1ab603655d36c6afc00727594070dcc6637d164a68dfd3a731"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-029",
+      "guide_id": "showcase-explore",
+      "title": "Carrito, pedidos y consultas",
+      "keywords": "comprar carrito pedido consultas showcase",
+      "meaning": "Guardar un producto, consultar al vendedor y realizar un pedido son acciones diferentes. Un carrito no confirma que el pago haya terminado.",
+      "steps": [
+        "Revisa producto, vendedor y condiciones.",
+        "Comprueba el estado final del pedido o pago en su flujo."
+      ],
+      "checks": [
+        "No repitas una compra si no sabes si la operación anterior se completó."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/showcase-cart.js",
+          "line": 6,
+          "sha256": "815bb1fd66a629729f434d4512e4c3c2baa46fd6dd2b7a9e8173097938280e61"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-030",
+      "guide_id": "events-explore",
+      "title": "Descubrir eventos y comprar entradas",
+      "keywords": "eventos entradas fecha lugar descubrir",
+      "meaning": "La ficha del evento muestra la información publicada y las opciones disponibles. Ver el evento no significa tener una inscripción o entrada confirmada.",
+      "steps": [
+        "Revisa fecha, lugar y condiciones.",
+        "Usa el flujo de entrada o inscripción que esté habilitado."
+      ],
+      "checks": [
+        "Comprueba el estado final antes de considerar confirmada la asistencia."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-events.js",
+          "line": 11,
+          "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-031",
+      "guide_id": "events-create",
+      "title": "Organizador profesional sin suscripción de club",
+      "keywords": "promotora profesional organizar seminario puntual",
+      "meaning": "La organización de eventos puede apoyarse en activaciones puntuales autorizadas. No debe exigirse una suscripción de club a todo organizador por defecto.",
+      "steps": [
+        "Usa la identidad profesional verificada que corresponda.",
+        "Revisa los servicios de evento y ticketing disponibles para activación."
+      ],
+      "checks": [
+        "Crear un borrador no activa venta de entradas."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/professional-operations.js",
+          "line": 21,
+          "sha256": "0bffca81daffd68120785e8b5d83c6b490c1dda29971cdaecd47deb8f4ee8042"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-032",
+      "guide_id": "events-create",
+      "title": "Logo y presentación del ticket",
+      "keywords": "logo ticket entradas imagen organizador",
+      "meaning": "La presentación del ticket se revisa en su propio flujo. No debe confundirse con el logo del perfil público del organizador.",
+      "steps": [
+        "Revisa la configuración de ticketing.",
+        "Comprueba el ticket generado antes de distribuirlo."
+      ],
+      "checks": [
+        "No publiques datos de acceso o códigos de una entrada en Social."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/kombax-events.js",
+          "line": 111,
+          "sha256": "a40a8b6779bd10be371c030b8d71238f545cd9ecd82c7da32326a16bb6119c61"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-033",
+      "guide_id": "profile-documents",
+      "title": "Acreditaciones profesionales y visibilidad",
+      "keywords": "diploma licencia acreditación profesional documentos públicos",
+      "meaning": "La verificación general y una acreditación para un servicio concreto pueden ser requisitos distintos. Un documento subido no queda automáticamente validado.",
+      "steps": [
+        "Completa la profesión y los documentos que correspondan.",
+        "Revisa qué información se hace pública antes de mostrarla."
+      ],
+      "checks": [
+        "No publiques documentos personales completos si contienen datos que deben permanecer privados."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/professional-documents.js",
+          "line": 6,
+          "sha256": "e9aa86bb92ae2c2f8dcf0d8e25a7be6a400106bd0e95068bcac36deba22daab4"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-034",
+      "guide_id": "profile-public",
+      "title": "Competidor: disponibilidad y descubrimiento",
+      "keywords": "competidor disponibilidad descubrir verificado",
+      "meaning": "El perfil del competidor reúne su información deportiva y sus herramientas. La aparición verificada y las capacidades dependen del estado autorizado.",
+      "steps": [
+        "Revisa la identidad Competidor seleccionada.",
+        "Completa su información pública y comprueba la disponibilidad que muestre el perfil."
+      ],
+      "checks": [
+        "Las excepciones de piloto no deben extenderse a cualquier cuenta nueva."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/competitor-hub.js",
+          "line": 2,
+          "sha256": "c472b4edb67f1df9fb6fab5702a6b6b7fc73b3dbcbda2aa01fa3b213cd09fd74"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-035",
+      "guide_id": "profile-brand",
+      "title": "Marca: campañas y colaboraciones",
+      "keywords": "marca campañas patrocinio colaboradores propuestas",
+      "meaning": "Las campañas y propuestas se gestionan desde la Marca activa y sus capacidades habilitadas. Descubrir colaboradores no autoriza usar cualquier dato privado.",
+      "steps": [
+        "Revisa campañas, descubrimiento y propuestas de la marca.",
+        "Usa únicamente los contactos públicos habilitados y las autorizaciones de colaboración."
+      ],
+      "checks": [
+        "El perfil público gratuito no equivale a un servicio comercial activado."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/brand-business.js",
+          "line": 9,
+          "sha256": "d318405912e2fa527253b3c3e8aefcbe2d6d80e92dc492835f962c2ffcb9a339"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-036",
+      "guide_id": "profile-federation",
+      "title": "Federación: clubes, federados y licencias",
+      "keywords": "federación federados clubes licencias vencimiento",
+      "meaning": "La Federación tiene su espacio e información propios. La licencia requiere su ámbito, estado y validación; no se deduce de una insignia social.",
+      "steps": [
+        "Revisa el contexto de Federación.",
+        "Consulta el expediente o solicitud que corresponda con tu rol autorizado."
+      ],
+      "checks": [
+        "No confirmes vigencia o aprobación de una licencia sin el dato verificado."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/federation-licenses.js",
+          "line": 9,
+          "sha256": "19b62b1a25715cefc2816fc81ed0607d1c9486e760634e6daa23d963baade21f"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-037",
+      "guide_id": "social-publish",
+      "title": "Conectar Instagram y compartir contenido",
+      "keywords": "instagram facebook meta conectar compartir historia",
+      "meaning": "Compartir un enlace y publicar mediante una conexión oficial son vías distintas. La conexión depende de la cuenta profesional y los permisos que Meta autorice.",
+      "steps": [
+        "Abre la conexión de Instagram desde la identidad correcta.",
+        "Completa el consentimiento oficial y comprueba el estado de conexión."
+      ],
+      "checks": [
+        "No envíes claves ni tokens por el chat. Una publicación real necesita autorización del usuario."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/instagram-integration.js",
+          "line": 5,
+          "sha256": "7cd7c17e192489c709d8e0959bab6979ebd76ff89df2a45267ee2522eb5f76d5"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-038",
+      "guide_id": "social-publish",
+      "title": "Desconectar Instagram y eliminar datos de conexión",
+      "keywords": "instagram desconectar desautorizar borrar datos conexión",
+      "meaning": "Desconectar la cuenta y solicitar la eliminación de datos de la integración son operaciones distintas. No equivalen a borrar la cuenta de KOMBAX.",
+      "steps": [
+        "Utiliza la opción de desconexión o el procedimiento de privacidad correspondiente.",
+        "Comprueba el resultado antes de intentar publicar de nuevo."
+      ],
+      "checks": [
+        "No se deben seguir utilizando permisos de una conexión revocada."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/instagram-integration.js",
+          "line": 38,
+          "sha256": "7cd7c17e192489c709d8e0959bab6979ebd76ff89df2a45267ee2522eb5f76d5"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-039",
+      "guide_id": "assist-data",
+      "title": "Diferencia entre Ayuda, Assist y Migrations",
+      "keywords": "chatbot ayuda assist migrations diferencia datos",
+      "meaning": "Ayuda explica la plataforma. Assist interpreta datos autorizados del espacio. Migrations prepara la incorporación de archivos para revisión.",
+      "steps": [
+        "Elige el canal según lo que necesitas.",
+        "Indica el objetivo con lenguaje natural, sin copiar secretos."
+      ],
+      "checks": [
+        "El contexto disponible y los permisos limitan lo que puede responder cada canal."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/customer-operations.js",
+          "line": 6,
+          "sha256": "6a2c70af5696a758adcc10605365e7724186e282bbbcf16418100be64ec394ed"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-040",
+      "guide_id": "assist-data",
+      "title": "Créditos y límites compartidos de IA",
+      "keywords": "saldo mensual consultas gratis créditos assist migrations",
+      "meaning": "Las cuentas gratuitas tienen el límite de ayuda IA establecido. En los espacios de pago se aplican el saldo y los límites compartidos que autorice el plan.",
+      "steps": [
+        "Consulta el saldo disponible en tu espacio.",
+        "Las guías siguen siendo una alternativa cuando no procede usar IA."
+      ],
+      "checks": [
+        "No prometas consultas ilimitadas ni cambies al contexto de otra entidad para consumir su saldo."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/customer-operations.js",
+          "line": 41,
+          "sha256": "6a2c70af5696a758adcc10605365e7724186e282bbbcf16418100be64ec394ed"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-041",
+      "guide_id": "migrations-import",
+      "title": "Vista previa, duplicados y confirmación de importación",
+      "keywords": "importar Excel csv vista previa duplicados alumnos",
+      "meaning": "Una extracción o vista previa prepara los datos. La importación solo se considera aplicada cuando el flujo autorizado confirma su resultado.",
+      "steps": [
+        "Revisa los campos, filas y avisos de duplicados.",
+        "Comprueba disciplinas y grupos antes de confirmar."
+      ],
+      "checks": [
+        "No importes fichas de menores en un club distinto ni interpretes todo documento como un listado de alumnos."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/customer-operations.js",
+          "line": 10,
+          "sha256": "6a2c70af5696a758adcc10605365e7724186e282bbbcf16418100be64ec394ed"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-042",
+      "guide_id": "documents",
+      "title": "Archivar documentos y recuperar",
+      "keywords": "archivar documentación privado recuperar archivos",
+      "meaning": "La documentación tiene su ámbito de acceso y su ciclo de vida. Archivar no implica necesariamente eliminar el archivo de almacenamiento.",
+      "steps": [
+        "Selecciona el documento correcto.",
+        "Revisa la acción y el estado resultante."
+      ],
+      "checks": [
+        "No borres historial financiero o legal para ocultar un movimiento."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/documents.js",
+          "line": 12,
+          "sha256": "40e0337d728fce5550245f733bcc253d9c08e64212b5309cb611d7a261daba02"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-043",
+      "guide_id": "start",
+      "title": "Guías, consultoría y recursos",
+      "keywords": "guías consultoría formación recursos información",
+      "meaning": "Las guías proporcionan información de uso. La consultoría y la formación pueden tener sus propios requisitos o activaciones.",
+      "steps": [
+        "Abre Recursos KOMBAX.",
+        "Revisa la guía del tema antes de solicitar una revisión personalizada."
+      ],
+      "checks": [
+        "No inventes una tarifa automática de consultoría ni una activación contractual."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/resource-center.js",
+          "line": 7,
+          "sha256": "226498d9aa45c632116f2d57cfb16cff46fb7b87faa148342053707e57a94957"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-044",
+      "guide_id": "install",
+      "title": "PWA, actualización y conexión",
+      "keywords": "instalar app pwa cache actualizar offline",
+      "meaning": "La instalación facilita acceder a la webapp. No garantiza que una operación que necesita servidor funcione sin conexión.",
+      "steps": [
+        "Usa la instalación disponible en tu navegador.",
+        "Si hay un error al guardar, comprueba el resultado cuando recuperes conexión."
+      ],
+      "checks": [
+        "No des por realizada una escritura solo porque la pantalla permanezca abierta."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/pwa-install.js",
+          "line": 1,
+          "sha256": "229278656b76dbde7ce83f4ac6455fbc4f8fb24aba8446a7f7ace180c71d93ad"
+        }
+      ],
+      "review_status": "source_reviewed"
+    },
+    {
+      "id": "supplement-045",
+      "guide_id": "privacy",
+      "title": "Privacidad, datos de menores y ayuda humana",
+      "keywords": "privacidad seguridad menor contraseña soporte",
+      "meaning": "El chatbot puede explicar el procedimiento de privacidad, pero no debe solicitar contraseñas ni ejecutar por sí solo decisiones sensibles sobre cuentas o menores.",
+      "steps": [
+        "Utiliza el canal y trámite autorizado para tu solicitud.",
+        "Facilita solo la información necesaria para identificar el problema."
+      ],
+      "checks": [
+        "Una autorización del club no sustituye el permiso de acceso a los datos de otro usuario."
+      ],
+      "sources": [
+        {
+          "path": "web/js/modules/support-privacy.js",
+          "line": 35,
+          "sha256": "db69a91b6670c2a7f67a714b02a8f9ebf5022ab319a84caa22caa42a743d3579"
+        }
+      ],
+      "review_status": "source_reviewed"
+    }
+  ]
+}
